@@ -1,0 +1,345 @@
+# EN 50128 Railway Software Development Project - .gitignore
+
+# ============================================================================
+# Build Artifacts
+# ============================================================================
+
+# Compiled Object files
+*.o
+*.obj
+*.elf
+*.out
+*.exe
+*.app
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# ============================================================================
+# Coverage and Test Reports
+# ============================================================================
+
+# gcov/lcov coverage
+*.gcda
+*.gcno
+*.gcov
+coverage.info
+coverage/
+coverage_html/
+lcov_html/
+
+# Test results
+test_results/
+test_reports/
+*.log
+
+# ============================================================================
+# Static Analysis Reports
+# ============================================================================
+
+# PC-lint reports
+*.lob
+pclint_report.txt
+pclint_report.html
+
+# Cppcheck reports
+cppcheck_report.xml
+cppcheck_html/
+
+# Lizard reports
+lizard_report.html
+complexity_report.html
+
+# General analysis output
+analysis_results/
+static_analysis_reports/
+
+# ============================================================================
+# Build Directories
+# ============================================================================
+
+# CMake
+build/
+Build/
+BUILD/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Make
+*.d
+
+# Out directories
+out/
+bin/
+obj/
+
+# ============================================================================
+# IDE and Editor Files
+# ============================================================================
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.vcxproj.filters
+
+# JetBrains IDEs (CLion, PyCharm, etc.)
+.idea/
+*.iml
+*.iws
+
+# Eclipse
+.project
+.cproject
+.settings/
+
+# Vim
+*.swp
+*.swo
+*~
+.*.swp
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ============================================================================
+# Python
+# ============================================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Python distribution / packaging
+.Python
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# ============================================================================
+# Documentation Build Artifacts
+# ============================================================================
+
+# Doxygen
+Doxyfile.bak
+doxygen/
+html/
+latex/
+
+# Sphinx
+docs/_build/
+docs/_static/
+docs/_templates/
+
+# ============================================================================
+# Temporary and Cache Files
+# ============================================================================
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*~
+
+# Cache directories
+.cache/
+*.cache
+
+# OS-specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ============================================================================
+# Version Control and Logs
+# ============================================================================
+
+# Git merge/conflict files
+*.orig
+*.rej
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# ============================================================================
+# Standards and Proprietary Documents
+# ============================================================================
+
+# NOTE: Standard PDFs should typically not be committed to public repositories
+# due to copyright. For private repository, you may choose to include or exclude.
+# Currently EXCLUDING to be safe:
+
+std/*.pdf
+
+# Uncomment the line below if you want to include standards in private repo:
+# !std/*.pdf
+
+# ============================================================================
+# Credentials and Secrets
+# ============================================================================
+
+# Never commit these!
+*.key
+*.pem
+*.p12
+*.pfx
+*.cer
+*.crt
+id_rsa
+id_dsa
+*.secret
+.env
+.env.local
+.env.*.local
+secrets/
+credentials/
+config/secrets.json
+
+# ============================================================================
+# Hardware and Target-Specific
+# ============================================================================
+
+# Embedded development
+*.bin
+*.map
+*.lst
+*.lss
+*.sym
+*.axf
+*.elf
+
+# Debugger files
+*.launch
+*.jlink
+
+# ============================================================================
+# Toolchain Specific
+# ============================================================================
+
+# GCC
+*.su
+*.i
+*.s
+
+# IAR
+Debug/
+Release/
+*.dep
+*.eww
+*.ewd
+*.ewp
+*.ewt
+*.dni
+
+# Keil
+*.uvopt
+*.uvproj
+*.uvprojx
+
+# ============================================================================
+# Project-Specific
+# ============================================================================
+
+# Work-in-progress
+WIP/
+work/
+scratch/
+sandbox/
+
+# Archive
+archive/
+old/
+backup/
+
+# Personal notes (not part of official documentation)
+NOTES.txt
+TODO.txt
+PERSONAL.md
+
+# Quality metrics and reports (regenerate as needed)
+quality_metrics.json
+verification_report.json
+
+# ============================================================================
+# OpenCode Specific
+# ============================================================================
+
+# OpenCode session files (if any)
+.opencode/.sessions/
+.opencode/cache/
+
+# ============================================================================
+# END OF .gitignore
+# ============================================================================

@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<project version="1">
+  <root name="."/>
+  <project-name>EN50128-Project</project-name>
+  <builddir>cppcheck-build</builddir>
+  
+  <!-- Analysis settings -->
+  <analyze-all-vs-configs>true</analyze-all-vs-configs>
+  <check-config>true</check-config>
+  <check-level>exhaustive</check-level>
+  <max-ctu-depth>4</max-ctu-depth>
+  
+  <!-- Language standards -->
+  <standards>
+    <c>c11</c>
+    <misra-c>2012</misra-c>
+  </standards>
+  
+  <!-- Enable checks -->
+  <enable>all</enable>
+  <enable>warning</enable>
+  <enable>style</enable>
+  <enable>performance</enable>
+  <enable>portability</enable>
+  <enable>information</enable>
+  
+  <!-- Addons -->
+  <addons>
+    <addon>misra.py</addon>
+    <addon>cert.py</addon>
+  </addons>
+  
+  <!-- Include paths -->
+  <includedir>
+    <dir name="./include/"/>
+    <dir name="./src/"/>
+  </includedir>
+  
+  <!-- Source paths -->
+  <paths>
+    <dir name="./src/"/>
+  </paths>
+  
+  <!-- Exclude patterns -->
+  <exclude>
+    <path name="./test/"/>
+    <path name="./build/"/>
+  </exclude>
+  
+  <!-- Suppressions (document each) -->
+  <suppressions>
+    <!-- Example: Suppress specific warnings with justification -->
+    <!-- 
+    <suppression>
+      <id>missingIncludeSystem</id>
+      <justification>System headers checked separately</justification>
+    </suppression>
+    -->
+  </suppressions>
+  
+  <!-- Platform settings -->
+  <platform>native</platform>
+  
+  <!-- Maximum number of configurations to check -->
+  <max-configs>12</max-configs>
+  
+  <!-- Safety-critical checks -->
+  <check-library>true</check-library>
+  <check-unused-templates>true</check-unused-templates>
+</project>

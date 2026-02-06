@@ -1,0 +1,104 @@
+# MISRA C:2012 Configuration for PC-lint Plus
+
+# Enable MISRA C:2012 checking
++misra(2012)
+
+# Language: C99
+-A(C99)
+
+# Strong type checking
+-strong(AXJ)
+
+## Mandatory Rules (Must be enforced for SIL 2+)
+
+# Rule 1.3: No undefined behavior
++e{530}  # Symbol not initialized
++e{613}  # Possible use of null pointer
++e{670}  # Possible access out-of-bounds
+
+# Rule 2.1: No unreachable code
++e{527}  # Unreachable code
++e{825}  # Control flow anomalies
+
+# Rule 8.13: Use const where possible
++e{818}  # Pointer parameter could be const
+
+# Rule 11.8: No cast removing const/volatile
++e{9005} # Attempt to cast away const/volatile
+
+# Rule 14.3: No invariant controlling expressions
++e{506}  # Constant value boolean
++e{774}  # Boolean always evaluates to same value
+
+# Rule 17.7: Use return values
++e{534}  # Ignoring return value
+
+# Rule 21.3: No dynamic memory (Critical for SIL 2+)
++e{586}  # Deprecated function (malloc, calloc, realloc, free)
+-deprecate(function, malloc, "Dynamic memory forbidden for SIL 2+")
+-deprecate(function, calloc, "Dynamic memory forbidden for SIL 2+")
+-deprecate(function, realloc, "Dynamic memory forbidden for SIL 2+")
+-deprecate(function, free, "Dynamic memory forbidden for SIL 2+")
+
+## Additional Safety Checks
+
+# Pointer checks
++e{413}  # Likely use of null pointer
++e{415}  # Access of out-of-bounds pointer
++e{416}  # Creation of out-of-bounds pointer
++e{661}  # Possible access of out-of-bounds pointer
++e{662}  # Possible creation of out-of-bounds pointer
+
+# Division checks
++e{414}  # Possible division by 0
+
+# Array index checks
++e{645}  # Symbol may not have been initialized
+
+# Type checks
++e{734}  # Loss of precision
++e{737}  # Loss of sign
++e{713}  # Loss of precision in promoted type
+
+## Project-Specific Settings
+
+# Include paths (adjust for your project)
+-i"./include"
+-i"./src"
+
+# Suppress warnings for system headers
+-wlib(1)
++libclass(angle)
+
+# Maximum line length
+-linelen(120)
+
+# Maximum nesting depth
+-maxdepth(5)
+
+## Justified Suppressions (Document each)
+
+# Example: Suppress for specific cases with justification
+# -e{715}  # Symbol not referenced
+#  Justification: Callback function signature requires unused parameter
+
+## Output Settings
+
+# Warning level: All warnings
+-w4
+
+# Output format
++ffn  # Full path names in messages
+
+# Statistics
+-summary()
+
+## Metrics
+
+# Function complexity limit
+-function_max_complexity(10)  # SIL 3-4
+# -function_max_complexity(15)  # SIL 2
+# -function_max_complexity(20)  # SIL 0-1
+
+# Function size limit
+-function_max_statements(100)

@@ -1,0 +1,59 @@
+# Proprietary Software License
+
+**Copyright (c) 2026 [Your Organization Name]**
+
+All rights reserved.
+
+## PRIVATE REPOSITORY - RESTRICTED ACCESS
+
+This repository and its contents are PROPRIETARY and CONFIDENTIAL.
+
+### Terms and Conditions
+
+1. **Ownership**: This software, including all code, documentation, and associated materials, is the exclusive property of [Your Organization Name].
+
+2. **Access Restriction**: Access to this repository is granted only to authorized personnel who have signed appropriate confidentiality agreements.
+
+3. **Confidentiality**: All contents of this repository are confidential and must not be disclosed to any third party without explicit written permission from [Your Organization Name].
+
+4. **Usage Rights**: Authorized users may:
+   - Use the software for internal development purposes
+   - Modify the software for internal use
+   - Create derivative works for internal projects
+   
+   Authorized users may NOT:
+   - Distribute the software outside the organization
+   - Share repository access with unauthorized individuals
+   - Use the software in public or open-source projects
+   - Copy or extract portions for external use
+
+5. **No Warranty**: This software is provided "AS IS", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement.
+
+6. **Safety-Critical Use**: This software is designed for safety-critical railway applications under EN 50128:2011. Users are responsible for ensuring compliance with all applicable safety standards and regulations.
+
+7. **Standards Compliance**: Use of this software must comply with:
+   - EN 50128:2011 Railway Applications - Software for Railway Control and Protection Systems
+   - EN 50126 Railway Applications - Specification and Demonstration of RAMS
+   - MISRA C:2012 Guidelines for the Use of C Language in Critical Systems
+   - IEC 61508 Functional Safety of Electrical/Electronic/Programmable Electronic Safety-related Systems
+
+8. **Liability Limitation**: In no event shall [Your Organization Name] be liable for any claim, damages, or other liability arising from the use of this software.
+
+9. **Termination**: Access rights may be revoked at any time by [Your Organization Name]. Upon termination, all local copies must be deleted.
+
+10. **Third-Party Components**: This software may contain references to third-party standards and tools. Users must obtain appropriate licenses for:
+    - PC-lint Plus (Gimpel Software)
+    - EN 50128, EN 50126 standards (CENELEC)
+    - Other commercial tools as referenced
+
+## Contact
+
+For licensing inquiries or permission requests:
+- Email: [legal@yourorganization.com]
+- Address: [Your Organization Address]
+
+---
+
+**NOTICE**: Unauthorized access, use, or distribution of this software may result in civil and criminal penalties.
+
+**Last Updated**: February 6, 2026
