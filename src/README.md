@@ -1,6 +1,24 @@
 # Source Code Directory
 
-This directory contains the source code for EN 50128 compliant railway software components.
+## ⚠️ Template Structure
+
+This directory provides a **suggested template structure** for your EN 50128 C project.
+
+**This is NOT production code** - it's an empty template for organizing your implementation:
+1. Replace these placeholder README.md files with actual C source code
+2. Organize according to your specific project needs
+3. Follow MISRA C:2012 guidelines for all code
+4. Maintain traceability to requirements and design
+
+**For a complete working example**, see `examples/train_door_control/` which contains a full SIL 3 implementation with:
+- Complete C source code (MISRA C compliant)
+- Unity-based unit tests
+- EN 50128 documentation
+- Traceability matrices
+
+---
+
+## Template Structure
 
 ## Directory Structure
 

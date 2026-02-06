@@ -30,17 +30,53 @@ Use this skill when:
 - Reviewing design for EN 50128 compliance
 - Addressing safety architecture requirements
 
-## Design Principles by SIL (EN 50128 Table A.4)
+## Software Architecture Techniques (EN 50128 Table A.3)
 
-| Principle | SIL 0-1 | SIL 2 | SIL 3-4 |
-|-----------|---------|-------|---------|
-| Modularity | HR | HR | **M** |
-| Structured Design | HR | HR | **M** |
-| Defensive Programming | HR | HR | **M** |
-| Fault Detection | R | HR | **M** |
-| Error Handling | HR | HR | **M** |
+**EN 50128 Section 7.3, Table A.3** defines software architecture and design techniques:
 
-**M**=Mandatory, **HR**=Highly Recommended, **R**=Recommended
+| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-------------------|-----|-------|---------|---------|
+| 1 | Structured Methodology | D.52 | R | HR | **M** |
+| 2 | Defensive Programming | D.14 | - | HR | HR |
+| 3 | Fault Detection and Diagnosis | D.26 | - | R | HR |
+| 4 | Information Encapsulation | D.33 | R | HR | HR |
+| 5 | Modelling | Table A.17 | R | R | HR |
+| 6 | Formal Methods | D.28 | - | R | HR |
+| 7 | Fully Defined Interface | D.38 | HR | HR | HR |
+| 8 | Structured Design | D.51 | R | HR | HR |
+| 9 | Functional Cohesion | D.55 | R | R | HR |
+| 10 | Coupling and Cohesion | D.55 | R | R | HR |
+| 11 | Software Modules with Low Coupling | D.55 | R | HR | HR |
+| 12 | Event-driven Programming | D.21 | - | - | R |
+| 13 | Concurrency | D.11 | - | R | R |
+| 14 | Interrupt | D.35 | - | - | R |
+| 15 | Object-oriented Programming | D.39 | - | R | R |
+| 16 | Design and Coding Standards | Table A.12 | HR | HR | HR |
+| 17 | Software Design Notations | D.46 | R | R | HR |
+| 18 | Data Flow Diagrams | D.10 | R | R | R |
+| 19 | **Modular Approach** | D.38 | HR | **M** | **M** |
+| 20 | Schedulability Analysis | D.40 | - | R | HR |
+| 21 | Time-triggered Architecture | D.56 | - | R | HR |
+| 22 | Memorisation of Data/Program Flow | D.36 | R | HR | HR |
+| 23 | Failure Assertion Programming | D.24 | - | R | HR |
+
+**Mandatory Techniques:**
+- **SIL 3-4:** Structured Methodology (1) and Modular Approach (19) are **MANDATORY**
+- **SIL 2+:** Modular Approach (19) is **MANDATORY**
+
+**Key Highly Recommended for SIL 3-4:**
+- Defensive Programming (2)
+- Fault Detection and Diagnosis (3)
+- Modelling (5)
+- Formal Methods (6)
+- Fully Defined Interface (7)
+
+**Approved Combinations:**
+- **SIL 3-4 Option A:** 1, 7, 19, 22 + one from {4, 5, 12, 21}
+- **SIL 3-4 Option B:** 1, 4, 19, 22 + one from {2, 5, 12, 15, 21}
+- **SIL 1-2:** 1, 7, 19, 22
+
+**Standard Reference:** `std/EN50128-2011.md` Section 7.3, Table A.3
 
 ## Cyclomatic Complexity Limits
 

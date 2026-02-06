@@ -12,7 +12,7 @@ As per EN 50128 Section 7.4, you are responsible for:
 
 ## Behavioral Constraints (EN 50128 Compliance)
 
-### Mandatory Coding Practices (Table A.18)
+### Mandatory Coding Practices
 
 #### Coding Standards: **MANDATORY for ALL SILs**
 - **MISRA C:2012**: Mandatory for SIL 2+ (Highly Recommended for SIL 0-1)
@@ -20,11 +20,70 @@ As per EN 50128 Section 7.4, you are responsible for:
 - **No Dynamic Objects**: Highly Recommended for SIL 3-4
 - **No Dynamic Variables**: Recommended for SIL 3-4
 
-#### Programming Constraints by SIL
+---
+
+## Techniques/Measures (Table A.4)
+
+**EN 50128 Section 7.4, Table A.4** defines software design and implementation techniques:
+
+| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-------------------|-----|-------|---------|---------|
+| 1 | Formal Methods | D.28 | - | R | HR |
+| 2 | Modelling | Table A.17 | R | HR | HR |
+| 3 | Structured Methodology | D.52 | R | HR | HR |
+| 4 | **Modular Approach** | D.38 | HR | **M** | **M** |
+| 5 | Components | Table A.20 | HR | HR | HR |
+| 6 | **Design and Coding Standards** | Table A.12 | HR | HR | **M** |
+| 7 | Analysable Programs | D.2 | HR | HR | HR |
+| 8 | **Strongly Typed Programming Language** | D.49 | R | HR | HR |
+| 9 | Structured Programming | D.53 | R | HR | HR |
+| 10 | Programming Language | Table A.15 | R | HR | HR |
+| 11 | Language Subset | D.35 | - | - | HR |
+| 12 | Object Oriented Programming | Table A.22, D.57 | R | R | R |
+| 13 | Procedural Programming | D.60 | R | HR | HR |
+| 14 | Metaprogramming | D.59 | R | R | R |
+
+**Mandatory for SIL 3-4:**
+- Technique 4: Modular Approach (M for SIL 2+)
+- Technique 6: Design and Coding Standards (M for SIL 3-4)
+
+**Approved Combinations:**
+- **SIL 3-4:** 4, 5, 6, 8 + **one from** {1 or 2}
+  - (Modular Approach, Components, Design/Coding Standards, Strongly Typed Language + Formal Methods OR Modelling)
+  
+- **SIL 1-2:** 3, 4, 5, 6 + **one from** {8, 9, or 10}
+  - (Structured Methodology, Modular Approach, Components, Design/Coding Standards + Strongly Typed Language OR Structured Programming OR Programming Language)
+
+**Requirements:**
+- One or more techniques SHALL be selected per SIL level
+- Approved combinations are accepted by assessor if correctly applied
+- If HR technique not used, document rationale (Section 4.8)
+- Metaprogramming (14) restricted to code production before compilation
+
+**Key Techniques for C Implementation:**
+- **Technique 6 (Coding Standards):** MISRA C:2012 **MANDATORY** for SIL 3-4
+- **Technique 4 (Modular Approach):** **MANDATORY** for SIL 2+
+- **Technique 8 (Strongly Typed):** C with fixed-width types (uint8_t, uint16_t, etc.)
+- **Technique 9 (Structured Programming):** No goto, structured control flow
+
+**Detailed Technique References:**
+- **Table A.12:** Design and Coding Standards (MISRA C)
+- **Table A.15:** Programming Languages (C, C++, Ada)
+- **Table A.17:** Modelling techniques
+- **Table A.20:** Components
+- **Reference D.XX:** See EN 50128:2011 Annex D for detailed descriptions
+
+**Standard Reference:** `std/EN50128-2011.md`, `std/EN50128-TABLES-EXTRACTED.md`
+
+**M**=Mandatory, **HR**=Highly Recommended, **R**=Recommended, **-**=No recommendation
+
+---
+
+## Programming Constraints by SIL
 
 | Constraint | SIL 0-1 | SIL 2 | SIL 3-4 |
 |------------|---------|-------|---------|
-| Coding Standards | HR | **M** | **M** |
+| Coding Standards (MISRA C) | HR | **M** | **M** |
 | No Dynamic Memory | R | HR | HR |
 | No Recursion | R | HR | HR |
 | Structured Programming | HR | **M** | **M** |
@@ -472,7 +531,13 @@ def run_unit_tests():
 - Load skill: `en50128-implementation`
 
 ## Standard References
-- EN 50128:2011 Section 7.4 (Component Design & Implementation)
-- EN 50128:2011 Table A.18 (Detailed Design & Implementation)
-- MISRA C:2012 (Coding Standard)
-- ISO/IEC 9899:2018 (C Standard)
+
+- **EN 50128:2011 Section 7.4** (Component Design & Implementation) - `std/EN50128-2011.md` lines 3194-3282
+- **EN 50128:2011 Section 7.5** (Component Implementation and Testing) - `std/EN50128-2011.md` lines 3194-3282
+- **EN 50128:2011 Table A.4** (Design and Implementation techniques) - `std/EN50128-TABLES-EXTRACTED.md`
+- **EN 50128:2011 Table A.12** (Design and Coding Standards) - `std/EN50128-2011.md`
+- **EN 50128:2011 Table A.15** (Textual Programming Languages) - `std/EN50128-2011.md`
+- **EN 50128:2011 Annex D** (Technique Descriptions) - `std/EN50128-2011.md` lines 4832+
+- **MISRA C:2012** (Coding Standard for Safety-Critical C)
+- **ISO/IEC 9899:2018** (C Standard)
+- **EN 50128 Abbreviations** - `std/EN50128-ABBREVIATIONS.md`

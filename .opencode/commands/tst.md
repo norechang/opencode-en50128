@@ -12,20 +12,73 @@ As per EN 50128 Sections 7.4 and 7.5, you are responsible for:
 
 ## Behavioral Constraints (EN 50128 Compliance)
 
-### Testing Requirements by SIL (Table A.5)
+### Testing Requirements by SIL
 
-#### Code Coverage Requirements
+---
 
-| Coverage Type | SIL 0-1 | SIL 2 | SIL 3-4 |
-|---------------|---------|-------|---------|
-| Statement Coverage | HR | HR | **M** (100%) |
-| Branch Coverage | HR | **M** (100%) | **M** (100%) |
-| Condition Coverage | R | HR | **M** (100%) |
-| MC/DC Coverage | - | R | HR (100%) |
+## Techniques/Measures (Table A.5 - Testing)
+
+**EN 50128 Section 7.4, 7.5, 7.7, Table A.5** defines verification and testing techniques.
+
+**Testing Techniques (subset of Table A.5):**
+
+| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-------------------|-----|-------|---------|---------|
+| 3 | **Dynamic Analysis and Testing** | Table A.13 | - | HR | **M** |
+| 4 | **Test Coverage for Code** | Table A.21 | R | HR | **M** |
+| 5 | **Functional and Black-Box Testing** | Table A.14 | HR | HR | **M** |
+| 6 | **Performance Testing** | Table A.18 | - | HR | **M** |
+| 8 | Interface Testing | D.34 | HR | HR | HR |
+
+**Mandatory for SIL 3-4:**
+- Technique 3: Dynamic Analysis and Testing (M)
+- Technique 4: Test Coverage for Code (M) - See Table A.21
+- Technique 5: Functional and Black-Box Testing (M)
+- Technique 6: Performance Testing (M)
+
+**Requirements:**
+- One or more techniques SHALL be selected per SIL level
+- If HR technique not used, document rationale (Section 4.8)
+- Testing techniques work in combination with verification techniques (Table A.5 items 1, 2, 7, 9, 10)
+
+**Detailed Technique References:**
+- **Table A.13:** Dynamic Analysis and Testing methods
+- **Table A.14:** Functional/Black-Box Testing techniques
+- **Table A.18:** Performance Testing techniques
+- **Table A.21:** Test Coverage requirements (see below)
+- **Reference D.34:** Interface Testing
+
+---
+
+## Test Coverage Requirements (Table A.21)
+
+**EN 50128 Annex A, Table A.21** defines mandatory coverage levels:
+
+| Coverage Type | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---------------|-------|---------|---------|
+| **Statement Coverage** | HR | HR | **M** (100%) |
+| **Branch Coverage** | HR | **M** (100%) | **M** (100%) |
+| **Condition Coverage** | - | R | **M** (100%) |
+| **Data Flow Coverage** | - | R | HR |
+| **Path Coverage** | - | - | R |
+
+**Coverage Requirements by SIL:**
+- **SIL 0:** Statement (HR), Branch (HR)
+- **SIL 1-2:** Statement (HR), Branch (**M** - 100%), Condition (R)
+- **SIL 3-4:** Statement (**M** - 100%), Branch (**M** - 100%), Condition (**M** - 100%)
+
+**Key Points:**
+- **100% coverage required** for mandatory coverage types
+- Coverage measured at component level and integration level
+- Use gcov, lcov, Bullseye, or equivalent tools
+- Document any uncovered code with justification
+- Coverage reports SHALL be included in test reports
 
 **M**=Mandatory, **HR**=Highly Recommended, **R**=Recommended
 
-#### Testing Techniques by SIL
+---
+
+## Testing Techniques by SIL
 
 | Technique | SIL 0-1 | SIL 2 | SIL 3-4 |
 |-----------|---------|-------|---------|
@@ -521,7 +574,15 @@ if __name__ == "__main__":
 - Load skill: `en50128-testing`
 
 ## Standard References
-- EN 50128:2011 Section 7.4 (Component Testing)
-- EN 50128:2011 Section 7.5 (Integration Testing)
-- EN 50128:2011 Table A.5 (Testing Techniques)
-- ISO/IEC/IEEE 29119 (Software Testing Standard)
+
+- **EN 50128:2011 Section 7.4** (Component Implementation and Testing) - `std/EN50128-2011.md` lines 3194-3282
+- **EN 50128:2011 Section 7.5** (Component Testing) - `std/EN50128-2011.md` lines 3194-3282
+- **EN 50128:2011 Section 7.6** (Integration Testing) - `std/EN50128-2011.md` lines 3284-3404
+- **EN 50128:2011 Section 7.7** (Overall Software Testing) - `std/EN50128-2011.md` lines 3405-3520
+- **EN 50128:2011 Table A.5** (Verification and Testing techniques) - `std/EN50128-TABLES-EXTRACTED.md`
+- **EN 50128:2011 Table A.13** (Dynamic Analysis and Testing) - `std/EN50128-2011.md`
+- **EN 50128:2011 Table A.14** (Functional/Black-Box Testing) - `std/EN50128-2011.md`
+- **EN 50128:2011 Table A.18** (Performance Testing) - `std/EN50128-2011.md`
+- **EN 50128:2011 Table A.21** (Test Coverage for Code) - `std/EN50128-TABLES-EXTRACTED.md`
+- **EN 50128 Abbreviations** - `std/EN50128-ABBREVIATIONS.md`
+- **ISO/IEC/IEEE 29119** (Software Testing Standard)

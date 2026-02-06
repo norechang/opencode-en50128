@@ -7,13 +7,62 @@ metadata:
   standard: EN 50128:2011
   domain: railway-software
   language: C
-  section: "6.3"
+  section: "6.5"
   sil_applicability: "0-4"
 ---
 
-# EN 50128 Quality Assurance Skill
+## What I do
 
-This skill provides quality assurance processes, code review techniques, and audit procedures required by EN 50128 Section 6.3.
+I provide quality assurance processes, code review techniques, and audit procedures required by EN 50128 Section 6.5:
+- Software Quality Assurance Plan (SQAP) development
+- Code reviews and Fagan inspections
+- Process audits and compliance checks
+- Metrics collection and analysis
+- Configuration management oversight
+- Quality gates enforcement
+
+## When to use me
+
+Use this skill when:
+- Developing Software Quality Assurance Plan (SQAP)
+- Performing code reviews and inspections
+- Conducting process audits
+- Collecting and analyzing quality metrics
+- Enforcing quality gates
+- Managing non-conformances
+- Preparing for assessments
+
+## Quality Assurance Techniques (EN 50128 Table A.9)
+
+**EN 50128 Section 6.5, Table A.9** defines software quality assurance techniques:
+
+| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-------------------|-----|-------|---------|---------|
+| 1 | Accredited to EN ISO 9001 | 7.1 | R | HR | HR |
+| 2 | **Compliant with EN ISO 9001** | 7.1 | **M** | **M** | **M** |
+| 3 | Compliant with ISO/IEC 90003 | 7.1 | R | R | R |
+| 4 | **Company Quality System** | 7.1 | **M** | **M** | **M** |
+| 5 | **Software Configuration Management** | D.48 | **M** | **M** | **M** |
+| 6 | Checklists | D.7 | R | HR | HR |
+| 7 | **Traceability** | D.58 | R | HR | **M** |
+| 8 | **Data Recording and Analysis** | D.12 | HR | HR | **M** |
+
+**MANDATORY for ALL SIL Levels (0, 1, 2, 3, 4):**
+- **EN ISO 9001 Compliance (2)** - **MANDATORY**
+- **Company Quality System (4)** - **MANDATORY**
+- **Software Configuration Management (5)** - **MANDATORY**
+
+**MANDATORY for SIL 3-4:**
+- **Traceability (7)** - **MANDATORY**
+- **Data Recording and Analysis (8)** - **MANDATORY**
+
+**Key Points:**
+- **Three techniques are MANDATORY for ALL SIL levels** (including SIL 0)
+- Quality system SHALL comply with ISO 9001 (minimum)
+- Configuration Management is MANDATORY for all projects
+- Traceability and data analysis are MANDATORY for SIL 3-4
+
+**Standard Reference:** `std/EN50128-2011.md` Section 6.5, Table A.9
 
 ## Quality Assurance Overview
 

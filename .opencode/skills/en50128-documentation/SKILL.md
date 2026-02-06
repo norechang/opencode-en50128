@@ -29,6 +29,22 @@ Use this skill when:
 - Preparing deliverable packages
 - Supporting certification activities
 
+## EN 50128 Documentation Requirements
+
+**All documentation requirements are based on:**
+- **EN 50128:2011 Annex C** - Document requirements table
+- **Table A.2** - Requirements specification techniques
+- **Table A.3** - Architecture and design techniques
+- **Table A.4** - Implementation techniques
+- **Table A.5** - Verification and testing techniques
+- **Table A.6** - Integration techniques
+- **Table A.7** - Validation techniques
+- **Table A.8** - Software analysis techniques
+- **Table A.9** - Quality assurance techniques (3 MANDATORY for ALL SILs)
+- **Table A.21** - Test coverage requirements
+
+**Standard Reference:** `std/EN50128-2011.md` Annex C, all technique tables
+
 ## Mandatory Documentation by Phase
 
 ### Phase 1: Planning

@@ -29,6 +29,46 @@ Use this skill when:
 - Checking MISRA C compliance
 - Addressing safety-critical implementation concerns
 
+## Implementation Techniques (EN 50128 Table A.4)
+
+**EN 50128 Section 7.4, Table A.4** defines software design and implementation techniques:
+
+| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-------------------|-----|-------|---------|---------|
+| 1 | Formal Methods | D.28 | - | R | HR |
+| 2 | Modelling | Table A.17 | R | HR | HR |
+| 3 | Structured Methodology | D.52 | R | HR | HR |
+| 4 | **Modular Approach** | D.38 | HR | **M** | **M** |
+| 5 | Components | Table A.20 | HR | HR | HR |
+| 6 | **Design and Coding Standards** | Table A.12 | HR | HR | **M** |
+| 7 | Analysable Programs | D.2 | HR | HR | HR |
+| 8 | **Strongly Typed Programming Language** | D.49 | R | HR | HR |
+| 9 | Structured Programming | D.53 | R | HR | HR |
+| 10 | Programming Language | Table A.15 | R | HR | HR |
+| 11 | Language Subset | D.35 | - | - | HR |
+| 12 | Object Oriented Programming | Table A.22, D.57 | R | R | R |
+| 13 | Procedural Programming | D.60 | R | HR | HR |
+| 14 | Metaprogramming | D.59 | R | R | R |
+
+**Mandatory Techniques:**
+- **SIL 3-4:** Design and Coding Standards (6) is **MANDATORY**
+- **SIL 2+:** Modular Approach (4) is **MANDATORY**
+
+**Key Implementation Techniques:**
+- **Technique 6 (Coding Standards):** MISRA C:2012 **MANDATORY** for SIL 3-4
+- **Technique 4 (Modular Approach):** **MANDATORY** for SIL 2+
+- **Technique 8 (Strongly Typed):** C with fixed-width types (uint8_t, uint16_t, etc.)
+- **Technique 9 (Structured Programming):** No goto, structured control flow
+
+**Approved Combinations:**
+- **SIL 3-4:** 4, 5, 6, 8 + **one from** {1 or 2}
+  - (Modular Approach, Components, Design/Coding Standards, Strongly Typed Language + Formal Methods OR Modelling)
+  
+- **SIL 1-2:** 3, 4, 5, 6 + **one from** {8, 9, or 10}
+  - (Structured Methodology, Modular Approach, Components, Design/Coding Standards + Strongly Typed Language OR Structured Programming OR Programming Language)
+
+**Standard Reference:** `std/EN50128-2011.md` Section 7.4, Table A.4
+
 ## MISRA C:2012 Core Rules
 
 ### Rule 21.3: No Dynamic Memory (Mandatory SIL 2+)

@@ -16,15 +16,17 @@ This project provides:
 ### For New Projects
 
 1. **Understand the Lifecycle**: Read `LIFECYCLE.md` - complete EN 50128 V-Model process
-2. **Choose Your Agent**: See `AGENTS.md` - 8 role-based agents for each lifecycle phase
+2. **Choose Your Agent**: See `AGENTS.md` - 11 role-based agents for each lifecycle phase
 3. **Start Development**:
    ```bash
    /req  # Begin with Requirements Engineering
    /des  # Then Architecture & Design
    /imp  # Implementation (C + MISRA C:2012)
-   /tst  # Testing with 100% coverage
+   /tst  # Unit Testing with coverage
+   /int  # Component Integration
    /ver  # Verification (static analysis)
    /val  # Validation (system testing)
+   /cm   # Configuration Management (throughout)
    ```
 4. **Follow the Example**: `examples/train_door_control/` - Complete SIL 3 implementation
 
@@ -44,38 +46,64 @@ Determine the Safety Integrity Level (SIL) for your project:
 
 Use specialized agents via slash commands:
 
-- `/req` - Requirements management and validation
-- `/design` - Software architecture and design support
-- `/verify` - Verification and testing activities
-- `/quality` - Quality assurance and audits
-- `/config` - Configuration management
-- `/safety` - Safety analysis and hazard management
-- `/docs` - Documentation generation and management
-- `/check` - Compliance verification
+- `/req` - Requirements Engineer - Requirements specification and management
+- `/des` - Designer - Software architecture and design
+- `/imp` - Implementer - C code implementation with MISRA C compliance
+- `/tst` - Tester - Unit and integration testing with coverage analysis
+- `/int` - Integrator - Component integration and interface testing
+- `/ver` - Verifier - Static analysis and verification evidence collection
+- `/val` - Validator - System testing and acceptance validation
+- `/saf` - Safety Engineer - Hazard analysis, FMEA, and safety case
+- `/qua` - Quality Assurance - Code reviews, audits, and quality gates
+- `/pm` - Project Manager - Project coordination and CCB leadership
+- `/cm` - Configuration Manager - Version control and baseline management
 
 See [AGENTS.md](AGENTS.md) for detailed agent documentation.
 
 ### 3. Example Workflow
 
-#### Complete Requirements-to-Testing Flow
+#### Complete SIL 3 Development Flow
 
 ```bash
-# 1. Extract and validate requirements
-/req extract --source requirements.doc
-/req validate --sil 3
+# 1. Requirements Engineering
+/req
+# Define requirements, assign SIL levels, establish traceability
 
-# 2. Generate traceability matrix
-/req trace --output docs/requirements/requirements-trace.md
+# 2. Architecture and Design
+/des
+# Create software architecture (SAS) and design (SDS)
 
-# 3. Create design from requirements
-/design template --sil 3
-/design validate --requirements docs/requirements/requirements-trace.md
+# 3. Safety Analysis
+/saf
+# Perform FMEA/FTA, define safety requirements
 
-# 4. Generate test plan
-/verify testplan --requirements docs/requirements/requirements-trace.md --sil 3
+# 4. Implementation
+/imp
+# Implement C code with MISRA C:2012 compliance
 
-# 5. Check overall compliance
-/check status --phase design
+# 5. Unit Testing
+/tst
+# Execute unit tests, measure coverage (100% for SIL 3)
+
+# 6. Verification
+/ver
+# Run static analysis, verify complexity, code reviews
+
+# 7. Integration
+/int
+# Integrate components, interface testing
+
+# 8. Validation
+/val
+# System testing, UAT, safety validation
+
+# 9. Configuration Management (Throughout)
+/cm
+# Version control, change management, baselines
+
+# 10. Quality Assurance (Throughout)
+/qua
+# Code reviews, audits, quality gates
 ```
 
 ## Documentation
@@ -89,33 +117,33 @@ See [AGENTS.md](AGENTS.md) for detailed agent documentation.
 
 ```
 EN50128/
-├── AGENTS.md                      # Agent definitions and workflows
-├── README.md                      # This file
-├── std/                           # Reference standards
-│   ├── EN50128-2011.pdf
-│   ├── EN 50126-1-2017.pdf
-│   └── EN 50126-2-2017.pdf
-├── docs/                          # Documentation
+├── AGENTS.md                          # Agent definitions and workflows
+├── LIFECYCLE.md                       # Complete V-Model lifecycle
+├── README.md                          # This file
+├── .opencode/                         # OpenCode agent system
+│   ├── commands/                      # 11 agent command definitions
+│   └── skills/                        # 12 domain-specific skills
+├── std/                               # EN 50128 standards (LLM-friendly Markdown)
+│   ├── EN50128-2011.md                # Main standard (2.2 MB)
+│   ├── EN 50126-1-2017.md             # RAMS Part 1
+│   ├── EN 50126-2-2017.md             # RAMS Part 2
+│   ├── EN50128-ABBREVIATIONS.md       # Official abbreviations
+│   └── EN50128-TABLES-EXTRACTED.md    # All technique tables
+├── docs/                              # Documentation and guides
 │   ├── EN50128-Compliance-Guide.md
-│   ├── Project-Structure.md
-│   ├── plans/                     # SQAP, SCMP, SVP, SVaP
-│   ├── requirements/              # SRS, traceability
-│   ├── design/                    # SAS, SDS
-│   ├── test/                      # Test plans and reports
-│   ├── safety/                    # Hazard analysis, FMEA, FTA
-│   └── reports/                   # Verification, validation, compliance
-├── skills/                        # EN 50128 compliance skills
-│   ├── en50128-requirements.skill
-│   ├── en50128-design.skill
-│   ├── en50128-testing.skill
-│   ├── en50128-safety.skill
-│   └── en50128-documentation.skill
-├── templates/                     # Document templates
-├── tools/                         # Tool configurations
-└── src/                           # Source code
+│   ├── Project-Structure.md           # Detailed structure info
+│   ├── QUICKSTART.md
+│   └── project-revision/              # Project revision history (archived)
+├── examples/                          # Example projects
+│   └── train_door_control/            # Complete SIL 3 example
+├── src/                               # Source code template structure
+├── tools/                             # Development tools
+│   ├── pdf-conversion/                # PDF to Markdown converter
+│   └── static-analysis/               # MISRA C checking
+└── venv/                              # Python virtual environment
 ```
 
-See [docs/Project-Structure.md](docs/Project-Structure.md) for detailed structure information.
+**Note**: See [docs/Project-Structure.md](docs/Project-Structure.md) for complete structure details.
 
 ## Key Features
 
@@ -156,7 +184,34 @@ See [docs/Project-Structure.md](docs/Project-Structure.md) for detailed structur
 
 **Skills:** [skills/en50128-safety.skill](skills/en50128-safety.skill)
 
-### 5. Documentation Management
+### 5. PDF to Markdown Conversion
+
+Convert EN 50128 standard PDFs to LLM-friendly Markdown for easy reference and AI agent integration.
+
+**Features:**
+- LLM-optimized conversion using PyMuPDF4LLM
+- Table formatting and cleanup
+- Metadata extraction
+- Batch processing support
+
+**Usage:**
+```bash
+# Convert all standards (via OpenCode)
+/pdf2md --all
+
+# Convert single file
+/pdf2md std/EN50128-2011.pdf
+
+# Check conversion status
+/pdf2md --check
+
+# Direct script usage
+./tools/pdf-conversion/convert.sh --all
+```
+
+**Documentation:** [tools/pdf-conversion/README.md](tools/pdf-conversion/README.md)
+
+### 6. Documentation Management
 
 - All mandatory EN 50128 documents
 - Document templates

@@ -1,0 +1,4 @@
+# PyMuPDF4LLM - PDF to Markdown conversion optimized for LLMs
+# Used for converting EN 50128 railway standards to LLM-friendly format
+pymupdf4llm>=0.0.5
+pymupdf>=1.23.0

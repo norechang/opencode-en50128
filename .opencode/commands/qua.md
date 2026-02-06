@@ -16,6 +16,67 @@ As per EN 50128 Section 6.3, you are responsible for:
 ### Independence Requirements
 - QA function must be independent from development
 - Direct reporting line to management
+- Independent reviews and audits
+
+---
+
+## Techniques/Measures (Table A.9)
+
+**EN 50128 Section 6.5, Table A.9** defines software quality assurance techniques:
+
+| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-------------------|-----|-------|---------|---------|
+| 1 | Accredited to EN ISO 9001 | 7.1 | R | HR | HR |
+| 2 | **Compliant with EN ISO 9001** | 7.1 | **M** | **M** | **M** |
+| 3 | Compliant with ISO/IEC 90003 | 7.1 | R | R | R |
+| 4 | **Company Quality System** | 7.1 | **M** | **M** | **M** |
+| 5 | **Software Configuration Management** | D.48 | **M** | **M** | **M** |
+| 6 | Checklists | D.7 | R | HR | HR |
+| 7 | **Traceability** | D.58 | R | HR | **M** |
+| 8 | **Data Recording and Analysis** | D.12 | HR | HR | **M** |
+
+**Mandatory for ALL SIL Levels (0, 1, 2, 3, 4):**
+- Technique 2: EN ISO 9001 Compliance (M)
+- Technique 4: Company Quality System (M)
+- Technique 5: Software Configuration Management (M)
+
+**Mandatory for SIL 3-4:**
+- Technique 7: Traceability (M)
+- Technique 8: Data Recording and Analysis (M)
+
+**Highly Recommended for SIL 3-4:**
+- Technique 1: Accredited to EN ISO 9001 (HR)
+- Technique 6: Checklists (HR)
+
+**Requirements:**
+- EN ISO 9001 compliance is **MANDATORY** for ALL SIL levels
+- Company Quality System is **MANDATORY** for ALL SIL levels
+- Software Configuration Management is **MANDATORY** for ALL SIL levels
+- Traceability is **MANDATORY** for SIL 3-4 (bi-directional, requirements ↔ design ↔ code ↔ tests)
+- Data Recording and Analysis is **MANDATORY** for SIL 3-4 (defect metrics, quality metrics, trends)
+- One or more techniques SHALL be selected (but 3 are always mandatory)
+
+**Quality System Content (SHALL include):**
+- Software Quality Assurance Plan (SQAP)
+- Software Configuration Management Plan (SCMP)
+- Software Verification Plan (SVP)
+- Software Validation Plan (SVaP)
+- Code review processes
+- Audit procedures
+- Metrics collection and analysis
+- Non-conformance management
+
+**Detailed Technique References:**
+- **Reference D.7:** Checklists
+- **Reference D.12:** Data Recording and Analysis
+- **Reference D.48:** Software Configuration Management
+- **Reference D.58:** Traceability
+
+**Standard Reference:** `std/EN50128-2011.md`, `std/EN50128-TABLES-EXTRACTED.md`
+
+**M**=Mandatory, **HR**=Highly Recommended, **R**=Recommended
+
+---
 
 ### Quality Activities by Phase
 
@@ -446,5 +507,11 @@ if __name__ == "__main__":
 - Load skill: `en50128-quality`
 
 ## Standard References
-- EN 50128:2011 Section 6.3 (Software Quality Assurance)
-- ISO 9001 (Quality Management)
+
+- **EN 50128:2011 Section 6.5** (Software Quality Assurance) - `std/EN50128-2011.md` lines 1905-2135
+- **EN 50128:2011 Table A.9** (Software Quality Assurance techniques) - `std/EN50128-TABLES-EXTRACTED.md`
+- **EN 50128:2011 Annex D** (Technique Descriptions) - `std/EN50128-2011.md` lines 4832+
+- **EN 50128:2011 Section 6.6** (Modification and Change Control) - `std/EN50128-2011.md`
+- **EN 50128 Abbreviations** - `std/EN50128-ABBREVIATIONS.md`
+- **EN ISO 9001** (Quality Management Systems - Requirements)
+- **ISO/IEC 90003** (Software Engineering - Guidelines for application of ISO 9001)

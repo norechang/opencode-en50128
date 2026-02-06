@@ -6,6 +6,38 @@ This document defines role-based agents for EN 50128 railway software developmen
 - **`LIFECYCLE.md`** - Complete EN 50128 V-Model software development lifecycle (START HERE)
 - **`.opencode/skills/`** - Domain-specific skills for each lifecycle phase
 - **`.opencode/commands/`** - Agent command definitions
+- **`std/EN50128-2011.md`** - Full EN 50128 standard (LLM-friendly Markdown)
+- **`std/EN 50126-1-2017.md`** - RAMS standard Part 1
+- **`std/EN 50126-2-2017.md`** - RAMS standard Part 2
+
+---
+
+## EN 50128 Technique/Measure Tables (Annex A)
+
+The following tables define mandatory, highly recommended, and recommended techniques for each lifecycle phase. Agents SHALL reference these tables when performing their duties.
+
+**Standard Location:** `std/EN50128-2011.md` (converted from PDF)
+
+| Table | Section | Purpose | Key Agents |
+|-------|---------|---------|------------|
+| **Table A.2** | 7.2 | Software Requirements Specification techniques | `/req` |
+| **Table A.3** | 7.3 | Software Architecture techniques | `/des` |
+| **Table A.4** | 7.4 | Software Design and Implementation techniques | `/des`, `/imp` |
+| **Table A.5** | 6.2, 7.3 | Verification and Testing techniques | `/ver`, `/tst` |
+| **Table A.6** | 7.6 | Integration techniques | `/int` |
+| **Table A.7** | 7.7 | Overall Software Testing/Validation techniques | `/val` |
+| **Table A.8** | 6.3 | Software Analysis techniques | `/saf` |
+| **Table A.9** | 6.5 | Software Quality Assurance techniques | `/qua`, `/cm` |
+| **Table A.13** | - | Dynamic Analysis and Testing | `/tst`, `/ver` |
+| **Table A.19** | - | Static Analysis techniques | `/ver` |
+| **Table A.21** | - | Test Coverage for Code | `/tst` |
+
+**Key to Recommendations:**
+- **M** = Mandatory - Must be used
+- **HR** = Highly Recommended - Rationale required if not used
+- **R** = Recommended - Should be considered
+- **-** = No recommendation
+- **NR** = Not Recommended - Rationale required if used
 
 ---
 
@@ -66,8 +98,17 @@ EN 50128:2011 defines the following organizational roles:
 - Mandatory traceability matrices
 - C language considerations (data types, memory constraints)
 
-**Command File**: `.opencode/commands/req.md`
-**Skills**: `skills/en50128-requirements.skill`
+**EN 50128 Techniques (Table A.2)**:
+| Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----------|-------|---------|---------|-----------|
+| Formal Methods | - | R | HR | D.28 |
+| Modelling | R | R | HR | Table A.17 |
+| Structured Methodology | R | R | HR | D.52 |
+| Decision Tables | R | R | HR | D.13 |
+
+**Command File**: `.opencode/commands/req.md`  
+**Skills**: `skills/en50128-requirements/`  
+**Standard**: `std/EN50128-2011.md` Section 7.2
 
 ---
 
@@ -95,8 +136,23 @@ EN 50128:2011 defines the following organizational roles:
 - Bounded execution time
 - Explicit error handling
 
+**EN 50128 Techniques (Table A.3 - Key Entries)**:
+| Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----------|-------|---------|---------|-----------|
+| Defensive Programming | - | HR | HR | D.14 |
+| Structured Methodology | R | HR | **M** | D.52 |
+| Fully Defined Interface | HR | HR | HR | D.38 |
+| Modular Approach | HR | **M** | **M** | D.38 |
+| Fault Detection & Diagnosis | - | R | HR | D.26 |
+| Information Encapsulation | R | HR | HR | D.33 |
+
+**Approved Combinations (SIL 3-4):**
+- Option A: 1,7,19,22 + one from 4,5,12,21
+- Option B: 1,4,19,22 + one from 2,5,12,15,21
+
 **Command File**: `.opencode/commands/des.md`
-**Skills**: `skills/en50128-design.skill`
+**Skills**: `skills/en50128-design/`
+**Standard**: `std/EN50128-2011.md` Section 7.3, Table A.3
 
 ---
 
@@ -137,14 +193,27 @@ error_t err = function();
 if (err != SUCCESS) handle_error(err);  // REQUIRED
 ```
 
+**EN 50128 Techniques (Table A.4)**:
+| Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----------|-------|---------|---------|-----------|
+| Structured Methodology | R | HR | **M** | D.52 |
+| Modular Approach | HR | **M** | **M** | D.38 |
+| Design and Coding Standards | HR | HR | **M** | Table A.12 |
+| Analysable Programs | HR | HR | **M** | D.2 |
+| Strongly Typed Language | R | HR | HR | D.49 |
+| Structured Programming | R | HR | **M** | D.53 |
+
+**Approved Combinations (SIL 3-4):** 4,5,6,8 + one from 1 or 2
+
 **Command File**: `.opencode/commands/imp.md`
-**Skills**: `skills/en50128-implementation.skill` (to be created)
+**Skills**: `skills/en50128-implementation/`
+**Standard**: `std/EN50128-2011.md` Section 7.4, Table A.4
 
 ---
 
 ### 4. Tester (`/tst`)
 
-**Role**: Software Testing per EN 50128 Sections 7.4, 7.5
+**Role**: Software Testing per EN 50128 Sections 7.4, 7.5, 7.7
 
 **Responsibilities**:
 - Unit testing (component testing)
@@ -153,9 +222,10 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 - Coverage analysis
 
 **Key Behaviors**:
-- **Coverage Requirements by SIL**:
-  - SIL 2: Statement (100%), Branch (100%)
-  - SIL 3-4: Statement (100%), Branch (100%), Condition (100%)
+- **Coverage Requirements by SIL (Table A.21)**:
+  - SIL 0-1: Statement (HR), Branch (HR)
+  - SIL 2: Statement (HR), Branch (**M**)
+  - SIL 3-4: Statement (**M**), Branch (**M**), Condition (**M**)
 - Independent testing (mandatory SIL 3-4)
 - Boundary value analysis (mandatory SIL 3-4)
 - Fault injection (highly recommended SIL 3-4)
@@ -163,8 +233,18 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 **Test Framework**: Unity, CUnit (for C)
 **Coverage Tools**: gcov/lcov, Bullseye
 
+**EN 50128 Techniques (Table A.5 - Testing subset)**:
+| Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----------|-------|---------|---------|-----------|
+| Dynamic Analysis and Testing | - | HR | **M** | Table A.13 |
+| Test Coverage for Code | R | HR | **M** | Table A.21 |
+| Functional/Black-Box Testing | HR | HR | **M** | Table A.14 |
+| Performance Testing | - | HR | **M** | Table A.18 |
+| Interface Testing | HR | HR | HR | D.34 |
+
 **Command File**: `.opencode/commands/tst.md`
-**Skills**: `skills/en50128-testing.skill`
+**Skills**: `skills/en50128-testing/`
+**Standard**: `std/EN50128-2011.md` Sections 7.4, 7.5, 7.7, Table A.5
 
 ---
 
@@ -200,7 +280,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 ### 6. Verifier (`/ver`)
 
-**Role**: Software Verification per EN 50128 Section 6.4
+**Role**: Software Verification per EN 50128 Section 6.2
 
 **Responsibilities**:
 - Verification planning and execution
@@ -224,14 +304,26 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 - gcov/lcov (coverage)
 - Lizard (complexity)
 
+**EN 50128 Techniques (Table A.5 - Verification subset)**:
+| Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----------|-------|---------|---------|-----------|
+| Formal Proof | - | R | HR | D.29 |
+| Static Analysis | - | HR | **M** | Table A.19 |
+| Metrics | - | R | HR | D.37 |
+| Traceability | R | HR | **M** | D.58 |
+| Software Error Effect Analysis | - | R | HR | D.25 |
+
+**Approved Combination (SIL 3-4):** 3,5,7,8 + one from 1,2,6
+
 **Command File**: `.opencode/commands/ver.md`
-**Skills**: `skills/en50128-verification.skill` (to be created)
+**Skills**: `skills/en50128-verification/`
+**Standard**: `std/EN50128-2011.md` Section 6.2, Table A.5
 
 ---
 
 ### 7. Validator (`/val`)
 
-**Role**: Software Validation per EN 50128 Section 7.6
+**Role**: Software Validation per EN 50128 Section 7.7
 
 **Responsibilities**:
 - Validation planning
@@ -245,14 +337,22 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 - Operational scenarios
 - Customer acceptance
 
+**EN 50128 Techniques (Table A.7)**:
+| Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----------|-------|---------|---------|-----------|
+| Performance Testing | - | HR | **M** | Table A.18 |
+| Functional and Black-box Testing | HR | HR | **M** | Table A.14 |
+| Modelling | - | R | R | Table A.17 |
+
 **Command File**: `.opencode/commands/val.md`
-**Skills**: `skills/en50128-validation.skill` (to be created)
+**Skills**: `skills/en50128-validation/`
+**Standard**: `std/EN50128-2011.md` Section 7.7, Table A.7
 
 ---
 
 ### 8. Quality Assurance (`/qua`)
 
-**Role**: Quality Assurance per EN 50128 Section 6.3
+**Role**: Quality Assurance per EN 50128 Section 6.5
 
 **Responsibilities**:
 - SQAP development and enforcement
@@ -269,7 +369,103 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 - Quality gates enforcement
 
 **Command File**: `.opencode/commands/qua.md`
-**Skills**: `skills/en50128-quality.skill` (to be created)
+**Skills**: `skills/en50128-quality/`
+**Standard**: `std/EN50128-2011.md` Section 6.5
+
+---
+
+### 9. Integrator (`/int`)
+
+**Role**: Software Integration per EN 50128 Section 7.6
+
+**Responsibilities**:
+- Software component integration
+- Software/hardware integration
+- Integration testing
+- Interface testing
+- Integration verification
+
+**Key Behaviors**:
+- Progressive integration (bottom-up, top-down, sandwich)
+- Interface testing (mandatory for all SILs)
+- Performance testing (highly recommended SIL 3-4)
+- Integration test coverage
+- Integration defect tracking
+
+**EN 50128 Techniques (Table A.6)**:
+| Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----------|-------|---------|---------|-----------|
+| Functional and Black-box Testing | HR | HR | HR | Table A.14 |
+| Performance Testing | - | R | HR | Table A.18 |
+
+**Command File**: `.opencode/commands/int.md`
+**Skills**: `skills/en50128-integration/`
+**Standard**: `std/EN50128-2011.md` Section 7.6, Table A.6
+
+---
+
+### 10. Project Manager (`/pm`)
+
+**Role**: Project Management per EN 50128 Section 5, Table B.9
+
+**Responsibilities**:
+- Overall project coordination
+- Resource allocation and scheduling
+- Change Control Board (CCB) leadership
+- Stakeholder communication
+- Risk management
+- Project reporting
+
+**Key Behaviors**:
+- Coordinate across all roles (REQ, DES, IMP, TST, VER, VAL, INT, SAF, QUA, CM)
+- Ensure independence requirements met (SIL 3-4)
+- Approve baselines and releases
+- Manage project risks and issues
+- Report to senior management
+
+**Independence Constraints**:
+- **SIL 3-4:** Validator SHALL NOT report to Project Manager
+- **SIL 3-4:** PM has NO influence on Validator's decisions
+- **SIL 3-4:** Verifier independence required (separate from development)
+
+**Command File**: `.opencode/commands/pm.md`
+**Skills**: `skills/en50128-project-management/`
+**Standard**: `std/EN50128-2011.md` Section 5, Table B.9
+
+---
+
+### 11. Configuration Manager (`/cm`)
+
+**Role**: Configuration Management per EN 50128 Section 6.6
+
+**Responsibilities**:
+- Software Configuration Management Plan (SCMP) development
+- Configuration identification and control
+- Change request processing
+- Baseline management
+- Configuration audits (PCA, FCA)
+- Traceability management (mandatory SIL 3-4)
+
+**Key Behaviors**:
+- **Configuration Management MANDATORY for ALL SIL levels (0, 1, 2, 3, 4)**
+- Version control for all configuration items
+- Change control process (Change Control Board)
+- Configuration status accounting
+- Traceability matrix maintenance (mandatory SIL 3-4)
+- Data recording and analysis (mandatory SIL 3-4)
+
+**EN 50128 Techniques (Table A.9 - CM subset)**:
+| Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----------|-------|---------|---------|-----------|
+| Software Configuration Management | **M** | **M** | **M** | D.48 |
+| Traceability | R | HR | **M** | D.58 |
+| Data Recording and Analysis | HR | HR | **M** | D.12 |
+
+**Critical:** Configuration Management is **MANDATORY for ALL SIL levels** (0, 1, 2, 3, 4)
+
+**Command File**: `.opencode/commands/cm.md`
+**Skills**: `skills/en50128-configuration/`
+**Standard**: `std/EN50128-2011.md` Section 6.6, Table A.9
 
 ---
 
@@ -306,9 +502,17 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 │   TST   │ Testing
 │         │ - Execute tests
 │         │ - Measure coverage
-│         │ - Integration testing
+│         │ - Unit testing
 └────┬────┘
      │ (Test reports, Coverage)
+     ▼
+┌─────────┐
+│   INT   │ Integration
+│         │ - Integrate components
+│         │ - Integration testing
+│         │ - Interface testing
+└────┬────┘
+     │ (Integration report)
      ▼
 ┌─────────┐
 │   VER   │ Verification
@@ -342,6 +546,20 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
      │         │ - Code reviews
      │         │ - Audits
      │         │ - Quality gates
+     └─────────┘
+     
+     ┌─────────┐
+     │   CM    │ (Throughout)
+     │         │ - Version control
+     │         │ - Change management
+     │         │ - Baselines
+     └─────────┘
+     
+     ┌─────────┐
+     │   PM    │ (Throughout)
+     │         │ - Coordination
+     │         │ - CCB leadership
+     │         │ - Risk management
      └─────────┘
 ```
 
@@ -389,19 +607,30 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 # Measure coverage (100% for SIL 3+)
 # Fault injection
 
-# 7. VER: Verify
+# 7. INT: Integration
+/int
+# Integrate components
+# Integration testing
+# Interface testing
+# Performance testing
+
+# 8. VER: Verify
 /ver
 # Run static analysis (PC-lint, Cppcheck)
 # Check coverage
 # Verify complexity
 # Collect evidence
 
-# 8. VAL: Validate
+# 9. VAL: Validate
 /val
 # System testing on target
 # Operational scenarios
 # Acceptance testing
 # Customer approval
+
+# Throughout: CM, PM
+/cm  # Configuration management, change control, baselines
+/pm  # Project coordination, CCB, risk management
 ```
 
 ## C Language Compliance Summary

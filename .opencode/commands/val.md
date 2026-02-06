@@ -14,11 +14,62 @@ As per EN 50128 Section 7.6, you are responsible for:
 ## Behavioral Constraints (EN 50128 Compliance)
 
 ### Independence Requirements
-- **SIL 3-4**: Validation **MUST** be performed by independent team
 
-### Validation vs Verification
+**Per EN 50128 Section 5.1.2:**
+
+**Critical for SIL 3-4:**
+- Validation **MUST** be performed by independent validator
+- **SHALL NOT report to Project Manager** (Section 5.1.2.10.f)
+- Project Manager has **NO influence** on Validator's decisions
+- Validator **informs** PM about decisions (information only)
+- **Validator gives agreement/disagreement for software release** (Section 5.1.2.8)
+
+**Independence from:**
+- Requirements Manager, Designer, Implementer, Integrator, Tester, Verifier (for same component)
+- Project Manager (organizationally independent at SIL 3-4)
+
+**SIL 0-2:**
+- Independence relaxed, but still recommended
+- Document any role combinations
+
+---
+
+## Techniques/Measures (Table A.7)
+
+**EN 50128 Section 7.7, Table A.7** defines overall software testing techniques for validation:
+
+| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-------------------|-----|-------|---------|---------|
+| 1 | **Performance Testing** | Table A.18 | - | HR | **M** |
+| 2 | **Functional and Black-box Testing** | Table A.14 | HR | HR | **M** |
+| 3 | Modelling | Table A.17 | - | R | R |
+
+**Mandatory for SIL 3-4:**
+- Technique 1: Performance Testing (M)
+- Technique 2: Functional and Black-box Testing (M)
+
+**Requirements:**
+- One or more techniques SHALL be selected per SIL level
+- Performance testing **MANDATORY** for SIL 3-4
+- Functional/black-box testing **MANDATORY** for SIL 3-4
+- Testing performed in target environment or high-fidelity simulation
+- Test coverage per Table A.21 (Statement, Branch, Condition for SIL 3-4)
+
+**Detailed Technique References:**
+- **Table A.14:** Functional/Black-box Testing techniques (boundary value, equivalence partitioning, etc.)
+- **Table A.18:** Performance Testing techniques (load, stress, timing, resource usage)
+- **Table A.17:** Modelling techniques
+
+**Standard Reference:** `std/EN50128-2011.md`, `std/EN50128-TABLES-EXTRACTED.md`
+
+**M**=Mandatory, **HR**=Highly Recommended, **R**=Recommended
+
+---
+
+## Validation vs Verification
+
 - **Verification**: "Are we building the product right?" (Meets specifications)
-- **Validation**: "Are we building the right product?" (Meets user needs)
+- **Validation**: "Are we building the right product?" (Meets user needs and intended use)
 
 ## Validation Activities
 
@@ -402,5 +453,13 @@ if __name__ == "__main__":
 - Load skill: `en50128-validation`
 
 ## Standard References
-- EN 50128:2011 Section 7.6 (Software Validation)
-- EN 50128:2011 Section 8 (Software Assessment)
+
+- **EN 50128:2011 Section 7.7** (Overall Software Testing / Final Validation) - `std/EN50128-2011.md` lines 3405-3520
+- **EN 50128:2011 Section 5.1.2.8** (Validator Release Authority) - `std/EN50128-2011.md` line 1144
+- **EN 50128:2011 Section 5.1.2.10.f** (Validator Independence) - `std/EN50128-2011.md` lines 1173-1174
+- **EN 50128:2011 Table A.7** (Overall Software Testing techniques) - `std/EN50128-TABLES-EXTRACTED.md`
+- **EN 50128:2011 Table A.14** (Functional/Black-Box Testing) - `std/EN50128-2011.md`
+- **EN 50128:2011 Table A.18** (Performance Testing) - `std/EN50128-2011.md`
+- **EN 50128:2011 Table A.21** (Test Coverage) - `std/EN50128-TABLES-EXTRACTED.md`
+- **EN 50128:2011 Section 8** (Software Assessment) - `std/EN50128-2011.md`
+- **EN 50128 Abbreviations** - `std/EN50128-ABBREVIATIONS.md`

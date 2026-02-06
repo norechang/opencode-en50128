@@ -4,60 +4,98 @@
 
 ```
 EN50128/
-├── README.md                          # Project overview
+├── README.md                          # Project overview and quick start
 ├── AGENTS.md                          # Agent definitions and workflows
-├── std/                               # Reference standards
-│   ├── EN50128-2011.pdf              # Main standard
-│   ├── EN 50126-1-2017.pdf           # RAMS Part 1
-│   └── EN 50126-2-2017.pdf           # RAMS Part 2
-├── docs/                              # Project documentation
+├── LIFECYCLE.md                       # Complete V-Model lifecycle
+├── CHANGELOG.md                       # Version history
+├── CONTRIBUTING.md                    # Contribution guidelines
+├── GITHUB_SETUP.md                    # GitHub repository setup
+├── LICENSE                            # License information
+├── .gitignore                         # Git ignore rules
+│
+├── .opencode/                         # OpenCode agent system
+│   ├── commands/                      # 11 agent command definitions
+│   │   ├── req.md                    # Requirements Engineer
+│   │   ├── des.md                    # Designer
+│   │   ├── imp.md                    # Implementer
+│   │   ├── tst.md                    # Tester
+│   │   ├── int.md                    # Integrator
+│   │   ├── ver.md                    # Verifier
+│   │   ├── val.md                    # Validator
+│   │   ├── saf.md                    # Safety Engineer
+│   │   ├── qua.md                    # Quality Assurance
+│   │   ├── pm.md                     # Project Manager
+│   │   └── cm.md                     # Configuration Manager
+│   └── skills/                        # 12 domain-specific skills
+│       ├── en50128-requirements/     # Requirements engineering
+│       ├── en50128-design/           # Design patterns
+│       ├── en50128-implementation/   # C implementation with MISRA C
+│       ├── en50128-testing/          # Testing methodologies
+│       ├── en50128-integration/      # Integration techniques
+│       ├── en50128-verification/     # Verification and static analysis
+│       ├── en50128-validation/       # Validation and system testing
+│       ├── en50128-safety/           # Safety analysis (FMEA, FTA)
+│       ├── en50128-quality/          # Quality assurance
+│       ├── en50128-documentation/    # Documentation templates
+│       ├── en50128-project-management/  # Project management
+│       └── en50128-configuration/    # Configuration management
+│
+├── std/                               # EN 50128 standards (LLM-friendly)
+│   ├── EN50128-2011.md               # Main standard (2.2 MB Markdown)
+│   ├── EN 50126-1-2017.md            # RAMS Part 1 (293 KB)
+│   ├── EN 50126-2-2017.md            # RAMS Part 2 (210 KB)
+│   ├── EN50128-ABBREVIATIONS.md      # Official abbreviations
+│   └── EN50128-TABLES-EXTRACTED.md   # All technique tables (A.2-A.23)
+│
+├── docs/                              # Documentation and guides
+│   ├── QUICKSTART.md                 # Quick start guide
+│   ├── SETUP.md                      # Setup instructions
+│   ├── Quick-Reference.md            # Quick reference
+│   ├── Project-Structure.md          # This file
 │   ├── EN50128-Compliance-Guide.md   # Compliance overview
-│   ├── plans/                         # Planning documents
-│   │   ├── SQAP.md                   # Software Quality Assurance Plan
-│   │   ├── SCMP.md                   # Configuration Management Plan
-│   │   ├── SVP.md                    # Verification Plan
-│   │   └── SVaP.md                   # Validation Plan
-│   ├── requirements/                  # Requirements documentation
-│   │   ├── SRS.md                    # Software Requirements Spec
-│   │   └── requirements-trace.md     # Traceability matrix
-│   ├── design/                        # Design documentation
-│   │   ├── SAS.md                    # Software Architecture Spec
-│   │   └── SDS.md                    # Software Design Spec
-│   ├── test/                          # Test documentation
-│   │   ├── test-plan.md              # Master test plan
-│   │   ├── unit-tests/               # Unit test specs
-│   │   ├── integration-tests/        # Integration test specs
-│   │   └── validation-tests/         # Validation test specs
-│   ├── safety/                        # Safety documentation
-│   │   ├── hazard-log.md             # Hazard analysis
-│   │   ├── fmea.md                   # FMEA analysis
-│   │   ├── fta.md                    # Fault tree analysis
-│   │   └── safety-case.md            # Safety case
-│   └── reports/                       # Reports and assessments
-│       ├── verification/             # Verification reports
-│       ├── validation/               # Validation reports
-│       └── compliance/               # Compliance reports
-├── skills/                            # EN 50128 skills definitions
-│   ├── en50128-requirements.skill    # Requirements engineering
-│   ├── en50128-design.skill          # Design patterns
-│   ├── en50128-testing.skill         # Testing methodologies
-│   ├── en50128-safety.skill          # Safety analysis
-│   └── en50128-documentation.skill   # Documentation templates
-├── templates/                         # Document templates
-│   ├── requirement-template.md
-│   ├── design-template.md
-│   ├── test-case-template.md
-│   └── review-checklist.md
-├── tools/                             # Tool configurations
-│   ├── static-analysis/              # Static analysis configs
-│   ├── coverage/                     # Coverage tool configs
-│   └── build/                        # Build configurations
-└── src/                               # Source code (to be added)
-    ├── components/                    # Software components
-    ├── interfaces/                    # Interface definitions
-    ├── tests/                         # Test code
-    └── config/                        # Configuration files
+│   ├── EN50128-Roles.md              # Role descriptions
+│   ├── Agent-Skill-*.md              # Agent-skill mapping (3 files)
+│   └── project-revision/             # Project revision history (archived)
+│       ├── PROJECT_REVISION_STATUS.md   # Overall revision status
+│       ├── NEXT_STEPS.md                # Future enhancements
+│       ├── CLEANUP_ANALYSIS.md          # Cleanup analysis
+│       ├── PHASE_2A_COMPLETE.md         # Agent commands phase
+│       ├── PHASE_2B_COMPLETE.md         # New skills phase
+│       ├── PHASE_2C_COMPLETE.md         # Existing skills phase
+│       ├── PHASE_2D_COMPLETE.md         # Master docs phase
+│       └── PHASE_2E_COMPLETE.md         # Final verification phase
+│
+├── examples/                          # Example projects
+│   └── train_door_control/           # Complete SIL 3 example
+│       ├── docs/                     # Full EN 50128 documentation
+│       ├── src/                      # C source code (MISRA C compliant)
+│       ├── tests/                    # Unity-based tests
+│       └── README.md                 # Example overview
+│
+├── src/                               # Source code template structure
+│   ├── README.md                     # Template usage guide
+│   ├── components/                   # Software components (empty template)
+│   ├── interfaces/                   # Interface definitions (empty template)
+│   ├── tests/                        # Test code (empty template)
+│   └── config/                       # Configuration files (empty template)
+│
+├── tools/                             # Development tools
+│   ├── pdf-conversion/               # PDF to Markdown conversion
+│   │   ├── pdf2md.py                 # Conversion script
+│   │   └── requirements.txt          # Python dependencies
+│   └── static-analysis/              # MISRA C checking
+│       ├── cppcheck-misra.py         # Cppcheck MISRA wrapper
+│       └── misra.json                # MISRA C:2012 rules
+│
+└── venv/                              # Python virtual environment
 ```
+
+**Notes:**
+- **`std/`** contains LLM-friendly Markdown versions of EN 50128 standards
+- **`docs/project-revision/`** archives all Phase completion reports
+- **`src/`** is a template; replace with actual C code for your project
+- **`examples/train_door_control/`** provides a complete SIL 3 reference implementation
+- Empty placeholder directories have been removed for clarity
 
 ## File Naming Conventions
 

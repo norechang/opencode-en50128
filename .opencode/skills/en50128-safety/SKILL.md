@@ -32,6 +32,36 @@ Use this skill when:
 - Developing safety case
 - Reviewing code for safety compliance
 
+## Software Analysis Techniques (EN 50128 Table A.8)
+
+**EN 50128 Section 6.3, Table A.8** defines software analysis techniques:
+
+| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-------------------|-----|-------|---------|---------|
+| 1 | **Static Software Analysis** | D.13, D.37, Table A.19 | R | HR | HR |
+| 2 | **Dynamic Software Analysis** | Table A.13, Table A.14 | - | R | HR |
+| 3 | Cause Consequence Diagrams | D.6 | R | R | R |
+| 4 | Event Tree Analysis | D.22 | - | R | R |
+| 5 | **Software Error Effect Analysis** | D.25 | - | R | HR |
+
+**Highly Recommended for SIL 3-4:**
+- **Static Software Analysis (1)** - Highly Recommended
+- **Dynamic Software Analysis (2)** - Highly Recommended
+- **Software Error Effect Analysis (5)** - Highly Recommended
+
+**Key Points:**
+- One or more techniques SHALL be selected per SIL level
+- Software Error Effect Analysis (SEEA) is Highly Recommended for SIL 3-4
+- Static and Dynamic Analysis are Highly Recommended for SIL 3-4
+- Techniques complement system-level safety analysis (FMEA, FTA, HAZOP)
+
+**C Language Safety Analysis:**
+- **Static analysis:** MISRA C compliance, control/data flow, complexity
+- **Dynamic analysis:** Runtime behavior, memory usage, timing
+- **SEEA:** Analyze failure modes of C code (NULL pointers, overflows, etc.)
+
+**Standard Reference:** `std/EN50128-2011.md` Section 6.3, Table A.8
+
 ## SIL Determination
 
 | SIL | Consequence | Tolerable Hazard Rate | C Code Implications |

@@ -7,13 +7,98 @@ metadata:
   standard: EN 50128:2011
   domain: railway-software
   language: C
-  section: "6.4"
+  section: "6.2"
   sil_applicability: "0-4"
 ---
 
-# EN 50128 Verification Skill
+## What I do
 
-This skill provides verification techniques, static analysis patterns, and evidence collection methods required by EN 50128 Section 6.4.
+I provide verification techniques, static analysis patterns, and evidence collection methods required by EN 50128 Section 6.2:
+- Independent verification for SIL 3-4 (mandatory)
+- Static analysis (mandatory SIL 3-4)
+- Control flow and data flow analysis (mandatory SIL 3-4)
+- Traceability verification (mandatory SIL 3-4)
+- Metrics collection and analysis
+- Verification evidence collection
+
+## When to use me
+
+Use this skill when:
+- Performing software verification activities
+- Running static analysis on C code
+- Verifying traceability matrices
+- Collecting verification evidence
+- Analyzing code metrics
+- Preparing verification reports
+
+## Verification Techniques (EN 50128 Table A.5)
+
+**EN 50128 Section 6.2, 7.3, Table A.5** defines verification and testing techniques.
+
+**Verification Techniques (subset of Table A.5):**
+
+| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-------------------|-----|-------|---------|---------|
+| 1 | Formal Proof | D.29 | - | R | HR |
+| 2 | Probabilistic Testing | D.44 | R | R | - |
+| 3 | **Static Analysis** | Table A.19 | - | HR | **M** |
+| 5 | Metrics | D.37 | - | R | HR |
+| 7 | **Traceability** | D.58 | R | HR | **M** |
+| 9 | Software Error Effect Analysis | D.25 | - | R | HR |
+| 10 | Software Fault Tree Analysis | D.25 | - | R | HR |
+
+**Mandatory for SIL 3-4:**
+- **Static Analysis (3)** - **MANDATORY** (see Table A.19 below)
+- **Traceability (7)** - **MANDATORY**
+
+**Highly Recommended for SIL 3-4:**
+- Formal Proof, Metrics, Software Error Effect Analysis, Fault Tree Analysis
+
+**Approved Combination (SIL 3-4):**
+- **3, 5, 7, 8 + one from {1, 2, 6}**
+- (Static Analysis, Metrics, Traceability, [Testing] + Formal Proof OR Probabilistic Testing)
+
+**Independence Requirements:**
+- **SIL 3-4:** Verification **MUST** be performed by independent verifier (not developer/designer/implementer)
+
+**Standard Reference:** `std/EN50128-2011.md` Section 6.2, Table A.5
+
+## Static Analysis Techniques (EN 50128 Table A.19)
+
+**EN 50128 Annex A, Table A.19** defines static analysis techniques:
+
+| # | TECHNIQUE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-----------|-----|-------|---------|---------|
+| 1 | Boundary Value Analysis | D.4 | R | HR | HR |
+| 2 | **Control Flow Analysis** | D.9 | R | HR | **M** |
+| 3 | **Data Flow Analysis** | D.11 | R | HR | **M** |
+| 4 | Range Checking | D.45 | R | HR | HR |
+| 5 | Semantic Analysis | D.41 | - | R | HR |
+| 6 | **Code Review / Walkthrough** | D.56, D.61 | HR | HR | HR |
+| 7 | **Fagan Inspection** | D.23 | - | R | HR |
+| 8 | Complexity Metrics | D.8, D.37 | R | HR | HR |
+
+**Mandatory for SIL 3-4:**
+- **Control Flow Analysis (2)** - **MANDATORY**
+- **Data Flow Analysis (3)** - **MANDATORY**
+
+**Highly Recommended for SIL 3-4:**
+- Boundary Value Analysis, Range Checking, Semantic Analysis, Code Review, Fagan Inspection, Complexity Metrics
+
+**Tools for Static Analysis:**
+- **PC-lint Plus:** MISRA C compliance, control/data flow
+- **Cppcheck:** General static analysis
+- **Clang Static Analyzer:** Deep analysis
+- **Lizard:** Complexity metrics
+- **SonarQube:** Code quality metrics
+
+**Requirements:**
+- Static Analysis is **MANDATORY** for SIL 3-4
+- Control Flow and Data Flow Analysis are **MANDATORY** for SIL 3-4
+- Tools SHALL be qualified per Annex C
+- Analysis results SHALL be documented in verification reports
+
+**Standard Reference:** `std/EN50128-2011.md` Annex A, Table A.19
 
 ## Verification Overview
 

@@ -7,13 +7,55 @@ metadata:
   standard: EN 50128:2011
   domain: railway-software
   language: C
-  section: "7.6"
+  section: "7.7"
   sil_applicability: "0-4"
 ---
 
-# EN 50128 Validation Skill
+## What I do
 
-This skill provides validation techniques, system testing approaches, and acceptance testing procedures required by EN 50128 Section 7.6.
+I provide validation techniques, system testing approaches, and acceptance testing procedures required by EN 50128 Section 7.7:
+- Overall software testing and validation
+- Performance testing (mandatory SIL 3-4)
+- Functional and black-box testing (mandatory SIL 3-4)
+- System-level testing in target environment
+- Operational scenario validation
+- User acceptance testing
+
+## When to use me
+
+Use this skill when:
+- Performing system-level validation
+- Conducting acceptance testing
+- Testing operational scenarios
+- Validating performance requirements
+- Preparing for software release
+- Customer demonstration and acceptance
+
+## Validation Techniques (EN 50128 Table A.7)
+
+**EN 50128 Section 7.7, Table A.7** defines overall software testing techniques for validation:
+
+| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-------------------|-----|-------|---------|---------|
+| 1 | **Performance Testing** | Table A.18 | - | HR | **M** |
+| 2 | **Functional and Black-box Testing** | Table A.14 | HR | HR | **M** |
+| 3 | Modelling | Table A.17 | - | R | R |
+
+**Mandatory for SIL 3-4:**
+- **Performance Testing (1)** - **MANDATORY**
+- **Functional and Black-box Testing (2)** - **MANDATORY**
+
+**Key Points:**
+- One or more techniques SHALL be selected per SIL level
+- Testing performed in target environment or high-fidelity simulation
+- Independent validation MANDATORY for SIL 3-4
+
+**Independence Requirements (SIL 3-4):**
+- Validator **MUST** be independent from development team
+- Validator **SHALL NOT report to Project Manager** (Section 5.1.2.10.f)
+- Validator **gives agreement/disagreement for software release**
+
+**Standard Reference:** `std/EN50128-2011.md` Section 7.7, Table A.7
 
 ## Validation Overview
 

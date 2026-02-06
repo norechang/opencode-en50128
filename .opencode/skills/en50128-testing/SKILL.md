@@ -30,16 +30,60 @@ Use this skill when:
 - Verifying test completeness
 - Generating test reports
 
-## Coverage Requirements by SIL (EN 50128 Table A.5)
+## Testing Techniques (EN 50128 Table A.5)
 
-| Coverage Type | SIL 0-1 | SIL 2 | SIL 3-4 |
-|---------------|---------|-------|---------|
-| Statement Coverage | HR | HR | **M** (100%) |
-| Branch Coverage | HR | **M** (100%) | **M** (100%) |
-| Condition Coverage | R | HR | **M** (100%) |
-| MC/DC Coverage | - | R | HR (100%) |
+**EN 50128 Sections 7.4, 7.5, 7.7, Table A.5** defines verification and testing techniques.
 
-**M**=Mandatory, **HR**=Highly Recommended, **R**=Recommended
+**Testing Techniques (subset of Table A.5):**
+
+| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-------------------|-----|-------|---------|---------|
+| 3 | **Dynamic Analysis and Testing** | Table A.13 | - | HR | **M** |
+| 4 | **Test Coverage for Code** | Table A.21 | R | HR | **M** |
+| 5 | **Functional and Black-Box Testing** | Table A.14 | HR | HR | **M** |
+| 6 | **Performance Testing** | Table A.18 | - | HR | **M** |
+| 8 | Interface Testing | D.34 | HR | HR | HR |
+
+**Mandatory for SIL 3-4:**
+- Dynamic Analysis and Testing (3) - **MANDATORY**
+- Test Coverage for Code (4) - **MANDATORY** (see Table A.21 below)
+- Functional and Black-Box Testing (5) - **MANDATORY**
+- Performance Testing (6) - **MANDATORY**
+
+**Key Points:**
+- One or more techniques SHALL be selected per SIL level
+- Testing must be performed by independent team for SIL 3-4
+- Coverage requirements defined in Table A.21 below
+
+**Standard Reference:** `std/EN50128-2011.md` Sections 7.4, 7.5, 7.7, Table A.5
+
+## Test Coverage Requirements (EN 50128 Table A.21)
+
+**EN 50128 Annex A, Table A.21** defines mandatory coverage levels:
+
+| Coverage Type | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---------------|-------|---------|---------|
+| **Statement Coverage** | HR | HR | **M** (100%) |
+| **Branch Coverage** | HR | **M** (100%) | **M** (100%) |
+| **Condition Coverage** | - | R | **M** (100%) |
+| **Data Flow Coverage** | - | R | HR |
+| **Path Coverage** | - | - | R |
+
+**Coverage Requirements by SIL:**
+- **SIL 0:** Statement (HR), Branch (HR)
+- **SIL 1-2:** Statement (HR), Branch (**M** - 100%), Condition (R)
+- **SIL 3-4:** Statement (**M** - 100%), Branch (**M** - 100%), Condition (**M** - 100%)
+
+**Key Points:**
+- **100% coverage required** for all mandatory coverage types
+- Coverage measured at component level AND integration level
+- Use gcov, lcov, Bullseye, or equivalent tools
+- Document any uncovered code with justification
+- Coverage reports SHALL be included in test reports
+
+**Standard Reference:** `std/EN50128-2011.md` Annex A, Table A.21
+
+## Coverage Requirements by SIL
 
 ## Testing Techniques by SIL
 

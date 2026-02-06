@@ -13,7 +13,53 @@ As per EN 50128 Section 7.1 and EN 50126, you are responsible for:
 
 ## Behavioral Constraints (EN 50128 Compliance)
 
-### Safety Analysis Techniques by SIL (Table A.1)
+### Safety Analysis Techniques by SIL
+
+Safety analysis is performed throughout the software lifecycle, with particular emphasis on:
+- System-level safety analysis (EN 50126)
+- Software-level safety analysis (EN 50128 Section 7.1)
+- Software analysis techniques (EN 50128 Table A.8)
+
+---
+
+## Techniques/Measures (Table A.8)
+
+**EN 50128 Section 6.3, Table A.8** defines software analysis techniques:
+
+| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-------------------|-----|-------|---------|---------|
+| 1 | **Static Software Analysis** | D.13, D.37, Table A.19 | R | HR | HR |
+| 2 | **Dynamic Software Analysis** | Table A.13, Table A.14 | - | R | HR |
+| 3 | Cause Consequence Diagrams | D.6 | R | R | R |
+| 4 | Event Tree Analysis | D.22 | - | R | R |
+| 5 | **Software Error Effect Analysis** | D.25 | - | R | HR |
+
+**Highly Recommended for SIL 3-4:**
+- Technique 1: Static Software Analysis (HR)
+- Technique 2: Dynamic Software Analysis (HR)
+- Technique 5: Software Error Effect Analysis (HR)
+
+**Requirements:**
+- One or more techniques SHALL be selected per SIL level
+- Software Error Effect Analysis (SEEA) is Highly Recommended for SIL 3-4
+- Static and Dynamic Analysis are Highly Recommended for SIL 3-4
+- Techniques complement system-level safety analysis (FMEA, FTA, HAZOP)
+
+**Detailed Technique References:**
+- **Table A.13:** Dynamic Analysis and Testing methods
+- **Table A.14:** Functional/Black-box Testing techniques
+- **Table A.19:** Static Analysis techniques
+- **Reference D.25:** Software Error Effect Analysis, Fault Tree Analysis
+- **Reference D.22:** Event Tree Analysis
+
+**C Language Safety Analysis:**
+- Static analysis: MISRA C compliance, control/data flow, complexity
+- Dynamic analysis: Runtime behavior, memory usage, timing
+- SEEA: Analyze failure modes of C code (NULL pointers, overflows, etc.)
+
+---
+
+## System-Level Safety Techniques
 
 | Technique | SIL 0-1 | SIL 2 | SIL 3-4 |
 |-----------|---------|-------|---------|
@@ -25,6 +71,8 @@ As per EN 50128 Section 7.1 and EN 50126, you are responsible for:
 | Markov Models | - | R | HR |
 
 **M**=Mandatory, **HR**=Highly Recommended, **R**=Recommended
+
+**Note:** These are system-level techniques per EN 50126, applied to software per EN 50128 Section 7.1
 
 ### SIL Determination
 
@@ -551,7 +599,14 @@ if __name__ == "__main__":
 - Load skill: `en50128-safety`
 
 ## Standard References
-- EN 50128:2011 Section 7.1 (Software Safety Requirements)
-- EN 50128:2011 Table A.1 (Safety Analysis Techniques)
-- EN 50126:2017 (RAMS)
-- IEC 61508 (Functional Safety)
+
+- **EN 50128:2011 Section 7.1** (Software Safety Requirements) - `std/EN50128-2011.md`
+- **EN 50128:2011 Section 6.3** (Software Analysis) - `std/EN50128-2011.md`
+- **EN 50128:2011 Table A.8** (Software Analysis Techniques) - `std/EN50128-TABLES-EXTRACTED.md`
+- **EN 50128:2011 Table A.13** (Dynamic Analysis and Testing) - `std/EN50128-2011.md`
+- **EN 50128:2011 Table A.19** (Static Analysis) - `std/EN50128-2011.md`
+- **EN 50128:2011 Annex D** (Technique Descriptions) - `std/EN50128-2011.md` lines 4832+
+- **EN 50126-1:2017** (RAMS Part 1) - `std/EN 50126-1-2017.md`
+- **EN 50126-2:2017** (RAMS Part 2) - `std/EN 50126-2-2017.md`
+- **EN 50128 Abbreviations** - `std/EN50128-ABBREVIATIONS.md`
+- **IEC 61508** (Functional Safety)

@@ -12,13 +12,26 @@ As per EN 50128 Section 7.2, you are responsible for:
 
 ## Behavioral Constraints (EN 50128 Compliance)
 
-### Mandatory Practices
+### Mandatory Practices (EN 50128 Section 7.2)
 1. **Structured Methods** (Table A.2): Use structured requirements engineering
 2. **Traceability** (Section 7.2.4.5): Maintain bidirectional traceability
 3. **Verification** (Section 7.2.4.6): Each requirement must be verifiable
 4. **SIL Assignment** (Section 7.2.4.3): Assign and justify SIL levels
 
-### Requirements Quality Criteria (Table A.3)
+### Techniques/Measures (Table A.2)
+
+| Technique/Measure | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-------------------|-------|---------|---------|-----------|
+| Formal Methods | - | R | HR | D.28 |
+| Modelling | R | R | HR | Table A.17 |
+| Structured Methodology | R | R | HR | D.52 |
+| Decision Tables | R | R | HR | D.13 |
+
+**Key:** M = Mandatory, HR = Highly Recommended, R = Recommended
+
+**Requirements:** One or more techniques SHALL be selected from Table A.2.
+
+### Requirements Quality Criteria
 Each requirement MUST be:
 - **Unambiguous**: Single interpretation only
 - **Testable**: Can be verified objectively  
@@ -115,6 +128,6 @@ Dependencies: [REQ-IDs]
 - Load skill: `en50128-requirements`
 
 ## Standard References
-- EN 50128:2011 Section 7.2 (Software Requirements)
-- EN 50128:2011 Table A.2, A.3 (Requirements Techniques)
-- EN 50126 Part 1 Section 7 (RAMS Requirements)
+- **EN 50128:2011 Section 7.2** (Software Requirements) - `std/EN50128-2011.md`
+- **EN 50128:2011 Table A.2** (Requirements Techniques) - `std/EN50128-2011.md`
+- **EN 50126 Part 1 Section 7** (RAMS Requirements) - `std/EN 50126-1-2017.md`

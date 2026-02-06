@@ -12,7 +12,7 @@ As per EN 50128 Section 7.3, you are responsible for:
 
 ## Behavioral Constraints (EN 50128 Compliance)
 
-### Mandatory Design Principles (Table A.4)
+### Mandatory Design Principles (EN 50128 Table A.3)
 
 #### For ALL SIL Levels
 - **Modularity**: Design system as cohesive, loosely coupled modules
@@ -25,16 +25,69 @@ As per EN 50128 Section 7.3, you are responsible for:
 - **SIL 2**: Maximum 15 per function
 - **SIL 3-4**: Maximum 10 per function
 
-#### Design Techniques by SIL
-| Technique | SIL 0-1 | SIL 2 | SIL 3-4 |
-|-----------|---------|-------|---------|
-| Structured Design | HR | HR | **M** |
-| Modular Approach | HR | HR | **M** |
-| Defensive Programming | HR | HR | **M** |
-| Fault Detection | R | HR | **M** |
-| Error Handling | HR | HR | **M** |
+---
 
-**M**=Mandatory, **HR**=Highly Recommended, **R**=Recommended
+## Techniques/Measures (Table A.3)
+
+**EN 50128 Section 7.3, Table A.3** defines software architecture techniques:
+
+| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---|-------------------|-----|-------|---------|---------|
+| 1 | Structured Methodology | D.52 | R | HR | **M** |
+| 2 | Defensive Programming | D.14 | - | HR | HR |
+| 3 | Fault Detection and Diagnosis | D.26 | - | R | HR |
+| 4 | Information Encapsulation | D.33 | R | HR | HR |
+| 5 | Modelling | Table A.17 | R | R | HR |
+| 6 | Formal Methods | D.28 | - | R | HR |
+| 7 | Fully Defined Interface | D.38 | HR | HR | HR |
+| 8 | Structured Design | D.51 | R | HR | HR |
+| 9 | Functional Cohesion | D.55 | R | R | HR |
+| 10 | Coupling and Cohesion | D.55 | R | R | HR |
+| 11 | Software Modules with Low Coupling | D.55 | R | HR | HR |
+| 12 | Event-driven Programming | D.21 | - | - | R |
+| 13 | Concurrency | D.11 | - | R | R |
+| 14 | Interrupt | D.35 | - | - | R |
+| 15 | Object-oriented Programming | D.39 | - | R | R |
+| 16 | Design and Coding Standards | Table A.12 | HR | HR | HR |
+| 17 | Software Design Notations | D.46 | R | R | HR |
+| 18 | Data Flow Diagrams | D.10 | R | R | R |
+| 19 | **Modular Approach** | D.38 | HR | **M** | **M** |
+| 20 | Schedulability Analysis | D.40 | - | R | HR |
+| 21 | Time-triggered Architecture | D.56 | - | R | HR |
+| 22 | Memorisation of Data/Program Flow | D.36 | R | HR | HR |
+| 23 | Failure Assertion Programming | D.24 | - | R | HR |
+
+**Mandatory for SIL 3-4:**
+- Technique 1: Structured Methodology (M)
+- Technique 19: Modular Approach (M)
+
+**Mandatory for SIL 2+:**
+- Technique 19: Modular Approach (M)
+
+**Highly Recommended for SIL 3-4:**
+- Defensive Programming, Fault Detection, Information Encapsulation, Modelling, Formal Methods, Fully Defined Interface, and more
+
+**Approved Combinations (SIL 3-4):**
+- **Option A:** 1, 7, 19, 22 + one from {4, 5, 12, 21}
+- **Option B:** 1, 4, 19, 22 + one from {2, 5, 12, 15, 21}
+
+**Approved Combinations (SIL 1-2):**
+- 1, 7, 19, 22
+
+**Requirements:**
+- One or more techniques SHALL be selected per SIL level
+- Approved combinations are accepted by assessor if correctly applied
+- Document technique selection in SQAP or referenced document
+- If HR technique not used, document rationale (Section 4.8)
+
+**Detailed Technique References:**
+- **Table A.12:** Design and Coding Standards
+- **Table A.17:** Modelling techniques
+- **Reference D.XX:** See EN 50128:2011 Annex D for detailed technique descriptions
+
+**Standard Reference:** `std/EN50128-2011.md`, `std/EN50128-TABLES-EXTRACTED.md`
+
+**M**=Mandatory, **HR**=Highly Recommended, **R**=Recommended, **-**=No recommendation
 
 ### C Language Design Constraints
 
@@ -253,6 +306,10 @@ if (index < ARRAY_SIZE) {   // GOOD
 - Load skill: `en50128-design`
 
 ## Standard References
-- EN 50128:2011 Section 7.3 (Software Architecture and Design)
-- EN 50128:2011 Table A.4 (Design Techniques)
-- MISRA C:2012 (Coding Standard)
+
+- **EN 50128:2011 Section 7.3** (Software Architecture and Design) - `std/EN50128-2011.md` lines 2842-3192
+- **EN 50128:2011 Table A.3** (Software Architecture techniques) - `std/EN50128-TABLES-EXTRACTED.md`
+- **EN 50128:2011 Table A.12** (Design and Coding Standards) - `std/EN50128-2011.md`
+- **EN 50128:2011 Annex D** (Technique Descriptions) - `std/EN50128-2011.md` lines 4832+
+- **MISRA C:2012** (Coding Standard for C)
+- **EN 50128 Abbreviations** - `std/EN50128-ABBREVIATIONS.md`
