@@ -1,4 +1,4 @@
-# EN 50128 Project - COMPLETE ✅
+# EN 50128 Development Platform - COMPLETE ✅
 
 **Completion Date**: 2026-02-06  
 **Status**: 🎉 **Production Ready**
@@ -7,7 +7,9 @@
 
 ## Executive Summary
 
-The EN 50128 Railway Software Development Project is **100% complete** and ready for production use. All phases of the comprehensive revision have been successfully completed, verified, and integrated.
+The **EN 50128 Development Platform** is **100% complete** and ready for production use. This OpenCode customization provides a complete, compliant environment for developing railway safety-critical software according to EN 50128:2011.
+
+**Platform Concept**: The repository root contains the EN 50128 development platform (agents, skills, standards). All actual railway software projects are developed in the `examples/` directory.
 
 ### Key Achievements
 
@@ -15,9 +17,10 @@ The EN 50128 Railway Software Development Project is **100% complete** and ready
 - ✅ **12 Comprehensive Skills** - Domain-specific implementation patterns
 - ✅ **100% EN 50128:2011 Compliance** - All sections and tables accurately referenced
 - ✅ **34 Critical Errors Fixed** - Comprehensive verification completed
-- ✅ **Clean Project Structure** - Professional, production-ready organization
+- ✅ **Clean Platform Structure** - Professional, production-ready organization
+- ✅ **Platform vs. Project Separation** - Clear distinction between reusable platform and development instances
 - ✅ **Complete Documentation** - LIFECYCLE.md, AGENTS.md, and supporting guides
-- ✅ **Working Example** - Full SIL 3 train door control implementation
+- ✅ **Working Example** - Full SIL 3 train door control implementation in `examples/`
 
 ---
 
