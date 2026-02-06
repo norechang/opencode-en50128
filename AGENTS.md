@@ -2,6 +2,46 @@
 
 This document defines role-based agents for EN 50128 railway software development. Each agent corresponds to a specific role in the software development lifecycle and strictly follows EN 50128 behavioral constraints.
 
+**Related Documents**:
+- **`LIFECYCLE.md`** - Complete EN 50128 V-Model software development lifecycle (START HERE)
+- **`.opencode/skills/`** - Domain-specific skills for each lifecycle phase
+- **`.opencode/commands/`** - Agent command definitions
+
+---
+
+## EN 50128 Role Definitions (Section 5 and Annex B)
+
+EN 50128:2011 defines the following organizational roles:
+
+### Core Development Roles (Section 5.3)
+
+| Role | EN 50128 Section | Description | Independence Required |
+|------|------------------|-------------|----------------------|
+| **Software Manager** | 5.3.1, Table B.1 | Overall software development responsibility | No |
+| **Designer** | 5.3.2, Table B.2 | Software architecture and design | No |
+| **Implementer** | 5.3.3, Table B.3 | Code implementation | No |
+| **Tester** | 5.3.4, Table B.4 | Software testing | No |
+| **Verifier** | 5.3.5, Table B.5 | Software verification | Yes (SIL 3-4) |
+| **Integrator** | 5.3.6, Table B.6 | Software integration | No |
+| **Validator** | 5.3.7, Table B.7 | Software validation | Yes (SIL 3-4) |
+| **Assessor** | 5.3.8, Table B.8 | Independent safety assessment | Yes (SIL 3-4) |
+
+### Management and Support Roles (Section 5, Annex B)
+
+| Role | EN 50128 Reference | Description | Independence Required |
+|------|-------------------|-------------|----------------------|
+| **Project Manager** | Section 5, Table B.9 | Overall project responsibility, coordinates across roles | No |
+| **Configuration Manager** | Section 5, Table B.10 | Configuration and change management | No |
+
+**Important Notes**:
+- **Software Manager** (5.3.1) has responsibility for software development activities
+- **Project Manager** (Table B.9) has overall project coordination responsibility
+- Both roles are defined in EN 50128; they have different scopes
+- Independence is MANDATORY for Verifier, Validator, and Assessor roles at SIL 3-4
+- One person MAY perform multiple roles IF independence requirements are met
+
+---
+
 ## Development Language
 
 - **Primary Language**: C (for safety-critical software)

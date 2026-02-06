@@ -13,6 +13,21 @@ This project provides:
 
 ## Quick Start
 
+### For New Projects
+
+1. **Understand the Lifecycle**: Read `LIFECYCLE.md` - complete EN 50128 V-Model process
+2. **Choose Your Agent**: See `AGENTS.md` - 8 role-based agents for each lifecycle phase
+3. **Start Development**:
+   ```bash
+   /req  # Begin with Requirements Engineering
+   /des  # Then Architecture & Design
+   /imp  # Implementation (C + MISRA C:2012)
+   /tst  # Testing with 100% coverage
+   /ver  # Verification (static analysis)
+   /val  # Validation (system testing)
+   ```
+4. **Follow the Example**: `examples/train_door_control/` - Complete SIL 3 implementation
+
 ### 1. Understand Your SIL Level
 
 Determine the Safety Integrity Level (SIL) for your project:
@@ -62,6 +77,13 @@ See [AGENTS.md](AGENTS.md) for detailed agent documentation.
 # 5. Check overall compliance
 /check status --phase design
 ```
+
+## Documentation
+
+### Core Documents (START HERE)
+- **`LIFECYCLE.md`** - EN 50128 V-Model software development lifecycle (MUST READ FIRST)
+- **`AGENTS.md`** - 8 role-based agents mapped to lifecycle phases
+- **`README.md`** - This file (overview and getting started)
 
 ## Project Structure
 
