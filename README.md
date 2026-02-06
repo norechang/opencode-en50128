@@ -1,36 +1,52 @@
-# EN 50128 Railway Software Development Project
+# EN 50128 Railway Software Development Platform
 
-A comprehensive framework for developing railway software compliant with **EN 50128:2011** standard.
+**OpenCode customization for EN 50128:2011 compliant railway software development**
 
 ## Overview
 
-This project provides:
-- **Specialized agents** for EN 50128 compliance tasks
-- **Skills** with patterns, templates, and best practices
-- **Documentation templates** for all mandatory deliverables
-- **Reference standards** (EN 50128, EN 50126)
-- **Workflows** for requirements, design, testing, and safety analysis
+This project transforms OpenCode into an **EN 50128 compliant development platform** providing:
+- **11 specialized agents** for EN 50128 compliance tasks (Requirements, Design, Implementation, Testing, Verification, Validation, Safety, Quality, Integration, Project Management, Configuration Management)
+- **12 domain-specific skills** with patterns, templates, and best practices
+- **Complete EN 50128 standards** in LLM-friendly Markdown format (2.7 MB)
+- **EN 50128 V-Model lifecycle** implementation
+- **Production-ready workflows** for safety-critical railway software
+
+**This is a development platform, not a project template.** All actual development projects are created in the `examples/` directory.
 
 ## Quick Start
 
-### For New Projects
+### Creating Your First EN 50128 Project
 
-1. **Understand the Lifecycle**: Read `LIFECYCLE.md` - complete EN 50128 V-Model process
-2. **Choose Your Agent**: See `AGENTS.md` - 11 role-based agents for each lifecycle phase
-3. **Start Development**:
+1. **Create a project directory in examples/**:
+   ```bash
+   mkdir -p examples/my_railway_project
+   cd examples/my_railway_project
+   ```
+
+2. **Start with requirements**:
    ```bash
    /req  # Begin with Requirements Engineering
-   /des  # Then Architecture & Design
+   # Define requirements, assign SIL levels, establish traceability
+   ```
+
+3. **Follow the EN 50128 V-Model lifecycle**:
+   ```bash
+   /des  # Architecture & Design
+   /saf  # Safety Analysis (FMEA, FTA)
    /imp  # Implementation (C + MISRA C:2012)
    /tst  # Unit Testing with coverage
-   /int  # Component Integration
    /ver  # Verification (static analysis)
+   /int  # Component Integration
    /val  # Validation (system testing)
    /cm   # Configuration Management (throughout)
+   /qua  # Quality Assurance (throughout)
    ```
-4. **Follow the Example**: `examples/train_door_control/` - Complete SIL 3 implementation
 
-### 1. Understand Your SIL Level
+4. **Reference the working example**: 
+   - See `examples/train_door_control/` for a complete SIL 3 implementation
+   - Use it as a reference for structure, code style, and documentation
+
+### Understanding the Platform 1. Understand Your SIL Level
 
 Determine the Safety Integrity Level (SIL) for your project:
 
@@ -115,35 +131,77 @@ See [AGENTS.md](AGENTS.md) for detailed agent documentation.
 
 ## Project Structure
 
+This is an **EN 50128 platform** (not a project). Actual development projects go in `examples/`.
+
 ```
-EN50128/
-├── AGENTS.md                          # Agent definitions and workflows
-├── LIFECYCLE.md                       # Complete V-Model lifecycle
-├── README.md                          # This file
-├── .opencode/                         # OpenCode agent system
-│   ├── commands/                      # 11 agent command definitions
-│   └── skills/                        # 12 domain-specific skills
-├── std/                               # EN 50128 standards (LLM-friendly Markdown)
-│   ├── EN50128-2011.md                # Main standard (2.2 MB)
-│   ├── EN 50126-1-2017.md             # RAMS Part 1
-│   ├── EN 50126-2-2017.md             # RAMS Part 2
-│   ├── EN50128-ABBREVIATIONS.md       # Official abbreviations
-│   └── EN50128-TABLES-EXTRACTED.md    # All technique tables
-├── docs/                              # Documentation and guides
-│   ├── EN50128-Compliance-Guide.md
-│   ├── Project-Structure.md           # Detailed structure info
-│   ├── QUICKSTART.md
-│   └── project-revision/              # Project revision history (archived)
-├── examples/                          # Example projects
-│   └── train_door_control/            # Complete SIL 3 example
-├── src/                               # Source code template structure
-├── tools/                             # Development tools
-│   ├── pdf-conversion/                # PDF to Markdown converter
-│   └── static-analysis/               # MISRA C checking
-└── venv/                              # Python virtual environment
+EN50128/                                   # EN 50128 Development Platform
+│
+├── AGENTS.md                              # 11 agent definitions and workflows
+├── LIFECYCLE.md                           # Complete EN 50128 V-Model lifecycle
+├── README.md                              # This file (platform overview)
+│
+├── .opencode/                             # OpenCode customization
+│   ├── commands/                          # 11 EN 50128 agent commands
+│   │   ├── req.md                        # Requirements Engineer
+│   │   ├── des.md                        # Designer
+│   │   ├── imp.md                        # Implementer (C + MISRA C)
+│   │   ├── tst.md                        # Tester
+│   │   ├── int.md                        # Integrator
+│   │   ├── ver.md                        # Verifier (static analysis)
+│   │   ├── val.md                        # Validator (system testing)
+│   │   ├── saf.md                        # Safety Engineer (FMEA, FTA)
+│   │   ├── qua.md                        # Quality Assurance
+│   │   ├── pm.md                         # Project Manager
+│   │   └── cm.md                         # Configuration Manager
+│   └── skills/                            # 12 domain-specific EN 50128 skills
+│       ├── en50128-requirements/         # Requirements engineering
+│       ├── en50128-design/               # Architecture & design patterns
+│       ├── en50128-implementation/       # C implementation with MISRA C
+│       ├── en50128-testing/              # Testing methodologies
+│       ├── en50128-integration/          # Integration techniques
+│       ├── en50128-verification/         # Verification & static analysis
+│       ├── en50128-validation/           # Validation & system testing
+│       ├── en50128-safety/               # Safety analysis (FMEA, FTA)
+│       ├── en50128-quality/              # Quality assurance
+│       ├── en50128-documentation/        # Documentation templates
+│       ├── en50128-project-management/   # Project management
+│       └── en50128-configuration/        # Configuration management
+│
+├── std/                                   # EN 50128 Standards (LLM-friendly)
+│   ├── EN50128-2011.md                   # Main railway standard (2.2 MB)
+│   ├── EN 50126-1-2017.md                # RAMS Part 1 (293 KB)
+│   ├── EN 50126-2-2017.md                # RAMS Part 2 (210 KB)
+│   ├── EN50128-ABBREVIATIONS.md          # Official abbreviations
+│   └── EN50128-TABLES-EXTRACTED.md       # All technique tables (A.2-A.23)
+│
+├── docs/                                  # Platform documentation
+│   ├── QUICKSTART.md                     # Getting started guide
+│   ├── SETUP.md                          # Setup instructions
+│   ├── EN50128-Compliance-Guide.md       # Compliance overview
+│   ├── Project-Structure.md              # Detailed structure
+│   └── project-revision/                 # Project revision history (archived)
+│
+├── examples/                              # ⭐ YOUR PROJECTS GO HERE
+│   ├── README.md                         # Guide for creating projects
+│   ├── train_door_control/               # Complete SIL 3 reference implementation
+│   │   ├── src/                         # C source code (MISRA C compliant)
+│   │   ├── test/                        # Unity-based unit tests
+│   │   ├── docs/                        # Requirements, design, safety
+│   │   ├── Makefile                     # Build system with coverage
+│   │   └── README.md                    # Project documentation
+│   └── [your_project]/                   # Your EN 50128 project here
+│
+└── tools/                                 # Platform development tools
+    ├── pdf-conversion/                    # PDF to Markdown converter
+    └── static-analysis/                   # MISRA C checking tools
 ```
 
-**Note**: See [docs/Project-Structure.md](docs/Project-Structure.md) for complete structure details.
+**Key Points**:
+- **Platform root** = EN 50128 customization for OpenCode (agents, skills, standards)
+- **`examples/`** = Where all actual railway software projects are developed
+- **No `src/` in root** = This is not a project; projects go in `examples/`
+
+**Note**: See [docs/Project-Structure.md](docs/Project-Structure.md) for complete details.
 
 ## Key Features
 

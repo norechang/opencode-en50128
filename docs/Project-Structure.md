@@ -1,61 +1,67 @@
-# EN 50128 Project Structure
+# EN 50128 Platform Structure
+
+## Overview
+
+This document describes the structure of the **EN 50128 Development Platform** - an OpenCode customization for railway software development.
+
+**Important**: This is a **platform**, not a project. Actual development projects are created in the `examples/` directory.
 
 ## Directory Organization
 
 ```
-EN50128/
-├── README.md                          # Project overview and quick start
-├── AGENTS.md                          # Agent definitions and workflows
-├── LIFECYCLE.md                       # Complete V-Model lifecycle
-├── CHANGELOG.md                       # Version history
-├── CONTRIBUTING.md                    # Contribution guidelines
-├── GITHUB_SETUP.md                    # GitHub repository setup
-├── LICENSE                            # License information
-├── .gitignore                         # Git ignore rules
+EN50128/                                   # EN 50128 Development Platform Root
+├── README.md                              # Platform overview and quick start
+├── AGENTS.md                              # Agent definitions and workflows  
+├── LIFECYCLE.md                           # Complete EN 50128 V-Model lifecycle
+├── CHANGELOG.md                           # Version history
+├── CONTRIBUTING.md                        # Contribution guidelines
+├── GITHUB_SETUP.md                        # GitHub repository setup
+├── LICENSE                                # License information
+├── .gitignore                             # Git ignore rules
 │
-├── .opencode/                         # OpenCode agent system
-│   ├── commands/                      # 11 agent command definitions
-│   │   ├── req.md                    # Requirements Engineer
-│   │   ├── des.md                    # Designer
-│   │   ├── imp.md                    # Implementer
-│   │   ├── tst.md                    # Tester
-│   │   ├── int.md                    # Integrator
-│   │   ├── ver.md                    # Verifier
-│   │   ├── val.md                    # Validator
-│   │   ├── saf.md                    # Safety Engineer
-│   │   ├── qua.md                    # Quality Assurance
-│   │   ├── pm.md                     # Project Manager
-│   │   └── cm.md                     # Configuration Manager
-│   └── skills/                        # 12 domain-specific skills
-│       ├── en50128-requirements/     # Requirements engineering
-│       ├── en50128-design/           # Design patterns
-│       ├── en50128-implementation/   # C implementation with MISRA C
-│       ├── en50128-testing/          # Testing methodologies
-│       ├── en50128-integration/      # Integration techniques
-│       ├── en50128-verification/     # Verification and static analysis
-│       ├── en50128-validation/       # Validation and system testing
-│       ├── en50128-safety/           # Safety analysis (FMEA, FTA)
-│       ├── en50128-quality/          # Quality assurance
-│       ├── en50128-documentation/    # Documentation templates
-│       ├── en50128-project-management/  # Project management
-│       └── en50128-configuration/    # Configuration management
+├── .opencode/                             # OpenCode Customization
+│   ├── commands/                          # 11 EN 50128 agent command definitions
+│   │   ├── req.md                        # Requirements Engineer (Table A.2)
+│   │   ├── des.md                        # Designer (Table A.3)
+│   │   ├── imp.md                        # Implementer (Table A.4)
+│   │   ├── tst.md                        # Tester (Table A.5, A.21)
+│   │   ├── int.md                        # Integrator (Table A.6)
+│   │   ├── ver.md                        # Verifier (Table A.5, A.19)
+│   │   ├── val.md                        # Validator (Table A.7)
+│   │   ├── saf.md                        # Safety Engineer (Table A.8)
+│   │   ├── qua.md                        # Quality Assurance (Table A.9)
+│   │   ├── pm.md                         # Project Manager (Section 5)
+│   │   └── cm.md                         # Configuration Manager (Section 6.6)
+│   └── skills/                            # 12 Domain-Specific EN 50128 Skills
+│       ├── en50128-requirements/         # Requirements engineering patterns
+│       ├── en50128-design/               # Architecture & design patterns
+│       ├── en50128-implementation/       # C implementation with MISRA C
+│       ├── en50128-testing/              # Testing methodologies & coverage
+│       ├── en50128-integration/          # Integration techniques
+│       ├── en50128-verification/         # Verification & static analysis
+│       ├── en50128-validation/           # Validation & system testing
+│       ├── en50128-safety/               # Safety analysis (FMEA, FTA, CCA)
+│       ├── en50128-quality/              # Quality assurance processes
+│       ├── en50128-documentation/        # Documentation templates
+│       ├── en50128-project-management/   # Project management workflows
+│       └── en50128-configuration/        # Configuration management
 │
-├── std/                               # EN 50128 standards (LLM-friendly)
-│   ├── EN50128-2011.md               # Main standard (2.2 MB Markdown)
-│   ├── EN 50126-1-2017.md            # RAMS Part 1 (293 KB)
-│   ├── EN 50126-2-2017.md            # RAMS Part 2 (210 KB)
-│   ├── EN50128-ABBREVIATIONS.md      # Official abbreviations
-│   └── EN50128-TABLES-EXTRACTED.md   # All technique tables (A.2-A.23)
+├── std/                                   # EN 50128 Standards (LLM-Friendly)
+│   ├── EN50128-2011.md                   # Main railway standard (2.2 MB Markdown)
+│   ├── EN 50126-1-2017.md                # RAMS Part 1 (293 KB)
+│   ├── EN 50126-2-2017.md                # RAMS Part 2 (210 KB)
+│   ├── EN50128-ABBREVIATIONS.md          # Official abbreviations
+│   └── EN50128-TABLES-EXTRACTED.md       # All technique tables (A.2-A.23)
 │
-├── docs/                              # Documentation and guides
-│   ├── QUICKSTART.md                 # Quick start guide
-│   ├── SETUP.md                      # Setup instructions
-│   ├── Quick-Reference.md            # Quick reference
-│   ├── Project-Structure.md          # This file
-│   ├── EN50128-Compliance-Guide.md   # Compliance overview
-│   ├── EN50128-Roles.md              # Role descriptions
-│   ├── Agent-Skill-*.md              # Agent-skill mapping (3 files)
-│   └── project-revision/             # Project revision history (archived)
+├── docs/                                  # Platform Documentation
+│   ├── QUICKSTART.md                     # Getting started guide
+│   ├── SETUP.md                          # Setup instructions
+│   ├── Quick-Reference.md                # Quick reference
+│   ├── Project-Structure.md              # This file
+│   ├── EN50128-Compliance-Guide.md       # Compliance overview
+│   ├── EN50128-Roles.md                  # Role descriptions
+│   ├── Agent-Skill-*.md                  # Agent-skill mapping (3 files)
+│   └── project-revision/                 # Project revision history (archived)
 │       ├── PROJECT_REVISION_STATUS.md   # Overall revision status
 │       ├── NEXT_STEPS.md                # Future enhancements
 │       ├── CLEANUP_ANALYSIS.md          # Cleanup analysis
@@ -65,37 +71,88 @@ EN50128/
 │       ├── PHASE_2D_COMPLETE.md         # Master docs phase
 │       └── PHASE_2E_COMPLETE.md         # Final verification phase
 │
-├── examples/                          # Example projects
-│   └── train_door_control/           # Complete SIL 3 example
-│       ├── docs/                     # Full EN 50128 documentation
-│       ├── src/                      # C source code (MISRA C compliant)
-│       ├── tests/                    # Unity-based tests
-│       └── README.md                 # Example overview
+├── examples/                              # ⭐ Development Projects Directory
+│   ├── README.md                         # Guide for creating EN 50128 projects
+│   │
+│   ├── train_door_control/               # SIL 3 Reference Implementation
+│   │   ├── README.md                    # Project documentation
+│   │   ├── Makefile                     # Build system with coverage
+│   │   ├── docs/                        # EN 50128 documentation
+│   │   │   └── requirements.md          # Software Requirements Specification
+│   │   ├── src/                         # C source code (MISRA C compliant)
+│   │   │   ├── door_control.c          # Main control logic
+│   │   │   ├── door_control.h          # Public API
+│   │   │   └── error_types.h           # Error definitions
+│   │   ├── test/                        # Unity-based unit tests
+│   │   │   ├── test_door_control.c     # Test suite
+│   │   │   └── unity_config.h          # Unity configuration
+│   │   ├── lib/                         # External libraries (Unity)
+│   │   └── build/                       # Build artifacts (gitignored)
+│   │
+│   └── [your_project]/                   # ⭐ Your EN 50128 projects here
+│       ├── README.md                    # Project documentation
+│       ├── Makefile                     # Build system
+│       ├── docs/                        # Requirements, design, safety docs
+│       ├── src/                         # Your C source code
+│       ├── test/                        # Your unit tests
+│       └── build/                       # Build artifacts
 │
-├── src/                               # Source code template structure
-│   ├── README.md                     # Template usage guide
-│   ├── components/                   # Software components (empty template)
-│   ├── interfaces/                   # Interface definitions (empty template)
-│   ├── tests/                        # Test code (empty template)
-│   └── config/                       # Configuration files (empty template)
-│
-├── tools/                             # Development tools
-│   ├── pdf-conversion/               # PDF to Markdown conversion
-│   │   ├── pdf2md.py                 # Conversion script
-│   │   └── requirements.txt          # Python dependencies
-│   └── static-analysis/              # MISRA C checking
-│       ├── cppcheck-misra.py         # Cppcheck MISRA wrapper
-│       └── misra.json                # MISRA C:2012 rules
-│
-└── venv/                              # Python virtual environment
+└── tools/                                 # Platform Development Tools
+    ├── pdf-conversion/                    # PDF to Markdown Converter
+    │   ├── pdf_to_markdown.py            # Main conversion script
+    │   ├── table_formatter.py            # Table formatting module
+    │   ├── convert.sh                    # Wrapper script
+    │   ├── requirements.txt              # Python dependencies
+    │   └── README.md                     # Tool documentation
+    └── static-analysis/                   # MISRA C Checking Tools
+        ├── cppcheck-misra.py             # Cppcheck MISRA wrapper
+        └── misra.json                    # MISRA C:2012 rules configuration
+```
+
+## Key Concepts
+
+### Platform vs. Project
+
+- **Platform (Repository Root)**: EN 50128 customization for OpenCode
+  - Agents, skills, standards, documentation
+  - Reusable across all EN 50128 projects
+  - Version controlled as a unit
+  
+- **Projects (`examples/` directory)**: Individual railway software development instances
+  - Each project is self-contained
+  - Uses platform agents and skills
+  - Follows EN 50128 lifecycle
+  - Can be version controlled independently
+
+### Why No `src/` in Root?
+
+The root directory contains the **platform**, not a project. All project source code goes in `examples/[project_name]/src/`.
+
+**Before (incorrect)**:
+```
+EN50128/
+├── src/              # ❌ Confusing - is this platform code or project code?
+└── examples/
+    └── train_door_control/
+        └── src/      # ❌ Duplicate structure
+```
+
+**After (correct)**:
+```
+EN50128/              # ✅ Platform only
+└── examples/         # ✅ All projects here
+    ├── train_door_control/
+    │   └── src/      # ✅ Clear - this is project code
+    └── your_project/
+        └── src/      # ✅ Clear - this is your project code
 ```
 
 **Notes:**
 - **`std/`** contains LLM-friendly Markdown versions of EN 50128 standards
-- **`docs/project-revision/`** archives all Phase completion reports
-- **`src/`** is a template; replace with actual C code for your project
-- **`examples/train_door_control/`** provides a complete SIL 3 reference implementation
-- Empty placeholder directories have been removed for clarity
+- **`docs/project-revision/`** archives all Phase completion reports  
+- **`examples/`** is where ALL development happens
+- **`examples/train_door_control/`** provides a complete SIL 3 reference
+- Empty placeholder directories have been removed
 
 ## File Naming Conventions
 
