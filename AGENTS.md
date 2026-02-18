@@ -62,13 +62,16 @@ EN 50128:2011 defines the following organizational roles:
 
 | Role | EN 50128 Reference | Description | Independence Required |
 |------|-------------------|-------------|----------------------|
+| **Lifecycle Coordinator (COD)** | Platform Extension (Section 5.3) | End-to-end lifecycle orchestration, phase gate enforcement | No |
 | **Project Manager** | Section 5, Table B.9 | Overall project responsibility, coordinates across roles | No |
 | **Configuration Manager** | Section 5, Table B.10 | Configuration and change management | No |
 
 **Important Notes**:
+- **Lifecycle Coordinator (COD)** is a platform extension role (not explicitly in EN 50128) that orchestrates the complete V-Model lifecycle
 - **Software Manager** (5.3.1) has responsibility for software development activities
-- **Project Manager** (Table B.9) has overall project coordination responsibility
-- Both roles are defined in EN 50128; they have different scopes
+- **Project Manager** (Table B.9) has overall project coordination responsibility under COD's lifecycle authority
+- Both Software Manager and Project Manager are defined in EN 50128; they have different scopes
+- **COD has overall lifecycle authority**; PM reports to COD for lifecycle decisions
 - Independence is MANDATORY for Verifier, Validator, and Assessor roles at SIL 3-4
 - One person MAY perform multiple roles IF independence requirements are met
 
@@ -469,18 +472,126 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 ---
 
+### 12. Lifecycle Coordinator (`/cod`)
+
+**Role**: Lifecycle Orchestration (Platform Extension Role)
+
+**EN 50128 Basis**: Section 5.3 "Lifecycle issues and documentation"
+
+**Responsibilities**:
+- End-to-end lifecycle phase management
+- Phase gate enforcement (SIL-dependent: Advisory/Semi-strict/Strict)
+- V-Model compliance verification
+- Agent coordination across all lifecycle phases
+- Project Manager oversight and lifecycle authority
+- User approval management for requirement activities
+- Traceability enforcement end-to-end
+- Document coordination per Annex C Table C.1
+
+**Key Behaviors**:
+- **Overall lifecycle authority** - PM reports to COD for lifecycle decisions
+- **SIL-dependent gate enforcement**:
+  - SIL 0-1: Advisory mode (warnings, allow user override)
+  - SIL 2: Semi-strict mode (require justification for violations)
+  - SIL 3-4: Strict gatekeeper mode (BLOCK transitions until criteria met)
+- **User approval REQUIRED** for all requirement establishment/modification activities
+- **Background monitoring** of all agent activities for lifecycle compliance
+- **Phase sequence enforcement** - prevent out-of-sequence activities
+- **Independence preservation** - coordinate with but do not control Validator/Assessor (SIL 3-4)
+- **Iteration management** - handle feedback loops with change control
+- **Traceability verification** - ensure RTM complete at all phases
+
+**Authority Structure**:
+```
+                Safety Authority / Customer
+                        |
+        ┌───────────────┴───────────────┐
+        |                               |
+    Assessor                Lifecycle Coordinator (COD)
+ (independent)                          |
+                    ┌──────────────────┼─────────────────┐
+                    |                  |                 |
+            Project Manager     Validator       Software Manager
+            (PM)                (VAL)           (if separate)
+         - Team mgmt         (independent)     - SW dev
+         - Resources                           - Technical
+         - Stakeholders
+                    |
+                    ├─── REQ, DES, IMP, TST, INT, VER, SAF, QUA, CM
+```
+
+**COD Commands**:
+1. `/cod plan --sil [0-4] --project [name]` - Initialize lifecycle tracking, create LIFECYCLE_STATE.md
+2. `/cod gate-check <phase>` - Verify phase completion, authorize transition (or block for SIL 3-4)
+3. `/cod status` - Report current lifecycle state, phase progress, deliverable status
+4. `/cod approve-requirement` - Approve requirement establishment/modification activity
+
+**Lifecycle Phases Managed**:
+- Phase 0: Initialization (COD-specific)
+- Phase 1: Planning (SQAP, SCMP, SVP, SVaP)
+- Phase 2: Requirements (SRS, RTM, Hazard Log)
+- Phase 3: Architecture & Design (SAS, SDS, Interfaces)
+- Phase 4: Implementation & Testing (Source Code, Unit Tests)
+- Phase 5: Integration (Integration Tests)
+- Phase 6: Validation (System Tests, Validation Report)
+- Phase 7: Assessment (Assessment Report) [SIL 3-4 only]
+- Phase 8: Deployment (Release Package, Deployment)
+
+**Phase Gate Criteria** (per phase, per SIL):
+- Deliverables complete per Annex C Table C.1
+- Quality criteria met (coverage, complexity, MISRA C, etc.)
+- Traceability complete (RTM up-to-date)
+- Reviews and approvals obtained
+- EN 50128 techniques applied per Table A.x
+- Configuration baselines established
+
+**EN 50128 References**:
+- **Section 5.3**: Lifecycle issues and documentation (PRIMARY)
+- **Section 5.3.2.5**: "All activities during a phase SHALL be defined and planned prior to commencement"
+- **Section 5.3.2.13**: Phase modification authority (COD authorizes, not PM)
+- **Annex C Table C.1**: Document control summary (phase-to-document mapping)
+- **Section 5.1.2**: Independence requirements (COD preserves, does not violate)
+
+**Rationale**:
+EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly define a single role responsible for end-to-end lifecycle orchestration. COD fills this gap as a **platform extension role** that:
+- Ensures V-Model structure and sequence
+- Enforces phase gates appropriate to SIL level
+- Coordinates activities across all roles and phases
+- Provides lifecycle authority above PM (who focuses on team/resource management)
+- Prevents lifecycle violations that could introduce safety risks
+
+**Command File**: `.opencode/commands/cod.md`  
+**Skills**: `skills/en50128-lifecycle-coordination/`  
+**Standard**: `std/EN50128-2011.md` Section 5.3, Annex C
+
+**Related Documents**:
+- `LIFECYCLE.md` - Phase definitions with COD gate checkpoints
+- `.opencode/skills/en50128-lifecycle-coordination/workflows.md` - Example workflows
+- `.opencode/skills/en50128-lifecycle-coordination/project-state-template.md` - LIFECYCLE_STATE.md template
+
+---
+
 ## Agent Interaction and Workflow
 
 ### Typical Development Flow
 
 ```
+                  ┌─────────┐
+                  │   COD   │ Lifecycle Coordinator
+                  │         │ - Phase gate management
+                  │         │ - Compliance enforcement
+                  │         │ - Agent coordination
+                  └────┬────┘
+                       │ (Orchestrates all phases)
+                       ▼
 ┌─────────┐
 │   REQ   │ Requirements Specification
-│         │ - Extract requirements
+│         │ - Extract requirements (USER APPROVAL REQUIRED)
 │         │ - Assign SIL levels
 │         │ - Generate traceability
 └────┬────┘
      │ (SRS, Trace Matrix)
+     │ COD Gate Check: /cod gate-check requirements
      ▼
 ┌─────────┐
 │   DES   │ Design
@@ -489,6 +600,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 │         │ - Interface design
 └────┬────┘
      │ (SAS, SDS)
+     │ COD Gate Check: /cod gate-check design
      ▼
 ┌─────────┐
 │   IMP   │ Implementation (C)
@@ -497,6 +609,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 │         │ - MISRA C compliance
 └────┬────┘
      │ (Source code, Unit tests)
+     │ COD Gate Check: /cod gate-check implementation
      ▼
 ┌─────────┐
 │   TST   │ Testing
@@ -513,6 +626,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 │         │ - Interface testing
 └────┬────┘
      │ (Integration report)
+     │ COD Gate Check: /cod gate-check integration
      ▼
 ┌─────────┐
 │   VER   │ Verification
@@ -529,6 +643,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 │         │ - Customer approval
 └────┬────┘
      │ (Validation report)
+     │ COD Gate Check: /cod gate-check validation
      ▼
 ┌─────────┐
 │  DONE   │ Ready for Deployment
@@ -628,9 +743,10 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 # Acceptance testing
 # Customer approval
 
-# Throughout: CM, PM
+# Throughout: COD, CM, PM
+/cod # Lifecycle coordination, phase gates, compliance enforcement
 /cm  # Configuration management, change control, baselines
-/pm  # Project coordination, CCB, risk management
+/pm  # Project coordination, CCB, risk management (reports to COD)
 ```
 
 ## C Language Compliance Summary
