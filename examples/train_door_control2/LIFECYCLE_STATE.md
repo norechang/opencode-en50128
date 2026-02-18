@@ -13,7 +13,7 @@
 | **Lifecycle Model** | V-Model |
 | **COD Mode** | Strict Gatekeeper |
 | **Created** | 2026-02-18 |
-| **Last Updated** | 2026-02-18 12:00:00 UTC |
+| **Last Updated** | 2026-02-18 14:00:00 UTC |
 
 ---
 
@@ -34,7 +34,7 @@
 | Phase | Status | Started | Completed | Gate Passed | Notes |
 |-------|--------|---------|-----------|-------------|-------|
 | 0. Initialization | Complete | 2026-02-18 | 2026-02-18 | - | Project initialized by COD |
-| 1. Planning | Complete | 2026-02-18 | 2026-02-18 | 2026-02-18 | Gate check PASSED (5/5), Baseline 0 established |
+| 1. Planning | Complete | 2026-02-18 | 2026-02-18 | 2026-02-18 | Gate check PASSED (5/5) - All docs template compliant |
 | 2. Requirements | Ready to Start | 2026-02-18 | - | - | - |
 | 3. Architecture & Design | Not Started | - | - | - | - |
 | 4. Implementation & Testing | Not Started | - | - | - | - |
@@ -62,23 +62,23 @@
 - [x] Software Quality Assurance Plan (SQAP) - docs/plans/SQAP.md
   - Status: approved
   - PM: 2026-02-18 VER: 2026-02-18 VAL: 2026-02-18 COD: 2026-02-18
-  - Note: APPROVED - Baseline 0 established
+  - Note: REGENERATED v2.0 for template compliance - RE-APPROVED through full chain
 - [x] Software Quality Assurance Verification Report - docs/reports/SQAP-Verification.md
   - Status: approved
   - PM: 2026-02-18 VER: 2026-02-18 VAL: 2026-02-18 COD: 2026-02-18
-  - Note: APPROVED - Baseline 0 established
+  - Note: APPROVED - Baseline 0 established (no changes needed)
 - [x] Software Configuration Management Plan (SCMP) - docs/plans/SCMP.md
   - Status: approved
   - PM: 2026-02-18 VER: 2026-02-18 VAL: 2026-02-18 COD: 2026-02-18
-  - Note: APPROVED - Baseline 0 established
+  - Note: REGENERATED v2.0 for template compliance - RE-APPROVED through full chain
 - [x] Software Verification Plan (SVP) - docs/plans/SVP.md
   - Status: approved
   - PM: 2026-02-18 VER: 2026-02-18 VAL: 2026-02-18 COD: 2026-02-18
-  - Note: APPROVED - Baseline 0 established
+  - Note: REGENERATED v2.0 for template compliance - RE-APPROVED through full chain
 - [x] Software Validation Plan (SVaP) - docs/plans/SVaP.md
   - Status: approved
   - PM: 2026-02-18 VER: 2026-02-18 VAL: 2026-02-18 COD: 2026-02-18
-  - Note: APPROVED - Baseline 0 established
+  - Note: REGENERATED v2.0 for template compliance - RE-APPROVED through full chain
 
 **Project Setup**:
 - [x] Version control repository initialized
@@ -93,7 +93,7 @@
 - [x] Reporting structure established
 - [x] Team competency verified
 
-**Phase Status**: Complete - Gate check PASSED, Baseline 0 established
+**Phase Status**: Complete - Gate check PASSED (5/5), all documents template compliant and re-approved
 
 **Approval Chain Legend**:
 - **not_started**: Not yet started
@@ -356,6 +356,26 @@ This section tracks all status transitions for deliverables through the approval
 | 2026-02-18 | SCMP | Planning | validated | approved | COD | System | Gate check passed - Baseline 0 established |
 | 2026-02-18 | SVP | Planning | validated | approved | COD | System | Gate check passed - Baseline 0 established |
 | 2026-02-18 | SVaP | Planning | validated | approved | COD | System | Gate check passed - Baseline 0 established |
+| 2026-02-18 | SQAP | Planning | approved | draft | CM | System | REGENERATED v2.0 for template compliance - Document ID, Document Control, Approvals table added |
+| 2026-02-18 | SCMP | Planning | approved | draft | CM | System | REGENERATED v2.0 for template compliance - Document ID, Document Control, Approvals table added |
+| 2026-02-18 | SVP | Planning | approved | draft | CM | System | REGENERATED v2.0 for template compliance - Document ID, Document Control, Approvals table added |
+| 2026-02-18 | SVaP | Planning | approved | draft | CM | System | REGENERATED v2.0 for template compliance - Document ID, Document Control, Approvals table added |
+| 2026-02-18 | SQAP v2.0 | Planning | draft | complete | PM | Sarah Johnson | RE-APPROVAL: PM approved v2.0 with template compliance - ready for verification |
+| 2026-02-18 | SCMP v2.0 | Planning | draft | complete | PM | Sarah Johnson | RE-APPROVAL: PM approved v2.0 with template compliance - ready for verification |
+| 2026-02-18 | SVP v2.0 | Planning | draft | complete | PM | Sarah Johnson | RE-APPROVAL: PM approved v2.0 with template compliance - ready for verification |
+| 2026-02-18 | SVaP v2.0 | Planning | draft | complete | PM | Sarah Johnson | RE-APPROVAL: PM approved v2.0 with template compliance - ready for verification |
+| 2026-02-18 | SQAP v2.0 | Planning | complete | verified | VER | Anna Petrov | TEMPLATE COMPLIANCE VERIFIED: Document ID ✓, Document Control ✓, Approvals table ✓ |
+| 2026-02-18 | SCMP v2.0 | Planning | complete | verified | VER | Anna Petrov | TEMPLATE COMPLIANCE VERIFIED: Document ID ✓, Document Control ✓, Approvals table ✓ |
+| 2026-02-18 | SVP v2.0 | Planning | complete | verified | VER | Anna Petrov | TEMPLATE COMPLIANCE VERIFIED: Document ID ✓, Document Control ✓, Approvals table ✓ |
+| 2026-02-18 | SVaP v2.0 | Planning | complete | verified | VER | Anna Petrov | TEMPLATE COMPLIANCE VERIFIED: Document ID ✓, Document Control ✓, Approvals table ✓ |
+| 2026-02-18 | SQAP v2.0 | Planning | verified | validated | VAL | James Wilson (Independent Validation Ltd) | Independent validation passed - template compliant and acceptable |
+| 2026-02-18 | SCMP v2.0 | Planning | verified | validated | VAL | James Wilson (Independent Validation Ltd) | Independent validation passed - template compliant and acceptable |
+| 2026-02-18 | SVP v2.0 | Planning | verified | validated | VAL | James Wilson (Independent Validation Ltd) | Independent validation passed - template compliant and acceptable |
+| 2026-02-18 | SVaP v2.0 | Planning | verified | validated | VAL | James Wilson (Independent Validation Ltd) | Independent validation passed - template compliant and acceptable |
+| 2026-02-18 | SQAP v2.0 | Planning | validated | approved | COD | System | RE-APPROVAL COMPLETE: Gate check passed - Baseline updated |
+| 2026-02-18 | SCMP v2.0 | Planning | validated | approved | COD | System | RE-APPROVAL COMPLETE: Gate check passed - Baseline updated |
+| 2026-02-18 | SVP v2.0 | Planning | validated | approved | COD | System | RE-APPROVAL COMPLETE: Gate check passed - Baseline updated |
+| 2026-02-18 | SVaP v2.0 | Planning | validated | approved | COD | System | RE-APPROVAL COMPLETE: Gate check passed - Baseline updated |
 
 **Approval Chain Rules**:
 - PM can mark: `draft`, `complete`
@@ -390,7 +410,7 @@ This section tracks all status transitions for deliverables through the approval
 
 | Date | Phase | Change Type | Description | Impact | CR# | Status |
 |------|-------|-------------|-------------|--------|-----|--------|
-| - | - | - | - | - | - | - |
+| 2026-02-18 | Planning | Documentation Change | Regenerated 4 planning documents (SQAP, SCMP, SVP, SVaP) v2.0 for EN 50128 template compliance - added Document ID, Document Control table, Approvals table. All documents re-approved through PM→VER→VAL→COD chain with template compliance verification. | High | CR-001 | Complete |
 
 **Change Types**: Requirement Change, Design Change, Code Change, Test Change, Documentation Change, Process Change
 
@@ -402,7 +422,8 @@ This section tracks all status transitions for deliverables through the approval
 
 | Date | Phase | Result | Criteria Met | Criteria Total | Notes |
 |------|-------|--------|--------------|----------------|-------|
-| 2026-02-18 | Planning | **PASSED** | 5 | 5 | All 5 deliverables validated by complete PM→VER→VAL approval chain, Baseline 0 established (SQAP, SQAP-Verification, SCMP, SVP, SVaP all approved) |
+| 2026-02-18 | Planning | **PASSED** | 5 | 5 | Initial approval: All 5 deliverables validated by complete PM→VER→VAL approval chain, Baseline 0 established |
+| 2026-02-18 | Planning | **PASSED** | 5 | 5 | RE-APPROVAL: All 5 deliverables template compliant and re-approved (SQAP v2.0, SCMP v2.0, SVP v2.0, SVaP v2.0, SQAP-Verification unchanged) |
 
 **Results**: PASSED, FAILED, BLOCKED
 
@@ -519,8 +540,8 @@ This section tracks all status transitions for deliverables through the approval
 ## Next Steps
 
 ### Immediate Actions
-1. ✅ Phase 1 (Planning) COMPLETE - Gate check PASSED (5/5 criteria)!
-2. ✅ Baseline 0 established with all 5 deliverables approved
+1. ✅ Phase 1 (Planning) COMPLETE - Gate check PASSED (5/5 criteria) with template compliance!
+2. ✅ All planning documents template compliant and re-approved
 3. Begin Phase 2 (Requirements):
    - Establish Software Requirements Specification (SRS)
    - USER APPROVAL REQUIRED for all requirement activities
@@ -545,29 +566,48 @@ This section tracks all status transitions for deliverables through the approval
 
 ## Notes
 
-✅ **Full Workflow Test COMPLETE - Phase 1 (Planning) PASSED!**
+✅ **Phase 1 (Planning) COMPLETE WITH TEMPLATE COMPLIANCE** (2026-02-18)
 
-**Success Summary:**
-- ✅ All 5 deliverables approved (SQAP, SQAP-Verification, SCMP, SVP, SVaP)
+**Original Approval Chain (Initial):**
+- ✅ All 5 deliverables approved (SQAP v1.0, SQAP-Verification, SCMP v1.0, SVP v1.0, SVaP v1.0)
 - ✅ Complete PM→VER→VAL→COD approval chain executed (20 approval chain entries)
 - ✅ Gate check PASSED with 5/5 criteria met
 - ✅ Baseline 0 established (2026-02-18)
-- ✅ Build system configured (Makefile, tool-configuration.md)
-- ✅ Independence requirements verified (VAL reports to Safety Authority, not PM)
-- ✅ SIL 3 strict gatekeeper mode enforced successfully
+
+⚠️ **Template Compliance Issue Identified & RESOLVED** (2026-02-18)
+
+**Problem:** Planning documents (SQAP, SCMP, SVP, SVaP) missing mandatory template structure:
+- Missing Document ID field (DOC-TYPE-YYYY-NNN format)
+- Missing Document Control table (version history)
+- Missing Approvals table (SIL 3 signature requirements)
+
+**Root Cause:** Templates embedded in SKILL.md rather than separate files
+
+**Resolution:**
+1. ✅ Created comprehensive template system (.opencode/skills/en50128-documentation/templates/)
+2. ✅ Regenerated 4 documents (SQAP v2.0, SCMP v2.0, SVP v2.0, SVaP v2.0) with proper structure
+3. ✅ Updated QUA and VER commands to enforce template compliance
+4. ✅ Re-executed full approval chain (PM→VER→VAL→COD) for 4 regenerated documents
+5. ✅ VER verified template compliance for all documents (Document ID ✓, Document Control ✓, Approvals ✓)
+
+**Re-Approval Results:**
+- ✅ SQAP v2.0 (DOC-SQAP-2026-001): Template compliant - APPROVED
+- ✅ SCMP v2.0 (DOC-SCMP-2026-001): Template compliant - APPROVED
+- ✅ SVP v2.0 (DOC-SVP-2026-001): Template compliant - APPROVED
+- ✅ SVaP v2.0 (DOC-SVAP-2026-001): Template compliant - APPROVED
+- ✅ SQAP-Verification: No changes needed - APPROVED
+
+**Approval Chain Statistics:**
+- Total approval chain entries: 40 (20 initial + 4 regeneration + 16 re-approval)
+- Template compliance verifications: 4 (all passed)
+- Documents regenerated: 4
+- Gate checks passed: 2 (initial + re-approval)
 
 **Key Achievements:**
-1. Complete approval chain audit trail (20 entries in history table)
-2. All deliverables validated by independent VER and VAL before COD approval
-3. Tool configuration documented and verified
-4. Project setup complete (directory structure, build system, team organization)
-
-**Comparison to Fast-Track Test:**
-- Fast-track: 4 deliverables (SQAP-Verification skipped)
-- Full workflow: 5 deliverables (SQAP-Verification included)
-- Fast-track: 16 approval chain entries
-- Full workflow: 20 approval chain entries
-- Both tests: Successfully demonstrated SIL 3 independence and approval chain enforcement
+1. ✅ All planning documents now EN 50128 template compliant (SIL 3 mandatory requirement)
+2. ✅ Template compliance enforcement added to QUA and VER agents
+3. ✅ Complete audit trail of template compliance fix (40 approval chain entries)
+4. ✅ Phase 1 (Planning) COMPLETE with all deliverables properly structured
 
 Ready to proceed to Phase 2: Requirements.
 USER APPROVAL REQUIRED for all requirement establishment/modification activities.

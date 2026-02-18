@@ -82,277 +82,76 @@ Use this skill when:
 - [ ] Validation Test Report
 - [ ] Software Assessment Report
 
-## Document Template Structure
+## Document Templates
 
-### Standard Header
+All EN 50128 document templates are available in the `templates/` directory. Each template includes:
+- Standard document header (Document ID, Version, Date, Author, Reviewer, Approver, SIL Level, Status)
+- Document Control table (version history)
+- Approvals table (signature section with SIL-specific requirements)
+- EN 50128-compliant structure and content guidance
 
-```markdown
-# [Document Title]
+### Available Templates
 
-| Field | Value |
-|-------|-------|
-| Document ID | [DOC-XXX-YYY] |
-| Version | [X.Y] |
-| Date | [YYYY-MM-DD] |
-| Author | [Name, Role] |
-| Reviewer | [Name, Role] |
-| Approver | [Name, Role] |
-| SIL Level | [0-4] |
-| Status | [Draft|Review|Approved|Baseline] |
+| Template File | Document Type | EN 50128 Reference | Lifecycle Phase |
+|---------------|---------------|-------------------|-----------------|
+| **`DOCUMENT-HEADER-TEMPLATE.md`** | General header structure (mandatory for ALL documents) | Annex C | All phases |
+| **`SQAP-template.md`** | Software Quality Assurance Plan | Section 6.5, Table A.9 | Phase 1 (Planning) |
+| **`SCMP-template.md`** | Software Configuration Management Plan | Section 6.6, Table A.9 | Phase 1 (Planning) |
+| **`SVP-template.md`** | Software Verification Plan | Section 6.2, Table A.5 | Phase 1 (Planning) |
+| **`SVaP-template.md`** | Software Validation Plan | Section 7.7, Table A.7 | Phase 1 (Planning) |
+| **`SRS-template.md`** | Software Requirements Specification | Section 7.2, Table A.2 | Phase 2 (Requirements) |
+| **`SAS-template.md`** | Software Architecture Specification | Section 7.3, Table A.3 | Phase 3 (Architecture & Design) |
+| **`SDS-template.md`** | Software Design Specification | Section 7.4, Table A.4 | Phase 3 (Architecture & Design) |
 
-## Document Control
+### Template Usage
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 0.1 | YYYY-MM-DD | [Name] | Initial draft |
-| 1.0 | YYYY-MM-DD | [Name] | First approved version |
+1. **Always start with the general header template** (`DOCUMENT-HEADER-TEMPLATE.md`)
+2. **Select the appropriate document-specific template** from the table above
+3. **Follow the template structure exactly** - sections, tables, and required fields are all mandatory for EN 50128 compliance
+4. **Fill in all fields** marked with `[placeholders]`
+5. **Adjust SIL-specific sections** based on your target SIL level (0, 1, 2, 3, 4)
+6. **Maintain traceability** - update Requirements Traceability Matrix (RTM) with every document change
 
-## Approvals
+### Template Compliance Verification
 
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| Author | | | |
-| Reviewer | | | |
-| QA Manager | | | |
-| Safety Manager | | | |
+**Quality Assurance (QA)** and **Verification (VER)** roles SHALL verify template compliance during document reviews:
+
+#### Template Compliance Checklist
+- [ ] Standard header table present with all required fields (Document ID, Version, Date, Project, SIL Level, Author, Reviewer, Approver, Status)
+- [ ] Document ID follows format: `DOC-<TYPE>-<YYYY>-<NNN>` (e.g., `DOC-SQAP-2026-001`)
+- [ ] Version follows format: `MAJOR.MINOR` (0.1 for draft, 1.0 for first approved version)
+- [ ] Document Control table present with version history
+- [ ] Approvals table present with SIL-appropriate signature requirements
+- [ ] All template sections present (no missing sections)
+- [ ] Content follows template guidance (structure, format, required information)
+
+**Non-compliance**: Documents that do not follow the template SHALL be marked as **Draft** status and returned to author for correction.
+
+### SIL-Specific Template Requirements
+
+| SIL Level | Approval Requirements | Additional Requirements |
+|-----------|----------------------|-------------------------|
+| **SIL 0-1** | Author + Reviewer + PM | Standard header, document control, approvals |
+| **SIL 2** | Author + Reviewer + QA Manager + PM | Above + MISRA C compliance planning, static analysis planning |
+| **SIL 3-4** | Author + Independent Reviewer + QA Manager + Safety Manager + PM + Customer (for SRS/SQAP) | Above + Independent verification/validation, traceability matrix (RTM) mandatory, enhanced safety analysis |
+
+### Accessing Templates
+
+**File Location**: `.opencode/skills/en50128-documentation/templates/`
+
+**Reading Templates**:
+```bash
+# View general header template
+cat .opencode/skills/en50128-documentation/templates/DOCUMENT-HEADER-TEMPLATE.md
+
+# View SQAP template
+cat .opencode/skills/en50128-documentation/templates/SQAP-template.md
+
+# List all templates
+ls -l .opencode/skills/en50128-documentation/templates/
 ```
 
-## Software Requirements Specification (SRS) Template
-
-```markdown
-# Software Requirements Specification
-
-## 1. Introduction
-### 1.1 Purpose
-### 1.2 Scope
-### 1.3 Definitions and Acronyms
-### 1.4 References
-### 1.5 Overview
-
-## 2. General Description
-### 2.1 System Context
-### 2.2 System Functions
-### 2.3 User Characteristics
-### 2.4 Constraints
-### 2.5 Assumptions and Dependencies
-
-## 3. System Requirements
-
-### 3.1 Functional Requirements
-#### 3.1.1 [Function Group]
-- REQ-FUNC-001: [Requirement]
-
-### 3.2 Performance Requirements
-- REQ-PERF-001: [Timing requirement]
-
-### 3.3 Interface Requirements
-#### 3.3.1 Hardware Interfaces
-- REQ-IF-HW-001: [Requirement]
-
-#### 3.3.2 Software Interfaces
-- REQ-IF-SW-001: [Requirement]
-
-### 3.4 Safety Requirements
-- REQ-SAFE-001: [Safety requirement with SIL]
-
-### 3.5 C Language Constraints
-- Data types: Fixed-width types (uint8_t, etc.)
-- Memory: Static allocation (SIL 2+)
-- Error handling: Explicit return codes
-
-## 4. Verification
-### 4.1 Verification Methods
-### 4.2 Requirements Traceability Matrix
-
-## 5. Appendices
-```
-
-## Software Architecture Specification (SAS) Template
-
-```markdown
-# Software Architecture Specification
-
-## 1. Introduction
-### 1.1 Purpose
-### 1.2 Scope
-### 1.3 SIL Classification
-
-## 2. Architecture Overview
-### 2.1 System Context Diagram
-### 2.2 Architecture Goals
-### 2.3 Architecture Patterns
-
-## 3. Architecture Description
-### 3.1 Logical Architecture
-- Component diagram
-- Module descriptions (C modules)
-- Interface specifications
-
-### 3.2 Process Architecture
-- Task allocation
-- Inter-process communication
-
-### 3.3 Data Architecture
-- Data model
-- Data structures (C structs)
-- Static data allocation
-
-## 4. Safety Architecture
-### 4.1 Safety Functions
-### 4.2 Redundancy and Diversity
-### 4.3 Fault Detection
-### 4.4 Safe States
-
-## 5. C Implementation Constraints
-- Static memory allocation only (SIL 2+)
-- No recursion (highly recommended SIL 3-4)
-- MISRA C:2012 compliance
-- Cyclomatic complexity limits
-
-## 6. Verification
-### 6.1 Traceability to Requirements
-```
-
-## Software Design Specification (SDS) Template
-
-```markdown
-# Software Design Specification
-
-## 1. Introduction
-### 1.1 Purpose
-### 1.2 SIL Level
-
-## 2. Module Designs
-
-### 2.1 Module: [Name]
-
-**Identifier**: MOD-[ID]
-**SIL Level**: [0-4]
-**Implements**: REQ-[IDs]
-**C Files**: [module.h, module.c]
-
-#### Purpose
-[Module responsibility]
-
-#### Interfaces
-**Input**: [Parameters]
-**Output**: [Return values]
-**Dependencies**: [Other modules]
-
-#### Data Structures
-```c
-typedef struct {
-    uint32_t field1;
-    bool field2;
-} module_state_t;
-```
-
-#### Functions
-```c
-error_t module_init(module_state_t* state);
-error_t module_process(module_state_t* state, input_t* input);
-```
-
-#### Error Handling
-- [Error detection mechanisms]
-- [Error recovery strategies]
-
-#### Complexity
-- Cyclomatic complexity: [Value] (limit: [10/15/20])
-
-## 3. Traceability
-| Design Element | Requirements | Code Location |
-|----------------|--------------|---------------|
-| MOD-001 | REQ-FUNC-001 | brake.c |
-```
-
-## Software Test Plan Template
-
-```markdown
-# Software Test Plan
-
-## 1. Introduction
-### 1.1 Purpose
-### 1.2 Scope
-### 1.3 SIL Level
-### 1.4 Test Framework: Unity (C)
-
-## 2. Test Items
-### 2.1 Software Under Test
-### 2.2 Features to be Tested
-
-## 3. Test Approach
-### 3.1 Test Levels
-- Component testing (Unity framework)
-- Integration testing
-- System testing
-
-### 3.2 Coverage Criteria
-- SIL 2: Statement 100%, Branch 100%
-- SIL 3-4: Statement 100%, Branch 100%, Condition 100%
-
-### 3.3 Tools
-- Unity test framework
-- gcov/lcov for coverage
-
-## 4. Test Environment
-### 4.1 Hardware Requirements
-### 4.2 Software Requirements
-### 4.3 Test Tools
-
-## 5. Test Deliverables
-- Test specifications
-- Test reports
-- Coverage reports
-
-## 6. Traceability
-| Requirement | Test Cases |
-|-------------|------------|
-| REQ-FUNC-001 | TC-UNIT-001, TC-UNIT-002 |
-```
-
-## Software Quality Assurance Plan (SQAP) Template
-
-```markdown
-# Software Quality Assurance Plan
-
-## 1. Introduction
-### 1.1 Purpose
-### 1.2 SIL Classification
-
-## 2. Quality Objectives
-### 2.1 Quality Goals
-### 2.2 Quality Metrics
-
-## 3. Organization
-### 3.1 QA Organization
-### 3.2 Roles and Responsibilities
-### 3.3 Independence Requirements (SIL 3-4)
-
-## 4. Quality Activities
-### 4.1 Reviews and Audits
-- Document reviews
-- Code reviews (mandatory for all code)
-- Design reviews
-
-### 4.2 Verification Activities
-- Static analysis (PC-lint, Cppcheck)
-- Dynamic testing
-- MISRA C compliance checking
-
-## 5. Quality Standards
-### 5.1 Coding Standards
-- MISRA C:2012 (mandatory SIL 2+)
-- Fixed-width types
-- No dynamic memory (SIL 2+)
-
-### 5.2 Documentation Standards
-- EN 50128 templates
-
-## 6. Problem Reporting
-### 6.1 Defect Tracking
-### 6.2 Corrective Actions
-```
+**For detailed template descriptions**, see: `templates/README.md`
 
 ## Document Review Checklist
 
