@@ -560,9 +560,11 @@ This section tracks all status transitions for deliverables through the approval
 | 2026-02-19 | SAF | Create Hazard Log | - | Hazard-Log.md | 8 hazards, FMEA, FTA, CCF analysis |
 | 2026-02-19 | TST | Create Overall Test Spec | - | Overall-Test-Spec.md | 140+ test cases (100% coverage) |
 | 2026-02-19 | VER | Requirements verification | - | Requirements-Verification.md | PASS WITH NO DEFECTS |
+| 2026-02-19 | COD | Phase 2 gate check | - | Phase2-Gate-Check.md | PASSED (15/15 criteria) |
+| 2026-02-19 | CM | Create Baseline 1 | - | Git tag: baseline-1-requirements | Requirements baseline established |
 
-**Active Agents**: COD (lifecycle coordination)  
-**Pending Agents**: PM (approval), VAL (validation), CM (baseline)
+**Active Agents**: COD (lifecycle coordination), DES (ready to begin Phase 3)  
+**Pending Agents**: DES (architecture/design), SAF (design safety), QUA (template check), VER (design verification)
 
 ---
 
@@ -571,7 +573,7 @@ This section tracks all status transitions for deliverables through the approval
 | Baseline | Date Established | Phase | Version | Tag | Contents |
 |----------|------------------|-------|---------|-----|----------|
 | Baseline 0 | 2026-02-18 | Planning | 1.0 | baseline-0-planning | SQAP, SQAP-Verification, SCMP, SVP, SVaP (all approved) |
-| Baseline 1 | - | Requirements | - | - | SRS, RTM, Test Specs |
+| Baseline 1 | 2026-02-19 | Requirements | 1.0 | baseline-1-requirements | SRS, RTM, Hazard Log, Overall Test Spec, Requirements Verification Report (all approved) |
 | Baseline 2 | - | Design | - | - | SAS, SDS, Interfaces |
 | Baseline 3 | - | Implementation | - | - | Source Code, Unit Tests |
 | Baseline 4 | - | Integration | - | - | Integration Tests |
