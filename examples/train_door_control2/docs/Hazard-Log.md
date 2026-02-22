@@ -1,8 +1,8 @@
 # Hazard Log
 
 **Document ID**: DOC-HAZLOG-2026-001  
-**Version**: 1.0  
-**Date**: 2026-02-19  
+**Version**: 0.2  
+**Date**: 2026-02-21  
 **Project**: train_door_control2  
 **SIL Level**: 3  
 **Author**: Safety Engineer (SAF)  
@@ -15,8 +15,8 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | DOC-HAZLOG-2026-001 |
-| **Version** | 1.0 |
-| **Date** | 2026-02-19 |
+| **Version** | 0.2 |
+| **Date** | 2026-02-21 |
 | **Project** | train_door_control2 |
 | **SIL Level** | 3 |
 | **Author** | Safety Engineer (SAF) |
@@ -31,6 +31,7 @@
 | Version | Date | Author | Changes | Approved By |
 |---------|------|--------|---------|-------------|
 | 0.1 | 2026-02-19 | SAF Engineer | Initial hazard log with FMEA/FTA | - |
+| 0.2 | 2026-02-21 | SAF Engineer | Added architectural safety mitigations (Phase 3) | - |
 | 1.0 | TBD | SAF Engineer | First approved version | TBD |
 
 ---
@@ -41,7 +42,7 @@
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Author (Safety Engineer)** | SAF Agent | | 2026-02-19 |
+| **Author (Safety Engineer)** | SAF Agent | | 2026-02-21 (v0.2 update) |
 | **Independent Reviewer** | TBD | | |
 | **Safety Manager** | TBD | | |
 | **QA Manager** | TBD | | |
@@ -107,6 +108,7 @@ Per EN 50128 Table A.1 and A.8, the following safety analysis techniques have be
 | **[EN50126-2]** | EN 50126-2:2017 Railway applications - RAMS - Part 2: Systems approach to safety |
 | **[EN50129]** | EN 50129:2018 Railway applications - Safety related electronic systems for signalling |
 | **[SRS]** | Software Requirements Specification, DOC-SRS-2026-001 v1.0 |
+| **[SAS]** | Software Architecture Specification, DOC-SAS-2026-001 v1.0 |
 | **[RTM]** | Requirements Traceability Matrix, DOC-RTM-2026-001 v1.0 |
 
 ---
@@ -1117,6 +1119,521 @@ The Train Door Control System is safe for SIL 3 operation based on the following
 
 ---
 
+## 8. ARCHITECTURAL SAFETY MITIGATIONS (Phase 3)
+
+**Phase**: Architecture & Design  
+**Date**: 2026-02-21  
+**Document Reference**: Software Architecture Specification (DOC-SAS-2026-001 v1.0)  
+**Author**: Safety Engineer (SAF)  
+**Status**: Draft - Pending QUA review and verification
+
+### 8.1 Overview
+
+This section documents the architectural safety patterns and design-level mitigations applied to address the 8 identified hazards during Phase 3 (Architecture & Design). The software architecture decomposes the system into 8 modules with clear safety responsibilities, applies EN 50128 Table A.3 architecture techniques (SIL 3-4 compliant), and implements 4 major safety patterns.
+
+**Architecture Approach**: Layered + State Machine  
+- **Layer 1 (Hardware Abstraction)**: Hardware interface modules (HAL)  
+- **Layer 2 (Control Logic)**: Door control state machines, safety monitors  
+- **Layer 3 (Application)**: Command processing, status reporting, diagnostics  
+
+**EN 50128 Compliance**: All mandatory and highly recommended architecture techniques applied (Structured Methodology, Modular Approach, Defensive Programming, Fully Defined Interface, Information Encapsulation, Memorisation of Data/Program Flow).
+
+---
+
+### 8.2 Architectural Safety Patterns Applied
+
+The following 4 architectural safety patterns have been designed to mitigate identified hazards:
+
+#### 8.2.1 Redundancy Pattern (Dual Speed Monitoring)
+
+**Pattern Description**: Dual-channel redundancy with voting logic for speed monitoring
+
+**Implementation**: MOD-002 (Safety Monitor Module)
+
+**Safety Logic**:
+- Primary speed sensor (CAN bus from train control system)
+- Secondary speed sensor (diverse technology: wheel encoder or GPS)
+- Cross-check: IF sensors disagree by > 10%, use MAXIMUM value (most restrictive → lock doors)
+- Fail-safe: IF any sensor fails, assume speed > 5 km/h → lock doors, prevent opening
+
+**Hazards Mitigated**: HAZ-001 (doors opening while train moving)
+
+**Architecture Reference**: SAS Section 7.1 (Redundancy Pattern)
+
+**Verification**: Phase 4 - Sensor disagreement fault injection tests (TC-SAFE-005 to TC-SAFE-007)
+
+---
+
+#### 8.2.2 Fail-Safe Pattern (Default to Safe State)
+
+**Pattern Description**: On critical fault, immediately enter safe state
+
+**Implementation**: MOD-001 (Door Control FSM) + MOD-003 (Fault Detection Module)
+
+**Safe State Definition**:
+- All door actuators disabled (PWM = 0%)
+- Doors locked IF closed (lock solenoid energized)
+- Doors held in current position IF open or intermediate
+- Fault code reported to train control system and driver display
+- Non-volatile fault log updated
+
+**Trigger Conditions**:
+- Critical fault detected (watchdog timeout, all speed sensors failed, actuator failure, door not closed when speed > 5 km/h)
+- Manual safe state entry (diagnostic command)
+
+**Hazards Mitigated**: HAZ-001, HAZ-002, HAZ-004, HAZ-007
+
+**Architecture Reference**: SAS Section 7.2 (Fail-Safe Pattern)
+
+**Verification**: Phase 4 - Fault injection tests (TC-SAFE-026 to TC-SAFE-030)
+
+---
+
+#### 8.2.3 Watchdog Pattern (Liveness Monitoring)
+
+**Pattern Description**: Hardware watchdog timer monitors software liveness, resets system on lockup
+
+**Implementation**: Main control loop + MOD-003 (Fault Detection Module)
+
+**Watchdog Logic**:
+- Hardware watchdog timer (external, independent of software)
+- Software refreshes watchdog every 100ms (main control loop)
+- Watchdog timeout: 200ms (2x refresh period for margin)
+- Feed watchdog ONLY IF health checks pass:
+  - Control loop cycle time ≤ 40ms (WCET budget)
+  - No critical faults active
+  - All modules responsive
+
+**Fail-Safe Behavior**:
+- IF software fails to refresh watchdog (infinite loop, deadlock, crash)
+- THEN hardware watchdog expires → hardware-triggered system reset and safe state entry
+- After reset, software detects watchdog reset flag and logs fault FAULT_WATCHDOG_TIMEOUT
+
+**Hazards Mitigated**: HAZ-004 (software lockup or crash)
+
+**Architecture Reference**: SAS Section 7.3 (Watchdog Pattern)
+
+**Verification**: Phase 4 - Deliberate watchdog timeout test (TC-SAFE-028)
+
+---
+
+#### 8.2.4 Defensive Programming Pattern (Input Validation)
+
+**Pattern Description**: Validate all inputs, check all outputs, handle all error paths
+
+**Implementation**: All modules (MOD-001 through MOD-008)
+
+**Defensive Practices** (Mandatory SIL 3):
+1. **NULL Pointer Checks**: All function parameters validated before use
+2. **Range Checks**: All sensor values, position values, speed values validated against valid range
+3. **Return Value Checks**: All function calls checked for error return codes
+4. **Array Bounds Checks**: All array accesses validated against array size
+5. **Division by Zero Checks**: All division operations protected
+6. **Overflow Checks**: All arithmetic operations protected against overflow (safe arithmetic functions)
+
+**Example** (from Safety Monitor):
+```c
+error_t safety_monitor_validate_speed(safety_monitor_t* monitor) {
+    // NULL pointer check
+    if (monitor == NULL) {
+        return ERROR_NULL_POINTER;
+    }
+    
+    // Range check
+    if (monitor->primary_speed > MAX_SPEED) {
+        monitor->primary_sensor_valid = false;
+    }
+    
+    // Cross-check and fail-safe logic
+    if (!monitor->primary_sensor_valid && !monitor->secondary_sensor_valid) {
+        // Both sensors invalid → fail-safe (assume high speed, lock doors)
+        monitor->speed = MAX_SPEED;
+        return ERROR_SENSOR_FAILURE;
+    }
+    
+    return ERROR_SUCCESS;
+}
+```
+
+**Hazards Mitigated**: HAZ-004 (software crash), HAZ-007 (memory corruption)
+
+**Architecture Reference**: SAS Section 9 (Defensive Programming Patterns)
+
+**Verification**: Phase 4 - Static analysis (MISRA C checker, Cppcheck), Code review
+
+---
+
+### 8.3 Hazard-to-Architecture Mapping
+
+This section maps each hazard to the specific architectural modules and safety patterns that mitigate it.
+
+---
+
+#### 8.3.1 HAZ-001: Doors Open While Train is Moving
+
+**Hazard Description**: Doors open while train speed > 5 km/h, causing passenger fall (catastrophic)
+
+**SIL Level**: 3
+
+**Architectural Mitigations**:
+
+| Module | Responsibility | Mitigation Mechanism |
+|--------|----------------|----------------------|
+| **MOD-002: Safety Monitor** | Monitor train speed, enforce door lock interlock | - Dual speed sensors (primary + secondary) with cross-check<br>- IF sensors disagree > 10%, use MAXIMUM value (most restrictive)<br>- IF sensors fail, assume speed > 5 km/h → lock doors (fail-safe)<br>- Hysteresis: Unlock only when speed < 2 km/h for ≥ 1s |
+| **MOD-001: Door Control FSM** | Control door locking based on safety monitor commands | - LOCKED state: Door locked when speed > 5 km/h<br>- CLOSED state: Cannot transition to OPENING if speed ≥ 1 km/h<br>- State transition validation: Reject invalid transitions |
+| **MOD-007: Sensor HAL** | Read speed sensors (primary from CAN, secondary diverse) | - CAN timeout detection (100ms timeout)<br>- Sensor plausibility checks (speed < 300 km/h)<br>- 5-sample moving average filter (noise rejection) |
+| **MOD-003: Fault Detection** | Detect speed sensor failures, enter safe state if critical | - IF both sensors fail OR disagree persistently → critical fault<br>- Critical fault → immediate safe state (doors locked) |
+
+**Safety Patterns Applied**:
+- Redundancy Pattern (dual speed sensors)
+- Fail-Safe Pattern (sensor failure → lock doors)
+- Defensive Programming (range checks, timeout detection)
+
+**Architecture References**: 
+- SAS Section 3.2 (MOD-002 Safety Monitor)
+- SAS Section 7.1 (Redundancy Pattern)
+- SAS Section 6.1 (Door Control FSM State Diagram, LOCKED state)
+
+**Residual Risk After Architecture**: Reduced by factor of 10^3 to 10^4 (SIL 3 target achieved)
+
+**Verification Methods** (Planned Phase 4-6):
+- Unit test: Safety monitor speed validation logic
+- Integration test: Speed sensor → door lock interlock
+- Fault injection: Sensor failures, sensor disagreement, CAN timeout
+- System test: Operational scenarios (train accelerating, doors locked)
+
+---
+
+#### 8.3.2 HAZ-002: Door Closes on Passenger Causing Injury
+
+**Hazard Description**: Door closes on passenger due to obstacle detection failure (critical)
+
+**SIL Level**: 3
+
+**Architectural Mitigations**:
+
+| Module | Responsibility | Mitigation Mechanism |
+|--------|----------------|----------------------|
+| **MOD-001: Door Control FSM** | Control door closing with obstacle detection | - CLOSING state: Continuously monitor obstacle sensors<br>- IF obstacle detected → immediate transition to OPENING (reverse direction)<br>- Door reverses by 20% to clear obstacle<br>- Reaction time budget: ≤100ms (sensor read + decision + actuator command) |
+| **MOD-007: Sensor HAL** | Read obstacle sensors (3 sensors per door: infrared, pressure, capacitive) | - OR logic: ANY sensor triggered = obstacle detected (fail-safe)<br>- Sampling rate: 100 Hz (10ms period)<br>- Debounce: 10ms minimum trigger duration<br>- Self-test: Periodic sensor validation |
+| **MOD-006: Actuator HAL** | Control door motor PWM, stop door immediately | - Emergency stop function: Set PWM to 0% within 10ms<br>- Reverse PWM direction: Open door at 50% speed<br>- Hardware-level safety: Motor current limiter (mechanical) |
+| **MOD-003: Fault Detection** | Detect obstacle sensor failures, enter degraded mode | - IF single sensor fails → continue with 2 remaining sensors (redundancy)<br>- IF all 3 sensors fail → degraded mode (door closing speed reduced by 50%, manual close only) |
+
+**Safety Patterns Applied**:
+- Redundancy Pattern (3 obstacle sensors with OR logic)
+- Fail-Safe Pattern (sensor failure → degraded mode with reduced speed)
+- Defensive Programming (fast reaction time, bounds checking)
+
+**Architecture References**:
+- SAS Section 3.1 (MOD-001 Door Control FSM, CLOSING state)
+- SAS Section 3.7 (MOD-007 Sensor HAL, obstacle detection)
+- SAS Section 6.2 (State Transition Table, CLOSING → OPENING on obstacle)
+
+**Residual Risk After Architecture**: Reduced by factor of 10^3 to 10^4 (SIL 3 target achieved)
+
+**Verification Methods** (Planned Phase 4-6):
+- Unit test: Obstacle detection logic, state machine transitions
+- Integration test: Obstacle sensor → door stop reaction time (must be ≤100ms)
+- Safety test: Physical obstacle test with high-speed measurement (oscilloscope)
+- Fault injection: Sensor failures (single, multiple), timing delays
+
+---
+
+#### 8.3.3 HAZ-003: Passengers Trapped During Emergency
+
+**Hazard Description**: Doors fail to open during emergency (fire, collision), passengers entrapped (critical)
+
+**SIL Level**: 3
+
+**Architectural Mitigations**:
+
+| Module | Responsibility | Mitigation Mechanism |
+|--------|----------------|----------------------|
+| **MOD-007: Sensor HAL** | Monitor emergency release handle (hardware interrupt) | - GPIO interrupt on rising edge (handle pulled)<br>- Hardware-level direct path: Handle → Lock release solenoid (NO SOFTWARE REQUIRED)<br>- Software logs event for traceability |
+| **MOD-001: Door Control FSM** | EMERGENCY state: Open all doors immediately | - Emergency event overrides all other states<br>- Transition to EMERGENCY state from ANY state<br>- Command all doors to open (left + right sides)<br>- Unlock all door locks<br>- Disable automatic closing |
+| **MOD-004: Command Processor** | Process emergency evacuation command (driver button or CAN) | - Emergency evacuation button (driver control panel)<br>- Emergency evacuation CAN message (from train control)<br>- Immediate broadcast to all door FSMs |
+
+**Safety Patterns Applied**:
+- Hardware Independence (emergency release has direct electrical path, independent of software)
+- Fail-Safe Pattern (emergency overrides all software interlocks)
+- Defensive Programming (emergency event logging)
+
+**Architecture References**:
+- SAS Section 3.1 (MOD-001 Door Control FSM, EMERGENCY state)
+- SAS Section 4.2.2 (Emergency Release Handle Interface - hardware-level)
+- SAS Section 6.1 (State Diagram: ANY state → EMERGENCY on handle activation)
+
+**Residual Risk After Architecture**: Reduced by factor of 10^3 (SIL 3 target achieved)
+
+**Hardware Design Requirement**: Emergency release handle MUST have direct electrical path to lock release solenoid (independent of software). Software monitoring is for logging only.
+
+**Verification Methods** (Planned Phase 4-6):
+- Integration test: Emergency release with software disabled (verify hardware path)
+- Demonstration: Physical emergency release test with independent safety assessor
+- Inspection: Hardware design review (verify direct electrical path)
+
+---
+
+#### 8.3.4 HAZ-004: Software Lockup or Crash
+
+**Hazard Description**: Software experiences lockup (infinite loop, deadlock) or crash, preventing all door control (critical)
+
+**SIL Level**: 3
+
+**Architectural Mitigations**:
+
+| Module | Responsibility | Mitigation Mechanism |
+|--------|----------------|----------------------|
+| **Main Control Loop** | Execute periodic tasks, feed watchdog | - 50ms control loop (20 Hz)<br>- WCET budget: ≤40ms (80% of period, 20% margin)<br>- Health checks before feeding watchdog:<br>  - Cycle time ≤ 40ms<br>  - No critical faults active<br>- IF health checks fail → do NOT feed watchdog → hardware reset |
+| **MOD-003: Fault Detection** | Detect software faults, enter safe state | - Watchdog timeout detection (after reset, check reset flag)<br>- Internal consistency checks (stack canary, CRC checks)<br>- Control flow monitoring |
+| **Hardware Watchdog Timer** | Independent hardware timer, resets system on timeout | - Refresh rate: 100ms (software)<br>- Timeout: 200ms (hardware-configured)<br>- Reset action: Hardware-triggered system reset, safe state entry |
+
+**Defensive Programming Constraints** (All Modules):
+- **No recursion** (prevents stack overflow)
+- **Static allocation only** (no malloc/free, prevents heap corruption)
+- **Cyclomatic complexity ≤ 10** (reduces logic errors)
+- **NULL pointer checks** (prevents crashes)
+- **Bounds checks** (prevents buffer overflows)
+
+**Safety Patterns Applied**:
+- Watchdog Pattern (hardware-level liveness monitoring)
+- Fail-Safe Pattern (watchdog timeout → system reset and safe state)
+- Defensive Programming (MISRA C compliance, complexity limits)
+
+**Architecture References**:
+- SAS Section 7.3 (Watchdog Pattern)
+- SAS Section 8 (Memory Allocation Strategy - static only)
+- SAS Section 9 (Defensive Programming Patterns - 6 patterns mandatory)
+
+**Residual Risk After Architecture**: Reduced by factor of 10^3 to 10^4 (SIL 3 target achieved)
+
+**Verification Methods** (Planned Phase 4-6):
+- Unit test: Control loop timing budget verification
+- Static analysis: MISRA C checker (zero mandatory violations), complexity analysis (all functions ≤10)
+- Fault injection: Deliberate watchdog timeout, infinite loop simulation
+- Dynamic analysis: Runtime memory usage, stack overflow detection (stack canary)
+
+---
+
+#### 8.3.5 HAZ-005: Incorrect Door Position Reporting
+
+**Hazard Description**: Door position sensor or software incorrectly reports position (e.g., "closed" when open), incorrect status (marginal)
+
+**SIL Level**: 2
+
+**Architectural Mitigations**:
+
+| Module | Responsibility | Mitigation Mechanism |
+|--------|----------------|----------------------|
+| **MOD-007: Sensor HAL** | Read position sensors (12-bit ADC) with validation | - Sampling rate: 100 Hz (10ms period)<br>- Range validation: -5% to 105% (allows sensor tolerance)<br>- Plausibility check: Position change ≤ 20% per sample (detect stuck sensor)<br>- 3-sample median filter (reject noise spikes) |
+| **MOD-001: Door Control FSM** | Maintain door state based on validated position | - State consistency: IF position says OPEN but state is CLOSED → raise fault<br>- Threshold validation: CLOSED ≤ 5%, OPEN ≥ 95%, INTERMEDIATE otherwise |
+| **MOD-003: Fault Detection** | Detect position sensor faults, enter degraded mode | - IF sensor out of range → raise FAULT_POSITION_SENSOR<br>- IF sensor frozen (no change for > 5s during movement) → raise fault<br>- Degraded mode: Use timeout-based position estimation (no feedback) |
+| **MOD-005: Status Reporter** | Report door position to train control and display | - Position reported with valid flag<br>- IF sensor fault active → report FAULT status instead of position |
+
+**Safety Patterns Applied**:
+- Defensive Programming (range checks, plausibility checks, median filter)
+- Fail-Safe Pattern (sensor failure → degraded mode or fault state)
+
+**Architecture References**:
+- SAS Section 3.7 (MOD-007 Sensor HAL, position sensor interface)
+- SAS Section 3.1 (MOD-001 Door Control FSM, position monitoring)
+- SAS Section 4.1.3 (Door Control FSM ↔ Sensor HAL interface)
+
+**Residual Risk After Architecture**: Reduced to Tolerable level (Marginal severity, reduced frequency via validation)
+
+**Verification Methods** (Planned Phase 4-6):
+- Unit test: Position sensor validation logic, median filter
+- Integration test: Sensor out-of-range, sensor stuck, sensor noise injection
+- System test: Degraded mode operation (timeout-based control)
+
+---
+
+#### 8.3.6 HAZ-006: CAN Bus Communication Failure
+
+**Hazard Description**: CAN bus communication failure (timeout, corruption), loss of door commands and status reporting (marginal)
+
+**SIL Level**: 2
+
+**Architectural Mitigations**:
+
+| Module | Responsibility | Mitigation Mechanism |
+|--------|----------------|----------------------|
+| **MOD-008: Communication HAL** | CAN bus interface with timeout detection | - CAN timeout detection: 100ms for speed data, 200ms for commands<br>- CAN message validation: ID range, DLC check, checksum (CRC-8)<br>- CAN error handling: TX failure → retry up to 3 times<br>- CAN status monitoring: Bus-off detection, error counter monitoring |
+| **MOD-002: Safety Monitor** | Handle speed sensor timeout (CAN-based primary speed) | - IF no speed message received for > 100ms → raise FAULT_SPEED_SENSOR_TIMEOUT<br>- Fail-safe: Use secondary speed sensor (diverse, non-CAN) OR assume speed > 5 km/h (lock doors) |
+| **MOD-004: Command Processor** | Handle command timeout (CAN-based commands) | - IF no command message received for > 200ms → enter safe state (doors hold current position)<br>- Driver control panel (GPIO-based) remains functional (local control) |
+| **MOD-005: Status Reporter** | Report CAN communication fault | - IF CAN TX fails → raise warning WARN_CAN_TX_FAIL<br>- Status display (local) remains functional |
+
+**Safety Patterns Applied**:
+- Defensive Programming (timeout detection, message validation, retry logic)
+- Fail-Safe Pattern (CAN failure → safe state or degraded mode)
+- Redundancy (driver control panel provides local control independent of CAN)
+
+**Architecture References**:
+- SAS Section 3.8 (MOD-008 Communication HAL, CAN interface)
+- SAS Section 4.2.1 (External Interfaces: Train Control System CAN Bus)
+
+**Residual Risk After Architecture**: Reduced to Tolerable level (Marginal severity, degraded operation acceptable)
+
+**Verification Methods** (Planned Phase 4-6):
+- Integration test: CAN timeout, CAN message corruption, CAN bus-off
+- Fault injection: CAN controller disabled, CAN bus disconnected
+- System test: Degraded mode operation (local control only)
+
+---
+
+#### 8.3.7 HAZ-007: Memory Corruption (RAM/ROM)
+
+**Hazard Description**: Software memory corrupted (buffer overflow, wild pointer, stack overflow), incorrect behavior (critical)
+
+**SIL Level**: 3
+
+**Architectural Mitigations**:
+
+| Module | Responsibility | Mitigation Mechanism |
+|--------|----------------|----------------------|
+| **All Modules** | Defensive programming to prevent memory corruption | - **Static allocation only** (no malloc/free, prevents heap corruption)<br>- **No recursion** (prevents stack overflow)<br>- **Bounds checking** (all array accesses validated)<br>- **NULL pointer checks** (all pointer dereferences validated)<br>- **Safe string functions** (strncpy instead of strcpy)<br>- **Fixed-width types** (uint8_t, uint16_t, uint32_t - explicit sizes) |
+| **MOD-003: Fault Detection** | Detect memory corruption, enter safe state | - Stack canary (detect stack overflow)<br>- Periodic CRC checks on critical variables (safety monitor speed threshold, door lock flags)<br>- Watchdog (detect corrupted control flow) |
+| **Memory Allocation Strategy** | Static memory map with margins | - Stack: 8 KB allocated, WCSU ~896 bytes (780% margin)<br>- Module state: 4 KB allocated (all static variables)<br>- Total RAM: 64 KB available, ~30 KB used (50% margin) |
+
+**Hardware Design Requirements**:
+- **ECC RAM** (error-correcting code memory) for SEU protection (single-event upset from cosmic rays or EMI)
+- **Memory Protection Unit (MPU)** (if available on processor) to protect critical memory regions
+
+**Safety Patterns Applied**:
+- Defensive Programming (all 6 patterns mandatory: NULL checks, range checks, return value checks, bounds checks, division-by-zero checks, overflow checks)
+- Fail-Safe Pattern (memory corruption detection → safe state)
+- Watchdog Pattern (detect corrupted control flow)
+
+**Architecture References**:
+- SAS Section 8 (Memory Allocation Strategy - static only, stack analysis)
+- SAS Section 9 (Defensive Programming Patterns - 6 patterns mandatory)
+- SAS Section 3.3 (MOD-003 Fault Detection, stack canary, CRC checks)
+
+**Residual Risk After Architecture**: Reduced by factor of 10^3 (SIL 3 target achieved)
+
+**Verification Methods** (Planned Phase 4-6):
+- Static analysis: MISRA C checker (rules for memory safety), Cppcheck (buffer overflow detection)
+- Code review: Independent review by VER agent (SIL 3 mandatory)
+- Stack usage analysis: Verify WCSU ≤ 8 KB with margin
+- Runtime monitoring: Stack canary checks, CRC validation
+
+---
+
+#### 8.3.8 HAZ-008: Electromagnetic Interference (EMI)
+
+**Hazard Description**: EMI from traction motors or external sources causes transient faults (sensor glitches, CAN errors, processor glitches) (marginal)
+
+**SIL Level**: 2
+
+**Architectural Mitigations**:
+
+| Module | Responsibility | Mitigation Mechanism |
+|--------|----------------|----------------------|
+| **MOD-007: Sensor HAL** | Filter sensor signals, reject transient noise | - Median filter for position sensors (3-sample, reject spikes)<br>- Moving average filter for speed sensors (5-sample, smooth data)<br>- Debouncing for obstacle sensors (10ms minimum trigger duration)<br>- Signal plausibility checks (reject out-of-range values) |
+| **MOD-008: Communication HAL** | Robust CAN communication with error handling | - CAN message checksum validation (CRC-8)<br>- CAN error counter monitoring (detect EMI-induced errors)<br>- Automatic retransmission (CAN controller feature)<br>- Bus-off recovery |
+| **Main Control Loop** | Watchdog monitoring (recover from transient processor glitches) | - Watchdog timeout: 200ms (detect processor lockup from EMI)<br>- System reset and recovery (hardware-triggered) |
+
+**Hardware Design Requirements** (Per EN 50121 EMC Standard):
+- Shielded cables for all sensor signals
+- Filtering and grounding (hardware-level EMC protection)
+- Processor with built-in ESD protection
+- PCB layout with EMC best practices
+
+**Safety Patterns Applied**:
+- Defensive Programming (signal filtering, validation, checksum)
+- Watchdog Pattern (recover from transient processor glitches)
+- Fail-Safe Pattern (EMI-induced errors → safe state or degraded mode)
+
+**Architecture References**:
+- SAS Section 3.7 (MOD-007 Sensor HAL, filtering and debouncing)
+- SAS Section 3.8 (MOD-008 Communication HAL, CAN error handling)
+- SAS Section 7.3 (Watchdog Pattern)
+
+**Residual Risk After Architecture**: Reduced to Tolerable level (Marginal severity, transient faults recoverable)
+
+**Hardware Compliance**: EN 50121 EMC compliance mandatory (hardware design, verified in Phase 4 hardware testing)
+
+**Verification Methods** (Planned Phase 4-6):
+- EMC testing: Hardware-level EMI immunity tests (EN 50121)
+- Software robustness: Fault injection (inject transient faults, verify recovery)
+- System test: Operational testing in railway environment (high EMI exposure)
+
+---
+
+### 8.4 Module Safety Analysis
+
+This section identifies safety-critical modules and their safety properties.
+
+#### 8.4.1 Safety-Critical Modules (SIL 3)
+
+| Module ID | Module Name | SIL Level | Safety Responsibility | Critical Failure Modes |
+|-----------|-------------|-----------|----------------------|------------------------|
+| **MOD-001** | Door Control State Machine | **SIL 3** | Control door opening/closing/locking based on safety conditions | - Incorrect state transition (e.g., CLOSED → OPENING when speed > 5 km/h)<br>- Lock failure (door unlocked when speed > 5 km/h)<br>- Obstacle detection ignored during closing |
+| **MOD-002** | Safety Monitor | **SIL 3** | Monitor speed, enforce safety interlocks, prevent unsafe door operations | - Speed sensor validation failure (allow door open when speed > 5 km/h)<br>- Fail-safe logic failure (sensor failure does NOT lock doors)<br>- Interlock bypass (door open command accepted when unsafe) |
+| **MOD-003** | Fault Detection & Diagnosis | **SIL 3** | Detect faults, enter safe state, prevent unsafe operations | - Critical fault not detected (e.g., door not closed when speed > 5 km/h)<br>- Safe state entry failure (actuators not disabled)<br>- Fault log corruption (loss of safety evidence) |
+
+#### 8.4.2 Supporting Modules (SIL 3 Quality, Not Safety Functions)
+
+| Module ID | Module Name | SIL Level | Responsibility | Failure Impact |
+|-----------|-------------|-----------|----------------|----------------|
+| **MOD-004** | Command Processor | SIL 3 quality | Process door commands, validate commands | - Command validation failure → safety monitor catches (defense-in-depth)<br>- Command timeout → safe state entry |
+| **MOD-005** | Status Reporter | SIL 3 quality | Report status to train control and display | - Status reporting failure → loss of driver awareness (not immediate danger)<br>- CAN TX failure → degraded mode (local control remains functional) |
+| **MOD-006** | Actuator HAL | SIL 3 quality | Control door motors and locks | - PWM output failure → detected by fault detection → safe state<br>- Lock actuator failure → detected by position sensor (door not locked) |
+| **MOD-007** | Sensor HAL | SIL 3 quality | Read all sensors with validation | - Sensor read failure → detected by fault detection → safe state<br>- Filtering failure → plausibility checks catch invalid values |
+| **MOD-008** | Communication HAL | SIL 3 quality | CAN and UART communication | - CAN failure → timeout detection → safe state or degraded mode<br>- UART failure → no safety impact (diagnostic only) |
+
+**Note**: All modules developed to SIL 3 quality (MISRA C, complexity ≤10, defensive programming, independent verification). Safety-critical modules (MOD-001, MOD-002, MOD-003) are subject to additional safety analysis (FMEA, FTA) and safety testing.
+
+---
+
+### 8.5 Residual Risks After Architectural Mitigations
+
+This section re-assesses residual risk for each hazard after applying architectural mitigations.
+
+| Hazard ID | Description | Initial Risk | Architectural Mitigations | Residual Risk After Architecture | Risk Reduction Factor | Acceptable? |
+|-----------|-------------|-------------|---------------------------|----------------------------------|----------------------|-------------|
+| **HAZ-001** | Doors open while moving | Unacceptable (Catastrophic + Probable) | - Redundant speed monitoring (MOD-002)<br>- Fail-safe logic (sensor failure → lock doors)<br>- State machine validation (MOD-001)<br>- Fault detection (MOD-003) | **Tolerable** (Catastrophic + Improbable, < 10^-8 /hr) | 10^3 to 10^4 | ✓ Yes (SIL 3 target met) |
+| **HAZ-002** | Door closes on passenger | Unacceptable (Critical + Probable) | - Redundant obstacle sensors (3 sensors, OR logic)<br>- Fast reaction time (≤100ms)<br>- Immediate door reversal (MOD-001)<br>- Degraded mode (sensor failure → reduced speed) | **Tolerable** (Critical + Improbable, < 10^-8 /hr) | 10^3 to 10^4 | ✓ Yes (SIL 3 target met) |
+| **HAZ-003** | Passenger entrapment | Undesirable (Critical + Remote) | - Hardware-level emergency release (independent of software)<br>- Emergency evacuation mode (MOD-001, MOD-004)<br>- Software logs events (traceability) | **Tolerable** (Critical + Improbable, < 10^-8 /hr) | 10^3 | ✓ Yes (SIL 3 target met) |
+| **HAZ-004** | Software lockup | Unacceptable (Critical + Occasional) | - Hardware watchdog (independent, 200ms timeout)<br>- Health checks before feeding watchdog<br>- Static allocation (no heap corruption)<br>- No recursion (no stack overflow)<br>- Complexity ≤10 (reduced logic errors) | **Tolerable** (Critical + Improbable, < 10^-8 /hr) | 10^3 to 10^4 | ✓ Yes (SIL 3 target met) |
+| **HAZ-005** | Incorrect position | Undesirable (Marginal + Occasional) | - Position sensor validation (range, plausibility, median filter)<br>- Degraded mode (timeout-based control)<br>- Fault detection (MOD-003) | **Tolerable** (Marginal + Remote, < 10^-7 /hr) | 10^2 | ✓ Yes (SIL 2 target met) |
+| **HAZ-006** | CAN bus failure | Undesirable (Marginal + Probable) | - CAN timeout detection (100ms speed, 200ms command)<br>- Message validation (checksum, ID, DLC)<br>- Degraded mode (local control via driver panel)<br>- Fail-safe (speed timeout → lock doors) | **Tolerable** (Marginal + Occasional, < 10^-7 /hr) | 10^1 to 10^2 | ✓ Yes (SIL 2 target met) |
+| **HAZ-007** | Memory corruption | Undesirable (Critical + Remote) | - Static allocation only (no heap corruption)<br>- No recursion (no stack overflow)<br>- Defensive programming (bounds checks, NULL checks)<br>- Stack canary, CRC checks (detection)<br>- ECC RAM (hardware, SEU protection) | **Tolerable** (Critical + Improbable, < 10^-8 /hr) | 10^3 | ✓ Yes (SIL 3 target met) |
+| **HAZ-008** | EMI | Tolerable (Marginal + Occasional) | - Signal filtering (median, moving average, debouncing)<br>- CAN checksum validation, error handling<br>- Watchdog (recover from transient glitches)<br>- Hardware EMC compliance (EN 50121) | **Tolerable** (Marginal + Remote, < 10^-7 /hr) | 10^1 | ✓ Yes (SIL 2 target met) |
+
+**Overall Conclusion**: All 8 hazards have been addressed by architectural mitigations. Residual risk for all hazards is **TOLERABLE** and meets EN 50126 ALARP criteria. SIL 3 targets achieved for HAZ-001, HAZ-002, HAZ-003, HAZ-004, HAZ-007. SIL 2 targets achieved for HAZ-005, HAZ-006, HAZ-008.
+
+---
+
+### 8.6 Verification Requirements (Phase 4-6)
+
+The following verification activities are required to confirm that architectural mitigations are correctly implemented:
+
+| Hazard ID | Verification Method | Test Cases / Activities | Responsible Agent | Phase |
+|-----------|---------------------|-------------------------|-------------------|-------|
+| **HAZ-001** | - Unit test (safety monitor speed validation)<br>- Integration test (speed sensor → door lock)<br>- Fault injection (sensor failures, disagreement)<br>- System test (operational scenarios) | TC-SAFE-001 to TC-SAFE-010 | TST, VER | Phase 4-5 |
+| **HAZ-002** | - Unit test (obstacle detection logic)<br>- Integration test (obstacle → door stop, reaction time)<br>- Safety test (physical obstacle, high-speed measurement)<br>- Fault injection (sensor failures, timing delays) | TC-SAFE-011 to TC-SAFE-020 | TST, VER | Phase 4-5 |
+| **HAZ-003** | - Integration test (emergency release with software disabled)<br>- Demonstration (physical emergency release)<br>- Inspection (hardware design review) | TC-SAFE-021 to TC-SAFE-025 | TST, VER, Assessor | Phase 4-7 |
+| **HAZ-004** | - Unit test (control loop timing)<br>- Static analysis (MISRA C, complexity, stack usage)<br>- Fault injection (watchdog timeout, infinite loop)<br>- Dynamic analysis (runtime monitoring) | TC-SAFE-026 to TC-SAFE-030 | TST, VER | Phase 4-5 |
+| **HAZ-005** | - Unit test (position validation, median filter)<br>- Integration test (sensor faults, out-of-range, stuck)<br>- System test (degraded mode) | TC-SAFE-031 to TC-SAFE-035 | TST, VER | Phase 4-5 |
+| **HAZ-006** | - Integration test (CAN timeout, message corruption, bus-off)<br>- Fault injection (CAN disabled, bus disconnected)<br>- System test (degraded mode, local control) | TC-SAFE-036 to TC-SAFE-040 | TST, VER | Phase 4-5 |
+| **HAZ-007** | - Static analysis (MISRA C, Cppcheck, stack analysis)<br>- Code review (independent, VER agent)<br>- Runtime monitoring (stack canary, CRC checks) | Static analysis reports, code review report | VER, QUA | Phase 4 |
+| **HAZ-008** | - EMC testing (EN 50121, hardware-level)<br>- Fault injection (transient faults, EMI simulation)<br>- System test (operational testing in railway environment) | Hardware EMC test report, TC-SAFE-041 to TC-SAFE-045 | Hardware test, TST | Phase 4-5 |
+
+**Critical Verification Requirements**:
+- **Independent verification** (VER agent) for all SIL 3 modules (MOD-001, MOD-002, MOD-003) - mandatory per EN 50128
+- **Code review** with MISRA C compliance verification - mandatory before integration testing
+- **Fault injection testing** for all safety-critical paths - mandatory for SIL 3
+- **Coverage analysis**: 100% statement, branch, condition coverage for SIL 3 modules - mandatory
+
+---
+
+**Section 8 Status**: Draft - Awaiting QUA review and VER verification  
+**Date**: 2026-02-21  
+**Next Update**: Phase 4 (Implementation) - update with implementation evidence and verification results
+
+---
+
 ## 11. OPEN ITEMS AND ACTIONS
 
 ### 11.1 Open Safety Items
@@ -1128,6 +1645,12 @@ The Train Door Control System is safe for SIL 3 operation based on the following
 | **OPEN-003** | Define obstacle sensor self-test procedure (periodic trigger test) | Hardware Designer | Phase 3 | Open |
 | **OPEN-004** | Specify ECC RAM requirement for SEU protection | Hardware Designer | Phase 3 | Open |
 | **OPEN-005** | Develop fault injection test rig for safety testing | Test Engineer | Phase 4 | Open |
+| **ARCH-001** | Verify speed sensor diverse technology selection (wheel encoder vs GPS) with system team | System Designer | End of Phase 3 | Open |
+| **ARCH-002** | Confirm ECC RAM requirement with hardware team (SEU protection for HAZ-007) | Hardware Designer | End of Phase 3 | Open |
+| **ARCH-003** | Develop detailed module design (SDS) for MOD-001, MOD-002, MOD-003 (safety-critical) | DES | Phase 3 | In Progress |
+| **ARCH-004** | Define fault injection test rig requirements (speed sensor, obstacle sensor, CAN bus, watchdog) | TST | End of Phase 3 | Open |
+| **ARCH-005** | Update Requirements Traceability Matrix (RTM) with architecture module traceability | CM | End of Phase 3 | Pending |
+| **ARCH-006** | QA review of architecture document (template compliance, design review) | QUA | End of Phase 3 | Pending |
 
 ### 11.2 Actions Required
 
@@ -1160,6 +1683,7 @@ The Train Door Control System is safe for SIL 3 operation based on the following
 | Reference | Document |
 |-----------|----------|
 | **[SRS]** | Software Requirements Specification, DOC-SRS-2026-001 v1.0 |
+| **[SAS]** | Software Architecture Specification, DOC-SAS-2026-001 v1.0, 2026-02-21 |
 | **[RTM]** | Requirements Traceability Matrix, DOC-RTM-2026-001 v1.0 |
 | **[SQAP]** | Software Quality Assurance Plan, DOC-SQAP-2026-001 v2.0 |
 

@@ -1,0 +1,193 @@
+phase:
+  id: "architecture-design"
+  number: 3
+  name: "Architecture and Design"
+  
+  # Agent activities (EN 50128 Section 7.3 - 6 documents + 1 best practice)
+  activities:
+    # Activity 0: DES creates Software Architecture Specification (Annex C #9)
+    - agent: "des"
+      task_description: "Create Software Architecture Specification defining system decomposition, modules, and architectural patterns"
+      owner: "des"
+      deliverables:
+        - path: "docs/Software-Architecture-Specification.md"
+          doc_id: "DOC-SAS-2026-001"
+          doc_type: "Software-Architecture-Specification"
+          qua_required: true
+      parallel_group: 1
+    
+    # Activity 1: SAF updates Hazard Log with architectural safety patterns (best practice)
+    - agent: "saf"
+      task_description: "Update Hazard Log with architectural safety patterns and design-level mitigations"
+      owner: "saf"
+      deliverables:
+        - path: "docs/Hazard-Log.md"
+          doc_id: "DOC-HAZLOG-2026-001"
+          doc_type: "Hazard-Log"
+          qua_required: true
+      dependencies: [0]           # SAF depends on architecture (DES)
+    
+    # Activity 2: DES creates Software Design Specification (Annex C #10)
+    - agent: "des"
+      task_description: "Create Software Design Specification with detailed module designs, algorithms, and data structures"
+      owner: "des"
+      deliverables:
+        - path: "docs/Software-Design-Specification.md"
+          doc_id: "DOC-SDS-2026-001"
+          doc_type: "Software-Design-Specification"
+          qua_required: true
+      dependencies: [0, 1]        # SDS depends on SAS and updated Hazard Log
+    
+    # Activity 3: DES creates Software Interface Specifications (Annex C #11) - PLURAL per EN 50128 7.3.3 item 3
+    - agent: "des"
+      task_description: "Create Software Interface Specifications defining all internal and external interfaces with pre/post conditions, boundary values, and time constraints"
+      owner: "des"
+      deliverables:
+        - path: "docs/Software-Interface-Specifications.md"
+          doc_id: "DOC-INTERFACES-2026-001"
+          doc_type: "Software-Interface-Specifications"
+          qua_required: true
+      dependencies: [0]           # Interfaces depend on architecture (SAS)
+    
+    # Activity 4: INT creates Software Integration Test Specification (Annex C #12)
+    - agent: "int"
+      task_description: "Create Software Integration Test Specification for testing integration of software components (executed in Phase 6)"
+      owner: "int"
+      deliverables:
+        - path: "docs/test/Software-Integration-Test-Specification.md"
+          doc_id: "DOC-INTTEST-2026-001"
+          doc_type: "Software-Integration-Test-Specification"
+          qua_required: true
+      dependencies: [2, 3]        # Integration tests depend on design and interfaces
+    
+    # Activity 5: INT creates Software/Hardware Integration Test Specification (Annex C #13) - forward slash per EN 50128 7.3.3 item 5
+    - agent: "int"
+      task_description: "Create Software/Hardware Integration Test Specification for testing SW/HW integration (executed in Phase 6)"
+      owner: "int"
+      deliverables:
+        - path: "docs/test/Software-Hardware-Integration-Test-Specification.md"
+          doc_id: "DOC-HWINTTEST-2026-001"
+          doc_type: "Software-Hardware-Integration-Test-Specification"
+          qua_required: true
+      dependencies: [2, 3]        # HW integration tests depend on design and interfaces
+    
+    # Activity 6: VER creates Software Architecture and Design Verification Report (Annex C #14)
+    - agent: "ver"
+      task_description: "Create Software Architecture and Design Verification Report documenting independent verification of all Phase 3 deliverables"
+      owner: "ver"
+      deliverables:
+        - path: "docs/reports/Software-Architecture-Design-Verification-Report.md"
+          doc_id: "DOC-DESVER-2026-001"
+          doc_type: "Software-Architecture-Design-Verification-Report"
+          qua_required: true        # VER reports require QUA template review
+      dependencies: [0, 1, 2, 3, 4, 5]  # VER depends on all phase deliverables being complete
+    
+    # Activity 7: QUA reviews Verification Report for template compliance (MANDATORY SIL 3-4)
+    - agent: "qua"
+      task_description: "Review Software Architecture and Design Verification Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
+      owner: "qua"
+      deliverables:
+        - path: "docs/reports/QA-Template-Review-Architecture-Design-Verification.md"
+          doc_id: "DOC-QAREV-2026-003"
+          doc_type: "QA-Template-Compliance-Review"
+          qua_required: false      # QUA self-review not required
+      dependencies: [6]            # QUA depends on VER report (index 6)
+      sil_requirements:
+        sil_0: "optional"
+        sil_1: "recommended"
+        sil_2: "recommended"
+        sil_3: "mandatory"
+        sil_4: "mandatory"
+    
+    # Activity 8: VAL creates Software Architecture and Design Validation Report (SIL 3-4 independence)
+    # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
+    - agent: "val"
+      task_description: "Create Software Architecture and Design Validation Report documenting independent validation of operational suitability for all Phase 3 deliverables. For SIL 3-4, VMGR performs this activity."
+      owner: "val"
+      deliverables:
+        - path: "docs/reports/Software-Architecture-Design-Validation-Report.md"
+          doc_id: "DOC-DESVAL-2026-001"
+          doc_type: "Software-Architecture-Design-Validation-Report"
+          qua_required: true        # VAL reports require QUA template review
+      dependencies: [6, 7]          # VAL depends on VER report and QUA template review
+    
+    # Activity 9: QUA reviews Validation Report for template compliance (MANDATORY SIL 3-4)
+    - agent: "qua"
+      task_description: "Review Software Architecture and Design Validation Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
+      owner: "qua"
+      deliverables:
+        - path: "docs/reports/QA-Template-Review-Architecture-Design-Validation.md"
+          doc_id: "DOC-QAREV-2026-004"
+          doc_type: "QA-Template-Compliance-Review"
+          qua_required: false      # QUA self-review not required
+      dependencies: [8]            # QUA depends on VAL report (index 8)
+      sil_requirements:
+        sil_0: "optional"
+        sil_1: "recommended"
+        sil_2: "recommended"
+        sil_3: "mandatory"
+        sil_4: "mandatory"
+  
+  # Phase completion criteria (EN 50128 Section 7.3)
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true
+    coverage_requirements:
+      requirements: 100           # 100% requirements traced to design elements
+    custom_checks:
+      - "All 10 EN 50128 documents delivered (Software Architecture Specification, Software Design Specification, Software Interface Specifications, Software Integration Test Specification, Software/Hardware Integration Test Specification, Hazard Log Update, Software Architecture and Design Verification Report, QA Template Review of Verification Report, Software Architecture and Design Validation Report, QA Template Review of Validation Report)"
+      - "All modules defined with clear responsibilities"
+      - "All interfaces fully specified (inputs, outputs, error handling, timing)"
+      - "Integration test specifications complete (SW and SW/HW)"
+      - "Modular approach applied (M for SIL 2+)"
+      - "Defensive programming patterns specified (HR for SIL 3-4)"
+      - "Cyclomatic complexity limits defined (≤10 for SIL 3-4)"
+      - "Static memory allocation specified (M for SIL 2+)"
+      - "No recursion (HR for SIL 3-4)"
+      - "VER verification report complete (documents all verification findings)"
+      - "VAL validation report complete (documents operational suitability assessment)"
+      - "QUA template compliance reviews approved (SIL 3-4 MANDATORY)"
+      - "VMGR V&V approval obtained (SIL 3-4 MANDATORY)"
+  
+  # Verification requirements (EN 50128 Section 7.3.4.40-43, Annex C #14)
+  verification:
+    required: true
+    verifier: "ver"
+    criteria:
+      - "Software Architecture Specification template compliance (DOC-ID, Document Control, Approvals)"
+      - "Architecture satisfies all functional requirements"
+      - "Architecture satisfies all safety requirements"
+      - "Modular decomposition appropriate (M for SIL 2+)"
+      - "Interfaces fully defined in Software Interface Specifications (data types, ranges, error codes, timing)"
+      - "Defensive programming patterns specified (HR for SIL 3-4)"
+      - "Static allocation specified (M for SIL 2+)"
+      - "No dynamic memory allocation (malloc/free/realloc/calloc)"
+      - "Software Design Specification template compliance"
+      - "All algorithms described with pseudocode or flowcharts"
+      - "All data structures defined with fixed sizes"
+      - "Complexity limits specified (≤10 for SIL 3-4, ≤15 for SIL 2)"
+      - "Software Interface Specifications template compliance"
+      - "All module interfaces documented with pre/post conditions"
+      - "All boundary values and behaviors specified"
+      - "Software Integration Test Specification template compliance (SW and SW/HW)"
+      - "Integration tests cover all module interfaces"
+      - "Integration tests cover safety-critical paths"
+      - "Traceability: Requirements → Architecture → Design → Interfaces → Integration Tests"
+  
+  # Validation requirements (EN 50128 Section 7.3, independent validation SIL 3-4)
+  validation:
+    required_sil: [3, 4]
+    validator: "val"
+    criteria:
+      - "Architecture is implementable in C with MISRA C:2012"
+      - "Design is testable at component and integration levels"
+      - "Design patterns support defensive programming"
+      - "Software Interface Specifications are unambiguous and verifiable"
+      - "Software Integration Test Specifications are executable"
+      - "Safety patterns adequately implemented in design"
+      - "Architecture supports required reliability targets"
+  
+  # Gate check configuration
+  gate_check:
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [3, 4]

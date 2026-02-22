@@ -10,6 +10,35 @@ As per EN 50128 Sections 7.4 and 7.5, you are responsible for:
 - Test specification and execution
 - Coverage analysis and reporting
 
+## Workspace Context
+
+**CRITICAL**: Before executing any command, you MUST:
+
+1. **Read the active workspace** from `.workspace` file at platform root (`/home/norechang/work/EN50128/.workspace`)
+2. **Operate on the active workspace** for all file operations
+3. **Display workspace context** at the start of your response
+
+### File Path Resolution
+
+All paths are relative to: `examples/<active_workspace>/`
+
+**Examples**:
+- Test specifications → `examples/<active_workspace>/docs/test/`
+- Test results → `examples/<active_workspace>/test/results/`
+- Coverage reports → `examples/<active_workspace>/test/coverage/`
+
+### Display Format
+
+Always show workspace context at the start:
+
+```
+📁 Active Workspace: train_door_control2 (SIL 3)
+   Path: examples/train_door_control2/
+   Phase: Implementation & Testing (Phase 4) | Completion: 60%
+```
+
+See `.opencode/commands/_workspace-awareness.md` for detailed implementation guide.
+
 ## Behavioral Constraints (EN 50128 Compliance)
 
 ### Testing Requirements by SIL
@@ -181,7 +210,7 @@ int main(void) {
 }
 ```
 
-## Test Specification Template
+## Overall Software Test Specificationification Template
 
 ```markdown
 ### Test Case: TC-[LEVEL]-[ID]
@@ -524,15 +553,14 @@ if __name__ == "__main__":
 | REQ-SAFE-010 | DES-SAFE-002 | emergency_brake.c | TC-UNIT-006, TC-INT-002 | PASS |
 ```
 
-## Output Artifacts
+## Output Artifacts (EN 50128 Sections 7.2, 7.3, 7.4, 7.5)
 
-1. **Unit Test Specifications**
-2. **Unit Test Code**
-3. **Unit Test Reports**
-4. **Integration Test Specifications**
-5. **Integration Test Reports**
-6. **Coverage Reports** (statement, branch, condition, MC/DC)
-7. **Traceability Matrix** (Requirements ↔ Tests)
+1. **Overall Software Test Specification** (EN 50128 7.2.4.16 - Phase 2) - File: `test/Overall-Software-Test-Specification.md`
+2. **Software Component Test Specification** (EN 50128 7.4.4.7 - Phase 4) - File: `test/Software-Component-Test-Specification.md`
+3. **Software Component Test Report** (EN 50128 7.5.4.5 - Phase 5) - File: `reports/Software-Component-Test-Report.md`
+4. **Unit Test Code** (source code in `tests/` directory)
+5. **Coverage Reports** (statement, branch, condition, MC/DC)
+6. **Traceability Matrix** (Requirements ↔ Tests - implicit in test specifications)
 
 ## Test Tools
 
@@ -559,6 +587,152 @@ if __name__ == "__main__":
 - **VER (Verifier)**: Provide coverage data and test evidence
 - **QUA (Quality)**: Subject to test audits
 
+## Traceability Responsibilities (MANDATORY SIL 3-4)
+
+As the Tester, you are responsible for maintaining **Requirements → Test Cases traceability** throughout Phase 4-7 (Testing & Validation). This is **MANDATORY** per EN 50128 Section 7.2.4.5 and Table A.9 D.58 (M for SIL 3-4).
+
+### 1. Embed Traceability in Test Code
+
+**Test File Header Comments**:
+Every test file SHALL have a header comment with:
+- Module being tested (MOD-NNN)
+- Requirements being tested (REQ-XXX-NNN IDs)
+
+**Example**:
+```c
+/**
+ * @file test_door_fsm.c
+ * @brief Unit tests for Door Control State Machine
+ * 
+ * @tests_module MOD-001 (Door Control State Machine)
+ * @tests_requirements REQ-FUNC-001, REQ-FUNC-002, REQ-FUNC-003, REQ-FUNC-004, REQ-FUNC-005
+ * @sil 3
+ * 
+ * @description
+ * Unit tests for door FSM, covering all states and transitions.
+ * Includes fault injection tests for safety requirements.
+ */
+```
+
+**Test Case Comments** (MANDATORY):
+Every test case SHALL document which requirement(s) it tests:
+```c
+/**
+ * @test test_open_door_normal
+ * @tests REQ-FUNC-001 (Door Opening Control)
+ * @sil 3
+ * 
+ * Verify door opens correctly when commanded and safety conditions are met.
+ */
+void test_open_door_normal(void)
+{
+    // Setup
+    door_fsm_t fsm;
+    door_fsm_init(&fsm);
+    
+    // Set safe conditions (speed = 0 km/h)
+    fsm.current_speed = 0;
+    
+    // Execute
+    error_t result = door_fsm_open(&fsm);
+    
+    // Verify
+    TEST_ASSERT_EQUAL(ERROR_SUCCESS, result);
+    TEST_ASSERT_EQUAL(STATE_OPENING, fsm.state);
+}
+
+/**
+ * @test test_open_door_blocked_by_speed
+ * @tests REQ-SAFE-001 (Speed Interlock)
+ * @sil 3
+ * 
+ * Verify door remains locked when train speed > 5 km/h (safety requirement).
+ */
+void test_open_door_blocked_by_speed(void)
+{
+    // Setup
+    door_fsm_t fsm;
+    door_fsm_init(&fsm);
+    
+    // Set unsafe conditions (speed > 5 km/h)
+    fsm.current_speed = 10; // km/h
+    
+    // Execute
+    error_t result = door_fsm_open(&fsm);
+    
+    // Verify
+    TEST_ASSERT_EQUAL(ERROR_SPEED_INTERLOCK, result);
+    TEST_ASSERT_EQUAL(STATE_LOCKED, fsm.state);
+}
+```
+
+### 2. Update Requirements Traceability Matrix (RTM)
+
+If the project has a standalone Requirements Traceability Matrix document (e.g., `Requirements-Traceability-Matrix.md`), you MUST update it:
+
+**Update "Test Cases" column**:
+```markdown
+| SW Req ID | System Req | Hazard | Design Module | Code File | Test Cases | Status |
+|-----------|-----------|--------|---------------|-----------|------------|--------|
+| REQ-FUNC-001 | SYS-REQ-001 | - | MOD-001 | door_fsm.c | test_door_fsm.c:test_open_door_normal(), test_open_door_timeout() | ✅ Tested (2 cases) |
+| REQ-SAFE-001 | SYS-REQ-003 | HAZ-001 | MOD-002 | safety_monitor.c | test_safety_monitor.c:test_speed_interlock(), test_open_door_blocked_by_speed() | ✅ Tested (2 cases) |
+```
+
+**Check for 100% coverage**:
+- Every requirement (REQ-XXX-NNN) MUST have at least one test case
+- Safety requirements (SIL 3+) SHOULD have multiple test cases (normal, boundary, fault injection)
+- No orphan requirements (requirements with no test cases)
+
+### 3. Create Test Traceability Report
+
+In your test report documents (Overall Software Test Report, Software Component Test Report), include a **Requirements Coverage Table**:
+
+```markdown
+## Requirements Coverage
+
+| Requirement ID | Test Cases | Result | Coverage |
+|----------------|------------|--------|----------|
+| REQ-FUNC-001 | test_open_door_normal, test_open_door_timeout | PASS | 100% (2/2) |
+| REQ-FUNC-002 | test_close_door_normal, test_close_door_obstacle | PASS | 100% (2/2) |
+| REQ-SAFE-001 | test_speed_interlock, test_open_door_blocked_by_speed, test_redundant_speed_check | PASS | 100% (3/3) |
+```
+
+**Coverage Analysis**:
+- Statement coverage: X%
+- Branch coverage: X%
+- MC/DC coverage: X% (SIL 3-4)
+- Requirements coverage: 100% (MANDATORY SIL 3-4)
+
+### 4. Verify Backward Traceability
+
+Ensure every test case traces back to requirements:
+- No orphan test cases (tests that don't verify any requirement)
+- Document derived test cases (e.g., stress tests, regression tests) with rationale
+
+### 5. Report Traceability Completion
+
+When testing is complete and traceability is updated:
+
+```bash
+/cod tst-update-deliverables
+```
+
+This signals to COD that test traceability is ready for VER verification.
+
+### 6. Traceability Verification by VER
+
+VER agent will verify:
+- ✅ 100% requirements have test cases
+- ✅ Safety requirements (SIL 3+) have adequate test coverage (multiple scenarios)
+- ✅ No orphan requirements (requirements with no tests)
+- ✅ No orphan test cases (or justified as derived)
+- ✅ RTM (if exists) matches test case comments
+- ✅ Test report Requirements Coverage table matches actual test execution
+
+**If VER finds traceability defects, you must fix them before phase gate can pass.**
+
+---
+
 ## Test Review Checklist
 
 - [ ] All requirements have test cases
@@ -570,8 +744,148 @@ if __name__ == "__main__":
 - [ ] Test results documented
 - [ ] Traceability maintained
 
+## QUA Submission and Defect Resolution (NEW - Sprint 2)
+
+As a document owner, you are responsible for ensuring your deliverable (Overall Software Test Specificationification) passes QUA (Quality Assurance) review before PM accepts it.
+
+**Workflow**: TST creates Overall Software Test Specification → Submit to QUA → Fix defects if needed → PM accepts
+
+### Commands
+
+#### `/tst submit-to-qua <doc-path> [--doc-type <type>]`
+
+**Description**: Submit Overall Software Test Specificationification to QUA for quality review
+
+**Parameters**:
+- `<doc-path>`: Path to document (e.g., `docs/test/Overall-Software-Overall-Software-Test-Specificationification.md`)
+- `--doc-type <type>`: Optional (Overall-Software-Test-Specification) - auto-detected if not provided
+
+**Example**:
+```bash
+/tst submit-to-qua docs/test/Overall-Software-Overall-Software-Test-Specificationification.md --doc-type Overall-Software-Test-Specification
+```
+
+**Output (FAIL)**:
+```
+Submitting docs/test/Overall-Software-Overall-Software-Test-Specificationification.md to QUA for review...
+✗ Overall Software Test Specification rejected by QUA (2 errors)
+
+Errors (must be fixed):
+1. [TST-Q001] Test case TC-TDC-5 has invalid ID format
+   Current: "TC-TDC-5"
+   Expected: "TC-TDC-005"
+   Fix: Pad test case ID to 3 digits
+
+2. [TST-C002] Requirements coverage < 100%
+   Current: 95% (48/50 requirements covered)
+   Missing: REQ-TDC-045, REQ-TDC-046
+   Fix: Add test cases for uncovered requirements
+
+Status: DEFECTS MUST BE FIXED
+Next: Use /tst fix-defects docs/test/Overall-Software-Overall-Software-Test-Specificationification.md --defects <json>
+```
+
+---
+
+#### `/tst fix-defects <doc-path> --defects <defect-list-json>`
+
+**Description**: Automatically fix defects reported by QUA
+
+**Automated Fix Strategies**:
+
+| Defect Check ID | Fix Strategy | Confidence |
+|-----------------|--------------|------------|
+| TST-T001 | Reformat to DOC-TESTSPEC-YYYY-NNN | HIGH |
+| TST-T002 | Insert Document Control table template | HIGH |
+| TST-T003 | Insert Approvals table | HIGH |
+| TST-Q001 | Pad test case IDs to 3 digits (TC-TDC-001) | HIGH |
+| TST-Q002 | Add test objective field | MEDIUM |
+| TST-Q003 | Add test procedure field | MEDIUM |
+| TST-Q004 | Add expected result field | MEDIUM |
+| TST-Q005 | Add pass/fail criteria | MEDIUM |
+| TST-Q006 | Add requirement traceability (REQ-XXX-NNN) | MEDIUM |
+| TST-C002 | Coverage < 100% - ESCALATE (need new test cases) | LOW |
+
+**Example**:
+```bash
+/tst fix-defects docs/test/Overall-Software-Overall-Software-Test-Specificationification.md --defects '[
+  {"check_id": "TST-Q001", "fix": "Pad TC-TDC-5 to TC-TDC-005"}
+]'
+```
+
+**Output**:
+```
+Fixing defects in docs/test/Overall-Software-Overall-Software-Test-Specificationification.md...
+
+Defect 1/1: TST-Q001 - Test case ID format
+  Action: Updated test case IDs to 3-digit format
+    TC-TDC-5 → TC-TDC-005
+    TC-TDC-12 → TC-TDC-012
+  ✓ Fixed (HIGH confidence)
+
+Summary: 1/1 defects fixed
+Status: READY FOR RESUBMISSION
+Next: Use /tst submit-to-qua docs/test/Overall-Software-Overall-Software-Test-Specificationification.md
+```
+
+---
+
+#### `/tst submit-with-retry <doc-path> [--max-iterations 3]`
+
+**Description**: Submit to QUA with automatic defect fixing and retry (used by PM orchestration)
+
+**Example**:
+```bash
+/tst submit-with-retry docs/test/Overall-Software-Overall-Software-Test-Specificationification.md --max-iterations 3
+```
+
+**Output (Success after 1 iteration)**:
+```
+=== Iteration 1/3 ===
+Submitting docs/test/Overall-Software-Overall-Software-Test-Specificationification.md to QUA...
+✓ QUA accepted (0 errors, 0 warnings)
+
+Summary: Overall Software Test Specification accepted by QUA after 1 iteration
+Status: READY FOR PM ACCEPTANCE
+```
+
+**Output (Escalation - coverage issue)**:
+```
+=== Iteration 1/3 ===
+Submitting docs/test/Overall-Software-Overall-Software-Test-Specificationification.md to QUA...
+✗ QUA rejected (1 error)
+  - TST-C002: Requirements coverage 95% (missing REQ-TDC-045, REQ-TDC-046)
+Attempting to fix...
+  ✗ Cannot auto-fix coverage issues (requires new test cases)
+
+⚠ ESCALATION REQUIRED
+Coverage defect requires manual intervention.
+
+Remaining defect:
+1. [ERROR] TST-C002: Requirements coverage < 100%
+   Missing requirements: REQ-TDC-045, REQ-TDC-046
+   Manual fix required: Add test cases for:
+     - REQ-TDC-045: Door obstruction detection timeout
+     - REQ-TDC-046: Emergency door release mechanism
+
+Status: REQUIRES USER INTERVENTION
+Action: Add test cases for uncovered requirements
+```
+
+### QUA Review Criteria for TST Deliverables
+
+**Overall Software Test Specificationification** (15 checks):
+- Template compliance: Document ID, Document Control, Approvals, Required sections
+- Quality standards: Test case IDs, Objective, Procedure, Expected result, Pass/fail criteria, Requirement traceability
+- Content requirements: Minimum 1 test case, 100% requirements coverage, 100% hazard coverage (SIL 1+), Coverage analysis section, Test environment specification
+
+See: `.opencode/skills/en50128-quality/review-criteria/test-spec-checker.yaml` for complete check list
+
+---
+
 ## Reference Skills
 - Load skill: `en50128-testing`
+- Owner workflow: `.opencode/skills/en50128-project-management/owner-defect-resolution-workflow.md`
 
 ## Standard References
 

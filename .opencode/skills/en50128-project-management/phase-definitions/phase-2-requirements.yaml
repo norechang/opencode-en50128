@@ -1,0 +1,152 @@
+phase:
+  id: "requirements"
+  number: 2
+  name: "Requirements Specification"
+  
+  # Agent activities (sequential execution by default, parallel when parallel_group set)
+  activities:
+    # REQ: Create Software Requirements Specification (EN 50128 Section 7.2.3 item 1)
+    - agent: "req"
+      task_description: "Create Software Requirements Specification per EN 50128 Section 7.2.4.1"
+      owner: "req"
+      deliverables:
+        - path: "docs/Software-Requirements-Specification.md"
+          doc_id: "DOC-SRS-2026-001"
+          doc_type: "Software-Requirements-Specification"
+          qua_required: true
+      parallel_group: 1
+    
+    # SAF: Create Hazard Log
+    - agent: "saf"
+      task_description: "Create Hazard Log with FMEA, FTA, and Common Cause Failure (CCF) analysis"
+      owner: "saf"
+      deliverables:
+        - path: "docs/Hazard-Log.md"
+          doc_id: "DOC-HAZLOG-2026-001"
+          doc_type: "Hazard-Log"
+          qua_required: true
+      parallel_group: 1
+    
+    # TST: Create Overall Software Test Specification (EN 50128 Section 7.2.3 item 2)
+    - agent: "tst"
+      task_description: "Create Overall Software Test Specification per EN 50128 Section 7.2.4.16"
+      owner: "tst"
+      deliverables:
+        - path: "docs/test/Overall-Software-Test-Specification.md"
+          doc_id: "DOC-OVERALLTESTSPEC-2026-001"
+          doc_type: "Overall-Software-Test-Specification"
+          qua_required: true
+      dependencies: [0, 1]        # TST depends on REQ (index 0) and SAF (index 1)
+    
+    # VER: Create Software Requirements Verification Report (Annex C #8)
+    - agent: "ver"
+      task_description: "Create Software Requirements Verification Report verifying that Software Requirements Specification, Hazard Log, and Overall Software Test Specification meet all verification criteria including traceability, completeness, and EN 50128 compliance"
+      owner: "ver"
+      deliverables:
+        - path: "docs/reports/Software-Requirements-Verification-Report.md"
+          doc_id: "DOC-REQVER-2026-001"
+          doc_type: "Software-Requirements-Verification-Report"
+          qua_required: true
+      dependencies: [0, 1, 2]     # VER depends on all three deliverables
+    
+    # QUA: Template Compliance Review of Verification Report (MANDATORY SIL 3-4)
+    - agent: "qua"
+      task_description: "Review Software Requirements Verification Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
+      owner: "qua"
+      deliverables:
+        - path: "docs/reports/QA-Template-Review-Requirements-Verification.md"
+          doc_id: "DOC-QAREV-2026-001"
+          doc_type: "QA-Template-Compliance-Review"
+          qua_required: false      # QUA self-review not required
+      dependencies: [3]            # QUA depends on VER report (index 3)
+      sil_requirements:
+        sil_0: "optional"
+        sil_1: "recommended"
+        sil_2: "recommended"
+        sil_3: "mandatory"
+        sil_4: "mandatory"
+    
+    # VAL: Create Software Requirements Validation Report (SIL 3-4)
+    # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
+    - agent: "val"
+      task_description: "Create Software Requirements Validation Report validating that requirements are testable, unambiguous, complete, consistent, and that safety requirements adequately mitigate hazards. For SIL 3-4, VMGR performs this activity."
+      owner: "val"
+      deliverables:
+        - path: "docs/reports/Software-Requirements-Validation-Report.md"
+          doc_id: "DOC-REQVAL-2026-001"
+          doc_type: "Software-Requirements-Validation-Report"
+          qua_required: true
+      dependencies: [0, 1, 2, 3, 4]  # VAL depends on all deliverables including VER report and QUA template review
+    
+    # QUA: Template Compliance Review of Validation Report (MANDATORY SIL 3-4)
+    - agent: "qua"
+      task_description: "Review Software Requirements Validation Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
+      owner: "qua"
+      deliverables:
+        - path: "docs/reports/QA-Template-Review-Requirements-Validation.md"
+          doc_id: "DOC-QAREV-2026-002"
+          doc_type: "QA-Template-Compliance-Review"
+          qua_required: false      # QUA self-review not required
+      dependencies: [5]            # QUA depends on VAL report (index 5)
+      sil_requirements:
+        sil_0: "optional"
+        sil_1: "recommended"
+        sil_2: "recommended"
+        sil_3: "mandatory"
+        sil_4: "mandatory"
+  
+  # Phase completion criteria (checked by COD during gate check)
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true
+    coverage_requirements:
+      requirements: 100           # 100% system requirements traced to software requirements
+    custom_checks:
+      - "All 8 EN 50128 documents delivered (Software Requirements Specification, Hazard Log, Overall Software Test Specification, Software Requirements Verification Report per Annex C #8, QA Template Review of Verification Report, Software Requirements Validation Report, QA Template Review of Validation Report)"
+      - "All requirements have unique IDs (REQ-XXX-NNN format)"
+      - "All requirements have SIL levels assigned"
+      - "All requirements use SHALL/SHOULD/MAY keywords"
+      - "All hazards have associated safety requirements"
+      - "Test specification covers 100% of requirements"
+      - "Test specification covers 100% of hazards"
+      - "QUA template compliance reviews approved (SIL 3-4 MANDATORY)"
+      - "VMGR V&V approval obtained (SIL 3-4 MANDATORY)"
+  
+  # Verification requirements (independent technical verification)
+  verification:
+    required: true
+    verifier: "ver"
+    criteria:
+      - "Software Requirements Specification template compliance (EN 50128 7.2.4)"
+      - "All requirements have unique IDs (REQ-XXX-NNN format)"
+      - "All requirements have SIL levels"
+      - "All requirements use SHALL/SHOULD/MAY keywords correctly"
+      - "All requirements have verification methods"
+      - "Requirements Traceability Matrix (implicit in SRS) shows 100% bidirectional traceability"
+      - "No orphan requirements (software → system)"
+      - "No missing requirements (system → software)"
+      - "Hazard Log template compliance"
+      - "FMEA analysis complete (HR for SIL 3)"
+      - "FTA analysis complete (HR for SIL 3)"
+      - "CCF analysis complete (M for SIL 3-4)"
+      - "All hazards have mitigation (safety requirements)"
+      - "Overall Software Test Specification template compliance (EN 50128 7.2.4.16)"
+      - "Test coverage: 100% requirements"
+      - "Test coverage: 100% hazards"
+  
+  # Validation requirements (independent validation at SIL 3-4)
+  validation:
+    required_sil: [3, 4]
+    validator: "val"
+    criteria:
+      - "Requirements are testable (observable behavior)"
+      - "Requirements are unambiguous (single interpretation)"
+      - "Requirements are complete (no TBD/TBC)"
+      - "Requirements are consistent (no conflicts)"
+      - "Test specification adequately tests requirements"
+      - "Safety requirements adequately mitigate hazards"
+  
+  # Gate check configuration
+  gate_check:
+    mandatory_sil: [0, 1, 2, 3, 4]    # Gate check required for all SILs
+    blocking_sil: [3, 4]              # Gate check blocks transition for SIL 3-4

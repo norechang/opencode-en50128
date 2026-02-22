@@ -1,0 +1,652 @@
+# Implementation Phase Verification Criteria
+# EN 50128 Section 7.4 - Software Component Design and Implementation
+# Table A.4 - Software Design and Implementation Techniques/Measures
+# Table A.19 - Static Analysis Techniques/Measures
+# Table A.21 - Test Coverage for Code
+
+metadata:
+  phase: "Implementation & Unit Testing"
+  phase_id: "phase-4-implementation"
+  en50128_section: "7.4"
+  en50128_tables: ["A.4", "A.19", "A.21"]
+  description: "Verification criteria for C source code implementation, unit tests, and MISRA C compliance"
+  mandatory_deliverables:
+    - "C Source Code (.c files)"
+    - "C Header Files (.h files)"
+    - "Unit Test Code (Unity framework)"
+    - "Unit Test Results Report"
+    - "MISRA C Compliance Report"
+    - "Static Analysis Report"
+    - "Code Review Report"
+
+verification_checks:
+  # ============================================================================
+  # 1. MISRA C:2012 Compliance Verification (Mandatory SIL 2+)
+  # ============================================================================
+  
+  - check_id: "VER-IMP-001"
+    deliverable: "MISRA C Compliance Report"
+    category: "standards_compliance"
+    description: "Verify ZERO mandatory MISRA C:2012 violations (SIL 2+)"
+    en50128_reference: "Table A.4 - Design and Coding Standards (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "mandatory"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Run PC-lint Plus or equivalent MISRA C checker
+      - Check MISRA C Compliance Report
+      - Verify ZERO mandatory rule violations
+      - Verify required rules: violations justified with deviations
+      - Verify advisory rules: violations reviewed
+    pass_criteria:
+      - "ZERO mandatory MISRA C:2012 rule violations"
+      - "Required rule violations ≤5 with documented deviations"
+      - "Advisory rule violations reviewed and accepted"
+      - "Deviation process followed per MISRA C:2012 Appendix A"
+    fail_criteria:
+      - "ANY mandatory MISRA C:2012 rule violations"
+      - "Required rule violations without deviations"
+      - "Deviation process not followed"
+
+  - check_id: "VER-IMP-002"
+    deliverable: "C Source Code (.c files)"
+    category: "c_constraints"
+    description: "Verify NO dynamic memory allocation (malloc/calloc/realloc/free) for SIL 2+"
+    en50128_reference: "Table A.4 - Design and Coding Standards (M for SIL 3-4), MISRA C:2012"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "not_applicable"
+      sil_2: "mandatory"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Scan all .c and .h files for malloc, calloc, realloc, free
+      - Check for #include <stdlib.h> (should not be present for SIL 2+)
+      - Verify all arrays use static or stack allocation with fixed sizes
+      - Check for any dynamic data structures (linked lists, dynamic arrays)
+    pass_criteria:
+      - "ZERO occurrences of malloc, calloc, realloc, free"
+      - "NO #include <stdlib.h>"
+      - "All arrays statically allocated with compile-time constant sizes"
+      - "No dynamic data structures"
+    fail_criteria:
+      - "ANY use of malloc, calloc, realloc, free"
+      - "Presence of #include <stdlib.h>"
+      - "Dynamic allocation detected"
+
+  - check_id: "VER-IMP-003"
+    deliverable: "C Source Code (.c files)"
+    category: "c_constraints"
+    description: "Verify all integer types use fixed-width types from stdint.h"
+    en50128_reference: "MISRA C:2012 - Portable Types"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "mandatory"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "major"
+    verification_method: |
+      - Scan all variable declarations for int, long, short, unsigned
+      - Verify use of uint8_t, uint16_t, uint32_t, int8_t, int16_t, int32_t
+      - Check for #include <stdint.h> in all files using integer types
+      - Flag any platform-dependent types (size_t, ptrdiff_t) for justification
+    pass_criteria:
+      - "ALL integer types use stdint.h fixed-width types"
+      - "ZERO occurrences of int, long, short, unsigned int declarations"
+      - "#include <stdint.h> present in all relevant files"
+      - "Platform-dependent types (size_t, etc.) justified and minimal"
+    fail_criteria:
+      - "ANY use of int, long, short, unsigned without stdint.h equivalent"
+      - "Missing #include <stdint.h>"
+      - "Unjustified use of platform-dependent types"
+
+  - check_id: "VER-IMP-004"
+    deliverable: "C Source Code (.c files)"
+    category: "c_constraints"
+    description: "Verify NO recursion in code (HR for SIL 3-4)"
+    en50128_reference: "Table A.4 - Structured Programming (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "not_applicable"
+      sil_2: "recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Build call graph using static analysis tool
+      - Detect recursive call patterns (direct and indirect)
+      - Verify all algorithms use iterative approaches
+      - Check for stack depth analysis (if recursion justified)
+    pass_criteria:
+      - "ZERO recursive functions (direct or indirect)"
+      - "All algorithms implemented iteratively"
+      - "Call graph is acyclic"
+    fail_criteria:
+      - "ANY recursive function calls detected"
+      - "Cyclic call graph"
+      - "Recursion without stack depth justification (if allowed for SIL 0-2)"
+
+  # ============================================================================
+  # 2. Cyclomatic Complexity Verification
+  # ============================================================================
+
+  - check_id: "VER-IMP-005"
+    deliverable: "Static Analysis Report"
+    category: "complexity"
+    description: "Verify cyclomatic complexity within SIL-specific limits"
+    en50128_reference: "Table A.4 - Analysable Programs (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Run complexity analysis tool (Lizard, PC-lint, or equivalent)
+      - Calculate cyclomatic complexity for every function
+      - Verify against SIL-specific limits:
+        - SIL 0-1: ≤20
+        - SIL 2: ≤15
+        - SIL 3-4: ≤10
+      - Flag functions exceeding limits
+    pass_criteria:
+      - "SIL 0-1: All functions have complexity ≤20"
+      - "SIL 2: All functions have complexity ≤15"
+      - "SIL 3-4: All functions have complexity ≤10"
+      - "No functions exceed their SIL-specific limit"
+    fail_criteria:
+      - "ANY function exceeds SIL-specific complexity limit"
+      - "No complexity analysis performed"
+
+  - check_id: "VER-IMP-006"
+    deliverable: "Static Analysis Report"
+    category: "complexity"
+    description: "Verify function size limits (lines of code)"
+    en50128_reference: "Table A.4 - Analysable Programs (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "major"
+    verification_method: |
+      - Count lines of code (LOC) for each function
+      - Verify function size limits:
+        - SIL 0-1: ≤200 LOC
+        - SIL 2: ≤150 LOC
+        - SIL 3-4: ≤100 LOC
+      - Flag oversized functions for refactoring
+    pass_criteria:
+      - "SIL 0-1: All functions ≤200 LOC"
+      - "SIL 2: All functions ≤150 LOC"
+      - "SIL 3-4: All functions ≤100 LOC"
+    fail_criteria:
+      - "ANY function exceeds SIL-specific LOC limit"
+
+  # ============================================================================
+  # 3. Defensive Programming Verification
+  # ============================================================================
+
+  - check_id: "VER-IMP-007"
+    deliverable: "C Source Code (.c files)"
+    category: "defensive_programming"
+    description: "Verify ALL pointer parameters validated for NULL before use"
+    en50128_reference: "Table A.3 - Defensive Programming (HR for SIL 2+)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Scan all functions with pointer parameters
+      - Verify NULL check before pointer dereference
+      - Check for early return or error handling on NULL
+      - Use static analysis tool to detect missing NULL checks
+    pass_criteria:
+      - "ALL pointer parameters checked for NULL before use"
+      - "NULL checks at function entry (before any dereference)"
+      - "Error returned on NULL pointer detection"
+    fail_criteria:
+      - "ANY pointer dereferenced without NULL check"
+      - "Missing error handling for NULL pointers"
+
+  - check_id: "VER-IMP-008"
+    deliverable: "C Source Code (.c files)"
+    category: "defensive_programming"
+    description: "Verify ALL return values checked by callers"
+    en50128_reference: "Table A.3 - Defensive Programming (HR for SIL 2+)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Identify all functions returning status/error codes
+      - Scan all call sites for return value checking
+      - Verify return value assigned to variable OR checked in if statement
+      - Flag unchecked return values
+    pass_criteria:
+      - "ALL function calls with return values are checked"
+      - "Return values assigned to variables and inspected"
+      - "Error handling present for failure cases"
+    fail_criteria:
+      - "ANY function return value ignored"
+      - "Missing error handling for return codes"
+
+  - check_id: "VER-IMP-009"
+    deliverable: "C Source Code (.c files)"
+    category: "defensive_programming"
+    description: "Verify ALL array accesses bounds-checked"
+    en50128_reference: "Table A.3 - Defensive Programming (HR for SIL 2+)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Scan all array index operations (array[index])
+      - Verify index bounds check before access
+      - Check for loop bounds validation
+      - Use static analysis to detect buffer overflows
+    pass_criteria:
+      - "ALL array accesses have bounds checks (index < array_size)"
+      - "Loop indices validated against array bounds"
+      - "Error handling for out-of-bounds access"
+    fail_criteria:
+      - "ANY array access without bounds check"
+      - "Potential buffer overflow detected"
+
+  - check_id: "VER-IMP-010"
+    deliverable: "C Source Code (.c files)"
+    category: "defensive_programming"
+    description: "Verify division operations protected against divide-by-zero"
+    en50128_reference: "Table A.3 - Defensive Programming (HR for SIL 2+)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Scan all division operations (/, %)
+      - Verify divisor checked for zero before division
+      - Check for error handling on divide-by-zero
+    pass_criteria:
+      - "ALL division operations have zero-divisor checks"
+      - "Error handling for divide-by-zero cases"
+    fail_criteria:
+      - "ANY division without zero-divisor check"
+      - "Missing error handling for divide-by-zero"
+
+  # ============================================================================
+  # 4. Static Analysis Verification (Mandatory SIL 3-4)
+  # ============================================================================
+
+  - check_id: "VER-IMP-011"
+    deliverable: "Static Analysis Report"
+    category: "static_analysis"
+    description: "Verify control flow analysis performed and anomalies resolved"
+    en50128_reference: "Table A.19 - Control Flow Analysis (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Run control flow analysis (PC-lint, Clang, Cppcheck)
+      - Detect unreachable code
+      - Detect infinite loops
+      - Detect missing return statements
+      - Verify all control paths return values
+    pass_criteria:
+      - "Control flow analysis performed"
+      - "ZERO unreachable code blocks"
+      - "ZERO infinite loops (without timeout)"
+      - "All control paths return appropriate values"
+    fail_criteria:
+      - "Unreachable code detected"
+      - "Infinite loops without timeout/watchdog"
+      - "Missing return statements"
+
+  - check_id: "VER-IMP-012"
+    deliverable: "Static Analysis Report"
+    category: "static_analysis"
+    description: "Verify data flow analysis performed and anomalies resolved"
+    en50128_reference: "Table A.19 - Data Flow Analysis (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Run data flow analysis (PC-lint, Clang, Cppcheck)
+      - Detect uninitialized variables
+      - Detect unused variables
+      - Detect variable write-write without read
+      - Verify all variables initialized before use
+    pass_criteria:
+      - "Data flow analysis performed"
+      - "ZERO uninitialized variable uses"
+      - "ZERO unused variables (or justified)"
+      - "All variables initialized before first use"
+    fail_criteria:
+      - "Uninitialized variable use detected"
+      - "Unused variables without justification"
+      - "Data flow anomalies present"
+
+  - check_id: "VER-IMP-013"
+    deliverable: "Static Analysis Report"
+    category: "static_analysis"
+    description: "Verify static analysis tool executed with ZERO high-severity warnings"
+    en50128_reference: "Table A.5 - Static Analysis (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Run static analysis tool (PC-lint Plus, Cppcheck, Clang Static Analyzer)
+      - Review Static Analysis Report
+      - Verify ZERO high-severity warnings
+      - Verify medium-severity warnings reviewed and justified
+      - Check for tool configuration (all checks enabled)
+    pass_criteria:
+      - "Static analysis tool executed"
+      - "ZERO high-severity warnings"
+      - "Medium-severity warnings ≤10 with justifications"
+      - "Tool configuration documented (all checks enabled)"
+    fail_criteria:
+      - "ANY high-severity static analysis warnings"
+      - "Medium-severity warnings without review"
+      - "Static analysis not performed"
+
+  # ============================================================================
+  # 5. Unit Testing Verification
+  # ============================================================================
+
+  - check_id: "VER-IMP-014"
+    deliverable: "Unit Test Results Report"
+    category: "test_coverage"
+    description: "Verify unit test coverage meets SIL-specific requirements"
+    en50128_reference: "Table A.21 - Test Coverage for Code (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Run coverage analysis (gcov/lcov, Bullseye)
+      - Measure statement, branch, and condition coverage
+      - Verify against SIL-specific requirements:
+        - SIL 0-1: Statement (HR), Branch (HR)
+        - SIL 2: Statement (HR), Branch (M)
+        - SIL 3-4: Statement (M), Branch (M), Condition (M)
+      - Check for uncovered code with justifications
+    pass_criteria:
+      - "SIL 0-1: Statement ≥90%, Branch ≥80%"
+      - "SIL 2: Statement ≥95%, Branch 100%"
+      - "SIL 3-4: Statement 100%, Branch 100%, Condition 100%"
+      - "Uncovered code justified (unreachable, hardware-dependent, etc.)"
+    fail_criteria:
+      - "Coverage below SIL-specific requirements"
+      - "Uncovered code without justification"
+
+  - check_id: "VER-IMP-015"
+    deliverable: "Unit Test Results Report"
+    category: "test_quality"
+    description: "Verify all unit tests PASS with ZERO failures"
+    en50128_reference: "Table A.13 - Unit Testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Review Unit Test Results Report
+      - Verify all tests executed
+      - Check for test failures, errors, or skips
+      - Verify test output logs clean
+    pass_criteria:
+      - "ALL unit tests PASS (100% pass rate)"
+      - "ZERO test failures or errors"
+      - "ZERO skipped tests (or justified)"
+    fail_criteria:
+      - "ANY test failures or errors"
+      - "Skipped tests without justification"
+      - "Tests not executed"
+
+  - check_id: "VER-IMP-016"
+    deliverable: "Unit Test Code"
+    category: "test_quality"
+    description: "Verify unit tests cover boundary values and error conditions"
+    en50128_reference: "Table A.14 - Boundary Value Analysis (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review unit test cases
+      - Verify boundary value testing (min, max, min-1, max+1)
+      - Verify error condition testing (NULL, invalid inputs)
+      - Check for negative testing (invalid parameters, error injection)
+    pass_criteria:
+      - "All numeric parameters tested at boundaries"
+      - "All pointer parameters tested with NULL"
+      - "All error conditions tested (invalid inputs, overflow, etc.)"
+      - "Negative test cases present"
+    fail_criteria:
+      - "Missing boundary value tests"
+      - "Missing NULL pointer tests"
+      - "Missing error condition tests"
+
+  # ============================================================================
+  # 6. Code Review Verification (Mandatory all SILs)
+  # ============================================================================
+
+  - check_id: "VER-IMP-017"
+    deliverable: "Code Review Report"
+    category: "process_compliance"
+    description: "Verify code review performed by independent reviewer (SIL 3-4)"
+    en50128_reference: "Table A.9 - Design and Code Inspection (HR for SIL 2+)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Check for Code Review Report
+      - Verify reviewer independence (not author, SIL 3-4)
+      - Verify review checklist used
+      - Check review findings documented and resolved
+      - Verify approval signatures present
+    pass_criteria:
+      - "Code Review Report present"
+      - "Reviewer independent from implementer (SIL 3-4)"
+      - "Review checklist used (MISRA C, defensive programming, complexity)"
+      - "All findings resolved or waived with rationale"
+      - "Approvals present from Implementer and Reviewer"
+    fail_criteria:
+      - "No Code Review Report"
+      - "Reviewer not independent (SIL 3-4)"
+      - "Review findings not resolved"
+      - "Missing approvals"
+
+  - check_id: "VER-IMP-018"
+    deliverable: "Code Review Report"
+    category: "process_compliance"
+    description: "Verify code review checklist covers all mandatory items"
+    en50128_reference: "Table A.9 - Design and Code Inspection (HR for SIL 2+)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    verification_method: |
+      - Review Code Review Report checklist
+      - Verify checklist includes:
+        - MISRA C compliance
+        - Defensive programming patterns
+        - Cyclomatic complexity
+        - Fixed-width types
+        - Static allocation (SIL 2+)
+        - No recursion (SIL 3-4)
+        - NULL checks, bounds checks, error handling
+        - Code readability and comments
+    pass_criteria:
+      - "Checklist covers all mandatory code review items"
+      - "All checklist items marked (pass/fail/N/A)"
+      - "Failures addressed with corrective actions"
+    fail_criteria:
+      - "Incomplete checklist"
+      - "Mandatory items missing from checklist"
+      - "Checklist items not marked"
+
+  # ============================================================================
+  # 7. Implementation Traceability Verification
+  # ============================================================================
+
+  - check_id: "VER-IMP-019"
+    deliverable: "Implementation Traceability Matrix (RTM update)"
+    category: "traceability"
+    description: "Verify all design elements traced to source code"
+    en50128_reference: "Table A.5 - Traceability (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Parse RTM for Design → Implementation mappings
+      - Verify every SDS module has corresponding source file(s)
+      - Verify every source file traces to SDS module
+      - Check for orphaned design or code elements
+      - Verify traceability is bidirectional
+    pass_criteria:
+      - "All SDS modules have corresponding source code"
+      - "All source files trace to SDS modules"
+      - "No orphaned design or code elements"
+      - "Bidirectional traceability maintained"
+    fail_criteria:
+      - "SDS modules without source code"
+      - "Source files without design traceability"
+      - "Orphaned or untraceable code"
+
+  - check_id: "VER-IMP-020"
+    deliverable: "Implementation Traceability Matrix (RTM update)"
+    category: "traceability"
+    description: "Verify all unit tests trace to source code functions"
+    en50128_reference: "Table A.5 - Traceability (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Parse RTM for Code → Unit Test mappings
+      - Verify every public function has at least one unit test
+      - Verify every unit test traces to source function
+      - Check for untested functions
+      - Verify test traceability is bidirectional
+    pass_criteria:
+      - "All public functions have at least one unit test"
+      - "All unit tests trace to source functions"
+      - "No untested public functions (or justified)"
+      - "Bidirectional traceability maintained"
+    fail_criteria:
+      - "Public functions without unit tests"
+      - "Unit tests without source function traceability"
+      - "Untested functions without justification"
+
+  # ============================================================================
+  # 8. EN 50128 Technique Application Verification
+  # ============================================================================
+
+  - check_id: "VER-IMP-021"
+    deliverable: "Implementation Documentation"
+    category: "standards_compliance"
+    description: "Verify mandatory EN 50128 Table A.4 techniques applied"
+    en50128_reference: "Table A.4 - Software Design and Implementation Techniques/Measures"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "mandatory"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review implementation documentation for EN 50128 technique application
+      - Verify mandatory techniques applied:
+        - SIL 2+: Modular Approach (M)
+        - SIL 3-4: Structured Methodology (M)
+        - SIL 3-4: Design and Coding Standards (M) - MISRA C
+        - SIL 3-4: Analysable Programs (M) - Complexity limits
+        - SIL 3-4: Structured Programming (M) - No goto, bounded loops
+      - Verify highly recommended techniques applied or justified:
+        - SIL 2+: Strongly Typed Language (HR) - C mitigated with stdint.h
+      - Check for technique application evidence in code
+    pass_criteria:
+      - "All mandatory techniques applied with code evidence"
+      - "HR techniques applied OR rationale documented"
+      - "C language weaknesses mitigated (MISRA C, stdint.h)"
+      - "Technique application traceable in code"
+    fail_criteria:
+      - "Mandatory techniques not applied"
+      - "HR techniques not applied without rationale"
+      - "No evidence of technique application in code"

@@ -1,0 +1,143 @@
+phase:
+  id: "validation"
+  number: 7
+  name: "Overall Software Testing / Final Validation"
+  
+  # Agent activities (EN 50128 Section 7.7 - 3 documents)
+  activities:
+    # Activity 0: TST executes Overall Software Test Report (Annex C #24)
+    - agent: "tst"
+      task_description: "Execute Overall Software Tests per Overall Software Test Specification and create Overall Software Test Report with comprehensive system-level test results"
+      owner: "tst"
+      deliverables:
+        - path: "docs/test/Overall-Software-Test-Report.md"
+          doc_id: "DOC-OVERALLTESTRPT-2026-001"
+          doc_type: "Overall-Software-Test-Report"
+          qua_required: true
+      parallel_group: 1
+    
+    # Activity 1: VAL performs validation and creates Software Validation Report (Annex C #25)
+    # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
+    - agent: "val"
+      task_description: "Perform independent software validation including supplementary tests, operational scenarios, and create Software Validation Report confirming fitness for intended application. For SIL 3-4, VMGR performs this activity."
+      owner: "val"
+      deliverables:
+        - path: "docs/Software-Validation-Report.md"
+          doc_id: "DOC-VALRPT-2026-001"
+          doc_type: "Software-Validation-Report"
+          qua_required: true        # Validation reports require QUA template review
+      dependencies: [0]           # Validation depends on overall test results
+    
+    # Activity 2: QUA reviews Software Validation Report for template compliance (MANDATORY SIL 3-4)
+    - agent: "qua"
+      task_description: "Review Software Validation Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
+      owner: "qua"
+      deliverables:
+        - path: "docs/reports/QA-Template-Review-Software-Validation.md"
+          doc_id: "DOC-QAREV-2026-011"
+          doc_type: "QA-Template-Compliance-Review"
+          qua_required: false      # QUA self-review not required
+      dependencies: [1]            # QUA depends on Software Validation Report (index 1)
+      sil_requirements:
+        sil_0: "optional"
+        sil_1: "recommended"
+        sil_2: "recommended"
+        sil_3: "mandatory"
+        sil_4: "mandatory"
+    
+    # Activity 3: VAL creates Release Note (Annex C #26)
+    - agent: "val"
+      task_description: "Create Release Note documenting software identity, configuration, known issues, and release authorization. For SIL 3-4, VMGR performs this activity."
+      owner: "val"
+      deliverables:
+        - path: "docs/Release-Note.md"
+          doc_id: "DOC-RELEASE-2026-001"
+          doc_type: "Release-Note"
+          qua_required: true
+      dependencies: [1, 2]        # Release note depends on validation approval and QUA review
+  
+  # Phase completion criteria (EN 50128 Section 7.7)
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true
+    coverage_requirements:
+      requirements_to_tests: 100   # 100% software requirements validated
+    custom_checks:
+      - "All 4 EN 50128 documents delivered (Overall Software Test Report, Software Validation Report, QA Template Review of Software Validation Report, Release Note)"
+      - "All overall software tests executed and passed (100% pass rate)"
+      - "Validator supplementary tests executed (complex operational scenarios)"
+      - "Software tested on target hardware or validated simulation"
+      - "Software exercised under normal operation, anticipated occurrences, and undesired conditions"
+      - "All Software Requirements Specification requirements validated"
+      - "Test coverage on requirements evaluated and complete"
+      - "Customer acceptance obtained (sign-off)"
+      - "Independent validator assigned and verified (MANDATORY SIL 3-4)"
+      - "Validator does NOT report to Project Manager (MANDATORY SIL 3-4)"
+      - "Software identity and configuration documented"
+      - "All deviations tracked, evaluated, and resolved"
+      - "Change management process followed for corrective actions"
+      - "Techniques from Table A.7 correctly applied (Performance Testing M for SIL 3-4, Functional/Black-box M for SIL 3-4)"
+      - "Release authorization obtained"
+      - "QUA template compliance review approved (SIL 3-4 MANDATORY)"
+      - "VMGR V&V approval obtained (SIL 3-4 MANDATORY)"
+  
+  # Verification requirements (EN 50128 Section 7.7, verification of validation artifacts)
+  verification:
+    required: true
+    verifier: "ver"
+    criteria:
+      - "Overall Software Test Report adequately records tests per Overall Software Test Specification"
+      - "Overall Software Test Report meets readability and traceability requirements"
+      - "Software Validation Report written per Software Validation Plan"
+      - "Software Validation Report confirms Software Requirements Specification requirements met"
+      - "Test coverage on requirements complete (100%)"
+      - "Verification activities evaluated per Software Verification Plan"
+      - "Requirements tracing fully performed and covered"
+      - "Techniques from Table A.7 correctly applied"
+      - "Overall effectiveness of techniques/measures evaluated"
+      - "Software identity and configuration documented"
+      - "Deviations tracked and evaluated for risk"
+      - "Corrective actions handled per change management"
+      - "Release Note complete with software identification, known issues, and authorization"
+  
+  # Validation requirements (EN 50128 Section 7.7, independent validation MANDATORY SIL 3-4)
+  validation:
+    required_sil: [0, 1, 2, 3, 4]   # Validation is the primary activity of this phase
+    validator: "val"
+    independence_required_sil: [3, 4]   # Independent validator MANDATORY SIL 3-4
+    criteria:
+      - "Software on target machine fulfills Software Requirements Specification requirements"
+      - "Software fit for intended application (operational scenarios validated)"
+      - "Complex scenarios reflecting actual user needs tested"
+      - "Software exercised under normal operation conditions"
+      - "Software exercised under anticipated occurrences"
+      - "Software exercised under undesired conditions requiring system action"
+      - "Performance requirements validated (MANDATORY SIL 3-4 per Table A.7)"
+      - "Functional and black-box testing complete (MANDATORY SIL 3-4 per Table A.7)"
+      - "Validator supplementary tests executed (validator's discretion)"
+      - "Customer acceptance obtained"
+      - "Safety requirements validated"
+      - "Software behavior acceptable in target environment"
+      - "All validation objectives and criteria met"
+  
+  # Gate check configuration
+  gate_check:
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [3, 4]
+    criteria:
+      - "All deliverables QUA accepted"
+      - "Verification report approved"
+      - "Software Validation Report approved"
+      - "Traceability complete (Software Requirements → Overall Tests → Validation)"
+      - "No open critical or high defects"
+      - "All overall software tests passed (100% pass rate)"
+      - "All software requirements validated (100% coverage)"
+      - "Validator supplementary tests passed"
+      - "Customer acceptance obtained (sign-off required)"
+      - "Independent validator verified (MANDATORY SIL 3-4)"
+      - "Validator independence from PM confirmed (MANDATORY SIL 3-4)"
+      - "Performance testing complete (MANDATORY SIL 3-4)"
+      - "Operational scenarios validated"
+      - "Release Note approved and authorized"
+      - "Software identity and configuration documented"
+      - "All deviations resolved or justified"

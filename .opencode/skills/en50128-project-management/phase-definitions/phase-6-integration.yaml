@@ -1,0 +1,158 @@
+phase:
+  id: "integration"
+  number: 6
+  name: "Integration"
+  
+  # Agent activities (EN 50128 Section 7.6 - 3 documents)
+  activities:
+    # Activity 0: INT executes Software Integration Test Report (Annex C #21)
+    - agent: "int"
+      task_description: "Execute Software Integration Tests and create Software Integration Test Report demonstrating progressive integration of components and correct interface behavior"
+      owner: "int"
+      deliverables:
+        - path: "docs/test/Software-Integration-Test-Report.md"
+          doc_id: "DOC-INTTESTRPT-2026-001"
+          doc_type: "Software-Integration-Test-Report"
+          qua_required: true
+      parallel_group: 1
+    
+    # Activity 1: INT executes Software/Hardware Integration Test Report (Annex C #22)
+    - agent: "int"
+      task_description: "Execute Software/Hardware Integration Tests and create Software/Hardware Integration Test Report demonstrating correct software-hardware interaction on target platform"
+      owner: "int"
+      deliverables:
+        - path: "docs/test/Software-Hardware-Integration-Test-Report.md"
+          doc_id: "DOC-HWINTTESTRPT-2026-001"
+          doc_type: "Software-Hardware-Integration-Test-Report"
+          qua_required: true
+      parallel_group: 1
+    
+    # Activity 2: VER creates Software Integration Verification Report (Annex C #23)
+    - agent: "ver"
+      task_description: "Create Software Integration Verification Report verifying that integration tests adequately verify the Software Architecture Specification and that all integration test objectives are met"
+      owner: "ver"
+      deliverables:
+        - path: "docs/reports/Software-Integration-Verification-Report.md"
+          doc_id: "DOC-INTVER-2026-001"
+          doc_type: "Software-Integration-Verification-Report"
+          qua_required: true        # VER reports require QUA template review
+      dependencies: [0, 1]        # Verification depends on both integration test reports
+    
+    # Activity 3: QUA reviews Verification Report for template compliance (MANDATORY SIL 3-4)
+    - agent: "qua"
+      task_description: "Review Software Integration Verification Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
+      owner: "qua"
+      deliverables:
+        - path: "docs/reports/QA-Template-Review-Integration-Verification.md"
+          doc_id: "DOC-QAREV-2026-009"
+          doc_type: "QA-Template-Compliance-Review"
+          qua_required: false      # QUA self-review not required
+      dependencies: [2]            # QUA depends on VER report (index 2)
+      sil_requirements:
+        sil_0: "optional"
+        sil_1: "recommended"
+        sil_2: "recommended"
+        sil_3: "mandatory"
+        sil_4: "mandatory"
+    
+    # Activity 4: VAL creates Software Integration Validation Report (SIL 3-4)
+    # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
+    - agent: "val"
+      task_description: "Create Software Integration Validation Report validating that integrated software meets architectural specifications and performs correctly on target hardware. For SIL 3-4, VMGR performs this activity."
+      owner: "val"
+      deliverables:
+        - path: "docs/reports/Software-Integration-Validation-Report.md"
+          doc_id: "DOC-INTVAL-2026-001"
+          doc_type: "Software-Integration-Validation-Report"
+          qua_required: true        # VAL reports require QUA template review
+      dependencies: [0, 1, 2, 3]  # Validation depends on integration reports, verification report, and QUA review
+    
+    # Activity 5: QUA reviews Validation Report for template compliance (MANDATORY SIL 3-4)
+    - agent: "qua"
+      task_description: "Review Software Integration Validation Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
+      owner: "qua"
+      deliverables:
+        - path: "docs/reports/QA-Template-Review-Integration-Validation.md"
+          doc_id: "DOC-QAREV-2026-010"
+          doc_type: "QA-Template-Compliance-Review"
+          qua_required: false      # QUA self-review not required
+      dependencies: [4]            # QUA depends on VAL report (index 4)
+      sil_requirements:
+        sil_0: "optional"
+        sil_1: "recommended"
+        sil_2: "recommended"
+        sil_3: "mandatory"
+        sil_4: "mandatory"
+  
+  # Phase completion criteria (EN 50128 Section 7.6)
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true
+    coverage_requirements:
+      architecture_to_integration: 100   # 100% architectural interfaces tested
+      components_to_integration: 100     # 100% component integrations tested
+    custom_checks:
+      - "All 7 EN 50128 documents delivered (Software Integration Test Report, Software/Hardware Integration Test Report, Software Integration Verification Report per Annex C #23, QA Template Review of Verification Report, Software Integration Validation Report, QA Template Review of Validation Report)"
+      - "Progressive integration strategy documented (bottom-up, top-down, or sandwich)"
+      - "All component interfaces tested"
+      - "All software-hardware interfaces tested on target platform"
+      - "All integration test cases executed and passed (100% pass rate)"
+      - "Test cases repeatable and preferably automated"
+      - "All test results recorded in machine-readable form"
+      - "Identity and configuration of all items documented"
+      - "Correct use of techniques from Table A.6 demonstrated"
+      - "Impact analysis performed for any changes during integration"
+      - "All failures recorded with circumstances"
+      - "Performance testing performed (HR for SIL 3-4)"
+      - "Interface testing performed (HR for all SILs)"
+      - "QUA template compliance reviews approved (SIL 3-4 MANDATORY)"
+      - "VMGR V&V approval obtained (SIL 3-4 MANDATORY)"
+  
+  # Verification requirements (EN 50128 Section 7.6.4.11-7.6.4.13, Annex C #23)
+  verification:
+    required: true
+    verifier: "ver"
+    criteria:
+      - "Software Integration Test Report adequately records tests per Software Integration Test Specification"
+      - "Software/Hardware Integration Test Report adequately records tests per Software/Hardware Integration Test Specification"
+      - "All integration test objectives and criteria met"
+      - "Test results demonstrate correct component interface behavior"
+      - "Test results demonstrate correct software-hardware interaction"
+      - "Progressive integration strategy correctly applied"
+      - "All test cases executed and results recorded"
+      - "Configuration of tested items properly documented"
+      - "Techniques from Table A.6 correctly applied (Functional/Black-box Testing HR for all SILs)"
+      - "Interface testing performed and verified (HR for all SILs)"
+      - "Performance testing performed and verified (R for SIL 1-2, HR for SIL 3-4)"
+      - "All failures investigated and resolved or justified"
+      - "Traceability: Architecture → Integration Test Spec → Integration Test Report"
+      - "Impact analysis performed for changes"
+  
+  # Validation requirements (EN 50128 Section 7.6, independent validation SIL 3-4)
+  validation:
+    required_sil: [3, 4]
+    validator: "val"
+    criteria:
+      - "Integrated software meets architectural specifications"
+      - "Software-hardware integration correct on target platform"
+      - "Integration test results demonstrate correct system behavior"
+      - "Performance requirements met on target hardware"
+      - "Interface specifications satisfied"
+      - "Integration strategy appropriate for SIL level"
+  
+  # Gate check configuration
+  gate_check:
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [3, 4]
+    criteria:
+      - "All deliverables QUA accepted"
+      - "Verification report approved"
+      - "Validation report approved (SIL 3-4 only)"
+      - "Traceability complete (Architecture → Integration Tests → Integration Results)"
+      - "No open critical or high defects"
+      - "All integration tests passed (100% pass rate)"
+      - "All component interfaces tested"
+      - "All software-hardware interfaces tested on target"
+      - "Performance testing completed (HR for SIL 3-4)"
+      - "Configuration management applied (all items under control)"
+      - "Impact analysis complete for any integration changes"

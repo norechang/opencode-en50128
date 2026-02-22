@@ -5,15 +5,27 @@
 ## Overview
 
 This project transforms OpenCode into an **EN 50128 compliant development platform** providing:
-- **11 specialized agents** for EN 50128 compliance tasks (Requirements, Design, Implementation, Testing, Verification, Validation, Safety, Quality, Integration, Project Management, Configuration Management)
+- **12 specialized agents** for EN 50128 lifecycle management and compliance tasks (Lifecycle Coordinator, Requirements, Design, Implementation, Testing, Verification, Validation, Safety, Quality, Integration, Project Management, Configuration Management)
 - **12 domain-specific skills** with patterns, templates, and best practices
 - **Complete EN 50128 standards** in LLM-friendly Markdown format (2.7 MB)
-- **EN 50128 V-Model lifecycle** implementation
+- **EN 50128 V-Model lifecycle** implementation with phase gate enforcement
 - **Production-ready workflows** for safety-critical railway software
 
 **This is a development platform, not a project template.** All actual development projects are created in the `examples/` directory.
 
 ## Quick Start
+
+### Getting Help
+
+```bash
+# List all available commands
+/enhelp
+
+# Get detailed help for a specific command
+/enhelp cod
+/enhelp workspace
+/enhelp req
+```
 
 ### Creating Your First EN 50128 Project
 
@@ -23,30 +35,78 @@ This project transforms OpenCode into an **EN 50128 compliant development platfo
    cd examples/my_railway_project
    ```
 
-2. **Start with requirements**:
+2. **Initialize lifecycle tracking with COD**:
+   ```bash
+   /cod plan --sil 3 --project my_railway_project
+   # COD creates lifecycle plan and LIFECYCLE_STATE.md
+   ```
+
+3. **Start with requirements** (COD will request approval):
    ```bash
    /req  # Begin with Requirements Engineering
+   # COD monitors: User approval required for requirements
    # Define requirements, assign SIL levels, establish traceability
    ```
 
-3. **Follow the EN 50128 V-Model lifecycle**:
+4. **Follow the EN 50128 V-Model lifecycle**:
    ```bash
    /des  # Architecture & Design
+   /cod gate-check design  # COD verifies phase completion
+   
    /saf  # Safety Analysis (FMEA, FTA)
    /imp  # Implementation (C + MISRA C:2012)
+   /cod gate-check implementation  # COD enforces quality gates
+   
    /tst  # Unit Testing with coverage
    /ver  # Verification (static analysis)
    /int  # Component Integration
+   /cod gate-check integration
+   
    /val  # Validation (system testing)
+   /cod gate-check validation
+   
    /cm   # Configuration Management (throughout)
    /qua  # Quality Assurance (throughout)
+   /pm   # Project coordination (reports to COD)
    ```
 
-4. **Reference the working example**: 
+5. **Reference the working example**: 
    - See `examples/train_door_control/` for a complete SIL 3 implementation
    - Use it as a reference for structure, code style, and documentation
 
-### Understanding the Platform 1. Understand Your SIL Level
+### Working with Multiple Projects
+
+The platform supports multiple concurrent projects with independent lifecycle tracking:
+
+```bash
+# Check which workspace is active
+/workspace status
+# or
+/ws status
+
+# List all available projects
+/workspace list
+# or
+/ws list
+
+# Switch between projects
+/workspace switch train_door_control2
+# or
+/ws switch train_door_control2
+
+# Create a new project
+/workspace create brake_controller --sil 4
+# or
+/ws create brake_controller --sil 4
+```
+
+**Important**: All agents automatically work on the active workspace. When you switch workspaces, each project preserves its own phase progress, completion status, and documentation.
+
+See [Workspace Management](#workspace-management) section for detailed information.
+
+### Understanding the Platform
+
+#### 1. Understand Your SIL Level
 
 Determine the Safety Integrity Level (SIL) for your project:
 
@@ -58,10 +118,11 @@ Determine the Safety Integrity Level (SIL) for your project:
 | 1 | Low | Non-critical monitoring systems |
 | 0 | None | Administrative systems |
 
-### 2. Available Agents
+#### 2. Available Agents
 
 Use specialized agents via slash commands:
 
+- `/cod` - **Lifecycle Coordinator** - Lifecycle orchestration, phase gates, V-Model compliance
 - `/req` - Requirements Engineer - Requirements specification and management
 - `/des` - Designer - Software architecture and design
 - `/imp` - Implementer - C code implementation with MISRA C compliance
@@ -71,12 +132,27 @@ Use specialized agents via slash commands:
 - `/val` - Validator - System testing and acceptance validation
 - `/saf` - Safety Engineer - Hazard analysis, FMEA, and safety case
 - `/qua` - Quality Assurance - Code reviews, audits, and quality gates
-- `/pm` - Project Manager - Project coordination and CCB leadership
+- `/pm` - Project Manager - Project coordination and CCB leadership (reports to COD)
 - `/cm` - Configuration Manager - Version control and baseline management
+- `/workspace` (or `/ws`) - Workspace management - Switch between projects
+- `/enhelp` - Display help information for all commands
+
+**Note:** COD (Lifecycle Coordinator) is the primary orchestrator. For SIL 3-4 projects, COD enforces strict phase gates. For SIL 0-2, COD provides advisory guidance.
+
+**Getting Help:**
+```bash
+# List all available commands
+/enhelp
+
+# Get detailed help for a specific command
+/enhelp cod
+/enhelp workspace
+/enhelp req
+```
 
 See [AGENTS.md](AGENTS.md) for detailed agent documentation.
 
-### 3. Example Workflow
+#### 3. Example Workflow
 
 #### Complete SIL 3 Development Flow
 
@@ -122,12 +198,224 @@ See [AGENTS.md](AGENTS.md) for detailed agent documentation.
 # Code reviews, audits, quality gates
 ```
 
+## Workspace Management
+
+The platform supports **multiple concurrent projects** with independent lifecycle states. Each project in the `examples/` directory is a separate workspace.
+
+### Key Concepts
+
+- **Workspace**: An independent EN 50128 project with its own lifecycle tracking
+- **Active Workspace**: The current project you're working on
+- **Workspace Switching**: Ability to pause one project and resume another without losing context
+
+### Workspace Commands
+
+Use `/workspace` (or `/ws` for short) to manage workspaces:
+
+```bash
+# List all available workspaces
+/workspace list
+# or
+/ws list
+
+# Show current workspace status
+/workspace status
+# or
+/ws status
+
+# Switch to a different workspace
+/workspace switch train_door_control2
+# or
+/ws switch train_door_control2
+
+# Create a new workspace
+/workspace create brake_controller --sil 4
+# or
+/ws create brake_controller --sil 4
+```
+
+### How It Works
+
+1. **Workspace State File**: `.workspace` (JSON) at platform root tracks:
+   - Active workspace name
+   - All workspace metadata (SIL level, current phase, completion %)
+   - Last accessed timestamp
+
+2. **Per-Workspace Tracking**: Each workspace has:
+   - Independent `LIFECYCLE_STATE.md` tracking phase progress
+   - Complete documentation in `docs/` directory
+   - Source code in `src/` directory
+   - Test code in `test/` directory
+
+3. **Agent Context**: All agents automatically operate on the active workspace:
+   - Read `.workspace` file to determine active project
+   - Operate on files in `examples/<active_workspace>/`
+   - Display workspace context in responses
+
+### Example: Multi-Project Workflow
+
+```bash
+# Working on train door control system
+$ /ws status
+📁 Active Workspace: train_door_control (SIL 3)
+   Phase: Architecture & Design (Phase 3) | Completion: 75%
+
+$ /des
+# Work on design for train_door_control...
+
+# Need to switch to brake controller project
+$ /ws switch brake_controller
+✅ Workspace switched to: brake_controller
+   SIL Level: 4
+   Phase: Requirements (Phase 2) | Completion: 30%
+
+$ /req
+# Work on requirements for brake_controller...
+
+# Switch back to train door control
+$ /ws switch train_door_control
+✅ Workspace switched to: train_door_control
+   (Context preserved - still at Phase 3, 75%)
+
+$ /des
+# Resume design work exactly where you left off...
+```
+
+### Available Example Projects
+
+The platform includes complete example projects:
+
+1. **`train_door_control`** (SIL 3)
+   - Complete implementation (Phase 7 - Validation, 85% complete)
+   - Train door control system with safety interlocks
+   - Full documentation, C source code, unit tests
+   - Use as reference for new projects
+
+2. **`train_door_control2`** (SIL 3)
+   - In-progress project (Phase 3 - Architecture, 30% complete)
+   - Demonstrates system-level input documents
+   - 4 EN 50128 Section 7.2.2 system documents
+   - Shows requirements-to-design transition
+
+### Creating New Workspaces
+
+When creating a new workspace, the platform automatically:
+- Creates directory structure (`docs/`, `src/`, `test/`, `tools/`)
+- Generates README.md with project information
+- Creates Makefile skeleton for C projects
+- Initializes git repository (optional)
+
+```bash
+# Create new SIL 4 project
+$ /ws create automatic_train_protection --sil 4
+
+✅ Workspace created: automatic_train_protection
+   Path: examples/automatic_train_protection/
+   SIL Level: 4
+   
+Next steps:
+  1. Switch to workspace: /ws switch automatic_train_protection
+  2. Initialize lifecycle: /cod plan --sil 4 --project automatic_train_protection
+  3. Begin requirements: /req
+```
+
+### Workspace Directory Structure
+
+Each workspace follows EN 50128 structure:
+
+```
+examples/<workspace_name>/
+├── LIFECYCLE_STATE.md          # Phase tracking (managed by COD)
+├── README.md                   # Project overview
+├── Makefile                    # Build configuration
+├── docs/                       # EN 50128 documentation
+│   ├── system/                 # System-level inputs (Section 7.2.2)
+│   ├── plans/                  # SQAP, SCMP, SVP, SVaP
+│   ├── Software-Requirements-Specification.md
+│   ├── Software-Architecture-Specification.md
+│   ├── Software-Design-Specification.md
+│   └── ...                     # Other EN 50128 documents
+├── src/                        # C source code
+│   ├── <module>.h
+│   └── <module>.c
+├── test/                       # Unit and integration tests
+│   └── test_<module>.c
+└── tools/                      # Build and analysis scripts
+```
+
+### Detailed Workflows and Best Practices
+
+For comprehensive workspace management workflows, see:
+- **[Workspace Workflows and Best Practices](docs/WORKSPACE-WORKFLOWS.md)** - Detailed multi-project workflows, common scenarios, troubleshooting, and advanced tips
+
+**Topics covered**:
+- Parallel development on multiple projects
+- Maintenance on production while developing new features
+- Using reference implementations
+- Best practices for workspace naming and organization
+- Troubleshooting common issues
+
+### Best Practices
+
+1. **Always check active workspace** before starting work:
+   ```bash
+   /ws status
+   ```
+
+2. **Use descriptive workspace names**:
+   - Good: `train_door_control`, `automatic_brake_system`
+   - Bad: `project1`, `test`
+
+3. **Complete phase transitions** before switching workspaces:
+   ```bash
+   /cod gate-check design  # Complete current phase
+   /ws switch other_project  # Then switch
+   ```
+
+4. **Regular status checks** when returning to a workspace:
+   ```bash
+   /ws switch train_door_control
+   /cod status  # See detailed phase progress
+   ```
+
+5. **Archive completed projects**:
+   ```bash
+   /ws archive train_door_control  # Mark as completed
+   ```
+
 ## Documentation
 
-### Core Documents (START HERE)
-- **`LIFECYCLE.md`** - EN 50128 V-Model software development lifecycle (MUST READ FIRST)
-- **`AGENTS.md`** - 8 role-based agents mapped to lifecycle phases
-- **`README.md`** - This file (overview and getting started)
+### Core Platform Documentation
+
+Essential references in root directory:
+
+1. **[LIFECYCLE.md](LIFECYCLE.md)** - Complete EN 50128 V-Model lifecycle (1637 lines)
+   - All 10 lifecycle phases (Initialization → Deployment)
+   - Entry/exit criteria, deliverables, agent workflows
+   - COD gate enforcement (SIL-dependent: Advisory/Semi-strict/Strict)
+   
+2. **[AGENTS.md](AGENTS.md)** - Role-based agent definitions (837 lines)
+   - All 12 agents with EN 50128 role mappings (Section 5, Annex B)
+   - Responsibilities, techniques from Annex A tables
+   - C language constraints and MISRA C:2012 compliance
+   
+3. **[PHASES-VS-DOCUMENTS.md](PHASES-VS-DOCUMENTS.md)** - Phase-to-document reference (580 lines)
+   - Complete mapping: 10 phases → 30+ documents
+   - Exact EN 50128 document names from Section 7.X.3
+   - V-Model correspondence (Specification → Report)
+   - Quick command reference for all phases
+   
+4. **[EN50128-DELIVERABLES-MAPPING.md](EN50128-DELIVERABLES-MAPPING.md)** - Document naming guide (264 lines)
+   - Exact names from EN 50128 Section 7 (with pluralization rules)
+   - File naming strategy (hyphens, case conventions)
+   - Document ID format (`DOC-<TYPE>-YYYY-NNN`)
+   - QUA checker mappings
+
+### Supporting Documentation
+
+5. **[CONTRIBUTING.md](CONTRIBUTING.md)** - Contribution guidelines
+6. **[CHANGELOG.md](CHANGELOG.md)** - Version history and releases
+7. **[GITHUB_SETUP.md](GITHUB_SETUP.md)** - Git/GitHub setup and workflow
 
 ## Project Structure
 
@@ -541,7 +829,9 @@ This framework is provided for railway software development compliant with EN 50
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0 | 2026-02-06 | Initial project setup with agents, skills, and documentation |
+| 2.0.0 | 2026-02-21 | Complete EN 50128 compliance implementation: All 10 V-Model phases defined with exact EN 50128 document names; Phase definitions for Phases 2-7 operational (Requirements → Validation); 12 agents fully operational with SIL-dependent behaviors; Comprehensive documentation consolidated (7 informatic files removed); See [REMOVED_FILES.md](REMOVED_FILES.md) for details |
+| 1.0.0 | 2026-02-06 | Initial complete platform: 11 agents, 12 skills, complete EN 50128 standards; Working SIL 3 example (train_door_control) |
+| 0.1.0 | 2026-02-06 | Initial project setup with agents, skills, and documentation |
 
 ---
 

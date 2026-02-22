@@ -1,0 +1,273 @@
+document_type: "Software-Component-Test-Specification"
+checker_version: "1.0"
+description: "Quality checks for Software Component Test Specification per EN 50128 Section 7.4.4.7 and Table A.4"
+
+# Template compliance checks
+template_checks:
+  # Document ID format
+  - id: "CTS-T001"
+    name: "Document ID Format"
+    description: "Verify Document ID follows DOC-COMPTESTSPEC-YYYY-NNN format"
+    severity: "error"
+    rule_type: "regex"
+    rule_params:
+      pattern: "DOC-COMPTESTSPEC-[0-9]{4}-[0-9]{3}"
+      search_section: "Document Control"
+    expected: "Document ID matches DOC-COMPTESTSPEC-YYYY-NNN"
+    failure_message: "Document ID does not match required format"
+    fix_suggestion: "Update Document ID to DOC-COMPTESTSPEC-YYYY-NNN (e.g., DOC-COMPTESTSPEC-2026-001)"
+  
+  # Document Control table
+  - id: "CTS-T002"
+    name: "Document Control Table"
+    description: "Verify Document Control table exists"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "Document Control"
+      required_columns: ["Field", "Value"]
+      required_fields:
+        - "Document ID"
+        - "Version"
+        - "Date"
+        - "Author"
+        - "Status"
+    expected: "Document Control table present"
+    failure_message: "Document Control table missing or incomplete"
+    fix_suggestion: "Add Document Control table with required fields"
+  
+  # Approvals table
+  - id: "CTS-T003"
+    name: "Approvals Table"
+    description: "Verify Approvals table for SIL 3+"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "Approvals"
+      required_columns: ["Role", "Name", "Signature", "Date"]
+      required_roles_sil_3:
+        - "Author (TST)"
+        - "Reviewer (QUA)"
+        - "Approver (PM)"
+      minimum_sil: 3
+    expected: "Approvals table with required roles"
+    failure_message: "Approvals table missing (required SIL 3+)"
+    fix_suggestion: "Add Approvals table with roles: Author (TST), Reviewer (QUA), Approver (PM)"
+  
+  # Required sections
+  - id: "CTS-T004"
+    name: "Required Sections"
+    description: "Verify all required sections exist"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      required_sections:
+        - "1. Introduction"
+        - "2. Test Strategy"
+        - "3. Test Environment"
+        - "4. Component Tests"
+        - "5. Coverage Analysis"
+    expected: "All required sections present"
+    failure_message: "One or more required sections missing"
+    fix_suggestion: "Add missing sections per EN 50128 component test specification requirements"
+
+# Quality standards checks
+quality_checks:
+  # Test case ID format
+  - id: "CTS-Q001"
+    name: "Test Case ID Format"
+    description: "Verify all test cases have IDs in TC-XXX-NNN format"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**TC-"
+      id_pattern: "^TC-[A-Z]+-[0-9]{3}"
+    expected: "All test cases have IDs matching TC-XXX-NNN"
+    failure_message: "One or more test cases have invalid ID format"
+    fix_suggestion: "Ensure all test case IDs follow TC-XXX-NNN format (e.g., TC-TDC-001)"
+  
+  # Test objective
+  - id: "CTS-Q002"
+    name: "Test Objective"
+    description: "Verify all test cases have objective"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**TC-"
+      field_pattern: "Objective:"
+      field_description: "test objective"
+    expected: "All test cases specify objective"
+    failure_message: "One or more test cases missing objective"
+    fix_suggestion: "Add objective (what is being tested) to all test cases"
+  
+  # Test procedure
+  - id: "CTS-Q003"
+    name: "Test Procedure"
+    description: "Verify all test cases have procedure"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**TC-"
+      field_pattern: "Procedure:"
+      field_description: "test procedure"
+    expected: "All test cases specify procedure (steps)"
+    failure_message: "One or more test cases missing procedure"
+    fix_suggestion: "Add procedure (test steps) to all test cases"
+  
+  # Expected result
+  - id: "CTS-Q004"
+    name: "Expected Result"
+    description: "Verify all test cases have expected result"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**TC-"
+      field_pattern: "Expected Result:"
+      field_description: "expected result"
+    expected: "All test cases specify expected result"
+    failure_message: "One or more test cases missing expected result"
+    fix_suggestion: "Add expected result (pass criteria) to all test cases"
+  
+  # Pass/Fail criteria
+  - id: "CTS-Q005"
+    name: "Pass/Fail Criteria"
+    description: "Verify all test cases have pass/fail criteria"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**TC-"
+      field_pattern: "Pass/Fail:"
+      field_description: "pass/fail criteria"
+    expected: "All test cases specify pass/fail criteria"
+    failure_message: "One or more test cases missing pass/fail criteria"
+    fix_suggestion: "Add pass/fail criteria to all test cases"
+  
+  # Traceability to component design
+  - id: "CTS-Q006"
+    name: "Test Traceability to Components"
+    description: "Verify all test cases trace to component design specifications"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**TC-"
+      field_pattern: "Component:\\s*COMP-"
+      field_description: "component traceability"
+    expected: "All test cases trace to components (COMP-XXX-NNN)"
+    failure_message: "One or more test cases missing component traceability"
+    fix_suggestion: "Add 'Component: COMP-XXX-NNN' to all test cases"
+  
+  # Traceability to requirements (indirect)
+  - id: "CTS-Q007"
+    name: "Test Traceability to Requirements"
+    description: "Verify all test cases trace to requirements (indirect via component)"
+    severity: "warning"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**TC-"
+      field_pattern: "Requirements:\\s*REQ-"
+      field_description: "requirement traceability"
+    expected: "All test cases trace to requirements (REQ-XXX-NNN) - optional but recommended"
+    failure_message: "One or more test cases missing requirement traceability (warning only)"
+    fix_suggestion: "Add 'Requirements: REQ-XXX-NNN' to test cases for better traceability"
+
+# Content requirement checks
+content_checks:
+  # At least one test case
+  - id: "CTS-C001"
+    name: "Minimum Test Cases"
+    description: "Verify at least one test case exists"
+    severity: "error"
+    rule_type: "count_minimum"
+    rule_params:
+      item_pattern: "^\\*\\*TC-[A-Z]+-[0-9]{3}"
+      minimum_count: 1
+    expected: "At least 1 test case defined"
+    failure_message: "No test cases found in Component Test Specification"
+    fix_suggestion: "Add test cases to section 4"
+  
+  # 100% component coverage
+  - id: "CTS-C002"
+    name: "Component Coverage"
+    description: "Verify 100% component coverage"
+    severity: "error"
+    rule_type: "coverage_check"
+    rule_params:
+      coverage_type: "components"
+      minimum_coverage: 100
+      source_doc: "docs/Software-Component-Design-Specification.md"
+      item_pattern: "COMP-[A-Z]+-[0-9]{3}"
+    expected: "100% components covered by tests"
+    failure_message: "Component coverage < 100%"
+    fix_suggestion: "Add test cases to cover all components from Software Component Design Specification"
+  
+  # Coverage analysis section
+  - id: "CTS-C003"
+    name: "Coverage Analysis Section"
+    description: "Verify coverage analysis section exists"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "5. Coverage Analysis"
+      content_must_contain: "Component Coverage"
+    expected: "Coverage Analysis section with component coverage table"
+    failure_message: "Coverage Analysis section missing or incomplete"
+    fix_suggestion: "Add section 5 with component coverage table and analysis"
+  
+  # Test environment specification
+  - id: "CTS-C004"
+    name: "Test Environment"
+    description: "Verify test environment specified"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "3. Test Environment"
+      content_must_contain:
+        - "Test Framework"
+        - "Compiler"
+    expected: "Test environment section specifies test framework and compiler"
+    failure_message: "Test environment not fully specified"
+    fix_suggestion: "Add test framework (e.g., Unity, CUnit) and compiler configuration to section 3"
+  
+  # SIL-specific coverage requirements for unit tests
+  - id: "CTS-C005"
+    name: "SIL Coverage Requirements"
+    description: "Verify SIL-specific coverage targets documented for unit tests"
+    severity: "error"
+    rule_type: "content_check"
+    rule_params:
+      section: "5. Coverage Analysis"
+      sil_0_1_coverage: "Statement (HR), Branch (HR)"
+      sil_2_coverage: "Statement (HR), Branch (M)"
+      sil_3_4_coverage: "Statement (M), Branch (M), Condition (M)"
+    expected: "Coverage targets per SIL level documented"
+    failure_message: "SIL-specific coverage targets not documented"
+    fix_suggestion: "Document coverage targets per EN 50128 Table A.21: SIL 0-1 (Statement HR, Branch HR), SIL 2 (Statement HR, Branch M), SIL 3-4 (Statement M, Branch M, Condition M)"
+  
+  # Unit test isolation
+  - id: "CTS-C006"
+    name: "Unit Test Isolation"
+    description: "Verify unit test isolation strategy documented"
+    severity: "warning"
+    rule_type: "section_exists"
+    rule_params:
+      section: "2. Test Strategy"
+      content_must_contain:
+        - "isolation"
+    expected: "Test strategy documents unit test isolation approach (mocking, stubbing)"
+    failure_message: "Unit test isolation strategy not documented (warning only)"
+    fix_suggestion: "Document how unit tests isolate components (e.g., mocking dependencies, stubbing hardware interfaces)"
+  
+  # Boundary value testing
+  - id: "CTS-C007"
+    name: "Boundary Value Testing"
+    description: "Verify boundary value testing strategy for SIL 3+"
+    severity: "error"
+    rule_type: "content_check"
+    rule_params:
+      section: "2. Test Strategy"
+      content_must_contain:
+        - "boundary"
+      minimum_sil: 3
+    expected: "Test strategy documents boundary value testing (required SIL 3+)"
+    failure_message: "Boundary value testing strategy not documented (required SIL 3+)"
+    fix_suggestion: "Document boundary value testing approach per EN 50128 Table A.14 (Mandatory SIL 3-4)"

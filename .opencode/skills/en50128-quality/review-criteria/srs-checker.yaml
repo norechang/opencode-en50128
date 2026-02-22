@@ -1,0 +1,214 @@
+document_type: "Software-Requirements-Specification"
+checker_version: "1.0"
+description: "Quality checks for Software Requirements Specification per EN 50128 Section 7.2.4.1 and Table A.2"
+
+# Template compliance checks (EN 50128 document structure)
+template_checks:
+  # Document ID format
+  - id: "SRS-T001"
+    name: "Document ID Format"
+    description: "Verify Document ID follows DOC-XXX-YYYY-NNN format"
+    severity: "error"
+    rule_type: "regex"
+    rule_params:
+      pattern: "DOC-[A-Z]+-[0-9]{4}-[0-9]{3}"
+      search_section: "Document Control"
+    expected: "Document ID matches DOC-XXX-YYYY-NNN (e.g., DOC-SRS-2026-001)"
+    failure_message: "Document ID does not match required format DOC-XXX-YYYY-NNN"
+    fix_suggestion: "Update Document ID to format DOC-SRS-YYYY-NNN (e.g., DOC-SRS-2026-001)"
+  
+  # Document Control table
+  - id: "SRS-T002"
+    name: "Document Control Table"
+    description: "Verify Document Control table exists with required fields"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "Document Control"
+      required_columns: ["Field", "Value"]
+      required_fields:
+        - "Document ID"
+        - "Version"
+        - "Date"
+        - "Author"
+        - "Status"
+    expected: "Document Control table with all required fields"
+    failure_message: "Document Control table missing or incomplete"
+    fix_suggestion: "Add Document Control table with fields: Document ID, Version, Date, Author, Status"
+  
+  # Approvals table
+  - id: "SRS-T003"
+    name: "Approvals Table"
+    description: "Verify Approvals table exists with required roles"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "Approvals"
+      required_columns: ["Role", "Name", "Signature", "Date"]
+      required_roles_sil_3:
+        - "Author (REQ)"
+        - "Reviewer (QUA)"
+        - "Approver (PM)"
+    expected: "Approvals table with Author, Reviewer, Approver"
+    failure_message: "Approvals table missing or incomplete"
+    fix_suggestion: "Add Approvals table with roles: Author (REQ), Reviewer (QUA), Approver (PM)"
+  
+  # Required sections
+  - id: "SRS-T004"
+    name: "Required Sections"
+    description: "Verify all required sections exist"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      required_sections:
+        - "1. Introduction"
+        - "2. System Overview"
+        - "3. Functional Requirements"
+        - "4. Safety Requirements"
+        - "5. Performance Requirements"
+        - "6. Interface Requirements"
+        - "7. Traceability"
+    expected: "All required sections present"
+    failure_message: "One or more required sections missing"
+    fix_suggestion: "Add missing sections: 1. Introduction, 2. System Overview, 3. Functional Requirements, 4. Safety Requirements, 5. Performance Requirements, 6. Interface Requirements, 7. Traceability"
+
+# Quality standards checks
+quality_checks:
+  # Requirement ID format
+  - id: "SRS-Q001"
+    name: "Requirement ID Format"
+    description: "Verify all requirements have IDs in REQ-XXX-NNN format"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**REQ-"
+      id_pattern: "^REQ-[A-Z]+-[0-9]{3}"
+    expected: "All requirements have IDs matching REQ-XXX-NNN"
+    failure_message: "One or more requirements have invalid ID format"
+    fix_suggestion: "Ensure all requirement IDs follow REQ-XXX-NNN format (e.g., REQ-TDC-001)"
+  
+  # SIL level assignment
+  - id: "SRS-Q002"
+    name: "SIL Level Assignment"
+    description: "Verify all requirements have SIL level assigned"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**REQ-"
+      field_pattern: "SIL [0-4]"
+      field_description: "SIL level"
+    expected: "All requirements have SIL level (SIL 0-4)"
+    failure_message: "One or more requirements missing SIL level"
+    fix_suggestion: "Add SIL level to all requirements (format: SIL 0, SIL 1, SIL 2, SIL 3, or SIL 4)"
+  
+  # SHALL/SHOULD/MAY keywords
+  - id: "SRS-Q003"
+    name: "Requirement Keywords"
+    description: "Verify requirements use SHALL/SHOULD/MAY keywords"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**REQ-"
+      field_pattern: "(SHALL|SHOULD|MAY)"
+      field_description: "imperative keyword (SHALL/SHOULD/MAY)"
+    expected: "All requirements use SHALL, SHOULD, or MAY"
+    failure_message: "One or more requirements missing SHALL/SHOULD/MAY keyword"
+    fix_suggestion: "Use SHALL for mandatory requirements, SHOULD for recommendations, MAY for optional features"
+  
+  # Verification method
+  - id: "SRS-Q004"
+    name: "Verification Method"
+    description: "Verify all requirements have verification method"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**REQ-"
+      field_pattern: "Verification:\\s*(Test|Analysis|Inspection|Review)"
+      field_description: "verification method"
+    expected: "All requirements specify verification method (Test/Analysis/Inspection/Review)"
+    failure_message: "One or more requirements missing verification method"
+    fix_suggestion: "Add 'Verification: Test|Analysis|Inspection|Review' to all requirements"
+  
+  # Requirement length (warning only)
+  - id: "SRS-Q005"
+    name: "Requirement Conciseness"
+    description: "Warn if requirement text exceeds 500 characters"
+    severity: "warning"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**REQ-"
+      max_length: 500
+    expected: "Requirements should be concise (< 500 characters)"
+    failure_message: "One or more requirements exceed 500 characters (may be ambiguous)"
+    fix_suggestion: "Consider splitting long requirements into multiple smaller requirements"
+
+# Content requirement checks
+content_checks:
+  # At least one requirement exists
+  - id: "SRS-C001"
+    name: "Minimum Requirements"
+    description: "Verify at least one requirement exists"
+    severity: "error"
+    rule_type: "count_minimum"
+    rule_params:
+      item_pattern: "^\\*\\*REQ-[A-Z]+-[0-9]{3}"
+      minimum_count: 1
+    expected: "At least 1 requirement defined"
+    failure_message: "No requirements found in SRS"
+    fix_suggestion: "Add software requirements to section 3-6"
+  
+  # Traceability section exists
+  - id: "SRS-C002"
+    name: "Traceability Section"
+    description: "Verify Traceability section references RTM"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "7. Traceability"
+      content_must_contain: "RTM"
+    expected: "Traceability section references Requirements Traceability Matrix (RTM)"
+    failure_message: "Traceability section missing or doesn't reference RTM"
+    fix_suggestion: "Add section 7. Traceability with reference to RTM document"
+  
+  # Safety requirements section for SIL 1+
+  - id: "SRS-C003"
+    name: "Safety Requirements Section"
+    description: "Verify Safety Requirements section exists for SIL 1+"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "4. Safety Requirements"
+      minimum_sil: 1
+    expected: "Safety Requirements section exists (required for SIL 1+)"
+    failure_message: "Safety Requirements section missing (mandatory for SIL 1+)"
+    fix_suggestion: "Add section 4. Safety Requirements with safety-related requirements from Hazard Log"
+  
+  # At least one safety requirement for SIL 1+
+  - id: "SRS-C004"
+    name: "Minimum Safety Requirements"
+    description: "Verify at least one safety requirement exists for SIL 1+"
+    severity: "error"
+    rule_type: "count_minimum"
+    rule_params:
+      section: "4. Safety Requirements"
+      item_pattern: "^\\*\\*REQ-[A-Z]+-[0-9]{3}"
+      minimum_count: 1
+      minimum_sil: 1
+    expected: "At least 1 safety requirement (required for SIL 1+)"
+    failure_message: "No safety requirements found (mandatory for SIL 1+)"
+    fix_suggestion: "Add safety requirements derived from Hazard Log to section 4"
+  
+  # Consistent terminology
+  - id: "SRS-C005"
+    name: "Terminology Consistency"
+    description: "Check for common terminology inconsistencies"
+    severity: "warning"
+    rule_type: "terminology_check"
+    rule_params:
+      inconsistencies:
+        - ["train door", "door", "trainset door"]  # Use consistent term
+        - ["open", "opened", "opening"]            # Use consistent verb form
+        - ["close", "closed", "closing"]
+    expected: "Consistent terminology throughout document"
+    failure_message: "Inconsistent terminology detected"
+    fix_suggestion: "Use consistent terms throughout document (e.g., always 'train door' not 'door')"

@@ -1,0 +1,150 @@
+phase:
+  id: "component-design"
+  number: 4
+  name: "Component Design"
+  
+  # Agent activities (EN 50128 Section 7.4 - 3 documents)
+  activities:
+    # Activity 0: DES creates Software Component Design Specification (Annex C #15)
+    - agent: "des"
+      task_description: "Create Software Component Design Specification with detailed component-level designs, algorithms, and data structures for each module"
+      owner: "des"
+      deliverables:
+        - path: "docs/Software-Component-Design-Specification.md"
+          doc_id: "DOC-COMPDES-2026-001"
+          doc_type: "Software-Component-Design-Specification"
+          qua_required: true
+      parallel_group: 1
+    
+    # Activity 1: TST creates Software Component Test Specification (Annex C #16)
+    - agent: "tst"
+      task_description: "Create Software Component (Unit) Test Specification for all components with test cases, expected results, and coverage criteria"
+      owner: "tst"
+      deliverables:
+        - path: "docs/test/Software-Component-Test-Specification.md"
+          doc_id: "DOC-COMPTEST-2026-001"
+          doc_type: "Software-Component-Test-Specification"
+          qua_required: true
+      dependencies: [0]           # Component tests depend on component design
+    
+    # Activity 2: VER creates Software Component Design Verification Report (Annex C #17)
+    - agent: "ver"
+      task_description: "Create Software Component Design Verification Report documenting independent verification of all Phase 4 deliverables"
+      owner: "ver"
+      deliverables:
+        - path: "docs/reports/Software-Component-Design-Verification-Report.md"
+          doc_id: "DOC-COMPVER-2026-001"
+          doc_type: "Software-Component-Design-Verification-Report"
+          qua_required: true        # VER reports require QUA template review
+      dependencies: [0, 1]        # VER depends on all phase deliverables being complete
+    
+    # Activity 3: QUA reviews Verification Report for template compliance (MANDATORY SIL 3-4)
+    - agent: "qua"
+      task_description: "Review Software Component Design Verification Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
+      owner: "qua"
+      deliverables:
+        - path: "docs/reports/QA-Template-Review-Component-Design-Verification.md"
+          doc_id: "DOC-QAREV-2026-005"
+          doc_type: "QA-Template-Compliance-Review"
+          qua_required: false      # QUA self-review not required
+      dependencies: [2]            # QUA depends on VER report (index 2)
+      sil_requirements:
+        sil_0: "optional"
+        sil_1: "recommended"
+        sil_2: "recommended"
+        sil_3: "mandatory"
+        sil_4: "mandatory"
+    
+    # Activity 4: VAL creates Software Component Design Validation Report (SIL 3-4 independence)
+    # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
+    - agent: "val"
+      task_description: "Create Software Component Design Validation Report documenting independent validation of operational suitability for all Phase 4 deliverables. For SIL 3-4, VMGR performs this activity."
+      owner: "val"
+      deliverables:
+        - path: "docs/reports/Software-Component-Design-Validation-Report.md"
+          doc_id: "DOC-COMPVAL-2026-001"
+          doc_type: "Software-Component-Design-Validation-Report"
+          qua_required: true        # VAL reports require QUA template review
+      dependencies: [2, 3]        # VAL depends on VER report and QUA template review
+    
+    # Activity 5: QUA reviews Validation Report for template compliance (MANDATORY SIL 3-4)
+    - agent: "qua"
+      task_description: "Review Software Component Design Validation Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
+      owner: "qua"
+      deliverables:
+        - path: "docs/reports/QA-Template-Review-Component-Design-Validation.md"
+          doc_id: "DOC-QAREV-2026-006"
+          doc_type: "QA-Template-Compliance-Review"
+          qua_required: false      # QUA self-review not required
+      dependencies: [4]            # QUA depends on VAL report (index 4)
+      sil_requirements:
+        sil_0: "optional"
+        sil_1: "recommended"
+        sil_2: "recommended"
+        sil_3: "mandatory"
+        sil_4: "mandatory"
+  
+  # Phase completion criteria (EN 50128 Section 7.4)
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true
+    coverage_requirements:
+      architecture_to_components: 100   # 100% architectural modules traced to component designs
+    custom_checks:
+      - "All 6 EN 50128 documents delivered (Software Component Design Specification, Software Component Test Specification, Component Design Verification Report, QA Template Review of Verification Report, Component Design Validation Report, QA Template Review of Validation Report)"
+      - "All components designed with clear responsibilities and boundaries"
+      - "All algorithms specified with pseudocode or flowcharts"
+      - "All data structures defined with fixed sizes (static allocation)"
+      - "Cyclomatic complexity ≤10 for SIL 3-4 (≤15 for SIL 2)"
+      - "Component test specifications cover 100% of components"
+      - "Component test specifications cover all functions and error paths"
+      - "No recursion specified (HR for SIL 3-4)"
+      - "No dynamic memory allocation (M for SIL 2+)"
+      - "QUA template compliance reviews approved (SIL 3-4 MANDATORY)"
+      - "VMGR V&V approval obtained (SIL 3-4 MANDATORY)"
+  
+  # Verification requirements (EN 50128 Section 7.4.4, Annex C #17)
+  verification:
+    required: true
+    verifier: "ver"
+    criteria:
+      - "Software Component Design Specification template compliance (DOC-ID, Document Control, Approvals)"
+      - "All architectural modules decomposed into components"
+      - "Component designs satisfy architectural constraints"
+      - "All algorithms are bounded (execution time, memory)"
+      - "All data structures use fixed-width types (uint8_t, uint16_t, etc.)"
+      - "Static memory allocation only (M for SIL 2+)"
+      - "No recursion (HR for SIL 3-4)"
+      - "Cyclomatic complexity within limits (≤10 SIL 3-4, ≤15 SIL 2)"
+      - "Software Component Test Specification template compliance"
+      - "Component tests cover all components (100%)"
+      - "Component tests cover all functions"
+      - "Component tests cover all error handling paths"
+      - "Component tests include boundary value analysis"
+      - "Component tests define coverage criteria (statement, branch, condition)"
+      - "Traceability: Architecture → Component Design → Component Tests"
+  
+  # Validation requirements (EN 50128 Section 7.4, independent validation SIL 3-4)
+  validation:
+    required_sil: [3, 4]
+    validator: "val"
+    criteria:
+      - "Component designs are implementable in C with MISRA C:2012"
+      - "Component designs are testable at unit level"
+      - "Component test specifications are executable with Unity framework"
+      - "Algorithms are verifiable and bounded"
+      - "Component test coverage criteria are achievable (100% statement, branch, condition for SIL 3-4)"
+      - "Component designs support defensive programming patterns"
+  
+  # Gate check configuration
+  gate_check:
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [3, 4]
+    criteria:
+      - "All deliverables QUA accepted"
+      - "Verification report approved"
+      - "Validation report approved (SIL 3-4 only)"
+      - "Traceability complete (Architecture → Components → Tests)"
+      - "No open critical or high defects"
+      - "Complexity limits satisfied"
+      - "Static allocation enforced"

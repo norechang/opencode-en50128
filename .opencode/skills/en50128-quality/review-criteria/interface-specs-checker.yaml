@@ -1,0 +1,324 @@
+document_type: "Software-Interface-Specifications"
+checker_version: "1.0"
+description: "Quality checks for Software Interface Specifications (PLURAL per EN 50128 Section 7.3.3 item 3) per EN 50128 Section 7.3.4.18-19 and Annex C #11"
+
+# Template compliance checks (EN 50128 document structure)
+template_checks:
+  # Document ID format
+  - id: "IFACE-T001"
+    name: "Document ID Format"
+    description: "Verify Document ID follows DOC-INTERFACES-YYYY-NNN format"
+    severity: "error"
+    rule_type: "regex"
+    rule_params:
+      pattern: "DOC-INTERFACES-[0-9]{4}-[0-9]{3}"
+      search_section: "STANDARD HEADER"
+    expected: "Document ID matches DOC-INTERFACES-YYYY-NNN (e.g., DOC-INTERFACES-2026-001)"
+    failure_message: "Document ID does not match required format DOC-INTERFACES-YYYY-NNN"
+    fix_suggestion: "Update Document ID to format DOC-INTERFACES-YYYY-NNN (e.g., DOC-INTERFACES-2026-001)"
+  
+  # Standard Header table
+  - id: "IFACE-T002"
+    name: "Standard Header Table"
+    description: "Verify Standard Header table exists with required fields"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "STANDARD HEADER"
+      required_columns: ["Field", "Value"]
+      required_fields:
+        - "Document ID"
+        - "Version"
+        - "Date"
+        - "Project"
+        - "SIL Level"
+        - "Author"
+        - "Status"
+    expected: "Standard Header table with all required fields"
+    failure_message: "Standard Header table missing or incomplete"
+    fix_suggestion: "Add Standard Header table with fields: Document ID, Version, Date, Project, SIL Level, Author, Status"
+  
+  # Document Control table
+  - id: "IFACE-T003"
+    name: "Document Control Table"
+    description: "Verify Document Control table exists"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "DOCUMENT CONTROL"
+      required_columns: ["Version", "Date", "Author", "Changes", "Approved By"]
+    expected: "Document Control table with version history"
+    failure_message: "Document Control table missing or incomplete"
+    fix_suggestion: "Add Document Control table with columns: Version, Date, Author, Changes, Approved By"
+  
+  # Approvals table (SIL 3+ requires Designer + Independent Reviewer + QA + PM)
+  - id: "IFACE-T004"
+    name: "Approvals Table"
+    description: "Verify Approvals table exists with required roles"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "APPROVALS"
+      required_columns: ["Role", "Name", "Signature", "Date"]
+      required_roles_sil_3:
+        - "Author (Designer)"
+        - "Independent Reviewer"
+        - "QA Manager"
+        - "Project Manager"
+      minimum_sil: 3
+    expected: "Approvals table with Author, Reviewer, QA, PM"
+    failure_message: "Approvals table missing or incomplete (required SIL 3+)"
+    fix_suggestion: "Add Approvals table with roles: Author (Designer), Independent Reviewer, QA Manager, Project Manager"
+  
+  # Required sections per EN 50128 7.3.4.19
+  - id: "IFACE-T005"
+    name: "Required Sections"
+    description: "Verify all required sections exist per EN 50128 7.3.4.19"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      required_sections:
+        - "1. INTRODUCTION"
+        - "2. INTERNAL INTERFACES"
+        - "3. EXTERNAL INTERFACES"
+        - "4. INTERFACE SPECIFICATIONS"
+        - "5. DATA TYPES AND STRUCTURES"
+        - "6. ERROR HANDLING"
+        - "7. TIMING CONSTRAINTS"
+        - "8. MEMORY ALLOCATION"
+        - "9. SYNCHRONIZATION MECHANISMS"
+        - "10. REQUIREMENTS TRACEABILITY"
+        - "11. EN 50128 COMPLIANCE"
+    expected: "All required sections present"
+    failure_message: "One or more required sections missing"
+    fix_suggestion: "Add missing sections per EN 50128 Section 7.3.4.19 interface requirements"
+
+# Quality standards checks (EN 50128 7.3.4.19 interface description requirements)
+quality_checks:
+  # Interface ID format
+  - id: "IFACE-Q001"
+    name: "Interface ID Format"
+    description: "All interfaces must have IDs in format IF-XXX"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "IF-"
+      minimum: 1
+      context: "interface definitions"
+    expected: "At least 1 interface defined with ID format IF-XXX"
+    failure_message: "No interfaces defined with IF-XXX ID format"
+    fix_suggestion: "Define interfaces with ID format IF-XXX (e.g., IF-001, IF-002)"
+  
+  # Pre-conditions specified (EN 50128 7.3.4.19 item a)
+  - id: "IFACE-Q002"
+    name: "Pre-conditions Specified"
+    description: "All interfaces must specify pre-conditions"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "Pre-condition"
+      minimum: 1
+      context: "interface specifications"
+    expected: "Pre-conditions specified for interfaces"
+    failure_message: "No pre-conditions found in Software Interface Specifications"
+    fix_suggestion: "Add Pre-condition field to each interface specification (EN 50128 7.3.4.19 item a)"
+  
+  # Post-conditions specified (EN 50128 7.3.4.19 item a)
+  - id: "IFACE-Q003"
+    name: "Post-conditions Specified"
+    description: "All interfaces must specify post-conditions"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "Post-condition"
+      minimum: 1
+      context: "interface specifications"
+    expected: "Post-conditions specified for interfaces"
+    failure_message: "No post-conditions found in Software Interface Specifications"
+    fix_suggestion: "Add Post-condition field to each interface specification (EN 50128 7.3.4.19 item a)"
+  
+  # Boundary values specified (EN 50128 7.3.4.19 item b)
+  - id: "IFACE-Q004"
+    name: "Boundary Values Specified"
+    description: "All interfaces must specify boundary values and behaviors"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "Boundary"
+      minimum: 1
+      context: "interface specifications"
+    expected: "Boundary values and behaviors specified for interfaces"
+    failure_message: "No boundary values found in Software Interface Specifications"
+    fix_suggestion: "Add boundary values and behaviors for each interface (EN 50128 7.3.4.19 item b)"
+  
+  # Time constraints specified (EN 50128 7.3.4.19 item c)
+  - id: "IFACE-Q005"
+    name: "Time Constraints Specified"
+    description: "All interfaces must specify time constraints (execution time, response time)"
+    severity: "warning"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "time"
+      minimum: 1
+      context: "timing constraints"
+    expected: "Time constraints specified for interfaces"
+    failure_message: "No time constraints found in Software Interface Specifications"
+    fix_suggestion: "Add time constraints (execution time, response time, deadlines) per EN 50128 7.3.4.19 item c"
+  
+  # Memory allocation specified (EN 50128 7.3.4.19 item d)
+  - id: "IFACE-Q006"
+    name: "Memory Allocation Specified"
+    description: "Memory allocation for data buffers must be specified"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "buffer"
+      minimum: 0
+      context: "memory allocation"
+    expected: "Memory allocation for buffers specified (if applicable)"
+    failure_message: "Memory allocation not addressed"
+    fix_suggestion: "Specify memory allocation for data buffers (EN 50128 7.3.4.19 item d) - use static allocation for SIL 2+"
+  
+  # Synchronization mechanisms specified (EN 50128 7.3.4.19 item e)
+  - id: "IFACE-Q007"
+    name: "Synchronization Mechanisms Specified"
+    description: "Synchronization mechanisms must be specified for concurrent access"
+    severity: "warning"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "synchronization"
+      minimum: 0
+      context: "synchronization mechanisms"
+    expected: "Synchronization mechanisms specified (if applicable)"
+    failure_message: "Synchronization mechanisms not addressed"
+    fix_suggestion: "Specify synchronization mechanisms if interfaces are accessed concurrently (EN 50128 7.3.4.19 item e)"
+  
+  # Error codes defined
+  - id: "IFACE-Q008"
+    name: "Error Codes Defined"
+    description: "All interfaces must define error return codes"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "Error Code"
+      minimum: 1
+      context: "interface specifications"
+    expected: "Error codes defined for interfaces"
+    failure_message: "No error codes found in Software Interface Specifications"
+    fix_suggestion: "Define error codes for each interface (e.g., SUCCESS, ERROR_INVALID_INPUT, ERROR_TIMEOUT)"
+  
+  # Fixed-width types used (MISRA C compliance)
+  - id: "IFACE-Q009"
+    name: "Fixed-Width Types Used"
+    description: "All data types must use fixed-width types (uint8_t, uint16_t, etc.)"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "uint"
+      minimum: 1
+      context: "data types"
+    expected: "Fixed-width types used (uint8_t, uint16_t, uint32_t, int8_t, etc.)"
+    failure_message: "No fixed-width types found - using native types (int, char) violates MISRA C"
+    fix_suggestion: "Use fixed-width types (uint8_t, uint16_t, uint32_t, int8_t, etc.) per MISRA C:2012"
+  
+  # Range constraints specified
+  - id: "IFACE-Q010"
+    name: "Range Constraints Specified"
+    description: "All parameters must specify valid range constraints"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "Range"
+      minimum: 1
+      context: "parameter specifications"
+    expected: "Range constraints specified for parameters"
+    failure_message: "No range constraints found in Software Interface Specifications"
+    fix_suggestion: "Add range constraints for each parameter (e.g., Range: 0-255, 1000-5000)"
+  
+  # Requirements traceability present
+  - id: "IFACE-Q011"
+    name: "Requirements Traceability"
+    description: "Interfaces must be traced to requirements"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "REQ-"
+      minimum: 1
+      context: "traceability"
+    expected: "Interfaces traced to requirements (REQ-XXX)"
+    failure_message: "No requirements traceability found"
+    fix_suggestion: "Add traceability linking each interface to requirements (e.g., REQ-003, REQ-015)"
+
+# EN 50128 compliance checks
+en50128_checks:
+  # Section 7.3.4.18 compliance
+  - id: "IFACE-EN001"
+    name: "Interface Boundary Specification"
+    description: "Interfaces between components and at software boundary must be specified (EN 50128 7.3.4.18)"
+    severity: "error"
+    rule_type: "section_content"
+    rule_params:
+      section: "2. INTERNAL INTERFACES"
+      minimum_words: 50
+    expected: "Internal interfaces (component-to-component) specified"
+    failure_message: "Internal interfaces section too short or missing"
+    fix_suggestion: "Specify all interfaces between software components per EN 50128 7.3.4.18"
+  
+  - id: "IFACE-EN002"
+    name: "External Interface Specification"
+    description: "External interfaces at software boundary must be specified (EN 50128 7.3.4.18)"
+    severity: "error"
+    rule_type: "section_content"
+    rule_params:
+      section: "3. EXTERNAL INTERFACES"
+      minimum_words: 50
+    expected: "External interfaces (software boundary) specified"
+    failure_message: "External interfaces section too short or missing"
+    fix_suggestion: "Specify all interfaces at the software boundary per EN 50128 7.3.4.18"
+  
+  # Section 7.3.4.19 compliance (all 5 items)
+  - id: "IFACE-EN003"
+    name: "Complete Interface Descriptions"
+    description: "All interfaces must address all 5 items from EN 50128 7.3.4.19"
+    severity: "error"
+    rule_type: "checklist"
+    rule_params:
+      required_items:
+        - "Pre-conditions and post-conditions"
+        - "Boundary values and behaviors"
+        - "Time constraints"
+        - "Memory allocation for buffers"
+        - "Synchronization mechanisms"
+    expected: "All 5 EN 50128 7.3.4.19 items addressed for each interface"
+    failure_message: "Interface descriptions incomplete - missing EN 50128 7.3.4.19 items"
+    fix_suggestion: "Ensure each interface addresses all 5 items: (a) pre/post conditions, (b) boundary values, (c) time constraints, (d) memory allocation, (e) synchronization"
+
+# SIL-specific checks
+sil_checks:
+  # SIL 2+ requires static allocation
+  - id: "IFACE-SIL001"
+    name: "Static Memory Allocation"
+    description: "All buffers must use static allocation (SIL 2+ mandatory)"
+    severity: "error"
+    minimum_sil: 2
+    rule_type: "negative_keyword"
+    rule_params:
+      forbidden_keywords: ["malloc", "calloc", "realloc", "free"]
+    expected: "No dynamic memory allocation (malloc/free) - static allocation only"
+    failure_message: "Dynamic memory allocation found (malloc/calloc/realloc/free) - forbidden for SIL 2+"
+    fix_suggestion: "Use static allocation for all buffers (EN 50128 Table A.3 - static allocation mandatory SIL 2+)"
+  
+  # SIL 3-4 requires detailed timing analysis
+  - id: "IFACE-SIL002"
+    name: "Detailed Timing Analysis"
+    description: "Timing constraints must include worst-case execution time (SIL 3-4 highly recommended)"
+    severity: "warning"
+    minimum_sil: 3
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "WCET"
+      minimum: 1
+      context: "timing analysis"
+    expected: "Worst-case execution time (WCET) specified for interfaces"
+    failure_message: "No WCET analysis found - highly recommended for SIL 3-4"
+    fix_suggestion: "Add worst-case execution time (WCET) analysis for all time-critical interfaces"

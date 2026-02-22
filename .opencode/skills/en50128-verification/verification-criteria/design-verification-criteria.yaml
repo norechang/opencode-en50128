@@ -1,0 +1,631 @@
+# Design Phase Verification Criteria
+# EN 50128 Section 7.3 - Software Architecture and Design
+# Table A.3 - Software Architecture and Design Techniques/Measures
+# Table A.4 - Software Design and Implementation Techniques/Measures
+
+metadata:
+  phase: "Architecture & Design"
+  phase_id: "phase-3-architecture-design"
+  en50128_section: "7.3"
+  en50128_tables: ["A.3", "A.4"]
+  description: "Verification criteria for Software Architecture Specification (SAS) and Software Design Specification (SDS)"
+  mandatory_deliverables:
+    - "Software Architecture Specification (SAS)"
+    - "Software Design Specification (SDS)"
+    - "Interface Specifications"
+    - "Design Traceability Matrix (RTM update)"
+
+verification_checks:
+  # ============================================================================
+  # 1. Software Architecture Specification (SAS) Verification
+  # ============================================================================
+  
+  - check_id: "VER-DES-001"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "architecture_quality"
+    description: "Verify architectural decomposition into modules with clear responsibilities"
+    en50128_reference: "Table A.3 - Modular Approach (M for SIL 2+)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "mandatory"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review SAS section "2. Architectural Decomposition"
+      - Verify each module has single, well-defined responsibility
+      - Verify module interfaces are fully specified
+      - Verify module dependencies are minimized and documented
+      - Verify no circular dependencies exist
+    pass_criteria:
+      - "All modules have clear, single responsibilities"
+      - "Module interfaces fully defined with data types, parameters, return values"
+      - "Dependency graph is acyclic"
+      - "Module cohesion is high, coupling is low"
+    fail_criteria:
+      - "Modules with multiple, unrelated responsibilities"
+      - "Undefined or ambiguous interfaces"
+      - "Circular dependencies detected"
+      - "High coupling between unrelated modules"
+
+  - check_id: "VER-DES-002"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "complexity"
+    description: "Verify architectural complexity is within SIL-appropriate limits"
+    en50128_reference: "Table A.3 - Structured Methodology (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Count number of modules in architecture
+      - Count inter-module dependencies
+      - Calculate architectural complexity metrics (fan-in, fan-out)
+      - Verify against SIL-specific limits
+    pass_criteria:
+      - "SIL 0-1: No specific limits"
+      - "SIL 2: ≤30 modules per subsystem, fan-out ≤7"
+      - "SIL 3-4: ≤20 modules per subsystem, fan-out ≤5"
+      - "Module dependency depth ≤5 levels"
+    fail_criteria:
+      - "Exceeds module count limits for SIL level"
+      - "Excessive fan-out (modules calling too many others)"
+      - "Deep dependency chains (>5 levels)"
+
+  - check_id: "VER-DES-003"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "c_constraints"
+    description: "Verify architecture enforces static memory allocation (no dynamic allocation for SIL 2+)"
+    en50128_reference: "Table A.4 - Design and Coding Standards (M for SIL 3-4), MISRA C:2012"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "not_applicable"
+      sil_2: "mandatory"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review SAS section "3. Memory Management Strategy"
+      - Verify all data structures use static allocation
+      - Verify no malloc/calloc/realloc/free in architecture
+      - Verify all array sizes are compile-time constants
+      - Verify all buffers have defined maximum sizes
+    pass_criteria:
+      - "SAS explicitly states 'Static memory allocation only'"
+      - "All data structures defined with fixed sizes"
+      - "Memory map provided showing all static allocations"
+      - "No dynamic memory allocation functions in architecture"
+    fail_criteria:
+      - "Dynamic memory allocation mentioned or implied"
+      - "Unbounded data structures (e.g., dynamic lists)"
+      - "malloc/free or similar functions in architecture"
+
+  - check_id: "VER-DES-004"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "c_constraints"
+    description: "Verify architecture prohibits recursion (HR for SIL 3-4)"
+    en50128_reference: "Table A.4 - Structured Programming (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "not_applicable"
+      sil_2: "recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    verification_method: |
+      - Review SAS architectural constraints
+      - Verify explicit statement prohibiting recursion
+      - Review call graphs for potential recursive patterns
+      - Check for iterative alternatives to recursive algorithms
+    pass_criteria:
+      - "SAS explicitly states 'No recursion allowed'"
+      - "Call graphs show no recursive call paths"
+      - "Recursive algorithms replaced with iterative equivalents"
+    fail_criteria:
+      - "Recursion allowed or not addressed"
+      - "Recursive call patterns in architecture"
+      - "No iterative alternatives provided"
+
+  - check_id: "VER-DES-005"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "defensive_programming"
+    description: "Verify architecture incorporates defensive programming patterns"
+    en50128_reference: "Table A.3 - Defensive Programming (HR for SIL 2+)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review SAS error handling strategy
+      - Verify all inputs validated at module boundaries
+      - Verify all outputs checked before use
+      - Verify error propagation mechanism defined
+      - Check for redundancy and fault detection mechanisms
+    pass_criteria:
+      - "All module inputs validated (NULL checks, range checks)"
+      - "All return values checked and errors propagated"
+      - "Error handling strategy clearly documented"
+      - "Redundancy mechanisms defined (e.g., watchdog, CRC)"
+    fail_criteria:
+      - "No input validation specified"
+      - "Return values not checked"
+      - "No error handling strategy"
+      - "No fault detection mechanisms"
+
+  - check_id: "VER-DES-006"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "safety"
+    description: "Verify safety-critical functions identified and isolated in architecture"
+    en50128_reference: "Table A.3 - Fault Detection and Diagnosis (HR for SIL 3-4)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review SAS section "4. Safety Architecture"
+      - Verify safety-critical functions clearly identified
+      - Verify safety-critical modules isolated from non-critical
+      - Verify safety functions have appropriate redundancy
+      - Check for safety monitoring and fault detection
+    pass_criteria:
+      - "All safety-critical functions identified with SIL levels"
+      - "Safety-critical modules separated from non-critical"
+      - "Redundancy mechanisms defined (e.g., dual-channel, voting)"
+      - "Fault detection and safe state transitions specified"
+    fail_criteria:
+      - "Safety-critical functions not identified"
+      - "No separation between safety and non-safety modules"
+      - "No redundancy or fault detection mechanisms"
+
+  # ============================================================================
+  # 2. Software Design Specification (SDS) Verification
+  # ============================================================================
+
+  - check_id: "VER-DES-007"
+    deliverable: "Software Design Specification (SDS)"
+    category: "design_quality"
+    description: "Verify all modules have detailed design with algorithms, data structures, and interfaces"
+    en50128_reference: "Table A.4 - Structured Methodology (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review SDS for each module in SAS
+      - Verify algorithms described with pseudocode or flowcharts
+      - Verify data structures defined with C types
+      - Verify function signatures fully specified
+      - Check for design rationale and alternatives considered
+    pass_criteria:
+      - "Every module in SAS has corresponding SDS section"
+      - "Algorithms described in sufficient detail for implementation"
+      - "Data structures use fixed-width C types (uint8_t, uint16_t, etc.)"
+      - "Function prototypes match C syntax"
+    fail_criteria:
+      - "Missing SDS sections for some modules"
+      - "Algorithms too vague or ambiguous"
+      - "Data structures use non-standard types (int, long, etc.)"
+      - "Function signatures incomplete or ambiguous"
+
+  - check_id: "VER-DES-008"
+    deliverable: "Software Design Specification (SDS)"
+    category: "complexity"
+    description: "Verify function-level cyclomatic complexity within SIL limits"
+    en50128_reference: "Table A.4 - Analysable Programs (M for SIL 3-4), MISRA C:2012"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Calculate cyclomatic complexity for each function in SDS
+      - Use pseudocode or flowcharts to estimate complexity
+      - Verify complexity within SIL-specific limits
+      - Flag functions exceeding limits for refactoring
+    pass_criteria:
+      - "SIL 0-1: Cyclomatic complexity ≤20"
+      - "SIL 2: Cyclomatic complexity ≤15"
+      - "SIL 3-4: Cyclomatic complexity ≤10"
+      - "All functions meet their SIL-specific limit"
+    fail_criteria:
+      - "Any function exceeds SIL-specific complexity limit"
+      - "No complexity analysis performed"
+
+  - check_id: "VER-DES-009"
+    deliverable: "Software Design Specification (SDS)"
+    category: "c_constraints"
+    description: "Verify all data types use fixed-width types from stdint.h"
+    en50128_reference: "MISRA C:2012 - Portable Data Types"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "mandatory"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "major"
+    verification_method: |
+      - Scan SDS for all variable and parameter declarations
+      - Check for use of int, long, short, unsigned int, etc.
+      - Verify fixed-width types used: uint8_t, uint16_t, uint32_t, int8_t, etc.
+      - Flag any non-fixed-width types
+    pass_criteria:
+      - "All integer types use stdint.h fixed-width types"
+      - "No use of int, long, short, unsigned, etc."
+      - "Floating-point use justified and documented (if any)"
+    fail_criteria:
+      - "Use of int, long, short, unsigned int"
+      - "Undefined-width types present"
+      - "Unjustified use of floating-point types"
+
+  - check_id: "VER-DES-010"
+    deliverable: "Software Design Specification (SDS)"
+    category: "c_constraints"
+    description: "Verify bounded execution time for all functions"
+    en50128_reference: "Table A.4 - Analysable Programs (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review SDS for worst-case execution time (WCET) analysis
+      - Verify all loops have bounded iteration counts
+      - Verify no unbounded while loops
+      - Verify no recursion (checked in VER-DES-004)
+      - Check for timing constraints documented
+    pass_criteria:
+      - "All loops have maximum iteration count specified"
+      - "No unbounded while(1) loops without timeout"
+      - "WCET estimates provided for time-critical functions"
+      - "Timing requirements traceable to requirements"
+    fail_criteria:
+      - "Unbounded loops present"
+      - "No WCET analysis for time-critical functions"
+      - "Timing requirements not addressed"
+
+  - check_id: "VER-DES-011"
+    deliverable: "Software Design Specification (SDS)"
+    category: "error_handling"
+    description: "Verify comprehensive error handling design"
+    en50128_reference: "Table A.3 - Defensive Programming (HR for SIL 2+)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review SDS error handling strategy
+      - Verify all function return values indicate success/failure
+      - Verify all error conditions identified and handled
+      - Check for error propagation mechanism
+      - Verify safe state handling for critical errors
+    pass_criteria:
+      - "All functions return error codes (error_t, status_t, etc.)"
+      - "All error conditions identified with error codes"
+      - "Error propagation path documented (return codes, global error state)"
+      - "Safe state transitions defined for critical errors"
+    fail_criteria:
+      - "Functions with void return (no error indication)"
+      - "Error conditions not identified"
+      - "No error propagation mechanism"
+      - "No safe state handling"
+
+  # ============================================================================
+  # 3. Interface Specifications Verification
+  # ============================================================================
+
+  - check_id: "VER-DES-012"
+    deliverable: "Interface Specifications"
+    category: "interface_quality"
+    description: "Verify all module interfaces fully defined with data types, constraints, and error handling"
+    en50128_reference: "Table A.3 - Fully Defined Interface (HR for all SILs)"
+    sil_applicability:
+      sil_0: "highly_recommended"
+      sil_1: "highly_recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review Interface Specifications document
+      - Verify all module interfaces documented
+      - Check function prototypes match C syntax
+      - Verify parameter types, ranges, and constraints
+      - Check return value types and error codes
+      - Verify pre-conditions and post-conditions
+    pass_criteria:
+      - "All module interfaces documented with C prototypes"
+      - "All parameters have types, valid ranges, and constraints"
+      - "All return values and error codes documented"
+      - "Pre-conditions and post-conditions specified"
+    fail_criteria:
+      - "Missing interface specifications"
+      - "Ambiguous or incomplete parameter definitions"
+      - "Undefined return values or error codes"
+      - "Missing pre/post-conditions"
+
+  - check_id: "VER-DES-013"
+    deliverable: "Interface Specifications"
+    category: "c_constraints"
+    description: "Verify interface data types are compatible with target platform"
+    en50128_reference: "MISRA C:2012 - Portable Code"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "mandatory"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "major"
+    verification_method: |
+      - Review all interface data types
+      - Verify fixed-width types used (uint8_t, uint16_t, etc.)
+      - Check pointer types are explicit (e.g., uint8_t*, not void*)
+      - Verify no platform-dependent types (size_t, ptrdiff_t should be justified)
+      - Check alignment requirements documented
+    pass_criteria:
+      - "All data types use fixed-width stdint.h types"
+      - "Pointer types are explicit (not void*)"
+      - "Platform dependencies documented and justified"
+      - "Alignment requirements specified where relevant"
+    fail_criteria:
+      - "Use of int, long, short in interfaces"
+      - "Unexplained void* pointers"
+      - "Undocumented platform dependencies"
+
+  - check_id: "VER-DES-014"
+    deliverable: "Interface Specifications"
+    category: "defensive_programming"
+    description: "Verify interface validation requirements specified"
+    en50128_reference: "Table A.3 - Defensive Programming (HR for SIL 2+)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review interface validation requirements
+      - Verify NULL pointer checks specified for all pointer parameters
+      - Verify range checks specified for all numeric parameters
+      - Verify buffer size validation for all array parameters
+      - Check for return value validation requirements
+    pass_criteria:
+      - "All pointer parameters require NULL checks"
+      - "All numeric parameters have valid range specifications"
+      - "All array parameters have size validation requirements"
+      - "All return values require checking by caller"
+    fail_criteria:
+      - "No validation requirements specified"
+      - "Missing NULL checks for pointers"
+      - "Missing range checks for numeric parameters"
+      - "Missing size validation for arrays"
+
+  # ============================================================================
+  # 4. Design Traceability Verification
+  # ============================================================================
+
+  - check_id: "VER-DES-015"
+    deliverable: "Design Traceability Matrix (RTM update)"
+    category: "traceability"
+    description: "Verify all requirements traced to architectural components"
+    en50128_reference: "Table A.5 - Traceability (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Parse RTM for Requirements → Architecture mappings
+      - Verify every requirement has at least one architecture component
+      - Verify every architecture component traces to at least one requirement
+      - Check for orphaned requirements or components
+      - Verify traceability is bidirectional
+    pass_criteria:
+      - "All requirements have at least one architecture component"
+      - "All architecture components trace to at least one requirement"
+      - "No orphaned requirements or components"
+      - "Bidirectional traceability maintained"
+    fail_criteria:
+      - "Requirements without architecture components"
+      - "Architecture components without requirement traceability"
+      - "Orphaned or untraceable items"
+
+  - check_id: "VER-DES-016"
+    deliverable: "Design Traceability Matrix (RTM update)"
+    category: "traceability"
+    description: "Verify safety requirements traced to safety-critical architecture components"
+    en50128_reference: "Table A.3 - Safety Requirements (HR for SIL 2+)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Parse RTM for safety requirements (SAF-*)
+      - Verify all safety requirements traced to architecture
+      - Verify traced architecture components marked as safety-critical
+      - Check for redundancy mechanisms for safety requirements
+      - Verify fault detection for safety functions
+    pass_criteria:
+      - "All safety requirements traced to architecture components"
+      - "Traced architecture components marked safety-critical with SIL"
+      - "Redundancy/fault detection specified for safety functions"
+    fail_criteria:
+      - "Safety requirements without architecture traceability"
+      - "Safety requirements traced to non-critical components"
+      - "No redundancy or fault detection for safety functions"
+
+  - check_id: "VER-DES-017"
+    deliverable: "Design Traceability Matrix (RTM update)"
+    category: "traceability"
+    description: "Verify architecture components traced to detailed design"
+    en50128_reference: "Table A.5 - Traceability (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Parse RTM for Architecture → Design mappings
+      - Verify every architecture component has detailed design
+      - Verify every SDS module traces to architecture component
+      - Check for orphaned architecture or design elements
+      - Verify traceability is bidirectional
+    pass_criteria:
+      - "All architecture components have detailed design"
+      - "All SDS modules trace to architecture components"
+      - "No orphaned architecture or design elements"
+      - "Bidirectional traceability maintained"
+    fail_criteria:
+      - "Architecture components without detailed design"
+      - "SDS modules without architecture traceability"
+      - "Orphaned or untraceable design elements"
+
+  # ============================================================================
+  # 5. EN 50128 Technique Application Verification
+  # ============================================================================
+
+  - check_id: "VER-DES-018"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "standards_compliance"
+    description: "Verify mandatory EN 50128 Table A.3 techniques applied for SIL level"
+    en50128_reference: "Table A.3 - Software Architecture and Design Techniques/Measures"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "mandatory"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review SAS section "6. EN 50128 Technique Application"
+      - Verify mandatory techniques applied:
+        - SIL 2+: Modular Approach (M)
+        - SIL 3-4: Structured Methodology (M)
+      - Verify highly recommended techniques applied or justified:
+        - SIL 2+: Defensive Programming (HR)
+        - SIL 3-4: Fault Detection and Diagnosis (HR)
+      - Check for technique application evidence
+    pass_criteria:
+      - "All mandatory techniques applied with evidence"
+      - "HR techniques applied OR rationale for not applying provided"
+      - "Technique application documented in SAS"
+    fail_criteria:
+      - "Mandatory techniques not applied"
+      - "HR techniques not applied without rationale"
+      - "No evidence of technique application"
+
+  - check_id: "VER-DES-019"
+    deliverable: "Software Design Specification (SDS)"
+    category: "standards_compliance"
+    description: "Verify mandatory EN 50128 Table A.4 techniques applied for SIL level"
+    en50128_reference: "Table A.4 - Software Design and Implementation Techniques/Measures"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "mandatory"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review SDS section "5. EN 50128 Technique Application"
+      - Verify mandatory techniques applied:
+        - SIL 2+: Modular Approach (M)
+        - SIL 3-4: Structured Methodology (M)
+        - SIL 3-4: Design and Coding Standards (M)
+        - SIL 3-4: Analysable Programs (M)
+        - SIL 3-4: Structured Programming (M)
+      - Verify highly recommended techniques applied or justified:
+        - SIL 2+: Strongly Typed Language (HR) - C is weakly typed, justification required
+      - Check for technique application evidence
+    pass_criteria:
+      - "All mandatory techniques applied with evidence"
+      - "HR techniques applied OR rationale for not applying provided"
+      - "C language weaknesses mitigated (e.g., MISRA C, fixed-width types)"
+      - "Technique application documented in SDS"
+    fail_criteria:
+      - "Mandatory techniques not applied"
+      - "HR techniques not applied without rationale"
+      - "No mitigation for C language weaknesses"
+      - "No evidence of technique application"
+
+  # ============================================================================
+  # 6. Design Review and Approval Verification
+  # ============================================================================
+
+  - check_id: "VER-DES-020"
+    deliverable: "All Design Documents (SAS, SDS, Interfaces)"
+    category: "process_compliance"
+    description: "Verify design review performed and documented"
+    en50128_reference: "Table A.9 - Design and Code Inspection (HR for SIL 2+)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    verification_method: |
+      - Check for Design Review Report in deliverables
+      - Verify review performed by independent reviewer (SIL 3-4)
+      - Check review covered all design documents
+      - Verify review findings addressed
+      - Check for approval signatures
+    pass_criteria:
+      - "Design Review Report present"
+      - "Independent reviewer for SIL 3-4"
+      - "All design documents reviewed"
+      - "Review findings addressed or waived with rationale"
+      - "Approvals present from Designer and Reviewer"
+    fail_criteria:
+      - "No Design Review Report"
+      - "Reviewer not independent (SIL 3-4)"
+      - "Incomplete review coverage"
+      - "Review findings not addressed"
+      - "Missing approvals"

@@ -1,0 +1,365 @@
+phase: "requirements"
+phase_id: 2
+description: "Verification criteria for Requirements Phase deliverables"
+sil_level: 3  # Target SIL level (0-4)
+
+# EN 50128 Table A.5 verification techniques applied
+verification_techniques:
+  - name: "Traceability"
+    reference: "EN 50128 Table A.5 Technique 7"
+    requirement: "M (Mandatory for SIL 3-4)"
+  - name: "Static Analysis"
+    reference: "EN 50128 Table A.5 Technique 3"
+    requirement: "M (Mandatory for SIL 3-4)"
+  - name: "Metrics"
+    reference: "EN 50128 Table A.5 Technique 5"
+    requirement: "HR (Highly Recommended for SIL 3-4)"
+
+# Deliverables to verify in this phase
+deliverables:
+  
+  # ========================================
+  # Software Requirements Specification (SRS)
+  # ========================================
+  - name: "Software Requirements Specification (SRS)"
+    file_pattern: "docs/SRS.md"
+    owner: "REQ"
+    description: "Complete software requirements with traceability to system requirements"
+    
+    verification_checks:
+      
+      - id: "VER-SRS-001"
+        category: "requirements_quality"
+        severity: "major"
+        description: "All requirements unambiguous"
+        criteria: "No undefined terms, no ambiguous language (shall/should/may used correctly)"
+        verification_method: "automated"  # AI-assisted natural language analysis
+        automated_check:
+          type: "keyword_compliance"
+          pattern: "SHALL|SHOULD|MAY"
+          must_have_one: true
+          check_per_requirement: true
+        pass_criteria: "All requirements use SHALL/SHOULD/MAY correctly per RFC 2119"
+        reference: "EN 50128 Section 7.2.2.1"
+        fix_suggestion: "Review requirement statement for ambiguous terms. Use SHALL for mandatory, SHOULD for recommended, MAY for optional."
+        
+      - id: "VER-SRS-002"
+        category: "requirements_quality"
+        severity: "major"
+        description: "All requirements testable"
+        criteria: "Each requirement has acceptance criteria or test case mapping in RTM"
+        verification_method: "automated"
+        automated_check:
+          type: "traceability_check"
+          source: "SRS requirements"
+          target: "RTM test case mappings"
+          coverage_required: 100  # percent
+        pass_criteria: "100% requirements mapped to test cases in RTM"
+        reference: "EN 50128 Section 7.2.2.3"
+        fix_suggestion: "Add test case mapping in RTM for unmapped requirements. Ensure each requirement has at least one test case."
+        
+      - id: "VER-SRS-003"
+        category: "sil_assignment"
+        severity: "critical"
+        description: "SIL levels assigned to all requirements"
+        criteria: "Every requirement has SIL level (0-4) based on hazard analysis"
+        verification_method: "automated"
+        automated_check:
+          type: "field_presence"
+          field_name: "SIL"
+          required_for: "all_requirements"
+          valid_values: ["0", "1", "2", "3", "4"]
+        pass_criteria: "100% requirements have SIL level assignment"
+        reference: "EN 50128 Section 4.2-4.3, Section 7.2.4"
+        fix_suggestion: "Assign SIL level (0-4) based on hazard analysis. Reference Hazard-Log.md for hazard-to-requirement mapping."
+        
+      - id: "VER-SRS-004"
+        category: "c_constraints"
+        severity: "major"
+        description: "C language constraints considered"
+        criteria: "Requirements specify fixed-width types (stdint.h), static allocation, bounded execution"
+        verification_method: "automated"
+        automated_check:
+          type: "pattern_check"
+          disallowed_patterns:
+            - pattern: "\\b(char|short|int|long|unsigned)\\b(?!\\s*\\*)"  # Native types (not as pointers)
+              message: "Use fixed-width types from <stdint.h> (uint8_t, uint16_t, uint32_t, int32_t, etc.)"
+            - pattern: "malloc|calloc|realloc|free"
+              message: "Dynamic memory allocation forbidden for SIL 2+ (use static allocation)"
+          required_patterns:
+            - pattern: "static allocation|statically allocated|fixed-size"
+              message: "Specify static memory allocation for SIL 2+"
+        pass_criteria: "Data types use stdint.h, memory allocation specified as static"
+        reference: "MISRA C:2012 Directive 4.6, EN 50128 Table A.4"
+        fix_suggestion: "Replace native C types (int, long) with fixed-width types (int32_t, int64_t). Specify static allocation for buffers/arrays."
+        
+      - id: "VER-SRS-005"
+        category: "traceability"
+        severity: "critical"
+        description: "Traceability complete (System → Software requirements)"
+        criteria: "All system requirements traced to software requirements in RTM"
+        verification_method: "automated"
+        automated_check:
+          type: "traceability_matrix"
+          matrix_file: "docs/RTM.md"
+          forward_trace: true   # System req → Software req
+          backward_trace: true  # Software req → System req
+          coverage_required: 100  # percent
+          allow_orphans: false
+        pass_criteria: "100% forward trace, 100% backward trace, no orphan requirements"
+        reference: "EN 50128 Section 7.2.5, Table A.5 Technique 7 (M for SIL 3-4)"
+        fix_suggestion: "Update RTM to trace all system requirements to software requirements. Justify any orphan software requirements."
+        
+      - id: "VER-SRS-006"
+        category: "safety"
+        severity: "critical"
+        description: "Safety requirements identified and SIL-appropriate"
+        criteria: "All safety requirements from Hazard Log are included in SRS with correct SIL levels"
+        verification_method: "automated"
+        automated_check:
+          type: "cross_reference"
+          source_file: "docs/Hazard-Log.md"
+          source_section: "Safety Requirements"
+          target_file: "docs/SRS.md"
+          target_section: "Safety Requirements"
+          match_field: "requirement_id"
+        pass_criteria: "All safety requirements from Hazard Log present in SRS"
+        reference: "EN 50128 Section 7.2.4.4"
+        fix_suggestion: "Add missing safety requirements from Hazard Log to SRS. Ensure SIL levels match hazard severity."
+        
+      - id: "VER-SRS-007"
+        category: "standards_compliance"
+        severity: "major"
+        description: "EN 50128 Table A.2 techniques documented"
+        criteria: "SRS documents which Table A.2 requirements specification techniques were used"
+        verification_method: "manual"  # Check for technique documentation
+        pass_criteria: "At least one mandatory/highly recommended technique from Table A.2 documented"
+        reference: "EN 50128 Section 4.7-4.9, Table A.2"
+        fix_suggestion: "Document which requirements specification techniques were used (e.g., Structured Methodology, Modelling)."
+  
+  # ========================================
+  # Requirements Traceability Matrix (RTM)
+  # ========================================
+  - name: "Requirements Traceability Matrix (RTM)"
+    file_pattern: "docs/RTM.md"
+    owner: "REQ"
+    description: "Complete traceability from system requirements to software requirements to test cases"
+    
+    verification_checks:
+      
+      - id: "VER-RTM-001"
+        category: "traceability"
+        severity: "critical"
+        description: "RTM structure complete"
+        criteria: "RTM contains: System Req ID → Software Req ID → Test Case ID mappings"
+        verification_method: "automated"
+        automated_check:
+          type: "table_structure"
+          required_columns:
+            - "System Requirement ID"
+            - "Software Requirement ID"
+            - "Test Case ID"
+            - "Verification Status"
+        pass_criteria: "RTM has all required columns"
+        reference: "EN 50128 Section 7.2.5"
+        fix_suggestion: "Add missing columns to RTM table. Ensure proper structure for traceability."
+        
+      - id: "VER-RTM-002"
+        category: "traceability"
+        severity: "critical"
+        description: "Forward traceability complete"
+        criteria: "Every system requirement maps to at least one software requirement"
+        verification_method: "automated"
+        automated_check:
+          type: "coverage_check"
+          source: "System Requirement ID"
+          target: "Software Requirement ID"
+          coverage_required: 100
+        pass_criteria: "100% system requirements have software requirement mapping"
+        reference: "EN 50128 Section 7.2.5"
+        fix_suggestion: "Add software requirement mappings for unmapped system requirements."
+        
+      - id: "VER-RTM-003"
+        category: "traceability"
+        severity: "critical"
+        description: "Backward traceability complete"
+        criteria: "Every software requirement traces to at least one system requirement (or is justified as orphan)"
+        verification_method: "automated"
+        automated_check:
+          type: "orphan_check"
+          target: "Software Requirement ID"
+          source: "System Requirement ID"
+          allow_orphans_with_justification: true
+        pass_criteria: "All software requirements traced or justified"
+        reference: "EN 50128 Section 7.2.5"
+        fix_suggestion: "Trace orphan software requirements to system requirements, or provide justification for derived requirements."
+        
+      - id: "VER-RTM-004"
+        category: "traceability"
+        severity: "major"
+        description: "Test case coverage complete"
+        criteria: "Every software requirement maps to at least one test case"
+        verification_method: "automated"
+        automated_check:
+          type: "coverage_check"
+          source: "Software Requirement ID"
+          target: "Test Case ID"
+          coverage_required: 100
+        pass_criteria: "100% software requirements have test case mapping"
+        reference: "EN 50128 Section 7.2.5, Section 7.5"
+        fix_suggestion: "Add test case mappings for unmapped software requirements in Test Specification."
+  
+  # ========================================
+  # Hazard Log
+  # ========================================
+  - name: "Hazard Log"
+    file_pattern: "docs/Hazard-Log.md"
+    owner: "SAF"
+    description: "Complete hazard analysis with FMEA, FTA (SIL 2+), and CCF (SIL 3-4)"
+    
+    verification_checks:
+      
+      - id: "VER-HAZ-001"
+        category: "safety"
+        severity: "critical"
+        description: "All hazards have SIL assignment"
+        criteria: "Every identified hazard has SIL level based on severity and probability"
+        verification_method: "automated"
+        automated_check:
+          type: "field_presence"
+          section: "Hazard Register"
+          field_name: "SIL"
+          required_for: "all_hazards"
+          valid_values: ["0", "1", "2", "3", "4"]
+        pass_criteria: "100% hazards have SIL assignment"
+        reference: "EN 50128 Section 4.2-4.3"
+        fix_suggestion: "Assign SIL level to each hazard based on risk analysis (severity × probability)."
+        
+      - id: "VER-HAZ-002"
+        category: "safety"
+        severity: "critical"
+        description: "FMEA performed (highly recommended SIL 2+)"
+        criteria: "Failure Mode and Effects Analysis (FMEA) complete for safety-critical functions"
+        verification_method: "manual"
+        pass_criteria: "FMEA section present with failure modes, effects, and mitigations"
+        reference: "EN 50128 Table A.8 (HR for SIL 2+)"
+        fix_suggestion: "Perform FMEA for safety-critical functions. Document failure modes, effects, and mitigation strategies."
+        
+      - id: "VER-HAZ-003"
+        category: "safety"
+        severity: "major"
+        description: "FTA performed for critical hazards (highly recommended SIL 2+)"
+        criteria: "Fault Tree Analysis (FTA) for hazards with SIL 2+ severity"
+        verification_method: "manual"
+        pass_criteria: "FTA section present for critical hazards"
+        reference: "EN 50128 Table A.8 (HR for SIL 2+)"
+        fix_suggestion: "Perform FTA for critical hazards (SIL 2+). Identify root causes and contributing factors."
+        
+      - id: "VER-HAZ-004"
+        category: "safety"
+        severity: "critical"
+        description: "Common Cause Failure analysis (mandatory SIL 3-4)"
+        criteria: "CCF analysis performed for SIL 3-4 systems to identify common mode failures"
+        verification_method: "manual"
+        pass_criteria: "CCF section present with common cause failure scenarios"
+        reference: "EN 50128 Section 4.4 (M for SIL 3-4)"
+        fix_suggestion: "Perform Common Cause Failure analysis. Identify shared failure modes across redundant channels."
+        sil_requirement:
+          sil_0_1: "Not required"
+          sil_2: "Highly recommended"
+          sil_3_4: "Mandatory"
+        
+      - id: "VER-HAZ-005"
+        category: "safety"
+        severity: "major"
+        description: "Safety requirements derived from hazard analysis"
+        criteria: "Each hazard has corresponding safety requirement(s) to mitigate risk"
+        verification_method: "automated"
+        automated_check:
+          type: "cross_reference"
+          source_section: "Hazard Register"
+          target_section: "Safety Requirements"
+          match_field: "hazard_id"
+        pass_criteria: "All hazards have corresponding safety requirements"
+        reference: "EN 50128 Section 7.1"
+        fix_suggestion: "Derive safety requirements for each hazard. Specify mitigation strategies."
+  
+  # ========================================
+  # Overall Software Test Specification
+  # ========================================
+  - name: "Overall Software Test Specification"
+    file_pattern: "docs/test/Overall-Test-Spec.md"
+    owner: "TST"
+    description: "High-level test specification for system-level testing"
+    
+    verification_checks:
+      
+      - id: "VER-TST-001"
+        category: "test_coverage"
+        severity: "major"
+        description: "Test cases cover all requirements"
+        criteria: "Every requirement in SRS has at least one test case in Test Spec"
+        verification_method: "automated"
+        automated_check:
+          type: "coverage_check"
+          source_file: "docs/SRS.md"
+          source_field: "requirement_id"
+          target_file: "docs/test/Overall-Test-Spec.md"
+          target_field: "requirement_id"
+          coverage_required: 100
+        pass_criteria: "100% requirements have test case coverage"
+        reference: "EN 50128 Section 7.5"
+        fix_suggestion: "Add test cases for uncovered requirements. Ensure each requirement has acceptance criteria."
+        
+      - id: "VER-TST-002"
+        category: "test_coverage"
+        severity: "critical"
+        description: "Test coverage targets defined for SIL level"
+        criteria: "Test Spec defines coverage targets per EN 50128 Table A.21"
+        verification_method: "manual"
+        pass_criteria: "Coverage targets defined: Statement (M), Branch (M), Condition (M) for SIL 3-4"
+        reference: "EN 50128 Table A.21"
+        fix_suggestion: "Define test coverage targets: SIL 3-4 requires 100% statement, branch, and condition coverage."
+        sil_requirement:
+          sil_0_1: "Statement (HR), Branch (HR)"
+          sil_2: "Statement (HR), Branch (M)"
+          sil_3_4: "Statement (M), Branch (M), Condition (M)"
+        
+      - id: "VER-TST-003"
+        category: "test_quality"
+        severity: "major"
+        description: "Boundary value testing specified"
+        criteria: "Test cases include boundary value analysis for inputs"
+        verification_method: "manual"
+        pass_criteria: "Boundary test cases present for critical inputs"
+        reference: "EN 50128 Table A.14 (HR for all SILs)"
+        fix_suggestion: "Add boundary value test cases (min, max, just below min, just above max)."
+        
+      - id: "VER-TST-004"
+        category: "test_quality"
+        severity: "major"
+        description: "Fault injection testing specified (SIL 3-4)"
+        criteria: "Test cases include fault injection scenarios for safety-critical functions"
+        verification_method: "manual"
+        pass_criteria: "Fault injection test cases present"
+        reference: "EN 50128 Table A.13 (HR for SIL 3-4)"
+        fix_suggestion: "Add fault injection test cases to verify error detection and recovery."
+        sil_requirement:
+          sil_0_2: "Recommended"
+          sil_3_4: "Highly Recommended"
+
+# Verification summary criteria
+verification_summary:
+  critical_defects_allowed: 0  # SIL 3-4: No critical defects
+  major_defects_allowed: 0     # SIL 3-4: No major defects without justification
+  minor_defects_allowed: 5     # Minor defects OK with tracking
+  
+  pass_criteria: "All critical and major checks pass. Minor defects documented for resolution."
+  
+  independence_required: true  # SIL 3-4: VER must be independent from REQ/SAF/TST
+  
+  deliverable_approval_chain:
+    - "PM: complete (QUA-accepted)"
+    - "VER: verified (technical correctness)"
+    - "VAL: validated (user needs) [SIL 3-4]"
+    - "COD: approved (gate check)"

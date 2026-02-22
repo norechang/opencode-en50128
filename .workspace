@@ -1,0 +1,21 @@
+{
+  "active_workspace": "train_door_control2",
+  "workspaces": {
+    "train_door_control": {
+      "path": "examples/train_door_control",
+      "sil": 3,
+      "current_phase": "Phase 4 - Implementation & Testing",
+      "completion": 0,
+      "last_accessed": "2026-02-21T15:22:49.143778",
+      "status": "active"
+    },
+    "train_door_control2": {
+      "path": "examples/train_door_control2",
+      "sil": 3,
+      "current_phase": "Architecture & Design (Phase 3)",
+      "completion": 0,
+      "last_accessed": "2026-02-21T15:22:49.143826",
+      "status": "active"
+    }
+  }
+}

@@ -1,0 +1,556 @@
+# Design Phase Validation Criteria
+# EN 50128 Section 7.3 - Software Architecture and Design
+# Validation Focus: "Will this design meet operational needs?"
+
+metadata:
+  phase: "Architecture & Design"
+  phase_id: "phase-3-architecture-design"
+  en50128_section: "7.3, 7.7"
+  description: "Validation criteria to ensure design is suitable for operational environment and user needs"
+  mandatory_deliverables:
+    - "Software Architecture Specification (SAS)"
+    - "Software Design Specification (SDS)"
+    - "Interface Specifications"
+    - "Software Validation Plan (SVaP) - Updated"
+
+validation_checks:
+  # ============================================================================
+  # 1. Architecture Suitability for Operational Environment
+  # ============================================================================
+  
+  - check_id: "VAL-DES-001"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "operational_suitability"
+    description: "Verify architecture suitable for target operational environment"
+    en50128_reference: "Section 7.7 - Operational suitability validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review SAS from operational deployment perspective
+      - Check if architecture fits target hardware constraints
+      - Verify architecture supports operational temperature/vibration/EMI environment
+      - Check for field upgradeability requirements (if needed)
+      - Verify architecture supports maintenance and diagnostics
+    pass_criteria:
+      - "Architecture fits target hardware (CPU, memory, I/O)"
+      - "Environmental constraints addressed (temperature, vibration, EMI)"
+      - "Field upgradeability supported (if required)"
+      - "Maintenance and diagnostics supported"
+    fail_criteria:
+      - "Architecture exceeds target hardware capabilities"
+      - "Environmental constraints not addressed"
+      - "Missing field upgrade capability (if required)"
+    customer_impact: "Critical - Architecture unsuitable for deployment environment"
+
+  - check_id: "VAL-DES-002"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "operational_suitability"
+    description: "Verify architecture supports operational scalability and extensibility"
+    en50128_reference: "Section 7.7 - Future operational needs"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "recommended"
+      sil_3: "recommended"
+      sil_4: "recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review SAS for scalability (more stations, more trains, etc.)
+      - Check for extensibility (new features, protocols)
+      - Verify modular design supports future changes
+      - Check if architecture locks in vendor/technology
+      - Assess long-term maintainability (10+ year lifecycle)
+    pass_criteria:
+      - "Architecture supports reasonable scalability"
+      - "Modular design allows future extensions"
+      - "No vendor lock-in for critical components"
+      - "Maintainable for expected lifecycle (10+ years)"
+    fail_criteria:
+      - "Architecture not scalable"
+      - "Monolithic design prevents extensions"
+      - "Vendor lock-in detected"
+    customer_impact: "Major - Architecture will not support future operational needs"
+
+  # ============================================================================
+  # 2. Performance Feasibility Validation
+  # ============================================================================
+
+  - check_id: "VAL-DES-003"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "performance_feasibility"
+    description: "Verify architecture can meet performance requirements on target hardware"
+    en50128_reference: "Table A.7 - Performance Testing (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review SAS performance analysis
+      - Check if timing budget allocated to modules
+      - Verify worst-case execution time (WCET) estimates provided
+      - Check CPU utilization estimates (should be <80% average)
+      - Verify memory footprint estimates (RAM, ROM)
+    pass_criteria:
+      - "Timing budget allocated and feasible"
+      - "WCET estimates within requirements"
+      - "CPU utilization <80% average, <95% peak"
+      - "Memory footprint within target hardware limits"
+    fail_criteria:
+      - "No timing budget or infeasible"
+      - "WCET estimates exceed requirements"
+      - "CPU utilization >90% sustained"
+      - "Memory footprint exceeds hardware"
+    customer_impact: "Critical - System will not meet performance requirements"
+
+  - check_id: "VAL-DES-004"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "performance_feasibility"
+    description: "Verify real-time constraints achievable in architecture"
+    en50128_reference: "Table A.7 - Real-time performance"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review SAS real-time design
+      - Check if critical tasks have priority assignments
+      - Verify scheduling approach supports deadlines (rate monotonic, EDF, etc.)
+      - Check for priority inversion prevention
+      - Verify interrupt latency acceptable
+    pass_criteria:
+      - "Critical tasks have priority assignments"
+      - "Scheduling approach supports real-time deadlines"
+      - "Priority inversion prevented (priority ceiling, inheritance)"
+      - "Interrupt latency <10µs typical for safety-critical"
+    fail_criteria:
+      - "No real-time scheduling design"
+      - "Priority assignments missing or incorrect"
+      - "No priority inversion prevention"
+    customer_impact: "Critical - Real-time constraints will not be met"
+
+  # ============================================================================
+  # 3. Safety Architecture Validation
+  # ============================================================================
+
+  - check_id: "VAL-DES-005"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "safety_validation"
+    description: "Verify safety architecture adequate for identified hazards"
+    en50128_reference: "Section 7.1 - Safety architecture, Section 7.7 - Safety validation"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review SAS safety architecture from operational safety perspective
+      - Check if redundancy mechanisms are appropriate (dual-channel, TMR, etc.)
+      - Verify fault detection mechanisms adequate
+      - Check safe state reachable from all states
+      - Verify common cause failure analysis performed
+    pass_criteria:
+      - "Redundancy mechanisms appropriate for SIL level"
+      - "Fault detection covers critical failures"
+      - "Safe state reachable from all operational states"
+      - "Common cause failures analyzed and mitigated"
+    fail_criteria:
+      - "Insufficient redundancy for SIL level"
+      - "Fault detection inadequate"
+      - "Safe state not reachable from some states"
+    customer_impact: "Critical - Safety architecture inadequate, cannot deploy"
+
+  - check_id: "VAL-DES-006"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "safety_validation"
+    description: "Verify fail-safe behavior understandable from operational perspective"
+    en50128_reference: "Section 7.7 - Safety validation"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review SAS fail-safe behavior descriptions
+      - Check if safe state is observable by operators
+      - Verify safe state indications specified (LEDs, alarms)
+      - Check for operator actions in safe state documented
+      - Verify recovery procedures from safe state specified
+    pass_criteria:
+      - "Safe state observable by operators"
+      - "Safe state indications clearly specified"
+      - "Operator actions in safe state documented"
+      - "Recovery procedures specified"
+    fail_criteria:
+      - "Safe state not observable"
+      - "No operator indications"
+      - "Operator actions unclear"
+    customer_impact: "Critical - Operators cannot recognize or respond to safe state"
+
+  # ============================================================================
+  # 4. Maintainability and Operational Support
+  # ============================================================================
+
+  - check_id: "VAL-DES-007"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "maintainability"
+    description: "Verify architecture supports field diagnostics and troubleshooting"
+    en50128_reference: "Section 7.7 - Operational support validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review SAS diagnostics and logging architecture
+      - Check for built-in self-test (BIST) capabilities
+      - Verify error logging and fault history
+      - Check for remote diagnostics capability (if required)
+      - Verify diagnostic data accessible to maintenance personnel
+    pass_criteria:
+      - "BIST capabilities specified"
+      - "Error logging and fault history supported"
+      - "Remote diagnostics supported (if required)"
+      - "Diagnostic data accessible to maintenance"
+    fail_criteria:
+      - "No diagnostic capabilities"
+      - "No error logging"
+      - "Diagnostic data not accessible"
+    customer_impact: "Major - Difficult to diagnose and maintain in field"
+
+  - check_id: "VAL-DES-008"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "maintainability"
+    description: "Verify architecture supports configuration management and versioning"
+    en50128_reference: "Section 6.6 - Configuration management"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review SAS configuration management design
+      - Check for software version identification (readable in field)
+      - Verify configuration data storage and backup
+      - Check for field software update mechanism (if required)
+      - Verify configuration change tracking
+    pass_criteria:
+      - "Software version readable in field (display, diagnostic port)"
+      - "Configuration data storage and backup supported"
+      - "Field update mechanism specified (if required)"
+      - "Configuration change tracking supported"
+    fail_criteria:
+      - "No version identification"
+      - "No configuration backup"
+      - "Missing field update mechanism (if required)"
+    customer_impact: "Major - Difficult to manage multiple deployed versions"
+
+  # ============================================================================
+  # 5. Interface Usability Validation
+  # ============================================================================
+
+  - check_id: "VAL-DES-009"
+    deliverable: "Interface Specifications"
+    category: "usability"
+    description: "Verify human-machine interfaces (HMI) support operational workflows"
+    en50128_reference: "Section 7.7 - Usability validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "recommended"
+      sil_3: "recommended"
+      sil_4: "recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review Interface Specifications for HMI (if applicable)
+      - Check if interfaces support typical operational tasks
+      - Verify feedback mechanisms (visual, audible, tactile)
+      - Check for error prevention design (confirmations, interlocks)
+      - Verify accessibility considerations (readability, reachability)
+    pass_criteria:
+      - "Interfaces support typical operational tasks"
+      - "Feedback mechanisms appropriate (visual, audible)"
+      - "Error prevention designed in (confirmations)"
+      - "Accessibility addressed (if applicable)"
+    fail_criteria:
+      - "Interfaces do not support workflows"
+      - "Missing feedback mechanisms"
+      - "No error prevention"
+    customer_impact: "Major - Poor interface usability leads to operational errors"
+
+  - check_id: "VAL-DES-010"
+    deliverable: "Interface Specifications"
+    category: "usability"
+    description: "Verify external interfaces meet integration and interoperability needs"
+    en50128_reference: "Section 7.7 - Interoperability validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review external interface specifications
+      - Check if interfaces compatible with existing systems
+      - Verify protocol specifications complete (timing, data format)
+      - Check for interface error handling
+      - Verify interface documentation sufficient for integration
+    pass_criteria:
+      - "Interfaces compatible with existing systems"
+      - "Protocol specifications complete"
+      - "Interface error handling specified"
+      - "Documentation sufficient for integration"
+    fail_criteria:
+      - "Interface incompatibilities with existing systems"
+      - "Incomplete protocol specifications"
+      - "Missing error handling"
+    customer_impact: "Critical - System cannot integrate with existing infrastructure"
+
+  # ============================================================================
+  # 6. Design Completeness Validation
+  # ============================================================================
+
+  - check_id: "VAL-DES-011"
+    deliverable: "Software Design Specification (SDS)"
+    category: "completeness"
+    description: "Verify design covers all operational states and transitions"
+    en50128_reference: "Section 7.7 - Operational completeness"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review SDS state machines and operational modes
+      - Check for startup/initialization design
+      - Verify normal operation states covered
+      - Check for degraded mode states
+      - Verify safe state and shutdown design
+    pass_criteria:
+      - "All operational states designed (startup, normal, degraded, safe, shutdown)"
+      - "State transitions clearly defined"
+      - "All user-observable states covered"
+    fail_criteria:
+      - "Missing operational states"
+      - "Undefined state transitions"
+    customer_impact: "Critical - Operational modes not supported"
+
+  - check_id: "VAL-DES-012"
+    deliverable: "Software Design Specification (SDS)"
+    category: "completeness"
+    description: "Verify design addresses all operational scenarios from requirements"
+    en50128_reference: "Section 7.7 - Scenario coverage"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Map operational scenarios from requirements to SDS
+      - Check if each scenario has corresponding design
+      - Verify scenario sequences designed (step-by-step)
+      - Check for missing scenarios
+      - Verify exception handling for scenarios
+    pass_criteria:
+      - "All operational scenarios from requirements designed"
+      - "Scenario sequences designed step-by-step"
+      - "Exception handling designed for each scenario"
+    fail_criteria:
+      - "Missing scenario designs"
+      - "Incomplete scenario sequences"
+    customer_impact: "Critical - Operational scenarios not supported"
+
+  # ============================================================================
+  # 7. Design Feasibility and Risk Validation
+  # ============================================================================
+
+  - check_id: "VAL-DES-013"
+    deliverable: "Software Design Specification (SDS)"
+    category: "feasibility"
+    description: "Verify design complexity manageable for implementation team"
+    en50128_reference: "Section 7.7 - Implementation feasibility"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "recommended"
+      sil_3: "recommended"
+      sil_4: "recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review SDS design complexity
+      - Check if design is implementable with available skills
+      - Verify no overly complex algorithms
+      - Check for design patterns that simplify implementation
+      - Assess implementation risk from project perspective
+    pass_criteria:
+      - "Design complexity manageable"
+      - "No overly complex algorithms"
+      - "Design patterns simplify implementation"
+      - "Implementation risk acceptable"
+    fail_criteria:
+      - "Design too complex for team"
+      - "Overly complex algorithms"
+      - "High implementation risk"
+    customer_impact: "Major - Design may not be implementable, causing delays"
+
+  - check_id: "VAL-DES-014"
+    deliverable: "Software Design Specification (SDS)"
+    category: "feasibility"
+    description: "Verify design testable at integration and system levels"
+    en50128_reference: "Section 7.7 - Testability validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review SDS from testing perspective
+      - Check if design supports observability (internal state visible)
+      - Verify design supports controllability (inputs injectable)
+      - Check for test hooks and instrumentation points
+      - Verify fault injection capability for safety testing
+    pass_criteria:
+      - "Design supports observability (state visible)"
+      - "Design supports controllability (inputs injectable)"
+      - "Test hooks/instrumentation specified"
+      - "Fault injection capability specified"
+    fail_criteria:
+      - "Design not observable (black box)"
+      - "Design not controllable"
+      - "No test hooks"
+    customer_impact: "Major - Design difficult to test, causing validation delays"
+
+  # ============================================================================
+  # 8. Documentation and Training Validation
+  # ============================================================================
+
+  - check_id: "VAL-DES-015"
+    deliverable: "Software Architecture Specification (SAS)"
+    category: "documentation"
+    description: "Verify design documentation sufficient for operator training"
+    en50128_reference: "Section 7.7 - Training and documentation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "recommended"
+      sil_3: "recommended"
+      sil_4: "recommended"
+    check_type: "manual"
+    severity: "minor"
+    validation_method: |
+      - Review SAS/SDS from training perspective
+      - Check if operational behavior clearly documented
+      - Verify system states and modes explained
+      - Check for troubleshooting guidance
+      - Assess if documentation enables operator training
+    pass_criteria:
+      - "Operational behavior clearly documented"
+      - "System states and modes explained"
+      - "Troubleshooting guidance provided"
+      - "Documentation sufficient for training"
+    fail_criteria:
+      - "Operational behavior unclear"
+      - "Insufficient documentation for training"
+    customer_impact: "Minor - Training materials may need more development"
+
+  # ============================================================================
+  # 9. Software Validation Plan (SVaP) Update Validation
+  # ============================================================================
+
+  - check_id: "VAL-DES-016"
+    deliverable: "Software Validation Plan (SVaP) - Updated"
+    category: "validation_planning"
+    description: "Verify SVaP updated with design-level validation tests"
+    en50128_reference: "Section 7.7 - Validation planning"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review SVaP updates for design phase
+      - Check if integration test scenarios added
+      - Verify interface test cases specified
+      - Check for performance test planning
+      - Verify test environment details updated
+    pass_criteria:
+      - "Integration test scenarios added to SVaP"
+      - "Interface test cases specified"
+      - "Performance test planning detailed"
+      - "Test environment confirmed or updated"
+    fail_criteria:
+      - "SVaP not updated with design tests"
+      - "Missing integration or interface tests"
+    customer_impact: "Major - Validation planning incomplete"
+
+  - check_id: "VAL-DES-017"
+    deliverable: "Software Validation Plan (SVaP) - Updated"
+    category: "validation_planning"
+    description: "Verify validation test cases traceable to requirements and design"
+    en50128_reference: "Table A.5 - Traceability (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    validation_method: |
+      - Parse validation test cases from SVaP
+      - Check traceability to requirements
+      - Verify traceability to design elements
+      - Check for untested requirements or design elements
+      - Verify bidirectional traceability
+    pass_criteria:
+      - "All validation tests trace to requirements"
+      - "All requirements have validation tests"
+      - "Design elements covered by validation tests"
+      - "Bidirectional traceability maintained"
+    fail_criteria:
+      - "Validation tests without requirement traceability"
+      - "Requirements without validation tests"
+      - "Design elements not covered"
+    customer_impact: "Critical - Incomplete validation coverage"

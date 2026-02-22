@@ -1,0 +1,641 @@
+# Requirements Phase Validation Criteria
+# EN 50128 Section 7.7 - Overall Software Testing (Validation)
+# Validation Focus: "Did we capture the RIGHT user needs?"
+
+metadata:
+  phase: "Requirements"
+  phase_id: "phase-2-requirements"
+  en50128_section: "7.2, 7.7"
+  description: "Validation criteria to ensure requirements capture correct user needs and operational intent"
+  mandatory_deliverables:
+    - "Software Requirements Specification (SRS)"
+    - "User Needs Document (or System Requirements)"
+    - "Hazard Log"
+    - "Software Validation Plan (SVaP) - Draft"
+
+validation_checks:
+  # ============================================================================
+  # 1. User Needs Coverage Validation
+  # ============================================================================
+  
+  - check_id: "VAL-REQ-001"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "user_needs"
+    description: "Verify ALL identified user needs addressed in requirements"
+    en50128_reference: "Section 7.7.1 - Validation scope"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    validation_method: |
+      - Parse user needs from User Needs Document or System Requirements
+      - Parse software requirements from SRS
+      - Map each user need to software requirements
+      - Check for unmapped user needs (gaps)
+      - Verify mapping is logical and complete
+    pass_criteria:
+      - "100% of user needs mapped to software requirements"
+      - "No user needs without corresponding software requirements"
+      - "Mappings are logical and traceable"
+    fail_criteria:
+      - "ANY user need without software requirements"
+      - "User needs partially addressed"
+      - "Unclear or missing mappings"
+    customer_impact: "Critical - Missing user needs means software will not meet operational requirements"
+
+  - check_id: "VAL-REQ-002"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "user_needs"
+    description: "Verify requirements are understandable from user/operator perspective"
+    en50128_reference: "Section 7.7.1 - User-centric validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review requirements from user/operator perspective (not developer)
+      - Check for technical jargon without explanation
+      - Verify requirements describe WHAT (not HOW)
+      - Check for user-observable behavior described
+      - Verify operational context clear
+    pass_criteria:
+      - "Requirements understandable by non-technical users"
+      - "Technical terms explained or avoided"
+      - "Requirements describe user-observable behavior"
+      - "Operational context is clear"
+    fail_criteria:
+      - "Requirements use unexplained technical jargon"
+      - "Requirements describe implementation (HOW) instead of behavior (WHAT)"
+      - "Operational context missing or unclear"
+    customer_impact: "Major - User cannot verify requirements meet their needs if not understandable"
+
+  - check_id: "VAL-REQ-003"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "user_needs"
+    description: "Verify no unnecessary requirements (gold-plating) that add cost without user value"
+    en50128_reference: "Section 7.7.1 - Validation scope"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "recommended"
+      sil_3: "recommended"
+      sil_4: "recommended"
+    check_type: "manual"
+    severity: "minor"
+    validation_method: |
+      - Review each requirement for user value
+      - Check if requirement traces to user need
+      - Identify requirements without user need mapping
+      - Assess if untraceable requirements are necessary (e.g., regulatory, safety)
+    pass_criteria:
+      - "All requirements trace to user needs OR justified (regulatory, safety)"
+      - "No unnecessary features that add cost without value"
+    fail_criteria:
+      - "Requirements without user need justification"
+      - "Gold-plating detected (nice-to-have features)"
+    customer_impact: "Minor - Unnecessary requirements increase cost and complexity without user benefit"
+
+  # ============================================================================
+  # 2. Operational Scenario Coverage Validation
+  # ============================================================================
+
+  - check_id: "VAL-REQ-004"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "operational_scenarios"
+    description: "Verify requirements cover normal operational scenarios"
+    en50128_reference: "Section 7.7.2 - Operational scenario testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Identify normal operational scenarios from user needs
+      - Check SRS requirements cover each normal scenario
+      - Verify scenario sequences described (start → normal operation → end)
+      - Check for user interaction requirements (inputs, outputs)
+      - Verify timing requirements for normal operation
+    pass_criteria:
+      - "All normal operational scenarios addressed in requirements"
+      - "Scenario sequences clearly defined"
+      - "User interactions specified (inputs, outputs, feedback)"
+      - "Timing requirements specified where applicable"
+    fail_criteria:
+      - "Missing requirements for normal operational scenarios"
+      - "Incomplete scenario sequences"
+      - "User interactions not specified"
+    customer_impact: "Critical - Software will not support daily operational use"
+
+  - check_id: "VAL-REQ-005"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "operational_scenarios"
+    description: "Verify requirements cover abnormal/degraded operational scenarios"
+    en50128_reference: "Section 7.7.2 - Abnormal and degraded mode testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Identify abnormal/degraded operational scenarios (partial failures, degraded sensors)
+      - Check SRS requirements cover each abnormal scenario
+      - Verify degraded mode behavior specified
+      - Check for graceful degradation requirements
+      - Verify user notification requirements (warnings, alarms)
+    pass_criteria:
+      - "All abnormal/degraded scenarios addressed in requirements"
+      - "Degraded mode behavior clearly specified"
+      - "Graceful degradation defined (if applicable)"
+      - "User notifications specified (warnings, alarms)"
+    fail_criteria:
+      - "Missing requirements for abnormal scenarios"
+      - "Degraded mode behavior not specified"
+      - "No user notification requirements"
+    customer_impact: "Critical - Software may not handle failures gracefully, causing operational disruption"
+
+  - check_id: "VAL-REQ-006"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "operational_scenarios"
+    description: "Verify requirements cover emergency scenarios"
+    en50128_reference: "Section 7.7.2 - Emergency scenario testing"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Identify emergency scenarios from hazard analysis
+      - Check SRS requirements cover each emergency scenario
+      - Verify emergency stop requirements (if applicable)
+      - Check for safe state requirements
+      - Verify emergency response time requirements
+    pass_criteria:
+      - "All emergency scenarios addressed in requirements"
+      - "Emergency stop specified (if applicable)"
+      - "Safe state clearly defined"
+      - "Emergency response times specified (<100ms typical for safety-critical)"
+    fail_criteria:
+      - "Missing requirements for emergency scenarios"
+      - "Safe state not defined"
+      - "Emergency response time not specified"
+    customer_impact: "Critical - Safety compromise, cannot deploy without emergency handling"
+
+  # ============================================================================
+  # 3. Acceptance Criteria Validation
+  # ============================================================================
+
+  - check_id: "VAL-REQ-007"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "acceptance_criteria"
+    description: "Verify ALL requirements have measurable acceptance criteria"
+    en50128_reference: "Section 7.7.2 - Acceptance criteria definition"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review each requirement for acceptance criteria
+      - Check if criteria are objective and measurable
+      - Verify criteria specify PASS/FAIL conditions clearly
+      - Check for vague criteria (e.g., "fast", "reliable", "user-friendly")
+      - Verify quantitative criteria where possible (e.g., "<500ms", "≥99.9%")
+    pass_criteria:
+      - "ALL requirements have acceptance criteria"
+      - "Criteria are objective and measurable"
+      - "PASS/FAIL conditions clearly specified"
+      - "Quantitative criteria used where possible"
+    fail_criteria:
+      - "Requirements without acceptance criteria"
+      - "Vague criteria (fast, reliable, good, etc.)"
+      - "Subjective criteria that cannot be objectively measured"
+    customer_impact: "Critical - Cannot objectively determine if requirements are met at acceptance"
+
+  - check_id: "VAL-REQ-008"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "acceptance_criteria"
+    description: "Verify acceptance criteria are achievable and realistic"
+    en50128_reference: "Section 7.7.2 - Acceptance criteria feasibility"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review acceptance criteria for feasibility
+      - Check for overly aggressive timing requirements
+      - Verify resource constraints are realistic (memory, CPU)
+      - Check for conflicting criteria (e.g., "real-time" + "low power")
+      - Assess technical feasibility from user/operator perspective
+    pass_criteria:
+      - "All acceptance criteria appear feasible"
+      - "Timing requirements achievable on target hardware"
+      - "Resource constraints realistic"
+      - "No obvious conflicting criteria"
+    fail_criteria:
+      - "Acceptance criteria appear infeasible (too aggressive)"
+      - "Conflicting criteria detected"
+      - "Resource requirements exceed target hardware capabilities"
+    customer_impact: "Major - Infeasible criteria will lead to project delays or failures"
+
+  # ============================================================================
+  # 4. Safety Requirements Validation
+  # ============================================================================
+
+  - check_id: "VAL-REQ-009"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "safety_validation"
+    description: "Verify ALL hazards from Hazard Log have mitigation requirements"
+    en50128_reference: "Section 7.1 - Hazard Log, Section 7.7 - Safety validation"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    validation_method: |
+      - Parse hazards from Hazard Log
+      - Parse safety requirements from SRS (SAF-* requirements)
+      - Map each hazard to mitigation requirements
+      - Check for unmapped hazards (safety gaps)
+      - Verify mitigation adequacy from user safety perspective
+    pass_criteria:
+      - "100% of hazards mapped to mitigation requirements"
+      - "No hazards without mitigation"
+      - "Mitigation requirements appear adequate from user safety perspective"
+    fail_criteria:
+      - "ANY hazard without mitigation requirements"
+      - "Mitigation appears inadequate for hazard severity"
+    customer_impact: "Critical - Safety compromise, cannot deploy with unmitigated hazards"
+
+  - check_id: "VAL-REQ-010"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "safety_validation"
+    description: "Verify safety requirements are understandable and verifiable by users"
+    en50128_reference: "Section 7.7 - Safety validation"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review safety requirements (SAF-*) from user perspective
+      - Check if safety behavior is observable by user/operator
+      - Verify safe state is clearly defined and recognizable
+      - Check for user indication requirements (warnings, safe state indicators)
+      - Verify safety requirements describe WHAT happens (not HOW it's implemented)
+    pass_criteria:
+      - "Safety requirements understandable by users"
+      - "Safety behavior is user-observable"
+      - "Safe state clearly defined and recognizable"
+      - "User indications specified (LEDs, alarms, displays)"
+    fail_criteria:
+      - "Safety requirements too technical for users"
+      - "Safety behavior not observable"
+      - "Safe state not clearly defined or recognizable"
+    customer_impact: "Critical - Users cannot verify safety functions work correctly"
+
+  # ============================================================================
+  # 5. Performance and Timing Requirements Validation
+  # ============================================================================
+
+  - check_id: "VAL-REQ-011"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "performance_validation"
+    description: "Verify performance requirements meet operational needs"
+    en50128_reference: "Table A.7 - Performance Testing (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review performance requirements from operational perspective
+      - Verify response time requirements meet user expectations
+      - Check throughput requirements support operational load
+      - Verify real-time constraints align with operational needs
+      - Check if performance degradation under load is acceptable
+    pass_criteria:
+      - "Response times meet user expectations (e.g., <500ms for UI)"
+      - "Throughput supports peak operational load"
+      - "Real-time constraints aligned with operational needs"
+      - "Performance degradation acceptable to users"
+    fail_criteria:
+      - "Response times too slow for operational use"
+      - "Throughput insufficient for peak load"
+      - "Real-time constraints too loose (safety-critical)"
+    customer_impact: "Critical - Software will not meet operational performance needs"
+
+  - check_id: "VAL-REQ-012"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "performance_validation"
+    description: "Verify timing requirements specified for safety-critical functions"
+    en50128_reference: "Table A.7 - Performance Testing (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Identify safety-critical functions from hazard analysis
+      - Check each safety function has timing requirement
+      - Verify timing requirements are tight enough for safety
+      - Check for fault detection timing requirements
+      - Verify safe state transition timing specified
+    pass_criteria:
+      - "ALL safety functions have timing requirements"
+      - "Timing requirements sufficient for safety (e.g., <100ms typical)"
+      - "Fault detection timing specified"
+      - "Safe state transition timing specified"
+    fail_criteria:
+      - "Safety functions without timing requirements"
+      - "Timing requirements too loose for safety"
+    customer_impact: "Critical - Safety compromise if timing requirements inadequate"
+
+  # ============================================================================
+  # 6. Usability and User Interface Validation
+  # ============================================================================
+
+  - check_id: "VAL-REQ-013"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "usability"
+    description: "Verify user interface requirements support operational tasks"
+    en50128_reference: "Section 7.7 - Usability validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "recommended"
+      sil_3: "recommended"
+      sil_4: "recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review user interface requirements from operator perspective
+      - Check if UI supports typical operational workflows
+      - Verify user feedback mechanisms specified (visual, audible)
+      - Check for error prevention requirements (confirmations, warnings)
+      - Verify accessibility requirements (if applicable)
+    pass_criteria:
+      - "UI requirements support operational workflows"
+      - "User feedback mechanisms specified"
+      - "Error prevention mechanisms defined"
+      - "Accessibility addressed (if applicable)"
+    fail_criteria:
+      - "UI requirements do not support workflows"
+      - "Missing user feedback mechanisms"
+      - "No error prevention mechanisms"
+    customer_impact: "Major - Poor usability leads to operational errors and user dissatisfaction"
+
+  - check_id: "VAL-REQ-014"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "usability"
+    description: "Verify error messages and user notifications are user-friendly"
+    en50128_reference: "Section 7.7 - Usability validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "recommended"
+      sil_3: "recommended"
+      sil_4: "recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review error message requirements
+      - Check if error messages are understandable by users (not technical codes)
+      - Verify error messages suggest corrective actions
+      - Check for warning/alarm prioritization (critical vs non-critical)
+      - Verify notification timing requirements (immediate vs delayed)
+    pass_criteria:
+      - "Error messages understandable by users"
+      - "Error messages suggest corrective actions"
+      - "Warnings/alarms prioritized appropriately"
+      - "Notification timing specified"
+    fail_criteria:
+      - "Error messages are technical codes without explanation"
+      - "No corrective action guidance"
+      - "Warning/alarm prioritization unclear"
+    customer_impact: "Major - Users cannot effectively diagnose and resolve issues"
+
+  # ============================================================================
+  # 7. Software Validation Plan (SVaP) Draft Validation
+  # ============================================================================
+
+  - check_id: "VAL-REQ-015"
+    deliverable: "Software Validation Plan (SVaP) - Draft"
+    category: "validation_planning"
+    description: "Verify validation scope covers all user needs and operational scenarios"
+    en50128_reference: "Section 7.7.1 - Validation planning"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review SVaP validation scope
+      - Check if all user needs will be validated
+      - Verify all operational scenarios will be tested
+      - Check for acceptance test planning
+      - Verify customer/stakeholder involvement planned
+    pass_criteria:
+      - "Validation scope covers all user needs"
+      - "All operational scenarios included in test plan"
+      - "Acceptance testing planned"
+      - "Customer/stakeholder involvement defined"
+    fail_criteria:
+      - "Validation scope incomplete (missing user needs)"
+      - "Operational scenarios not covered"
+      - "No acceptance testing planned"
+    customer_impact: "Critical - Incomplete validation will miss user needs"
+
+  - check_id: "VAL-REQ-016"
+    deliverable: "Software Validation Plan (SVaP) - Draft"
+    category: "validation_planning"
+    description: "Verify validation environment is target or representative"
+    en50128_reference: "Section 7.7.3 - Validation environment"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review SVaP test environment specification
+      - Check if target hardware will be used for validation
+      - If not target, verify representative simulation planned
+      - Check for environment differences documented
+      - Verify environment justification provided
+    pass_criteria:
+      - "Target hardware specified for validation (preferred)"
+      - "OR representative simulation with justification"
+      - "Environment differences documented"
+      - "Environment suitability justified"
+    fail_criteria:
+      - "Test environment not specified"
+      - "Environment not target or representative"
+      - "Environment differences not documented"
+    customer_impact: "Critical - Validation on wrong environment may miss operational issues"
+
+  - check_id: "VAL-REQ-017"
+    deliverable: "Software Validation Plan (SVaP) - Draft"
+    category: "validation_planning"
+    description: "Verify validator independence planned (SIL 3-4)"
+    en50128_reference: "Section 5.3.7 - Validator independence"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "not_applicable"
+      sil_2: "not_applicable"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review SVaP Approvals table
+      - Check Validator role identified
+      - Verify Validator is independent (not Developer/Tester/Verifier)
+      - Check Validator does not report to PM
+      - Verify organizational independence documented
+    pass_criteria:
+      - "Validator identified and independent"
+      - "Validator NOT Developer/Tester/Verifier/PM"
+      - "Validator reports to COD or Safety Authority (not PM)"
+      - "Organizational independence documented"
+    fail_criteria:
+      - "Validator not independent"
+      - "Validator reports to PM"
+      - "Independence not documented"
+    customer_impact: "Critical - EN 50128 SIL 3-4 violation, assessment will fail"
+
+  # ============================================================================
+  # 8. Completeness and Consistency Validation
+  # ============================================================================
+
+  - check_id: "VAL-REQ-018"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "completeness"
+    description: "Verify no missing operational requirements from user perspective"
+    en50128_reference: "Section 7.7.1 - Requirements completeness"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review SRS from operational completeness perspective
+      - Check for missing startup/shutdown requirements
+      - Verify configuration and maintenance requirements
+      - Check for data logging and diagnostics requirements
+      - Verify operator training requirements considered
+    pass_criteria:
+      - "Startup/shutdown procedures specified"
+      - "Configuration and maintenance addressed"
+      - "Data logging and diagnostics specified"
+      - "Operator training needs considered"
+    fail_criteria:
+      - "Missing operational requirements"
+      - "Incomplete lifecycle coverage (only normal operation)"
+    customer_impact: "Major - Missing requirements will surface late in deployment"
+
+  - check_id: "VAL-REQ-019"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "consistency"
+    description: "Verify no conflicting requirements from operational perspective"
+    en50128_reference: "Section 7.7.1 - Requirements consistency"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review requirements for operational conflicts
+      - Check for timing conflicts (conflicting deadlines)
+      - Verify no resource conflicts (memory, CPU, I/O)
+      - Check for behavioral conflicts (contradictory behavior)
+      - Verify priority conflicts resolved (safety vs performance)
+    pass_criteria:
+      - "No conflicting timing requirements"
+      - "No resource conflicts"
+      - "No behavioral contradictions"
+      - "Priorities clearly defined (safety > performance)"
+    fail_criteria:
+      - "Conflicting requirements detected"
+      - "Unresolved priority conflicts"
+    customer_impact: "Major - Conflicting requirements lead to system malfunctions"
+
+  # ============================================================================
+  # 9. Regulatory and Standards Compliance Validation
+  # ============================================================================
+
+  - check_id: "VAL-REQ-020"
+    deliverable: "Software Requirements Specification (SRS)"
+    category: "compliance"
+    description: "Verify requirements address regulatory and standards requirements"
+    en50128_reference: "Section 4 - Railway application issues"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Identify applicable regulations (EN 50128, EN 50126, local railway standards)
+      - Check SRS requirements address regulatory requirements
+      - Verify safety integrity level (SIL) requirements met
+      - Check for certification requirements addressed
+      - Verify documentation requirements for deployment
+    pass_criteria:
+      - "All applicable regulatory requirements addressed"
+      - "SIL requirements met for all safety functions"
+      - "Certification requirements addressed"
+      - "Documentation requirements specified"
+    fail_criteria:
+      - "Missing regulatory requirements"
+      - "SIL requirements not met"
+      - "Certification requirements not addressed"
+    customer_impact: "Critical - Cannot deploy without regulatory compliance"

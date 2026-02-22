@@ -1,0 +1,493 @@
+# Implementation Phase Validation Criteria
+# EN 50128 Section 7.4 - Software Component Design and Implementation
+# Validation Focus: "Is the code ready for integration and operational testing?"
+
+metadata:
+  phase: "Implementation & Unit Testing"
+  phase_id: "phase-4-implementation"
+  en50128_section: "7.4, 7.7"
+  description: "Validation criteria to ensure implementation is operationally ready"
+  mandatory_deliverables:
+    - "C Source Code (.c files)"
+    - "C Header Files (.h files)"
+    - "Unit Test Code (Unity framework)"
+    - "Unit Test Results Report"
+
+validation_checks:
+  # ============================================================================
+  # 1. Code Completeness Validation
+  # ============================================================================
+  
+  - check_id: "VAL-IMP-001"
+    deliverable: "C Source Code (.c files)"
+    category: "completeness"
+    description: "Verify ALL design elements implemented in code"
+    en50128_reference: "Section 7.7 - Implementation completeness"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    validation_method: |
+      - Parse design elements from SDS (modules, functions, data structures)
+      - Parse implementation from source code
+      - Map each design element to code implementation
+      - Check for unimplemented design elements
+      - Verify implementation matches design intent
+    pass_criteria:
+      - "ALL design modules implemented"
+      - "ALL design functions implemented"
+      - "ALL design data structures implemented"
+      - "No design elements missing from code"
+    fail_criteria:
+      - "ANY design element not implemented"
+      - "Partial implementation detected"
+    customer_impact: "Critical - Incomplete implementation will fail operational testing"
+
+  - check_id: "VAL-IMP-002"
+    deliverable: "C Source Code (.c files)"
+    category: "completeness"
+    description: "Verify error handling implemented for all operational scenarios"
+    en50128_reference: "Section 7.7 - Error handling validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review code for error handling from operational perspective
+      - Check if all identified error conditions handled
+      - Verify error codes meaningful for diagnostics
+      - Check for graceful degradation on non-critical errors
+      - Verify safe state transition on critical errors
+    pass_criteria:
+      - "All error conditions handled"
+      - "Error codes meaningful (not just -1, 0, 1)"
+      - "Graceful degradation on non-critical errors"
+      - "Safe state on critical errors"
+    fail_criteria:
+      - "Unhandled error conditions"
+      - "Generic error codes (no diagnostic value)"
+      - "No safe state on critical errors"
+    customer_impact: "Critical - Poor error handling will cause operational failures"
+
+  # ============================================================================
+  # 2. Unit Test Quality Validation (User Perspective)
+  # ============================================================================
+
+  - check_id: "VAL-IMP-003"
+    deliverable: "Unit Test Code"
+    category: "test_quality"
+    description: "Verify unit tests represent realistic operational usage"
+    en50128_reference: "Section 7.7 - Operational testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review unit test cases from operational perspective
+      - Check if tests use realistic input values (not just 0, 1, -1)
+      - Verify tests simulate operational sequences
+      - Check for tests with operational timing constraints
+      - Verify tests cover operational boundary conditions
+    pass_criteria:
+      - "Tests use realistic operational input values"
+      - "Tests simulate operational sequences"
+      - "Timing constraints tested (where applicable)"
+      - "Operational boundary conditions tested"
+    fail_criteria:
+      - "Tests use only trivial values (0, 1, -1)"
+      - "Tests do not reflect operational usage"
+      - "Timing constraints not tested"
+    customer_impact: "Major - Unit tests may not reveal operational issues"
+
+  - check_id: "VAL-IMP-004"
+    deliverable: "Unit Test Results Report"
+    category: "test_quality"
+    description: "Verify unit tests cover operational error scenarios"
+    en50128_reference: "Section 7.7 - Error scenario testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review unit test cases for error scenario coverage
+      - Check if operational error conditions tested (sensor failure, invalid input)
+      - Verify error recovery tested
+      - Check for fault injection tests
+      - Verify safe state transition tested
+    pass_criteria:
+      - "Operational error conditions tested"
+      - "Error recovery tested"
+      - "Fault injection tests present (SIL 2+)"
+      - "Safe state transition tested"
+    fail_criteria:
+      - "Operational error conditions not tested"
+      - "No error recovery tests"
+      - "No safe state tests"
+    customer_impact: "Critical - Error handling failures will surface in operation"
+
+  # ============================================================================
+  # 3. Code Readability and Maintainability Validation
+  # ============================================================================
+
+  - check_id: "VAL-IMP-005"
+    deliverable: "C Source Code (.c files)"
+    category: "maintainability"
+    description: "Verify code understandable for future maintenance personnel"
+    en50128_reference: "Section 7.7 - Maintainability validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "recommended"
+      sil_3: "recommended"
+      sil_4: "recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review code from maintainer perspective (not original developer)
+      - Check for meaningful variable and function names
+      - Verify complex logic has explanatory comments
+      - Check for module/function header comments
+      - Verify magic numbers replaced with named constants
+    pass_criteria:
+      - "Variable/function names meaningful"
+      - "Complex logic explained in comments"
+      - "Module/function headers present"
+      - "No magic numbers (use named constants)"
+    fail_criteria:
+      - "Cryptic variable names (x, tmp, foo)"
+      - "Complex logic without comments"
+      - "Magic numbers present"
+    customer_impact: "Major - Difficult to maintain, increases long-term costs"
+
+  - check_id: "VAL-IMP-006"
+    deliverable: "C Source Code (.c files)"
+    category: "maintainability"
+    description: "Verify configuration parameters externalized (not hardcoded)"
+    en50128_reference: "Section 7.7 - Configuration management"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review code for configuration parameters
+      - Check if site-specific values externalized (timings, thresholds, addresses)
+      - Verify configuration mechanism (header file, config file, runtime)
+      - Check for documentation of configuration parameters
+      - Verify default values sensible
+    pass_criteria:
+      - "Site-specific values externalized"
+      - "Configuration mechanism clear"
+      - "Configuration parameters documented"
+      - "Default values sensible"
+    fail_criteria:
+      - "Configuration values hardcoded in logic"
+      - "No configuration mechanism"
+      - "Configuration not documented"
+    customer_impact: "Major - Difficult to customize for different sites"
+
+  # ============================================================================
+  # 4. Operational Diagnostics and Logging Validation
+  # ============================================================================
+
+  - check_id: "VAL-IMP-007"
+    deliverable: "C Source Code (.c files)"
+    category: "diagnostics"
+    description: "Verify diagnostic logging supports field troubleshooting"
+    en50128_reference: "Section 7.7 - Operational support"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review code for diagnostic logging
+      - Check if critical events logged (errors, state changes, warnings)
+      - Verify log messages meaningful for field personnel (not developer codes)
+      - Check for log levels (critical, warning, info, debug)
+      - Verify log storage mechanism (persistent, circular buffer)
+    pass_criteria:
+      - "Critical events logged"
+      - "Log messages meaningful for field personnel"
+      - "Log levels implemented"
+      - "Log storage mechanism specified"
+    fail_criteria:
+      - "No diagnostic logging"
+      - "Log messages are developer codes"
+      - "No persistent logging"
+    customer_impact: "Major - Difficult to diagnose field issues"
+
+  - check_id: "VAL-IMP-008"
+    deliverable: "C Source Code (.c files)"
+    category: "diagnostics"
+    description: "Verify software version identification accessible in field"
+    en50128_reference: "Section 6.6 - Configuration identification"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review code for version identification
+      - Check if version string embedded in code
+      - Verify version accessible via diagnostic interface
+      - Check for build date/time inclusion
+      - Verify version format follows configuration management standard
+    pass_criteria:
+      - "Version string embedded in code"
+      - "Version accessible via diagnostic interface"
+      - "Build date/time included"
+      - "Version format follows standard (e.g., vX.Y.Z)"
+    fail_criteria:
+      - "No version identification"
+      - "Version not accessible in field"
+    customer_impact: "Major - Cannot identify deployed software version"
+
+  # ============================================================================
+  # 5. Safety Function Implementation Validation
+  # ============================================================================
+
+  - check_id: "VAL-IMP-009"
+    deliverable: "C Source Code (.c files)"
+    category: "safety_validation"
+    description: "Verify safety-critical functions clearly identifiable in code"
+    en50128_reference: "Section 7.7 - Safety validation"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review code for safety function identification
+      - Check if safety functions marked in code (comments, naming)
+      - Verify safety functions separated from non-safety
+      - Check for safety function documentation
+      - Verify SIL level documented for safety functions
+    pass_criteria:
+      - "Safety functions clearly marked in code"
+      - "Safety functions separated from non-safety"
+      - "Safety function documentation present"
+      - "SIL levels documented"
+    fail_criteria:
+      - "Safety functions not identifiable"
+      - "Safety and non-safety mixed"
+      - "No safety documentation"
+    customer_impact: "Critical - Safety functions not traceable for assessment"
+
+  - check_id: "VAL-IMP-010"
+    deliverable: "C Source Code (.c files)"
+    category: "safety_validation"
+    description: "Verify safe state implementation meets operational safety needs"
+    en50128_reference: "Section 7.7 - Safety validation"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review safe state implementation from operational safety perspective
+      - Check if safe state reachable from all operational states
+      - Verify safe state prevents hazards (outputs disabled, interlocks active)
+      - Check for safe state indication (LEDs, alarms)
+      - Verify safe state persistent until deliberate reset
+    pass_criteria:
+      - "Safe state reachable from all states"
+      - "Safe state prevents identified hazards"
+      - "Safe state indication implemented"
+      - "Safe state persistent until reset"
+    fail_criteria:
+      - "Safe state not reachable from some states"
+      - "Safe state does not prevent hazards"
+      - "No safe state indication"
+    customer_impact: "Critical - Safe state implementation inadequate for safety"
+
+  # ============================================================================
+  # 6. Performance Implementation Validation
+  # ============================================================================
+
+  - check_id: "VAL-IMP-011"
+    deliverable: "C Source Code (.c files)"
+    category: "performance_validation"
+    description: "Verify implementation meets real-time constraints"
+    en50128_reference: "Table A.7 - Performance Testing (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review implementation from real-time perspective
+      - Check for blocking operations in time-critical paths
+      - Verify polling loops have timeouts
+      - Check for unbounded loops
+      - Verify interrupt service routines (ISRs) are short
+    pass_criteria:
+      - "No blocking operations in time-critical paths"
+      - "All polling loops have timeouts"
+      - "No unbounded loops"
+      - "ISRs are short (<10µs typical)"
+    fail_criteria:
+      - "Blocking operations in critical path"
+      - "Polling loops without timeouts"
+      - "Unbounded loops detected"
+    customer_impact: "Critical - Real-time constraints will not be met"
+
+  - check_id: "VAL-IMP-012"
+    deliverable: "Unit Test Results Report"
+    category: "performance_validation"
+    description: "Verify unit tests measure execution times for critical functions"
+    en50128_reference: "Table A.7 - Performance Testing"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review unit test results for timing measurements
+      - Check if critical functions timed in tests
+      - Verify worst-case execution time (WCET) measured
+      - Check timing measurements against requirements
+      - Verify timing margin adequate (≥20%)
+    pass_criteria:
+      - "Critical functions timed in unit tests"
+      - "WCET measured for time-critical functions"
+      - "Timing within requirements with ≥20% margin"
+    fail_criteria:
+      - "No timing measurements"
+      - "Timing exceeds requirements"
+      - "Insufficient timing margin (<20%)"
+    customer_impact: "Major - Performance issues will surface in integration"
+
+  # ============================================================================
+  # 7. Code Robustness Validation
+  # ============================================================================
+
+  - check_id: "VAL-IMP-013"
+    deliverable: "C Source Code (.c files)"
+    category: "robustness"
+    description: "Verify code handles unexpected inputs gracefully"
+    en50128_reference: "Table A.3 - Defensive Programming"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review code for robustness from operational perspective
+      - Check if unexpected inputs handled (out-of-range, corrupted data)
+      - Verify code does not crash on bad inputs
+      - Check for assertion or error return on invalid inputs
+      - Verify system remains operational or enters safe state
+    pass_criteria:
+      - "Unexpected inputs handled gracefully"
+      - "No crashes on bad inputs"
+      - "Invalid inputs detected and rejected"
+      - "System remains operational or safe"
+    fail_criteria:
+      - "Code crashes on unexpected inputs"
+      - "No validation of inputs"
+      - "Undefined behavior on bad inputs"
+    customer_impact: "Critical - System will fail in field on unexpected conditions"
+
+  - check_id: "VAL-IMP-014"
+    deliverable: "C Source Code (.c files)"
+    category: "robustness"
+    description: "Verify code handles resource constraints gracefully"
+    en50128_reference: "Section 7.7 - Robustness validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review code for resource constraint handling
+      - Check if buffer full conditions handled
+      - Verify queue overflow handling
+      - Check for memory allocation failures (if dynamic allocation used)
+      - Verify degraded operation on resource constraints
+    pass_criteria:
+      - "Buffer full conditions handled"
+      - "Queue overflow handled gracefully"
+      - "Memory allocation failures handled (if applicable)"
+      - "Degraded operation specified on resource limits"
+    fail_criteria:
+      - "No buffer overflow handling"
+      - "System crashes on resource exhaustion"
+    customer_impact: "Major - System will fail under high load conditions"
+
+  # ============================================================================
+  # 8. Implementation Traceability Validation
+  # ============================================================================
+
+  - check_id: "VAL-IMP-015"
+    deliverable: "C Source Code (.c files)"
+    category: "traceability"
+    description: "Verify code traceability to requirements for operational validation"
+    en50128_reference: "Table A.5 - Traceability (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "major"
+    validation_method: |
+      - Parse traceability from code comments or RTM
+      - Check if code modules trace to requirements
+      - Verify requirement IDs referenced in code
+      - Check for orphaned code (no requirement traceability)
+      - Verify traceability enables impact analysis for changes
+    pass_criteria:
+      - "Code modules trace to requirements"
+      - "Requirement IDs referenced in code or RTM"
+      - "No orphaned code"
+      - "Traceability enables impact analysis"
+    fail_criteria:
+      - "Code without requirement traceability"
+      - "Orphaned code detected"
+      - "Cannot trace code to requirements"
+    customer_impact: "Major - Cannot validate code meets operational requirements"

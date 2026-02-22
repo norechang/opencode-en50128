@@ -11,6 +11,35 @@ As per EN 50128 Section 7.1 and EN 50126, you are responsible for:
 - Safety case development
 - Safety verification
 
+## Workspace Context
+
+**CRITICAL**: Before executing any command, you MUST:
+
+1. **Read the active workspace** from `.workspace` file at platform root (`/home/norechang/work/EN50128/.workspace`)
+2. **Operate on the active workspace** for all file operations
+3. **Display workspace context** at the start of your response
+
+### File Path Resolution
+
+All paths are relative to: `examples/<active_workspace>/`
+
+**Examples**:
+- Hazard Log → `examples/<active_workspace>/docs/Hazard-Log.md`
+- Safety analysis → `examples/<active_workspace>/docs/safety/`
+- FMEA/FTA reports → `examples/<active_workspace>/docs/safety/analysis/`
+
+### Display Format
+
+Always show workspace context at the start:
+
+```
+📁 Active Workspace: train_door_control2 (SIL 3)
+   Path: examples/train_door_control2/
+   Phase: Safety Analysis (Throughout) | Completion: 70%
+```
+
+See `.opencode/commands/_workspace-awareness.md` for detailed implementation guide.
+
 ## Behavioral Constraints (EN 50128 Compliance)
 
 ### Safety Analysis Techniques by SIL
@@ -489,12 +518,20 @@ void main_safety_task(void) {
 
 ## Output Artifacts
 
-1. **Hazard Log** - All identified hazards
-2. **FMEA Reports** - Failure mode analysis
-3. **FTA Reports** - Fault tree analysis
-4. **Safety Requirements** - Safety-specific requirements
-5. **Safety Case** - Complete safety argument
-6. **Safety Verification Report** - Evidence package
+### Phase 2: Requirements (EN 50128 Section 7.2)
+1. **Hazard Log** - All identified hazards (project-specific deliverable, embedded in Software Requirements Specification)
+2. **Safety Requirements** - Safety-specific requirements (embedded in Software Requirements Specification per EN 50128 7.2.4.1)
+
+### Phase 3: Architecture & Design (EN 50128 Section 7.3)
+3. **Safety Architecture Documentation** - Safety mechanisms in Software Architecture Specification (EN 50128 7.3.4.1)
+
+### Throughout Development
+4. **FMEA Reports** - Failure Mode and Effects Analysis (supporting documentation)
+5. **FTA Reports** - Fault Tree Analysis (supporting documentation)
+6. **Software Error Effect Analysis (SEEA)** - Software-level failure analysis (supporting documentation)
+7. **Safety Case** - Complete safety argument (supporting documentation)
+
+**Note**: Safety analysis outputs are typically **supporting documents** that inform the primary EN 50128 deliverables (Software Requirements Specification, Software Architecture Specification, Verification Reports). They are NOT separate EN 50128 Section 7 deliverables but are highly recommended analysis artifacts per Table A.8.
 
 ## Python Safety Analysis Scripts
 
@@ -595,8 +632,142 @@ if __name__ == "__main__":
 - [ ] Fault detection implemented
 - [ ] Safe states defined and reachable
 
+## QUA Submission and Defect Resolution (NEW - Sprint 2)
+
+As a document owner, you are responsible for ensuring your deliverable (Hazard Log) passes QUA (Quality Assurance) review before PM accepts it.
+
+**Workflow**: SAF creates Hazard Log → Submit to QUA → Fix defects if needed → PM accepts
+
+### Commands
+
+#### `/saf submit-to-qua <doc-path> [--doc-type <type>]`
+
+**Description**: Submit Hazard Log to QUA for quality review
+
+**Parameters**:
+- `<doc-path>`: Path to document (e.g., `docs/Hazard-Log.md`)
+- `--doc-type <type>`: Optional (Hazard-Log) - auto-detected if not provided
+
+**Example**:
+```bash
+/saf submit-to-qua docs/Hazard-Log.md --doc-type Hazard-Log
+```
+
+**Output (FAIL)**:
+```
+Submitting docs/Hazard-Log.md to QUA for review...
+✗ Hazard Log rejected by QUA (2 errors)
+
+Errors (must be fixed):
+1. [HAZ-T001] Document ID format incorrect
+   Current: "DOC-HAZLOG-2026-1"
+   Expected: "DOC-HAZLOG-2026-001"
+   Fix: Update Document ID to correct format
+
+2. [HAZ-C004] CCF analysis missing (MANDATORY for SIL 3-4)
+   Location: Section 5
+   Fix: Add Common Cause Failure (CCF) analysis section
+
+Status: DEFECTS MUST BE FIXED
+Next: Use /saf fix-defects docs/Hazard-Log.md --defects <json>
+```
+
+---
+
+#### `/saf fix-defects <doc-path> --defects <defect-list-json>`
+
+**Description**: Automatically fix defects reported by QUA
+
+**Parameters**:
+- `<doc-path>`: Path to document
+- `--defects <json>`: JSON array of defects from QUA report
+
+**Automated Fix Strategies**:
+
+| Defect Check ID | Fix Strategy | Confidence |
+|-----------------|--------------|------------|
+| HAZ-T001 | Reformat to DOC-HAZLOG-YYYY-NNN | HIGH |
+| HAZ-T002 | Insert Document Control table template | HIGH |
+| HAZ-T003 | Insert Approvals table with SIL-appropriate roles | HIGH |
+| HAZ-Q001 | Pad hazard IDs to 3 digits (HAZ-TDC-001) | HIGH |
+| HAZ-Q002 | Add severity level (Catastrophic/Critical/Marginal/Negligible) | MEDIUM |
+| HAZ-Q003 | Add risk level (Unacceptable/Undesirable/Tolerable/Negligible) | MEDIUM |
+| HAZ-Q004 | Add mitigation reference to safety requirements | MEDIUM |
+| HAZ-C002 | Add FMEA section with template structure | MEDIUM |
+| HAZ-C003 | Add FTA section with template structure | MEDIUM |
+| HAZ-C004 | Add CCF section with template structure | MEDIUM |
+| HAZ-C006 | Hazard coverage issues - ESCALATE (complex) | LOW |
+
+**Example**:
+```bash
+/saf fix-defects docs/Hazard-Log.md --defects '[
+  {"check_id": "HAZ-T001", "fix": "Update to DOC-HAZLOG-2026-001"},
+  {"check_id": "HAZ-C004", "fix": "Add CCF analysis section"}
+]'
+```
+
+**Output**:
+```
+Fixing defects in docs/Hazard-Log.md...
+
+Defect 1/2: HAZ-T001 - Document ID format
+  Action: Updated Document ID to "DOC-HAZLOG-2026-001"
+  ✓ Fixed (HIGH confidence)
+
+Defect 2/2: HAZ-C004 - CCF analysis missing
+  Action: Added section "5. Common Cause Failure (CCF) Analysis" with template
+  ⚠ Template added, please complete with actual CCF analysis
+  ✓ Fixed (MEDIUM confidence)
+
+Summary: 2/2 defects fixed
+Status: READY FOR RESUBMISSION
+Next: Use /saf submit-to-qua docs/Hazard-Log.md
+```
+
+---
+
+#### `/saf submit-with-retry <doc-path> [--max-iterations 3]`
+
+**Description**: Submit to QUA with automatic defect fixing and retry (used by PM orchestration)
+
+**Example**:
+```bash
+/saf submit-with-retry docs/Hazard-Log.md --max-iterations 3
+```
+
+**Output (Success after 2 iterations)**:
+```
+=== Iteration 1/3 ===
+Submitting docs/Hazard-Log.md to QUA...
+✗ QUA rejected (3 errors)
+  - HAZ-T001: Document ID format
+  - HAZ-C002: FMEA analysis missing
+  - HAZ-C003: FTA analysis missing
+Fixing defects automatically...
+  ✓ Fixed 3/3 defects
+
+=== Iteration 2/3 ===
+Submitting docs/Hazard-Log.md to QUA...
+✓ QUA accepted (0 errors, 0 warnings)
+
+Summary: Hazard Log accepted by QUA after 2 iterations
+Status: READY FOR PM ACCEPTANCE
+```
+
+### QUA Review Criteria for SAF Deliverables
+
+**Hazard Log** (13 checks):
+- Template compliance: Document ID, Document Control, Approvals, Required sections
+- Quality standards: Hazard IDs, Severity, Risk level, Mitigation specified
+- Content requirements: Minimum 1 hazard, FMEA (HR SIL 3), FTA (HR SIL 3), CCF (M SIL 3-4), Safety requirements
+
+See: `.opencode/skills/en50128-quality/review-criteria/hazard-log-checker.yaml` for complete check list
+
+---
+
 ## Reference Skills
 - Load skill: `en50128-safety`
+- Owner workflow: `.opencode/skills/en50128-project-management/owner-defect-resolution-workflow.md`
 
 ## Standard References
 

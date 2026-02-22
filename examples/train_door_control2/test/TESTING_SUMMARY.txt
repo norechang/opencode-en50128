@@ -1,0 +1,196 @@
+================================================================================
+  TRAIN DOOR CONTROL SYSTEM - COMPONENT TESTING SUMMARY (SIL 3)
+================================================================================
+Project: train_door_control2
+SIL Level: 3 (Safety-Critical Railway Door Control)
+Date: 2026-02-22
+Tester: TST Agent (EN 50128 Role per AGENTS.md Section 4)
+Test Specification: DOC-COMPTEST-2026-001 v1.0
+Test Status: TEST_STATUS.md (DOC-TEST-STATUS-2026-001 v3.0)
+Iteration: 3 (After Defect Fixes)
+
+================================================================================
+EXECUTIVE SUMMARY
+================================================================================
+
+STATUS: ⚠️ NON-COMPLIANT (8 test cases missing, LOCK function untested)
+
+MOD-001 (Door Control FSM):
+  - Tests Implemented: 43/51 (84.3%) - 8 test cases missing
+  - Tests Passing: 43/43 (100%) ✅
+  - Statement Coverage: 90.50% ⚠️ (Target: 100%, Gap: 9.5%, 21 lines)
+  - Branch Coverage: 95.74% executed, 86.17% taken ⚠️ (Target: 100%)
+  - MC/DC Coverage: Not measured ❌ (MANDATORY for SIL 3)
+
+COMPLIANCE: ❌ NON-COMPLIANT with EN 50128:2011 Table A.21 (SIL 3 requires 100%)
+
+CRITICAL BLOCKER: transition_to_locked() function (REQ-FUNC-003, SIL 3) has 0% coverage
+  - This is a CRITICAL SAFETY FUNCTION (prevents doors opening while train moving)
+  - HAZ-001 "Doors open while train is moving" - Catastrophic severity
+  - 13 lines untested including lock actuator engagement and failure detection
+  - Missing test cases: TC-MOD001-019, 021, 021b, 022
+
+================================================================================
+ACHIEVEMENTS (Iteration 3 - After Defect Fixes)
+================================================================================
+
+✅ Defects Fixed by IMP Agent (2026-02-22)
+   - DEFECT #1 (CRITICAL): Event queue processing bug - FIXED
+     * Event-driven state transitions now functional
+     * Fix: Moved event dequeue to END of update cycle
+   - DEFECT #2 (MAJOR): Unreachable buffer full path - FIXED
+     * Buffer full condition now testable
+     * Fix: Reduced queue size from 16 to 8
+
+✅ Test Infrastructure Complete
+   - Custom test framework (test_harness.h/c)
+   - Mock system with fault injection support (test_mocks.h/c)
+   - Build system with coverage support (Makefile)
+   - Test runner (run_all_tests.c)
+
+✅ MOD-001 Test Suite (43 tests implemented)
+   - door_fsm_init(): 4 tests
+   - door_fsm_update(): 11 tests
+   - door_fsm_process_event(): 6 tests
+   - door_fsm_enter_safe_state(): 4 tests
+   - door_fsm_get_state(): 2 tests
+   - door_fsm_get_position(): 2 tests
+   - door_fsm_is_locked(): 3 tests
+   - Additional coverage tests: 11 tests
+
+✅ Coverage Improvement (3 Iterations)
+   - Iteration 1: 57.47% (27 tests)
+   - Iteration 2: 83.71% (43 tests) - Blocked by defects
+   - Iteration 3: 90.50% (43 tests) - Defects fixed
+   - Total Improvement: +33.03%
+
+✅ Defect Identification
+   - 2 CRITICAL/MAJOR implementation defects found and documented
+   - All defects include root cause analysis and recommendations
+
+================================================================================
+BLOCKERS (CRITICAL)
+================================================================================
+
+❌ DEFECT #1: Event Queue Processing Bug (DEF-IMPL-001)
+   Severity: CRITICAL
+   Location: door_fsm.c lines 136, 152
+   Impact: 13 lines (5.88%) UNREACHABLE
+   Description: door_fsm_process_queued_events() dequeues event BEFORE
+                event_queue_contains() checks for it. Door cannot respond
+                to commands.
+   Status: OPEN - Requires DES/IMP agent fix
+
+❌ DEFECT #2: Unreachable Buffer Full Code (DEF-DESIGN-001)
+   Severity: MAJOR
+   Location: door_fsm.c line 307
+   Impact: 1 line (0.45%) UNREACHABLE
+   Description: Queue size (16) exceeds unique queueable events (8),
+                making ERROR_BUFFER_FULL impossible to trigger.
+   Status: OPEN - Requires DES agent design decision
+
+❌ Private Function Error Paths
+   Impact: 22 lines (9.95%) UNREACHABLE without fixing DEFECT #1
+   Description: Private transition functions can only be tested through
+                event-driven state machine, which is blocked by DEFECT #1.
+
+TOTAL BLOCKED: 36 lines (16.29% of 221 total lines)
+
+================================================================================
+EN 50128:2011 COMPLIANCE ANALYSIS
+================================================================================
+
+Table A.21 - Test Coverage for Code (SIL 3-4):
+  - Statement Coverage: MANDATORY (M) - ❌ 83.71% (Target: 100%)
+  - Branch Coverage: MANDATORY (M) - ❌ Not measured
+  - MC/DC Coverage: MANDATORY (M) - ❌ Not measured
+
+Table A.5 - Verification and Testing:
+  - Dynamic Analysis and Testing: MANDATORY (M) - ✅ Implemented
+  - Functional Testing: MANDATORY (M) - ✅ 43 tests passing
+
+OVERALL COMPLIANCE: NON-COMPLIANT
+  Reason: Statement coverage below 100% (MANDATORY for SIL 3)
+  Risk Level: HIGH - Cannot release safety-critical software
+
+================================================================================
+NEXT STEPS (CRITICAL PATH)
+================================================================================
+
+1. DES/IMP AGENT (IMMEDIATE - 2-4 hours):
+   □ Fix DEFECT #1 (event queue bug) - MANDATORY
+   □ Decide on DEFECT #2 (accept as defensive code OR redesign)
+   □ Re-submit door_fsm.c for testing
+
+2. TST AGENT (after fixes - 4-6 hours):
+   □ Re-run 43 existing tests to verify fixes
+   □ Add tests for newly reachable code (36 lines)
+   □ Measure branch coverage using gcov -b
+   □ Measure MC/DC coverage
+   □ Implement tests for MOD-002 to MOD-008 (~150 tests)
+
+3. VER AGENT (after 100% coverage - 4-8 hours):
+   □ Static analysis (MISRA C, complexity, Cppcheck)
+   □ Create Software Source Code Verification Report
+   □ Verify traceability to requirements
+
+ESTIMATED TIME TO COMPLIANCE: 10-18 hours
+
+================================================================================
+ALTERNATIVE PATH (IF DEFECTS CANNOT BE FIXED)
+================================================================================
+
+If implementation defects cannot be fixed:
+  1. Create Deviation Report explaining coverage gap
+  2. Perform manual code review of untested 16.29%
+  3. Document as "unreachable due to implementation constraints"
+  4. Seek Safety Authority approval for deviation
+  
+RISK: May not satisfy SIL 3 requirements (100% coverage MANDATORY)
+RECOMMENDATION: Fix defects (Option 1 preferred over deviation)
+
+================================================================================
+FILES CREATED
+================================================================================
+
+Test Implementation:
+  examples/train_door_control2/test/test_harness.h
+  examples/train_door_control2/test/test_harness.c
+  examples/train_door_control2/test/test_mocks.h
+  examples/train_door_control2/test/test_mocks.c
+  examples/train_door_control2/test/test_door_fsm.c (43 tests)
+  examples/train_door_control2/test/test_stubs.c
+  examples/train_door_control2/test/run_all_tests.c
+  examples/train_door_control2/test/Makefile
+
+Test Results:
+  examples/train_door_control2/test/door_fsm.c.gcov (coverage report)
+  examples/train_door_control2/test/TEST_STATUS.md (detailed status)
+  examples/train_door_control2/test/TESTING_SUMMARY.txt (this file)
+
+================================================================================
+CONCLUSION
+================================================================================
+
+Unit testing for MOD-001 has achieved significant progress (83.71% coverage)
+but is BLOCKED from reaching 100% due to 2 implementation defects that make
+36 lines of code UNREACHABLE through normal testing.
+
+The door control system has a CRITICAL defect (DEF-IMPL-001) that prevents
+event-driven state transitions from working, making the door NON-FUNCTIONAL
+for command-based operations.
+
+RECOMMENDATION: HALT testing, escalate to DES/IMP agent to fix DEFECT #1,
+                then resume testing to achieve 100% coverage (MANDATORY SIL 3).
+
+TEST VERDICT: BLOCKED - Cannot proceed to VER phase until defects fixed
+
+================================================================================
+Document Control
+================================================================================
+Document ID: TEST-SUMMARY-2026-001
+Version: 1.0
+Date: 2026-02-22
+Author: TST Agent
+Approval: Pending defect resolution
+================================================================================

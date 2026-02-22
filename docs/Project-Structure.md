@@ -20,7 +20,8 @@ EN50128/                                   # EN 50128 Development Platform Root
 ├── .gitignore                             # Git ignore rules
 │
 ├── .opencode/                             # OpenCode Customization
-│   ├── commands/                          # 11 EN 50128 agent command definitions
+│   ├── commands/                          # 12 EN 50128 agent command definitions
+│   │   ├── cod.md                        # Lifecycle Coordinator (Section 5.3)
 │   │   ├── req.md                        # Requirements Engineer (Table A.2)
 │   │   ├── des.md                        # Designer (Table A.3)
 │   │   ├── imp.md                        # Implementer (Table A.4)
@@ -32,7 +33,8 @@ EN50128/                                   # EN 50128 Development Platform Root
 │   │   ├── qua.md                        # Quality Assurance (Table A.9)
 │   │   ├── pm.md                         # Project Manager (Section 5)
 │   │   └── cm.md                         # Configuration Manager (Section 6.6)
-│   └── skills/                            # 12 Domain-Specific EN 50128 Skills
+│   └── skills/                            # 13 Domain-Specific EN 50128 Skills
+│       ├── en50128-lifecycle-coordination/ # Lifecycle orchestration patterns
 │       ├── en50128-requirements/         # Requirements engineering patterns
 │       ├── en50128-design/               # Architecture & design patterns
 │       ├── en50128-implementation/       # C implementation with MISRA C
@@ -76,6 +78,7 @@ EN50128/                                   # EN 50128 Development Platform Root
 │   │
 │   ├── train_door_control/               # SIL 3 Reference Implementation
 │   │   ├── README.md                    # Project documentation
+│   │   ├── LIFECYCLE_STATE.md           # COD lifecycle tracking (if COD used)
 │   │   ├── Makefile                     # Build system with coverage
 │   │   ├── docs/                        # EN 50128 documentation
 │   │   │   └── requirements.md          # Software Requirements Specification
@@ -91,6 +94,7 @@ EN50128/                                   # EN 50128 Development Platform Root
 │   │
 │   └── [your_project]/                   # ⭐ Your EN 50128 projects here
 │       ├── README.md                    # Project documentation
+│       ├── LIFECYCLE_STATE.md           # COD lifecycle tracking (COD managed)
 │       ├── Makefile                     # Build system
 │       ├── docs/                        # Requirements, design, safety docs
 │       ├── src/                         # Your C source code
@@ -110,6 +114,98 @@ EN50128/                                   # EN 50128 Development Platform Root
 ```
 
 ## Key Concepts
+
+### Lifecycle Coordinator (COD)
+
+The **Lifecycle Coordinator (COD)** is a platform extension role that orchestrates the complete EN 50128 software development lifecycle with SIL-dependent phase gate enforcement.
+
+**When to Use COD:**
+- **SIL 3-4 projects**: MANDATORY - COD provides strict phase gate enforcement
+- **SIL 2 projects**: RECOMMENDED - COD provides semi-strict enforcement with justification requirements
+- **SIL 0-1 projects**: OPTIONAL - COD provides advisory warnings only
+
+**COD Initialization:**
+```bash
+# Initialize lifecycle tracking for your project
+/cod plan --sil 3 --project train_door_control
+
+# This creates LIFECYCLE_STATE.md in your project root
+# Format: examples/[project_name]/LIFECYCLE_STATE.md
+```
+
+**COD Commands:**
+| Command | Purpose | When to Use |
+|---------|---------|-------------|
+| `/cod plan --sil [0-4] --project [name]` | Initialize lifecycle tracking | At project start |
+| `/cod gate-check <phase>` | Verify phase completion, authorize transition | After each phase |
+| `/cod status` | View current lifecycle state and progress | Anytime during project |
+| `/cod approve-requirement` | Approve requirement activities | Auto-triggered when `/req` invoked |
+
+**SIL-Dependent Behavior:**
+- **SIL 0-1**: Advisory mode - warnings only, allows user override
+- **SIL 2**: Semi-strict mode - requires justification for incomplete criteria
+- **SIL 3-4**: Strict gatekeeper - BLOCKS transitions until criteria met
+
+**Phase Gates Enforced by COD:**
+1. Planning gate (`/cod gate-check planning`)
+2. Requirements gate (`/cod gate-check requirements`)
+3. Design gate (`/cod gate-check design`)
+4. Implementation gate (`/cod gate-check implementation`)
+5. Integration gate (`/cod gate-check integration`)
+6. Validation gate (`/cod gate-check validation`)
+7. Assessment gate (`/cod gate-check assessment`)
+
+**LIFECYCLE_STATE.md:**
+COD maintains project state in `LIFECYCLE_STATE.md` (project root):
+- Current phase and status
+- Deliverable completion status
+- Phase gate pass/fail status
+- Traceability status (RTM completeness)
+- Agent activity log
+- Approval history
+
+**Example: Using COD in a Project:**
+```bash
+# 1. Initialize project with COD
+cd examples/my_sil3_project
+/cod plan --sil 3 --project my_sil3_project
+
+# 2. Proceed through lifecycle with phase gates
+/pm   # Project setup
+/cm   # Configuration management
+/qua  # Quality assurance planning
+/cod gate-check planning  # COD verifies planning complete
+
+/req  # Requirements (COD requires user approval)
+/cod gate-check requirements  # COD verifies SRS, RTM, hazard analysis
+
+/des  # Design
+/cod gate-check design  # COD verifies SAS, SDS, traceability
+
+/imp  # Implementation
+/cod gate-check implementation  # COD verifies MISRA C, coverage, complexity
+
+# ... continue through integration, validation, assessment
+
+# 3. Check status anytime
+/cod status  # View current phase, deliverables, gate status
+```
+
+**Authority Structure with COD:**
+```
+    Lifecycle Coordinator (COD)
+             |
+    ┌────────┼────────┐
+    |        |        |
+   PM   Validator  Assessor
+   |    (indep)    (indep)
+   |
+   └─── REQ, DES, IMP, TST, INT, VER, SAF, QUA, CM
+```
+
+- **COD**: Overall lifecycle authority, phase gate enforcement
+- **PM**: Team/resource management, reports to COD for lifecycle decisions
+- **Validator/Assessor**: Independent roles (SIL 3-4), coordinated by COD but not controlled
 
 ### Platform vs. Project
 

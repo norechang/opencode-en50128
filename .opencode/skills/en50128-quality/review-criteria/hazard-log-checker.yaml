@@ -1,0 +1,212 @@
+document_type: "Hazard-Log"
+checker_version: "1.0"
+description: "Quality checks for Hazard Log per EN 50128 Section 7.1 and Table A.8"
+
+# Template compliance checks
+template_checks:
+  # Document ID format
+  - id: "HAZ-T001"
+    name: "Document ID Format"
+    description: "Verify Document ID follows DOC-HAZLOG-YYYY-NNN format"
+    severity: "error"
+    rule_type: "regex"
+    rule_params:
+      pattern: "DOC-HAZLOG-[0-9]{4}-[0-9]{3}"
+      search_section: "Document Control"
+    expected: "Document ID matches DOC-HAZLOG-YYYY-NNN"
+    failure_message: "Document ID does not match required format"
+    fix_suggestion: "Update Document ID to DOC-HAZLOG-YYYY-NNN (e.g., DOC-HAZLOG-2026-001)"
+  
+  # Document Control table
+  - id: "HAZ-T002"
+    name: "Document Control Table"
+    description: "Verify Document Control table exists"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "Document Control"
+      required_columns: ["Field", "Value"]
+      required_fields:
+        - "Document ID"
+        - "Version"
+        - "Date"
+        - "Author"
+        - "Status"
+    expected: "Document Control table present"
+    failure_message: "Document Control table missing or incomplete"
+    fix_suggestion: "Add Document Control table with required fields"
+  
+  # Approvals table
+  - id: "HAZ-T003"
+    name: "Approvals Table"
+    description: "Verify Approvals table for SIL 3+"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "Approvals"
+      required_columns: ["Role", "Name", "Signature", "Date"]
+      required_roles_sil_3:
+        - "Author (SAF)"
+        - "Reviewer (QUA)"
+        - "Approver (PM)"
+      minimum_sil: 3
+    expected: "Approvals table with Author, Reviewer, Approver"
+    failure_message: "Approvals table missing (required SIL 3+)"
+    fix_suggestion: "Add Approvals table with roles: Author (SAF), Reviewer (QUA), Approver (PM)"
+  
+  # Required sections
+  - id: "HAZ-T004"
+    name: "Required Sections"
+    description: "Verify all required sections exist"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      required_sections:
+        - "1. Introduction"
+        - "2. Hazard Identification"
+        - "3. Failure Mode and Effects Analysis (FMEA)"
+        - "4. Fault Tree Analysis (FTA)"
+        - "5. Common Cause Failure (CCF) Analysis"
+        - "6. Safety Requirements"
+    expected: "All required sections present"
+    failure_message: "One or more required sections missing"
+    fix_suggestion: "Add missing sections per EN 50128 hazard analysis requirements"
+
+# Quality standards checks
+quality_checks:
+  # Hazard ID format
+  - id: "HAZ-Q001"
+    name: "Hazard ID Format"
+    description: "Verify all hazards have IDs in HAZ-XXX-NNN format"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**HAZ-"
+      id_pattern: "^HAZ-[A-Z]+-[0-9]{3}"
+    expected: "All hazards have IDs matching HAZ-XXX-NNN"
+    failure_message: "One or more hazards have invalid ID format"
+    fix_suggestion: "Ensure all hazard IDs follow HAZ-XXX-NNN format (e.g., HAZ-TDC-001)"
+  
+  # Hazard severity
+  - id: "HAZ-Q002"
+    name: "Hazard Severity"
+    description: "Verify all hazards have severity level"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**HAZ-"
+      field_pattern: "Severity:\\s*(Catastrophic|Critical|Marginal|Negligible)"
+      field_description: "severity level"
+    expected: "All hazards have severity (Catastrophic/Critical/Marginal/Negligible)"
+    failure_message: "One or more hazards missing severity level"
+    fix_suggestion: "Add severity level to all hazards per EN 50126"
+  
+  # Hazard risk level
+  - id: "HAZ-Q003"
+    name: "Hazard Risk Level"
+    description: "Verify all hazards have risk level"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**HAZ-"
+      field_pattern: "Risk Level:\\s*(Unacceptable|Undesirable|Tolerable|Negligible)"
+      field_description: "risk level"
+    expected: "All hazards have risk level classification"
+    failure_message: "One or more hazards missing risk level"
+    fix_suggestion: "Add risk level (Unacceptable/Undesirable/Tolerable/Negligible) to all hazards"
+  
+  # Mitigation specified
+  - id: "HAZ-Q004"
+    name: "Hazard Mitigation"
+    description: "Verify all hazards have mitigation strategy"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**HAZ-"
+      field_pattern: "Mitigation:"
+      field_description: "mitigation strategy"
+    expected: "All hazards have mitigation specified"
+    failure_message: "One or more hazards missing mitigation"
+    fix_suggestion: "Add mitigation strategy (safety requirements) to all hazards"
+
+# Content requirement checks
+content_checks:
+  # At least one hazard
+  - id: "HAZ-C001"
+    name: "Minimum Hazards"
+    description: "Verify at least one hazard exists"
+    severity: "error"
+    rule_type: "count_minimum"
+    rule_params:
+      item_pattern: "^\\*\\*HAZ-[A-Z]+-[0-9]{3}"
+      minimum_count: 1
+    expected: "At least 1 hazard identified"
+    failure_message: "No hazards found in Hazard Log"
+    fix_suggestion: "Identify and document hazards in section 2"
+  
+  # FMEA analysis for SIL 2+ (HR for SIL 3)
+  - id: "HAZ-C002"
+    name: "FMEA Analysis"
+    description: "Verify FMEA analysis performed for SIL 2+"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "3. Failure Mode and Effects Analysis (FMEA)"
+      content_must_contain: "Failure Mode"
+      minimum_sil: 2
+    expected: "FMEA analysis present (HR for SIL 3)"
+    failure_message: "FMEA analysis missing (highly recommended for SIL 3)"
+    fix_suggestion: "Perform FMEA analysis per EN 50128 Table A.8 (HR for SIL 3)"
+  
+  # FTA analysis for SIL 2+ (HR for SIL 3)
+  - id: "HAZ-C003"
+    name: "FTA Analysis"
+    description: "Verify FTA analysis performed for SIL 2+"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "4. Fault Tree Analysis (FTA)"
+      content_must_contain: "Fault Tree"
+      minimum_sil: 2
+    expected: "FTA analysis present (HR for SIL 3)"
+    failure_message: "FTA analysis missing (highly recommended for SIL 3)"
+    fix_suggestion: "Perform FTA analysis per EN 50128 Table A.8 (HR for SIL 3)"
+  
+  # CCF analysis (M for SIL 3-4)
+  - id: "HAZ-C004"
+    name: "CCF Analysis"
+    description: "Verify CCF analysis performed for SIL 3-4"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "5. Common Cause Failure (CCF) Analysis"
+      content_must_contain: "Common Cause"
+      minimum_sil: 3
+    expected: "CCF analysis present (MANDATORY for SIL 3-4)"
+    failure_message: "CCF analysis missing (mandatory for SIL 3-4)"
+    fix_suggestion: "Perform CCF analysis per EN 50128 Table A.8 (M for SIL 3-4)"
+  
+  # Safety requirements derived
+  - id: "HAZ-C005"
+    name: "Safety Requirements"
+    description: "Verify safety requirements derived from hazards"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "6. Safety Requirements"
+      content_must_contain: "REQ-"
+    expected: "Safety requirements section references derived requirements"
+    failure_message: "Safety requirements section missing or empty"
+    fix_suggestion: "Add section 6 with safety requirements derived from hazard analysis"
+  
+  # All hazards have safety requirements
+  - id: "HAZ-C006"
+    name: "Hazard Coverage"
+    description: "Verify all hazards have associated safety requirements"
+    severity: "error"
+    rule_type: "hazard_coverage"
+    rule_params:
+      check_mitigation_references: true
+    expected: "All hazards have safety requirements (REQ-XXX-NNN references)"
+    failure_message: "One or more hazards lack safety requirement references"
+    fix_suggestion: "Ensure each hazard's mitigation field references specific safety requirements (REQ-XXX-NNN)"

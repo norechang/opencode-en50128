@@ -1,0 +1,249 @@
+document_type: "Software-Component-Design-Specification"
+checker_version: "1.0"
+description: "Quality checks for Software Component Design Specification per EN 50128 Section 7.4.4.1 and Table A.4"
+
+# Template compliance checks (EN 50128 document structure)
+template_checks:
+  # Document ID format
+  - id: "COMPDES-T001"
+    name: "Document ID Format"
+    description: "Verify Document ID follows DOC-COMPDES-YYYY-NNN format"
+    severity: "error"
+    rule_type: "regex"
+    rule_params:
+      pattern: "DOC-COMPDES-[0-9]{4}-[0-9]{3}"
+      search_section: "STANDARD HEADER"
+    expected: "Document ID matches DOC-COMPDES-YYYY-NNN (e.g., DOC-COMPDES-2026-001)"
+    failure_message: "Document ID does not match required format DOC-COMPDES-YYYY-NNN"
+    fix_suggestion: "Update Document ID to format DOC-COMPDES-YYYY-NNN (e.g., DOC-COMPDES-2026-001)"
+  
+  # Standard Header table
+  - id: "COMPDES-T002"
+    name: "Standard Header Table"
+    description: "Verify Standard Header table exists with required fields"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "STANDARD HEADER"
+      required_columns: ["Field", "Value"]
+      required_fields:
+        - "Document ID"
+        - "Version"
+        - "Date"
+        - "Project"
+        - "SIL Level"
+        - "Author"
+        - "Status"
+    expected: "Standard Header table with all required fields"
+    failure_message: "Standard Header table missing or incomplete"
+    fix_suggestion: "Add Standard Header table with fields: Document ID, Version, Date, Project, SIL Level, Author, Status"
+  
+  # Document Control table
+  - id: "COMPDES-T003"
+    name: "Document Control Table"
+    description: "Verify Document Control table exists"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "DOCUMENT CONTROL"
+      required_columns: ["Version", "Date", "Author", "Changes", "Approved By"]
+    expected: "Document Control table with version history"
+    failure_message: "Document Control table missing or incomplete"
+    fix_suggestion: "Add Document Control table with columns: Version, Date, Author, Changes, Approved By"
+  
+  # Approvals table (SIL 3+ requires Designer + Independent Reviewer + QA + PM)
+  - id: "COMPDES-T004"
+    name: "Approvals Table"
+    description: "Verify Approvals table exists with required roles"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "APPROVALS"
+      required_columns: ["Role", "Name", "Signature", "Date"]
+      required_roles_sil_3:
+        - "Author (Designer)"
+        - "Independent Reviewer"
+        - "QA Manager"
+        - "Project Manager"
+      minimum_sil: 3
+    expected: "Approvals table with Author, Reviewer, QA, PM"
+    failure_message: "Approvals table missing or incomplete (required SIL 3+)"
+    fix_suggestion: "Add Approvals table with roles: Author (Designer), Independent Reviewer, QA Manager, Project Manager"
+  
+  # Required sections per EN 50128 7.4
+  - id: "COMPDES-T005"
+    name: "Required Sections"
+    description: "Verify all required sections exist per EN 50128 7.4"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      required_sections:
+        - "1. INTRODUCTION"
+        - "2. COMPONENT OVERVIEW"
+        - "3. COMPONENT DESIGNS"
+        - "4. ALGORITHMS AND PSEUDOCODE"
+        - "5. DATA STRUCTURES"
+        - "6. ERROR HANDLING"
+        - "7. COMPLEXITY ANALYSIS"
+        - "8. REQUIREMENTS TRACEABILITY"
+        - "9. EN 50128 COMPLIANCE"
+    expected: "All required sections present"
+    failure_message: "One or more required sections missing"
+    fix_suggestion: "Add missing sections per EN 50128 Section 7.4 component design requirements"
+
+# Quality standards checks (EN 50128 7.4.4)
+quality_checks:
+  # Component ID format
+  - id: "COMPDES-Q001"
+    name: "Component ID Format"
+    description: "All components must have IDs in format COMP-XXX"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "COMP-"
+      minimum: 1
+      context: "component definitions"
+    expected: "At least 1 component defined with ID format COMP-XXX"
+    failure_message: "No components defined with COMP-XXX ID format"
+    fix_suggestion: "Define components with ID format COMP-XXX (e.g., COMP-001, COMP-002)"
+  
+  # Algorithms specified with pseudocode
+  - id: "COMPDES-Q002"
+    name: "Algorithms with Pseudocode"
+    description: "All algorithms must be specified with pseudocode or flowcharts"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "Algorithm"
+      minimum: 1
+      context: "algorithm specifications"
+    expected: "Algorithms specified with pseudocode or flowcharts"
+    failure_message: "No algorithms found with pseudocode"
+    fix_suggestion: "Add pseudocode or flowcharts for all algorithms (EN 50128 7.4.4.2)"
+  
+  # Data structures with fixed sizes
+  - id: "COMPDES-Q003"
+    name: "Data Structures Fixed Sizes"
+    description: "All data structures must define fixed sizes (static allocation)"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "size"
+      minimum: 1
+      context: "data structure definitions"
+    expected: "All data structures have fixed sizes specified"
+    failure_message: "Data structures missing size specifications"
+    fix_suggestion: "Add fixed sizes to all data structures (static allocation for SIL 2+)"
+  
+  # Cyclomatic complexity specified
+  - id: "COMPDES-Q004"
+    name: "Cyclomatic Complexity Specified"
+    description: "Cyclomatic complexity must be specified for all components"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "Complexity"
+      minimum: 1
+      context: "complexity analysis"
+    expected: "Complexity specified (≤10 SIL 3-4, ≤15 SIL 2)"
+    failure_message: "No complexity analysis found"
+    fix_suggestion: "Add cyclomatic complexity for each component (≤10 for SIL 3-4)"
+  
+  # Fixed-width types used (MISRA C compliance)
+  - id: "COMPDES-Q005"
+    name: "Fixed-Width Types Used"
+    description: "All data types must use fixed-width types (uint8_t, uint16_t, etc.)"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "uint"
+      minimum: 1
+      context: "data types"
+    expected: "Fixed-width types used (uint8_t, uint16_t, uint32_t, int8_t, etc.)"
+    failure_message: "No fixed-width types found - using native types (int, char) violates MISRA C"
+    fix_suggestion: "Use fixed-width types (uint8_t, uint16_t, uint32_t, int8_t, etc.) per MISRA C:2012"
+  
+  # Requirements traceability present
+  - id: "COMPDES-Q006"
+    name: "Requirements Traceability"
+    description: "Components must be traced to architecture elements"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "MOD-"
+      minimum: 1
+      context: "traceability"
+    expected: "Components traced to architecture modules (MOD-XXX)"
+    failure_message: "No architecture traceability found"
+    fix_suggestion: "Add traceability linking each component to architecture modules"
+
+# EN 50128 compliance checks
+en50128_checks:
+  # Section 7.4.4.2 - All algorithms described
+  - id: "COMPDES-EN001"
+    name: "All Algorithms Described"
+    description: "All algorithms must be described with sufficient detail (EN 50128 7.4.4.2)"
+    severity: "error"
+    rule_type: "section_content"
+    rule_params:
+      section: "4. ALGORITHMS AND PSEUDOCODE"
+      minimum_words: 100
+    expected: "Algorithms described in detail with pseudocode"
+    failure_message: "Algorithms section too short or missing detail"
+    fix_suggestion: "Provide detailed algorithm descriptions with pseudocode per EN 50128 7.4.4.2"
+  
+  # Section 7.4.4.3 - All data structures specified
+  - id: "COMPDES-EN002"
+    name: "Data Structures Specified"
+    description: "All data structures must be completely specified (EN 50128 7.4.4.3)"
+    severity: "error"
+    rule_type: "section_content"
+    rule_params:
+      section: "5. DATA STRUCTURES"
+      minimum_words: 50
+    expected: "All data structures specified with types and sizes"
+    failure_message: "Data structures section incomplete"
+    fix_suggestion: "Specify all data structures with data types, sizes, and initialization values per EN 50128 7.4.4.3"
+
+# SIL-specific checks
+sil_checks:
+  # SIL 2+ requires static allocation
+  - id: "COMPDES-SIL001"
+    name: "Static Memory Allocation"
+    description: "All data structures must use static allocation (SIL 2+ mandatory)"
+    severity: "error"
+    minimum_sil: 2
+    rule_type: "negative_keyword"
+    rule_params:
+      forbidden_keywords: ["malloc", "calloc", "realloc", "free", "dynamic"]
+    expected: "No dynamic memory allocation - static allocation only"
+    failure_message: "Dynamic memory allocation found - forbidden for SIL 2+"
+    fix_suggestion: "Use static allocation for all data structures (EN 50128 Table A.4 - static allocation mandatory SIL 2+)"
+  
+  # SIL 3-4 requires complexity ≤10
+  - id: "COMPDES-SIL002"
+    name: "Cyclomatic Complexity Limit"
+    description: "Cyclomatic complexity must be ≤10 for SIL 3-4 (≤15 for SIL 2)"
+    severity: "error"
+    minimum_sil: 3
+    rule_type: "numeric_threshold"
+    rule_params:
+      keyword: "Complexity"
+      maximum: 10
+      context: "complexity values"
+    expected: "All components have complexity ≤10 (SIL 3-4)"
+    failure_message: "Complexity exceeds limit (>10 for SIL 3-4)"
+    fix_suggestion: "Reduce complexity to ≤10 by refactoring complex components"
+  
+  # SIL 3-4 no recursion
+  - id: "COMPDES-SIL003"
+    name: "No Recursion"
+    description: "Recursion forbidden for SIL 3-4 (highly recommended)"
+    severity: "warning"
+    minimum_sil: 3
+    rule_type: "negative_keyword"
+    rule_params:
+      forbidden_keywords: ["recursion", "recursive", "calls itself"]
+    expected: "No recursion used (HR for SIL 3-4)"
+    failure_message: "Recursion found - highly recommended to avoid for SIL 3-4"
+    fix_suggestion: "Replace recursive algorithms with iterative implementations"

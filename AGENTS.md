@@ -63,16 +63,20 @@ EN 50128:2011 defines the following organizational roles:
 | Role | EN 50128 Reference | Description | Independence Required |
 |------|-------------------|-------------|----------------------|
 | **Lifecycle Coordinator (COD)** | Platform Extension (Section 5.3) | End-to-end lifecycle orchestration, phase gate enforcement | No |
+| **V&V Manager (VMGR)** | Platform Extension (Section 5.1.2.10) | Independent V&V authority, manages Verifier team, provides final V&V approval | Yes (SIL 3-4) |
 | **Project Manager** | Section 5, Table B.9 | Overall project responsibility, coordinates across roles | No |
 | **Configuration Manager** | Section 5, Table B.10 | Configuration and change management | No |
 
 **Important Notes**:
 - **Lifecycle Coordinator (COD)** is a platform extension role (not explicitly in EN 50128) that orchestrates the complete V-Model lifecycle
+- **V&V Manager (VMGR)** is a platform extension role (based on EN 50128 Section 5.1.2.10e "Verifier can report to Validator") that provides independent V&V authority for SIL 3-4 projects
 - **Software Manager** (5.3.1) has responsibility for software development activities
 - **Project Manager** (Table B.9) has overall project coordination responsibility under COD's lifecycle authority
 - Both Software Manager and Project Manager are defined in EN 50128; they have different scopes
 - **COD has overall lifecycle authority**; PM reports to COD for lifecycle decisions
+- **VMGR is INDEPENDENT from COD and PM** (SIL 3-4); coordinates with COD but does not report to COD
 - Independence is MANDATORY for Verifier, Validator, and Assessor roles at SIL 3-4
+- Independence is MANDATORY for VMGR at SIL 3-4 (manages independent V&V team)
 - One person MAY perform multiple roles IF independence requirements are met
 
 ---
@@ -91,7 +95,7 @@ EN 50128:2011 defines the following organizational roles:
 
 **Responsibilities**:
 - Requirements elicitation and analysis
-- Software Requirements Specification (SRS) development
+- Software Requirements Specification development
 - Requirements traceability management
 - SIL level assignment
 
@@ -120,8 +124,8 @@ EN 50128:2011 defines the following organizational roles:
 **Role**: Software Architecture and Design per EN 50128 Section 7.3
 
 **Responsibilities**:
-- Software Architecture Specification (SAS)
-- Software Design Specification (SDS)
+- Software Architecture Specification
+- Software Design Specification
 - Interface design
 - Design verification
 
@@ -472,7 +476,87 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 ---
 
-### 12. Lifecycle Coordinator (`/cod`)
+### 12. V&V Manager (`/vmgr`)
+
+**Role**: Verification and Validation Management (Platform Extension Role for SIL 3-4)
+
+**EN 50128 Basis**: Section 5.1.2.10e "Verifier can report to... Validator"
+
+**Responsibilities**:
+- Independent V&V authority for SIL 3-4 projects
+- Manages Verifier team (VER reports to VMGR)
+- Provides final V&V approval/rejection for phase gates
+- Coordinates with COD (but does NOT report to COD)
+- Ensures independence from development organization (PM, REQ, DES, IMP, INT, TST)
+- Reviews and approves all Verification Reports
+- Reviews and approves all Validation Reports
+- Provides V&V status to COD for gate check decisions
+
+**Key Behaviors**:
+- **MANDATORY for SIL 3-4** (highly recommended for SIL 2)
+- **Independent authority** - VMGR decisions CANNOT be overridden by COD or PM
+- **Reports to Safety Authority / Customer** (not PM, not COD)
+- **Coordinates with COD** - provides approval/rejection, COD enforces gate based on VMGR decision
+- **Manages VER team** - VER agents report to VMGR (EN 50128 5.1.2.10e)
+- **Performs Validation activities** - VMGR acts as Validator role (VAL)
+- **Independence preservation** - VMGR SHALL NOT be influenced by project schedule/cost pressures
+- **Quality gate enforcement** - VER/VAL reports must pass QUA template compliance before VMGR review
+
+**V&V Workflow (SIL 3-4)**:
+1. VER creates Verification Report
+2. VER submits to QUA for template compliance check (1 pass)
+3. QUA approves/rejects (if rejected, VER fixes and resubmits ONCE)
+4. VER submits to VMGR for technical review
+5. VMGR reviews and approves/rejects Verification Report
+6. VMGR performs Validation activities (as VAL role)
+7. VMGR creates Validation Report
+8. VMGR submits to QUA for template compliance check (1 pass)
+9. QUA approves/rejects (if rejected, VMGR fixes and resubmits ONCE)
+10. VMGR informs COD of V&V approval/rejection
+11. COD enforces gate based on VMGR decision (CANNOT override)
+
+**Authority Structure**:
+```
+        Safety Authority / Customer
+                |
+        ┌───────┴───────┐
+        |               |
+    COD (Lifecycle)  VMGR (Independent V&V)
+        |               |
+    PM (Team)       VER (Verification)
+        |
+    REQ, DES, IMP, INT, TST, QUA, CM, SAF
+```
+
+**EN 50128 References**:
+- **Section 5.1.2.10e**: "Verifier can report to the Project Manager or to the Validator" (PRIMARY)
+- **Section 5.1.2.10f**: "Validator shall not report to the Project Manager" (INDEPENDENCE)
+- **Section 5.1.2.8**: "The Validator shall give agreement/disagreement for the software release"
+- **Section 5.1.2.10i**: "A person who is Verifier shall neither be Requirements Manager, Designer, Implementer, Integrator, Tester nor Validator"
+- **Section 5.1.2.10j**: "A person who is Validator shall neither be Requirements Manager, Designer, Implementer, Integrator, Tester nor Verifier"
+
+**Rationale**:
+EN 50128 requires independent Verifier and Validator roles for SIL 3-4 (Section 5.1.2.10) and allows Verifier to report to Validator (5.1.2.10e). VMGR is a **platform extension role** that:
+- Formalizes the "Validator manages Verifier" organizational structure
+- Provides single point of V&V authority for large SIL 3-4 projects
+- Ensures independence from development organization (COD, PM)
+- Combines Validator responsibilities with Verifier team management
+- Simplifies coordination with COD while preserving independence
+
+**VMGR Commands**:
+1. `/vmgr status` - Report V&V status for all phases
+2. `/vmgr review-verification <phase>` - Review VER report and approve/reject
+3. `/vmgr review-validation <phase>` - Review VAL activities for phase
+4. `/vmgr approve-gate <phase>` - Provide V&V approval/rejection to COD
+5. `/vmgr independence-check` - Verify independence requirements met
+
+**Command File**: `.opencode/commands/vmgr.md`  
+**Skills**: `skills/en50128-vv-management/`  
+**Standard**: `std/EN50128-2011.md` Section 5.1.2.10
+
+---
+
+### 13. Lifecycle Coordinator (`/cod`)
 
 **Role**: Lifecycle Orchestration (Platform Extension Role)
 
@@ -499,7 +583,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 - **Phase sequence enforcement** - prevent out-of-sequence activities
 - **Independence preservation** - coordinate with but do not control Validator/Assessor (SIL 3-4)
 - **Iteration management** - handle feedback loops with change control
-- **Traceability verification** - ensure RTM complete at all phases
+- **Traceability verification** - ensure traceability complete at all phases
 
 **Authority Structure**:
 ```
@@ -529,8 +613,8 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 **Lifecycle Phases Managed**:
 - Phase 0: Initialization (COD-specific)
 - Phase 1: Planning (SQAP, SCMP, SVP, SVaP)
-- Phase 2: Requirements (SRS, RTM, Hazard Log)
-- Phase 3: Architecture & Design (SAS, SDS, Interfaces)
+- Phase 2: Requirements (Software Requirements Specification, traceability, Hazard Log)
+- Phase 3: Architecture & Design (Software Architecture Specification, Software Design Specification, Software Interface Specifications)
 - Phase 4: Implementation & Testing (Source Code, Unit Tests)
 - Phase 5: Integration (Integration Tests)
 - Phase 6: Validation (System Tests, Validation Report)
@@ -540,7 +624,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 **Phase Gate Criteria** (per phase, per SIL):
 - Deliverables complete per Annex C Table C.1
 - Quality criteria met (coverage, complexity, MISRA C, etc.)
-- Traceability complete (RTM up-to-date)
+- Traceability complete (embedded in Software Requirements Specification, up-to-date)
 - Reviews and approvals obtained
 - EN 50128 techniques applied per Table A.x
 - Configuration baselines established
@@ -590,7 +674,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 │         │ - Assign SIL levels
 │         │ - Generate traceability
 └────┬────┘
-     │ (SRS, Trace Matrix)
+     │ (Software Requirements Specification, Traceability)
      │ COD Gate Check: /cod gate-check requirements
      ▼
 ┌─────────┐
@@ -599,7 +683,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 │         │ - Module design
 │         │ - Interface design
 └────┬────┘
-     │ (SAS, SDS)
+     │ (Software Architecture Specification, Software Design Specification)
      │ COD Gate Check: /cod gate-check design
      ▼
 ┌─────────┐
@@ -687,61 +771,88 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 # Assign SIL levels
 # Generate traceability matrix
 
-# 2. DES: Design architecture
-/des
-# Create architecture (C modules, interfaces)
-# Design for static allocation
-# Ensure complexity limits
-# Design review
-
-# 3. SAF: Safety analysis
+# 2. SAF: Safety analysis
 /saf
 # Identify hazards
 # Perform FMEA on C code
 # Define safety requirements
 # Design fault detection
 
-# 4. IMP: Implement in C
+# 3. QUA: Document template compliance (MANDATORY SIL 3-4, BEFORE VER)
+/qua
+# Verify Document ID format (DOC-XXX-YYYY-NNN)
+# Verify Document Control table
+# Verify Approvals table with SIL-specific roles
+# Generate QA Template Compliance Report
+
+# 4. DES: Design architecture
+/des
+# Create architecture (C modules, interfaces)
+# Design for static allocation
+# Ensure complexity limits
+# Design review
+
+# 5. QUA: Design document template compliance (MANDATORY SIL 3-4, BEFORE VER)
+/qua
+# Verify design documents follow template
+# Design review - complexity, defensive programming
+# Generate QA Design Review Report
+
+# 6. IMP: Implement in C
 /imp
 # Write C code (MISRA C compliant)
 # Static allocation only
 # Defensive programming
 # Unit tests
 
-# 5. QUA: Code review
-/qua
-# Review C code
-# Check MISRA C compliance
-# Verify complexity
-# Check defensive programming
-
-# 6. TST: Test
+# 7. TST: Test
 /tst
 # Execute unit tests
 # Execute integration tests
 # Measure coverage (100% for SIL 3+)
 # Fault injection
 
-# 7. INT: Integration
+# 8. QUA: Code review (MANDATORY all SILs, BEFORE VER)
+/qua
+# Review C code
+# Check MISRA C compliance (zero mandatory violations SIL 2+)
+# Verify complexity (≤10 SIL 3-4, ≤15 SIL 2)
+# Check defensive programming
+# Generate QA Code Review Report
+
+# 9. VER: Verify
+/ver
+# Run static analysis (PC-lint, Cppcheck)
+# Check coverage
+# Verify complexity
+# Verify QA reviews performed
+# Collect evidence
+
+# 10. INT: Integration
 /int
 # Integrate components
 # Integration testing
 # Interface testing
 # Performance testing
 
-# 8. VER: Verify
-/ver
-# Run static analysis (PC-lint, Cppcheck)
-# Check coverage
-# Verify complexity
-# Collect evidence
+# 11. QUA: Integration test review (MANDATORY SIL 3-4)
+/qua
+# Verify integration test documentation follows template
+# Review integration test results
+# Generate QA Integration Test Review Report
 
-# 9. VAL: Validate
+# 12. VAL: Validate
 /val
 # System testing on target
 # Operational scenarios
 # Acceptance testing
 # Customer approval
+
+# 13. QUA: Validation review (MANDATORY SIL 3-4)
+/qua
+# Verify validation documentation follows template
+# Review validation test results
+# Generate QA Validation Review Report
 
 # Throughout: COD, CM, PM
 /cod # Lifecycle coordination, phase gates, compliance enforcement

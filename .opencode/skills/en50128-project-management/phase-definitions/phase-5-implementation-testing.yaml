@@ -1,0 +1,166 @@
+phase:
+  id: "implementation-testing"
+  number: 5
+  name: "Component Implementation and Testing"
+  
+  # Agent activities (EN 50128 Section 7.5 - 3 documents)
+  activities:
+    # Activity 0: IMP creates Software Source Code and supporting documentation (Annex C #18)
+    - agent: "imp"
+      task_description: "Implement Software Source Code and supporting documentation for all components following MISRA C:2012, defensive programming patterns, and coding standards"
+      owner: "imp"
+      deliverables:
+        - path: "src/"
+          doc_id: "DOC-SOURCECODE-2026-001"
+          doc_type: "Software-Source-Code-and-supporting-documentation"
+          qua_required: true
+      parallel_group: 1
+    
+    # Activity 1: TST executes Software Component Test Report (Annex C #19)
+    - agent: "tst"
+      task_description: "Execute Software Component (Unit) Tests and create Software Component Test Report with test results, coverage analysis, and pass/fail status"
+      owner: "tst"
+      deliverables:
+        - path: "docs/test/Software-Component-Test-Report.md"
+          doc_id: "DOC-COMPTESTRPT-2026-001"
+          doc_type: "Software-Component-Test-Report"
+          qua_required: true
+      dependencies: [0]           # Component tests depend on source code
+    
+    # Activity 2: VER creates Software Source Code Verification Report (Annex C #20)
+    - agent: "ver"
+      task_description: "Create Software Source Code Verification Report verifying that Software Source Code implements the Software Component Design Specification and meets all verification criteria including MISRA C compliance, static analysis, complexity, and coverage"
+      owner: "ver"
+      deliverables:
+        - path: "docs/reports/Software-Source-Code-Verification-Report.md"
+          doc_id: "DOC-IMPVER-2026-001"
+          doc_type: "Software-Source-Code-Verification-Report"
+          qua_required: true        # VER reports require QUA template review
+      dependencies: [0, 1]        # Verification depends on source code and test report
+    
+    # Activity 3: QUA reviews Verification Report for template compliance (MANDATORY SIL 3-4)
+    - agent: "qua"
+      task_description: "Review Software Source Code Verification Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
+      owner: "qua"
+      deliverables:
+        - path: "docs/reports/QA-Template-Review-Implementation-Verification.md"
+          doc_id: "DOC-QAREV-2026-007"
+          doc_type: "QA-Template-Compliance-Review"
+          qua_required: false      # QUA self-review not required
+      dependencies: [2]            # QUA depends on VER report (index 2)
+      sil_requirements:
+        sil_0: "optional"
+        sil_1: "recommended"
+        sil_2: "recommended"
+        sil_3: "mandatory"
+        sil_4: "mandatory"
+    
+    # Activity 4: VAL creates Software Source Code Validation Report (SIL 3-4)
+    # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
+    - agent: "val"
+      task_description: "Create Software Source Code Validation Report validating that Software Source Code executes correctly, meets performance requirements, and is fit for purpose in the target environment. For SIL 3-4, VMGR performs this activity."
+      owner: "val"
+      deliverables:
+        - path: "docs/reports/Software-Source-Code-Validation-Report.md"
+          doc_id: "DOC-IMPVAL-2026-001"
+          doc_type: "Software-Source-Code-Validation-Report"
+          qua_required: true        # VAL reports require QUA template review
+      dependencies: [0, 1, 2, 3]  # Validation depends on source, tests, verification report, and QUA review
+    
+    # Activity 5: QUA reviews Validation Report for template compliance (MANDATORY SIL 3-4)
+    - agent: "qua"
+      task_description: "Review Software Source Code Validation Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
+      owner: "qua"
+      deliverables:
+        - path: "docs/reports/QA-Template-Review-Implementation-Validation.md"
+          doc_id: "DOC-QAREV-2026-008"
+          doc_type: "QA-Template-Compliance-Review"
+          qua_required: false      # QUA self-review not required
+      dependencies: [4]            # QUA depends on VAL report (index 4)
+      sil_requirements:
+        sil_0: "optional"
+        sil_1: "recommended"
+        sil_2: "recommended"
+        sil_3: "mandatory"
+        sil_4: "mandatory"
+  
+  # Phase completion criteria (EN 50128 Section 7.5)
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true
+    coverage_requirements:
+      components_to_source: 100   # 100% components traced to source code
+      tests_to_components: 100    # 100% components have unit tests
+      statement_coverage_sil34: 100   # 100% statement coverage (SIL 3-4)
+      branch_coverage_sil34: 100      # 100% branch coverage (SIL 3-4)
+      condition_coverage_sil34: 100   # 100% MC/DC coverage (SIL 3-4)
+      statement_coverage_sil2: 100    # 100% statement coverage (SIL 2)
+      branch_coverage_sil2: 100       # 100% branch coverage (SIL 2)
+    custom_checks:
+      - "All 7 EN 50128 documents delivered (Software Source Code and supporting documentation, Software Component Test Report, Software Source Code Verification Report per Annex C #20, QA Template Review of Verification Report, Software Source Code Validation Report, QA Template Review of Validation Report)"
+      - "MISRA C:2012 compliance: ZERO mandatory rule violations (SIL 2+)"
+      - "MISRA C:2012 compliance: Required rule violations justified (SIL 2+)"
+      - "Static allocation only - no malloc/calloc/realloc/free (M for SIL 2+)"
+      - "No recursion (HR for SIL 3-4)"
+      - "All function return values checked"
+      - "All pointers validated before use"
+      - "Cyclomatic complexity ≤10 for SIL 3-4 (≤15 for SIL 2)"
+      - "Fixed-width types used (uint8_t, uint16_t, int32_t, etc.)"
+      - "All unit tests executed and passed (100% pass rate)"
+      - "Coverage requirements met per SIL level"
+      - "Static analysis clean (PC-lint/Cppcheck/Clang)"
+      - "QUA template compliance reviews approved (SIL 3-4 MANDATORY)"
+      - "VMGR V&V approval obtained (SIL 3-4 MANDATORY)"
+  
+  # Verification requirements (EN 50128 Section 7.5.4.8-7.5.4.10, Annex C #20)
+  verification:
+    required: true
+    verifier: "ver"
+    criteria:
+      - "Software Source Code adequately implements Software Component Design Specification"
+      - "Correct use of techniques from Table A.4 (Structured Programming M for SIL 3-4)"
+      - "Coding standards correctly applied (MISRA C:2012 for SIL 2+)"
+      - "Source code meets readability and traceability requirements (5.3.2.7-5.3.2.10)"
+      - "Source code meets specific requirements (7.5.4.1-7.5.4.4)"
+      - "Software Component Test Report adequate record of tests per Software Component Test Specification"
+      - "MISRA C:2012 mandatory rules: ZERO violations (SIL 2+)"
+      - "MISRA C:2012 required rules: Violations justified"
+      - "Static analysis passed (PC-lint Plus, Cppcheck, Clang Static Analyzer)"
+      - "Complexity analysis passed (cyclomatic complexity within limits)"
+      - "Coverage analysis passed (statement, branch, MC/DC per SIL)"
+      - "Defensive programming patterns verified (NULL checks, bounds checks, error handling)"
+      - "Static allocation verified (no dynamic memory)"
+      - "No recursion verified (HR for SIL 3-4)"
+      - "Fixed-width types verified"
+      - "Traceability: Component Design → Source Code → Unit Tests → Test Results"
+  
+  # Validation requirements (EN 50128 Section 7.5, independent validation SIL 3-4)
+  validation:
+    required_sil: [3, 4]
+    validator: "val"
+    criteria:
+      - "Source code executes correctly on target hardware"
+      - "Unit tests execute correctly with Unity framework"
+      - "Coverage requirements achievable and achieved"
+      - "Source code behavior matches component design specifications"
+      - "Error handling works correctly (fault injection testing)"
+      - "Performance requirements met (execution time, memory usage)"
+      - "Source code is maintainable and readable"
+  
+  # Gate check configuration
+  gate_check:
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [3, 4]
+    criteria:
+      - "All deliverables QUA accepted"
+      - "Verification report approved"
+      - "Validation report approved (SIL 3-4 only)"
+      - "Traceability complete (Component Design → Source → Tests → Results)"
+      - "No open critical or high defects"
+      - "MISRA C:2012 compliance verified (zero mandatory violations SIL 2+)"
+      - "Coverage requirements met (100% statement/branch/condition SIL 3-4)"
+      - "Static analysis passed (zero critical findings)"
+      - "Complexity limits satisfied (≤10 SIL 3-4, ≤15 SIL 2)"
+      - "All unit tests passed (100% pass rate)"
+      - "Code review completed and approved (QUA)"
+      - "Source code under configuration control"

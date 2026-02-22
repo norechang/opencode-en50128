@@ -1,0 +1,583 @@
+# Integration Phase Verification Criteria
+# EN 50128 Section 7.6 - Software Integration
+# Table A.6 - Integration Techniques/Measures
+
+metadata:
+  phase: "Integration"
+  phase_id: "phase-5-integration"
+  en50128_section: "7.6"
+  en50128_tables: ["A.6", "A.13", "A.18"]
+  description: "Verification criteria for software integration, interface testing, and system-level validation"
+  mandatory_deliverables:
+    - "Integration Test Plan"
+    - "Integration Test Specification"
+    - "Integration Test Results Report"
+    - "Interface Test Results"
+    - "Performance Test Results"
+    - "Integration Traceability Matrix (RTM update)"
+
+verification_checks:
+  # ============================================================================
+  # 1. Integration Strategy Verification
+  # ============================================================================
+  
+  - check_id: "VER-INT-001"
+    deliverable: "Integration Test Plan"
+    category: "integration_strategy"
+    description: "Verify integration strategy defined (bottom-up, top-down, or sandwich)"
+    en50128_reference: "Section 7.6 - Integration approach"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    verification_method: |
+      - Review Integration Test Plan section "2. Integration Strategy"
+      - Verify integration approach defined (bottom-up, top-down, sandwich)
+      - Check for integration sequence documented
+      - Verify integration phases/increments defined
+      - Check for stub/driver requirements identified
+    pass_criteria:
+      - "Integration approach clearly defined"
+      - "Integration sequence documented with dependencies"
+      - "Integration phases/increments specified"
+      - "Stubs and drivers identified where needed"
+    fail_criteria:
+      - "No integration strategy defined"
+      - "Integration sequence not documented"
+      - "Missing stub/driver requirements"
+
+  - check_id: "VER-INT-002"
+    deliverable: "Integration Test Plan"
+    category: "integration_strategy"
+    description: "Verify progressive integration with incremental builds"
+    en50128_reference: "Section 7.6 - Progressive integration"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    verification_method: |
+      - Review Integration Test Plan integration increments
+      - Verify integration is progressive (not "big bang")
+      - Check each increment adds limited new components
+      - Verify integration order respects dependencies
+      - Check for regression testing after each increment
+    pass_criteria:
+      - "Progressive integration approach (not big bang)"
+      - "Integration increments defined with clear scope"
+      - "Each increment adds ≤5 new components"
+      - "Dependency order respected"
+      - "Regression testing planned after each increment"
+    fail_criteria:
+      - "Big bang integration (all at once)"
+      - "Integration increments too large (>5 components)"
+      - "Dependencies violated in integration order"
+      - "No regression testing planned"
+
+  # ============================================================================
+  # 2. Interface Testing Verification (Mandatory all SILs)
+  # ============================================================================
+
+  - check_id: "VER-INT-003"
+    deliverable: "Interface Test Results"
+    category: "interface_testing"
+    description: "Verify ALL module interfaces tested"
+    en50128_reference: "Table A.6 - Interface Testing (mandatory concept for all SILs)"
+    sil_applicability:
+      sil_0: "highly_recommended"
+      sil_1: "highly_recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - List all module interfaces from SAS
+      - Review Interface Test Results for coverage
+      - Verify every interface has at least one test case
+      - Check for interface parameter testing (valid, invalid, boundary)
+      - Verify interface error handling tested
+    pass_criteria:
+      - "ALL module interfaces have test cases"
+      - "Interface parameters tested (valid, invalid, boundary values)"
+      - "Interface error handling tested (NULL, out-of-range, etc.)"
+      - "100% interface coverage"
+    fail_criteria:
+      - "Untested interfaces present"
+      - "Missing parameter validation tests"
+      - "Missing error handling tests"
+
+  - check_id: "VER-INT-004"
+    deliverable: "Interface Test Results"
+    category: "interface_testing"
+    description: "Verify interface boundary value testing performed"
+    en50128_reference: "Table A.14 - Boundary Value Analysis (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review interface test cases for boundary value testing
+      - Verify numeric parameters tested at min, max, min-1, max+1
+      - Verify pointer parameters tested with NULL
+      - Verify array parameters tested at size boundaries (0, 1, max, max+1)
+      - Check for buffer overflow/underflow testing
+    pass_criteria:
+      - "All numeric parameters tested at boundaries"
+      - "All pointer parameters tested with NULL"
+      - "All array parameters tested at size boundaries"
+      - "Buffer overflow/underflow tests present"
+    fail_criteria:
+      - "Missing boundary value tests"
+      - "Missing NULL pointer tests"
+      - "Missing buffer overflow tests"
+
+  - check_id: "VER-INT-005"
+    deliverable: "Interface Test Results"
+    category: "interface_testing"
+    description: "Verify interface data consistency and integrity"
+    en50128_reference: "Table A.6 - Interface Testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review interface test cases for data integrity checks
+      - Verify data passed across interfaces maintains integrity
+      - Check for data type consistency (no implicit conversions)
+      - Verify data range preservation across interfaces
+      - Check for data corruption detection mechanisms (CRC, checksums)
+    pass_criteria:
+      - "Data integrity verified across all interfaces"
+      - "No data corruption detected in interface tests"
+      - "Data type consistency maintained"
+      - "Data ranges preserved across interfaces"
+    fail_criteria:
+      - "Data corruption detected in interface tests"
+      - "Data type inconsistencies found"
+      - "Data range violations across interfaces"
+
+  # ============================================================================
+  # 3. Functional and Black-Box Testing (HR all SILs)
+  # ============================================================================
+
+  - check_id: "VER-INT-006"
+    deliverable: "Integration Test Results Report"
+    category: "functional_testing"
+    description: "Verify functional and black-box testing performed at integration level"
+    en50128_reference: "Table A.6 - Functional and Black-box Testing (HR for all SILs)"
+    sil_applicability:
+      sil_0: "highly_recommended"
+      sil_1: "highly_recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review Integration Test Specification for functional test cases
+      - Verify test cases derived from requirements (black-box)
+      - Check for functional coverage of integrated subsystems
+      - Verify test cases independent of implementation details
+      - Check for functional equivalence classes tested
+    pass_criteria:
+      - "Functional test cases derived from requirements"
+      - "Black-box approach (no internal implementation knowledge)"
+      - "Functional coverage ≥90% of integrated subsystem requirements"
+      - "Equivalence classes identified and tested"
+    fail_criteria:
+      - "No functional test cases"
+      - "Test cases based on implementation (white-box only)"
+      - "Functional coverage <90%"
+
+  - check_id: "VER-INT-007"
+    deliverable: "Integration Test Results Report"
+    category: "functional_testing"
+    description: "Verify ALL integration tests PASS with ZERO failures"
+    en50128_reference: "Table A.13 - Integration Testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Review Integration Test Results Report
+      - Verify all integration tests executed
+      - Check for test failures, errors, or skips
+      - Verify test logs clean (no errors)
+    pass_criteria:
+      - "ALL integration tests PASS (100% pass rate)"
+      - "ZERO test failures or errors"
+      - "ZERO skipped tests (or justified)"
+      - "Test logs clean (no unexpected errors)"
+    fail_criteria:
+      - "ANY test failures or errors"
+      - "Skipped tests without justification"
+      - "Tests not executed"
+
+  - check_id: "VER-INT-008"
+    deliverable: "Integration Test Results Report"
+    category: "test_coverage"
+    description: "Verify integration test coverage of requirements"
+    en50128_reference: "Table A.6 - Functional Testing coverage"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Map integration test cases to requirements
+      - Calculate requirements coverage percentage
+      - Verify coverage meets SIL-specific targets:
+        - SIL 0-1: ≥80%
+        - SIL 2: ≥90%
+        - SIL 3-4: ≥95%
+      - Check for untested requirements with justifications
+    pass_criteria:
+      - "SIL 0-1: Requirements coverage ≥80%"
+      - "SIL 2: Requirements coverage ≥90%"
+      - "SIL 3-4: Requirements coverage ≥95%"
+      - "Untested requirements justified"
+    fail_criteria:
+      - "Requirements coverage below SIL target"
+      - "Untested requirements without justification"
+
+  # ============================================================================
+  # 4. Performance Testing (R for SIL 2, HR for SIL 3-4)
+  # ============================================================================
+
+  - check_id: "VER-INT-009"
+    deliverable: "Performance Test Results"
+    category: "performance_testing"
+    description: "Verify performance testing performed on integrated system"
+    en50128_reference: "Table A.6 - Performance Testing (R for SIL 2, HR for SIL 3-4)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "not_applicable"
+      sil_2: "recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    verification_method: |
+      - Review Performance Test Results
+      - Verify timing requirements tested
+      - Check for worst-case execution time (WCET) measurements
+      - Verify memory usage measurements (stack, heap, static)
+      - Check for CPU utilization measurements
+      - Verify throughput and latency tested
+    pass_criteria:
+      - "Performance tests executed on integrated system"
+      - "WCET measured and within requirements"
+      - "Memory usage measured and within limits"
+      - "CPU utilization acceptable (<80% average, <95% peak)"
+      - "Throughput and latency meet requirements"
+    fail_criteria:
+      - "No performance testing performed (SIL 3-4)"
+      - "WCET exceeds requirements"
+      - "Memory usage exceeds limits"
+      - "CPU utilization excessive (>95% sustained)"
+
+  - check_id: "VER-INT-010"
+    deliverable: "Performance Test Results"
+    category: "performance_testing"
+    description: "Verify real-time constraints met under worst-case conditions"
+    en50128_reference: "Table A.18 - Real-time Testing (HR for SIL 3-4)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "not_applicable"
+      sil_2: "recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review real-time constraint testing
+      - Verify worst-case scenarios tested (max load, max interrupts)
+      - Check for deadline miss detection
+      - Verify priority inversion handling
+      - Check for timing margin analysis (WCET vs deadline)
+    pass_criteria:
+      - "Real-time constraints tested under worst-case load"
+      - "ZERO deadline misses detected"
+      - "Priority inversion handled or prevented"
+      - "Timing margin ≥20% (WCET ≤80% of deadline)"
+    fail_criteria:
+      - "Deadline misses detected"
+      - "Insufficient timing margin (<20%)"
+      - "Priority inversion not handled"
+
+  # ============================================================================
+  # 5. Error and Exception Handling Testing
+  # ============================================================================
+
+  - check_id: "VER-INT-011"
+    deliverable: "Integration Test Results Report"
+    category: "error_handling"
+    description: "Verify error propagation across module boundaries tested"
+    en50128_reference: "Table A.3 - Defensive Programming (HR for SIL 2+)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review error propagation test cases
+      - Verify errors injected at module boundaries
+      - Check error codes propagated correctly
+      - Verify error handling at each integration level
+      - Check for error logging and reporting
+    pass_criteria:
+      - "Error injection tests at all module boundaries"
+      - "Error codes propagated correctly through call stack"
+      - "Error handling verified at each integration level"
+      - "Error logging and reporting functional"
+    fail_criteria:
+      - "Missing error injection tests"
+      - "Error codes not propagated correctly"
+      - "Error handling failures detected"
+
+  - check_id: "VER-INT-012"
+    deliverable: "Integration Test Results Report"
+    category: "error_handling"
+    description: "Verify safe state transitions on critical errors"
+    en50128_reference: "Table A.3 - Fault Detection and Diagnosis (HR for SIL 3-4)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review safe state transition test cases
+      - Verify critical errors trigger safe state
+      - Check for safe state reachability within time limits
+      - Verify system remains in safe state until reset
+      - Check for safe state monitoring and reporting
+    pass_criteria:
+      - "Critical errors trigger safe state transition"
+      - "Safe state reached within specified time (<100ms typical)"
+      - "System remains in safe state until authorized reset"
+      - "Safe state events logged and reported"
+    fail_criteria:
+      - "Safe state not reached on critical error"
+      - "Safe state transition time excessive"
+      - "System exits safe state unexpectedly"
+
+  # ============================================================================
+  # 6. Hardware/Software Integration (if applicable)
+  # ============================================================================
+
+  - check_id: "VER-INT-013"
+    deliverable: "Integration Test Results Report"
+    category: "hw_sw_integration"
+    description: "Verify hardware/software interface testing (if applicable)"
+    en50128_reference: "Section 7.6 - Software/Hardware Integration"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review HW/SW interface test cases (if target HW used)
+      - Verify hardware abstraction layer (HAL) tested
+      - Check for I/O operation testing (GPIO, UART, CAN, etc.)
+      - Verify interrupt handling tested
+      - Check for hardware fault injection (if safety-critical)
+    pass_criteria:
+      - "HAL functions tested on target hardware"
+      - "I/O operations verified functional"
+      - "Interrupt handling correct (latency, priority)"
+      - "Hardware fault injection performed (SIL 3-4)"
+    fail_criteria:
+      - "HW/SW interfaces not tested on target hardware"
+      - "I/O operation failures"
+      - "Interrupt handling issues"
+
+  # ============================================================================
+  # 7. Regression Testing
+  # ============================================================================
+
+  - check_id: "VER-INT-014"
+    deliverable: "Integration Test Results Report"
+    category: "regression_testing"
+    description: "Verify regression testing performed after each integration increment"
+    en50128_reference: "Section 7.6 - Progressive integration with regression"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    verification_method: |
+      - Review regression test execution after each integration increment
+      - Verify previously passing tests still pass
+      - Check for regression defects introduced
+      - Verify regression test suite updated with new tests
+    pass_criteria:
+      - "Regression tests executed after each integration increment"
+      - "ALL previous tests still pass (no regression defects)"
+      - "Regression test suite updated with new integration tests"
+    fail_criteria:
+      - "No regression testing performed"
+      - "Regression defects detected (previous tests now fail)"
+      - "Regression test suite not maintained"
+
+  # ============================================================================
+  # 8. Integration Traceability Verification
+  # ============================================================================
+
+  - check_id: "VER-INT-015"
+    deliverable: "Integration Traceability Matrix (RTM update)"
+    category: "traceability"
+    description: "Verify all integration tests trace to requirements"
+    en50128_reference: "Table A.5 - Traceability (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Parse RTM for Requirements → Integration Tests mappings
+      - Verify every requirement has at least one integration test
+      - Verify every integration test traces to requirement(s)
+      - Check for untested requirements
+      - Verify traceability is bidirectional
+    pass_criteria:
+      - "All requirements have at least one integration test"
+      - "All integration tests trace to requirements"
+      - "No untested requirements (or justified)"
+      - "Bidirectional traceability maintained"
+    fail_criteria:
+      - "Requirements without integration tests"
+      - "Integration tests without requirement traceability"
+      - "Untested requirements without justification"
+
+  - check_id: "VER-INT-016"
+    deliverable: "Integration Traceability Matrix (RTM update)"
+    category: "traceability"
+    description: "Verify integration test coverage of interfaces"
+    en50128_reference: "Table A.5 - Traceability (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Parse RTM for Interfaces → Integration Tests mappings
+      - Verify every interface has at least one integration test
+      - Verify every integration test traces to interface(s)
+      - Check for untested interfaces
+      - Verify traceability is bidirectional
+    pass_criteria:
+      - "All interfaces have at least one integration test"
+      - "All integration tests trace to interfaces"
+      - "No untested interfaces"
+      - "Bidirectional traceability maintained"
+    fail_criteria:
+      - "Interfaces without integration tests"
+      - "Integration tests without interface traceability"
+      - "Untested interfaces present"
+
+  # ============================================================================
+  # 9. EN 50128 Technique Application Verification
+  # ============================================================================
+
+  - check_id: "VER-INT-017"
+    deliverable: "Integration Test Plan"
+    category: "standards_compliance"
+    description: "Verify mandatory EN 50128 Table A.6 techniques applied"
+    en50128_reference: "Table A.6 - Integration Techniques/Measures"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    verification_method: |
+      - Review Integration Test Plan for EN 50128 technique application
+      - Verify recommended techniques applied:
+        - Functional and Black-box Testing (HR for all SILs)
+        - Interface Testing (HR for all SILs)
+        - Performance Testing (R for SIL 2, HR for SIL 3-4)
+      - Check for technique application evidence in test results
+    pass_criteria:
+      - "Functional and Black-box Testing applied"
+      - "Interface Testing applied (all interfaces tested)"
+      - "Performance Testing applied (SIL 2+)"
+      - "Technique application documented and evidenced"
+    fail_criteria:
+      - "Mandatory techniques not applied"
+      - "No evidence of technique application"
+
+  # ============================================================================
+  # 10. Integration Defect Management
+  # ============================================================================
+
+  - check_id: "VER-INT-018"
+    deliverable: "Integration Test Results Report"
+    category: "defect_management"
+    description: "Verify all integration defects resolved or tracked"
+    en50128_reference: "Section 6.7 - Problem Reporting and Resolution"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review integration defect log
+      - Verify all defects documented with ID, severity, description
+      - Check for defect resolution status (open, resolved, closed)
+      - Verify critical/major defects RESOLVED before proceeding
+      - Check for defect root cause analysis (SIL 3-4)
+    pass_criteria:
+      - "All defects documented in defect tracking system"
+      - "ZERO critical/major defects open"
+      - "Minor defects tracked with target resolution date"
+      - "Root cause analysis performed for critical defects (SIL 3-4)"
+    fail_criteria:
+      - "Critical or major defects still open"
+      - "Defects not documented or tracked"
+      - "No root cause analysis (SIL 3-4)"

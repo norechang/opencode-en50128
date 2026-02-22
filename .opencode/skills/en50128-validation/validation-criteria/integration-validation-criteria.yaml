@@ -1,0 +1,493 @@
+# Integration Phase Validation Criteria
+# EN 50128 Section 7.6 - Software Integration
+# Validation Focus: "Does the integrated system work in realistic operational scenarios?"
+
+metadata:
+  phase: "Integration"
+  phase_id: "phase-5-integration"
+  en50128_section: "7.6, 7.7"
+  description: "Validation criteria to ensure integrated system meets operational needs"
+  mandatory_deliverables:
+    - "Integration Test Plan"
+    - "Integration Test Specification"
+    - "Integration Test Results Report"
+    - "Performance Test Results"
+
+validation_checks:
+  # ============================================================================
+  # 1. End-to-End Operational Scenario Validation
+  # ============================================================================
+  
+  - check_id: "VAL-INT-001"
+    deliverable: "Integration Test Specification"
+    category: "operational_scenarios"
+    description: "Verify integration tests cover realistic end-to-end operational scenarios"
+    en50128_reference: "Section 7.7.2 - Operational scenario testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review integration test scenarios from operational perspective
+      - Check if scenarios reflect actual operational workflows
+      - Verify scenarios include realistic timing and sequences
+      - Check for multi-step scenarios (not just single function tests)
+      - Verify user interaction sequences tested
+    pass_criteria:
+      - "Test scenarios reflect actual operational workflows"
+      - "Realistic timing and sequences used"
+      - "Multi-step end-to-end scenarios tested"
+      - "User interaction sequences tested"
+    fail_criteria:
+      - "Test scenarios unrealistic or trivial"
+      - "Only single-function tests (no end-to-end)"
+      - "User interactions not tested"
+    customer_impact: "Critical - System may not work in real operational scenarios"
+
+  - check_id: "VAL-INT-002"
+    deliverable: "Integration Test Results Report"
+    category: "operational_scenarios"
+    description: "Verify normal operational mode tested end-to-end"
+    en50128_reference: "Section 7.7.2 - Normal operation testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review integration test results for normal operation scenarios
+      - Check if complete operational cycle tested (startup → operation → shutdown)
+      - Verify typical user workflows executed successfully
+      - Check for sustained operation testing (not just one-shot tests)
+      - Verify normal operation performance acceptable
+    pass_criteria:
+      - "Complete operational cycle tested"
+      - "Typical user workflows executed successfully"
+      - "Sustained operation tested (≥10 minutes typical)"
+      - "Performance acceptable in normal operation"
+    fail_criteria:
+      - "Incomplete operational cycle"
+      - "Only one-shot tests (no sustained operation)"
+      - "Performance issues in normal operation"
+    customer_impact: "Critical - System may not support daily operational use"
+
+  - check_id: "VAL-INT-003"
+    deliverable: "Integration Test Results Report"
+    category: "operational_scenarios"
+    description: "Verify abnormal and degraded mode scenarios tested"
+    en50128_reference: "Section 7.7.2 - Abnormal scenario testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review integration tests for abnormal scenarios
+      - Check if partial failures tested (sensor loss, communication loss)
+      - Verify degraded mode operation tested
+      - Check for graceful degradation validated
+      - Verify user notifications tested (warnings, alarms)
+    pass_criteria:
+      - "Partial failure scenarios tested"
+      - "Degraded mode operation validated"
+      - "Graceful degradation confirmed"
+      - "User notifications working"
+    fail_criteria:
+      - "Abnormal scenarios not tested"
+      - "No degraded mode testing"
+      - "System fails on partial failures"
+    customer_impact: "Critical - System will not handle real-world failures gracefully"
+
+  # ============================================================================
+  # 2. Performance and Timing Validation
+  # ============================================================================
+
+  - check_id: "VAL-INT-004"
+    deliverable: "Performance Test Results"
+    category: "performance_validation"
+    description: "Verify system meets user-perceived performance requirements"
+    en50128_reference: "Table A.7 - Performance Testing (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review performance test results from user perspective
+      - Check if user response times meet expectations (<500ms UI typical)
+      - Verify system responsiveness under normal load
+      - Check for performance degradation under load
+      - Verify recovery time after transient overload
+    pass_criteria:
+      - "User response times meet expectations"
+      - "System responsive under normal load"
+      - "Acceptable degradation under overload"
+      - "Quick recovery after transient overload (<1 second)"
+    fail_criteria:
+      - "User response times too slow"
+      - "System sluggish under normal load"
+      - "Unacceptable degradation or no recovery"
+    customer_impact: "Critical - System will not meet user performance expectations"
+
+  - check_id: "VAL-INT-005"
+    deliverable: "Performance Test Results"
+    category: "performance_validation"
+    description: "Verify system stable under sustained operational load"
+    en50128_reference: "Table A.18 - Load and stress testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review sustained load test results
+      - Check if system tested at operational load for extended duration
+      - Verify no memory leaks (memory stable over time)
+      - Check for performance degradation over time
+      - Verify no resource exhaustion (buffers, queues)
+    pass_criteria:
+      - "System tested at operational load ≥1 hour"
+      - "No memory leaks (memory usage stable)"
+      - "No performance degradation over time"
+      - "No resource exhaustion detected"
+    fail_criteria:
+      - "Memory leaks detected"
+      - "Performance degrades over time"
+      - "Resource exhaustion occurs"
+    customer_impact: "Critical - System will fail during sustained operation"
+
+  - check_id: "VAL-INT-006"
+    deliverable: "Performance Test Results"
+    category: "performance_validation"
+    description: "Verify system handles peak operational load"
+    en50128_reference: "Table A.18 - Peak load testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review peak load test results
+      - Check if system tested at maximum expected operational load
+      - Verify real-time constraints met at peak load
+      - Check for load shedding or prioritization (if designed)
+      - Verify system recovers when load decreases
+    pass_criteria:
+      - "System tested at maximum expected load"
+      - "Real-time constraints met at peak"
+      - "Load shedding works (if designed)"
+      - "System recovers when load decreases"
+    fail_criteria:
+      - "System fails at peak load"
+      - "Real-time constraints violated at peak"
+      - "No recovery after peak load"
+    customer_impact: "Critical - System will fail during peak operational periods"
+
+  # ============================================================================
+  # 3. Interface and Interoperability Validation
+  # ============================================================================
+
+  - check_id: "VAL-INT-007"
+    deliverable: "Integration Test Results Report"
+    category: "interoperability"
+    description: "Verify external interfaces work with real external systems"
+    en50128_reference: "Section 7.6 - Interface testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review interface testing with real external systems
+      - Check if interfaces tested with actual target systems (not stubs)
+      - Verify protocol compatibility validated
+      - Check for interoperability issues resolved
+      - Verify interface performance acceptable in real environment
+    pass_criteria:
+      - "Interfaces tested with actual target systems"
+      - "Protocol compatibility validated"
+      - "Interoperability issues resolved"
+      - "Interface performance acceptable"
+    fail_criteria:
+      - "Interfaces only tested with stubs"
+      - "Interoperability issues detected"
+      - "Protocol incompatibilities found"
+    customer_impact: "Critical - System will not integrate with existing infrastructure"
+
+  - check_id: "VAL-INT-008"
+    deliverable: "Integration Test Results Report"
+    category: "interoperability"
+    description: "Verify human-machine interface (HMI) usable in operational context"
+    en50128_reference: "Section 7.7 - Usability validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "recommended"
+      sil_3: "recommended"
+      sil_4: "recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review HMI testing from operator perspective
+      - Check if operators can complete typical tasks
+      - Verify HMI feedback clear and timely (visual, audible)
+      - Check for operator error prevention (confirmations, interlocks)
+      - Verify HMI usable in operational environment (lighting, noise, vibration)
+    pass_criteria:
+      - "Operators can complete typical tasks"
+      - "HMI feedback clear and timely"
+      - "Error prevention mechanisms effective"
+      - "HMI usable in operational environment"
+    fail_criteria:
+      - "Operators struggle with typical tasks"
+      - "HMI feedback unclear or delayed"
+      - "Frequent operator errors"
+    customer_impact: "Major - Poor HMI will lead to operational errors"
+
+  # ============================================================================
+  # 4. Safety Function Integration Validation
+  # ============================================================================
+
+  - check_id: "VAL-INT-009"
+    deliverable: "Integration Test Results Report"
+    category: "safety_validation"
+    description: "Verify safety functions work correctly in integrated system"
+    en50128_reference: "Section 7.7 - Safety validation"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review safety function testing at integration level
+      - Check if all safety functions tested in system context
+      - Verify safety functions operate correctly under load
+      - Check for safety function timing validated
+      - Verify safety functions independent of non-safety functions
+    pass_criteria:
+      - "All safety functions tested in system context"
+      - "Safety functions work correctly under load"
+      - "Safety function timing validated"
+      - "Safety independence verified"
+    fail_criteria:
+      - "Safety functions not tested in system"
+      - "Safety function failures under load"
+      - "Timing requirements not met"
+    customer_impact: "Critical - Safety functions may fail in operation"
+
+  - check_id: "VAL-INT-010"
+    deliverable: "Integration Test Results Report"
+    category: "safety_validation"
+    description: "Verify fault detection and safe state reachable in realistic scenarios"
+    en50128_reference: "Section 7.7 - Fault injection and safe state validation"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review fault injection test results
+      - Check if realistic faults injected (sensor failures, communication loss)
+      - Verify fault detection mechanisms work
+      - Check safe state reached within time limits
+      - Verify safe state indications work (LEDs, alarms)
+      - Check operator can recognize safe state
+    pass_criteria:
+      - "Realistic faults injected and detected"
+      - "Safe state reached within time limits (<100ms typical)"
+      - "Safe state indications work"
+      - "Operators can recognize safe state"
+    fail_criteria:
+      - "Faults not detected"
+      - "Safe state not reached or delayed"
+      - "Safe state indications not working"
+    customer_impact: "Critical - Safety mechanisms may fail in real faults"
+
+  # ============================================================================
+  # 5. Error Handling and Recovery Validation
+  # ============================================================================
+
+  - check_id: "VAL-INT-011"
+    deliverable: "Integration Test Results Report"
+    category: "error_handling"
+    description: "Verify error messages and diagnostics useful to operators"
+    en50128_reference: "Section 7.7 - Operational diagnostics"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review error message testing from operator perspective
+      - Check if error messages understandable (not cryptic codes)
+      - Verify error messages suggest corrective actions
+      - Check for diagnostic information accessible
+      - Verify error logging captures sufficient detail for troubleshooting
+    pass_criteria:
+      - "Error messages understandable by operators"
+      - "Corrective actions suggested"
+      - "Diagnostic information accessible"
+      - "Error logs sufficient for troubleshooting"
+    fail_criteria:
+      - "Error messages cryptic (codes only)"
+      - "No corrective action guidance"
+      - "Diagnostic information inaccessible"
+    customer_impact: "Major - Operators cannot diagnose and resolve issues"
+
+  - check_id: "VAL-INT-012"
+    deliverable: "Integration Test Results Report"
+    category: "error_handling"
+    description: "Verify system recovery from transient faults"
+    en50128_reference: "Section 7.7 - Recovery validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review transient fault recovery testing
+      - Check if system recovers from transient faults (power glitch, brief communication loss)
+      - Verify recovery automatic (no operator intervention)
+      - Check recovery time acceptable (<5 seconds typical)
+      - Verify no data loss or corruption on recovery
+    pass_criteria:
+      - "System recovers from transient faults"
+      - "Recovery automatic"
+      - "Recovery time <5 seconds"
+      - "No data loss or corruption"
+    fail_criteria:
+      - "System does not recover automatically"
+      - "Recovery time excessive (>10 seconds)"
+      - "Data loss or corruption on recovery"
+    customer_impact: "Critical - System will require frequent restarts in field"
+
+  # ============================================================================
+  # 6. Configuration and Customization Validation
+  # ============================================================================
+
+  - check_id: "VAL-INT-013"
+    deliverable: "Integration Test Results Report"
+    category: "configuration"
+    description: "Verify system configurable for different operational sites"
+    en50128_reference: "Section 7.7 - Configuration validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "recommended"
+      sil_3: "recommended"
+      sil_4: "recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review configuration testing
+      - Check if site-specific parameters adjustable
+      - Verify configuration changes do not require recompilation
+      - Check for configuration backup and restore
+      - Verify default configuration sensible for typical site
+    pass_criteria:
+      - "Site-specific parameters adjustable"
+      - "No recompilation needed for configuration"
+      - "Configuration backup and restore work"
+      - "Default configuration sensible"
+    fail_criteria:
+      - "Configuration requires recompilation"
+      - "No configuration backup"
+      - "Default configuration inappropriate"
+    customer_impact: "Major - Difficult to customize for different sites"
+
+  # ============================================================================
+  # 7. Operational Environment Validation
+  # ============================================================================
+
+  - check_id: "VAL-INT-014"
+    deliverable: "Integration Test Results Report"
+    category: "operational_environment"
+    description: "Verify system tested in representative operational environment"
+    en50128_reference: "Section 7.7.3 - Environment validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review test environment documentation
+      - Check if tests executed on target hardware
+      - Verify environmental conditions representative (temperature, vibration, EMI)
+      - Check for field-like conditions (noise, operator interaction)
+      - Verify differences from production documented and justified
+    pass_criteria:
+      - "Tests on target hardware (preferred)"
+      - "Environmental conditions representative"
+      - "Field-like conditions simulated"
+      - "Differences from production documented"
+    fail_criteria:
+      - "Tests not on target hardware (unjustified)"
+      - "Environmental conditions not representative"
+      - "Lab conditions only (not field-like)"
+    customer_impact: "Critical - System may not work in actual operational environment"
+
+  - check_id: "VAL-INT-015"
+    deliverable: "Integration Test Results Report"
+    category: "operational_environment"
+    description: "Verify system handles environmental conditions (temperature, vibration, EMI)"
+    en50128_reference: "Section 7.7 - Environmental validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review environmental testing results
+      - Check if system tested at operational temperature range
+      - Verify vibration testing (if applicable)
+      - Check for EMI/EMC testing results
+      - Verify system operates correctly under environmental stress
+    pass_criteria:
+      - "System tested at operational temperature range"
+      - "Vibration testing passed (if applicable)"
+      - "EMI/EMC testing passed"
+      - "System operates correctly under environmental stress"
+    fail_criteria:
+      - "Environmental testing not performed"
+      - "System fails under environmental stress"
+    customer_impact: "Critical - System will fail in field environmental conditions"

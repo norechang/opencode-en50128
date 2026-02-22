@@ -1,0 +1,307 @@
+document_type: "Software-Integration-Test-Specification"
+checker_version: "1.0"
+description: "Quality checks for Software Integration Test Specification per EN 50128 Section 7.3.4.25-32 (SW) and Software/Hardware Integration Test Specification per 7.3.4.33-39 (SW/HW) - Annex C #12 and #13"
+
+# Template compliance checks (EN 50128 document structure)
+template_checks:
+  # Document ID format (accepts both SW Integration and SW/HW Integration)
+  - id: "INTTEST-T001"
+    name: "Document ID Format"
+    description: "Verify Document ID follows DOC-INTTEST-YYYY-NNN or DOC-HWINTTEST-YYYY-NNN format"
+    severity: "error"
+    rule_type: "regex"
+    rule_params:
+      pattern: "DOC-(INT|HWINT)TEST-[0-9]{4}-[0-9]{3}"
+      search_section: "STANDARD HEADER"
+    expected: "Document ID matches DOC-INTTEST-YYYY-NNN or DOC-HWINTTEST-YYYY-NNN"
+    failure_message: "Document ID does not match required format"
+    fix_suggestion: "Update Document ID to format DOC-INTTEST-YYYY-NNN (SW) or DOC-HWINTTEST-YYYY-NNN (SW/HW)"
+  
+  # Standard Header table
+  - id: "INTTEST-T002"
+    name: "Standard Header Table"
+    description: "Verify Standard Header table exists with required fields"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "STANDARD HEADER"
+      required_columns: ["Field", "Value"]
+      required_fields:
+        - "Document ID"
+        - "Version"
+        - "Date"
+        - "Project"
+        - "SIL Level"
+        - "Author"
+        - "Status"
+    expected: "Standard Header table with all required fields"
+    failure_message: "Standard Header table missing or incomplete"
+    fix_suggestion: "Add Standard Header table with fields: Document ID, Version, Date, Project, SIL Level, Author, Status"
+  
+  # Document Control table
+  - id: "INTTEST-T003"
+    name: "Document Control Table"
+    description: "Verify Document Control table exists"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "DOCUMENT CONTROL"
+      required_columns: ["Version", "Date", "Author", "Changes", "Approved By"]
+    expected: "Document Control table with version history"
+    failure_message: "Document Control table missing or incomplete"
+    fix_suggestion: "Add Document Control table with columns: Version, Date, Author, Changes, Approved By"
+  
+  # Approvals table (SIL 3+ requires Integrator + Independent Reviewer + QA + PM)
+  - id: "INTTEST-T004"
+    name: "Approvals Table"
+    description: "Verify Approvals table exists with required roles"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "APPROVALS"
+      required_columns: ["Role", "Name", "Signature", "Date"]
+      required_roles_sil_3:
+        - "Author (Integrator)"
+        - "Independent Reviewer"
+        - "QA Manager"
+        - "Project Manager"
+      minimum_sil: 3
+    expected: "Approvals table with Author, Reviewer, QA, PM"
+    failure_message: "Approvals table missing or incomplete (required SIL 3+)"
+    fix_suggestion: "Add Approvals table with roles: Author (Integrator), Independent Reviewer, QA Manager, Project Manager"
+  
+  # Required sections per EN 50128 7.3.4.25-32 (SW) or 7.3.4.33-39 (SW/HW)
+  - id: "INTTEST-T005"
+    name: "Required Sections"
+    description: "Verify all required sections exist per EN 50128 7.3.4"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      required_sections:
+        - "1. INTRODUCTION"
+        - "2. TEST OBJECTIVES"
+        - "3. TEST SCOPE"
+        - "4. TEST ENVIRONMENT"
+        - "5. TEST CASES"
+        - "6. TEST PROCEDURES"
+        - "7. ACCEPTANCE CRITERIA"
+        - "8. TEST DATA"
+        - "9. REQUIREMENTS TRACEABILITY"
+        - "10. EN 50128 COMPLIANCE"
+    expected: "All required sections present"
+    failure_message: "One or more required sections missing"
+    fix_suggestion: "Add missing sections per EN 50128 Section 7.3.4 integration test requirements"
+
+# Quality standards checks
+quality_checks:
+  # Test case ID format
+  - id: "INTTEST-Q001"
+    name: "Test Case ID Format"
+    description: "All test cases must have IDs in format TC-INT-XXX or TC-HWINT-XXX"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "TC-"
+      minimum: 1
+      context: "test case definitions"
+    expected: "At least 1 test case defined with ID format TC-INT-XXX or TC-HWINT-XXX"
+    failure_message: "No test cases defined with TC-XXX ID format"
+    fix_suggestion: "Define test cases with ID format TC-INT-XXX (SW) or TC-HWINT-XXX (SW/HW)"
+  
+  # Test objectives specified (EN 50128 7.3.4.26 or 7.3.4.34)
+  - id: "INTTEST-Q002"
+    name: "Test Objectives Specified"
+    description: "Test objectives must be clearly stated"
+    severity: "error"
+    rule_type: "section_content"
+    rule_params:
+      section: "2. TEST OBJECTIVES"
+      minimum_words: 50
+    expected: "Clear test objectives specified"
+    failure_message: "Test objectives section too short or missing"
+    fix_suggestion: "Specify test objectives per EN 50128 7.3.4.26 (SW) or 7.3.4.34 (SW/HW)"
+  
+  # Interface testing covered
+  - id: "INTTEST-Q003"
+    name: "Interface Testing Covered"
+    description: "All interfaces must be covered by integration tests"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "IF-"
+      minimum: 1
+      context: "test coverage"
+    expected: "Interfaces referenced in test cases (IF-XXX)"
+    failure_message: "No interface references found in test cases"
+    fix_suggestion: "Ensure all interfaces (IF-XXX) from Interface Spec are covered by test cases"
+  
+  # Test inputs specified (EN 50128 7.3.4.28 or 7.3.4.36)
+  - id: "INTTEST-Q004"
+    name: "Test Inputs Specified"
+    description: "All test cases must specify inputs"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "Input"
+      minimum: 1
+      context: "test case specifications"
+    expected: "Test inputs specified for test cases"
+    failure_message: "No test inputs found in test cases"
+    fix_suggestion: "Add Input field to each test case specification"
+  
+  # Expected results specified (EN 50128 7.3.4.29 or 7.3.4.37)
+  - id: "INTTEST-Q005"
+    name: "Expected Results Specified"
+    description: "All test cases must specify expected results"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "Expected"
+      minimum: 1
+      context: "test case specifications"
+    expected: "Expected results specified for test cases"
+    failure_message: "No expected results found in test cases"
+    fix_suggestion: "Add Expected Result field to each test case specification"
+  
+  # Test procedures specified (EN 50128 7.3.4.30 or 7.3.4.38)
+  - id: "INTTEST-Q006"
+    name: "Test Procedures Specified"
+    description: "Test execution procedures must be specified"
+    severity: "error"
+    rule_type: "section_content"
+    rule_params:
+      section: "6. TEST PROCEDURES"
+      minimum_words: 100
+    expected: "Detailed test procedures specified"
+    failure_message: "Test procedures section too short or missing"
+    fix_suggestion: "Add detailed step-by-step test execution procedures per EN 50128 7.3.4.30 (SW) or 7.3.4.38 (SW/HW)"
+  
+  # Pass/fail criteria specified
+  - id: "INTTEST-Q007"
+    name: "Pass/Fail Criteria Specified"
+    description: "Each test case must have clear pass/fail criteria"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "Pass Criteria"
+      minimum: 1
+      context: "test case specifications"
+    expected: "Pass/fail criteria specified for test cases"
+    failure_message: "No pass/fail criteria found in test cases"
+    fix_suggestion: "Add Pass Criteria and Fail Criteria fields to each test case"
+  
+  # Requirements traceability present (EN 50128 7.3.4.27 or 7.3.4.35)
+  - id: "INTTEST-Q008"
+    name: "Requirements Traceability"
+    description: "Test cases must be traced to requirements"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "REQ-"
+      minimum: 1
+      context: "traceability"
+    expected: "Test cases traced to requirements (REQ-XXX)"
+    failure_message: "No requirements traceability found"
+    fix_suggestion: "Add traceability linking each test case to requirements (e.g., REQ-003, REQ-015)"
+  
+  # Safety requirements tested
+  - id: "INTTEST-Q009"
+    name: "Safety Requirements Tested"
+    description: "Safety-critical requirements must be covered by integration tests"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "safety"
+      minimum: 1
+      context: "test coverage"
+    expected: "Safety requirements covered in test cases"
+    failure_message: "No safety requirements coverage found"
+    fix_suggestion: "Add test cases covering safety-critical requirements from Hazard Log"
+  
+  # Boundary value testing
+  - id: "INTTEST-Q010"
+    name: "Boundary Value Testing"
+    description: "Boundary values must be tested (mandatory SIL 3-4)"
+    severity: "error"
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "boundary"
+      minimum: 1
+      context: "test cases"
+    expected: "Boundary value test cases present"
+    failure_message: "No boundary value testing found"
+    fix_suggestion: "Add boundary value test cases for all interfaces (mandatory SIL 3-4 per Table A.14)"
+
+# EN 50128 compliance checks
+en50128_checks:
+  # Section 7.3.4.25-32 (SW Integration) or 7.3.4.33-39 (SW/HW Integration)
+  - id: "INTTEST-EN001"
+    name: "Integration Test Completeness"
+    description: "Integration tests must cover all interfaces and component interactions"
+    severity: "error"
+    rule_type: "custom"
+    rule_params:
+      check_type: "integration_coverage"
+    expected: "All interfaces and component interactions covered by test cases"
+    failure_message: "Integration test coverage incomplete"
+    fix_suggestion: "Ensure all interfaces (from Interface Spec) and component interactions (from SDS) are covered"
+  
+  # V-Model alignment - tests created during design, executed during integration phase
+  - id: "INTTEST-EN002"
+    name: "V-Model Alignment"
+    description: "Integration tests created in Phase 3 (design), executed in Phase 6 (integration)"
+    severity: "info"
+    rule_type: "metadata"
+    rule_params:
+      expected_phase_created: 3
+      expected_phase_executed: 6
+    expected: "Test spec created in Phase 3, execution report in Phase 6"
+    failure_message: "V-Model alignment issue"
+    fix_suggestion: "Integration Test Specification is created in Phase 3 (Architecture & Design), execution happens in Phase 6 (Integration)"
+
+# SIL-specific checks
+sil_checks:
+  # SIL 3-4 requires interface testing (mandatory per Table A.6)
+  - id: "INTTEST-SIL001"
+    name: "Interface Testing Mandatory"
+    description: "Interface testing is mandatory for SIL 3-4"
+    severity: "error"
+    minimum_sil: 3
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "interface"
+      minimum: 5
+      context: "test cases"
+    expected: "Comprehensive interface testing for SIL 3-4"
+    failure_message: "Insufficient interface testing for SIL 3-4"
+    fix_suggestion: "Add comprehensive interface test cases - mandatory for SIL 3-4 per EN 50128 Table A.6"
+  
+  # SIL 3-4 requires performance testing (highly recommended per Table A.6)
+  - id: "INTTEST-SIL002"
+    name: "Performance Testing"
+    description: "Performance testing is highly recommended for SIL 3-4"
+    severity: "warning"
+    minimum_sil: 3
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "performance"
+      minimum: 1
+      context: "test cases"
+    expected: "Performance test cases present (timing, throughput, resource usage)"
+    failure_message: "No performance testing found - highly recommended for SIL 3-4"
+    fix_suggestion: "Add performance test cases (timing, throughput, memory usage) - highly recommended SIL 3-4"
+  
+  # SIL 3-4 requires error injection testing (highly recommended)
+  - id: "INTTEST-SIL003"
+    name: "Error Injection Testing"
+    description: "Error injection testing is highly recommended for SIL 3-4"
+    severity: "warning"
+    minimum_sil: 3
+    rule_type: "keyword_count"
+    rule_params:
+      keyword: "error injection"
+      minimum: 1
+      context: "test cases"
+    expected: "Error injection test cases present"
+    failure_message: "No error injection testing found - highly recommended for SIL 3-4"
+    fix_suggestion: "Add error injection test cases to verify error handling and recovery - highly recommended SIL 3-4"

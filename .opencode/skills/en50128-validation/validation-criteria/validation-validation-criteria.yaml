@@ -1,0 +1,723 @@
+# Validation Phase (Final) Validation Criteria
+# EN 50128 Section 7.7 - Overall Software Testing (Validation)
+# Validation Focus: "Is the software fit for operational deployment?"
+
+metadata:
+  phase: "Validation"
+  phase_id: "phase-6-validation"
+  en50128_section: "7.7"
+  description: "Final validation criteria to ensure software is ready for operational deployment"
+  mandatory_deliverables:
+    - "Software Validation Plan (SVaP) - Final"
+    - "Validation Test Specification"
+    - "Validation Test Results Report"
+    - "Software Validation Report"
+    - "Acceptance Test Results"
+
+validation_checks:
+  # ============================================================================
+  # 1. Validation Plan Completeness and Approval
+  # ============================================================================
+  
+  - check_id: "VAL-FIN-001"
+    deliverable: "Software Validation Plan (SVaP) - Final"
+    category: "validation_planning"
+    description: "Verify validation plan complete and covers all user needs"
+    en50128_reference: "Section 7.7.1 - Validation planning"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review SVaP for completeness
+      - Check if all user needs have validation tests
+      - Verify all operational scenarios covered
+      - Check for acceptance criteria defined
+      - Verify customer/stakeholder involvement documented
+    pass_criteria:
+      - "All user needs have validation tests"
+      - "All operational scenarios covered"
+      - "Acceptance criteria clearly defined"
+      - "Customer/stakeholder involvement documented"
+    fail_criteria:
+      - "Missing user need coverage"
+      - "Operational scenarios incomplete"
+      - "Acceptance criteria vague"
+    customer_impact: "Critical - Incomplete validation plan misses operational requirements"
+
+  - check_id: "VAL-FIN-002"
+    deliverable: "Software Validation Plan (SVaP) - Final"
+    category: "validation_planning"
+    description: "Verify validator independence confirmed (SIL 3-4)"
+    en50128_reference: "Section 5.3.7 - Validator independence"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "not_applicable"
+      sil_2: "not_applicable"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review validator assignment in SVaP
+      - Verify validator independent from PM, Developer, Tester, Verifier
+      - Check validator reports to COD or Safety Authority (not PM)
+      - Verify organizational independence documented
+      - Check for absence of conflicts of interest
+    pass_criteria:
+      - "Validator independent from PM/Developer/Tester/Verifier"
+      - "Validator reports to COD or Safety Authority"
+      - "Organizational independence documented"
+      - "No conflicts of interest"
+    fail_criteria:
+      - "Validator not independent"
+      - "Validator reports to PM"
+      - "Conflicts of interest detected"
+    customer_impact: "Critical - EN 50128 SIL 3-4 violation, cannot certify"
+
+  # ============================================================================
+  # 2. Validation Test Execution and Results
+  # ============================================================================
+
+  - check_id: "VAL-FIN-003"
+    deliverable: "Validation Test Results Report"
+    category: "test_execution"
+    description: "Verify ALL validation tests executed and PASSED"
+    en50128_reference: "Section 7.7.4 - Validation test execution"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    validation_method: |
+      - Review Validation Test Results Report
+      - Verify all planned tests executed
+      - Check test pass/fail status
+      - Verify 100% pass rate (or failures justified and resolved)
+      - Check for test evidence (logs, screenshots, videos)
+    pass_criteria:
+      - "ALL validation tests executed"
+      - "100% test pass rate"
+      - "ZERO unresolved test failures"
+      - "Test evidence documented"
+    fail_criteria:
+      - "ANY unresolved test failures"
+      - "Tests not executed"
+      - "Missing test evidence"
+    customer_impact: "Critical - Cannot approve deployment with test failures"
+
+  - check_id: "VAL-FIN-004"
+    deliverable: "Validation Test Results Report"
+    category: "test_execution"
+    description: "Verify validation tests executed on target or representative environment"
+    en50128_reference: "Section 7.7.3 - Test environment"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review test environment documentation
+      - Check if tests executed on target hardware
+      - If not target, verify representative environment justified
+      - Check for environmental conditions documented
+      - Verify test environment matches operational environment
+    pass_criteria:
+      - "Tests on target hardware (strongly preferred)"
+      - "OR representative environment with justification"
+      - "Environmental conditions documented"
+      - "Test environment matches operational environment"
+    fail_criteria:
+      - "Tests not on target or representative environment"
+      - "Environmental conditions not documented"
+      - "Significant environment differences unjustified"
+    customer_impact: "Critical - Validation on wrong environment may miss operational issues"
+
+  - check_id: "VAL-FIN-005"
+    deliverable: "Validation Test Results Report"
+    category: "test_coverage"
+    description: "Verify validation test coverage meets requirements (100% for SIL 3-4)"
+    en50128_reference: "Section 7.7.5 - Requirements coverage"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    validation_method: |
+      - Map validation tests to requirements
+      - Calculate requirements coverage percentage
+      - Verify coverage meets SIL targets:
+        - SIL 0-1: ≥90%
+        - SIL 2: ≥95%
+        - SIL 3-4: 100%
+      - Check untested requirements justified
+    pass_criteria:
+      - "SIL 0-1: ≥90% requirements coverage"
+      - "SIL 2: ≥95% requirements coverage"
+      - "SIL 3-4: 100% requirements coverage"
+      - "Untested requirements justified (hardware-only, etc.)"
+    fail_criteria:
+      - "Requirements coverage below SIL target"
+      - "Untested requirements without justification"
+    customer_impact: "Critical - Incomplete coverage means untested requirements"
+
+  # ============================================================================
+  # 3. Operational Scenario Validation
+  # ============================================================================
+
+  - check_id: "VAL-FIN-006"
+    deliverable: "Validation Test Results Report"
+    category: "operational_scenarios"
+    description: "Verify ALL operational scenarios tested and passed"
+    en50128_reference: "Section 7.7.2 - Operational scenario validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review operational scenario test results
+      - Check normal operational scenarios tested and passed
+      - Verify abnormal/degraded scenarios tested and passed
+      - Check emergency scenarios tested and passed (if applicable)
+      - Verify scenarios executed with realistic timing and sequences
+    pass_criteria:
+      - "All normal operational scenarios passed"
+      - "All abnormal/degraded scenarios passed"
+      - "All emergency scenarios passed"
+      - "Scenarios executed with realistic timing"
+    fail_criteria:
+      - "ANY operational scenario failures"
+      - "Scenarios not realistic"
+    customer_impact: "Critical - System will not work in real operational scenarios"
+
+  - check_id: "VAL-FIN-007"
+    deliverable: "Validation Test Results Report"
+    category: "operational_scenarios"
+    description: "Verify extended operational testing successful (endurance/soak testing)"
+    en50128_reference: "Table A.7 - Endurance testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review extended operational testing results
+      - Check if system tested for extended duration (≥8 hours typical)
+      - Verify system stable over extended operation
+      - Check for no memory leaks or resource exhaustion
+      - Verify no performance degradation over time
+    pass_criteria:
+      - "System tested ≥8 hours continuous operation"
+      - "System stable (no crashes, hangs)"
+      - "No memory leaks or resource exhaustion"
+      - "No performance degradation"
+    fail_criteria:
+      - "System unstable during extended operation"
+      - "Memory leaks or resource exhaustion"
+      - "Performance degrades over time"
+    customer_impact: "Major - System may fail during extended shifts"
+
+  # ============================================================================
+  # 4. Performance and Timing Validation
+  # ============================================================================
+
+  - check_id: "VAL-FIN-008"
+    deliverable: "Validation Test Results Report"
+    category: "performance_validation"
+    description: "Verify system-level performance meets user expectations (M for SIL 3-4)"
+    en50128_reference: "Table A.7 - Performance Testing (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review system performance test results
+      - Check user-perceived response times acceptable
+      - Verify throughput meets operational needs
+      - Check real-time constraints met under all conditions
+      - Verify performance under peak load acceptable
+    pass_criteria:
+      - "User response times acceptable (<500ms UI typical)"
+      - "Throughput meets operational needs"
+      - "Real-time constraints met"
+      - "Performance acceptable under peak load"
+    fail_criteria:
+      - "User response times too slow"
+      - "Throughput insufficient"
+      - "Real-time constraints violated"
+    customer_impact: "Critical - System will not meet operational performance needs"
+
+  - check_id: "VAL-FIN-009"
+    deliverable: "Validation Test Results Report"
+    category: "performance_validation"
+    description: "Verify stress testing passed (system handles overload gracefully)"
+    en50128_reference: "Table A.18 - Stress testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review stress test results
+      - Check system tested beyond maximum expected load
+      - Verify system degrades gracefully (no crash)
+      - Check for load shedding or prioritization
+      - Verify system recovers when load normalizes
+    pass_criteria:
+      - "System tested at 150% maximum load"
+      - "Graceful degradation (no crash)"
+      - "Load shedding/prioritization works (if designed)"
+      - "System recovers when load normalizes"
+    fail_criteria:
+      - "System crashes under overload"
+      - "No graceful degradation"
+      - "System does not recover"
+    customer_impact: "Major - System will crash during unexpected load spikes"
+
+  # ============================================================================
+  # 5. Safety Function Final Validation
+  # ============================================================================
+
+  - check_id: "VAL-FIN-010"
+    deliverable: "Validation Test Results Report"
+    category: "safety_validation"
+    description: "Verify ALL safety requirements validated and passed"
+    en50128_reference: "Section 7.7 - Safety validation"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review safety requirement validation results
+      - Check if all safety requirements (SAF-*) tested
+      - Verify all hazards from Hazard Log mitigated
+      - Check fault injection testing passed
+      - Verify safe state reachable and observable
+    pass_criteria:
+      - "ALL safety requirements tested and passed"
+      - "ALL hazards mitigated per Hazard Log"
+      - "Fault injection testing passed"
+      - "Safe state validated"
+    fail_criteria:
+      - "ANY safety requirement failures"
+      - "Unmitigated hazards"
+      - "Fault injection test failures"
+    customer_impact: "Critical - Safety compromise, cannot deploy"
+
+  - check_id: "VAL-FIN-011"
+    deliverable: "Validation Test Results Report"
+    category: "safety_validation"
+    description: "Verify operators can recognize and respond to safe state"
+    en50128_reference: "Section 7.7 - Operational safety validation"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review operator safe state recognition testing
+      - Check if operators participated in validation
+      - Verify safe state indications clear (LEDs, alarms, displays)
+      - Check operators can identify safe state correctly
+      - Verify operators understand recovery procedures
+    pass_criteria:
+      - "Operators participated in validation"
+      - "Safe state indications clear and recognizable"
+      - "Operators correctly identify safe state (100%)"
+      - "Recovery procedures understood"
+    fail_criteria:
+      - "Operators cannot recognize safe state"
+      - "Safe state indications unclear"
+      - "Operators do not understand recovery"
+    customer_impact: "Critical - Operators cannot respond correctly to safety events"
+
+  # ============================================================================
+  # 6. Acceptance Testing and Customer Approval
+  # ============================================================================
+
+  - check_id: "VAL-FIN-012"
+    deliverable: "Acceptance Test Results"
+    category: "acceptance_testing"
+    description: "Verify customer acceptance criteria met"
+    en50128_reference: "Section 7.7.6 - Acceptance testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review acceptance test results
+      - Check if all customer acceptance criteria met
+      - Verify customer participated in acceptance testing
+      - Check for customer observations and feedback
+      - Verify all customer concerns addressed
+    pass_criteria:
+      - "All customer acceptance criteria met"
+      - "Customer participated in testing"
+      - "Customer feedback positive"
+      - "Customer concerns addressed"
+    fail_criteria:
+      - "Customer acceptance criteria not met"
+      - "No customer participation"
+      - "Unresolved customer concerns"
+    customer_impact: "Critical - Customer will not accept delivery"
+
+  - check_id: "VAL-FIN-013"
+    deliverable: "Acceptance Test Results"
+    category: "acceptance_testing"
+    description: "Verify customer formal sign-off obtained"
+    en50128_reference: "Section 7.7.6 - Customer approval"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review acceptance documentation
+      - Check for customer formal sign-off
+      - Verify customer representative authorized
+      - Check sign-off date and signatures present
+      - Verify any conditions or restrictions documented
+    pass_criteria:
+      - "Customer formal sign-off obtained"
+      - "Customer representative authorized"
+      - "Sign-off dated and signed"
+      - "Conditions/restrictions documented (if any)"
+    fail_criteria:
+      - "No customer sign-off"
+      - "Sign-off from unauthorized person"
+      - "Missing signatures or date"
+    customer_impact: "Critical - Cannot proceed to deployment without customer approval"
+
+  # ============================================================================
+  # 7. Usability and Operational Procedures Validation
+  # ============================================================================
+
+  - check_id: "VAL-FIN-014"
+    deliverable: "Validation Test Results Report"
+    category: "usability"
+    description: "Verify user manuals and operational procedures validated"
+    en50128_reference: "Table A.7 - Operational and Usage Procedures Testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "recommended"
+      sil_3: "recommended"
+      sil_4: "recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review user manual and procedure validation
+      - Check if operators used manuals during testing
+      - Verify procedures are complete and correct
+      - Check for operator feedback on documentation
+      - Verify operator training materials adequate
+    pass_criteria:
+      - "User manuals used and validated"
+      - "Procedures complete and correct"
+      - "Operator feedback positive"
+      - "Training materials adequate"
+    fail_criteria:
+      - "User manuals not validated"
+      - "Procedures incomplete or incorrect"
+      - "Negative operator feedback"
+    customer_impact: "Major - Operators cannot use system effectively"
+
+  - check_id: "VAL-FIN-015"
+    deliverable: "Validation Test Results Report"
+    category: "usability"
+    description: "Verify maintenance and troubleshooting procedures validated"
+    en50128_reference: "Section 7.7 - Maintenance validation"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "recommended"
+      sil_3: "recommended"
+      sil_4: "recommended"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review maintenance procedure validation
+      - Check if maintenance personnel participated
+      - Verify diagnostic procedures work
+      - Check for troubleshooting guide validated
+      - Verify maintenance can be performed in field
+    pass_criteria:
+      - "Maintenance procedures validated"
+      - "Maintenance personnel participated"
+      - "Diagnostic procedures work"
+      - "Troubleshooting guide validated"
+    fail_criteria:
+      - "Maintenance procedures not validated"
+      - "Diagnostic procedures don't work"
+      - "Maintenance cannot be performed in field"
+    customer_impact: "Major - Difficult to maintain system in field"
+
+  # ============================================================================
+  # 8. Software Validation Report Completeness
+  # ============================================================================
+
+  - check_id: "VAL-FIN-016"
+    deliverable: "Software Validation Report"
+    category: "validation_reporting"
+    description: "Verify Software Validation Report complete with conclusion"
+    en50128_reference: "Section 7.7.7 - Validation reporting"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review Software Validation Report structure
+      - Check for validation summary and conclusion
+      - Verify test results summarized (pass/fail statistics)
+      - Check requirements coverage documented
+      - Verify defects and resolutions documented
+      - Check for validation statement (fit for purpose)
+    pass_criteria:
+      - "Validation Report complete"
+      - "Conclusion: Software validated and fit for purpose"
+      - "Test results summarized (100% pass)"
+      - "Requirements coverage documented"
+      - "All defects resolved"
+    fail_criteria:
+      - "Validation Report incomplete"
+      - "No validation conclusion"
+      - "Test failures unresolved"
+    customer_impact: "Critical - Cannot approve deployment without validation report"
+
+  - check_id: "VAL-FIN-017"
+    deliverable: "Software Validation Report"
+    category: "validation_reporting"
+    description: "Verify validation limitations and restrictions documented"
+    en50128_reference: "Section 7.7.7 - Validation limitations"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review validation limitations section
+      - Check for test environment limitations documented
+      - Verify operational restrictions documented (if any)
+      - Check for known issues/workarounds documented
+      - Verify residual risks documented
+    pass_criteria:
+      - "Test environment limitations documented"
+      - "Operational restrictions documented (if any)"
+      - "Known issues/workarounds documented"
+      - "Residual risks documented and acceptable"
+    fail_criteria:
+      - "Limitations not documented"
+      - "Operational restrictions not disclosed"
+      - "Known issues hidden"
+    customer_impact: "Major - Customer not aware of limitations and risks"
+
+  - check_id: "VAL-FIN-018"
+    deliverable: "Software Validation Report"
+    category: "validation_reporting"
+    description: "Verify deployment recommendations provided"
+    en50128_reference: "Section 7.7.7 - Deployment recommendations"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "major"
+    validation_method: |
+      - Review deployment recommendations section
+      - Check for deployment environment requirements
+      - Verify installation instructions referenced
+      - Check for commissioning procedures outlined
+      - Verify operator training requirements specified
+    pass_criteria:
+      - "Deployment environment requirements specified"
+      - "Installation instructions referenced"
+      - "Commissioning procedures outlined"
+      - "Operator training requirements specified"
+    fail_criteria:
+      - "No deployment recommendations"
+      - "Deployment requirements unclear"
+    customer_impact: "Major - Difficult to deploy correctly"
+
+  # ============================================================================
+  # 9. Traceability and Compliance Final Check
+  # ============================================================================
+
+  - check_id: "VAL-FIN-019"
+    deliverable: "Software Validation Report"
+    category: "traceability"
+    description: "Verify end-to-end traceability complete and documented"
+    en50128_reference: "Table A.5 - Traceability (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    validation_method: |
+      - Verify complete traceability chain documented:
+        User Needs → Requirements → Design → Code → Tests → Validation
+      - Check for traceability matrix completeness
+      - Verify bidirectional traceability at all levels
+      - Check for no orphaned elements
+      - Verify traceability report in validation report
+    pass_criteria:
+      - "Complete end-to-end traceability chain"
+      - "Traceability matrix complete"
+      - "Bidirectional traceability maintained"
+      - "No orphaned elements"
+    fail_criteria:
+      - "Traceability gaps in chain"
+      - "Orphaned elements detected"
+      - "Traceability incomplete"
+    customer_impact: "Critical - Cannot demonstrate compliance without traceability"
+
+  - check_id: "VAL-FIN-020"
+    deliverable: "Software Validation Report"
+    category: "compliance"
+    description: "Verify EN 50128 compliance documented and evidenced"
+    en50128_reference: "Section 7.7 - Standards compliance"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review EN 50128 compliance documentation
+      - Check for mandatory technique application documented
+      - Verify SIL requirements met for all safety functions
+      - Check for deviations documented and justified
+      - Verify validator independence demonstrated (SIL 3-4)
+    pass_criteria:
+      - "EN 50128 compliance documented"
+      - "Mandatory techniques applied and evidenced"
+      - "SIL requirements met"
+      - "Deviations justified"
+      - "Validator independence demonstrated (SIL 3-4)"
+    fail_criteria:
+      - "EN 50128 compliance not documented"
+      - "Mandatory techniques not applied"
+      - "SIL requirements not met"
+    customer_impact: "Critical - Cannot certify without EN 50128 compliance"
+
+  # ============================================================================
+  # 10. Deployment Readiness Final Check
+  # ============================================================================
+
+  - check_id: "VAL-FIN-021"
+    deliverable: "Software Validation Report"
+    category: "deployment_readiness"
+    description: "Verify all prerequisites for deployment satisfied"
+    en50128_reference: "Section 7.7 - Deployment readiness"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review deployment readiness checklist
+      - Check all validation tests passed
+      - Verify customer acceptance obtained
+      - Check documentation complete (user manuals, maintenance)
+      - Verify training materials ready
+      - Check configuration management ready
+    pass_criteria:
+      - "All validation tests passed"
+      - "Customer acceptance obtained"
+      - "Documentation complete"
+      - "Training materials ready"
+      - "Configuration management ready"
+    fail_criteria:
+      - "Validation tests not passed"
+      - "No customer acceptance"
+      - "Documentation incomplete"
+    customer_impact: "Critical - Not ready for deployment"
+
+  - check_id: "VAL-FIN-022"
+    deliverable: "Software Validation Report"
+    category: "deployment_readiness"
+    description: "Verify final validation approval and sign-off"
+    en50128_reference: "Section 7.7.7 - Final approval"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    validation_method: |
+      - Review Software Validation Report approvals
+      - Check for Validator sign-off
+      - Verify Project Manager sign-off
+      - Check customer sign-off
+      - Verify all sign-offs dated
+      - Check no conditional approvals (all complete)
+    pass_criteria:
+      - "Validator sign-off present"
+      - "Project Manager sign-off present"
+      - "Customer sign-off present"
+      - "All sign-offs dated"
+      - "No conditional approvals"
+    fail_criteria:
+      - "Missing Validator sign-off"
+      - "Missing customer sign-off"
+      - "Conditional approvals present"
+    customer_impact: "Critical - Cannot deploy without final approvals"

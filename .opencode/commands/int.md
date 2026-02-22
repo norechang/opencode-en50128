@@ -28,6 +28,35 @@ As per EN 50128:2011 Section 7.6 and Annex B Table B.6, you are responsible for:
    - Version control during integration
    - Test repeatability assurance
 
+## Workspace Context
+
+**CRITICAL**: Before executing any command, you MUST:
+
+1. **Read the active workspace** from `.workspace` file at platform root (`/home/norechang/work/EN50128/.workspace`)
+2. **Operate on the active workspace** for all file operations
+3. **Display workspace context** at the start of your response
+
+### File Path Resolution
+
+All paths are relative to: `examples/<active_workspace>/`
+
+**Examples**:
+- Integration test specs → `examples/<active_workspace>/docs/test/integration/`
+- Integration reports → `examples/<active_workspace>/test/integration/reports/`
+- Build artifacts → `examples/<active_workspace>/build/`
+
+### Display Format
+
+Always show workspace context at the start:
+
+```
+📁 Active Workspace: train_door_control2 (SIL 3)
+   Path: examples/train_door_control2/
+   Phase: Integration (Phase 5) | Completion: 75%
+```
+
+See `.opencode/commands/_workspace-awareness.md` for detailed implementation guide.
+
 ---
 
 ## Behavioral Constraints (EN 50128 Compliance)
@@ -255,21 +284,35 @@ result_t test_error_propagation(void) {
 
 ---
 
-## Output Artifacts
+## Output Artifacts (EN 50128 Section 7.3.3 and 7.6.3)
 
-### Required Documents (per Annex C):
+### Phase 3 Deliverables (Test Specifications - Created During Design):
 
-1. **Software Integration Test Report** (Document 21)
-   - **Input:** Software Integration Test Specification (Document 12)
+1. **Software Integration Test Specification** (EN 50128 7.3.4.25 - Annex C #12)
+   - **File:** `test/Software-Integration-Test-Specification.md`
+   - **Executed in:** Phase 6 (Integration)
+   - **Template:** See `integration-test-spec-checker.yaml`
+
+2. **Software/Hardware Integration Test Specification** (EN 50128 7.3.4.33 - Annex C #13 - forward slash)
+   - **File:** `test/Software-Hardware-Integration-Test-Specification.md`
+   - **Executed in:** Phase 6 (Integration)
+   - **Template:** See `integration-test-spec-checker.yaml`
+
+### Phase 6 Deliverables (Test Reports - Created During Execution):
+
+3. **Software Integration Test Report** (EN 50128 7.6.4.3 - Annex C #21)
+   - **File:** `reports/Software-Integration-Test-Report.md`
+   - **Input:** Software Integration Test Specification (from Phase 3)
    - **Verifier Check:** VER (first), VAL (second)
    - **Template:** Section 6.1.4.5 (Generic Test Report)
-   - **Specific Requirements:** Sections 7.6.4.3-7.6.4.6
 
-2. **Software/Hardware Integration Test Report** (Document 22)
-   - **Input:** Software/Hardware Integration Test Specification (Document 13)
+4. **Software/Hardware Integration Test Report** (EN 50128 7.6.4.3 - Annex C #22 - forward slash)
+   - **File:** `reports/Software-Hardware-Integration-Test-Report.md`
+   - **Input:** Software/Hardware Integration Test Specification (from Phase 3)
    - **Verifier Check:** VER (first), VAL (second)
    - **Template:** Section 6.1.4.5 (Generic Test Report)
-   - **Specific Requirements:** Sections 7.6.4.7-7.6.4.10
+
+5. **Software Integration Verification Report** (EN 50128 7.6.4.6 - created by VER)
 
 ### Report Content Requirements:
 

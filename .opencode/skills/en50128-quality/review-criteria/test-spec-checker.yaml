@@ -1,0 +1,248 @@
+document_type: "Overall-Software-Test-Specification"
+checker_version: "1.0"
+description: "Quality checks for Overall Software Test Specification per EN 50128 Section 7.2.4.16 and Table A.7"
+
+# Template compliance checks
+template_checks:
+  # Document ID format
+  - id: "TST-T001"
+    name: "Document ID Format"
+    description: "Verify Document ID follows DOC-TESTSPEC-YYYY-NNN format"
+    severity: "error"
+    rule_type: "regex"
+    rule_params:
+      pattern: "DOC-TESTSPEC-[0-9]{4}-[0-9]{3}"
+      search_section: "Document Control"
+    expected: "Document ID matches DOC-TESTSPEC-YYYY-NNN"
+    failure_message: "Document ID does not match required format"
+    fix_suggestion: "Update Document ID to DOC-TESTSPEC-YYYY-NNN (e.g., DOC-TESTSPEC-2026-001)"
+  
+  # Document Control table
+  - id: "TST-T002"
+    name: "Document Control Table"
+    description: "Verify Document Control table exists"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "Document Control"
+      required_columns: ["Field", "Value"]
+      required_fields:
+        - "Document ID"
+        - "Version"
+        - "Date"
+        - "Author"
+        - "Status"
+    expected: "Document Control table present"
+    failure_message: "Document Control table missing or incomplete"
+    fix_suggestion: "Add Document Control table with required fields"
+  
+  # Approvals table
+  - id: "TST-T003"
+    name: "Approvals Table"
+    description: "Verify Approvals table for SIL 3+"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "Approvals"
+      required_columns: ["Role", "Name", "Signature", "Date"]
+      required_roles_sil_3:
+        - "Author (TST)"
+        - "Reviewer (QUA)"
+        - "Approver (PM)"
+      minimum_sil: 3
+    expected: "Approvals table with required roles"
+    failure_message: "Approvals table missing (required SIL 3+)"
+    fix_suggestion: "Add Approvals table with roles: Author (TST), Reviewer (QUA), Approver (PM)"
+  
+  # Required sections
+  - id: "TST-T004"
+    name: "Required Sections"
+    description: "Verify all required sections exist"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      required_sections:
+        - "1. Introduction"
+        - "2. Test Strategy"
+        - "3. Test Environment"
+        - "4. Component Tests"
+        - "5. Integration Tests"
+        - "6. System Tests"
+        - "7. Coverage Analysis"
+    expected: "All required sections present"
+    failure_message: "One or more required sections missing"
+    fix_suggestion: "Add missing sections per EN 50128 test specification requirements"
+
+# Quality standards checks
+quality_checks:
+  # Test case ID format
+  - id: "TST-Q001"
+    name: "Test Case ID Format"
+    description: "Verify all test cases have IDs in TC-XXX-NNN format"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**TC-"
+      id_pattern: "^TC-[A-Z]+-[0-9]{3}"
+    expected: "All test cases have IDs matching TC-XXX-NNN"
+    failure_message: "One or more test cases have invalid ID format"
+    fix_suggestion: "Ensure all test case IDs follow TC-XXX-NNN format (e.g., TC-TDC-001)"
+  
+  # Test objective
+  - id: "TST-Q002"
+    name: "Test Objective"
+    description: "Verify all test cases have objective"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**TC-"
+      field_pattern: "Objective:"
+      field_description: "test objective"
+    expected: "All test cases specify objective"
+    failure_message: "One or more test cases missing objective"
+    fix_suggestion: "Add objective (what is being tested) to all test cases"
+  
+  # Test procedure
+  - id: "TST-Q003"
+    name: "Test Procedure"
+    description: "Verify all test cases have procedure"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**TC-"
+      field_pattern: "Procedure:"
+      field_description: "test procedure"
+    expected: "All test cases specify procedure (steps)"
+    failure_message: "One or more test cases missing procedure"
+    fix_suggestion: "Add procedure (test steps) to all test cases"
+  
+  # Expected result
+  - id: "TST-Q004"
+    name: "Expected Result"
+    description: "Verify all test cases have expected result"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**TC-"
+      field_pattern: "Expected Result:"
+      field_description: "expected result"
+    expected: "All test cases specify expected result"
+    failure_message: "One or more test cases missing expected result"
+    fix_suggestion: "Add expected result (pass criteria) to all test cases"
+  
+  # Pass/Fail criteria
+  - id: "TST-Q005"
+    name: "Pass/Fail Criteria"
+    description: "Verify all test cases have pass/fail criteria"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**TC-"
+      field_pattern: "Pass/Fail:"
+      field_description: "pass/fail criteria"
+    expected: "All test cases specify pass/fail criteria"
+    failure_message: "One or more test cases missing pass/fail criteria"
+    fix_suggestion: "Add pass/fail criteria to all test cases"
+  
+  # Traceability to requirements
+  - id: "TST-Q006"
+    name: "Test Traceability"
+    description: "Verify all test cases trace to requirements"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**TC-"
+      field_pattern: "Requirements:\\s*REQ-"
+      field_description: "requirement traceability"
+    expected: "All test cases trace to requirements (REQ-XXX-NNN)"
+    failure_message: "One or more test cases missing requirement traceability"
+    fix_suggestion: "Add 'Requirements: REQ-XXX-NNN' to all test cases"
+
+# Content requirement checks
+content_checks:
+  # At least one test case
+  - id: "TST-C001"
+    name: "Minimum Test Cases"
+    description: "Verify at least one test case exists"
+    severity: "error"
+    rule_type: "count_minimum"
+    rule_params:
+      item_pattern: "^\\*\\*TC-[A-Z]+-[0-9]{3}"
+      minimum_count: 1
+    expected: "At least 1 test case defined"
+    failure_message: "No test cases found in Test Specification"
+    fix_suggestion: "Add test cases to sections 4-6"
+  
+  # 100% requirements coverage
+  - id: "TST-C002"
+    name: "Requirements Coverage"
+    description: "Verify 100% requirements coverage"
+    severity: "error"
+    rule_type: "coverage_check"
+    rule_params:
+      coverage_type: "requirements"
+      minimum_coverage: 100
+      source_doc: "docs/SRS.md"
+      item_pattern: "REQ-[A-Z]+-[0-9]{3}"
+    expected: "100% requirements covered by tests"
+    failure_message: "Requirements coverage < 100%"
+    fix_suggestion: "Add test cases to cover all requirements from SRS"
+  
+  # Hazard coverage (for safety-critical systems)
+  - id: "TST-C003"
+    name: "Hazard Coverage"
+    description: "Verify all hazards covered by tests"
+    severity: "error"
+    rule_type: "coverage_check"
+    rule_params:
+      coverage_type: "hazards"
+      minimum_coverage: 100
+      source_doc: "docs/Hazard-Log.md"
+      item_pattern: "HAZ-[A-Z]+-[0-9]{3}"
+      minimum_sil: 1
+    expected: "100% hazards covered by tests (required SIL 1+)"
+    failure_message: "Hazard coverage < 100% (required SIL 1+)"
+    fix_suggestion: "Add test cases to cover all hazards from Hazard Log"
+  
+  # Coverage analysis section
+  - id: "TST-C004"
+    name: "Coverage Analysis Section"
+    description: "Verify coverage analysis section exists"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "7. Coverage Analysis"
+      content_must_contain: "Requirements Coverage"
+    expected: "Coverage Analysis section with requirements coverage table"
+    failure_message: "Coverage Analysis section missing or incomplete"
+    fix_suggestion: "Add section 7 with requirements coverage table and analysis"
+  
+  # Test environment specification
+  - id: "TST-C005"
+    name: "Test Environment"
+    description: "Verify test environment specified"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "3. Test Environment"
+      content_must_contain:
+        - "Hardware"
+        - "Software"
+    expected: "Test environment section specifies hardware and software"
+    failure_message: "Test environment not fully specified"
+    fix_suggestion: "Add hardware and software configuration to section 3"
+  
+  # SIL-specific coverage requirements
+  - id: "TST-C006"
+    name: "SIL Coverage Requirements"
+    description: "Verify SIL-specific coverage targets documented"
+    severity: "error"
+    rule_type: "content_check"
+    rule_params:
+      section: "7. Coverage Analysis"
+      sil_0_1_coverage: "Statement (HR), Branch (HR)"
+      sil_2_coverage: "Statement (HR), Branch (M)"
+      sil_3_4_coverage: "Statement (M), Branch (M), Condition (M)"
+    expected: "Coverage targets per SIL level documented"
+    failure_message: "SIL-specific coverage targets not documented"
+    fix_suggestion: "Document coverage targets per EN 50128 Table A.21: SIL 0-1 (Statement HR, Branch HR), SIL 2 (Statement HR, Branch M), SIL 3-4 (Statement M, Branch M, Condition M)"

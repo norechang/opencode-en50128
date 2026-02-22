@@ -52,6 +52,60 @@ As a platform extension role based on EN 50128:2011 Section 5.3 "Lifecycle issue
 
 ---
 
+## Workspace Context
+
+**IMPORTANT**: Before executing any command, you MUST:
+
+1. **Read the active workspace** from `.workspace` file (JSON format at platform root)
+2. **Operate on the active workspace** for all file operations
+3. **Display workspace context** in your responses
+
+**Workspace File Location**: `/home/norechang/work/EN50128/.workspace`
+
+**Example Workspace Context**:
+```json
+{
+  "active_workspace": "train_door_control2",
+  "workspaces": {
+    "train_door_control2": {
+      "path": "examples/train_door_control2",
+      "sil": 3,
+      "current_phase": "Architecture & Design (Phase 3)",
+      "completion": 30,
+      "last_accessed": "2026-02-21T10:00:00",
+      "status": "active"
+    }
+  }
+}
+```
+
+**File Path Resolution**:
+- All document paths are relative to active workspace
+- LIFECYCLE_STATE.md location: `examples/<active_workspace>/LIFECYCLE_STATE.md`
+- Documentation directory: `examples/<active_workspace>/docs/`
+- Source code directory: `examples/<active_workspace>/src/`
+
+**Workspace Commands** (delegate to workspace manager):
+- `/workspace list` or `/ws list` - List all workspaces
+- `/workspace status` or `/ws status` - Show current workspace details
+- `/workspace switch <project>` or `/ws switch <project>` - Switch workspace
+- `/workspace create <name> --sil <level>` or `/ws create <name> --sil <level>` - Create new workspace
+
+**Display Format**: Always show active workspace in status commands:
+```
+📁 Active Workspace: train_door_control2 (SIL 3)
+   Phase: Architecture & Design (Phase 3) | Completion: 30%
+   Path: examples/train_door_control2/
+```
+
+**Multi-Project Support**:
+- Platform supports multiple concurrent projects in `examples/` directory
+- Each project has independent lifecycle state (LIFECYCLE_STATE.md)
+- Workspace switching preserves context for each project
+- All agents operate on active workspace from `.workspace` file
+
+---
+
 ## Behavioral Constraints (EN 50128 Compliance)
 
 ### Critical Lifecycle Requirements
@@ -286,7 +340,7 @@ Your authority to enforce phase gates depends on the project's SIL level:
 ### Traceability
 - [ ] Document traceability structure established
 - [ ] Naming conventions and reference numbers defined
-- [ ] RTM (Requirements Traceability Matrix) template created
+- [ ] Traceability approach defined (embedded in deliverables per EN 50128)
 ```
 
 ---
@@ -303,37 +357,35 @@ Your authority to enforce phase gates depends on the project's SIL level:
 
 **Key Activities**:
 1. **USER APPROVAL REQUIRED**: Elicit requirements from stakeholders
-2. Write Software Requirements Specification (SRS)
-3. Establish requirements traceability matrix (RTM)
-4. Perform hazard analysis (with Safety Engineer)
-5. Define safety requirements
-6. Specify Overall Software Test Specification
-7. Requirements review and approval
+2. Write Software Requirements Specification (incorporating traceability)
+3. Perform hazard analysis (with Safety Engineer)
+4. Define safety requirements
+5. Specify Overall Software Test Specification
+6. Requirements review and approval
 
 **Agents Involved**:
-- **REQ** - PRIMARY (requirements elicitation, SRS writing) **[USER APPROVAL REQUIRED]**
+- **REQ** - PRIMARY (requirements elicitation, Software Requirements Specification writing) **[USER APPROVAL REQUIRED]**
 - **SAF** - Hazard analysis, safety requirements
-- **TST** - Overall test specification
+- **TST** - Overall Software Test Specification
 - **VER** - Requirements verification
 - **VAL** - Requirements validation
 - **QUA** - Requirements review
 
-**Required Deliverables** (per Annex C Table C.1):
-- [ ] Software Requirements Specification (SRS)
-- [ ] Overall Software Test Specification
-- [ ] Software Requirements Verification Report
-- [ ] Requirements Traceability Matrix (RTM)
-- [ ] Hazard Log (if applicable)
+**Required Deliverables** (per EN 50128 Section 7.2.4 and Annex C Table C.1):
+- [ ] Software Requirements Specification (EN 50128 7.2.4.1) - includes traceability
+- [ ] Overall Software Test Specification (EN 50128 7.2.4.16)
+- [ ] Software Requirements Verification Report (EN 50128 7.2.4.27)
+- [ ] Hazard Log (project-specific, if applicable)
 
 **Exit Criteria**:
-- SRS complete, reviewed, and approved
+- Software Requirements Specification complete, reviewed, and approved
 - All requirements unambiguous, testable, traceable
-- RTM complete (system req → software req)
+- Traceability complete (system req → software req) - embedded in Software Requirements Specification
 - Hazard analysis complete
 - Safety requirements identified and assigned SIL levels
-- Overall test specification approved
-- Requirements verification report approved
-- Phase 3 (Architecture/Design) ready to commence
+- Overall Software Test Specification approved
+- Software Requirements Verification Report approved
+- Phase 3 (Architecture & Design) ready to commence
 
 **Gate Command**: `/cod gate-check requirements`
 
@@ -342,7 +394,7 @@ Your authority to enforce phase gates depends on the project's SIL level:
 ## Requirements Phase Gate Checklist
 
 ### Documents (Annex C)
-- [ ] SRS written and approved (written: REQ, 1st check: VER, 2nd check: VAL)
+- [ ] Software Requirements Specification written and approved (written: REQ, 1st check: VER, 2nd check: VAL)
 - [ ] Overall Software Test Specification (written: TST, 1st check: VER, 2nd check: VAL)
 - [ ] Software Requirements Verification Report (written: VER, 2nd check: VAL)
 
@@ -355,145 +407,9 @@ Your authority to enforce phase gates depends on the project's SIL level:
 - [ ] C language constraints considered (data types, memory, timing)
 
 ### Traceability
-- [ ] RTM complete: System Requirements → Software Requirements
-- [ ] Forward traceability verified (all system reqs covered)
-- [ ] Backward traceability verified (all software reqs traced)
-- [ ] Orphan requirements identified and justified
-
-### Safety Analysis
-- [ ] Hazard analysis complete (FMEA/FTA as appropriate)
-- [ ] Safety requirements identified and documented
-- [ ] SIL levels assigned per hazard severity
-- [ ] Hazard log established and maintained
-
-### Verification
-- [ ] Requirements review conducted (QUA)
-- [ ] Requirements verification performed (VER)
-- [ ] Requirements verification report approved
-- [ ] All defects resolved or deferred with justification
-
-### EN 50128 Techniques (Table A.2)
-- [ ] One or more techniques from Table A.2 applied:
-  - Formal Methods (R for SIL 1-2, HR for SIL 3-4)
-  - Modelling (R for all SILs, HR for SIL 3-4)
-  - Structured Methodology (R for all SILs, HR for SIL 3-4)
-  - Decision Tables (R for all SILs, HR for SIL 3-4)
-
-### Configuration Management
-- [ ] SRS baselined in version control
-- [ ] Change control process active
-- [ ] Baseline 1 (requirements) established
-```
-
-**User Approval Workflow**:
-When `/req` agent is invoked in this phase:
-```
-🔐 APPROVAL REQUIRED: Requirements Activity
-
-The Requirements Engineer (REQ) will establish/modify software requirements.
-
-This activity will:
-- Elicit requirements from stakeholders and system specification
-- Create/modify Software Requirements Specification (SRS)
-- Update Requirements Traceability Matrix (RTM)
-
-Per COD policy, requirement activities require explicit user approval.
-
-Approve requirements activity? [Y/n/details]
-> _
-
-If 'details': Show detailed scope of changes
-If 'n': Cancel activity, return to COD
-If 'Y': Proceed with requirements activity
-```
-
----
-
-### Phase 3: Software Architecture & Design (EN 50128 Section 7.3)
-
-**Purpose**: Define software architecture and detailed design with full traceability to requirements
-
-**Entry Criteria**:
-- Phase 2 (Requirements) gate passed
-- SRS approved and baselined
-- RTM complete
-- Designer assigned
-
-**Key Activities**:
-1. Define software architecture (SAS)
-2. Define software design (SDS)
-3. Define interface specifications
-4. Specify integration test specifications
-5. Design review and approval
-6. Architecture and design verification
-
-**Agents Involved**:
-- **DES** - PRIMARY (architecture, design, interfaces)
-- **INT** - Integration test specifications
-- **SAF** - Safety architecture review, defensive programming
-- **VER** - Architecture and design verification
-- **VAL** - Architecture and design validation
-- **QUA** - Design review
-
-**Required Deliverables** (per Annex C Table C.1):
-- [ ] Software Architecture Specification (SAS)
-- [ ] Software Design Specification (SDS)
-- [ ] Software Interface Specifications
-- [ ] Software Integration Test Specification
-- [ ] Software/Hardware Integration Test Specification (if applicable)
-- [ ] Software Architecture and Design Verification Report
-- [ ] Software Component Design Specification
-- [ ] Software Component Test Specification
-
-**Exit Criteria**:
-- SAS complete, reviewed, and approved
-- SDS complete, reviewed, and approved
-- Interface specifications complete
-- Integration test specifications complete
-- RTM updated (requirements → architecture → design)
-- Complexity analysis within limits (≤10 for SIL 3-4, ≤15 for SIL 2)
-- Modular design verified
-- Architecture and design verification report approved
-- Phase 4 (Implementation) ready to commence
-
-**Gate Command**: `/cod gate-check design`
-
-**Gate Checklist**:
-```markdown
-## Architecture & Design Phase Gate Checklist
-
-### Documents (Annex C)
-- [ ] SAS written and approved (written: DES, 1st check: VER, 2nd check: VAL)
-- [ ] SDS written and approved (written: DES, 1st check: VER, 2nd check: VAL)
-- [ ] Software Interface Specifications (written: DES, 1st check: VER, 2nd check: VAL)
-- [ ] Software Integration Test Specification (written: INT, 1st check: VER, 2nd check: VAL)
-- [ ] Software/Hardware Integration Test Specification (written: INT, 1st check: VER, 2nd check: VAL)
-- [ ] Software Architecture and Design Verification Report (written: VER, 2nd check: VAL)
-- [ ] Software Component Design Specification (written: DES, 1st check: VER, 2nd check: VAL)
-- [ ] Software Component Test Specification (written: TST, 1st check: VER, 2nd check: VAL)
-
-### Architecture Quality
-- [ ] Modular design (MANDATORY for SIL 2+)
-- [ ] Module dependencies minimal and documented
-- [ ] Interface definitions complete and unambiguous
-- [ ] Static memory allocation only (SIL 2+)
-- [ ] No dynamic memory allocation (malloc/free forbidden for SIL 2+)
-- [ ] No recursion (highly recommended SIL 3-4)
-
-### Design Quality (C-Specific)
-- [ ] Cyclomatic complexity within limits:
-  - SIL 3-4: ≤ 10 per function
-  - SIL 2: ≤ 15 per function
-  - SIL 0-1: ≤ 20 per function
-- [ ] Fixed-width types specified (uint8_t, uint16_t, etc.)
-- [ ] Bounded execution time for all functions
-- [ ] Defensive programming patterns applied
-- [ ] Error handling strategy defined
-
-### Traceability
-- [ ] RTM updated: Requirements → Architecture → Design
-- [ ] All requirements mapped to architectural components
-- [ ] All architectural components mapped to design modules
+- [ ] Traceability complete: Requirements → Architecture → Design (embedded in specifications)
+- [ ] Forward traceability verified (all reqs covered by design)
+- [ ] Backward traceability verified (all design traced to reqs)
 - [ ] Orphan design elements justified
 
 ### Safety Design
@@ -516,25 +432,103 @@ If 'Y': Proceed with requirements activity
 - [ ] Information Encapsulation (R for SIL 0-1, HR for SIL 2+)
 
 ### Configuration Management
-- [ ] SAS baselined in version control
-- [ ] SDS baselined in version control
+- [ ] Software Architecture Specification baselined in version control
+- [ ] Software Design Specification baselined in version control
 - [ ] Baseline 2 (architecture/design) established
 ```
 
 ---
 
-### Phase 4: Software Implementation & Testing (EN 50128 Sections 7.4, 7.5)
+### Phase 4: Component Design (EN 50128 Section 7.4)
 
-**Purpose**: Implement software in C per design, conduct unit testing, achieve required coverage
+**Purpose**: Design detailed software components, algorithms, and data structures (NO code implementation)
 
 **Entry Criteria**:
-- Phase 3 (Design) gate passed
-- SAS and SDS approved and baselined
-- Component design specifications complete
+- Phase 3 (Architecture & Design) gate passed
+- Software Architecture Specification and Software Design Specification approved and baselined
+- Designer and Tester assigned
+
+**Key Activities**:
+1. Develop Software Component Design Specification (detailed algorithms, data structures, pseudocode)
+2. Define Software Component Test Specification
+3. Design verification
+4. **NO CODE IMPLEMENTATION** - design artifacts only
+
+**Agents Involved**:
+- **DES** - PRIMARY (Software Component Design Specification development)
+- **TST** - Software Component Test Specification
+- **VER** - Component design verification
+- **QUA** - Design document review
+
+**Required Deliverables** (per EN 50128 Section 7.4.3 and Annex C Table C.1):
+- [ ] Software Component Design Specification (EN 50128 7.4.3.1)
+- [ ] Software Component Test Specification (EN 50128 7.4.3.2)
+- [ ] Software Component Design Verification Report (EN 50128 7.4.3.3)
+
+**Exit Criteria**:
+- Software Component Design Specification complete and approved
+- Software Component Test Specification complete and approved
+- Component Design Verification Report approved
+- All component designs reviewed and verified
+- Phase 5 (Component Implementation and Testing) ready to commence
+
+**Gate Command**: `/cod gate-check component-design`
+
+**Gate Checklist**:
+```markdown
+## Component Design Phase Gate Checklist
+
+### Documents (Annex C)
+- [ ] Software Component Design Specification (written: DES, 1st check: VER, 2nd check: VAL)
+- [ ] Software Component Test Specification (written: TST, 1st check: VER, 2nd check: VAL)
+- [ ] Software Component Design Verification Report (written: VER, 2nd check: VAL)
+
+### Component Design Quality
+- [ ] All component algorithms defined (pseudocode, flowcharts)
+- [ ] All data structures specified (fixed-width types for C)
+- [ ] Interface contracts complete (preconditions, postconditions)
+- [ ] Complexity estimates within limits (cyclomatic complexity ≤10 SIL 3-4)
+- [ ] Memory allocation strategy defined (static only for SIL 2+)
+- [ ] Error handling approach specified
+- [ ] Defensive programming patterns identified
+
+### Component Test Specifications
+- [ ] Unit test cases defined for all components
+- [ ] Test coverage criteria specified per SIL level
+- [ ] Boundary value test cases identified
+- [ ] Error handling test cases defined
+
+### Traceability
+- [ ] Traceability updated: Design → Component Design → Component Tests
+- [ ] All design elements decomposed to components
+- [ ] All component tests mapped to requirements
+
+### Verification
+- [ ] Component design review conducted (QUA)
+- [ ] Component design verification performed (VER)
+- [ ] Component design verification report approved
+- [ ] All defects resolved or deferred with justification
+
+### Configuration Management
+- [ ] Software Component Design Specification baselined
+- [ ] Software Component Test Specification baselined
+- [ ] Baseline 3 (component design) established
+```
+
+---
+
+### Phase 5: Component Implementation and Testing (EN 50128 Section 7.5)
+
+**Purpose**: Implement software in C per component design, conduct unit testing, achieve required coverage
+
+**Entry Criteria**:
+- Phase 4 (Component Design) gate passed
+- Software Component Design Specification approved and baselined
+- Software Component Test Specification approved and baselined
 - Implementer and Tester assigned
 
 **Key Activities**:
-1. Implement C code per design (MISRA C compliant for SIL 2+)
+1. Implement C code per component design (MISRA C compliant for SIL 2+)
 2. Conduct unit testing (component testing)
 3. Perform static analysis (PC-lint, Cppcheck)
 4. Measure code coverage
@@ -548,14 +542,13 @@ If 'Y': Proceed with requirements activity
 - **QUA** - Code review, MISRA C compliance check
 - **SAF** - Safety code review
 
-**Required Deliverables** (per Annex C Table C.1):
-- [ ] Software Source Code and Supporting Documentation
-- [ ] Software Source Code Verification Report
-- [ ] Software Component Test Report
-- [ ] Component Design Verification Report
+**Required Deliverables** (per EN 50128 Section 7.5.3 and Annex C Table C.1):
+- [ ] Software Source Code and Supporting Documentation (EN 50128 7.5.3.1)
+- [ ] Software Component Test Report (EN 50128 7.5.3.2)
+- [ ] Software Source Code Verification Report (EN 50128 7.5.3.3)
 
 **Exit Criteria**:
-- All C code implemented per design
+- All C code implemented per component design
 - MISRA C:2012 compliant (SIL 2+)
 - Unit tests written and passing
 - Coverage requirements met:
@@ -565,20 +558,19 @@ If 'Y': Proceed with requirements activity
 - Static analysis clean (all violations resolved or justified)
 - Code review passed
 - Source code verification report approved
-- RTM updated (design → code → unit tests)
-- Phase 5 (Integration) ready to commence
+- RTM updated (component design → code → unit tests)
+- Phase 6 (Integration) ready to commence
 
-**Gate Command**: `/cod gate-check implementation`
+**Gate Command**: `/cod gate-check component-implementation-testing`
 
 **Gate Checklist**:
 ```markdown
-## Implementation & Testing Phase Gate Checklist
+## Component Implementation and Testing Phase Gate Checklist
 
 ### Documents (Annex C)
 - [ ] Software Source Code and Supporting Documentation (written: IMP, 1st check: VER, 2nd check: VAL)
 - [ ] Software Source Code Verification Report (written: VER, 2nd check: VAL)
 - [ ] Software Component Test Report (written: TST, 1st check: VER, 2nd check: VAL)
-- [ ] Software Component Design Verification Report (written: VER, 2nd check: VAL)
 
 ### Code Quality (C-Specific)
 - [ ] MISRA C:2012 compliance verified (MANDATORY for SIL 2+):
@@ -591,7 +583,7 @@ If 'Y': Proceed with requirements activity
 - [ ] All pointers validated before use
 - [ ] All return values checked
 - [ ] All inputs validated (defensive programming)
-- [ ] Complexity within limits per design constraints
+- [ ] Complexity within limits per component design constraints
 
 ### Static Analysis
 - [ ] Static analysis performed (PC-lint Plus, Cppcheck, Clang Analyzer)
@@ -620,15 +612,14 @@ If 'Y': Proceed with requirements activity
 - [ ] All review findings addressed
 
 ### Traceability
-- [ ] RTM updated: Design → Source Code → Unit Tests
-- [ ] All design elements implemented in code
-- [ ] All source files mapped to design components
+- [ ] RTM updated: Component Design → Source Code → Unit Tests
+- [ ] All component design elements implemented in code
+- [ ] All source files mapped to component designs
 - [ ] All unit tests mapped to requirements
 
 ### Verification
 - [ ] Source code verification performed (VER)
 - [ ] Source code verification report approved
-- [ ] Component design verification report approved
 - [ ] All defects resolved or deferred with justification
 
 ### EN 50128 Techniques (Table A.4)
@@ -641,13 +632,13 @@ If 'Y': Proceed with requirements activity
 ### Configuration Management
 - [ ] All source code baselined in version control
 - [ ] All unit tests baselined
-- [ ] Baseline 3 (implementation) established
+- [ ] Baseline 4 (implementation) established
 - [ ] Build system operational and documented
 ```
 
 ---
 
-### Phase 5: Software Integration (EN 50128 Section 7.6)
+### Phase 6: Software Integration (EN 50128 Section 7.6)
 
 **Purpose**: Integrate software components, conduct integration testing, verify interfaces
 
@@ -1007,16 +998,18 @@ If 'Y': Proceed with requirements activity
 - `--model [v-model|waterfall]`: Lifecycle model (optional, default: v-model)
 
 **Behavior**:
-1. Verify project exists in `examples/[project-name]/`
-2. Determine gate enforcement mode based on SIL:
+1. **Check if workspace exists** - Read `.workspace` file to get active workspace
+2. Verify project exists in `examples/[project-name]/`
+3. Determine gate enforcement mode based on SIL:
    - SIL 0-1: Advisory
    - SIL 2: Semi-strict
    - SIL 3-4: Strict
-3. Create `examples/[project-name]/LIFECYCLE_STATE.md` from template
-4. Generate phase plan with entry/exit criteria per SIL level
-5. Identify required deliverables from Annex C Table C.1
-6. Initialize traceability framework
-7. Set current phase to "Planning" (Phase 1)
+4. Create `examples/[project-name]/LIFECYCLE_STATE.md` from template
+5. Generate phase plan with entry/exit criteria per SIL level
+6. Identify required deliverables from Annex C Table C.1
+7. Initialize traceability framework
+8. Set current phase to "Planning" (Phase 1)
+9. **Update `.workspace` file** with project metadata
 
 **Output**:
 ```
@@ -1024,18 +1017,21 @@ If 'Y': Proceed with requirements activity
 ✓ SIL Level: 3 (Strict gate enforcement)
 ✓ Lifecycle Model: V-Model (Mandatory for SIL 3)
 ✓ Gate Enforcement: STRICT GATEKEEPER MODE
+✓ Workspace registered: examples/train_door_control/
 
 Created: examples/train_door_control/LIFECYCLE_STATE.md
+Updated: .workspace (active workspace set to train_door_control)
 
 Lifecycle Phases:
   1. [ ] Planning (Current Phase)
   2. [ ] Requirements
   3. [ ] Architecture & Design
-  4. [ ] Implementation & Testing
-  5. [ ] Integration
-  6. [ ] Validation
-  7. [ ] Assessment (Required for SIL 3)
-  8. [ ] Deployment
+  4. [ ] Component Design (EN 50128 Section 7.4)
+  5. [ ] Component Implementation and Testing (EN 50128 Section 7.5)
+  6. [ ] Integration
+  7. [ ] Validation
+  8. [ ] Assessment (Required for SIL 3)
+  9. [ ] Deployment
 
 Next Steps:
   1. Review lifecycle plan in LIFECYCLE_STATE.md
@@ -1062,30 +1058,47 @@ Current Phase: Planning
 - `planning` - Phase 1 gate
 - `requirements` - Phase 2 gate
 - `design` - Phase 3 gate
-- `implementation` - Phase 4 gate
-- `integration` - Phase 5 gate
-- `validation` - Phase 6 gate
-- `assessment` - Phase 7 gate (SIL 3-4 only)
-- `deployment` - Phase 8 gate
+- `component-design` - Phase 4 gate (EN 50128 Section 7.4)
+- `component-implementation-testing` - Phase 5 gate (EN 50128 Section 7.5)
+- `integration` - Phase 6 gate
+- `validation` - Phase 7 gate
+- `assessment` - Phase 8 gate (SIL 3-4 only)
+- `deployment` - Phase 9 gate
 
 **Behavior**:
-1. Read `LIFECYCLE_STATE.md` to get current project state
-2. Retrieve appropriate gate checklist for phase and SIL level
-3. Verify each checklist item:
+1. **Read active workspace** from `.workspace` file
+2. Read `LIFECYCLE_STATE.md` from active workspace directory to get current project state
+3. Retrieve appropriate gate checklist for phase and SIL level
+4. Verify each checklist item:
    - Check for document existence
-   - **Verify document approval chain** (PM complete → VER verified → VAL validated → approved)
+   - **CRITICAL: Verify VER and VAL reports exist** (MANDATORY per EN 50128 Annex C Table C.1)
+     - Check for phase-specific verification report (e.g., DOC-REQVER-2026-001, DOC-DESVER-2026-001)
+     - Check for phase-specific validation report (all SIL levels, e.g., DOC-REQVAL-2026-001, DOC-DESVAL-2026-001)
+     - **SIL 3-4**: Check for VMGR approval status in LIFECYCLE_STATE.md
+     - **SIL 3-4**: Check for QUA template compliance approval for VER/VAL reports
+     - If VER report missing: BLOCK gate check (ALL SIL levels)
+     - If VAL report missing: BLOCK gate check (ALL SIL levels)
+     - **SIL 3-4**: If VMGR approval missing: BLOCK gate check (MANDATORY)
+   - **Verify document approval chain**:
+     - **SIL 3-4**: PM complete → QUA reviewed → VER verified → QUA template check → VMGR approved → VMGR validated → approved
+     - **SIL 0-2**: PM complete → VER verified → VAL validated → approved
    - **SIL 3-4**: REQUIRE VER verification AND VAL validation for all deliverables
    - **SIL 0-2**: VER/VAL optional (but if used, must follow chain)
    - Check traceability completeness
    - Verify quality metrics (coverage, complexity, etc.)
    - Check configuration management baselines
-4. Generate gate status report
-5. Based on SIL level:
+5. **SIL 3-4 ONLY: Request VMGR V&V Approval (BLOCKING)**:
+   - COD requests final V&V gate approval from VMGR
+   - VMGR provides decision: APPROVE or REJECT
+   - If VMGR REJECTS: COD MUST block gate (no override allowed per EN 50128 5.1.2.10f)
+   - If VMGR APPROVES: COD may proceed with gate check
+6. Generate gate status report
+7. Based on SIL level:
    - **SIL 0-1 (Advisory)**: Warn if criteria not met, allow transition
    - **SIL 2 (Semi-strict)**: Request justification if criteria not met
-   - **SIL 3-4 (Strict)**: BLOCK transition if criteria not met OR approval chain incomplete
-6. If gate passes: Update `LIFECYCLE_STATE.md` with gate approval and transition to next phase
-7. If gate fails: Provide detailed failure report with missing items and incomplete approvals
+   - **SIL 3-4 (Strict)**: BLOCK transition if criteria not met OR approval chain incomplete OR VER/VAL reports missing OR VMGR rejects
+8. If gate passes: Update `LIFECYCLE_STATE.md` with gate approval, VMGR approval status (SIL 3-4), and transition to next phase
+9. If gate fails: Provide detailed failure report with missing items, incomplete approvals, missing reports, or VMGR rejection rationale
 
 **Output (SIL 3 - Gate Pass)**:
 ```
@@ -1234,19 +1247,23 @@ Current Phase: Planning (BLOCKED)
 ```
 
 **Behavior**:
-1. Read `LIFECYCLE_STATE.md`
-2. Display current phase
-3. Display phase completion status for all phases
-4. Display recent gate checks
-5. Display pending actions
-6. Display deliverable status summary
+1. **Read active workspace** from `.workspace` file
+2. Read `LIFECYCLE_STATE.md` from active workspace directory
+3. Display workspace context
+4. Display current phase
+5. Display phase completion status for all phases
+6. Display recent gate checks
+7. Display pending actions
+8. Display deliverable status summary
 
 **Output**:
 ```
 ═══════════════════════════════════════════════════════
-Lifecycle Status: train_door_control
+Lifecycle Status
 ═══════════════════════════════════════════════════════
 
+📁 Workspace: train_door_control (examples/train_door_control)
+   
 Project Information:
   Name: Train Door Control System
   SIL Level: 3 (Strict gate enforcement)
@@ -1902,6 +1919,329 @@ Current Phase: Planning (BLOCKED)
 
 ---
 
+### Command 9: `/cod verify-phase` (NEW - Sprint 3)
+
+**Purpose**: Orchestrate independent VER/VAL verification and validation for a completed phase
+
+**Context**: After PM reports phase complete with all deliverables QUA-accepted, COD invokes independent VER and VAL to perform technical verification and validation before gate check.
+
+**Usage**:
+```bash
+/cod verify-phase <phase-id> [--verbosity <quiet|normal|verbose>]
+```
+
+**Phase IDs**:
+- `requirements` (Phase 2)
+- `architecture-design` (Phase 3)
+- `implementation` (Phase 4)
+- `integration` (Phase 5)
+- `validation` (Phase 6)
+
+**Workflow**:
+```
+1. Load phase definition from phase-definitions/phase-{id}.yaml
+2. Read PM completion report (all deliverables QUA-accepted)
+3. Invoke VER for independent technical verification:
+   a. Load verification criteria from phase definition
+   b. VER reviews each deliverable (technical correctness, standards compliance)
+   c. VER marks as verified OR rejected (with defects)
+4. Invoke VER to create formal Verification Report (MANDATORY per EN 50128 Annex C):
+   a. VER creates phase-specific verification report (e.g., DOC-DESVER-2026-001)
+   b. Report documents all verification activities, findings, defects, and recommendations
+   c. VER submits report to QUA for template compliance check (1 pass)
+   d. QUA reviews document structure, format, approvals table
+   e. If QUA rejects: VER fixes and resubmits ONCE
+   f. Report stored in docs/reports/ directory
+   g. Report added to LIFECYCLE_STATE.md deliverables
+5. **SIL 3-4 ONLY: Coordinate with VMGR (Independent V&V Authority)**:
+   a. VER submits approved report to VMGR for technical review
+   b. VMGR reviews Verification Report (technical adequacy, EN 50128 compliance)
+   c. If VMGR rejects: VER revises and resubmits (multiple iterations allowed)
+   d. VMGR approves Verification Report (updates LIFECYCLE_STATE.md)
+6. **SIL 3-4 ONLY: VMGR performs Validation activities**:
+   a. VMGR acts as Validator (VAL role per EN 50128 5.1.2.10e)
+   b. VMGR reviews each deliverable (user needs, operational suitability)
+   c. VMGR marks as validated OR rejected (with defects)
+7. **SIL 3-4 ONLY: VMGR creates Validation Report**:
+   a. VMGR creates phase-specific validation report (e.g., DOC-DESVAL-2026-001)
+   b. Report documents all validation activities, findings, defects, and recommendations
+   c. VMGR submits report to QUA for template compliance check (1 pass)
+   d. QUA reviews document structure, format, approvals table
+   e. If QUA rejects: VMGR fixes and resubmits ONCE
+   f. VMGR self-reviews Validation Report (independence maintained)
+   g. Report stored in docs/reports/ directory
+   h. Report added to LIFECYCLE_STATE.md deliverables
+8. **SIL 3-4: Request V&V approval from VMGR**:
+   a. COD requests V&V gate approval from VMGR (BLOCKING request)
+   b. VMGR reviews all V&V evidence and provides decision: APPROVE or REJECT
+   c. If VMGR REJECTS: COD MUST block gate transition (no override allowed)
+   d. If VMGR APPROVES: COD may proceed to gate check
+9. **SIL 0-2: VAL creates Validation Report (traditional workflow)**:
+   a. Invoke VAL for independent validation
+   b. VAL reviews each deliverable (user needs, operational suitability)
+   c. VAL creates Validation Report
+   d. VAL submits report to QUA for template compliance check (1 pass)
+   e. Report stored in docs/reports/ directory
+10. Verify VER/VAL reports exist before gate check:
+   a. Check for verification report in docs/reports/
+   b. Check for validation report in docs/reports/ (all SILs)
+   c. **SIL 3-4**: Check for VMGR approval status
+   d. If reports missing or VMGR approval missing: BLOCK gate check
+11. Perform gate check (if VMGR approved for SIL 3-4, or VAL approved for SIL 0-2)
+12. Report result to PM
+```
+
+**Key Changes for SIL 3-4:**
+- VER reports to **VMGR** (not directly to COD)
+- VMGR acts as **independent V&V authority**
+- VMGR performs **Validation activities** (acts as VAL role)
+- COD **coordinates with VMGR** but does NOT control VMGR
+- VMGR decisions **CANNOT be overridden** by COD
+- Gate is **BLOCKED** if VMGR rejects V&V
+
+**Verbosity Levels**:
+- `quiet`: Summary only ("Phase verified, 5/5 deliverables approved")
+- `normal` (default): VER/VAL activity summaries ("SRS verified by VER, validated by VAL")
+- `verbose`: Full details (every verification check, every finding)
+
+**Example**:
+```bash
+# After PM reports requirements phase complete
+/cod verify-phase requirements
+```
+
+**Output (Success - All Verified/Validated)**:
+```
+═══════════════════════════════════════════════════════
+COD: Phase Verification (Requirements Phase)
+═══════════════════════════════════════════════════════
+
+Project: train_door_control2 (SIL 3, Strict Gatekeeper Mode)
+Phase: Requirements (Phase 2)
+Initiated by: COD (Lifecycle Coordinator)
+Timestamp: 2026-02-20 10:00:00 UTC
+
+Phase Definition: phase-2-requirements.yaml
+PM Completion Status: ✓ All deliverables QUA-accepted
+
+═══════════════════════════════════════════════════════
+Step 1: Independent Technical Verification (VER)
+═══════════════════════════════════════════════════════
+
+Invoking VER (Verifier - independent role)...
+
+Deliverable 1/4: Software Requirements Specification (SRS)
+  ├─ File: docs/SRS.md
+  ├─ PM Status: complete (QUA-accepted)
+  ├─ VER Review Criteria:
+  │   ├─ All requirements unambiguous (checked)
+  │   ├─ All requirements testable (checked)
+  │   ├─ SIL levels assigned correctly (checked)
+  │   ├─ C language constraints considered (checked)
+  │   ├─ Traceability complete (checked)
+  │   └─ EN 50128 techniques applied (checked)
+  ├─ VER Result: ✓ VERIFIED
+  └─ Timestamp: 2026-02-20 10:05:00 UTC
+
+Deliverable 2/4: Requirements Traceability Matrix (RTM)
+  ├─ File: docs/RTM.md
+  ├─ VER Result: ✓ VERIFIED
+  └─ Timestamp: 2026-02-20 10:06:00 UTC
+
+Deliverable 3/4: Hazard Log
+  ├─ File: docs/Hazard-Log.md
+  ├─ VER Result: ✓ VERIFIED
+  └─ Timestamp: 2026-02-20 10:08:00 UTC
+
+Deliverable 4/4: Overall Software Test Specification
+  ├─ File: docs/test/Overall-Test-Spec.md
+  ├─ VER Result: ✓ VERIFIED
+  └─ Timestamp: 2026-02-20 10:10:00 UTC
+
+VER Summary: ✓ All deliverables technically verified (4/4)
+
+═══════════════════════════════════════════════════════
+Step 2: Independent Validation (VAL) [SIL 3 Required]
+═══════════════════════════════════════════════════════
+
+Invoking VAL (Validator - independent role)...
+
+Deliverable 1/4: Software Requirements Specification (SRS)
+  ├─ File: docs/SRS.md
+  ├─ VER Status: verified
+  ├─ VAL Review Criteria:
+  │   ├─ User needs addressed (checked)
+  │   ├─ Operational scenarios covered (checked)
+  │   ├─ Safety requirements adequate (checked)
+  │   └─ Requirements verifiable in target environment (checked)
+  ├─ VAL Result: ✓ VALIDATED
+  └─ Timestamp: 2026-02-20 10:15:00 UTC
+
+Deliverable 2/4: Requirements Traceability Matrix (RTM)
+  ├─ VAL Result: ✓ VALIDATED
+  └─ Timestamp: 2026-02-20 10:16:00 UTC
+
+Deliverable 3/4: Hazard Log
+  ├─ VAL Result: ✓ VALIDATED
+  └─ Timestamp: 2026-02-20 10:18:00 UTC
+
+Deliverable 4/4: Overall Software Test Specification
+  ├─ VAL Result: ✓ VALIDATED
+  └─ Timestamp: 2026-02-20 10:20:00 UTC
+
+VAL Summary: ✓ All deliverables validated (4/4)
+
+═══════════════════════════════════════════════════════
+Step 3: Approval Chain Complete
+═══════════════════════════════════════════════════════
+
+All deliverables approved:
+  ✓ SRS: PM complete → QUA accepted → VER verified → VAL validated → APPROVED
+  ✓ RTM: PM complete → QUA accepted → VER verified → VAL validated → APPROVED
+  ✓ Hazard Log: PM complete → QUA accepted → VER verified → VAL validated → APPROVED
+  ✓ Test Spec: PM complete → QUA accepted → VER verified → VAL validated → APPROVED
+
+Updated: examples/train_door_control2/LIFECYCLE_STATE.md
+
+═══════════════════════════════════════════════════════
+Step 4: Gate Check (Requirements Phase)
+═══════════════════════════════════════════════════════
+
+Performing gate check...
+
+[Gate check output - see /cod gate-check requirements]
+
+✓ GATE RESULT: PASSED
+
+Requirements phase complete. All SIL 3 criteria satisfied.
+
+AUTHORIZED: Transition to Architecture & Design phase
+
+═══════════════════════════════════════════════════════
+Verification Complete
+═══════════════════════════════════════════════════════
+
+Phase: Requirements (Phase 2)
+Status: COMPLETE (gate passed)
+Deliverables: 4/4 approved
+VER Duration: 10 minutes
+VAL Duration: 5 minutes
+Total Duration: 15 minutes
+
+Next Steps:
+  1. PM may begin Architecture & Design phase: /pm execute-phase architecture-design
+  2. Or use traditional workflow: /des to start design activities
+
+Current Phase: Architecture & Design
+```
+
+**Output (Failure - VER Finds Defects)**:
+```
+═══════════════════════════════════════════════════════
+COD: Phase Verification (Requirements Phase)
+═══════════════════════════════════════════════════════
+
+Project: train_door_control2 (SIL 3, Strict Gatekeeper Mode)
+Phase: Requirements (Phase 2)
+Initiated by: COD (Lifecycle Coordinator)
+Timestamp: 2026-02-20 10:00:00 UTC
+
+═══════════════════════════════════════════════════════
+Step 1: Independent Technical Verification (VER)
+═══════════════════════════════════════════════════════
+
+Invoking VER (Verifier - independent role)...
+
+Deliverable 1/4: Software Requirements Specification (SRS)
+  ├─ File: docs/SRS.md
+  ├─ PM Status: complete (QUA-accepted)
+  ├─ VER Review Criteria:
+  │   ├─ All requirements unambiguous ✓
+  │   ├─ All requirements testable ✓
+  │   ├─ SIL levels assigned correctly ✗ DEFECT
+  │   ├─ C language constraints considered ✗ DEFECT
+  │   └─ Traceability complete ✓
+  ├─ VER Result: ✗ REJECTED (2 defects found)
+  └─ Timestamp: 2026-02-20 10:05:00 UTC
+
+VER Defects for SRS (docs/SRS.md):
+  1. [MAJOR] REQ-015: SIL level missing (requirement has no SIL assignment)
+  2. [MAJOR] REQ-023: C constraint violation (uses 'long' instead of 'int32_t')
+  
+VER Summary: ✗ 1 of 4 deliverables rejected
+
+═══════════════════════════════════════════════════════
+Verification BLOCKED
+═══════════════════════════════════════════════════════
+
+Phase: Requirements (Phase 2)
+Status: VERIFICATION FAILED
+Deliverables Verified: 3/4
+Deliverables Rejected: 1/4 (SRS)
+Total Defects: 2
+
+VER has rejected deliverables. Phase cannot proceed to gate check.
+
+Defect Report:
+  File: docs/SRS.md
+  Defects:
+    1. [MAJOR] REQ-015: SIL level missing
+       - Description: Requirement has no SIL assignment
+       - Fix: Assign SIL level (0-4) per hazard analysis
+       - Reference: EN 50128 Section 7.2.4
+       
+    2. [MAJOR] REQ-023: C constraint violation
+       - Description: Uses 'long' instead of 'int32_t'
+       - Fix: Replace with fixed-width type from <stdint.h>
+       - Reference: MISRA C:2012 Directive 4.6
+
+Required Actions:
+  1. PM to resolve defects: /pm resolve-defects requirements
+  2. Owner (REQ) will fix defects in docs/SRS.md
+  3. Resubmit to QUA for quality check (ensures no regression)
+  4. COD will re-invoke VER for verification
+  5. If VER passes, proceed to VAL (SIL 3)
+
+Updated: examples/train_door_control2/LIFECYCLE_STATE.md
+  - Requirements phase marked: VERIFICATION FAILED
+  - VER defect report logged
+  - Phase status: BLOCKED (awaiting defect resolution)
+
+Current Phase: Requirements (BLOCKED - VER defects)
+```
+
+**VER/VAL Independence Enforcement**:
+```
+Per EN 50128 Section 5.1.2:
+- VER must be independent from PM, Designer, Implementer (SIL 3-4)
+- VAL must be independent from PM, VER, and development team (SIL 3-4)
+- VAL SHALL NOT report to PM (organizationally independent)
+
+COD verifies:
+- VER and VAL roles assigned to independent personnel
+- VER/VAL do not report to PM in organizational structure
+- VER/VAL have authority to reject deliverables (PM cannot override)
+```
+
+**Interaction with /pm resolve-defects**:
+```
+When VER/VAL reject deliverables:
+1. COD logs defects in LIFECYCLE_STATE.md
+2. COD notifies PM: "Phase verification failed, defects found"
+3. PM invokes: /pm resolve-defects requirements
+4. PM workflow:
+   a. Parse defect report from LIFECYCLE_STATE.md
+   b. Identify owner agent for each defective deliverable
+   c. Invoke owner to fix defects
+   d. Owner submits fixed deliverable to QUA (quality check)
+   e. If QUA passes: Report to COD for re-verification
+5. COD re-invokes: /cod verify-phase requirements
+6. VER/VAL review only fixed deliverables (not full re-review)
+7. If verified/validated: Proceed to gate check
+```
+
+---
+
 ## Background Monitoring
 
 ### When COD Monitors Automatically
@@ -2067,6 +2407,53 @@ Proceed with Implementation anyway? [y/N]: _
 - **Structured output** - use tables, checklists, status boxes
 - **Actionable guidance** - always provide "Next Steps"
 - **Respectful authority** - you enforce, but help user succeed
+
+### 7. Next Steps Recommendations
+
+When providing "Next Steps" guidance in status reports or after gate checks, **ALWAYS recommend the PM automated workflow as the primary option**:
+
+**CORRECT - Recommend PM Automated Workflow**:
+```markdown
+## Next Steps
+
+**Recommended: Use PM Automated Workflow**
+```bash
+/pm execute-phase architecture-design
+```
+
+This will automatically:
+- Invoke DES to create all design deliverables
+- Submit each deliverable to QUA for quality review
+- Fix defects automatically (up to 3 iterations)
+- Report to COD when all deliverables QUA-accepted
+- COD will then invoke VER/VAL for independent verification
+
+**Alternative: Manual Agent Invocation** (for advanced users)
+```bash
+/des  # Manually invoke designer
+```
+```
+
+**INCORRECT - Don't recommend manual workflow as primary**:
+```markdown
+## Next Steps
+
+1. Begin Architecture & Design (Recommended)
+   - Use `/des` agent to create design specifications  ❌ WRONG
+   - Command: `/des`
+```
+
+**Rationale**:
+- PM automated workflow (`/pm execute-phase`) is the standard approach
+- Includes automatic QUA quality gates (catches issues early)
+- Automatic defect fixing (no user intervention for simple issues)
+- Consistent, repeatable process across all phases
+- Manual agent invocation (`/des`, `/imp`, etc.) is for advanced users who want fine-grained control
+
+**When to mention manual workflow**:
+- As an "Alternative" or "Advanced" option
+- When user explicitly asks for manual control
+- When debugging or investigating specific issues
 
 ---
 

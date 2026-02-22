@@ -1,0 +1,663 @@
+# Validation Phase Verification Criteria
+# EN 50128 Section 7.7 - Overall Software Testing (Validation)
+# Table A.7 - Overall Software Testing/Validation Techniques/Measures
+
+metadata:
+  phase: "Validation"
+  phase_id: "phase-6-validation"
+  en50128_section: "7.7"
+  en50128_tables: ["A.7", "A.13", "A.14", "A.18"]
+  description: "Verification criteria for system testing, validation, and acceptance testing"
+  mandatory_deliverables:
+    - "Software Validation Plan (SVaP)"
+    - "Validation Test Specification"
+    - "Validation Test Results Report"
+    - "Software Validation Report"
+    - "Acceptance Test Results"
+    - "Validation Traceability Matrix (RTM update)"
+
+verification_checks:
+  # ============================================================================
+  # 1. Software Validation Plan (SVaP) Verification
+  # ============================================================================
+  
+  - check_id: "VER-VAL-001"
+    deliverable: "Software Validation Plan (SVaP)"
+    category: "validation_planning"
+    description: "Verify Software Validation Plan compliant with EN 50128 Section 7.7"
+    en50128_reference: "Section 7.7 - Software Validation Planning"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review SVaP structure and content
+      - Verify SVaP includes:
+        - Validation scope and objectives
+        - Validation strategy (black-box, operational scenarios)
+        - Test environment (target or representative)
+        - Acceptance criteria
+        - Validation schedule and resources
+        - Independence requirements (SIL 3-4)
+      - Check for approval signatures
+    pass_criteria:
+      - "SVaP contains all mandatory sections"
+      - "Validation scope covers all requirements"
+      - "Target or representative environment defined"
+      - "Acceptance criteria clearly specified"
+      - "Independence requirements addressed (SIL 3-4)"
+      - "Approvals present from Validator and Project Manager"
+    fail_criteria:
+      - "SVaP missing mandatory sections"
+      - "Validation scope incomplete"
+      - "Test environment not defined"
+      - "Independence not addressed (SIL 3-4)"
+      - "Missing approvals"
+
+  - check_id: "VER-VAL-002"
+    deliverable: "Software Validation Plan (SVaP)"
+    category: "validation_planning"
+    description: "Verify validator independence from development team (SIL 3-4)"
+    en50128_reference: "Section 5.3.7 - Validator role independence"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "not_applicable"
+      sil_2: "not_applicable"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review SVaP Approvals table
+      - Verify Validator role identified
+      - Check Validator is NOT Developer, Implementer, Tester, or Integrator
+      - Verify Validator does not report to Project Manager
+      - Check organizational independence documented
+    pass_criteria:
+      - "Validator identified and independent"
+      - "Validator NOT Developer/Implementer/Tester/Integrator"
+      - "Validator does NOT report to PM (reports to COD or Safety Authority)"
+      - "Organizational independence documented"
+    fail_criteria:
+      - "Validator not independent (same person as Developer/Tester)"
+      - "Validator reports to PM"
+      - "Independence not documented"
+
+  # ============================================================================
+  # 2. Validation Test Specification Verification
+  # ============================================================================
+
+  - check_id: "VER-VAL-003"
+    deliverable: "Validation Test Specification"
+    category: "test_specification"
+    description: "Verify validation test cases derived from requirements (black-box)"
+    en50128_reference: "Table A.7 - Functional and Black-box Testing (HR for all SILs, M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "highly_recommended"
+      sil_1: "highly_recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review Validation Test Specification
+      - Verify test cases derived from SRS requirements
+      - Check for black-box approach (no internal implementation knowledge)
+      - Verify test cases independent of code structure
+      - Check for requirements traceability for each test case
+    pass_criteria:
+      - "All test cases derived from SRS requirements"
+      - "Black-box approach (no white-box knowledge used)"
+      - "Test cases focus on external behavior and functionality"
+      - "Each test case traceable to requirement(s)"
+    fail_criteria:
+      - "Test cases based on code structure (white-box)"
+      - "Missing requirements traceability"
+      - "Test specification incomplete"
+
+  - check_id: "VER-VAL-004"
+    deliverable: "Validation Test Specification"
+    category: "test_specification"
+    description: "Verify operational scenarios tested"
+    en50128_reference: "Table A.7 - Operational and Usage Procedures Testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review Validation Test Specification for operational scenarios
+      - Verify realistic operational sequences tested
+      - Check for normal operation scenarios
+      - Verify abnormal/degraded operation scenarios
+      - Check for emergency and fault scenarios
+      - Verify user interaction scenarios (if applicable)
+    pass_criteria:
+      - "Operational scenarios defined and tested"
+      - "Normal operation scenarios covered"
+      - "Abnormal/degraded operation scenarios covered"
+      - "Emergency and fault scenarios covered"
+      - "User interaction scenarios covered (if applicable)"
+    fail_criteria:
+      - "No operational scenarios defined"
+      - "Missing abnormal/emergency scenarios"
+      - "Scenarios not realistic or representative"
+
+  - check_id: "VER-VAL-005"
+    deliverable: "Validation Test Specification"
+    category: "test_specification"
+    description: "Verify boundary value analysis applied to validation tests"
+    en50128_reference: "Table A.14 - Boundary Value Analysis (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review validation test cases for boundary value testing
+      - Verify system-level parameters tested at boundaries
+      - Check for input boundary testing (min, max, min-1, max+1)
+      - Verify timing boundary testing (min/max response times)
+      - Check for load boundary testing (min/max throughput)
+    pass_criteria:
+      - "System parameters tested at boundaries"
+      - "Input boundaries tested (min, max, out-of-range)"
+      - "Timing boundaries tested"
+      - "Load boundaries tested (min/max throughput)"
+    fail_criteria:
+      - "Missing boundary value tests"
+      - "Boundary conditions not tested"
+
+  # ============================================================================
+  # 3. Validation Test Execution Verification
+  # ============================================================================
+
+  - check_id: "VER-VAL-006"
+    deliverable: "Validation Test Results Report"
+    category: "test_execution"
+    description: "Verify ALL validation tests executed and PASSED"
+    en50128_reference: "Section 7.7 - Validation test execution"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Review Validation Test Results Report
+      - Verify all test cases executed
+      - Check for test pass/fail status
+      - Verify 100% pass rate (or failures justified and resolved)
+      - Check for test logs and evidence
+    pass_criteria:
+      - "ALL validation tests executed"
+      - "100% test pass rate (all tests PASS)"
+      - "ZERO unresolved test failures"
+      - "Test logs and evidence documented"
+    fail_criteria:
+      - "ANY test failures unresolved"
+      - "Tests not executed"
+      - "Missing test logs or evidence"
+
+  - check_id: "VER-VAL-007"
+    deliverable: "Validation Test Results Report"
+    category: "test_execution"
+    description: "Verify validation tests executed on target or representative environment"
+    en50128_reference: "Section 7.7 - Test environment requirements"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review test environment documentation
+      - Verify tests executed on target hardware (if available)
+      - If not target, verify representative environment used
+      - Check for environment configuration documented
+      - Verify environment differences justified (if any)
+    pass_criteria:
+      - "Tests executed on target hardware (preferred)"
+      - "OR tests on representative environment with justification"
+      - "Test environment configuration documented"
+      - "Environment differences from production justified"
+    fail_criteria:
+      - "Tests NOT on target or representative environment"
+      - "Test environment not documented"
+      - "Environment differences not justified"
+
+  - check_id: "VER-VAL-008"
+    deliverable: "Validation Test Results Report"
+    category: "test_coverage"
+    description: "Verify validation test coverage of requirements"
+    en50128_reference: "Table A.7 - Requirements-based testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Map validation test cases to requirements
+      - Calculate requirements coverage percentage
+      - Verify coverage meets SIL-specific targets:
+        - SIL 0-1: ≥90%
+        - SIL 2: ≥95%
+        - SIL 3-4: 100%
+      - Check for untested requirements with justifications
+    pass_criteria:
+      - "SIL 0-1: Requirements coverage ≥90%"
+      - "SIL 2: Requirements coverage ≥95%"
+      - "SIL 3-4: Requirements coverage 100%"
+      - "Untested requirements justified (e.g., hardware-only, not safety-critical)"
+    fail_criteria:
+      - "Requirements coverage below SIL target"
+      - "Untested requirements without justification"
+
+  # ============================================================================
+  # 4. Performance Testing Verification (M for SIL 3-4)
+  # ============================================================================
+
+  - check_id: "VER-VAL-009"
+    deliverable: "Validation Test Results Report"
+    category: "performance_testing"
+    description: "Verify performance testing performed at system level (M for SIL 3-4)"
+    en50128_reference: "Table A.7 - Performance Testing (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review performance test results
+      - Verify system-level timing requirements tested
+      - Check for end-to-end latency measurements
+      - Verify throughput testing under load
+      - Check for resource utilization (CPU, memory, I/O)
+      - Verify real-time constraints met under worst-case load
+    pass_criteria:
+      - "System-level performance tests executed"
+      - "End-to-end latency meets requirements"
+      - "Throughput meets requirements under load"
+      - "Resource utilization acceptable (<80% typical, <95% peak)"
+      - "Real-time constraints met under worst-case load"
+    fail_criteria:
+      - "No performance testing performed (SIL 3-4)"
+      - "Timing requirements not met"
+      - "Throughput below requirements"
+      - "Resource utilization excessive"
+
+  - check_id: "VER-VAL-010"
+    deliverable: "Validation Test Results Report"
+    category: "performance_testing"
+    description: "Verify stress and load testing performed"
+    en50128_reference: "Table A.18 - Stress and Load Testing"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    verification_method: |
+      - Review stress and load test results
+      - Verify system tested under maximum load
+      - Check for sustained load testing (duration)
+      - Verify system stability under stress
+      - Check for graceful degradation (if designed)
+      - Verify recovery after stress removal
+    pass_criteria:
+      - "System tested at maximum specified load"
+      - "Sustained load testing performed (≥1 hour typical)"
+      - "System stable under stress (no crashes, hangs)"
+      - "Graceful degradation verified (if applicable)"
+      - "System recovers correctly after stress removal"
+    fail_criteria:
+      - "No stress/load testing performed"
+      - "System unstable under load"
+      - "No recovery after stress"
+
+  # ============================================================================
+  # 5. Safety and Fault Injection Testing
+  # ============================================================================
+
+  - check_id: "VER-VAL-011"
+    deliverable: "Validation Test Results Report"
+    category: "safety_testing"
+    description: "Verify safety functions validated under normal and fault conditions"
+    en50128_reference: "Table A.7 - Safety requirements validation"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review safety function test results
+      - Verify all safety requirements (SAF-*) tested
+      - Check for normal operation validation
+      - Verify fault detection and safe state validation
+      - Check for fault injection testing (sensor faults, actuator faults)
+      - Verify safe state reached within time limits
+    pass_criteria:
+      - "All safety requirements tested and validated"
+      - "Safety functions operate correctly under normal conditions"
+      - "Fault detection mechanisms validated"
+      - "Safe state reached within specified time on faults"
+      - "System remains in safe state until reset"
+    fail_criteria:
+      - "Safety requirements not validated"
+      - "Safety function failures detected"
+      - "Safe state not reached or delayed"
+
+  - check_id: "VER-VAL-012"
+    deliverable: "Validation Test Results Report"
+    category: "safety_testing"
+    description: "Verify hazard mitigation validated for identified hazards"
+    en50128_reference: "Section 7.1 - Hazard Log, Table A.8 - Safety Analysis"
+    sil_applicability:
+      sil_0: "not_applicable"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review Hazard Log for identified hazards
+      - Verify mitigation measures tested for each hazard
+      - Check for hazard scenario simulation
+      - Verify mitigation effectiveness validated
+      - Check for residual risk assessment
+    pass_criteria:
+      - "All hazards from Hazard Log tested"
+      - "Mitigation measures validated effective"
+      - "Hazard scenarios simulated and mitigated"
+      - "Residual risk acceptable (per safety requirements)"
+    fail_criteria:
+      - "Hazards not tested"
+      - "Mitigation measures ineffective"
+      - "Residual risk unacceptable"
+
+  # ============================================================================
+  # 6. Acceptance Testing Verification
+  # ============================================================================
+
+  - check_id: "VER-VAL-013"
+    deliverable: "Acceptance Test Results"
+    category: "acceptance_testing"
+    description: "Verify customer/stakeholder acceptance criteria met"
+    en50128_reference: "Section 7.7 - Acceptance testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review Acceptance Test Results
+      - Verify acceptance criteria from SVaP tested
+      - Check for customer/stakeholder participation
+      - Verify acceptance test execution on target/representative environment
+      - Check for customer sign-off
+    pass_criteria:
+      - "All acceptance criteria from SVaP met"
+      - "Customer/stakeholder participated in testing"
+      - "Tests executed on target or representative environment"
+      - "Customer sign-off obtained"
+    fail_criteria:
+      - "Acceptance criteria not met"
+      - "No customer participation"
+      - "Customer sign-off not obtained"
+
+  - check_id: "VER-VAL-014"
+    deliverable: "Acceptance Test Results"
+    category: "acceptance_testing"
+    description: "Verify user operational procedures validated"
+    en50128_reference: "Table A.7 - Operational and Usage Procedures Testing"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "highly_recommended"
+      sil_4: "highly_recommended"
+    check_type: "manual"
+    severity: "major"
+    verification_method: |
+      - Review operational procedure testing
+      - Verify user manuals and procedures tested
+      - Check for usability testing (if applicable)
+      - Verify operational training materials validated
+      - Check for user feedback collection
+    pass_criteria:
+      - "User manuals and procedures tested"
+      - "Usability validated (if applicable)"
+      - "Training materials validated"
+      - "User feedback positive (no major issues)"
+    fail_criteria:
+      - "Operational procedures not validated"
+      - "Usability issues identified"
+      - "User feedback negative or major issues found"
+
+  # ============================================================================
+  # 7. Software Validation Report Verification
+  # ============================================================================
+
+  - check_id: "VER-VAL-015"
+    deliverable: "Software Validation Report"
+    category: "validation_reporting"
+    description: "Verify Software Validation Report complete and approved"
+    en50128_reference: "Section 7.7 - Validation reporting"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review Software Validation Report structure
+      - Verify report includes:
+        - Validation summary and conclusions
+        - Test results summary (pass/fail statistics)
+        - Requirements coverage summary
+        - Defects and resolutions summary
+        - Deviations from SVaP (if any)
+        - Validation statement (pass/fail)
+      - Check for approval signatures (Validator, PM, Customer)
+    pass_criteria:
+      - "Validation Report complete with all sections"
+      - "Test results summarized (100% pass rate)"
+      - "Requirements coverage documented (meets SIL target)"
+      - "All defects resolved or accepted"
+      - "Validation PASSED with approvals"
+    fail_criteria:
+      - "Validation Report incomplete"
+      - "Test failures unresolved"
+      - "Requirements coverage insufficient"
+      - "Validation FAILED or no approval"
+
+  - check_id: "VER-VAL-016"
+    deliverable: "Software Validation Report"
+    category: "validation_reporting"
+    description: "Verify validation conclusions and recommendations documented"
+    en50128_reference: "Section 7.7 - Validation conclusions"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review validation conclusions section
+      - Verify conclusion statement (software fit for purpose)
+      - Check for limitations or restrictions documented
+      - Verify recommendations for deployment
+      - Check for outstanding issues documented
+    pass_criteria:
+      - "Conclusion: Software validated and fit for intended purpose"
+      - "Limitations/restrictions documented (if any)"
+      - "Recommendations for deployment provided"
+      - "Outstanding issues documented with mitigation"
+    fail_criteria:
+      - "Conclusion: Software NOT validated"
+      - "Limitations not documented"
+      - "No deployment recommendations"
+
+  # ============================================================================
+  # 8. Validation Traceability Verification
+  # ============================================================================
+
+  - check_id: "VER-VAL-017"
+    deliverable: "Validation Traceability Matrix (RTM update)"
+    category: "traceability"
+    description: "Verify all requirements traced to validation test cases"
+    en50128_reference: "Table A.5 - Traceability (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Parse RTM for Requirements → Validation Tests mappings
+      - Verify every requirement has at least one validation test
+      - Verify every validation test traces to requirement(s)
+      - Check for untested requirements
+      - Verify traceability is bidirectional
+    pass_criteria:
+      - "All requirements have at least one validation test"
+      - "All validation tests trace to requirements"
+      - "No untested requirements (or justified)"
+      - "Bidirectional traceability maintained"
+    fail_criteria:
+      - "Requirements without validation tests"
+      - "Validation tests without requirement traceability"
+      - "Untested requirements without justification"
+
+  - check_id: "VER-VAL-018"
+    deliverable: "Validation Traceability Matrix (RTM update)"
+    category: "traceability"
+    description: "Verify end-to-end traceability complete (Requirements → Design → Code → Tests → Validation)"
+    en50128_reference: "Table A.5 - Traceability (M for SIL 3-4)"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "automated"
+    severity: "critical"
+    verification_method: |
+      - Verify complete traceability chain exists:
+        Requirements → Architecture → Design → Code → Unit Tests → Integration Tests → Validation Tests
+      - Check for traceability gaps
+      - Verify bidirectional traceability at each level
+      - Check for orphaned elements at any level
+    pass_criteria:
+      - "Complete end-to-end traceability chain exists"
+      - "No traceability gaps in chain"
+      - "Bidirectional traceability maintained at all levels"
+      - "No orphaned requirements, design, code, or tests"
+    fail_criteria:
+      - "Traceability gaps in chain"
+      - "Orphaned elements detected"
+      - "Unidirectional traceability only"
+
+  # ============================================================================
+  # 9. EN 50128 Technique Application Verification
+  # ============================================================================
+
+  - check_id: "VER-VAL-019"
+    deliverable: "Software Validation Plan (SVaP)"
+    category: "standards_compliance"
+    description: "Verify mandatory EN 50128 Table A.7 techniques applied"
+    en50128_reference: "Table A.7 - Overall Software Testing/Validation Techniques/Measures"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review SVaP for EN 50128 technique application
+      - Verify mandatory techniques applied:
+        - SIL 3-4: Performance Testing (M)
+        - SIL 3-4: Functional and Black-box Testing (M)
+      - Verify highly recommended techniques applied or justified:
+        - All SILs: Functional and Black-box Testing (HR)
+      - Check for technique application evidence in test results
+    pass_criteria:
+      - "All mandatory techniques applied (SIL 3-4)"
+      - "HR techniques applied OR rationale documented"
+      - "Technique application evidenced in test results"
+    fail_criteria:
+      - "Mandatory techniques not applied (SIL 3-4)"
+      - "HR techniques not applied without rationale"
+      - "No evidence of technique application"
+
+  # ============================================================================
+  # 10. Validation Defect Management
+  # ============================================================================
+
+  - check_id: "VER-VAL-020"
+    deliverable: "Software Validation Report"
+    category: "defect_management"
+    description: "Verify all validation defects resolved before validation sign-off"
+    en50128_reference: "Section 6.7 - Problem Reporting and Resolution"
+    sil_applicability:
+      sil_0: "recommended"
+      sil_1: "recommended"
+      sil_2: "highly_recommended"
+      sil_3: "mandatory"
+      sil_4: "mandatory"
+    check_type: "manual"
+    severity: "critical"
+    verification_method: |
+      - Review validation defect log
+      - Verify all defects documented with ID, severity, description
+      - Check defect resolution status (open, resolved, closed)
+      - Verify ALL critical/major defects CLOSED
+      - Verify minor defects accepted with rationale OR resolved
+      - Check for defect root cause analysis (SIL 3-4)
+    pass_criteria:
+      - "All defects documented"
+      - "ZERO critical/major defects open"
+      - "Minor defects closed OR accepted with customer agreement"
+      - "Root cause analysis performed for critical defects (SIL 3-4)"
+    fail_criteria:
+      - "Critical or major defects still open"
+      - "Defects not documented"
+      - "No root cause analysis (SIL 3-4)"

@@ -1,0 +1,455 @@
+document_type: "Software-Design-Specification"
+checker_version: "1.0"
+description: "Quality checks for Software Design Specification per EN 50128 Section 7.3.4.20 and Table A.4"
+
+# Template compliance checks (EN 50128 document structure)
+template_checks:
+  # Document ID format
+  - id: "SDS-T001"
+    name: "Document ID Format"
+    description: "Verify Document ID follows DOC-SDS-YYYY-NNN format"
+    severity: "error"
+    rule_type: "regex"
+    rule_params:
+      pattern: "DOC-SDS-[0-9]{4}-[0-9]{3}"
+      search_section: "STANDARD HEADER"
+    expected: "Document ID matches DOC-SDS-YYYY-NNN (e.g., DOC-SDS-2026-001)"
+    failure_message: "Document ID does not match required format DOC-SDS-YYYY-NNN"
+    fix_suggestion: "Update Document ID to format DOC-SDS-YYYY-NNN (e.g., DOC-SDS-2026-001)"
+  
+  # Standard Header table
+  - id: "SDS-T002"
+    name: "Standard Header Table"
+    description: "Verify Standard Header table exists with required fields"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "STANDARD HEADER"
+      required_columns: ["Field", "Value"]
+      required_fields:
+        - "Document ID"
+        - "Version"
+        - "Date"
+        - "Project"
+        - "SIL Level"
+        - "Author"
+        - "Status"
+    expected: "Standard Header table with all required fields"
+    failure_message: "Standard Header table missing or incomplete"
+    fix_suggestion: "Add Standard Header table with fields: Document ID, Version, Date, Project, SIL Level, Author, Status"
+  
+  # Document Control table
+  - id: "SDS-T003"
+    name: "Document Control Table"
+    description: "Verify Document Control table exists"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "DOCUMENT CONTROL"
+      required_columns: ["Version", "Date", "Author", "Changes", "Approved By"]
+    expected: "Document Control table with version history"
+    failure_message: "Document Control table missing or incomplete"
+    fix_suggestion: "Add Document Control table with columns: Version, Date, Author, Changes, Approved By"
+  
+  # Approvals table
+  - id: "SDS-T004"
+    name: "Approvals Table"
+    description: "Verify Approvals table exists with required roles"
+    severity: "error"
+    rule_type: "table_exists"
+    rule_params:
+      table_header: "APPROVALS"
+      required_columns: ["Role", "Name", "Signature", "Date"]
+      required_roles_sil_3:
+        - "Author (Designer)"
+        - "Independent Reviewer"
+        - "QA Manager"
+        - "Project Manager"
+      minimum_sil: 3
+    expected: "Approvals table with Author, Reviewer, QA, PM"
+    failure_message: "Approvals table missing or incomplete (required SIL 3+)"
+    fix_suggestion: "Add Approvals table with roles: Author (Designer), Independent Reviewer, QA Manager, Project Manager"
+  
+  # Required sections
+  - id: "SDS-T005"
+    name: "Required Sections"
+    description: "Verify all required sections exist"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      required_sections:
+        - "1. INTRODUCTION"
+        - "2. DESIGN OVERVIEW"
+        - "3. MODULE DESIGNS"
+        - "4. ALGORITHMS"
+        - "5. DATA STRUCTURES"
+        - "6. ERROR HANDLING"
+        - "7. MEMORY MANAGEMENT"
+        - "8. TIMING AND PERFORMANCE"
+        - "9. REQUIREMENTS TRACEABILITY"
+        - "10. EN 50128 COMPLIANCE"
+    expected: "All required sections present"
+    failure_message: "One or more required sections missing"
+    fix_suggestion: "Add missing sections per EN 50128 Section 7.4 design requirements"
+
+# Quality standards checks
+quality_checks:
+  # Function ID format
+  - id: "SDS-Q001"
+    name: "Function ID Format"
+    description: "Verify all functions have IDs in FUNC-XXX-NNN format"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**FUNC-"
+      id_pattern: "^FUNC-[A-Z]+-[0-9]{3}"
+    expected: "All functions have IDs matching FUNC-XXX-NNN"
+    failure_message: "One or more functions have invalid ID format"
+    fix_suggestion: "Ensure all function IDs follow FUNC-XXX-NNN format (e.g., FUNC-TDC-001)"
+  
+  # Function purpose/description
+  - id: "SDS-Q002"
+    name: "Function Purpose"
+    description: "Verify all functions have purpose defined"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**FUNC-"
+      field_pattern: "(Purpose:|Description:)"
+      field_description: "function purpose"
+    expected: "All functions have purpose/description defined"
+    failure_message: "One or more functions missing purpose definition"
+    fix_suggestion: "Add purpose/description statement to all functions"
+  
+  # Function signatures (inputs/outputs)
+  - id: "SDS-Q003"
+    name: "Function Signatures"
+    description: "Verify all functions have inputs and outputs defined"
+    severity: "error"
+    rule_type: "all_items_match"
+    rule_params:
+      item_marker: "**FUNC-"
+      field_pattern: "(Inputs?:|Parameters?:).*(Outputs?:|Returns?:)"
+      field_description: "function signature (inputs/outputs)"
+    expected: "All functions have inputs and outputs defined"
+    failure_message: "One or more functions missing input/output specification"
+    fix_suggestion: "Add inputs (parameters) and outputs (return value) to all function specifications"
+  
+  # EN 50128 Table A.4 compliance
+  - id: "SDS-Q004"
+    name: "EN 50128 Table A.4 Compliance"
+    description: "Verify EN 50128 Table A.4 techniques documented"
+    severity: "error"
+    rule_type: "content_check"
+    rule_params:
+      section: "1. INTRODUCTION"
+      required_content:
+        - "Table A.4"
+        - "Structured Programming"
+        - "Design and Coding Standards"
+    expected: "EN 50128 Table A.4 techniques documented in Introduction"
+    failure_message: "EN 50128 Table A.4 compliance not documented"
+    fix_suggestion: "Add section 1.3 with Table A.4 techniques applied (Structured Programming M, Design and Coding Standards M for SIL 3-4)"
+  
+  # SIL level specified
+  - id: "SDS-Q005"
+    name: "SIL Level Specified"
+    description: "Verify SIL level specified in header"
+    severity: "error"
+    rule_type: "content_check"
+    rule_params:
+      section: "STANDARD HEADER"
+      field_pattern: "SIL Level.*[0-4]"
+    expected: "SIL level (0-4) specified in Standard Header"
+    failure_message: "SIL level not specified in Standard Header"
+    fix_suggestion: "Add SIL Level field to Standard Header table"
+
+# Design quality checks
+design_checks:
+  # Minimum function count
+  - id: "SDS-D001"
+    name: "Function Definitions"
+    description: "Verify at least one function defined"
+    severity: "error"
+    rule_type: "count_minimum"
+    rule_params:
+      item_pattern: "^\\*\\*FUNC-[A-Z]+-[0-9]{3}"
+      minimum_count: 1
+    expected: "At least 1 function defined"
+    failure_message: "No functions found in SDS"
+    fix_suggestion: "Add detailed function designs to section 3"
+  
+  # Algorithms documented
+  - id: "SDS-D002"
+    name: "Algorithms Documented"
+    description: "Verify algorithms section exists with pseudocode or flowcharts"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "4. ALGORITHMS"
+      content_must_contain_one:
+        - "pseudocode"
+        - "flowchart"
+        - "algorithm"
+    expected: "Algorithms section with pseudocode or flowcharts"
+    failure_message: "Algorithms section missing or incomplete"
+    fix_suggestion: "Add section 4 with algorithm descriptions using pseudocode or flowcharts for complex functions"
+  
+  # Data structures with fixed sizes (M for SIL 2+)
+  - id: "SDS-D003"
+    name: "Data Structures Fixed Sizes"
+    description: "Verify data structures have fixed sizes (M for SIL 2+)"
+    severity: "error"
+    rule_type: "content_check"
+    rule_params:
+      section: "5. DATA STRUCTURES"
+      required_patterns:
+        - "\\[[0-9]+\\]"  # Array size [N]
+        - "uint[0-9]+_t"  # Fixed-width types
+      forbidden_patterns:
+        - "\\*\\*"  # Pointer to pointer
+      minimum_sil: 2
+    expected: "Data structures with fixed sizes, no dynamic structures (M for SIL 2+)"
+    failure_message: "Data structures not fully defined with fixed sizes (mandatory SIL 2+)"
+    fix_suggestion: "Define all data structures with fixed array sizes [N] and fixed-width types (uint8_t, uint16_t, etc.)"
+  
+  # Error handling specified
+  - id: "SDS-D004"
+    name: "Error Handling Specified"
+    description: "Verify error handling section exists"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "6. ERROR HANDLING"
+      content_must_contain:
+        - "error"
+        - "return"
+    expected: "Error Handling section with error codes and handling strategy"
+    failure_message: "Error Handling section missing or incomplete"
+    fix_suggestion: "Add section 6 with error codes, error handling strategy, and recovery mechanisms"
+  
+  # Memory management (static allocation for SIL 2+)
+  - id: "SDS-D005"
+    name: "Memory Management Specified"
+    description: "Verify memory management section exists"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "7. MEMORY MANAGEMENT"
+      content_must_contain:
+        - "static"
+        - "allocation"
+    expected: "Memory Management section with allocation strategy"
+    failure_message: "Memory Management section missing or incomplete"
+    fix_suggestion: "Add section 7 with memory allocation strategy (static allocation only for SIL 2+)"
+  
+  # Timing and performance requirements
+  - id: "SDS-D006"
+    name: "Timing and Performance"
+    description: "Verify timing and performance section exists"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "8. TIMING AND PERFORMANCE"
+      content_must_contain_one:
+        - "WCET"
+        - "execution time"
+        - "performance"
+    expected: "Timing and Performance section with WCET or execution time analysis"
+    failure_message: "Timing and Performance section missing or incomplete"
+    fix_suggestion: "Add section 8 with timing analysis, WCET estimates, and performance requirements"
+
+# SIL-specific constraint checks
+sil_constraints:
+  # Static allocation only (M for SIL 2+)
+  - id: "SDS-S001"
+    name: "Static Allocation Only"
+    description: "Verify static allocation specified, no dynamic allocation (M for SIL 2+)"
+    severity: "error"
+    rule_type: "content_check"
+    rule_params:
+      section: "7. MEMORY MANAGEMENT"
+      required_content:
+        - "static"
+      forbidden_content:
+        - "malloc"
+        - "free"
+        - "calloc"
+        - "realloc"
+      minimum_sil: 2
+    expected: "Static allocation only, no dynamic allocation (M for SIL 2+)"
+    failure_message: "Dynamic allocation mentioned or static allocation not specified (mandatory SIL 2+)"
+    fix_suggestion: "Specify static allocation only, explicitly forbid malloc/free/calloc/realloc (M for SIL 2+)"
+  
+  # Complexity limits (≤10 for SIL 3-4, ≤15 for SIL 2)
+  - id: "SDS-S002"
+    name: "Complexity Limits"
+    description: "Verify cyclomatic complexity limits specified for all functions"
+    severity: "error"
+    rule_type: "content_check"
+    rule_params:
+      section: "3. MODULE DESIGNS"
+      sil_2_pattern: "complexity.*≤?\\s*15"
+      sil_3_4_pattern: "complexity.*≤?\\s*10"
+      minimum_sil: 2
+    expected: "Complexity: ≤15 (SIL 2), ≤10 (SIL 3-4) for all functions"
+    failure_message: "Cyclomatic complexity limits not specified for functions"
+    fix_suggestion: "Add complexity analysis for all functions: ≤15 (SIL 2), ≤10 (SIL 3-4)"
+  
+  # No recursion (HR for SIL 3-4)
+  - id: "SDS-S003"
+    name: "No Recursion"
+    description: "Verify no recursion constraint (HR for SIL 3-4)"
+    severity: "error"
+    rule_type: "content_check"
+    rule_params:
+      section: "3. MODULE DESIGNS"
+      required_content:
+        - "no recursion"
+      minimum_sil: 3
+    expected: "No recursion constraint specified (HR for SIL 3-4)"
+    failure_message: "No recursion constraint not specified (highly recommended SIL 3-4)"
+    fix_suggestion: "Add no recursion constraint to all function designs (HR for SIL 3-4)"
+  
+  # Defensive programming (HR for SIL 3-4)
+  - id: "SDS-S004"
+    name: "Defensive Programming"
+    description: "Verify defensive programming patterns specified (HR for SIL 3-4)"
+    severity: "error"
+    rule_type: "content_check"
+    rule_params:
+      section: "6. ERROR HANDLING"
+      required_patterns:
+        - "NULL.*check"
+        - "bounds.*check"
+        - "input.*validation"
+      minimum_sil: 3
+    expected: "Defensive programming patterns specified (HR for SIL 3-4)"
+    failure_message: "Defensive programming patterns not specified (highly recommended SIL 3-4)"
+    fix_suggestion: "Add defensive programming patterns: NULL checks, bounds checking, input validation (HR for SIL 3-4)"
+  
+  # Fixed-width types (SIL 2+)
+  - id: "SDS-S005"
+    name: "Fixed-Width Types"
+    description: "Verify fixed-width integer types used (uint8_t, uint16_t, uint32_t)"
+    severity: "error"
+    rule_type: "content_check"
+    rule_params:
+      section: "5. DATA STRUCTURES"
+      required_patterns:
+        - "uint[0-9]+_t"
+        - "int[0-9]+_t"
+      forbidden_patterns:
+        - "\\bint\\b"  # Avoid plain int
+        - "\\blong\\b"  # Avoid plain long
+      minimum_sil: 2
+    expected: "Fixed-width types (uint8_t, uint16_t, uint32_t) used throughout"
+    failure_message: "Plain int/long types used instead of fixed-width types"
+    fix_suggestion: "Use fixed-width types: uint8_t, uint16_t, uint32_t, int8_t, int16_t, int32_t (avoid plain int/long)"
+
+# Traceability checks
+traceability_checks:
+  # Requirements traceability section
+  - id: "SDS-TR001"
+    name: "Requirements Traceability Section"
+    description: "Verify requirements traceability section exists"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "9. REQUIREMENTS TRACEABILITY"
+      content_must_contain:
+        - "REQ-"
+        - "FUNC-"
+    expected: "Requirements Traceability section maps requirements to functions"
+    failure_message: "Requirements Traceability section missing or incomplete"
+    fix_suggestion: "Add section 9 with traceability matrix: Requirements (REQ-XXX-NNN) → Functions (FUNC-XXX-NNN)"
+  
+  # Architecture traceability (modules to functions)
+  - id: "SDS-TR002"
+    name: "Architecture Traceability"
+    description: "Verify architecture traceability (modules to functions)"
+    severity: "error"
+    rule_type: "content_check"
+    rule_params:
+      section: "9. REQUIREMENTS TRACEABILITY"
+      required_patterns:
+        - "MOD-[0-9]{3}"
+        - "FUNC-[A-Z]+-[0-9]{3}"
+    expected: "Traceability from architecture (modules) to design (functions)"
+    failure_message: "Architecture traceability (MOD → FUNC) missing"
+    fix_suggestion: "Add traceability showing which functions implement which modules from SAS"
+  
+  # 100% requirements coverage (M for SIL 3-4)
+  - id: "SDS-TR003"
+    name: "Requirements Coverage"
+    description: "Verify 100% requirements traced to functions (M for SIL 3-4)"
+    severity: "error"
+    rule_type: "coverage_check"
+    rule_params:
+      coverage_type: "requirements"
+      minimum_coverage: 100
+      source_doc: "docs/SRS.md"
+      item_pattern: "REQ-[A-Z]+-[0-9]{3}"
+      minimum_sil: 3
+    expected: "100% requirements traced to functions (M for SIL 3-4)"
+    failure_message: "Requirements coverage < 100% (mandatory SIL 3-4)"
+    fix_suggestion: "Ensure all requirements from SRS are traced to at least one function in section 9"
+  
+  # EN 50128 compliance matrix
+  - id: "SDS-TR004"
+    name: "EN 50128 Compliance Matrix"
+    description: "Verify EN 50128 compliance matrix section exists"
+    severity: "error"
+    rule_type: "section_exists"
+    rule_params:
+      section: "10. EN 50128 COMPLIANCE"
+      content_must_contain:
+        - "Table A.4"
+    expected: "EN 50128 Compliance section with Table A.4 mapping"
+    failure_message: "EN 50128 Compliance section missing"
+    fix_suggestion: "Add section 10 with EN 50128 Table A.4 compliance matrix showing which techniques are applied"
+
+# Content consistency checks
+consistency_checks:
+  # All functions have algorithms
+  - id: "SDS-CO001"
+    name: "Function Algorithm Consistency"
+    description: "Verify all functions have algorithms documented in section 4"
+    severity: "warning"
+    rule_type: "cross_reference_check"
+    rule_params:
+      source_section: "3. MODULE DESIGNS"
+      source_pattern: "FUNC-[A-Z]+-[0-9]{3}"
+      target_section: "4. ALGORITHMS"
+      target_pattern: "FUNC-[A-Z]+-[0-9]{3}"
+    expected: "All functions from section 3 have algorithms in section 4"
+    failure_message: "Some functions lack algorithm descriptions"
+    fix_suggestion: "Add algorithm descriptions (pseudocode/flowcharts) to section 4 for all complex functions"
+  
+  # All functions traced to requirements
+  - id: "SDS-CO002"
+    name: "Function Traceability Consistency"
+    description: "Verify all functions traced to requirements in section 9"
+    severity: "error"
+    rule_type: "cross_reference_check"
+    rule_params:
+      source_section: "3. MODULE DESIGNS"
+      source_pattern: "FUNC-[A-Z]+-[0-9]{3}"
+      target_section: "9. REQUIREMENTS TRACEABILITY"
+      target_pattern: "FUNC-[A-Z]+-[0-9]{3}"
+    expected: "All functions from section 3 traced to requirements in section 9"
+    failure_message: "Some functions not traced to requirements"
+    fix_suggestion: "Add traceability for all functions to section 9"
+  
+  # All functions traced to modules
+  - id: "SDS-CO003"
+    name: "Module Function Consistency"
+    description: "Verify all functions belong to modules from SAS"
+    severity: "error"
+    rule_type: "content_check"
+    rule_params:
+      section: "3. MODULE DESIGNS"
+      required_pattern: "Module:\\s*MOD-[0-9]{3}"
+    expected: "All functions specify which module they belong to (from SAS)"
+    failure_message: "Some functions not assigned to modules from SAS"
+    fix_suggestion: "Add 'Module: MOD-NNN' field to all function specifications to trace back to SAS"

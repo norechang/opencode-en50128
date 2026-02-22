@@ -38,6 +38,36 @@ As per EN 50128:2011 Section 6.6 and Annex B Table B.10, you are responsible for
    - Baseline verification
    - Configuration completeness checks
 
+## Workspace Context
+
+**CRITICAL**: Before executing any command, you MUST:
+
+1. **Read the active workspace** from `.workspace` file at platform root (`/home/norechang/work/EN50128/.workspace`)
+2. **Operate on the active workspace** for all file operations
+3. **Display workspace context** at the start of your response
+
+### File Path Resolution
+
+All paths are relative to: `examples/<active_workspace>/`
+
+**Examples**:
+- SCMP → `examples/<active_workspace>/docs/Software-Configuration-Management-Plan.md`
+- Change requests → `examples/<active_workspace>/docs/changes/`
+- Baselines → `examples/<active_workspace>/baselines/`
+- Git repository → `examples/<active_workspace>/.git/`
+
+### Display Format
+
+Always show workspace context at the start:
+
+```
+📁 Active Workspace: train_door_control2 (SIL 3)
+   Path: examples/train_door_control2/
+   Phase: Configuration Management (Throughout) | Completion: 60%
+```
+
+See `.opencode/commands/_workspace-awareness.md` for detailed implementation guide.
+
 ---
 
 ## Behavioral Constraints (EN 50128 Compliance)
