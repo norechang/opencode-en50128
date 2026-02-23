@@ -11,57 +11,92 @@ Each subdirectory represents a complete, self-contained railway software project
 ```
 examples/
 ├── README.md                          # This file
-├── train_door_control/                # SIL 3 train door control system
+├── train_door_control2/               # SIL 3 train door control system (reference implementation)
 │   ├── src/                          # C source code
 │   ├── test/                         # Unit tests
 │   ├── docs/                         # Project documentation
+│   │   ├── system/                   # System-level documents (EN 50126/50129)
+│   │   └── *.md                      # Software documents (EN 50128)
 │   ├── build/                        # Build artifacts
+│   ├── LIFECYCLE_STATE.md            # Lifecycle tracking
 │   └── Makefile                      # Build system
 │
 └── [your-project-name]/               # Your EN 50128 project
     ├── src/                          # Your source code
     ├── test/                         # Your tests
     ├── docs/                         # Your documentation
+    │   └── system/                   # System documents (mandatory per EN 50128 7.2.2)
+    ├── LIFECYCLE_STATE.md            # Created by /cod plan
     └── ...
 ```
 
 ## Creating a New Project
 
+### Prerequisites: System-Level Documents (EN 50128 Section 7.2.2)
+
+Before starting any EN 50128 project, you need **4 system-level input documents**:
+1. System Requirements Specification
+2. System Architecture Description  
+3. System Safety Plan
+4. System Safety Requirements Specification
+
+**Two Options**:
+
+**Option A: Use Platform Templates** (Recommended for learning):
+```bash
+# Templates are automatically offered by REQ/DES agents when missing
+# Or manually copy from platform templates:
+mkdir -p examples/my_project/docs/system
+cp assets/sample_system/*.md examples/my_project/docs/system/
+# Then customize for your system
+```
+
+**Option B: Study Reference Implementation**:
+```bash
+# See complete examples at:
+cat examples/train_door_control2/docs/system/README.md
+# Review the 4 system documents to understand structure and content
+```
+
 ### Option 1: Use OpenCode Agents (Recommended)
 
-Start a new EN 50128 project from scratch:
+Start a new EN 50128 project using lifecycle coordinator and agents:
 
 ```bash
-# Create project directory
+# 1. Initialize project with COD
 mkdir -p examples/my_railway_project
 cd examples/my_railway_project
+/cod plan --sil 3 --project my_railway_project
 
-# Start with requirements
+# 2. REQ agent will check for system documents
 /req
+# If missing, REQ offers to copy templates from assets/sample_system/
+
+# 3. Continue with requirements
 # Define requirements, assign SIL levels
 
-# Continue with design
+# 4. Continue with design
 /des
 # Create architecture and design
 
-# Implement
+# 5. Implement
 /imp
 # Generate C code with MISRA C compliance
 
-# Test
+# 6. Test
 /tst
 # Create unit tests with coverage
 
-# ... continue through lifecycle
+# 7. ... continue through lifecycle with /cod gate-check
 ```
 
-### Option 2: Copy Existing Example
+### Option 2: Copy Existing Example (Advanced)
 
-Use an existing example as a starting point:
+Use the reference implementation as a starting point:
 
 ```bash
-# Copy train door control as template
-cp -r examples/train_door_control examples/my_project
+# Copy train_door_control2 as template
+cp -r examples/train_door_control2 examples/my_project
 cd examples/my_project
 
 # Clean up
@@ -69,12 +104,15 @@ rm -rf build/
 find . -name "*.o" -delete
 find . -name "*.gcda" -delete
 find . -name "*.gcno" -delete
+rm LIFECYCLE_STATE.md
 
-# Customize
-# - Update README.md with your project info
-# - Modify src/ with your code
-# - Update docs/ with your requirements/design
-# - Adapt tests to your components
+# Reinitialize with COD
+/cod plan --sil 3 --project my_project
+
+# Customize system documents in docs/system/
+# Update docs/Software-*.md for your requirements
+# Modify src/ with your code
+# Adapt tests to your components
 ```
 
 ### Option 3: Manual Setup
@@ -101,47 +139,70 @@ touch Makefile
 
 ## Available Examples
 
-### 1. Train Door Control System
+### Train Door Control System (train_door_control2)
 
-**Path**: `examples/train_door_control/`
+**Path**: `examples/train_door_control2/`
 
-**Description**: Complete SIL 3 train door control system demonstrating:
-- Safety-critical door control logic
+**Description**: Complete SIL 3 train door control system reference implementation demonstrating:
+- Complete EN 50128 V-Model lifecycle (Phases 0-5 complete)
+- System-level documents (EN 50126/50129) in `docs/system/`
+- Software-level documents (EN 50128) in `docs/`
 - MISRA C:2012 compliant implementation
 - Comprehensive unit testing with Unity framework
-- Full requirements traceability
+- Full requirements traceability (100%)
 - Defensive programming patterns
-- Redundant safety checks
+- Redundant safety checks and dual-channel architecture
 
 **SIL Level**: 3 (High safety integrity)
 
-**Files**:
-- `src/door_control.c` - Main control logic (~250 lines)
-- `src/door_control.h` - Public API
-- `src/error_types.h` - Error definitions
-- `test/test_door_control.c` - Unit tests (~320 lines)
-- `docs/requirements.md` - Complete SRS
+**Current Status**: Phase 5 (Integration) Complete ✅
+
+**Key Documents**:
+- **System Documents** (4):
+  - `docs/system/System-Requirements-Specification.md` (71 system requirements)
+  - `docs/system/System-Architecture-Description.md` (dual-channel architecture)
+  - `docs/system/System-Safety-Plan.md` (safety management)
+  - `docs/system/System-Safety-Requirements-Specification.md` (9 hazards, 7 safety functions)
+- **Software Documents**:
+  - `docs/Software-Requirements-Specification.md` (50 software requirements)
+  - `docs/Software-Architecture-Specification.md` (8 modules)
+  - `docs/Software-Design-Specification.md` (detailed design)
+  - `docs/Software-Component-Design-Specification.md` (53 components)
+  - `docs/Requirements-Traceability-Matrix.md` (complete traceability)
+
+**Source Code**: 
+- `src/` - 8 modules, 53 components, ~3,740 lines C
+- `test/` - Unit tests with Unity framework
+- Zero compilation warnings with strict GCC flags
 
 **Key Features**:
-- ✅ Static memory allocation only
-- ✅ Cyclomatic complexity ≤ 10
-- ✅ 100% statement/branch coverage
-- ✅ Defensive programming throughout
-- ✅ Fail-safe error handling
+- ✅ Static memory allocation only (no dynamic allocation)
+- ✅ Cyclomatic complexity ≤ 10 (SIL 3 compliant)
+- ✅ 100% defensive programming coverage
+- ✅ Complete traceability (system → software → design → code → tests)
+- ✅ Fail-safe error handling throughout
+- ✅ Dual-channel processing with 2oo2 sensor redundancy
 
 **Build & Test**:
 ```bash
-cd examples/train_door_control
-make test          # Run tests
-make coverage      # Generate coverage report
+cd examples/train_door_control2/src
+make all           # Build static library
 make clean         # Clean build artifacts
+make check         # Run static analysis (requires cppcheck)
+make complexity    # Analyze complexity (requires lizard)
 ```
 
 **Use Cases**:
-- Reference implementation for SIL 3 projects
-- Learning EN 50128 compliance patterns
-- Template for safety-critical C code
-- Testing framework example
+- **Reference implementation** for SIL 3 projects
+- **Learning EN 50128** complete lifecycle example
+- **Template for safety-critical C code** with best practices
+- **Study system/software document relationships**
+- **Testing framework example** with Unity integration
+
+**See Also**:
+- `examples/train_door_control2/docs/system/README.md` - System document guide
+- `examples/train_door_control2/src/README.md` - Implementation status
+- `examples/train_door_control2/LIFECYCLE_STATE.md` - Phase tracking
 
 ---
 
@@ -157,17 +218,25 @@ When creating new projects in `examples/`, follow these naming conventions:
 ### Project Structure (Standard)
 ```
 your_project/
-├── README.md              # Project overview, SIL level, requirements
+├── README.md              # Project overview, SIL level, status
+├── LIFECYCLE_STATE.md     # Created by /cod plan, tracks phase progress
 ├── Makefile               # Build system
 ├── docs/                  # Documentation
-│   ├── requirements.md    # SRS (Software Requirements Specification)
-│   ├── architecture.md    # SAS (Software Architecture Specification)
-│   ├── design.md          # SDS (Software Design Specification)
-│   └── safety.md          # Safety analysis (FMEA, FTA)
+│   ├── system/            # System-level documents (EN 50126/50129) ⚠️ REQUIRED
+│   │   ├── README.md                                      # System docs guide
+│   │   ├── System-Requirements-Specification.md          # System requirements
+│   │   ├── System-Architecture-Description.md            # HW/SW architecture
+│   │   ├── System-Safety-Plan.md                         # Safety management
+│   │   └── System-Safety-Requirements-Specification.md   # Hazards, safety functions
+│   ├── Software-Requirements-Specification.md    # Software requirements (EN 50128)
+│   ├── Software-Architecture-Specification.md    # Software architecture
+│   ├── Software-Design-Specification.md          # Software detailed design
+│   ├── Requirements-Traceability-Matrix.md       # Traceability (system→SW→code→tests)
+│   └── plans/                                     # SQAP, SCMP, SVP, SVaP
 ├── src/                   # C source code
 │   ├── *.c                # Implementation files
 │   ├── *.h                # Header files
-│   └── error_types.h      # Common error definitions
+│   └── common/            # Common types and error codes
 ├── test/                  # Unit tests
 │   ├── test_*.c           # Unity test files
 │   └── unity_config.h     # Unity configuration
@@ -177,6 +246,8 @@ your_project/
 │   └── test_runner        # Test executable
 └── lib/                   # External libraries (Unity, etc.)
 ```
+
+**⚠️ CRITICAL**: The `docs/system/` directory with 4 system documents is **MANDATORY** per EN 50128 Section 7.2.2. REQ and DES agents will check for these files and offer to copy templates if missing.
 
 ---
 
@@ -201,43 +272,64 @@ When creating a new project, determine the appropriate SIL level:
 
 ## Development Workflow
 
-For each project in `examples/`, follow the EN 50128 V-Model lifecycle:
+For each project in `examples/`, follow the EN 50128 V-Model lifecycle with COD (Lifecycle Coordinator) oversight:
 
-### 1. Requirements Phase (`/req`)
+### Phase 0: Project Initialization (`/cod`)
 ```bash
 cd examples/your_project
-/req
-# Define requirements in docs/requirements.md
-# Assign SIL levels to each requirement
-# Create traceability matrix
+/cod plan --sil 3 --project your_project
+# Creates LIFECYCLE_STATE.md, initializes phase tracking
 ```
 
-### 2. Architecture & Design Phase (`/des`)
+### Phase 1: Planning (`/pm` or manual)
+```bash
+# Create planning documents
+# - Software Quality Assurance Plan (SQAP)
+# - Software Configuration Management Plan (SCMP)
+# - Software Verification Plan (SVP)
+# - Software Validation Plan (SVaP)
+```
+
+### Phase 2: Requirements (`/req`)
+```bash
+/req
+# REQ checks for system documents in docs/system/
+# If missing, offers to copy templates from assets/sample_system/
+# Then: Define software requirements in docs/Software-Requirements-Specification.md
+# Assign SIL levels to each requirement
+# Create traceability matrix (system → software requirements)
+/cod gate-check requirements
+```
+
+### Phase 3: Architecture & Design (`/des`)
 ```bash
 /des
-# Create architecture in docs/architecture.md
-# Create detailed design in docs/design.md
+# DES checks for system documents (if not already done)
+# Create architecture in docs/Software-Architecture-Specification.md
+# Create detailed design in docs/Software-Design-Specification.md
 # Define module interfaces
+/cod gate-check design
 ```
 
-### 3. Safety Analysis Phase (`/saf`)
+### Phase 4: Safety Analysis (`/saf`)
 ```bash
 /saf
 # Perform FMEA analysis
 # Create fault trees (FTA)
-# Document in docs/safety.md
+# Document in safety analysis reports
 ```
 
-### 4. Implementation Phase (`/imp`)
+### Phase 5: Implementation (`/imp`)
 ```bash
 /imp
 # Implement C code in src/
 # Follow MISRA C:2012
 # Use defensive programming
 # Static allocation only (SIL 2+)
+/cod gate-check implementation
 ```
 
-### 5. Testing Phase (`/tst`)
+### Phase 6: Testing (`/tst`)
 ```bash
 /tst
 # Create unit tests in test/
@@ -245,7 +337,7 @@ cd examples/your_project
 # Document test results
 ```
 
-### 6. Verification Phase (`/ver`)
+### Phase 7: Verification (`/ver`)
 ```bash
 /ver
 # Run static analysis
@@ -254,15 +346,16 @@ cd examples/your_project
 # Collect evidence
 ```
 
-### 7. Validation Phase (`/val`)
+### Phase 8: Validation (`/val`)
 ```bash
 /val
 # System testing
 # Acceptance testing
 # Operational scenarios
+/cod gate-check validation
 ```
 
-### 8. Configuration Management (`/cm`)
+### Throughout: Configuration Management (`/cm`)
 ```bash
 /cm
 # Version control
@@ -417,21 +510,27 @@ git push origin feature/signal-interlocking
 ## Support and Resources
 
 ### EN 50128 Platform Resources
-- **Lifecycle Guide**: `../../LIFECYCLE.md`
-- **Agent Reference**: `../../AGENTS.md`
-- **Skills**: `../../.opencode/skills/en50128-*/`
-- **Standards**: `../../std/EN50128-2011.md`
+- **Main README**: `../../README.md` - Platform overview
+- **Lifecycle Guide**: `../../LIFECYCLE.md` - Complete V-Model phases
+- **Agent Reference**: `../../AGENTS.md` - 13 agent roles
+- **Tutorial**: `../../TUTORIAL.md` - Step-by-step walkthrough
+- **Skills**: `../../.opencode/skills/en50128-*/` - Domain-specific patterns
+- **System Templates**: `../../assets/sample_system/` - System document templates
+- **Standards**: `../../std/EN50128-2011.md` - Full EN 50128 standard
 
 ### External Resources
 - Unity Test Framework: https://github.com/ThrowTheSwitch/Unity
 - MISRA C:2012 Guidelines: https://www.misra.org.uk
-- EN 50128:2011 Standard: `../../std/EN50128-2011.md`
+- EN 50128:2011 Standard: Official standard document
+- EN 50126:2017 RAMS: System-level safety management
+- EN 50129:2018: Safety cases and acceptance
 
 ### Getting Help
-- Review existing examples in this directory
-- Consult `../../docs/QUICKSTART.md`
-- Use OpenCode agents: `/req`, `/des`, `/imp`, etc.
-- Check `../../docs/EN50128-Compliance-Guide.md`
+- Review reference implementation: `train_door_control2/`
+- Use OpenCode agents: `/req`, `/des`, `/imp`, `/cod`, etc.
+- Check system document templates: `assets/sample_system/README.md`
+- Follow tutorial: `../../TUTORIAL.md`
+- Review lifecycle phases: `../../LIFECYCLE.md`
 
 ---
 
