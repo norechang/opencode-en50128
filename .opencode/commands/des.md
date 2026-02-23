@@ -252,6 +252,162 @@ typedef struct {
 error_t read_with_cross_check(redundant_sensor_t* sensor);
 ```
 
+## System Document Prerequisites (EN 50128 Section 7.2.2)
+
+**CRITICAL**: Before beginning software architecture or design work, you MUST verify that the required system-level documents exist in the project's `docs/system/` directory.
+
+### Required System Documents (Mandatory per EN 50128 7.2.2)
+
+According to EN 50128 Section 7.2.2, the following **four system documents** are MANDATORY inputs before software requirements specification:
+
+1. **System Requirements Specification** - `docs/system/System-Requirements-Specification.md`
+2. **System Architecture Description** - `docs/system/System-Architecture-Description.md`
+3. **System Safety Plan** - `docs/system/System-Safety-Plan.md`
+4. **System Safety Requirements Specification** - `docs/system/System-Safety-Requirements-Specification.md`
+
+These are produced by the **System Engineering phase** (EN 50126/50129 standards) and are prerequisites for software development.
+
+### Verification Workflow
+
+**At the start of ANY design task**, execute this check:
+
+```bash
+# Check if system documents directory exists
+if [ ! -d "examples/<active_workspace>/docs/system" ]; then
+    REPORT MISSING SYSTEM DOCUMENTS
+fi
+
+# Check for each required document
+MISSING_DOCS=()
+if [ ! -f "examples/<active_workspace>/docs/system/System-Requirements-Specification.md" ]; then
+    MISSING_DOCS+=("System-Requirements-Specification.md")
+fi
+if [ ! -f "examples/<active_workspace>/docs/system/System-Architecture-Description.md" ]; then
+    MISSING_DOCS+=("System-Architecture-Description.md")
+fi
+if [ ! -f "examples/<active_workspace>/docs/system/System-Safety-Plan.md" ]; then
+    MISSING_DOCS+=("System-Safety-Plan.md")
+fi
+if [ ! -f "examples/<active_workspace>/docs/system/System-Safety-Requirements-Specification.md" ]; then
+    MISSING_DOCS+=("System-Safety-Requirements-Specification.md")
+fi
+
+# Report if any missing
+if [ ${#MISSING_DOCS[@]} -gt 0 ]; then
+    REPORT MISSING DOCUMENTS AND ASK USER
+fi
+```
+
+### When System Documents Are Missing
+
+If system documents are missing or incomplete, you MUST:
+
+1. **STOP** any design work immediately
+2. **REPORT** missing documents clearly to the user:
+   ```
+   ⚠️  MISSING SYSTEM DOCUMENTS (EN 50128 Section 7.2.2 Violation)
+   
+   The following mandatory system-level documents are missing from docs/system/:
+   - System Requirements Specification
+   - System Architecture Description
+   - System Safety Plan
+   - System Safety Requirements Specification
+   
+   These documents are REQUIRED inputs before software architecture/design can begin.
+   ```
+
+3. **OFFER** to copy templates from `assets/sample_system/`:
+   ```
+   Would you like me to copy the reference templates from assets/sample_system/ 
+   to your project's docs/system/ directory?
+   
+   These are complete Train Door Control System examples that you can customize 
+   for your project. They demonstrate EN 50126/50129 compliance patterns.
+   
+   Options:
+   [Y] Yes, copy all 4 system document templates
+   [N] No, I will provide my own system documents
+   [S] Show me what's in the templates first
+   ```
+
+4. **WAIT** for user confirmation before proceeding
+
+### Copying System Templates
+
+If the user approves (`[Y]`), execute:
+
+```bash
+# Create system directory if needed
+mkdir -p examples/<active_workspace>/docs/system
+
+# Copy templates
+cp assets/sample_system/System-Requirements-Specification-TEMPLATE.md \
+   examples/<active_workspace>/docs/system/System-Requirements-Specification.md
+
+cp assets/sample_system/System-Architecture-Description-TEMPLATE.md \
+   examples/<active_workspace>/docs/system/System-Architecture-Description.md
+
+cp assets/sample_system/System-Safety-Plan-TEMPLATE.md \
+   examples/<active_workspace>/docs/system/System-Safety-Plan.md
+
+cp assets/sample_system/System-Safety-Requirements-Specification-TEMPLATE.md \
+   examples/<active_workspace>/docs/system/System-Safety-Requirements-Specification.md
+
+# Copy README for reference
+cp assets/sample_system/README.md \
+   examples/<active_workspace>/docs/system/README.md
+```
+
+Then inform the user:
+```
+✅ System document templates copied to docs/system/
+
+IMPORTANT: These are REFERENCE EXAMPLES based on Train Door Control System.
+You MUST customize them for your specific system:
+
+1. Update metadata (Document IDs, dates, names, organizations)
+2. Replace Train Door Control content with YOUR system specifics
+3. Maintain the same structure and level of detail
+4. Keep EN 50126/50129/50128 compliance patterns
+
+See docs/system/README.md for detailed customization instructions.
+
+Once you have customized these documents, you can proceed with software 
+architecture and design work.
+```
+
+### Completeness Check
+
+Even if system documents exist, perform a **basic completeness check**:
+
+```bash
+# Check file sizes (empty or stub files are insufficient)
+for doc in System-Requirements-Specification.md \
+           System-Architecture-Description.md \
+           System-Safety-Plan.md \
+           System-Safety-Requirements-Specification.md; do
+    
+    SIZE=$(wc -l < "examples/<active_workspace>/docs/system/$doc")
+    
+    # If less than 100 lines, likely incomplete
+    if [ $SIZE -lt 100 ]; then
+        echo "⚠️  WARNING: $doc appears incomplete ($SIZE lines)"
+        echo "   Typical system documents are 500+ lines"
+        echo "   Consider reviewing against templates in assets/sample_system/"
+    fi
+done
+```
+
+### Reference to Sample Documents
+
+Users can study the complete examples at:
+- **Platform templates**: `assets/sample_system/` (4 documents + README)
+- **Reference implementation**: `examples/train_door_control2/docs/system/` (actual project documents)
+
+**Standard Reference**: EN 50128:2011 Section 7.2.2 (Software Requirements Specification Inputs)
+
+---
+
 ## Key Design Activities
 
 ### 1. Architecture Design
