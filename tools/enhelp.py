@@ -11,7 +11,9 @@ Usage:
 
 import sys
 import os
+import subprocess
 from pathlib import Path
+from io import StringIO
 
 # Command registry with categories
 COMMANDS = {
@@ -168,6 +170,9 @@ def print_all_commands():
     print("For detailed help on any command: /enhelp <command>")
     print("For platform documentation: See README.md and LIFECYCLE.md")
     print_separator()
+    print()
+    print("Navigation: Use ↑↓ arrows or PgUp/PgDn to scroll • Press 'q' to quit • Press 'h' for help")
+    print()
 
 
 def find_command(cmd_name):
@@ -442,6 +447,9 @@ def print_command_detail(cmd_key, cmd_info):
     print()
     
     print_separator()
+    print()
+    print("Navigation: Use ↑↓ arrows or PgUp/PgDn to scroll • Press 'q' to quit • Press 'h' for help")
+    print()
 
 
 def get_detailed_description(cmd_key):
@@ -633,32 +641,106 @@ def suggest_similar_commands(cmd_name):
     return suggestions[:5]  # Return top 5 suggestions
 
 
+def display_with_pager(content):
+    """
+    Display content using a pager (less) for scrollable output.
+    User can press 'q' to quit, similar to OpenCode's /help dialog.
+    
+    Falls back to direct print if:
+    - Not in interactive terminal
+    - Pager not available
+    - Content is very short
+    """
+    # Check if we're in an interactive terminal
+    if not sys.stdout.isatty():
+        print(content)
+        return
+    
+    # For short content (< 40 lines), just print directly
+    line_count = content.count('\n')
+    if line_count < 40:
+        print(content)
+        return
+    
+    # Try to use less as pager (most Unix-like systems)
+    pager_commands = [
+        ['less', '-R', '-X', '-F'],  # -R: raw colors, -X: no clear screen, -F: quit if one screen
+        ['more'],  # Fallback to more
+    ]
+    
+    for pager_cmd in pager_commands:
+        try:
+            # Check if pager exists
+            if subprocess.run(['which', pager_cmd[0]], 
+                            stdout=subprocess.DEVNULL, 
+                            stderr=subprocess.DEVNULL).returncode != 0:
+                continue
+            
+            # Open pager process
+            pager = subprocess.Popen(
+                pager_cmd,
+                stdin=subprocess.PIPE,
+                stdout=sys.stdout,
+                stderr=sys.stderr
+            )
+            
+            # Send content to pager
+            try:
+                pager.stdin.write(content.encode('utf-8'))
+                pager.stdin.close()
+                pager.wait()
+                return
+            except (BrokenPipeError, IOError):
+                # User quit pager early
+                return
+                
+        except (FileNotFoundError, PermissionError):
+            continue
+    
+    # Fallback: just print if no pager available
+    print(content)
+    print("\n(Tip: Install 'less' for better scrolling experience - press 'q' to quit)")
+
+
 def main():
     """Main entry point."""
-    if len(sys.argv) == 1:
-        # No arguments - show all commands
-        print_all_commands()
-    else:
-        # Show detailed help for specific command
-        cmd_name = sys.argv[1]
-        cmd_key, cmd_info = find_command(cmd_name)
-        
-        if cmd_info:
-            print_command_detail(cmd_key, cmd_info)
+    # Capture output in a string buffer
+    output = StringIO()
+    original_stdout = sys.stdout
+    sys.stdout = output
+    
+    try:
+        if len(sys.argv) == 1:
+            # No arguments - show all commands
+            print_all_commands()
         else:
-            # Command not found
-            print(f"❌ Unknown command: /{cmd_name}")
-            print()
+            # Show detailed help for specific command
+            cmd_name = sys.argv[1]
+            cmd_key, cmd_info = find_command(cmd_name)
             
-            # Suggest similar commands
-            suggestions = suggest_similar_commands(cmd_name)
-            if suggestions:
-                print("Did you mean one of these?")
-                for cmd_key, cmd_info in suggestions:
-                    print(f"  {cmd_info['name']:15s} - {cmd_info['description']}")
+            if cmd_info:
+                print_command_detail(cmd_key, cmd_info)
+            else:
+                # Command not found
+                print(f"❌ Unknown command: /{cmd_name}")
                 print()
-            
-            print("Use /enhelp to see all available commands.")
+                
+                # Suggest similar commands
+                suggestions = suggest_similar_commands(cmd_name)
+                if suggestions:
+                    print("Did you mean one of these?")
+                    for cmd_key, cmd_info in suggestions:
+                        print(f"  {cmd_info['name']:15s} - {cmd_info['description']}")
+                    print()
+                
+                print("Use /enhelp to see all available commands.")
+    finally:
+        # Restore stdout
+        sys.stdout = original_stdout
+    
+    # Display captured output through pager
+    content = output.getvalue()
+    display_with_pager(content)
 
 
 if __name__ == "__main__":

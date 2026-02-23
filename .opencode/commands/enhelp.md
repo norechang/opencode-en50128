@@ -22,6 +22,11 @@ Provide comprehensive help information about all available EN 50128 commands, ag
 
 Shows a categorized list of all available EN 50128 commands with short descriptions.
 
+**Output Display**: Results are displayed in a scrollable pager (like OpenCode's `/help`):
+- Use arrow keys or Page Up/Down to scroll
+- Press `q` to dismiss/quit
+- Press `h` for pager help
+
 ### Display Detailed Help for Specific Command
 
 ```bash
@@ -42,6 +47,8 @@ Shows detailed information about a specific command including:
 /enhelp req
 /enhelp des
 ```
+
+**Note**: Short outputs display directly; longer outputs use a pager for easy scrolling.
 
 ---
 
