@@ -12,10 +12,18 @@
     "train_door_control2": {
       "path": "examples/train_door_control2",
       "sil": 3,
-      "current_phase": "Architecture & Design (Phase 3)",
+      "current_phase": "Phase 6 - Integration",
       "completion": 0,
-      "last_accessed": "2026-02-21T15:22:49.143826",
-      "status": "active"
+      "last_accessed": "2026-02-23T00:00:00.000000",
+      "status": "active",
+      "phase_5_status": "Complete (PARTIAL PASS - MOD-001 only)",
+      "phase_5_gate_passed": "2026-02-22",
+      "phase_6_priority_tasks": [
+        "Complete unit testing MOD-002 to MOD-008 (40 components)",
+        "Measure MC/DC coverage (SIL 3 mandatory)",
+        "Measure WCET on target hardware",
+        "Begin integration testing after unit testing complete"
+      ]
     }
   }
 }
