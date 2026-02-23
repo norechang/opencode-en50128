@@ -26,10 +26,17 @@ This platform provides a complete EN 50128-compliant development environment usi
 # Get detailed help for specific commands
 /enhelp cod        # Lifecycle Coordinator
 /enhelp workspace  # Workspace management
-/enhelp req        # Requirements Engineer
+/enhelp pm         # Project Manager (automation mode)
+/enhelp req        # Requirements Engineer (manual mode)
 ```
 
-### 2. Create Your First Project
+### 2. Development Modes
+
+The platform supports two approaches to EN 50128 development:
+
+#### **Mode 1: PM Automation (Recommended for Most Users)**
+
+Project Manager orchestrates the workflow, automatically coordinating agents:
 
 ```bash
 # Create and initialize a new SIL 3 project
@@ -37,27 +44,74 @@ mkdir -p examples/my_railway_project
 cd examples/my_railway_project
 /cod plan --sil 3 --project my_railway_project
 
-# Start with requirements engineering
-/req  # COD enforces user approval for requirements
+# PM executes complete phases with agent orchestration
+/pm execute-phase planning        # PM → QUA, CM, VER, VAL agents
+/pm execute-phase requirements    # PM → REQ, SAF, QUA, VER agents
+/pm execute-phase design          # PM → DES, SAF, QUA, VER agents
+/pm execute-phase implementation  # PM → IMP, TST, QUA, VER agents
+/pm execute-phase integration     # PM → INT, QUA, VER agents
+/pm execute-phase validation      # PM → VAL, QUA, VER agents
+/pm execute-phase assessment      # PM coordinates independent assessment
+/pm execute-phase deployment      # PM → Release packaging
 
-# Follow the V-Model lifecycle
-/des               # Architecture & Design
+# PM handles: agent sequencing, QA gates, verification coordination, COD gate checks
+```
+
+**Benefits**:
+- ✅ Simplified workflow - single command per phase
+- ✅ Automatic agent coordination and sequencing
+- ✅ Built-in quality gates and verification checkpoints
+- ✅ Ideal for users less familiar with EN 50128 details
+
+#### **Mode 2: Manual Agent Invocation (Expert/Advanced Users)**
+
+Directly invoke individual agents for fine-grained control:
+
+```bash
+# Create and initialize a new SIL 3 project
+mkdir -p examples/my_railway_project
+cd examples/my_railway_project
+/cod plan --sil 3 --project my_railway_project
+
+# Manually invoke each agent in sequence
+/req                   # Requirements Engineer
+/saf                   # Safety Analysis
+/qua review-requirements
+/ver verify-requirements
+/cod gate-check requirements
+
+/des                   # Designer
+/saf fmea --phase design
+/qua review-design
+/ver verify-design
 /cod gate-check design
 
-/saf               # Safety Analysis (FMEA, FTA)
-/imp               # Implementation (C + MISRA C:2012)
-/tst               # Unit Testing with coverage
-/ver               # Verification (static analysis)
-/int               # Integration
-/val               # Validation (system testing)
-/cod gate-check validation
+/imp                   # Implementer
+/tst                   # Tester
+/qua review-code
+/ver verify-module
+/cod gate-check implementation
 
-# Throughout: /cm (Configuration), /qua (Quality), /pm (Project Management)
+# Continue for integration, validation, etc.
 ```
+
+**Benefits**:
+- ✅ Maximum control over each step
+- ✅ Flexibility to customize workflow
+- ✅ Ideal for experts who understand EN 50128 lifecycle details
+- ✅ Useful for iterating on specific activities
+
+**Which Mode Should You Use?**
+- **New to EN 50128?** → Use **PM Automation Mode**
+- **Experienced with EN 50128?** → Either mode works; PM automation is faster
+- **Need fine-grained control?** → Use **Manual Mode**
+- **Following the tutorial?** → Tutorial demonstrates **Manual Mode** for educational purposes
 
 ### 3. Reference Implementation
 
 See `examples/train_door_control2/` for a complete SIL 3 implementation (Phase 5 complete).
+
+**Note**: The reference implementation uses **Manual Mode** to demonstrate each agent's responsibilities. For production use, consider **PM Automation Mode** for streamlined workflow.
 
 ### 4. Multi-Project Workflow
 
@@ -128,7 +182,7 @@ Platform documentation in root directory:
 
 | Document | Description | Size |
 |----------|-------------|------|
-| **[TUTORIAL.md](TUTORIAL.md)** | Complete step-by-step tutorial for SIL 3 project | Comprehensive guide |
+| **[TUTORIAL.md](TUTORIAL.md)** | Complete step-by-step tutorial for SIL 3 project (Manual Mode for learning, PM Automation Guide for production) | Comprehensive guide |
 | **[LIFECYCLE.md](LIFECYCLE.md)** | EN 50128 V-Model lifecycle (10 phases) | 1637 lines |
 | **[AGENTS.md](AGENTS.md)** | All 13 agent definitions and workflows | 837 lines |
 | **[PHASES-VS-DOCUMENTS.md](PHASES-VS-DOCUMENTS.md)** | Phase-to-document mapping (30+ documents) | 580 lines |

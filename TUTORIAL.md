@@ -10,19 +10,64 @@ This tutorial walks you through creating a complete EN 50128-compliant railway s
 
 ---
 
+## Development Modes
+
+The platform supports two approaches to EN 50128 development:
+
+### **Mode 1: PM Automation (Recommended)**
+
+The **Project Manager (PM)** orchestrates the complete workflow, automatically coordinating agents in the correct sequence. This mode is **recommended for most users** as it simplifies the lifecycle and ensures proper agent coordination.
+
+```bash
+/pm execute-phase requirements    # PM → REQ, SAF, QUA, VER agents
+/pm execute-phase design          # PM → DES, SAF, QUA, VER agents
+# PM handles sequencing, quality gates, verification
+```
+
+**When to use**: Production projects, teams new to EN 50128, streamlined development
+
+### **Mode 2: Manual Agent Invocation (Educational/Expert)**
+
+Manually invoke each agent for **fine-grained control** and **learning purposes**. This mode demonstrates each agent's specific responsibilities and EN 50128 workflow details.
+
+```bash
+/req                        # Requirements Engineer
+/saf                        # Safety Analysis
+/qua review-requirements    # Quality Assurance
+/ver verify-requirements    # Verification
+/cod gate-check requirements
+# User controls each step
+```
+
+**When to use**: Learning EN 50128 details, iterating on specific activities, expert customization
+
+---
+
+## Tutorial Approach
+
+**This tutorial uses Manual Mode** to help you understand each agent's role and the EN 50128 lifecycle in detail. Once you're comfortable with the concepts:
+
+1. **For learning**: Continue with Manual Mode (this tutorial)
+2. **For production**: Switch to PM Automation Mode (see [PM Automation Guide](#pm-automation-guide))
+
+---
+
 ## Table of Contents
 
-1. [Introduction](#introduction)
-2. [Phase 0: Project Initialization](#phase-0-project-initialization)
-3. [Phase 1: Planning](#phase-1-planning)
-4. [Phase 2: Requirements Specification](#phase-2-requirements-specification)
-5. [Phase 3: Architecture & Design](#phase-3-architecture--design)
-6. [Phase 4: Component Implementation & Testing](#phase-4-component-implementation--testing)
-7. [Phase 5: Integration](#phase-5-integration)
-8. [Phase 6: Validation](#phase-6-validation)
-9. [Phase 7: Assessment (SIL 3-4)](#phase-7-assessment-sil-3-4)
-10. [Phase 8: Deployment](#phase-8-deployment)
-11. [Advanced Topics](#advanced-topics)
+1. [Development Modes](#development-modes)
+2. [Tutorial Approach](#tutorial-approach)
+3. [Introduction](#introduction)
+4. [Phase 0: Project Initialization](#phase-0-project-initialization)
+5. [Phase 1: Planning](#phase-1-planning)
+6. [Phase 2: Requirements Specification](#phase-2-requirements-specification)
+7. [Phase 3: Architecture & Design](#phase-3-architecture--design)
+8. [Phase 4: Component Implementation & Testing](#phase-4-component-implementation--testing)
+9. [Phase 5: Integration](#phase-5-integration)
+10. [Phase 6: Validation](#phase-6-validation)
+11. [Phase 7: Assessment (SIL 3-4)](#phase-7-assessment-sil-3-4)
+12. [Phase 8: Deployment](#phase-8-deployment)
+13. [PM Automation Guide](#pm-automation-guide) ⭐ **Streamlined Production Workflow**
+14. [Advanced Topics](#advanced-topics)
 
 ---
 
@@ -1463,6 +1508,249 @@ You've completed a full EN 50128 SIL 3 software development lifecycle! 🎉
 - ✅ Achieved 100% test coverage (unit + integration + validation)
 - ✅ Passed independent assessment
 - ✅ Deployed safety-critical railway software
+
+---
+
+## PM Automation Guide
+
+**Streamlined Development with Project Manager Orchestration**
+
+Now that you understand the EN 50128 lifecycle (from the manual mode walkthrough above), here's how to use **PM Automation Mode** for streamlined production development.
+
+### Overview
+
+Instead of invoking each agent manually, the **Project Manager (PM)** executes complete phases with automatic agent coordination:
+
+```
+/pm execute-phase <phase-name>
+    ↓
+PM orchestrates agents in correct sequence
+    ↓
+Automatic quality gates and verification
+    ↓
+COD gate check approval
+```
+
+### PM Automation Workflow
+
+#### Phase 0: Project Initialization (Same as Manual Mode)
+
+```bash
+mkdir train_door_control_automated
+cd train_door_control_automated
+
+/cod plan --sil 3 --project "Train Door Control System"
+```
+
+#### Phase 1: Planning
+
+```bash
+/pm execute-phase planning
+```
+
+**What PM Does**:
+1. `/qua create-sqap --sil 3` - Create Software Quality Assurance Plan
+2. `/cm create-scmp --sil 3` - Create Software Configuration Management Plan
+3. `/ver create-svp --sil 3` - Create Software Verification Plan
+4. `/val create-svap --sil 3` - Create Software Validation Plan
+5. `/qua review-plans` - QA review of all plans
+6. `/cod gate-check planning` - Automatic gate check
+
+**User Interaction**: PM may prompt for approvals (e.g., plan review)
+
+**Result**: Phase 1 complete, all planning documents created
+
+#### Phase 2: Requirements Specification
+
+```bash
+/pm execute-phase requirements
+```
+
+**What PM Does**:
+1. `/req create-srs --sil 3` - REQ agent creates Software Requirements Specification
+   - **User approval required** (COD enforces)
+   - User provides requirements interactively
+2. `/saf analyze-hazards` - SAF agent performs hazard analysis
+3. `/saf fmea --phase requirements` - Preliminary FMEA
+4. `/qua review-requirements` - QA template compliance check
+5. `/ver verify-requirements` - VER agent verifies traceability
+6. `/cm baseline create REQ-001` - CM creates baseline
+7. `/cod gate-check requirements` - Automatic gate check
+
+**User Interaction**: 
+- Provide requirements when REQ prompts
+- Approve hazard analysis results
+
+**Result**: Phase 2 complete, SRS, Hazard Log, traceability established
+
+#### Phase 3: Architecture & Design
+
+```bash
+/pm execute-phase design
+```
+
+**What PM Does**:
+1. `/des create-sas` - Software Architecture Specification
+2. `/des create-sds` - Software Design Specification  
+3. `/des create-sis` - Software Interface Specifications
+4. `/saf fmea --phase design` - Design FMEA
+5. `/qua review-design` - QA design review (complexity, modularity, defensive programming)
+6. `/ver verify-design` - VER agent verifies traceability and design compliance
+7. `/cm baseline create DES-001` - CM creates design baseline
+8. `/cod gate-check design` - Automatic gate check
+
+**User Interaction**: Review and approve architecture decisions
+
+**Result**: Phase 3 complete, SAS, SDS, SIS, Design FMEA
+
+#### Phase 4: Component Implementation & Testing
+
+```bash
+/pm execute-phase implementation
+```
+
+**What PM Does** (for each module):
+1. `/imp implement-module --name <module>` - IMP agent generates C code
+2. `/tst create-unit-tests --module <module>` - TST agent creates unit tests
+3. `/tst run-unit-tests --module <module> --coverage` - Execute tests with coverage
+4. `/qua review-code --module <module>` - QA code review (MISRA C, complexity, defensive programming)
+5. `/ver verify-module --module <module>` - VER agent runs static analysis
+6. Repeat for all modules
+7. `/cm baseline create IMP-001` - CM creates implementation baseline
+8. `/cod gate-check implementation` - Automatic gate check
+
+**User Interaction**: Review MISRA C deviations (if any)
+
+**Result**: Phase 4 complete, all modules implemented with 100% test coverage
+
+#### Phase 5: Integration
+
+```bash
+/pm execute-phase integration
+```
+
+**What PM Does**:
+1. `/int create-integration-plan` - INT agent creates integration plan
+2. `/int integrate-level --level 1` - Progressive integration (Level 1)
+3. `/int integrate-level --level 2` - Progressive integration (Level 2)
+4. `/int integrate-level --level 3` - Progressive integration (Level 3)
+5. `/int integrate-level --level 4` - Progressive integration (Level 4)
+6. `/int run-integration-tests --coverage` - Execute integration tests
+7. `/int performance-test` - Performance testing (SIL 3 mandatory)
+8. `/qua review-integration` - QA integration review
+9. `/ver verify-integration` - VER agent verifies integration
+10. `/cm baseline create INT-001` - CM creates integration baseline
+11. `/cod gate-check integration` - Automatic gate check
+
+**User Interaction**: Minimal (review integration test results)
+
+**Result**: Phase 5 complete, all modules integrated with performance validated
+
+#### Phase 6: Validation
+
+```bash
+/pm execute-phase validation
+```
+
+**What PM Does**:
+1. `/val create-validation-tests` - VAL agent creates validation test specification
+2. `/val run-validation-tests` - Execute validation tests on target
+3. `/val customer-acceptance` - Obtain customer acceptance
+4. `/qua review-validation` - QA validation review
+5. `/ver verify-validation` - VER agent verifies validation completeness
+6. `/cm baseline create VAL-001` - CM creates validation baseline
+7. `/cod gate-check validation` - Automatic gate check
+
+**User Interaction**: Customer interaction for acceptance
+
+**Result**: Phase 6 complete, system validated, customer acceptance obtained
+
+#### Phase 7: Assessment (SIL 3-4)
+
+```bash
+/pm execute-phase assessment
+```
+
+**What PM Does**:
+1. `/pm prepare-assessment-package` - Collect all deliverables
+2. `/pm request-assessment --assessor "Independent Safety Assessor"` - Coordinate assessment
+3. Wait for independent assessor to complete assessment
+4. `/pm review-assessment-findings` - Address any findings
+5. `/cod gate-check assessment` - Automatic gate check (after assessor approval)
+
+**User Interaction**: Coordinate with independent assessor, address findings
+
+**Result**: Phase 7 complete, assessment passed, approval for deployment
+
+#### Phase 8: Deployment
+
+```bash
+/pm execute-phase deployment
+```
+
+**What PM Does**:
+1. `/pm create-release-package --version "1.0.0"` - Create release package
+2. `/cm audit-configuration` - CM performs Physical Configuration Audit (PCA)
+3. `/pm deploy --target production --version "1.0.0"` - Deploy to target
+4. `/cod close-project` - Close project
+
+**User Interaction**: Deployment verification
+
+**Result**: Phase 8 complete, software deployed, project closed
+
+---
+
+### PM Automation Benefits
+
+**Comparison: Manual Mode vs PM Automation Mode**
+
+| Aspect | Manual Mode | PM Automation Mode |
+|--------|-------------|-------------------|
+| **Commands per phase** | 5-10+ individual commands | 1 command per phase |
+| **Agent sequencing** | User manages | PM handles automatically |
+| **Quality gates** | User invokes QUA manually | PM invokes automatically |
+| **Verification** | User invokes VER manually | PM invokes automatically |
+| **COD gate checks** | User invokes manually | PM invokes automatically |
+| **Learning curve** | High (need to know EN 50128 details) | Low (PM guides workflow) |
+| **Flexibility** | Maximum (fine-grained control) | Medium (phase-level control) |
+| **Error prevention** | User must remember sequence | PM prevents out-of-sequence steps |
+| **Best for** | Learning, expert customization | Production, streamlined development |
+
+### When to Use Each Mode
+
+**Use PM Automation Mode when:**
+- ✅ You want streamlined development
+- ✅ You're working on production projects
+- ✅ Your team is new to EN 50128
+- ✅ You want to reduce errors from missed steps
+- ✅ You prefer single-command-per-phase workflow
+
+**Use Manual Mode when:**
+- ✅ You're learning EN 50128 lifecycle details
+- ✅ You need to iterate on specific activities (e.g., just requirements)
+- ✅ You're an expert and need fine-grained control
+- ✅ You're debugging or customizing workflows
+- ✅ You're following educational tutorials
+
+### Switching Between Modes
+
+You can **mix modes** in the same project:
+
+```bash
+# Use PM automation for most phases
+/pm execute-phase requirements
+/pm execute-phase design
+
+# Switch to manual mode to iterate on implementation
+/imp implement-module --name door_control
+/tst run-unit-tests --module door_control
+# Fix issues, re-run tests
+
+# Back to PM automation for integration
+/pm execute-phase integration
+```
+
+**COD tracks progress regardless of mode** - use `/cod status` to check phase completion.
 
 ---
 
