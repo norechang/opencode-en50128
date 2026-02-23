@@ -322,12 +322,21 @@ EN50128/                                   # Platform Root
 │   ├── Project-Structure.md
 │   └── WORKSPACE-WORKFLOWS.md
 │
+├── assets/                                # Platform assets
+│   └── sample_system/                    # ⭐ System-level document templates
+│       ├── README.md                     # Usage guide
+│       ├── System-Requirements-Specification-TEMPLATE.md
+│       ├── System-Architecture-Description-TEMPLATE.md
+│       ├── System-Safety-Plan-TEMPLATE.md
+│       └── System-Safety-Requirements-Specification-TEMPLATE.md
+│
 ├── examples/                              # ⭐ YOUR PROJECTS GO HERE
 │   ├── train_door_control2/              # Reference SIL 3 project (Phase 5)
 │   │   ├── LIFECYCLE_STATE.md           # Phase tracking
 │   │   ├── src/                         # C source (MISRA C)
 │   │   ├── test/                        # Unity unit tests
 │   │   ├── docs/                        # EN 50128 documents
+│   │   │   └── system/                  # System-level documents (EN 50126/50129)
 │   │   ├── Makefile
 │   │   └── README.md
 │   └── [your_project]/                   # Create new projects here
@@ -339,10 +348,65 @@ EN50128/                                   # Platform Root
 
 **Key Points**:
 - Platform root = EN 50128 agents, skills, standards
+- `assets/sample_system/` = System-level document templates (EN 50126/50129 inputs)
 - `examples/` = All railway software projects
 - No `src/` in root = Projects go in `examples/`
 
 See [docs/Project-Structure.md](docs/Project-Structure.md) for complete details.
+
+## System-Level Documents (EN 50126/50129 Inputs)
+
+### Overview
+
+Per EN 50128 Section 7.2.2, **four system-level documents are MANDATORY inputs** before software requirements specification can begin:
+
+1. **System Requirements Specification** - Overall system functional and non-functional requirements
+2. **System Architecture Description** - Hardware/software partitioning, system structure
+3. **System Safety Plan** - Safety management strategy, lifecycle activities, V&V plan
+4. **System Safety Requirements Specification** - Hazards (FMEA/FTA), safety functions, safety requirements
+
+These documents are produced by the **System Engineering phase** (EN 50126/50129) and consumed by the **Software Engineering phase** (EN 50128).
+
+### Sample Templates Available
+
+The platform provides **complete reference examples** in `assets/sample_system/`:
+
+| Template | Lines | Content |
+|----------|-------|---------|
+| **System-Requirements-Specification-TEMPLATE.md** | 569 | 71 requirements for Train Door Control System |
+| **System-Architecture-Description-TEMPLATE.md** | 769 | Dual-channel architecture, hardware/software partitioning |
+| **System-Safety-Plan-TEMPLATE.md** | 1189 | Complete safety management plan, ISA strategy, lifecycle |
+| **System-Safety-Requirements-Specification-TEMPLATE.md** | 508 | 9 hazards, FMEA/FTA, 7 safety functions at SIL 2-3 |
+
+**These are NOT generic templates** - they contain complete Train Door Control System content as learning examples. Only metadata is templated (Document IDs, dates, names).
+
+### How to Use
+
+1. **Study the examples**: Read `assets/sample_system/README.md` and the template files
+2. **Copy for your project**: Copy relevant templates to `your_project/docs/system/`
+3. **Customize metadata**: Replace `YYYY-MM-DD`, `[Name]`, `DOC-XXX-YYYY-NNN` with your project info
+4. **Adapt content**: Replace Train Door Control specifics with YOUR system (keep structure and rigor)
+5. **Use as EN 50128 inputs**: Reference these in Phase 2 (Requirements) when using `/req` agent
+
+See `assets/sample_system/README.md` for complete usage guide and example workflows.
+
+### Reference Implementation
+
+`examples/train_door_control2/docs/system/` contains the original (non-templated) system documents for the reference implementation.
+
+### When to Create
+
+**Before Phase 2 (Requirements Specification)**:
+
+```
+System Engineering (EN 50126/50129)
+    ↓
+Create 4 system-level documents ← Use assets/sample_system/ as reference
+    ↓
+Phase 2: Software Requirements (EN 50128) ← Begins here
+    ↓
+Use /req, /des, /imp, etc.
+```
 
 ## EN 50128 Compliance Requirements
 

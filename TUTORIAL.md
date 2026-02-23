@@ -292,15 +292,97 @@ Authorization: Proceed to Phase 2 (Requirements Specification)
 
 ---
 
+## System-Level Documents (Prerequisite for Phase 2)
+
+### Overview
+
+**IMPORTANT**: Before you can begin Phase 2 (Software Requirements Specification), you need **four system-level input documents** per EN 50128 Section 7.2.2. These are produced by the **System Engineering phase** following EN 50126/50129 standards.
+
+### Required System-Level Documents
+
+1. **System Requirements Specification** - Overall system requirements (not just software)
+2. **System Architecture Description** - Hardware/software partitioning, system boundaries
+3. **System Safety Plan** - Safety management strategy, hazard analysis process, ISA plan
+4. **System Safety Requirements Specification** - Hazards (FMEA/FTA), safety functions, SIL assignment
+
+### Where to Find Templates
+
+The platform provides **complete reference examples** in `assets/sample_system/`:
+
+```bash
+# View the templates
+ls assets/sample_system/
+
+# Read the comprehensive usage guide
+cat assets/sample_system/README.md
+```
+
+**Available Templates** (569-1189 lines each):
+- `System-Requirements-Specification-TEMPLATE.md` - 71 requirements example
+- `System-Architecture-Description-TEMPLATE.md` - Dual-channel architecture example
+- `System-Safety-Plan-TEMPLATE.md` - Complete safety management plan
+- `System-Safety-Requirements-Specification-TEMPLATE.md` - 9 hazards, FMEA/FTA, 7 safety functions
+
+### How to Use for Your Project
+
+**Option 1: Study the Reference Example (Recommended for Learning)**
+
+If you're following this tutorial to learn, you can study the reference implementation:
+
+```bash
+# View the completed system documents for Train Door Control
+ls examples/train_door_control2/docs/system/
+```
+
+These are the **original, complete documents** (non-templated) that demonstrate proper EN 50126/50129 structure.
+
+**Option 2: Create Your Own System Documents**
+
+For a real project, you would:
+
+1. **Copy templates to your project**:
+   ```bash
+   mkdir -p docs/system
+   cp assets/sample_system/*.md docs/system/
+   ```
+
+2. **Customize metadata**: Replace `YYYY-MM-DD`, `[Name]`, `DOC-XXX-YYYY-NNN`
+
+3. **Adapt content**: Replace Train Door Control specifics with YOUR system
+
+4. **Ensure completeness**:
+   - All hazards identified (FMEA/FTA performed)
+   - Safety functions defined with SIL levels
+   - System architecture documented
+   - Safety management organization defined
+
+See `assets/sample_system/README.md` for complete usage guide.
+
+### For This Tutorial
+
+**We'll assume system-level documents exist** and proceed directly to Phase 2 (Software Requirements). In the reference example (`examples/train_door_control2/`), these documents are already completed in `docs/system/`.
+
+**Key Traceability**:
+- System Requirements → Software Requirements (Phase 2)
+- System Safety Requirements → Software Safety Requirements (Phase 2)
+- System Architecture → Software Architecture (Phase 3)
+
+---
+
 ## Phase 2: Requirements Specification
 
 ### Overview
 
-Define **what** the system must do, not **how** it does it. All requirements must be:
+Define **what the software** must do, derived from system-level requirements. Software requirements must be:
 - **Unambiguous** - Single interpretation
 - **Testable** - Can be verified
 - **Traceable** - Forward to design, backward to system requirements
 - **SIL-assigned** - Each requirement has SIL level
+
+**Input Documents** (from System Engineering phase):
+- System Requirements Specification
+- System Safety Requirements Specification
+- System Architecture Description
 
 ### Step 1: Create Software Requirements Specification (SRS)
 
