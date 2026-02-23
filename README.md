@@ -2,6 +2,34 @@
 
 **AI-powered development platform for EN 50128:2011 compliant railway software**
 
+---
+
+## ⚠️ IMPORTANT: OpenCode TUI Required
+
+**This platform MUST be used within the OpenCode TUI (Terminal User Interface) environment.**
+
+- **Install OpenCode**: Visit [https://opencode.ai](https://opencode.ai) for installation instructions
+- **Why Required**: This platform uses OpenCode's agent system, specialized skills, and command routing
+- **Do NOT use**: Generic LLM interfaces (ChatGPT, Claude web interface, etc.) - they cannot invoke the specialized agents or access EN 50128 skills
+
+**Quick Start**:
+```bash
+# Install OpenCode (if not already installed)
+# Visit https://opencode.ai/docs/installation
+
+# Clone this repository
+git clone https://github.com/norechang/opencode-en50128.git
+cd opencode-en50128
+
+# Launch OpenCode TUI
+opencode
+
+# Start using EN 50128 agents
+/enhelp
+```
+
+---
+
 ## Overview
 
 This platform provides a complete EN 50128-compliant development environment using OpenCode:

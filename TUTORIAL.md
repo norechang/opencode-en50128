@@ -2,6 +2,36 @@
 
 **Complete Step-by-Step Guide to Railway Software Development**
 
+---
+
+## ⚠️ IMPORTANT: OpenCode TUI Required
+
+**This tutorial MUST be followed within the OpenCode TUI (Terminal User Interface) environment.**
+
+- **Install OpenCode**: Visit [https://opencode.ai](https://opencode.ai) for installation instructions
+- **Why Required**: All commands (`/cod`, `/req`, `/des`, `/imp`, etc.) are OpenCode agents that only work in the TUI
+- **Do NOT use**: Generic LLM interfaces - they cannot execute the specialized EN 50128 agents
+
+**Setup**:
+```bash
+# 1. Install OpenCode (if not already installed)
+# Visit https://opencode.ai/docs/installation
+
+# 2. Clone this repository
+git clone https://github.com/norechang/opencode-en50128.git
+cd opencode-en50128
+
+# 3. Launch OpenCode TUI
+opencode
+
+# 4. Verify platform is ready
+/enhelp
+```
+
+---
+
+## Tutorial Overview
+
 This tutorial walks you through creating a complete EN 50128-compliant railway software project from scratch. We'll develop a **Train Door Control System** at SIL 3, following the complete V-Model lifecycle.
 
 **Time Required**: 2-3 hours for complete walkthrough  
