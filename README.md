@@ -107,13 +107,75 @@ cd examples/my_railway_project
 - **Need fine-grained control?** → Use **Manual Mode**
 - **Following the tutorial?** → Tutorial demonstrates **Manual Mode** for educational purposes
 
-### 3. Reference Implementation
+### 3. EN 50128 Organizational Roles
+
+The platform implements 13 specialized agents representing EN 50128-defined roles:
+
+#### Core Development Roles (EN 50128 Section 5.3)
+
+| Agent | Command | EN 50128 Role | Responsibilities | Independence (SIL 3-4) |
+|-------|---------|---------------|------------------|----------------------|
+| **Requirements Engineer** | `/req` | Requirements Manager (5.3.1) | Requirements specification, SIL assignment, traceability | No |
+| **Designer** | `/des` | Designer (5.3.2) | Architecture & design, MISRA C patterns, complexity control | No |
+| **Implementer** | `/imp` | Implementer (5.3.3) | C code implementation, unit tests, MISRA C compliance | No |
+| **Tester** | `/tst` | Tester (5.3.4) | Unit/integration testing, coverage analysis (100% SIL 3-4) | No |
+| **Integrator** | `/int` | Integrator (5.3.6) | Component integration, interface testing, performance testing | No |
+| **Verifier** | `/ver` | Verifier (5.3.5) | Static analysis, verification evidence, compliance checking | **Yes** |
+| **Validator** | `/val` | Validator (5.3.7) | System testing, acceptance validation, customer approval | **Yes** |
+| **Safety Engineer** | `/saf` | (Implicit) | FMEA, FTA, hazard analysis, safety case development | No |
+
+#### Management & Support Roles (EN 50128 Section 5, Annex B)
+
+| Agent | Command | EN 50128 Role | Responsibilities | Independence (SIL 3-4) |
+|-------|---------|---------------|------------------|----------------------|
+| **Lifecycle Coordinator** | `/cod` | Platform Extension* | V-Model orchestration, phase gate enforcement, lifecycle compliance | No |
+| **Project Manager** | `/pm` | Project Manager (Table B.9) | Team coordination, CCB leadership, resource management, risk management | No |
+| **Configuration Manager** | `/cm` | Configuration Manager (Table B.10) | Version control, baselines, change control, traceability (mandatory all SILs) | No |
+| **Quality Assurance** | `/qua` | (Implicit in 6.5) | Code reviews, audits, MISRA C checks, quality gates, template compliance | No |
+| **V&V Manager** | `/vmgr` | Platform Extension** | Independent V&V authority, manages Verifier team, final V&V approval | **Yes** |
+
+**Notes**:
+- **Platform Extension\***: COD is not explicitly defined in EN 50128 but implements Section 5.3 lifecycle orchestration requirements
+- **Platform Extension\*\***: VMGR formalizes EN 50128 Section 5.1.2.10e organizational structure ("Verifier can report to Validator")
+- **Independence Requirements (SIL 3-4)**: VER, VAL, and VMGR MUST be independent from development team (REQ, DES, IMP, TST, INT)
+- **Assessor Role**: Not implemented as agent (requires external independent safety assessor per EN 50128 5.3.8)
+
+#### Organizational Authority Structure (SIL 3-4)
+
+```
+        Safety Authority / Customer
+                |
+        ┌───────┴───────────┐
+        |                   |
+    COD (Lifecycle)     VMGR (Independent V&V)
+        |                   |
+        |               ┌───┴───┐
+        |           VER (Team) VAL
+        |
+    PM (Project Coordination)
+        |
+    ┌───┴────────────────────────┐
+    |                            |
+REQ, DES, IMP, TST, INT      QUA, CM, SAF
+(Development Team)        (Support Functions)
+```
+
+**Key Authority Relationships**:
+- **COD** has overall lifecycle authority, enforces phase gates
+- **VMGR** is independent, provides V&V approval/rejection (cannot be overridden by COD or PM)
+- **PM** coordinates development team, reports to COD for lifecycle decisions
+- **VER/VAL** report to VMGR (SIL 3-4), ensuring independence from PM
+- **QUA/CM/SAF** support both development and V&V activities
+
+See [AGENTS.md](AGENTS.md) for complete role definitions and EN 50128 technique tables.
+
+### 4. Reference Implementation
 
 See `examples/train_door_control2/` for a complete SIL 3 implementation (Phase 5 complete).
 
 **Note**: The reference implementation uses **Manual Mode** to demonstrate each agent's responsibilities. For production use, consider **PM Automation Mode** for streamlined workflow.
 
-### 4. Multi-Project Workflow
+### 5. Multi-Project Workflow
 
 The platform supports concurrent development on multiple projects:
 
@@ -150,7 +212,7 @@ Safety Integrity Levels determine requirements stringency:
 
 ### Available Agents
 
-Specialized AI agents accessible via slash commands:
+Specialized AI agents accessible via slash commands (see [EN 50128 Organizational Roles](#3-en-50128-organizational-roles) for complete details):
 
 | Command | Agent | Role |
 |---------|-------|------|
@@ -160,19 +222,22 @@ Specialized AI agents accessible via slash commands:
 | `/imp` | Implementer | C code implementation with MISRA C compliance |
 | `/tst` | Tester | Unit and integration testing with coverage |
 | `/int` | Integrator | Component integration and interface testing |
-| `/ver` | Verifier | Static analysis and verification evidence |
-| `/val` | Validator | System testing and acceptance validation |
+| `/ver` | Verifier | Static analysis and verification evidence (independent SIL 3-4) |
+| `/val` | Validator | System testing and acceptance validation (independent SIL 3-4) |
 | `/saf` | Safety Engineer | Hazard analysis, FMEA, FTA, safety case |
 | `/qua` | Quality Assurance | Code reviews, audits, quality gates |
-| `/pm` | Project Manager | Project coordination, CCB leadership |
-| `/cm` | Configuration Manager | Version control, baselines, change management |
-| `/vmgr` | V&V Manager | Independent V&V authority (SIL 3-4) |
+| `/pm` | Project Manager | Project coordination, CCB leadership, reports to COD |
+| `/cm` | Configuration Manager | Version control, baselines, change management (mandatory all SILs) |
+| `/vmgr` | V&V Manager | Independent V&V authority, manages VER team (SIL 3-4) |
 | `/workspace` (`/ws`) | Workspace Manager | Multi-project workspace management |
 | `/enhelp` | Help System | Command documentation |
 
-**Note**: COD enforces SIL-dependent phase gates: Advisory (SIL 0-1), Semi-strict (SIL 2), Strict (SIL 3-4).
+**Key Notes**:
+- **Independence (SIL 3-4)**: VER, VAL, VMGR must be independent from development team
+- **Phase Gates**: COD enforces SIL-dependent gates: Advisory (SIL 0-1), Semi-strict (SIL 2), Strict (SIL 3-4)
+- **Configuration Management**: CM is mandatory for ALL SIL levels (0-4)
 
-See [AGENTS.md](AGENTS.md) for detailed documentation.
+See [AGENTS.md](AGENTS.md) for detailed documentation and EN 50128 technique tables.
 
 ## Documentation
 
