@@ -3,8 +3,8 @@
 **SIL Level**: 3  
 **Current Phase**: Component Implementation and Testing (Phase 5)  
 **Implementation**: ✅ 100% COMPLETE (53/53 components, 0 warnings)  
-**Testing**: ⚠️ 25% COMPLETE (13/53 components with 100% MC/DC coverage)  
-**Status**: IN PROGRESS - Implementation complete, unit testing MOD-002 to MOD-008 (40 components, 7 modules remaining)
+**Testing**: ⚠️ 25% COMPLETE (MOD-001: 13/53 components, 100% statement/branch, **MC/DC NOT MEASURED**)  
+**Status**: 🚫 **BLOCKED** - MC/DC coverage NOT MEASURED (SIL 3 MANDATORY), MOD-002-008 untested (87% of system)
 
 ---
 
@@ -184,15 +184,204 @@ make complexity    # Analyze cyclomatic complexity (lizard)
 - Condition Coverage: 100% (MC/DC - MANDATORY)
 
 ### Current Test Statistics
-- **Unit Tests**: 29 test cases (MOD-001 only)
-- **Coverage Achieved**: 100% statement/branch/condition (MOD-001)
+- **Unit Tests**: 52 test cases (MOD-001 only), ~125 remaining for MOD-002-008
+- **Coverage Achieved (MOD-001)**: 100% statement, 100% branch (execution), 95.74% branch (taken), **MC/DC NOT MEASURED**
+- **Coverage Achieved (MOD-002-008)**: 0% (not tested)
+- **Overall System Coverage**: ~6% statement/branch, **0% MC/DC** - ❌ **SIL 3 MANDATORY requirement NOT MET**
 - **Integration Tests**: Not started
 - **System Tests**: Not started
-- **Test Pass Rate**: 100% (for completed modules)
+- **Test Pass Rate**: 100% (52/52 tests passing for MOD-001)
 
 ### Testing Status by Module
-- MOD-001: ✅ 29/29 tests passing (100% MC/DC coverage)
-- MOD-002 to MOD-008: ⏳ Unit testing pending (40 components)
+- MOD-001: ✅ 52/52 tests passing (100% statement/branch, **MC/DC NOT MEASURED** ❌)
+- MOD-002 to MOD-008: ⏳ Unit testing pending (40 components, 3,519 LOC, 0% coverage)
+
+---
+
+## MC/DC Coverage Measurement
+
+### What is MC/DC?
+
+**MC/DC (Modified Condition/Decision Coverage)** is a code coverage metric that ensures:
+1. Each condition in a decision independently affects the decision outcome
+2. All conditions have been tested in both true and false states
+3. Each condition is shown to independently affect the decision
+
+**Example:**
+```c
+// Decision: (A && B) || C
+// MC/DC requires test cases where:
+// - A changes decision outcome while B and C held constant
+// - B changes decision outcome while A and C held constant  
+// - C changes decision outcome while A and B held constant
+```
+
+### Why is MC/DC Required?
+
+**EN 50128:2011 Table A.21 (Test Coverage for Code):**
+
+| Coverage Type | SIL 0 | SIL 1-2 | SIL 3-4 | Status |
+|---------------|-------|---------|---------|--------|
+| Statement Coverage | R | HR | **M** | ✅ 100% (MOD-001) |
+| Branch Coverage | R | HR | **M** | ✅ 100% (MOD-001) |
+| **Condition Coverage (MC/DC)** | - | R | **M (MANDATORY)** | ❌ **NOT MEASURED** |
+
+**"M" (Mandatory) means:**
+> "The technique/measure SHALL be used. If the technique/measure is not used, a justification SHALL be provided and accepted by the **railway authority**." (EN 50128 Section 4.2)
+
+For SIL 3 railway software, MC/DC coverage is **NOT OPTIONAL**. Either:
+1. Measure and achieve 100% MC/DC coverage, OR
+2. Obtain railway authority approval for not using MC/DC (with documented justification)
+
+### Current Project Status
+
+**Tool Used**: gcov/lcov (GNU Coverage)  
+**Limitation**: gcov does NOT support MC/DC measurement (only statement and branch coverage)  
+**Result**: MC/DC coverage = 0% (NOT MEASURED)
+
+**Impact**: Phase 5 gate check **BLOCKED** - cannot proceed to Phase 6 (Integration) until MC/DC requirement met.
+
+### MC/DC Measurement Solutions
+
+#### Option A: Commercial Tools (Recommended for SIL 3)
+
+**Best for:** Production SIL 3 projects, automated MC/DC measurement, regulatory compliance
+
+| Tool | Description | EN 50128 Support | Cost | Setup Complexity |
+|------|-------------|------------------|------|------------------|
+| **VectorCAST** | Industry standard, full automation, railway-certified | ✅ Excellent | $$$$ | Medium |
+| **LDRA TBvision** | Railway-specific, pre-certified for EN 50128 | ✅ Excellent | $$$$ | Medium |
+| **Cantata** | C/C++ unit testing with MC/DC | ✅ Good | $$$ | Medium |
+| **Bullseye Coverage** | Cost-effective, supports MC/DC | ✅ Good | $$ | Low |
+
+**Installation Example (Bullseye Coverage):**
+```bash
+# 1. Download Bullseye from www.bullseye.com
+# 2. Install according to vendor instructions
+# 3. Instrument build with Bullseye compiler wrapper:
+export CC=gcc-cov  # Bullseye wrapper
+make clean && make test
+# 4. Generate MC/DC report:
+covhtml -o coverage_report/
+```
+
+**Pros:**
+- Fully automated MC/DC measurement
+- Regulatory compliance (certified for EN 50128)
+- Integration with CI/CD pipelines
+- Professional support and documentation
+
+**Cons:**
+- License cost ($$$ - $$$$$)
+- Setup and configuration time
+- May require training
+
+#### Option B: Enhanced Open-Source (Partial Solution)
+
+**Best for:** Budget-constrained projects, hybrid approach
+
+**gcovr** (Python-based gcov wrapper):
+```bash
+# Install gcovr
+pip install gcovr
+
+# Run tests with coverage
+cd test/
+make clean && make test
+
+# Generate enhanced report
+gcovr --root ../src --html-details -o coverage_report.html --decisions
+```
+
+**Limitation:** gcovr provides "decision coverage" (similar to branch coverage) but NOT true MC/DC. Manual analysis still required.
+
+**Hybrid Approach:**
+1. Use gcov/gcovr for statement and branch coverage (automated)
+2. Perform manual MC/DC analysis for multi-condition expressions (see Option C)
+3. Document both automated and manual results
+
+#### Option C: Manual Truth Table Analysis (Fallback)
+
+**Best for:** Small codebases, learning MC/DC concepts, no budget
+
+**Process:**
+1. Identify all multi-condition expressions (&&, ||, complex conditions)
+2. Create truth table for each expression
+3. Design test cases to achieve MC/DC coverage
+4. Execute tests and verify results
+5. Document analysis in spreadsheet or markdown
+
+**Example: Manual MC/DC Analysis for door_fsm.c**
+
+**Expression 1** (door_fsm.c:189):
+```c
+if ((state == DOOR_STATE_CLOSED) && (cmd == DOOR_CMD_OPEN))
+```
+
+**Truth Table:**
+| Test | state==CLOSED | cmd==OPEN | Decision | Notes |
+|------|---------------|-----------|----------|-------|
+| T1 | T | T | T | Open door from closed state ✅ |
+| T2 | T | F | F | A changes outcome (independence) ✅ |
+| T3 | F | T | F | B changes outcome (independence) ✅ |
+
+**MC/DC Coverage**: ✅ 100% (3 test cases cover all independent effects)
+
+**Apply this analysis to ALL multi-condition expressions in the codebase.**
+
+**Tools for Manual Analysis:**
+- Spreadsheet (Excel, Google Sheets)
+- Markdown tables
+- Python script (truth table generator)
+
+**Time Estimate:**
+- Simple expression (2 conditions): 15-30 minutes
+- Complex expression (3-4 conditions): 1-2 hours
+- MOD-001 (door_fsm.c): Estimated 20-30 multi-condition expressions = 8-15 hours
+- Full system (53 components): Estimated 100-150 hours (2-4 weeks)
+
+#### Option D: Railway Authority Approval (Alternative)
+
+**If MC/DC measurement is impractical**, you may request railway authority approval to defer or waive MC/DC coverage.
+
+**Requirements** (EN 50128 Section 4.2):
+1. **Documented justification** explaining:
+   - Why MC/DC cannot be measured (tool limitation, schedule, cost)
+   - Alternative verification techniques applied (e.g., formal methods, extended branch coverage)
+   - Risk assessment of not measuring MC/DC
+2. **Railway authority review and approval**
+3. **Document approval in project records** (SCMP, SVP)
+
+**Important:** This is NOT a "get out of jail free" card. Railway authorities rarely approve waivers for mandatory SIL 3 requirements without strong technical justification.
+
+### Recommendation for This Project
+
+**Recommended Path: Option A (Commercial Tool) or Option C (Manual Analysis)**
+
+**For SIL 3 compliance:**
+1. **Short-term (immediate gate unblock):**
+   - Perform manual MC/DC analysis for MOD-001 (door_fsm.c) using truth tables
+   - Document analysis in `test/MCDC_ANALYSIS_MOD001.md`
+   - Estimated effort: 8-15 hours
+   - This unblocks MC/DC requirement for MOD-001
+
+2. **Long-term (full project):**
+   - Procure commercial MC/DC tool (Bullseye Coverage recommended for cost/benefit)
+   - Integrate into build system (test/Makefile)
+   - Automate MC/DC measurement for all modules
+   - This provides scalable solution for MOD-002-008 and future projects
+
+**Alternative (budget-constrained):**
+- Manual truth table analysis for all 53 components
+- Estimated effort: 100-150 hours (2-4 weeks full-time)
+- Labor-intensive but zero tool cost
+
+### References
+
+- **EN 50128:2011 Table A.21**: Test Coverage for Code (page 90)
+- **EN 50128:2011 Annex D.59**: MC/DC definition and examples
+- **RTCA DO-178C**: Aviation standard with detailed MC/DC guidance (applicable to railway)
+- **NASA GB-1740.13-96**: Software Safety Guidebook - MC/DC examples
 
 ---
 
