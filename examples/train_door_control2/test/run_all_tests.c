@@ -64,14 +64,13 @@ int main(void) {
     
     /* Execute all test suites */
     run_door_fsm_tests();              /* MOD-001: Door Control FSM */
-    /* NOTE: Remaining test suites temporarily disabled */
-    /* run_safety_monitor_tests();        MOD-002: Safety Monitor */
-    /* run_fault_detection_tests();       MOD-003: Fault Detection */
-    /* run_command_processor_tests();     MOD-004: Command Processor */
-    /* run_status_reporter_tests();       MOD-005: Status Reporter */
-    /* run_actuator_hal_tests();          MOD-006: Actuator HAL */
-    /* run_sensor_hal_tests();            MOD-007: Sensor HAL */
-    /* run_communication_hal_tests();     MOD-008: Communication HAL */
+    run_safety_monitor_tests();        /* MOD-002: Safety Monitor */
+    run_fault_detection_tests();       /* MOD-003: Fault Detection */
+    run_command_processor_tests();     /* MOD-004: Command Processor */
+    run_status_reporter_tests();       /* MOD-005: Status Reporter */
+    run_actuator_hal_tests();          /* MOD-006: Actuator HAL */
+    run_sensor_hal_tests();            /* MOD-007: Sensor HAL */
+    run_communication_hal_tests();     /* MOD-008: Communication HAL */
     
     /* Print final summary */
     test_print_summary();

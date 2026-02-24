@@ -9,7 +9,7 @@
  * 
  * @description
  * Comprehensive unit tests for MOD-001 Door Control FSM.
- * Total test cases: 32
+ * Total test cases: 57
  * Coverage target: 100% statement, branch, condition (SIL 3)
  */
 
@@ -1519,6 +1519,128 @@ bool test_door_fsm_closed_pwm_failure(void) {
 /* Test Suite Runner                                                         */
 /*===========================================================================*/
 
+/*===========================================================================*/
+/* Test Suite Runner                                                         */
+/*===========================================================================*/
+
+/**
+ * TC-MOD001-054: OPENING state — no obstacle, no timeout, position < 95%
+ *
+ * TRACEABILITY: door_fsm.c line 189 branch 1 (false): if (obstacle) → NOT taken
+ * COVERAGE: else branch line 187-194 taken, but obstacle=false → no action path.
+ *
+ * Door is in OPENING state, position ~50% (< 95% threshold), time = 1000ms
+ * (< 5000ms timeout), obstacle sensor = false → reaches line 189 with
+ * obstacle=false → the if(obstacle) branch is NOT taken → no-action path.
+ */
+bool test_door_fsm_opening_no_obstacle_no_timeout(void) {
+    door_fsm_t fsm;
+    reset_mocks();
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+
+    fsm.current_state = DOOR_STATE_OPENING;
+    fsm.state_entry_time_ms = 0U;
+    /* ~50% open: ADC = 2048 → position = (2048*100)/4095 = 50% < 95% */
+    mock_position_sensor = 2048U;
+    mock_obstacle_sensor = false;   /* No obstacle */
+    /* time = 1000ms < DOOR_FSM_OPEN_TIMEOUT_MS (5000ms) → else branch */
+    mock_set_system_time(1000U);
+
+    error_t result = door_fsm_update(&fsm);
+
+    TEST_ASSERT_EQUAL(ERROR_SUCCESS, result);
+    /* Must remain in OPENING (no transition, no fault) */
+    TEST_ASSERT_EQUAL(DOOR_STATE_OPENING, fsm.current_state);
+    /* No fault reported */
+    TEST_ASSERT_EQUAL(0U, mock_reported_fault_code);
+    return true;
+}
+
+/**
+ * TC-MOD001-055: OPEN state — no CLOSE_CMD in queue (maintain PWM)
+ *
+ * TRACEABILITY: door_fsm.c line 202 branch 2 (false):
+ *   if (event_queue_contains(fsm, DOOR_EVENT_CLOSE_CMD)) → NOT taken
+ * COVERAGE: OPEN state with empty event queue → stays OPEN, no action.
+ */
+bool test_door_fsm_open_no_close_cmd(void) {
+    door_fsm_t fsm;
+    reset_mocks();
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+
+    fsm.current_state = DOOR_STATE_OPEN;
+    /* Position at 100% (fully open) */
+    mock_position_sensor = 4095U;
+    /* No events queued (event queue is empty after init) */
+    mock_obstacle_sensor = false;
+    mock_set_system_time(0U);
+
+    error_t result = door_fsm_update(&fsm);
+
+    TEST_ASSERT_EQUAL(ERROR_SUCCESS, result);
+    /* Must remain in OPEN */
+    TEST_ASSERT_EQUAL(DOOR_STATE_OPEN, fsm.current_state);
+    return true;
+}
+
+/**
+ * TC-MOD001-056: CLOSING state — no obstacle, no timeout, position > 5%
+ *
+ * TRACEABILITY: door_fsm.c line 232 branch 1 (false):
+ *   else if (time_in_state_ms > DOOR_FSM_CLOSE_TIMEOUT_MS) → NOT taken
+ * The else (no action) path at line 235-237 is taken.
+ *
+ * Door CLOSING at ~50% position, time = 1000 ms < 7000 ms timeout, no obstacle.
+ */
+bool test_door_fsm_closing_no_obstacle_no_timeout(void) {
+    door_fsm_t fsm;
+    reset_mocks();
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+
+    fsm.current_state = DOOR_STATE_CLOSING;
+    fsm.state_entry_time_ms = 0U;
+    /* ~50% — above DOOR_FSM_POSITION_CLOSED_PCT (5%) → not yet closed */
+    mock_position_sensor = 2048U;  /* ~50% */
+    mock_obstacle_sensor = false;  /* No obstacle */
+    /* 1000ms < 7000ms (DOOR_FSM_CLOSE_TIMEOUT_MS) → else { no action } */
+    mock_set_system_time(1000U);
+
+    error_t result = door_fsm_update(&fsm);
+
+    TEST_ASSERT_EQUAL(ERROR_SUCCESS, result);
+    /* Must remain in CLOSING (no transition) */
+    TEST_ASSERT_EQUAL(DOOR_STATE_CLOSING, fsm.current_state);
+    return true;
+}
+
+/**
+ * TC-MOD001-057: LOCKED state — no UNLOCK_CMD in queue
+ *
+ * TRACEABILITY: door_fsm.c line 248 branch 2 (false):
+ *   if (event_queue_contains(fsm, DOOR_EVENT_UNLOCK_CMD)) → NOT taken
+ * COVERAGE: LOCKED state, no events queued → stays LOCKED.
+ */
+bool test_door_fsm_locked_no_unlock_cmd(void) {
+    door_fsm_t fsm;
+    reset_mocks();
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+
+    fsm.current_state = DOOR_STATE_LOCKED;
+    fsm.locked = true;
+    /* Door fully closed (ADC=0) */
+    mock_position_sensor = 0U;
+    /* No events queued */
+    mock_set_system_time(0U);
+
+    error_t result = door_fsm_update(&fsm);
+
+    TEST_ASSERT_EQUAL(ERROR_SUCCESS, result);
+    /* Must remain in LOCKED */
+    TEST_ASSERT_EQUAL(DOOR_STATE_LOCKED, fsm.current_state);
+    TEST_ASSERT_TRUE(fsm.locked);
+    return true;
+}
+
 void run_door_fsm_tests(void) {
     test_suite_begin("MOD-001: Door Control FSM");
     
@@ -1644,6 +1766,15 @@ void run_door_fsm_tests(void) {
     run_test("TC-MOD001-051: Closing PWM failure", test_door_fsm_closing_pwm_failure);
     mod001_test_count++;
     run_test("TC-MOD001-052: Closed PWM failure", test_door_fsm_closed_pwm_failure);
+    mod001_test_count++;
+    
+    /* Branch coverage tests */
+    run_test("TC-MOD001-054: OPENING no obstacle branch false", test_door_fsm_opening_no_obstacle_no_timeout);
+    mod001_test_count++;
+    run_test("TC-MOD001-055: OPEN no CLOSE_CMD branch false", test_door_fsm_open_no_close_cmd);
+    mod001_test_count++;
+    run_test("TC-MOD001-056: CLOSING no obstacle no timeout", test_door_fsm_closing_no_obstacle_no_timeout);    mod001_test_count++;
+    run_test("TC-MOD001-057: LOCKED no UNLOCK_CMD branch false", test_door_fsm_locked_no_unlock_cmd);
     mod001_test_count++;
     
     test_suite_end("MOD-001: Door Control FSM", mod001_test_count);

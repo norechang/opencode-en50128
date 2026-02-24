@@ -1,0 +1,3933 @@
+{
+  "schema_version": "1.0",
+  "project": "train_door_control2",
+  "sil_level": 3,
+  "generated": "2026-02-24T15:07:13Z",
+  "total_expressions": 28,
+  "expressions": [
+    {
+      "expr_id": "CBE-AH-001",
+      "file": "examples/train_door_control2/src/actuator_hal/actuator_hal.c",
+      "line": 115,
+      "function": "actuator_hal_set_door_pwm",
+      "text": "(duty_cycle < PWM_MIN_DUTY_CYCLE) ||                    /* +1 */ (duty_cycle > PWM_MAX_DUTY_CYCLE)",
+      "operator": "OR",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "duty_cycle < PWM_MIN_DUTY_CYCLE"
+        },
+        {
+          "index": 1,
+          "text": "/* +1 */ (duty_cycle > PWM_MAX_DUTY_CYCLE)"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-AH-001-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-AH-001-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-AH-001-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-AH-001-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-AH-001-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-AH-001-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-AH-001-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "duty_cycle < PWM_MIN_DUTY_CYCLE",
+            "row_a": 0,
+            "row_b": 2,
+            "row_a_label": "TC-CBE-AH-001-01",
+            "row_b_label": "TC-CBE-AH-001-03"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "/* +1 */ (duty_cycle > PWM_MAX_DUTY_CYCLE)",
+            "row_a": 0,
+            "row_b": 1,
+            "row_a_label": "TC-CBE-AH-001-01",
+            "row_b_label": "TC-CBE-AH-001-02"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-AH-002",
+      "file": "examples/train_door_control2/src/actuator_hal/actuator_hal.c",
+      "line": 121,
+      "function": "actuator_hal_set_door_pwm",
+      "text": "(side != DOOR_SIDE_LEFT) && (side != DOOR_SIDE_RIGHT)",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "side != DOOR_SIDE_LEFT"
+        },
+        {
+          "index": 1,
+          "text": "side != DOOR_SIDE_RIGHT"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-AH-002-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-AH-002-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-AH-002-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-AH-002-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-AH-002-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-AH-002-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-AH-002-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "side != DOOR_SIDE_LEFT",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-AH-002-02",
+            "row_b_label": "TC-CBE-AH-002-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "side != DOOR_SIDE_RIGHT",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-AH-002-03",
+            "row_b_label": "TC-CBE-AH-002-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-AH-003",
+      "file": "examples/train_door_control2/src/actuator_hal/actuator_hal.c",
+      "line": 150,
+      "function": "actuator_hal_set_door_lock",
+      "text": "(side != DOOR_SIDE_LEFT) && (side != DOOR_SIDE_RIGHT)",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "side != DOOR_SIDE_LEFT"
+        },
+        {
+          "index": 1,
+          "text": "side != DOOR_SIDE_RIGHT"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-AH-003-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-AH-003-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-AH-003-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-AH-003-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-AH-003-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-AH-003-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-AH-003-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "side != DOOR_SIDE_LEFT",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-AH-003-02",
+            "row_b_label": "TC-CBE-AH-003-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "side != DOOR_SIDE_RIGHT",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-AH-003-03",
+            "row_b_label": "TC-CBE-AH-003-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-CP-001",
+      "file": "examples/train_door_control2/src/command_processor/command_processor.c",
+      "line": 215,
+      "function": "command_processor_process_can_command",
+      "text": "(cp == NULL) || (msg == NULL)",
+      "operator": "OR",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "cp == NULL"
+        },
+        {
+          "index": 1,
+          "text": "msg == NULL"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-CP-001-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-CP-001-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-CP-001-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-CP-001-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-CP-001-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-CP-001-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-CP-001-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "cp == NULL",
+            "row_a": 0,
+            "row_b": 2,
+            "row_a_label": "TC-CBE-CP-001-01",
+            "row_b_label": "TC-CBE-CP-001-03"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "msg == NULL",
+            "row_a": 0,
+            "row_b": 1,
+            "row_a_label": "TC-CBE-CP-001-01",
+            "row_b_label": "TC-CBE-CP-001-02"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-CH-001",
+      "file": "examples/train_door_control2/src/communication_hal/communication_hal.c",
+      "line": 174,
+      "function": "communication_hal_can_receive",
+      "text": "(msg->id > CAN_ID_MAX) || (msg->dlc > CAN_MAX_DLC)",
+      "operator": "OR",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "msg->id > CAN_ID_MAX"
+        },
+        {
+          "index": 1,
+          "text": "msg->dlc > CAN_MAX_DLC"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-CH-001-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-CH-001-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-CH-001-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-CH-001-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-CH-001-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-CH-001-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-CH-001-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "msg->id > CAN_ID_MAX",
+            "row_a": 0,
+            "row_b": 2,
+            "row_a_label": "TC-CBE-CH-001-01",
+            "row_b_label": "TC-CBE-CH-001-03"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "msg->dlc > CAN_MAX_DLC",
+            "row_a": 0,
+            "row_b": 1,
+            "row_a_label": "TC-CBE-CH-001-01",
+            "row_b_label": "TC-CBE-CH-001-02"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-CH-002",
+      "file": "examples/train_door_control2/src/communication_hal/communication_hal.c",
+      "line": 215,
+      "function": "communication_hal_uart_send",
+      "text": "(data == NULL) || (length == 0U)",
+      "operator": "OR",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "data == NULL"
+        },
+        {
+          "index": 1,
+          "text": "length == 0U"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-CH-002-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-CH-002-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-CH-002-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-CH-002-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-CH-002-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-CH-002-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-CH-002-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "data == NULL",
+            "row_a": 0,
+            "row_b": 2,
+            "row_a_label": "TC-CBE-CH-002-01",
+            "row_b_label": "TC-CBE-CH-002-03"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "length == 0U",
+            "row_a": 0,
+            "row_b": 1,
+            "row_a_label": "TC-CBE-CH-002-01",
+            "row_b_label": "TC-CBE-CH-002-02"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-CH-003",
+      "file": "examples/train_door_control2/src/communication_hal/communication_hal.c",
+      "line": 243,
+      "function": "communication_hal_uart_receive",
+      "text": "(data == NULL) || (length == NULL)",
+      "operator": "OR",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "data == NULL"
+        },
+        {
+          "index": 1,
+          "text": "length == NULL"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-CH-003-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-CH-003-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-CH-003-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-CH-003-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-CH-003-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-CH-003-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-CH-003-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "data == NULL",
+            "row_a": 0,
+            "row_b": 2,
+            "row_a_label": "TC-CBE-CH-003-01",
+            "row_b_label": "TC-CBE-CH-003-03"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "length == NULL",
+            "row_a": 0,
+            "row_b": 1,
+            "row_a_label": "TC-CBE-CH-003-01",
+            "row_b_label": "TC-CBE-CH-003-02"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-FD-001",
+      "file": "examples/train_door_control2/src/fault_detection/fault_detection.c",
+      "line": 127,
+      "function": "fault_detection_report_fault",
+      "text": "(fd->fault_log[i].active == true) && (fd->fault_log[i].code == code)",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "fd->fault_log[i].active == true"
+        },
+        {
+          "index": 1,
+          "text": "fd->fault_log[i].code == code"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-FD-001-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-FD-001-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-FD-001-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-FD-001-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-FD-001-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-FD-001-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-FD-001-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "fd->fault_log[i].active == true",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-FD-001-02",
+            "row_b_label": "TC-CBE-FD-001-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "fd->fault_log[i].code == code",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-FD-001-03",
+            "row_b_label": "TC-CBE-FD-001-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-FD-002",
+      "file": "examples/train_door_control2/src/fault_detection/fault_detection.c",
+      "line": 191,
+      "function": "fault_detection_get_active_faults",
+      "text": "(fd == NULL) || (buffer == NULL)",
+      "operator": "OR",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "fd == NULL"
+        },
+        {
+          "index": 1,
+          "text": "buffer == NULL"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-FD-002-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-FD-002-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-FD-002-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-FD-002-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-FD-002-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-FD-002-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-FD-002-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "fd == NULL",
+            "row_a": 0,
+            "row_b": 2,
+            "row_a_label": "TC-CBE-FD-002-01",
+            "row_b_label": "TC-CBE-FD-002-03"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "buffer == NULL",
+            "row_a": 0,
+            "row_b": 1,
+            "row_a_label": "TC-CBE-FD-002-01",
+            "row_b_label": "TC-CBE-FD-002-02"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-FD-003",
+      "file": "examples/train_door_control2/src/fault_detection/fault_detection.c",
+      "line": 240,
+      "function": "fault_detection_clear_fault",
+      "text": "(fd->fault_log[i].active == true) && (fd->fault_log[i].code == code)",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "fd->fault_log[i].active == true"
+        },
+        {
+          "index": 1,
+          "text": "fd->fault_log[i].code == code"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-FD-003-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-FD-003-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-FD-003-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-FD-003-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-FD-003-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-FD-003-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-FD-003-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "fd->fault_log[i].active == true",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-FD-003-02",
+            "row_b_label": "TC-CBE-FD-003-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "fd->fault_log[i].code == code",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-FD-003-03",
+            "row_b_label": "TC-CBE-FD-003-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-FD-004",
+      "file": "examples/train_door_control2/src/fault_detection/fault_detection.c",
+      "line": 259,
+      "function": "fault_detection_clear_fault",
+      "text": "(fd->fault_log[i].active == true) && (fd->fault_log[i].severity == FAULT_SEVERITY_CRITICAL)",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "fd->fault_log[i].active == true"
+        },
+        {
+          "index": 1,
+          "text": "fd->fault_log[i].severity == FAULT_SEVERITY_CRITICAL"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-FD-004-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-FD-004-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-FD-004-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-FD-004-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-FD-004-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-FD-004-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-FD-004-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "fd->fault_log[i].active == true",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-FD-004-02",
+            "row_b_label": "TC-CBE-FD-004-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "fd->fault_log[i].severity == FAULT_SEVERITY_CRITICAL",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-FD-004-03",
+            "row_b_label": "TC-CBE-FD-004-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-HD-001",
+      "file": "examples/train_door_control2/src/hal_drivers/hal_driver_stubs.c",
+      "line": 131,
+      "function": "can_init",
+      "text": "(baudrate != 125U) && (baudrate != 250U) && (baudrate != 500U) && (baudrate != 1000U)",
+      "operator": "AND",
+      "num_conditions": 4,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "baudrate != 125U"
+        },
+        {
+          "index": 1,
+          "text": "baudrate != 250U"
+        },
+        {
+          "index": 2,
+          "text": "baudrate != 500U"
+        },
+        {
+          "index": 3,
+          "text": "baudrate != 1000U"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-HD-001-01",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": false,
+            "3": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-HD-001-02",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": false,
+            "3": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-HD-001-03",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": true,
+            "3": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-HD-001-04",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": true,
+            "3": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 4,
+          "label": "TC-CBE-HD-001-05",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": false,
+            "3": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 5,
+          "label": "TC-CBE-HD-001-06",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": false,
+            "3": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 6,
+          "label": "TC-CBE-HD-001-07",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": true,
+            "3": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 7,
+          "label": "TC-CBE-HD-001-08",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": true,
+            "3": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 8,
+          "label": "TC-CBE-HD-001-09",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": false,
+            "3": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 9,
+          "label": "TC-CBE-HD-001-10",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": false,
+            "3": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 10,
+          "label": "TC-CBE-HD-001-11",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": true,
+            "3": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 11,
+          "label": "TC-CBE-HD-001-12",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": true,
+            "3": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 12,
+          "label": "TC-CBE-HD-001-13",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": false,
+            "3": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 13,
+          "label": "TC-CBE-HD-001-14",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": false,
+            "3": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 14,
+          "label": "TC-CBE-HD-001-15",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 15,
+          "label": "TC-CBE-HD-001-16",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 7,
+          "label": "TC-CBE-HD-001-08",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": true,
+            "3": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 11,
+          "label": "TC-CBE-HD-001-12",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": true,
+            "3": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 13,
+          "label": "TC-CBE-HD-001-14",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": false,
+            "3": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 14,
+          "label": "TC-CBE-HD-001-15",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 15,
+          "label": "TC-CBE-HD-001-16",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "baudrate != 125U",
+            "row_a": 7,
+            "row_b": 15,
+            "row_a_label": "TC-CBE-HD-001-08",
+            "row_b_label": "TC-CBE-HD-001-16"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "baudrate != 250U",
+            "row_a": 11,
+            "row_b": 15,
+            "row_a_label": "TC-CBE-HD-001-12",
+            "row_b_label": "TC-CBE-HD-001-16"
+          }
+        ],
+        "2": [
+          {
+            "condition_index": 2,
+            "condition_text": "baudrate != 500U",
+            "row_a": 13,
+            "row_b": 15,
+            "row_a_label": "TC-CBE-HD-001-14",
+            "row_b_label": "TC-CBE-HD-001-16"
+          }
+        ],
+        "3": [
+          {
+            "condition_index": 3,
+            "condition_text": "baudrate != 1000U",
+            "row_a": 14,
+            "row_b": 15,
+            "row_a_label": "TC-CBE-HD-001-15",
+            "row_b_label": "TC-CBE-HD-001-16"
+          }
+        ]
+      },
+      "min_required": 5,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-HD-002",
+      "file": "examples/train_door_control2/src/hal_drivers/hal_driver_stubs.c",
+      "line": 132,
+      "function": "can_init",
+      "text": "(baudrate != 500U) && (baudrate != 1000U))",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "baudrate != 500U"
+        },
+        {
+          "index": 1,
+          "text": "(baudrate != 1000U))"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-HD-002-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-HD-002-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-HD-002-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-HD-002-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-HD-002-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-HD-002-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-HD-002-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "baudrate != 500U",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-HD-002-02",
+            "row_b_label": "TC-CBE-HD-002-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "(baudrate != 1000U))",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-HD-002-03",
+            "row_b_label": "TC-CBE-HD-002-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-HD-003",
+      "file": "examples/train_door_control2/src/hal_drivers/hal_driver_stubs.c",
+      "line": 164,
+      "function": "can_receive",
+      "text": "(id == NULL) || (data == NULL) || (length == NULL)",
+      "operator": "OR",
+      "num_conditions": 3,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "id == NULL"
+        },
+        {
+          "index": 1,
+          "text": "data == NULL"
+        },
+        {
+          "index": 2,
+          "text": "length == NULL"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-HD-003-01",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-HD-003-02",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-HD-003-03",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-HD-003-04",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 4,
+          "label": "TC-CBE-HD-003-05",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 5,
+          "label": "TC-CBE-HD-003-06",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 6,
+          "label": "TC-CBE-HD-003-07",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 7,
+          "label": "TC-CBE-HD-003-08",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-HD-003-01",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-HD-003-02",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-HD-003-03",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 4,
+          "label": "TC-CBE-HD-003-05",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": false
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "id == NULL",
+            "row_a": 0,
+            "row_b": 4,
+            "row_a_label": "TC-CBE-HD-003-01",
+            "row_b_label": "TC-CBE-HD-003-05"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "data == NULL",
+            "row_a": 0,
+            "row_b": 2,
+            "row_a_label": "TC-CBE-HD-003-01",
+            "row_b_label": "TC-CBE-HD-003-03"
+          }
+        ],
+        "2": [
+          {
+            "condition_index": 2,
+            "condition_text": "length == NULL",
+            "row_a": 0,
+            "row_b": 1,
+            "row_a_label": "TC-CBE-HD-003-01",
+            "row_b_label": "TC-CBE-HD-003-02"
+          }
+        ]
+      },
+      "min_required": 4,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-HD-004",
+      "file": "examples/train_door_control2/src/hal_drivers/hal_driver_stubs.c",
+      "line": 196,
+      "function": "uart_init",
+      "text": "(baudrate != 9600U) && (baudrate != 19200U) && (baudrate != 38400U) && (baudrate != 57600U) && (baudrate != 115200U)",
+      "operator": "AND",
+      "num_conditions": 5,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "baudrate != 9600U"
+        },
+        {
+          "index": 1,
+          "text": "baudrate != 19200U"
+        },
+        {
+          "index": 2,
+          "text": "baudrate != 38400U"
+        },
+        {
+          "index": 3,
+          "text": "baudrate != 57600U"
+        },
+        {
+          "index": 4,
+          "text": "baudrate != 115200U"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-HD-004-01",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": false,
+            "3": false,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-HD-004-02",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": false,
+            "3": false,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-HD-004-03",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": false,
+            "3": true,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-HD-004-04",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": false,
+            "3": true,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 4,
+          "label": "TC-CBE-HD-004-05",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": true,
+            "3": false,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 5,
+          "label": "TC-CBE-HD-004-06",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": true,
+            "3": false,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 6,
+          "label": "TC-CBE-HD-004-07",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": true,
+            "3": true,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 7,
+          "label": "TC-CBE-HD-004-08",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": true,
+            "3": true,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 8,
+          "label": "TC-CBE-HD-004-09",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": false,
+            "3": false,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 9,
+          "label": "TC-CBE-HD-004-10",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": false,
+            "3": false,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 10,
+          "label": "TC-CBE-HD-004-11",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": false,
+            "3": true,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 11,
+          "label": "TC-CBE-HD-004-12",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": false,
+            "3": true,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 12,
+          "label": "TC-CBE-HD-004-13",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": true,
+            "3": false,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 13,
+          "label": "TC-CBE-HD-004-14",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": true,
+            "3": false,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 14,
+          "label": "TC-CBE-HD-004-15",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 15,
+          "label": "TC-CBE-HD-004-16",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 16,
+          "label": "TC-CBE-HD-004-17",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": false,
+            "3": false,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 17,
+          "label": "TC-CBE-HD-004-18",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": false,
+            "3": false,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 18,
+          "label": "TC-CBE-HD-004-19",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": false,
+            "3": true,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 19,
+          "label": "TC-CBE-HD-004-20",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": false,
+            "3": true,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 20,
+          "label": "TC-CBE-HD-004-21",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": true,
+            "3": false,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 21,
+          "label": "TC-CBE-HD-004-22",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": true,
+            "3": false,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 22,
+          "label": "TC-CBE-HD-004-23",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": true,
+            "3": true,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 23,
+          "label": "TC-CBE-HD-004-24",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": true,
+            "3": true,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 24,
+          "label": "TC-CBE-HD-004-25",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": false,
+            "3": false,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 25,
+          "label": "TC-CBE-HD-004-26",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": false,
+            "3": false,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 26,
+          "label": "TC-CBE-HD-004-27",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": false,
+            "3": true,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 27,
+          "label": "TC-CBE-HD-004-28",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": false,
+            "3": true,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 28,
+          "label": "TC-CBE-HD-004-29",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": false,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 29,
+          "label": "TC-CBE-HD-004-30",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": false,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 30,
+          "label": "TC-CBE-HD-004-31",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 31,
+          "label": "TC-CBE-HD-004-32",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 15,
+          "label": "TC-CBE-HD-004-16",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 23,
+          "label": "TC-CBE-HD-004-24",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": true,
+            "3": true,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 27,
+          "label": "TC-CBE-HD-004-28",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": false,
+            "3": true,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 29,
+          "label": "TC-CBE-HD-004-30",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": false,
+            "4": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 30,
+          "label": "TC-CBE-HD-004-31",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 31,
+          "label": "TC-CBE-HD-004-32",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "baudrate != 9600U",
+            "row_a": 15,
+            "row_b": 31,
+            "row_a_label": "TC-CBE-HD-004-16",
+            "row_b_label": "TC-CBE-HD-004-32"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "baudrate != 19200U",
+            "row_a": 23,
+            "row_b": 31,
+            "row_a_label": "TC-CBE-HD-004-24",
+            "row_b_label": "TC-CBE-HD-004-32"
+          }
+        ],
+        "2": [
+          {
+            "condition_index": 2,
+            "condition_text": "baudrate != 38400U",
+            "row_a": 27,
+            "row_b": 31,
+            "row_a_label": "TC-CBE-HD-004-28",
+            "row_b_label": "TC-CBE-HD-004-32"
+          }
+        ],
+        "3": [
+          {
+            "condition_index": 3,
+            "condition_text": "baudrate != 57600U",
+            "row_a": 29,
+            "row_b": 31,
+            "row_a_label": "TC-CBE-HD-004-30",
+            "row_b_label": "TC-CBE-HD-004-32"
+          }
+        ],
+        "4": [
+          {
+            "condition_index": 4,
+            "condition_text": "baudrate != 115200U",
+            "row_a": 30,
+            "row_b": 31,
+            "row_a_label": "TC-CBE-HD-004-31",
+            "row_b_label": "TC-CBE-HD-004-32"
+          }
+        ]
+      },
+      "min_required": 6,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-HD-005",
+      "file": "examples/train_door_control2/src/hal_drivers/hal_driver_stubs.c",
+      "line": 197,
+      "function": "uart_init",
+      "text": "(baudrate != 38400U) && (baudrate != 57600U) &&",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "baudrate != 38400U"
+        },
+        {
+          "index": 1,
+          "text": "baudrate != 57600U"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-HD-005-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-HD-005-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-HD-005-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-HD-005-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-HD-005-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-HD-005-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-HD-005-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "baudrate != 38400U",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-HD-005-02",
+            "row_b_label": "TC-CBE-HD-005-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "baudrate != 57600U",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-HD-005-03",
+            "row_b_label": "TC-CBE-HD-005-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-HD-006",
+      "file": "examples/train_door_control2/src/hal_drivers/hal_driver_stubs.c",
+      "line": 268,
+      "function": "test_can_inject_message",
+      "text": "(data != NULL) && (length <= 8U)",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "data != NULL"
+        },
+        {
+          "index": 1,
+          "text": "length <= 8U"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-HD-006-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-HD-006-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-HD-006-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-HD-006-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-HD-006-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-HD-006-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-HD-006-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "data != NULL",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-HD-006-02",
+            "row_b_label": "TC-CBE-HD-006-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "length <= 8U",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-HD-006-03",
+            "row_b_label": "TC-CBE-HD-006-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-HD-007",
+      "file": "examples/train_door_control2/src/hal_drivers/hal_driver_stubs.c",
+      "line": 282,
+      "function": "test_uart_inject_data",
+      "text": "(data != NULL) && (length > 0U)",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "data != NULL"
+        },
+        {
+          "index": 1,
+          "text": "length > 0U"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-HD-007-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-HD-007-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-HD-007-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-HD-007-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-HD-007-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-HD-007-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-HD-007-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "data != NULL",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-HD-007-02",
+            "row_b_label": "TC-CBE-HD-007-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "length > 0U",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-HD-007-03",
+            "row_b_label": "TC-CBE-HD-007-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-SM-001",
+      "file": "examples/train_door_control2/src/safety_monitor/safety_monitor.c",
+      "line": 111,
+      "function": "safety_monitor_update",
+      "text": "monitor->primary_sensor_valid && monitor->secondary_sensor_valid",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "monitor->primary_sensor_valid"
+        },
+        {
+          "index": 1,
+          "text": "monitor->secondary_sensor_valid"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-SM-001-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SM-001-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SM-001-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SM-001-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SM-001-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SM-001-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SM-001-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "monitor->primary_sensor_valid",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SM-001-02",
+            "row_b_label": "TC-CBE-SM-001-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "monitor->secondary_sensor_valid",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SM-001-03",
+            "row_b_label": "TC-CBE-SM-001-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-SM-002",
+      "file": "examples/train_door_control2/src/safety_monitor/safety_monitor.c",
+      "line": 195,
+      "function": "safety_monitor_is_safe_to_open",
+      "text": "(!monitor->primary_sensor_valid) && (!monitor->secondary_sensor_valid)",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "!monitor->primary_sensor_valid"
+        },
+        {
+          "index": 1,
+          "text": "!monitor->secondary_sensor_valid"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-SM-002-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SM-002-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SM-002-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SM-002-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SM-002-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SM-002-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SM-002-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "!monitor->primary_sensor_valid",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SM-002-02",
+            "row_b_label": "TC-CBE-SM-002-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "!monitor->secondary_sensor_valid",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SM-002-03",
+            "row_b_label": "TC-CBE-SM-002-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-SM-003",
+      "file": "examples/train_door_control2/src/safety_monitor/safety_monitor.c",
+      "line": 221,
+      "function": "safety_monitor_should_lock",
+      "text": "(!monitor->primary_sensor_valid) && (!monitor->secondary_sensor_valid)",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "!monitor->primary_sensor_valid"
+        },
+        {
+          "index": 1,
+          "text": "!monitor->secondary_sensor_valid"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-SM-003-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SM-003-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SM-003-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SM-003-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SM-003-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SM-003-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SM-003-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "!monitor->primary_sensor_valid",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SM-003-02",
+            "row_b_label": "TC-CBE-SM-003-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "!monitor->secondary_sensor_valid",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SM-003-03",
+            "row_b_label": "TC-CBE-SM-003-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-SM-004",
+      "file": "examples/train_door_control2/src/safety_monitor/safety_monitor.c",
+      "line": 243,
+      "function": "safety_monitor_should_unlock",
+      "text": "(!monitor->primary_sensor_valid) && (!monitor->secondary_sensor_valid)",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "!monitor->primary_sensor_valid"
+        },
+        {
+          "index": 1,
+          "text": "!monitor->secondary_sensor_valid"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-SM-004-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SM-004-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SM-004-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SM-004-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SM-004-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SM-004-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SM-004-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "!monitor->primary_sensor_valid",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SM-004-02",
+            "row_b_label": "TC-CBE-SM-004-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "!monitor->secondary_sensor_valid",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SM-004-03",
+            "row_b_label": "TC-CBE-SM-004-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-SM-005",
+      "file": "examples/train_door_control2/src/safety_monitor/safety_monitor.c",
+      "line": 283,
+      "function": "safety_monitor_get_sensor_health",
+      "text": "(monitor == NULL) || (primary_valid == NULL) || (secondary_valid == NULL)",
+      "operator": "OR",
+      "num_conditions": 3,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "monitor == NULL"
+        },
+        {
+          "index": 1,
+          "text": "primary_valid == NULL"
+        },
+        {
+          "index": 2,
+          "text": "secondary_valid == NULL"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-SM-005-01",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SM-005-02",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SM-005-03",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SM-005-04",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 4,
+          "label": "TC-CBE-SM-005-05",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 5,
+          "label": "TC-CBE-SM-005-06",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 6,
+          "label": "TC-CBE-SM-005-07",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 7,
+          "label": "TC-CBE-SM-005-08",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-SM-005-01",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SM-005-02",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SM-005-03",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 4,
+          "label": "TC-CBE-SM-005-05",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": false
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "monitor == NULL",
+            "row_a": 0,
+            "row_b": 4,
+            "row_a_label": "TC-CBE-SM-005-01",
+            "row_b_label": "TC-CBE-SM-005-05"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "primary_valid == NULL",
+            "row_a": 0,
+            "row_b": 2,
+            "row_a_label": "TC-CBE-SM-005-01",
+            "row_b_label": "TC-CBE-SM-005-03"
+          }
+        ],
+        "2": [
+          {
+            "condition_index": 2,
+            "condition_text": "secondary_valid == NULL",
+            "row_a": 0,
+            "row_b": 1,
+            "row_a_label": "TC-CBE-SM-005-01",
+            "row_b_label": "TC-CBE-SM-005-02"
+          }
+        ]
+      },
+      "min_required": 4,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-SH-001",
+      "file": "examples/train_door_control2/src/sensor_hal/sensor_hal.c",
+      "line": 158,
+      "function": "sensor_hal_read_position",
+      "text": "(side != DOOR_SIDE_LEFT) && (side != DOOR_SIDE_RIGHT)",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "side != DOOR_SIDE_LEFT"
+        },
+        {
+          "index": 1,
+          "text": "side != DOOR_SIDE_RIGHT"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-SH-001-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SH-001-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SH-001-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SH-001-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SH-001-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SH-001-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SH-001-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "side != DOOR_SIDE_LEFT",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SH-001-02",
+            "row_b_label": "TC-CBE-SH-001-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "side != DOOR_SIDE_RIGHT",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SH-001-03",
+            "row_b_label": "TC-CBE-SH-001-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-SH-002",
+      "file": "examples/train_door_control2/src/sensor_hal/sensor_hal.c",
+      "line": 217,
+      "function": "sensor_hal_read_obstacle",
+      "text": "(side != DOOR_SIDE_LEFT) && (side != DOOR_SIDE_RIGHT)",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "side != DOOR_SIDE_LEFT"
+        },
+        {
+          "index": 1,
+          "text": "side != DOOR_SIDE_RIGHT"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-SH-002-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SH-002-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SH-002-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SH-002-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SH-002-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SH-002-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SH-002-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "side != DOOR_SIDE_LEFT",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SH-002-02",
+            "row_b_label": "TC-CBE-SH-002-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "side != DOOR_SIDE_RIGHT",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SH-002-03",
+            "row_b_label": "TC-CBE-SH-002-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-SH-003",
+      "file": "examples/train_door_control2/src/sensor_hal/sensor_hal.c",
+      "line": 252,
+      "function": "sensor_hal_read_speed",
+      "text": "(primary_speed == NULL) || (secondary_speed == NULL)",
+      "operator": "OR",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "primary_speed == NULL"
+        },
+        {
+          "index": 1,
+          "text": "secondary_speed == NULL"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-SH-003-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SH-003-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SH-003-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SH-003-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-SH-003-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SH-003-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": true
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SH-003-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "primary_speed == NULL",
+            "row_a": 0,
+            "row_b": 2,
+            "row_a_label": "TC-CBE-SH-003-01",
+            "row_b_label": "TC-CBE-SH-003-03"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "secondary_speed == NULL",
+            "row_a": 0,
+            "row_b": 1,
+            "row_a_label": "TC-CBE-SH-003-01",
+            "row_b_label": "TC-CBE-SH-003-02"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-SH-004",
+      "file": "examples/train_door_control2/src/sensor_hal/sensor_hal.c",
+      "line": 267,
+      "function": "sensor_hal_read_speed",
+      "text": "(err == ERROR_SUCCESS) &&                           /* +1 */ (can_msg.id == CAN_ID_SPEED_DATA) && (can_msg.dlc == 8U)",
+      "operator": "AND",
+      "num_conditions": 3,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "err == ERROR_SUCCESS"
+        },
+        {
+          "index": 1,
+          "text": "/* +1 */ (can_msg.id == CAN_ID_SPEED_DATA)"
+        },
+        {
+          "index": 2,
+          "text": "can_msg.dlc == 8U"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-SH-004-01",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SH-004-02",
+          "assignments": {
+            "0": false,
+            "1": false,
+            "2": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SH-004-03",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SH-004-04",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 4,
+          "label": "TC-CBE-SH-004-05",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 5,
+          "label": "TC-CBE-SH-004-06",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 6,
+          "label": "TC-CBE-SH-004-07",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 7,
+          "label": "TC-CBE-SH-004-08",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SH-004-04",
+          "assignments": {
+            "0": false,
+            "1": true,
+            "2": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 5,
+          "label": "TC-CBE-SH-004-06",
+          "assignments": {
+            "0": true,
+            "1": false,
+            "2": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 6,
+          "label": "TC-CBE-SH-004-07",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 7,
+          "label": "TC-CBE-SH-004-08",
+          "assignments": {
+            "0": true,
+            "1": true,
+            "2": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "err == ERROR_SUCCESS",
+            "row_a": 3,
+            "row_b": 7,
+            "row_a_label": "TC-CBE-SH-004-04",
+            "row_b_label": "TC-CBE-SH-004-08"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "/* +1 */ (can_msg.id == CAN_ID_SPEED_DATA)",
+            "row_a": 5,
+            "row_b": 7,
+            "row_a_label": "TC-CBE-SH-004-06",
+            "row_b_label": "TC-CBE-SH-004-08"
+          }
+        ],
+        "2": [
+          {
+            "condition_index": 2,
+            "condition_text": "can_msg.dlc == 8U",
+            "row_a": 6,
+            "row_b": 7,
+            "row_a_label": "TC-CBE-SH-004-07",
+            "row_b_label": "TC-CBE-SH-004-08"
+          }
+        ]
+      },
+      "min_required": 4,
+      "is_achievable": true
+    },
+    {
+      "expr_id": "CBE-SH-005",
+      "file": "examples/train_door_control2/src/sensor_hal/sensor_hal.c",
+      "line": 306,
+      "function": "sensor_hal_read_emergency_handle",
+      "text": "(side != DOOR_SIDE_LEFT) && (side != DOOR_SIDE_RIGHT)",
+      "operator": "AND",
+      "num_conditions": 2,
+      "conditions": [
+        {
+          "index": 0,
+          "text": "side != DOOR_SIDE_LEFT"
+        },
+        {
+          "index": 1,
+          "text": "side != DOOR_SIDE_RIGHT"
+        }
+      ],
+      "truth_table": [
+        {
+          "row_id": 0,
+          "label": "TC-CBE-SH-005-01",
+          "assignments": {
+            "0": false,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SH-005-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SH-005-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SH-005-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "minimal_vectors": [
+        {
+          "row_id": 1,
+          "label": "TC-CBE-SH-005-02",
+          "assignments": {
+            "0": false,
+            "1": true
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 2,
+          "label": "TC-CBE-SH-005-03",
+          "assignments": {
+            "0": true,
+            "1": false
+          },
+          "outcome": false
+        },
+        {
+          "row_id": 3,
+          "label": "TC-CBE-SH-005-04",
+          "assignments": {
+            "0": true,
+            "1": true
+          },
+          "outcome": true
+        }
+      ],
+      "independence_pairs": {
+        "0": [
+          {
+            "condition_index": 0,
+            "condition_text": "side != DOOR_SIDE_LEFT",
+            "row_a": 1,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SH-005-02",
+            "row_b_label": "TC-CBE-SH-005-04"
+          }
+        ],
+        "1": [
+          {
+            "condition_index": 1,
+            "condition_text": "side != DOOR_SIDE_RIGHT",
+            "row_a": 2,
+            "row_b": 3,
+            "row_a_label": "TC-CBE-SH-005-03",
+            "row_b_label": "TC-CBE-SH-005-04"
+          }
+        ]
+      },
+      "min_required": 3,
+      "is_achievable": true
+    }
+  ]
+}

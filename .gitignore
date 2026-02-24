@@ -312,6 +312,13 @@ Release/
 # Project-Specific
 # ============================================================================
 
+# Compiled test runner executables (no extension, produced by test/Makefile)
+examples/train_door_control2/test/test_fsm_runner
+examples/train_door_control2/test/test_modules_runner
+examples/train_door_control2/test/test_fault_runner
+examples/train_door_control2/test/test_hal_runner
+examples/train_door_control2/test/test_runner
+
 # Work-in-progress
 WIP/
 work/
