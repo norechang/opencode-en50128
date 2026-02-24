@@ -1098,7 +1098,11 @@ Current Phase: Planning
    - **SIL 2 (Semi-strict)**: Request justification if criteria not met
    - **SIL 3-4 (Strict)**: BLOCK transition if criteria not met OR approval chain incomplete OR VER/VAL reports missing OR VMGR rejects
 8. If gate passes: Update `LIFECYCLE_STATE.md` with gate approval, VMGR approval status (SIL 3-4), and transition to next phase
-9. If gate fails: Provide detailed failure report with missing items, incomplete approvals, missing reports, or VMGR rejection rationale
+9. **AUTOMATICALLY sync README.md** (SSOT Architecture):
+   - Call `/cod sync-readme` to update README.md "Current Status" section from LIFECYCLE_STATE.md
+   - Generate phase progress checklist, recent activity, next steps
+   - Display README sync confirmation
+10. If gate fails: Provide detailed failure report with missing items, incomplete approvals, missing reports, or VMGR rejection rationale
 
 **Output (SIL 3 - Gate Pass)**:
 ```
@@ -1171,6 +1175,12 @@ Updated: examples/train_door_control/LIFECYCLE_STATE.md
   - Design phase marked COMPLETE
   - Implementation phase marked IN PROGRESS
   - Gate approval recorded (timestamp: 2026-02-18 14:32:15 UTC)
+
+✓ README.md synchronized with LIFECYCLE_STATE.md
+  - Phase Progress: Updated checklist (3/9 phases complete)
+  - Recent Activity: Added "Phase 3 gate check PASSED (2026-02-18)"
+  - Next Steps: Updated for Phase 4 (Implementation & Testing)
+  - Last Sync: 2026-02-18 14:32:16 UTC
 
 Next Steps:
   1. Begin Implementation & Testing (Phase 4):
@@ -2239,6 +2249,126 @@ When VER/VAL reject deliverables:
 6. VER/VAL review only fixed deliverables (not full re-review)
 7. If verified/validated: Proceed to gate check
 ```
+
+---
+
+### Command 10: `/cod sync-readme`
+
+**Purpose**: Synchronize project README.md with current status from LIFECYCLE_STATE.md (SSOT Architecture)
+
+**Context**: README.md contains an auto-generated "Current Status" section that must reflect the current lifecycle state. This command updates README.md after lifecycle operations (gate checks, phase transitions, status updates).
+
+**Usage**:
+```bash
+/cod sync-readme
+```
+
+**SSOT Architecture**:
+- **Single Source of Truth**: `LIFECYCLE_STATE.md` (per-project)
+- **Derived View**: `README.md` "Current Status" section (auto-generated)
+- **No Caching**: README generated from LIFECYCLE_STATE.md on demand
+- **Automation**: COD calls this automatically after gate checks and phase transitions
+
+**Behavior**:
+1. Read active workspace from `.workspace` file
+2. Read `examples/<workspace>/LIFECYCLE_STATE.md` to extract:
+   - Project name, SIL level
+   - Current phase, completion percentage, status
+   - Phase history (all phases with completion status)
+   - Recent activity log (last 5 events)
+   - Next steps (from Next Steps section)
+3. Load README template from `.opencode/templates/project-readme-template.md`
+4. Generate "Current Status" section:
+   - **Phase Progress**: Checklist of all phases with status indicators
+   - **Recent Activity**: Last 5 lifecycle events
+   - **Next Steps**: Priority actions from LIFECYCLE_STATE.md
+5. Update `examples/<workspace>/README.md`:
+   - Replace content between `<!-- ⚠️ AUTO-GENERATED SECTION` and `<!-- END AUTO-GENERATED SECTION -->`
+   - Preserve manual sections (Overview, Architecture, Build)
+   - Update `{{LAST_SYNC_TIMESTAMP}}` with current date
+6. Log sync operation in LIFECYCLE_STATE.md activity log
+
+**Auto-Sync Triggers**:
+COD SHALL automatically call `/cod sync-readme` after:
+- `/cod gate-check <phase>` (successful gate passage)
+- `/cod plan` (project initialization)
+- Phase transition authorized
+- Major status change (phase started, blocked, unblocked)
+
+**Example Output**:
+```
+✓ README.md synchronized with LIFECYCLE_STATE.md
+
+Project: train_door_control2 (SIL 3)
+Updated: examples/train_door_control2/README.md
+
+Changes:
+  - Current Phase: Integration (Phase 6) → 0% complete
+  - Phase Progress: Updated checklist (5/9 phases complete)
+  - Recent Activity: Added "Phase 6 authorized (2026-02-23)"
+  - Next Steps: Updated priority actions (unit testing MOD-002-008)
+  - Last Sync: 2026-02-24 14:30:00 UTC
+
+README.md Status Section:
+  ✓ Phase Progress checklist (9 phases)
+  ✓ Recent Activity log (5 events)
+  ✓ Next Steps list (4 priority actions)
+  ✓ Auto-generated markers present
+
+SSOT Status: ✓ README.md derived from LIFECYCLE_STATE.md (no caching)
+```
+
+**Function: `generate_readme_status()`**
+
+```python
+def generate_readme_status(workspace_name):
+    """
+    Generate README.md "Current Status" section from LIFECYCLE_STATE.md (SSOT).
+    
+    Args:
+        workspace_name: Name of workspace (e.g., "train_door_control2")
+    
+    Returns:
+        str: Markdown content for "Current Status" section
+    """
+    lifecycle_path = f"examples/{workspace_name}/LIFECYCLE_STATE.md"
+    
+    # Read LIFECYCLE_STATE.md
+    with open(lifecycle_path) as f:
+        content = f.read()
+    
+    # Extract data from SSOT
+    sil = extract_table_value(content, "SIL Level")
+    current_phase = extract_table_value(content, "Current Phase")
+    completion = extract_table_value(content, "Completion")
+    status = extract_table_value(content, "Status")
+    
+    # Parse Phase History table (lines 32-45)
+    phase_history = parse_phase_history_table(content)
+    
+    # Extract Recent Activity (last 5 events from activity log)
+    recent_activity = extract_recent_activity(content, limit=5)
+    
+    # Extract Next Steps (from Next Steps section)
+    next_steps = extract_next_steps(content)
+    
+    # Generate markdown
+    status_section = f"""### Phase Progress
+
+{generate_phase_checklist(phase_history)}
+
+### Recent Activity
+
+{generate_activity_list(recent_activity)}
+
+### Next Steps
+
+{generate_next_steps_list(next_steps)}"""
+    
+    return status_section
+```
+
+**Key Principle**: README.md "Current Status" is ALWAYS generated from LIFECYCLE_STATE.md. Never manually edit the auto-generated section.
 
 ---
 

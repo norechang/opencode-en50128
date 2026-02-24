@@ -37,6 +37,14 @@ Each workspace maintains its own:
 - Last modified date
 - Active workspace indicator (*)
 
+**Implementation**:
+1. Read `.workspace` to get `active_workspace` and workspace registry
+2. For each workspace in registry:
+   - Call `get_workspace_status(workspace_name)` to read from LIFECYCLE_STATE.md
+   - Extract: project_name, sil, current_phase, completion, status
+3. Display formatted list with active indicator (*)
+4. Sort by last_accessed (most recent first)
+
 ### Switch to a different workspace
 ```bash
 /workspace switch <project_name>
@@ -44,10 +52,17 @@ Each workspace maintains its own:
 ```
 
 **Actions**:
-1. Save current workspace state
-2. Update `.workspace` file with new active project
-3. Load target workspace state
-4. Display workspace summary (current phase, next steps)
+1. Validate target workspace exists in `.workspace` registry
+2. Update `.workspace` file:
+   - Set `active_workspace` to target project name
+   - Update `last_accessed` timestamp for target workspace
+3. Read target workspace LIFECYCLE_STATE.md using `get_workspace_status()`
+4. Display workspace summary (SIL, current phase, completion, next steps)
+
+**Implementation**:
+- Read from SSOT (LIFECYCLE_STATE.md) after switch
+- DO NOT cache status in `.workspace`
+- Display derived status from LIFECYCLE_STATE.md
 
 ### Show current workspace status
 ```bash
@@ -61,6 +76,15 @@ Each workspace maintains its own:
 - Phase completion percentage
 - Recent activity
 - Next recommended actions
+
+**Implementation**:
+1. Read `.workspace` to get `active_workspace`
+2. Call `get_workspace_status(active_workspace)` to read from LIFECYCLE_STATE.md
+3. Extract additional details:
+   - Phase history (lines 120+)
+   - Recent activity (lines 45+)
+   - Next actions (lines 29+)
+4. Display formatted status report
 
 ### Create a new workspace
 ```bash
@@ -93,34 +117,315 @@ Each workspace maintains its own:
 
 ---
 
+## Command Implementations
+
+When the user invokes `/ws status`, `/ws list`, or `/ws switch`, you MUST:
+
+### `/ws status` - Show Active Workspace Status
+
+**Step-by-step execution**:
+
+1. **Read active workspace pointer**:
+   ```
+   Read .workspace file
+   Extract: active_workspace = <workspace_name>
+   ```
+
+2. **Read SSOT for active workspace**:
+   ```
+   Call get_workspace_status(active_workspace)
+   Returns: {project_name, sil, current_phase, completion, status}
+   ```
+
+3. **Read additional details from LIFECYCLE_STATE.md**:
+   ```
+   Read examples/<active_workspace>/LIFECYCLE_STATE.md
+   Extract recent activity (look for "Recent Activity" section around line 45)
+   Extract next actions (look for "Next Actions" section around line 29)
+   Extract phase history (look for "Phase History" section around line 120)
+   ```
+
+4. **Display formatted status**:
+   ```
+   📊 Active Workspace Status
+   
+   Project: <project_name>
+   SIL Level: <sil>
+   Current Phase: <current_phase>
+   Completion: <completion>
+   Status: <status>
+   
+   📋 Recent Activity:
+   <list recent activity from LIFECYCLE_STATE.md>
+   
+   🎯 Next Actions:
+   <list next actions from LIFECYCLE_STATE.md>
+   
+   Available commands:
+   /cod status - Detailed lifecycle state
+   /cod gate-check <phase> - Check phase gate
+   /ws list - List all workspaces
+   /ws switch <name> - Switch workspace
+   ```
+
+**Example Output**:
+```
+📊 Active Workspace Status
+
+Project: Train Door Control System (v2)
+SIL Level: 3
+Current Phase: Component Implementation and Testing (Phase 5)
+Completion: 25% (13 of 53 components tested)
+Status: IN PROGRESS - Completing MOD-002 to MOD-008 unit testing (40 components remaining)
+
+📋 Recent Activity:
+- 2026-02-22: Phase 5 status corrected (was incorrectly showing Phase 6)
+- 2026-02-22: MOD-001 unit testing complete (100% MC/DC coverage)
+- 2026-02-21: Source code implementation complete (53 components)
+
+🎯 Next Actions:
+1. Complete unit testing for MOD-002 to MOD-008 (40 components)
+2. Achieve 100% statement/branch/condition (MC/DC) coverage for all components
+3. Run code review (QUA) after all unit tests complete
+4. Submit to VER for verification
+
+Available commands:
+/cod status - Detailed lifecycle state
+/imp - Continue implementation work
+/tst - Execute unit tests
+/qua - Run code review
+```
+
+---
+
+### `/ws list` - List All Workspaces
+
+**Step-by-step execution**:
+
+1. **Read workspace registry**:
+   ```
+   Read .workspace file
+   Extract: active_workspace, workspaces dict
+   ```
+
+2. **For each workspace in registry**:
+   ```
+   For each (name, metadata) in workspaces:
+     Call get_workspace_status(name)
+     Returns: {project_name, sil, current_phase, completion, status}
+     Collect: (name, project_name, sil, current_phase, completion, last_accessed, is_active)
+   ```
+
+3. **Sort by last_accessed (most recent first)**
+
+4. **Display formatted list**:
+   ```
+   📂 Available Workspaces
+   
+   <active indicator> <workspace_name> (<SIL level>)
+     Phase: <current_phase>
+     Completion: <completion>
+     Last accessed: <last_accessed>
+   
+   Total: <count> workspaces
+   
+   Commands:
+   /ws switch <name> - Switch to workspace
+   /ws status - Show active workspace details
+   /ws create <name> --sil <level> - Create new workspace
+   ```
+
+**Example Output**:
+```
+📂 Available Workspaces
+
+* train_door_control2 (SIL 3) - ACTIVE
+  Phase: Component Implementation and Testing (Phase 5)
+  Completion: 25% (13 of 53 components tested)
+  Last accessed: 2026-02-24 10:15:00
+
+  train_door_control (SIL 3)
+  Phase: Validation (Phase 7)
+  Completion: 85%
+  Last accessed: 2026-02-18 14:08:00
+
+Total: 2 workspaces
+
+Commands:
+/ws switch <name> - Switch to workspace
+/ws status - Show active workspace details
+/ws create <name> --sil <level> - Create new workspace
+```
+
+---
+
+### `/ws switch <workspace_name>` - Switch Active Workspace
+
+**Step-by-step execution**:
+
+1. **Validate target workspace exists**:
+   ```
+   Read .workspace file
+   Check if <workspace_name> exists in workspaces dict
+   If not found: Display error with available workspace list
+   ```
+
+2. **Update workspace registry**:
+   ```
+   Read .workspace file
+   Set active_workspace = <workspace_name>
+   Update workspaces[workspace_name].last_accessed = current timestamp (ISO 8601)
+   Write .workspace file
+   ```
+
+3. **Read target workspace status from SSOT**:
+   ```
+   Call get_workspace_status(workspace_name)
+   Returns: {project_name, sil, current_phase, completion, status}
+   ```
+
+4. **Read next actions from LIFECYCLE_STATE.md**:
+   ```
+   Read examples/<workspace_name>/LIFECYCLE_STATE.md
+   Extract next actions (around line 29)
+   ```
+
+5. **Display switch confirmation and summary**:
+   ```
+   ✅ Workspace switched to: <workspace_name>
+   
+   Project: <project_name>
+   SIL Level: <sil>
+   Current Phase: <current_phase>
+   Completion: <completion>
+   Status: <status>
+   
+   🎯 Next Steps:
+   <list next actions>
+   
+   Available commands:
+   /cod status - Detailed lifecycle state
+   /cod gate-check <phase> - Check phase gate
+   <phase-specific commands based on current phase>
+   ```
+
+**Example Output**:
+```
+✅ Workspace switched to: train_door_control
+
+Project: Train Door Control System
+SIL Level: 3
+Current Phase: Validation (Phase 7)
+Completion: 85%
+Status: IN PROGRESS - Completing validation testing
+
+🎯 Next Steps:
+1. Run validation tests (Overall Software Test)
+2. Review validation results
+3. Prepare for independent assessment
+
+Available commands:
+/cod status - Detailed lifecycle state
+/val - Run validation activities
+/cod gate-check validation - Check phase 7 gate
+```
+
+---
+
+## SSOT Architecture: Status Queries
+
+**Single Source of Truth**: `LIFECYCLE_STATE.md` (per-project)
+
+### Status Query Pattern
+
+When `/ws status` or `/ws list` is invoked:
+
+1. Read `.workspace` to get active workspace and workspace list
+2. For each workspace, read `examples/<workspace>/LIFECYCLE_STATE.md`
+3. Extract status fields:
+   - Project name (line 11: `| **Project Name** | <value> |`)
+   - SIL level (line 12: `| **SIL Level** | <value> |`)
+   - Current phase (line 24: `| **Current Phase** | <value> |`)
+   - Completion (line 27: `| **Completion** | <value> |`)
+   - Status (line 28: `| **Status** | <value> |`)
+4. Display derived status (never cached)
+
+### Function: `get_workspace_status(workspace_name)`
+
+**Purpose**: Read workspace status from LIFECYCLE_STATE.md (SSOT)
+
+**Algorithm**:
+```
+Input: workspace_name (string, e.g., "train_door_control2")
+Output: dict with keys: project_name, sil, current_phase, completion, status
+
+1. Construct path: lifecycle_path = "examples/{workspace_name}/LIFECYCLE_STATE.md"
+2. Read LIFECYCLE_STATE.md content
+3. Parse Project Information table (lines 8-16):
+   - Extract "Project Name" from markdown table row
+   - Extract "SIL Level" from markdown table row (convert to integer)
+4. Parse Current Status table (lines 20-28):
+   - Extract "Current Phase" from markdown table row
+   - Extract "Completion" from markdown table row
+   - Extract "Status" from markdown table row
+5. Return status dictionary
+
+Parsing pattern for markdown tables:
+- Find line matching: | **<field_name>** | <value> |
+- Extract <value> using regex: r'\| \*\*{field}\*\* \| (.*?) \|'
+- Strip whitespace from extracted value
+```
+
+**Example Parsing**:
+```markdown
+# Input (LIFECYCLE_STATE.md lines 8-16):
+| **Project Name** | Train Door Control System (v2) |
+| **SIL Level** | 3 |
+
+# Output:
+{
+  "project_name": "Train Door Control System (v2)",
+  "sil": 3,
+  "current_phase": "Component Implementation and Testing (Phase 5)",
+  "completion": "25% (13 of 53 components tested)",
+  "status": "IN PROGRESS - Completing MOD-002 to MOD-008 unit testing (40 components remaining)"
+}
+```
+
+**Key Principle**: NEVER cache status fields in `.workspace`. Always read from SSOT on demand.
+
+**Implementation Note**: When implementing this function, use the Read tool to read LIFECYCLE_STATE.md, then parse the markdown tables using regex or string matching to extract the required fields.
+
+---
+
 ## Workspace State File
 
 **Location**: `/home/norechang/work/EN50128/.workspace`
 
-**Format** (JSON):
+**Format** (JSON) - Simplified Schema (SSOT Architecture):
 ```json
 {
   "active_workspace": "train_door_control2",
   "workspaces": {
     "train_door_control": {
       "path": "examples/train_door_control",
-      "sil": 3,
-      "current_phase": "Validation",
-      "completion": 85,
-      "last_accessed": "2026-02-18T14:08:00Z",
-      "status": "active"
+      "created": "2026-02-18T14:08:00Z",
+      "last_accessed": "2026-02-18T14:08:00Z"
     },
     "train_door_control2": {
       "path": "examples/train_door_control2",
-      "sil": 3,
-      "current_phase": "Architecture & Design",
-      "completion": 30,
-      "last_accessed": "2026-02-21T14:38:00Z",
-      "status": "active"
+      "created": "2026-02-22T00:00:00Z",
+      "last_accessed": "2026-02-21T14:38:00Z"
     }
   }
 }
 ```
+
+**IMPORTANT - SSOT Architecture**:
+- `.workspace` contains ONLY workspace registry (path, timestamps)
+- **NO status fields** (sil, current_phase, completion, status, etc.)
+- All status information read from `LIFECYCLE_STATE.md` (Single Source of Truth)
+- No caching, no duplication, no synchronization issues
 
 ---
 
@@ -157,7 +462,9 @@ examples/<project_name>/
 
 Check `.workspace` file for `active_workspace` field.
 
-If `.workspace` doesn't exist, create it by scanning `examples/` and reading each `LIFECYCLE_STATE.md`.
+If `.workspace` doesn't exist, create it by scanning `examples/` for directories containing `LIFECYCLE_STATE.md`.
+
+**SSOT Pattern**: Read workspace pointer from `.workspace`, then read status from `LIFECYCLE_STATE.md`.
 
 ### 2. Save Current State
 
@@ -168,10 +475,14 @@ Before switching, ensure current workspace state is saved:
 
 ### 3. Load Target Workspace
 
-- Read target `LIFECYCLE_STATE.md`
-- Display workspace summary
+- Read active workspace path from `.workspace`
+- Read target `examples/<workspace>/LIFECYCLE_STATE.md` to extract status
+- Display workspace summary (SIL, phase, completion from LIFECYCLE_STATE.md)
 - Set `active_workspace` in `.workspace`
+- Update `last_accessed` timestamp
 - Recommend next actions based on current phase
+
+**SSOT Pattern**: All status derived from LIFECYCLE_STATE.md on demand.
 
 ### 4. Context Restoration
 
@@ -322,12 +633,11 @@ Continue anyway? (y/n)
 Scan `examples/` directory for subdirectories containing `LIFECYCLE_STATE.md`. These are valid workspaces.
 
 For each workspace:
-1. Read `LIFECYCLE_STATE.md` to extract:
-   - Project name
-   - SIL level
-   - Current phase
-   - Completion percentage
-2. Add to `.workspace` index
+1. Add workspace entry to `.workspace` index with path and timestamps
+2. **DO NOT extract or cache status** (sil, phase, completion) in `.workspace`
+3. Status will be read from LIFECYCLE_STATE.md on demand when displaying
+
+**SSOT Enforcement**: `.workspace` is registry only, not a cache.
 
 ### Error Handling
 
