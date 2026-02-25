@@ -1,0 +1,102 @@
+# EN 50128 Railway Software Development Platform
+# Python Package Requirements
+# 
+# Installation: pip install -r requirements.txt
+# Virtual Environment: Use venv/ in project root
+
+# ============================================================================
+# Core Python Tools
+# ============================================================================
+
+# PDF to Markdown Conversion (for EN 50128 standards)
+# Used by: tools/pdf-conversion/pdf_to_markdown.py
+pymupdf4llm>=0.0.5
+pymupdf>=1.23.0
+
+# C Parser for MC/DC Analysis
+# Used by: tools/mcdc/mcdc_analyzer.py
+pycparser>=2.21
+
+# Table formatting for reports
+# Used by: tools/pdf-conversion/table_formatter.py
+tabulate>=0.9.0
+
+# ============================================================================
+# Code Quality and Static Analysis
+# ============================================================================
+
+# Complexity Analysis (MANDATORY for SIL 3 - CCN ≤ 10)
+# Used by: VER agent for cyclomatic complexity verification
+# EN 50128 Reference: Table A.19 (Static Analysis - MANDATORY SIL 3-4)
+lizard>=1.17.0
+
+# Code formatting and linting
+# Used by: IMP agent for code quality
+autopep8>=2.0.0
+pylint>=3.0.0
+flake8>=6.0.0
+
+# Type checking
+# Used by: Python tool development
+mypy>=1.0.0
+
+# ============================================================================
+# Testing and Coverage
+# ============================================================================
+
+# Python unit testing
+# Used by: Tool testing and validation
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Coverage reporting
+# Used by: Test coverage analysis
+coverage>=7.0.0
+
+# ============================================================================
+# Documentation and Reporting
+# ============================================================================
+
+# Markdown processing
+# Used by: Report generation, document validation
+markdown>=3.4.0
+pymdown-extensions>=10.0.0
+
+# JSON/YAML processing
+# Used by: Configuration management, test result parsing
+pyyaml>=6.0.0
+
+# Report generation
+# Used by: QUA agent for quality reports
+jinja2>=3.1.0
+
+# ============================================================================
+# Development Tools
+# ============================================================================
+
+# Interactive Python shell (optional, for debugging)
+ipython>=8.0.0
+
+# Code formatting (optional, for tool development)
+black>=23.0.0
+
+# ============================================================================
+# EN 50128 Specific Tools (Custom - installed from tools/ directory)
+# ============================================================================
+
+# These are installed via:
+# pip install -e tools/mcdc/
+# pip install -e tools/workspace/
+
+# Note: Custom tools in tools/ directory should be installed separately
+# using pip install -e <path> for development mode, or add setup.py
+# to each tool directory for proper packaging.
+
+# ============================================================================
+# Version Notes
+# ============================================================================
+# - All versions use >= to allow newer compatible versions
+# - For production EN 50128 projects, pin exact versions for traceability
+# - Tool Confidence Level (TCL) classification:
+#   - Python tools: TCL 1 (No qualification required, output verified)
+#   - See TOOLS.md for complete tool qualification requirements

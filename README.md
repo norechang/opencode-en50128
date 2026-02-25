@@ -45,6 +45,35 @@ This platform provides a complete EN 50128-compliant development environment usi
 
 ## Quick Start
 
+### 0. Tool Installation (First Time Setup)
+
+Before using the platform, install required development and analysis tools:
+
+```bash
+# Install system tools (gcc, lcov, cppcheck, clang, valgrind, etc.)
+# Requires sudo privileges
+./install_tools.sh
+
+# Install Python tools (lizard, pytest, etc.)
+# Creates virtual environment in venv/
+./install_python.sh
+
+# Check installation status
+./install_tools.sh --check
+source venv/bin/activate
+./install_python.sh --check
+
+# For minimal installation (MANDATORY SIL 3 tools only)
+./install_tools.sh --minimal
+```
+
+**Tool Categories**:
+- **MANDATORY for SIL 3**: gcc, gcov, lcov, cppcheck, clang, lizard, git
+- **Highly Recommended**: valgrind, PC-lint Plus (commercial)
+- **Optional**: doxygen, splint, ctags
+
+**Tool Catalog**: See [`TOOLS.md`](TOOLS.md) for complete tool information, usage examples, and agent integration patterns.
+
 ### 1. Getting Help
 
 ```bash

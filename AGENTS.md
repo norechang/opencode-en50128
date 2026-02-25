@@ -4,11 +4,163 @@ This document defines role-based agents for EN 50128 railway software developmen
 
 **Related Documents**:
 - **`LIFECYCLE.md`** - Complete EN 50128 V-Model software development lifecycle (START HERE)
+- **`TOOLS.md`** - Comprehensive tool catalog with usage information for agents (CRITICAL)
 - **`.opencode/skills/`** - Domain-specific skills for each lifecycle phase
 - **`.opencode/commands/`** - Agent command definitions
 - **`std/EN50128-2011.md`** - Full EN 50128 standard (LLM-friendly Markdown)
 - **`std/EN 50126-1-2017.md`** - RAMS standard Part 1
 - **`std/EN 50126-2-2017.md`** - RAMS standard Part 2
+
+---
+
+## Agent Tool Usage Protocol
+
+**CRITICAL**: Before invoking ANY tool, agents MUST follow this protocol to ensure effective tool selection and EN 50128 compliance.
+
+### Tool Examination Workflow
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 1: IDENTIFY TASK REQUIREMENTS                          │
+│ - What is the task? (static analysis, coverage, etc.)       │
+│ - What SIL level? (0, 1, 2, 3, 4)                          │
+│ - What EN 50128 table applies? (A.2-A.21)                  │
+└─────────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 2: CONSULT TOOLS.md                                    │
+│ - Read TOOLS.md to identify available tools                 │
+│ - Check tool classification (M/HR/R for SIL level)          │
+│ - Check Tool Confidence Level (T1/T2/T3)                    │
+└─────────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 3: VERIFY TOOL AVAILABILITY                            │
+│ - Check if tool is installed: which <tool_name>             │
+│ - Verify version meets requirements                         │
+│ - Check qualification status (for T2/T3 tools)              │
+└─────────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 4: SELECT MOST EFFECTIVE TOOL                          │
+│ - Prefer MANDATORY tools for SIL level                      │
+│ - Use multiple tools for thoroughness (SIL 3+)              │
+│ - Consider tool output format (XML/JSON for automation)     │
+│ - Select custom EN50128 tools when applicable               │
+└─────────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 5: EXECUTE TOOL WITH PROPER FLAGS                      │
+│ - Use SIL-appropriate flags and thresholds                  │
+│ - Generate machine-readable output                          │
+│ - Document tool invocation in agent deliverable             │
+└─────────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 6: VERIFY AND DOCUMENT RESULTS                         │
+│ - T1: Inspect output for correctness                        │
+│ - T2: Cross-reference with other tools                      │
+│ - T3: Verify qualification evidence exists                  │
+│ - Include results in agent deliverable                      │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Tool Selection Decision Matrix
+
+| Task | SIL 3 MANDATORY Tool(s) | Alternative/Additional | Custom EN50128 Tool |
+|------|-------------------------|------------------------|---------------------|
+| **Static Analysis** | Cppcheck, Clang | Splint, PC-lint Plus | check_misra.py |
+| **Complexity Analysis** | Lizard (CCN ≤ 10) | - | - |
+| **Coverage Analysis** | gcov, lcov | Bullseye | - |
+| **MC/DC Analysis** | Manual + gcov | Bullseye | mcdc_analyzer.py (RECOMMENDED) |
+| **Memory Analysis** | Valgrind (HR) | AddressSanitizer | - |
+| **Version Control** | Git | - | workspace.py |
+| **Build** | gcc, make | - | - |
+| **Documentation** | - | Doxygen | enhelp.py |
+
+### Example: Verifier (VER) Agent Tool Usage
+
+**Scenario**: VER agent needs to perform static analysis for SIL 3 project
+
+```python
+# STEP 1: Identify requirements
+# Task: Static analysis
+# SIL: 3
+# EN 50128 Reference: Table A.19 (MANDATORY SIL 3-4)
+
+# STEP 2: Consult TOOLS.md
+# Read: "MANDATORY Tools (SIL 3)" section
+# Find: Cppcheck (MANDATORY), Clang (MANDATORY)
+
+# STEP 3: Verify availability
+bash: which cppcheck  # Check Cppcheck installed
+bash: which clang     # Check Clang installed
+
+# STEP 4: Select tools
+# Decision: Use BOTH Cppcheck AND Clang (multiple tools for SIL 3)
+
+# STEP 5: Execute with proper flags
+bash: cppcheck --enable=all --xml --xml-version=2 src/ 2> cppcheck_report.xml
+bash: scan-build -o analysis_results make
+
+# STEP 6: Document results
+# Include in Verification Report:
+# - Tool versions (Cppcheck 2.13.0, Clang 18.x)
+# - Invocation commands
+# - Number of issues found
+# - Classification of issues (critical/warning/info)
+# - Remediation status
+```
+
+### Tool Availability Check Commands
+
+Before using a tool, agents should verify installation:
+
+```bash
+# Check system tool availability
+which gcc && gcc --version
+which gcov && gcov --version
+which lcov && lcov --version
+which cppcheck && cppcheck --version
+which clang && clang --version
+which valgrind && valgrind --version
+which git && git --version
+
+# Check Python tool availability (requires venv active)
+source venv/bin/activate
+which lizard && lizard --version
+python3 tools/mcdc/mcdc_analyzer.py --help
+python3 tools/workspace.py --help
+python3 tools/enhelp.py --help
+```
+
+### Tool Installation References
+
+If a required tool is missing:
+
+```bash
+# System tools
+./install_tools.sh --check    # Check installation status
+./install_tools.sh            # Install all tools
+./install_tools.sh --minimal  # Install MANDATORY only
+
+# Python tools
+./install_python.sh           # Setup venv and install packages
+./install_python.sh --check   # Check Python environment
+```
+
+### Agent Responsibilities for Tool Management
+
+| Agent | Tool Responsibilities | Key Tools |
+|-------|----------------------|-----------|
+| **IMP** | Compilation, unit testing | gcc, make, gcov |
+| **TST** | Testing, coverage | gcov, lcov, mcdc_analyzer.py |
+| **VER** | Static analysis, complexity | cppcheck, clang, lizard |
+| **INT** | Integration builds, memory checks | gcc, make, valgrind |
+| **VAL** | System testing, validation | All test tools |
+| **QUA** | Quality checks, reviews | All analysis tools |
+| **CM** | Version control | git |
+| **COD** | Tool compliance verification | All tools |
 
 ---
 
