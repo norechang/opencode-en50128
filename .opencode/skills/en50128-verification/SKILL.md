@@ -20,6 +20,7 @@ I provide verification techniques, static analysis patterns, and evidence collec
 - Traceability verification (mandatory SIL 3-4)
 - Metrics collection and analysis
 - Verification evidence collection
+- 11 verification reports (DOC-2, DOC-4, DOC-8, DOC-14, DOC-17, DOC-19, DOC-23, DOC-32, DOC-35, DOC-40, DOC-44)
 
 ## When to use me
 
@@ -30,6 +31,477 @@ Use this skill when:
 - Collecting verification evidence
 - Analyzing code metrics
 - Preparing verification reports
+
+---
+
+## How to Use This Skill
+
+### Overview
+
+The **en50128-verification** skill is the **largest and most comprehensive skill** in the EN 50128 platform, covering 11 verification reports across all lifecycle phases. This skill provides:
+
+- **4 comprehensive workflows** (~170 pages) - Step-by-step processes for verification planning, static analysis, traceability, and reporting
+- **5 detailed resources** (~230 pages) - Guidelines, checklists, tool references, defect catalogs, and metrics
+- **Cross-cutting application** - Used throughout all phases (Planning, Requirements, Design, Implementation, Integration, Validation)
+- **Independence focus** - MANDATORY independent verification for SIL 3-4
+
+**Total Content**: ~400 pages of verification guidance (largest skill in platform)
+
+### Role-Specific Usage
+
+#### For Verifiers (VER)
+
+**Primary Responsibilities**:
+- Execute independent verification activities (MANDATORY SIL 3-4)
+- Perform static analysis (Cppcheck, PC-lint Plus, Clang, Lizard)
+- Verify traceability completeness (forward and backward)
+- Collect verification evidence
+- Create 11 verification reports
+
+**Key Workflows**:
+1. **`workflows/verification-planning.md`** - Create Software Verification Plan (SVP) - DOC-4
+   - EN 50128 technique selection (Tables A.5, A.19, A.21)
+   - Tool selection and qualification (12+ tools)
+   - Independence requirements (SIL 3-4)
+   - Verification schedule and resource planning
+   
+2. **`workflows/static-analysis-workflow.md`** - Execute static analysis
+   - Multi-tool strategy (Cppcheck + PC-lint Plus + Clang + Lizard)
+   - Defect triage (Critical, High, Medium, Low)
+   - MISRA C:2012 compliance verification (zero mandatory violations SIL 2+)
+   - Complexity verification (CCN ≤ 10 SIL 3-4)
+   
+3. **`workflows/traceability-verification.md`** - Verify traceability
+   - Forward traceability: Requirements → Design → Code → Tests (100% SIL 3-4)
+   - Backward traceability: Tests → Requirements (100% SIL 3-4)
+   - Safety requirements traceability (100% MANDATORY SIL 3-4)
+   - Gap analysis and remediation
+   
+4. **`workflows/verification-reporting.md`** - Create verification reports
+   - 11 verification report templates
+   - Evidence collection and organization
+   - QUA template compliance review (SIL 3-4)
+   - VMGR technical review submission (SIL 3-4)
+
+**Key Resources**:
+- **`resources/static-analysis-guidelines.md`** - Tool configuration for Cppcheck, PC-lint Plus, Clang, Lizard (40 pages)
+- **`resources/verification-tools-reference.md`** - Comprehensive tool catalog with installation, usage, qualification (40 pages)
+- **`resources/common-verification-defects.md`** - 30+ defect patterns with before/after code examples (40 pages)
+- **`resources/verification-metrics.md`** - Complexity, coverage, defect, traceability, quality metrics (40 pages)
+- **`resources/traceability-verification-checklist.md`** - Phase-by-phase checklists (40 pages)
+
+**Typical VER Workflow**:
+```bash
+# 1. Plan verification activities
+# Read: workflows/verification-planning.md
+# Create: Software Verification Plan (SVP) - DOC-4
+
+# 2. Execute static analysis
+# Read: workflows/static-analysis-workflow.md
+# Read: resources/static-analysis-guidelines.md
+cppcheck --enable=all --xml src/ 2> cppcheck_report.xml
+pclp64 --misra3 -os(misra_report.xml) src/*.c
+scan-build -o analysis_results make
+lizard -CCN 10 -w src/
+
+# 3. Verify traceability
+# Read: workflows/traceability-verification.md
+python3 tools/traceability/check_forward_trace.py --requirements SRS.md --code src/ --tests tests/
+python3 tools/traceability/check_backward_trace.py --code src/ --requirements SRS.md
+
+# 4. Collect metrics
+# Read: resources/verification-metrics.md
+./tools/metrics/collect_all_metrics.sh 3 metrics_output/
+
+# 5. Create verification report
+# Read: workflows/verification-reporting.md
+# Template: deliverables/DOC-19-Software-Source-Code-Verification-Report.yaml
+# Create: Software Source Code Verification Report - DOC-19
+
+# 6. Submit to QUA for template compliance review (SIL 3-4)
+# QUA verifies document structure, completeness, EN 50128 references
+
+# 7. Address QUA feedback (if any) - ONE iteration only
+
+# 8. Submit to VMGR for technical review (SIL 3-4)
+# VMGR reviews verification evidence, approves/rejects
+```
+
+**Independence Requirements (SIL 3-4)**:
+- VER **MUST NOT** be the same person as REQ, DES, IMP, TST, INT
+- VER reports to VMGR (NOT to PM or COD)
+- VER approval required for phase gate transitions
+- VER has authority to reject work products (cannot be overridden by PM)
+
+#### For V&V Managers (VMGR)
+
+**Primary Responsibilities** (SIL 3-4 MANDATORY):
+- Manage independent verification team (VER reports to VMGR)
+- Review and approve all verification reports (11 reports)
+- Perform validation activities (VMGR acts as VAL role)
+- Provide final V&V approval/rejection for phase gates
+- Coordinate with COD (but independent authority)
+
+**Key Workflows**:
+1. **`workflows/verification-planning.md`** - Review and approve Software Verification Plan (SVP)
+   - Verify VER independence maintained
+   - Approve technique selection
+   - Approve tool selection and qualification plan
+   
+2. **`workflows/verification-reporting.md`** - Review verification reports
+   - Technical review of verification evidence
+   - Assess completeness and correctness
+   - Approve or reject with detailed feedback
+   - Provide V&V status to COD for gate check
+
+**Typical VMGR Review Workflow**:
+```bash
+# 1. VER submits verification report (after QUA template compliance approved)
+
+# 2. VMGR reviews verification report
+# Read: workflows/verification-reporting.md Section 10 "VMGR Technical Review"
+# Check:
+#   - Evidence complete? (static analysis, coverage, traceability, metrics)
+#   - Defect analysis thorough? (all defects triaged, critical/high closed)
+#   - Metrics meet targets? (CCN ≤ 10, 100% coverage, 0 critical defects)
+#   - EN 50128 techniques applied correctly? (Tables A.5, A.19, A.21)
+#   - Independence preserved? (VER not involved in development)
+
+# 3. VMGR decision
+# Option A: APPROVE
+#   - Document approval in report (signature, date)
+#   - Inform COD: "Verification APPROVED for Phase X"
+#   - COD enforces gate based on VMGR decision
+# Option B: REJECT
+#   - Document rejection reasons (specific, actionable feedback)
+#   - Inform COD: "Verification REJECTED for Phase X"
+#   - COD BLOCKS gate transition (cannot override VMGR)
+#   - VER addresses feedback, resubmits (NEW iteration, not amend)
+
+# 4. VMGR reports V&V status to COD
+python3 tools/vmgr/report_vv_status.py --phase implementation --status approved
+```
+
+**Authority Structure**:
+```
+Safety Authority / Customer
+        |
+    ┌───┴───┐
+    |       |
+  COD    VMGR (Independent V&V Authority)
+    |       |
+   PM     VER (Verification Team)
+    |
+REQ, DES, IMP, TST, INT, QUA, CM, SAF
+```
+
+**Key Point**: VMGR has **independent authority** - COD cannot override VMGR approval/rejection decisions.
+
+#### For Quality Assurance (QUA)
+
+**Primary Responsibilities**:
+- Template compliance review (MANDATORY SIL 3-4 BEFORE VER submission to VMGR)
+- Verify document structure follows EN 50128 requirements
+- One-pass review (reject if non-compliant, VER fixes ONCE, resubmits)
+
+**Key Workflows**:
+1. **`workflows/verification-reporting.md`** Section 9 "QUA Template Compliance Review"
+   - Document ID format (DOC-XXX-YYYY-NNN)
+   - Document Control table (version, date, author, approvals)
+   - Approvals table with SIL-specific roles
+   - Section structure per template
+   - EN 50128 references present
+
+**QUA Review Workflow**:
+```bash
+# 1. VER submits verification report for QUA review
+
+# 2. QUA performs template compliance check
+# Read: workflows/verification-reporting.md Section 9
+# Check:
+#   - Document ID correct? (DOC-19-SWC-VER-001)
+#   - Document Control table present?
+#   - Approvals table with correct roles? (VER, VMGR for SIL 3-4)
+#   - All required sections present? (12 sections + 4 appendices)
+#   - EN 50128 references present? (Section 6.2, Tables A.5, A.19, A.21)
+
+# 3. QUA decision (ONE PASS only)
+# Option A: APPROVE
+#   - Document approval in QA Template Compliance Report
+#   - VER proceeds to VMGR technical review
+# Option B: REJECT
+#   - Document specific non-compliance issues
+#   - VER fixes issues ONCE, resubmits
+#   - QUA re-reviews (final decision)
+
+# 4. After QUA approval, VER submits to VMGR
+```
+
+**Important**: QUA checks **template compliance** (structure, format). VMGR checks **technical content** (evidence, correctness).
+
+#### For Project Managers (PM)
+
+**Usage**:
+- Monitor verification progress via metrics dashboards
+- Coordinate VER resources (but NOT direct VER technical work)
+- Review verification reports for schedule impact
+- **Cannot override VER/VMGR decisions** (independence preserved)
+
+**Key Resources**:
+- **`resources/verification-metrics.md`** - Track verification progress, defect trends, coverage status
+- **`workflows/verification-reporting.md`** Section 14 "Project Management Dashboard"
+
+**PM Monitoring**:
+```bash
+# View verification metrics dashboard
+python3 tools/metrics/generate_dashboard.py --sil 3 --output dashboard.html
+# See: Coverage %, Defect density, CCN distribution, Verification progress %
+
+# Check verification bottlenecks
+# Read: resources/verification-metrics.md Section 8 "Verification Progress Metrics"
+```
+
+### 11 Verification Reports Covered
+
+This skill provides guidance for creating **11 verification reports** across all lifecycle phases:
+
+| Report ID | Report Name | Phase | Workflow Section |
+|-----------|-------------|-------|------------------|
+| **DOC-2** | SQAP Verification Report | Phase 1 | `workflows/verification-reporting.md` Sec 5.1 |
+| **DOC-4** | Software Verification Plan | Phase 1 | `workflows/verification-planning.md` (PRIMARY) |
+| **DOC-8** | Software Requirements Verification Report | Phase 2 | `workflows/verification-reporting.md` Sec 5.2 |
+| **DOC-14** | SW Architecture and Design Verification Report | Phase 3 | `workflows/verification-reporting.md` Sec 5.3 |
+| **DOC-17** | Software Component Design Verification Report | Phase 3 | `workflows/verification-reporting.md` Sec 5.4 |
+| **DOC-19** | Software Source Code Verification Report | Phase 4 | `workflows/verification-reporting.md` Sec 5.5 (PRIMARY) |
+| **DOC-23** | Software Integration Verification Report | Phase 5 | `workflows/verification-reporting.md` Sec 5.6 |
+| **DOC-32** | Software/Hardware Integration Verification Report | Phase 5 | `workflows/verification-reporting.md` Sec 5.7 |
+| **DOC-35** | Overall Software Test Verification Report | Phase 6 | `workflows/verification-reporting.md` Sec 5.8 |
+| **DOC-40** | Software Validation Verification Report | Phase 6 | `workflows/verification-reporting.md` Sec 5.9 |
+| **DOC-44** | Software Maintenance Verification Report | Phase 8 | `workflows/verification-reporting.md` Sec 5.10 |
+
+**Most Common Reports**:
+- **DOC-4**: Software Verification Plan (created in Phase 1, updated throughout)
+- **DOC-19**: Software Source Code Verification Report (created in Phase 4, most detailed)
+- **DOC-35**: Overall Software Test Verification Report (created in Phase 6, comprehensive)
+
+### Tool Integration Commands
+
+**Quick Reference - Static Analysis**:
+
+```bash
+# Cppcheck (MANDATORY SIL 3-4)
+cppcheck --enable=all --xml --xml-version=2 src/ 2> cppcheck_report.xml
+
+# PC-lint Plus (MANDATORY SIL 3-4, MISRA C)
+pclp64 -vm -os(misra_report.xml) +ffn -w3 au-misra3.lnt src/*.c
+
+# Clang Static Analyzer (MANDATORY SIL 3-4)
+scan-build -o analysis_results --status-bugs make
+
+# Lizard Complexity (MANDATORY SIL 3-4)
+lizard -CCN 10 -w src/
+
+# GCC Compilation with all warnings (MANDATORY all SILs)
+gcc -Wall -Wextra -Werror -std=c11 -pedantic src/*.c
+
+# Valgrind Memory Analysis (HR SIL 3-4)
+valgrind --leak-check=full --show-leak-kinds=all ./test_executable
+```
+
+**Quick Reference - Coverage**:
+
+```bash
+# gcov/lcov (MANDATORY SIL 3-4)
+gcc -fprofile-arcs -ftest-coverage src/module.c -o module_test
+./module_test
+gcov src/module.c
+lcov --capture --directory . --output-file coverage.info
+genhtml coverage.info --output-directory coverage_html
+
+# Check coverage thresholds
+lcov --summary coverage.info
+# SIL 3-4 REQUIREMENT: 100% statement, 100% branch, 100% condition, 100% MC/DC
+```
+
+**Quick Reference - Metrics Collection**:
+
+```bash
+# Automated metrics collection (all tools)
+./tools/metrics/collect_all_metrics.sh 3 metrics_output/
+
+# Generate metrics dashboard
+python3 tools/metrics/generate_metrics_report.py \
+    --sil 3 \
+    --metrics-dir metrics_output/ \
+    --output metrics_report.html
+```
+
+### Skill Structure
+
+```
+.opencode/skills/en50128-verification/
+├── SKILL.md (THIS FILE - Overview and quick reference)
+├── workflows/ (4 files, ~170 pages)
+│   ├── verification-planning.md (50 pages) - SVP creation, technique selection
+│   ├── static-analysis-workflow.md (38 pages) - Multi-tool static analysis
+│   ├── traceability-verification.md (15 pages) - Forward/backward trace
+│   └── verification-reporting.md (40 pages) - 11 verification reports
+├── resources/ (5 files, ~230 pages)
+│   ├── static-analysis-guidelines.md (40 pages) - Tool config, thresholds
+│   ├── traceability-verification-checklist.md (40 pages) - Phase-by-phase
+│   ├── verification-tools-reference.md (40 pages) - 12+ tool catalog
+│   ├── common-verification-defects.md (40 pages) - 30+ defect patterns
+│   └── verification-metrics.md (40 pages) - Metrics formulas, targets
+├── verification-criteria/ (5 YAML files from Phase 1)
+│   └── [Criteria for each verification type]
+└── report-templates/ (2 template files from Phase 1)
+    └── [Templates for verification reports]
+```
+
+### When to Use Each Workflow
+
+| Workflow | When to Use | Primary Output |
+|----------|-------------|----------------|
+| **verification-planning.md** | Phase 1 (Planning), updated each phase | Software Verification Plan (SVP) - DOC-4 |
+| **static-analysis-workflow.md** | Phase 4 (Implementation), Phase 5 (Integration) | Static analysis reports (Cppcheck, PC-lint, Clang, Lizard) |
+| **traceability-verification.md** | All phases (2-7), gate checks | Traceability matrices, gap analysis reports |
+| **verification-reporting.md** | End of each phase (2-7) | 11 verification reports (DOC-2, DOC-8, DOC-14, etc.) |
+
+### When to Use Each Resource
+
+| Resource | When to Use | Primary Purpose |
+|----------|-------------|-----------------|
+| **static-analysis-guidelines.md** | Before running static analysis | Tool configuration, severity classification, thresholds |
+| **traceability-verification-checklist.md** | During traceability verification | Phase-specific checklist, forward/backward trace |
+| **verification-tools-reference.md** | Tool selection, installation, usage | Comprehensive tool catalog, installation, qualification |
+| **common-verification-defects.md** | Defect triage, remediation | 30+ defect patterns with before/after code examples |
+| **verification-metrics.md** | Metrics collection, interpretation, reporting | Formulas, targets, benchmarks, dashboards |
+
+### SIL-Specific Requirements Summary
+
+**SIL 0-1** (Advisory/Recommended):
+- Static analysis: Recommended
+- Complexity: CCN ≤ 20
+- Coverage: Statement ≥ 85%, Branch ≥ 75%
+- MISRA C: Follow where practical
+- Independence: Not required
+
+**SIL 2** (Highly Recommended):
+- Static analysis: Highly Recommended
+- Complexity: CCN ≤ 15
+- Coverage: Statement 100%, Branch 100% (MANDATORY)
+- MISRA C: Zero mandatory violations (MANDATORY)
+- Independence: Highly Recommended
+
+**SIL 3-4** (MANDATORY):
+- Static analysis: **MANDATORY** (Control flow + Data flow analysis)
+- Complexity: **CCN ≤ 10 MANDATORY**
+- Coverage: **100% statement, branch, condition, MC/DC MANDATORY**
+- MISRA C: **Zero mandatory violations MANDATORY**
+- Traceability: **100% forward and backward MANDATORY**
+- Independence: **MANDATORY** (VER independent from REQ/DES/IMP/TST/INT)
+- VMGR: **MANDATORY** (independent V&V authority)
+
+### EN 50128 Compliance Mapping
+
+| EN 50128 Reference | Skill Coverage | Workflow/Resource |
+|--------------------|----------------|-------------------|
+| **Section 6.2** Software Verification | Complete | All workflows, all resources |
+| **Table A.5** Verification techniques | Technique selection | `workflows/verification-planning.md` Sec 3 |
+| **Table A.19** Static Analysis | All 8 techniques | `workflows/static-analysis-workflow.md`, `resources/static-analysis-guidelines.md` |
+| **Table A.21** Test Coverage | Statement, Branch, Condition, MC/DC | `resources/verification-metrics.md` Sec 3 |
+| **Section 7.5.4.10** Source Code Verification | Complete | `workflows/verification-reporting.md` Sec 5.5 |
+
+### Getting Started
+
+**For First-Time Users**:
+
+1. **Read this section** ("How to Use This Skill") - 10 minutes
+2. **Read `workflows/verification-planning.md`** - Understand verification planning - 30 minutes
+3. **Read `resources/verification-tools-reference.md`** - Understand available tools - 20 minutes
+4. **Install verification tools** - Run `./install_tools.sh` - 15 minutes
+5. **Try static analysis on sample code** - Run Cppcheck, PC-lint Plus - 30 minutes
+6. **Review example verification report** - See `workflows/verification-reporting.md` Appendix A - 20 minutes
+
+**Total Getting Started Time**: ~2 hours
+
+**For Experienced Users**:
+
+1. Jump directly to relevant workflow (verification-planning, static-analysis, traceability, verification-reporting)
+2. Use resources as reference (static-analysis-guidelines, verification-metrics, common-defects)
+3. Follow tool commands in "Tool Integration Commands" section above
+
+### Related Skills
+
+**Upstream Skills** (provide inputs to verification):
+- **en50128-requirements** - Requirements documents (SRS) to verify
+- **en50128-design** - Design documents (SAS, SDS) to verify
+- **en50128-implementation** - Source code to verify
+- **en50128-testing** - Test results to verify coverage
+
+**Downstream Skills** (consume verification outputs):
+- **en50128-validation** - Uses verification reports as evidence
+- **en50128-quality** - Uses verification metrics for quality assessment
+- **en50128-lifecycle-coordination** - Uses verification status for gate checks
+
+**Parallel Skills** (used concurrently):
+- **en50128-configuration** - Version control for verification artifacts
+- **en50128-safety** - Safety analysis integrated with verification
+
+### Common Pitfalls and Best Practices
+
+**Pitfall 1**: Running static analysis without configuration
+- **Fix**: Read `resources/static-analysis-guidelines.md` BEFORE running tools
+- **Best Practice**: Use provided tool configuration files (Cppcheck project file, PC-lint options)
+
+**Pitfall 2**: Ignoring Low/Medium severity defects
+- **Fix**: All defects must be triaged, documented (fix or justify)
+- **Best Practice**: Zero critical, zero high defects (MANDATORY SIL 3-4)
+
+**Pitfall 3**: Incomplete traceability (missing forward or backward traces)
+- **Fix**: Run traceability verification scripts (forward AND backward)
+- **Best Practice**: 100% traceability (MANDATORY SIL 3-4)
+
+**Pitfall 4**: Submitting verification report without QUA review (SIL 3-4)
+- **Fix**: ALWAYS submit to QUA for template compliance BEFORE VMGR technical review
+- **Best Practice**: Follow workflow order: VER → QUA (template) → VMGR (technical)
+
+**Pitfall 5**: VMGR (or PM) overriding VER rejection
+- **Fix**: VER/VMGR have independent authority (cannot be overridden)
+- **Best Practice**: Respect independence requirements (EN 50128 5.3.5)
+
+**Pitfall 6**: Insufficient metrics collection
+- **Fix**: Use automated metrics collection script (`collect_all_metrics.sh`)
+- **Best Practice**: Collect metrics continuously (CI/CD), not just at gate checks
+
+**Pitfall 7**: Using single static analysis tool (SIL 3-4)
+- **Fix**: Multi-tool strategy required (Cppcheck + PC-lint Plus + Clang + Lizard)
+- **Best Practice**: Each tool finds different defect types (complementary)
+
+**Pitfall 8**: Not documenting tool qualification (T2/T3 tools)
+- **Fix**: Document tool version, vendor qualification, validation testing
+- **Best Practice**: Maintain Tool Qualification Report (see `resources/verification-tools-reference.md` Sec 11)
+
+### Success Criteria
+
+**Verification Phase Complete When**:
+- ✓ All 11 verification reports created (or applicable subset for phase)
+- ✓ Zero critical defects, zero high defects (SIL 3-4)
+- ✓ 100% statement, branch, condition, MC/DC coverage (SIL 3-4)
+- ✓ CCN ≤ 10 for all functions (SIL 3-4)
+- ✓ Zero MISRA C mandatory violations (SIL 2+)
+- ✓ 100% forward and backward traceability (SIL 3-4)
+- ✓ QUA template compliance approved (SIL 3-4)
+- ✓ VMGR technical review approved (SIL 3-4)
+- ✓ All verification evidence collected and archived
+
+**Ready for Next Phase (Gate Check) When**:
+- ✓ Verification report signed by VER, VMGR (SIL 3-4)
+- ✓ All defects closed (or justified and approved)
+- ✓ Metrics meet SIL-specific targets
+- ✓ COD receives VMGR approval for phase transition
+
+---
 
 ## Verification Techniques (EN 50128 Table A.5)
 
