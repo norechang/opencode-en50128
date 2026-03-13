@@ -12,23 +12,153 @@ metadata:
 
 ## What I do
 
-I provide design patterns and best practices for railway software architecture compliant with EN 50128 Section 7.3:
-- Enforce modular design principles (mandatory SIL 2+)
-- Apply cyclomatic complexity limits by SIL
-- Ensure static memory allocation only (SIL 2+)
-- Provide C-specific design patterns
-- Enforce defensive programming techniques
-- Ensure MISRA C:2012 compliance in design
+I provide comprehensive patterns, templates, workflows, and resources for software architecture and design compliant with EN 50128 Section 7.3:
+- **Workflows**: Step-by-step processes for architecture design, software design, interface design, and design review
+- **Resources**: Guidelines for defensive programming, complexity management, modularity, MISRA C design, and architecture review
+- **Templates**: Software Architecture Specification (DOC-9), Software Design Specification (DOC-10), and Software Interface Specifications (DOC-11) templates
+- **Techniques**: EN 50128 Table A.3 techniques (Modular Approach, Structured Methodology, Defensive Programming, Fault Detection)
+- **C Language**: MISRA C:2012 compliant design patterns with static allocation, bounded complexity, and safety patterns
 
 ## When to use me
 
 Use this skill when:
-- Creating software architecture (SAS)
-- Designing software modules (SDS)
-- Defining interfaces between components
-- Applying defensive programming patterns
-- Reviewing design for EN 50128 compliance
-- Addressing safety architecture requirements
+- **Starting architecture phase**: Follow `workflows/architecture-design.md` to create Software Architecture Specification (DOC-9)
+- **Designing modules**: Use `workflows/software-design.md` to create Software Design Specification (DOC-10)
+- **Defining interfaces**: Follow `workflows/interface-design.md` to specify internal, hardware, external, and HMI interfaces (DOC-11)
+- **Reviewing design**: Apply `workflows/design-review.md` for SIL-dependent peer, QUA, VER, VAL, and PM reviews
+- **Applying defensive patterns**: Reference `resources/defensive-programming-patterns.md` for 18 comprehensive safety patterns
+- **Managing complexity**: Use `resources/complexity-guidelines.md` for SIL-dependent complexity limits and reduction strategies
+- **Ensuring modularity**: Apply `resources/modularity-guidelines.md` for modular design principles (MANDATORY SIL 2+)
+- **MISRA C design**: Follow `resources/misra-c-design-guidelines.md` for design decisions affecting MISRA C compliance
+
+## How to use this skill
+
+### For Designers (DES)
+
+**Complete Architecture and Design Phase Workflow:**
+
+```
+1. ARCHITECTURE DESIGN (workflows/architecture-design.md)
+   ├─ Review input documents (SRS DOC-5, Hazard Log DOC-21, SQAP DOC-2, SCMP DOC-3)
+   ├─ Identify architectural components (decompose system into subsystems/components)
+   ├─ Define component interfaces (data, control, timing)
+   ├─ Apply EN 50128 Table A.3 techniques:
+   │    ├─ Structured Methodology (MANDATORY SIL 3-4)
+   │    ├─ Modular Approach (MANDATORY SIL 2+)
+   │    ├─ Defensive Programming (Highly Recommended SIL 3-4)
+   │    └─ Fault Detection and Diagnosis (Highly Recommended SIL 3-4)
+   ├─ Design safety architecture (fault detection, fail-safe, redundancy)
+   ├─ Allocate requirements to components (traceability)
+   ├─ Document in Software Architecture Specification (DOC-9)
+   └─ Submit for review (PEER → QUA → VER → VAL → PM)
+
+2. SOFTWARE DESIGN (workflows/software-design.md)
+   ├─ Decompose architectural components into modules
+   ├─ Design module interfaces (function signatures, data structures)
+   ├─ Specify functions (parameters, return values, error handling)
+   ├─ Design data structures (structs, enums, arrays - MISRA C compliant)
+   ├─ Apply complexity limits (≤10 CCN for SIL 3-4, ≤15 for SIL 2)
+   ├─ Apply defensive programming patterns (input validation, error detection)
+   ├─ Ensure static allocation only (SIL 2+) - no dynamic memory
+   ├─ Document algorithms (pseudocode, flowcharts)
+   ├─ Document in Software Design Specification (DOC-10)
+   └─ Submit for review (PEER → QUA → VER → VAL → PM)
+
+3. INTERFACE DESIGN (workflows/interface-design.md)
+   ├─ Define internal interfaces (SW-SW communication between modules)
+   ├─ Define hardware interfaces (SW-HW, memory-mapped I/O, GPIO, ADC, timers)
+   ├─ Define external interfaces (SW-external system, CAN, UART, SPI, I2C)
+   ├─ Define HMI interfaces (SW-user, displays, buttons, indicators)
+   ├─ Specify interface protocols (data formats, timing, error handling)
+   ├─ Apply defensive programming at interfaces (validation, error detection)
+   ├─ Document in Software Interface Specifications (DOC-11)
+   └─ Submit for review (PEER → QUA → VER → VAL → PM)
+
+4. DESIGN REVIEW (workflows/design-review.md)
+   ├─ Self-review (use resources/architecture-review-checklist.md)
+   ├─ PEER review (technical correctness, clarity)
+   ├─ QUA review (process compliance, EN 50128, MISRA C)
+   ├─ SAFETY_MGR review (hazard mitigation, SIL 3-4)
+   ├─ VER review (traceability, completeness, SIL 3-4)
+   ├─ VAL review (testability, SIL 3-4)
+   ├─ PM review (project alignment, risks)
+   └─ Rework if rejected (all reviewers must re-approve)
+
+5. BASELINE & APPROVAL
+   ├─ All reviews pass (SIL 0-2: 4 approvals, SIL 3-4: 8 approvals)
+   ├─ Documents baselined (CM locks versions: DOC-9 v1.0, DOC-10 v1.0, DOC-11 v1.0)
+   └─ Proceed to implementation phase
+```
+
+### For Quality Assurance (QUA)
+
+**Design Review Checklist:**
+1. Verify document template compliance (DOC-9, DOC-10, DOC-11 templates)
+2. Apply `resources/architecture-review-checklist.md` for completeness, correctness, consistency
+3. Verify EN 50128 Table A.3 techniques applied (Modular Approach MANDATORY SIL 2+)
+4. Verify MISRA C design compliance (static allocation, fixed-width types, no recursion for SIL 3-4)
+5. Verify defensive programming applied (input validation, error handling, fail-safe)
+6. Verify complexity within limits (≤10 CCN for SIL 3-4)
+7. Verify traceability complete (requirements → architecture → design)
+
+### For Verifiers (VER)
+
+**Verification Checklist:**
+1. Verify all requirements (SRS DOC-5) addressed in architecture/design
+2. Verify traceability complete (100% for SIL 3-4)
+3. Verify design is verifiable (static analysis, complexity analysis, unit testing)
+4. Verify EN 50128 compliance (Table A.3 techniques, Table A.4 design techniques)
+5. Verify safety requirements addressed (hazard mitigation, fault detection)
+6. Run tool validations:
+   ```bash
+   traceability.py validate --matrix requirements_to_architecture --sil 3
+   traceability.py validate --matrix architecture_to_design --sil 3
+   lizard src/ --CCN 10 --warnings_only  # SIL 3-4
+   ```
+7. Create Software Architecture Verification Report (DOC-012) and Software Design Verification Report (DOC-013)
+
+### For Validators (VAL)
+
+**Validation Checklist:**
+1. Verify design supports operational scenarios
+2. Verify design is testable (unit tests, integration tests, system tests)
+3. Verify test coverage targets achievable (100% branch + condition for SIL 3-4)
+4. Provide validation approval
+
+### For Safety Managers (SAFETY_MGR, SIL 3-4)
+
+**Safety Review Checklist:**
+1. Verify all hazards (Hazard Log DOC-21) addressed in safety architecture
+2. Verify fault detection mechanisms defined (sensor validation, communication checks, watchdog)
+3. Verify fail-safe behavior defined (safe state entry, emergency stop)
+4. Verify defensive programming patterns applied (`resources/defensive-programming-patterns.md`)
+5. Verify safety requirements traced to design elements
+
+## Skill Structure
+
+```
+en50128-design/
+├── SKILL.md                               (This file - comprehensive guide)
+├── templates/
+│   ├── Software-Architecture-Specification-template.md (DOC-9)
+│   ├── Software-Design-Specification-template.md (DOC-10)
+│   ├── Software-Interface-Specifications-template.md (DOC-11)
+│   ├── Software-Architecture-Verification-Report-template.md (DOC-012)
+│   └── Software-Design-Verification-Report-template.md (DOC-013)
+├── workflows/
+│   ├── architecture-design.md             (Create DOC-9 - ~45 pages)
+│   ├── software-design.md                 (Create DOC-10 - ~40 pages)
+│   ├── interface-design.md                (Create DOC-11 - ~50 pages)
+│   └── design-review.md                   (Review process - ~50 pages)
+├── resources/
+│   ├── defensive-programming-patterns.md  (18 patterns - ~25 pages)
+│   ├── complexity-guidelines.md           (Complexity management - ~20 pages)
+│   ├── modularity-guidelines.md           (Modular design - ~50 pages)
+│   ├── misra-c-design-guidelines.md       (MISRA C design - ~40 pages)
+│   └── architecture-review-checklist.md   (Review checklist - ~35 pages)
+└── tools/
+    └── (Tool integration via Traceability Manager and Workflow Manager)
+```
 
 ## Software Architecture Techniques (EN 50128 Table A.3)
 
@@ -380,7 +510,51 @@ Keep functions simple:
 - Maximum functions per module: 20-30
 - Maximum nesting depth: 4-5 levels
 
-## References
-- EN 50128:2011 Section 7.3 (Software Architecture and Design)
-- EN 50128:2011 Table A.4 (Design Techniques)
-- MISRA C:2012 (Coding Standard)
+## Standard References
+
+- **EN 50128:2011 Section 7.3** - Software Architecture and Design - `std/EN50128-2011.md`
+- **EN 50128:2011 Table A.3** - Software Architecture techniques - `std/EN50128-2011.md`
+- **EN 50128:2011 Table A.4** - Software Design and Implementation techniques - `std/EN50128-2011.md`
+- **EN 50128:2011 Table A.12** - Design and Coding Standards - `std/EN50128-2011.md`
+- **EN 50128:2011 Table A.19** - Static Analysis (MANDATORY SIL 3-4) - `std/EN50128-2011.md`
+- **EN 50128:2011 Annex D.14** - Defensive Programming - `std/EN50128-2011.md`
+- **EN 50128:2011 Annex D.38** - Modular Approach - `std/EN50128-2011.md`
+- **MISRA C:2012** - C Coding Standard (MANDATORY SIL 3-4) - `docs/MISRA-C-2012.pdf`
+- **EN 50126-1:2017 Section 7** - RAMS Requirements - `std/EN 50126-1-2017.md`
+
+## Interaction with Other Agents
+
+**Receives requirements from:**
+- `/req` - Requirements Engineer (Software Requirements Specification DOC-5)
+- `/saf` - Safety Engineer (Hazard Log DOC-21, safety requirements)
+
+**Provides design to:**
+- `/imp` - Implementer (implements design in C code)
+- `/tst` - Tester (tests against design specifications)
+- `/int` - Integrator (integrates modules per architecture)
+
+**Coordinates with:**
+- `/ver` - Verifier (design verification, traceability validation)
+- `/val` - Validator (design validation, testability review)
+- `/qua` - Quality Assurance (design reviews, EN 50128 compliance)
+- `/pm` - Project Manager (design approval, change control)
+- `/cm` - Configuration Manager (design baselines, version control)
+
+**Submits for review to:**
+- PEER → QUA → SAFETY_MGR (SIL 3-4) → VER (SIL 3-4) → VAL (SIL 3-4) → PM
+
+## Abbreviations
+
+- **DES** = Designer (you)
+- **SAS** = Software Architecture Specification (DOC-9)
+- **SDS** = Software Design Specification (DOC-10)
+- **SIS** = Software Interface Specifications (DOC-11)
+- **SIL** = Safety Integrity Level
+- **CCN** = Cyclomatic Complexity Number
+- **M** = Mandatory
+- **HR** = Highly Recommended
+- **R** = Recommended
+- **MISRA C** = Motor Industry Software Reliability Association C
+- **WCET** = Worst Case Execution Time
+
+**Reference:** `std/EN50128-ABBREVIATIONS.md`
