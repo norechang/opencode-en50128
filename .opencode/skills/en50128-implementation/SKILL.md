@@ -23,11 +23,251 @@ I provide C implementation patterns and practices for EN 50128 Section 7.4:
 ## When to use me
 
 Use this skill when:
-- Implementing C code from design
-- Writing unit tests for C code
-- Performing code reviews
-- Checking MISRA C compliance
-- Addressing safety-critical implementation concerns
+- **Starting implementation phase**: Follow `workflows/misra-c-implementation.md` to write MISRA C compliant code
+- **Applying defensive coding**: Use `workflows/defensive-coding-implementation.md` for input validation, error handling, and safety patterns
+- **Writing unit tests**: Follow `workflows/unit-testing-workflow.md` to create Unity-based tests with coverage
+- **Performing code review**: Apply `workflows/code-review-workflow.md` for peer, QUA, and VER reviews (SIL-dependent)
+- **Referencing MISRA C patterns**: Use `resources/misra-c-coding-patterns.md` for all 178 rules + 16 directives with code examples
+- **Referencing test patterns**: Apply `resources/unit-testing-patterns.md` for test design, mocking, and coverage strategies
+- **Preparing for code review**: Use `resources/code-review-checklist.md` (124 items across 11 categories)
+- **Avoiding common mistakes**: Reference `resources/common-pitfalls.md` for 40+ pitfalls with before/after examples
+
+## How to use this skill
+
+### For Implementers (IMP)
+
+**Complete Implementation Phase Workflow:**
+
+```
+1. MISRA C IMPLEMENTATION (workflows/misra-c-implementation.md)
+   ├─ Review input documents (Software Design Specification DOC-10, Interface Specifications DOC-11)
+   ├─ Setup development environment (gcc, MISRA C checker, gcov/lcov, Unity test framework)
+   ├─ Implement modules per design specification:
+   │    ├─ Use fixed-width types (uint8_t, uint16_t, uint32_t, int8_t, etc.) - MANDATORY
+   │    ├─ Static allocation only (no malloc/free) - MANDATORY SIL 2+
+   │    ├─ No recursion - FORBIDDEN SIL 3-4
+   │    ├─ Validate all pointer parameters (NULL checks) - MANDATORY
+   │    ├─ Check all return values - MANDATORY
+   │    └─ Apply MISRA C:2012 rules (143 mandatory, 35 required) - MANDATORY SIL 2+
+   ├─ Apply defensive programming patterns (workflows/defensive-coding-implementation.md):
+   │    ├─ Input validation (NULL, range, plausibility, rate-of-change)
+   │    ├─ Safe arithmetic (overflow, underflow, divide-by-zero checks)
+   │    ├─ Array bounds checking (all array accesses)
+   │    ├─ Error detection and reporting (comprehensive error codes)
+   │    └─ Fail-safe behavior (safe state entry on error)
+   ├─ Maintain complexity limits:
+   │    ├─ SIL 0-1: CCN ≤ 20
+   │    ├─ SIL 2: CCN ≤ 15
+   │    └─ SIL 3-4: CCN ≤ 10 (MANDATORY)
+   ├─ Document code with Doxygen-style comments:
+   │    ├─ Function headers (@brief, @param, @return, @pre, @post)
+   │    ├─ Traceability (@trace SRS-XXX, @trace SDS-YYY)
+   │    └─ Algorithm explanations (pseudocode for complex logic)
+   └─ Submit for self-review → PEER review → QUA review
+
+2. UNIT TESTING (workflows/unit-testing-workflow.md)
+   ├─ Create test file for each module (test_<module>.c)
+   ├─ Setup Unity test framework:
+   │    ├─ setUp() and tearDown() functions
+   │    ├─ Test fixtures for each test case
+   │    └─ Mock external dependencies (hardware, I/O, OS)
+   ├─ Apply test design patterns (resources/unit-testing-patterns.md):
+   │    ├─ Equivalence partitioning (valid, invalid, boundary)
+   │    ├─ Boundary value analysis (min, max, min-1, max+1)
+   │    ├─ State transition testing (for FSMs)
+   │    ├─ Decision table testing (for boolean combinations)
+   │    └─ Error path testing (NULL, out-of-range, overflow, timeout)
+   ├─ Write test cases for all functions:
+   │    ├─ Test success paths (normal operation)
+   │    ├─ Test error paths (NULL, invalid, overflow, underflow, divide-by-zero)
+   │    ├─ Test boundary values (min, max, zero, one, -1)
+   │    ├─ Test state transitions (FSM valid/invalid)
+   │    └─ Test concurrency (if applicable - ISR, multithreading)
+   ├─ Measure coverage (gcov/lcov):
+   │    ├─ Statement coverage (100% for SIL 3-4, HR for SIL 2)
+   │    ├─ Branch coverage (100% for SIL 3-4, MANDATORY for SIL 2)
+   │    ├─ Condition coverage (100% for SIL 3-4)
+   │    └─ MC/DC coverage (Highly Recommended for SIL 3-4)
+   ├─ Achieve coverage targets:
+   │    ├─ Add tests for uncovered lines/branches
+   │    ├─ Document justified exclusions (unreachable code, hardware-dependent)
+   │    └─ Generate coverage report (HTML, XML)
+   └─ Submit tests and coverage report for review
+
+3. CODE REVIEW (workflows/code-review-workflow.md)
+   ├─ Self-review using resources/code-review-checklist.md:
+   │    ├─ Completeness (12 items): All functions, error handling, traceability
+   │    ├─ Correctness (15 items): Logic, algorithms, edge cases
+   │    ├─ Consistency (10 items): Naming, formatting, style
+   │    ├─ EN 50128 (12 items): Table A.4 techniques, defensive programming
+   │    ├─ MISRA C (20 items): Mandatory rules, required rules, advisory rules
+   │    ├─ Safety (18 items): NULL checks, bounds checks, overflow checks
+   │    ├─ Quality (15 items): Complexity, maintainability, readability
+   │    └─ Traceability (8 items): Requirements, design, tests
+   ├─ PEER review (technical correctness, logic, clarity):
+   │    ├─ Apply Top 20 quick reference checklist
+   │    ├─ Focus on correctness and safety
+   │    └─ Provide feedback (critical, major, minor)
+   ├─ QUA review (process compliance, EN 50128, MISRA C):
+   │    ├─ Run static analysis (Cppcheck, PC-lint Plus, Clang)
+   │    ├─ Run complexity analysis (Lizard)
+   │    ├─ Verify MISRA C compliance (zero mandatory violations for SIL 2+)
+   │    ├─ Verify complexity within limits (≤10 CCN for SIL 3-4)
+   │    └─ Generate QA Code Review Report
+   ├─ VER review (SIL 3-4 - independent verification):
+   │    ├─ Verify traceability (requirements → design → code → tests)
+   │    ├─ Verify defensive programming applied
+   │    ├─ Verify coverage targets met (100% for SIL 3-4)
+   │    ├─ Verify EN 50128 compliance (Table A.4 techniques)
+   │    └─ Generate Software Component Verification Report (DOC-014)
+   └─ Rework if rejected (all reviewers must re-approve)
+
+4. AVOIDING PITFALLS (resources/common-pitfalls.md)
+   ├─ MISRA C common violations (20+ pitfalls):
+   │    ├─ Implicit type conversions → Use fixed-width types
+   │    ├─ Missing NULL checks → Validate all pointers
+   │    ├─ Array out of bounds → Bounds-check all accesses
+   │    ├─ Uninitialized variables → Initialize at declaration
+   │    ├─ Using goto → Use structured control flow
+   │    ├─ Integer overflow → Check before arithmetic
+   │    ├─ Divide by zero → Validate divisor != 0
+   │    └─ Using recursion → Use iteration instead
+   ├─ Defensive programming mistakes (5+ pitfalls):
+   │    ├─ Ignoring return values → Check all error codes
+   │    ├─ Missing default case → Always include default
+   │    ├─ No enum range checking → Validate enum before use
+   │    ├─ Magic numbers → Use named constants
+   │    └─ Implicit boolean conversions → Use explicit comparisons
+   ├─ Unit testing anti-patterns (5+ pitfalls):
+   │    ├─ Testing implementation → Test behavior/requirements
+   │    ├─ No negative testing → Test all error paths
+   │    ├─ Test interdependence → Use setUp/tearDown for isolation
+   │    ├─ Over-mocking → Mock only external dependencies
+   │    └─ No coverage measurement → Always measure coverage
+   └─ Memory, concurrency, integration pitfalls (10+ pitfalls)
+
+5. BASELINE & APPROVAL
+   ├─ All reviews pass (SIL 0-2: 3 approvals, SIL 3-4: 4 approvals)
+   ├─ Source code baselined (CM locks versions: module.c v1.0, module.h v1.0, test_module.c v1.0)
+   ├─ Coverage reports archived (statement/branch/condition coverage)
+   ├─ MISRA C compliance verified (zero mandatory violations for SIL 2+)
+   └─ Proceed to integration phase
+```
+
+### For Testers (TST)
+
+**Unit Testing Workflow:**
+1. Review `workflows/unit-testing-workflow.md` for comprehensive testing process
+2. Apply test design patterns from `resources/unit-testing-patterns.md`:
+   - Equivalence partitioning, boundary value analysis, state transition testing
+   - Error path testing (NULL, out-of-range, overflow, timeout, corrupted data)
+   - Mocking patterns (return value, call count, parameter capture, sequence, hardware, time)
+3. Use Unity test framework for test implementation
+4. Measure coverage with gcov/lcov:
+   ```bash
+   gcc -fprofile-arcs -ftest-coverage -o test_module test_module.c module.c
+   ./test_module
+   gcov module.c
+   lcov --capture --directory . --output-file coverage.info
+   genhtml coverage.info --output-directory coverage_html
+   ```
+5. Achieve coverage targets:
+   - **SIL 0-1**: Statement (HR), Branch (HR)
+   - **SIL 2**: Statement (HR), Branch (**M**)
+   - **SIL 3-4**: Statement (**M**), Branch (**M**), Condition (**M**)
+6. For MC/DC coverage (SIL 3-4 Highly Recommended):
+   ```bash
+   python3 tools/mcdc/mcdc_analyzer.py --source module.c --test test_module.c
+   ```
+
+### For Quality Assurance (QUA)
+
+**Code Review Checklist (124 items):**
+1. Apply `resources/code-review-checklist.md` for comprehensive review
+2. Run static analysis tools:
+   ```bash
+   # Cppcheck (MANDATORY SIL 3-4)
+   cppcheck --enable=all --xml --xml-version=2 src/ 2> cppcheck.xml
+   
+   # Clang Static Analyzer (MANDATORY SIL 3-4)
+   scan-build -o analysis_results make
+   
+   # Complexity analysis (MANDATORY SIL 3-4)
+   lizard src/ --CCN 10 --warnings_only  # SIL 3-4
+   ```
+3. Verify MISRA C compliance:
+   ```bash
+   # PC-lint Plus (best for MISRA C)
+   pclp64 -vs src/module.c -misra3 -misra-xml=misra_report.xml
+   
+   # Or Cppcheck with MISRA addon
+   cppcheck --addon=misra src/module.c 2> misra_violations.txt
+   ```
+4. Review categories (11 total):
+   - **Completeness** (12 items): Functions, error handling, comments, traceability
+   - **Correctness** (15 items): Logic, algorithms, calculations, edge cases
+   - **Consistency** (10 items): Naming, formatting, style, patterns
+   - **EN 50128** (12 items): Table A.4 techniques, defensive programming
+   - **MISRA C** (20 items): Zero mandatory violations for SIL 2+
+   - **Safety** (18 items): NULL checks, bounds checks, overflow checks
+   - **Quality** (15 items): Complexity ≤10 for SIL 3-4, maintainability
+   - **Traceability** (8 items): @trace tags, requirements coverage
+   - **Tool Validation** (6 items): Static analysis, complexity, coverage
+   - **Review Process** (8 items): Feedback recording, rework verification
+5. Generate QA Code Review Report with findings (critical, major, minor)
+
+### For Verifiers (VER, SIL 3-4)
+
+**Independent Verification Checklist:**
+1. Verify all requirements (SRS DOC-5) traced to code
+2. Verify traceability complete (requirements → design → code → tests = 100%)
+3. Verify EN 50128 Table A.4 techniques applied:
+   - Modular Approach (MANDATORY SIL 2+)
+   - Design and Coding Standards (MANDATORY SIL 3-4)
+   - Structured Programming (MANDATORY SIL 3-4)
+4. Verify MISRA C:2012 compliance (zero mandatory violations)
+5. Verify defensive programming applied (all patterns from resources)
+6. Verify coverage targets met:
+   - **SIL 3-4**: 100% statement, branch, condition (MANDATORY)
+7. Run verification tools:
+   ```bash
+   # Traceability validation
+   python3 tools/traceability_manager.py validate --matrix requirements_to_code --sil 3
+   
+   # Static analysis
+   cppcheck --enable=all --xml --xml-version=2 src/ 2> cppcheck.xml
+   scan-build make
+   
+   # Complexity analysis
+   lizard src/ --CCN 10 --warnings_only
+   
+   # Coverage validation
+   lcov --summary coverage.info | grep -E "lines|functions|branches"
+   ```
+8. Create Software Component Verification Report (DOC-014)
+
+## Skill Structure
+
+```
+en50128-implementation/
+├── SKILL.md                               (This file - comprehensive guide)
+├── templates/
+│   ├── Software-Unit-Test-Specification-template.md (DOC-015)
+│   ├── Software-Unit-Test-Report-template.md (DOC-016)
+│   └── Software-Component-Verification-Report-template.md (DOC-014)
+├── workflows/
+│   ├── misra-c-implementation.md          (MISRA C coding - ~40 pages)
+│   ├── defensive-coding-implementation.md (Defensive patterns - ~40 pages)
+│   ├── unit-testing-workflow.md           (Unity testing - ~50 pages)
+│   └── code-review-workflow.md            (Review process - ~50 pages)
+├── resources/
+│   ├── misra-c-coding-patterns.md         (All 178 rules + 16 directives - ~50 pages)
+│   ├── unit-testing-patterns.md           (Test design and patterns - ~40 pages)
+│   ├── code-review-checklist.md           (124 items, 11 categories - ~40 pages)
+│   └── common-pitfalls.md                 (40+ pitfalls with fixes - ~30 pages)
+└── tools/
+    └── (Tool integration via Workflow Manager, gcov/lcov, Cppcheck, Unity)
+```
 
 ## Implementation Techniques (EN 50128 Table A.4)
 
