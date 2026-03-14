@@ -804,9 +804,464 @@ if __name__ == '__main__':
 }
 ```
 
+---
+
+## Comprehensive Workflows
+
+This skill provides **3 comprehensive workflows** covering the complete validation lifecycle:
+
+### 1. System Validation Workflow (`workflows/system-validation-workflow.md`)
+
+**EN 50128 Reference**: Section 7.7 (Overall Software Testing / Final Validation), Table A.7  
+**Coverage**: System-level testing, functional validation, performance validation, safety validation
+
+**Key Topics**:
+- Software Validation Plan (SVP) development with complete template
+- Validation environment setup (laboratory, HIL, pilot installation)
+- Functional validation (MANDATORY SIL 3-4, Table A.14)
+- Performance validation (MANDATORY SIL 3-4, Table A.18)
+- Safety validation (hazard-based testing, fault injection)
+- Operational scenario validation (customer-defined scenarios)
+- Requirements coverage validation (100% traceability verification)
+- Validation report generation (EN 50128 Section 7.7.4.6-7.7.4.11)
+- Complete C code examples (2,482 lines, ~100 pages)
+- Python test automation scripts
+
+**Example Usage**:
+```bash
+# 1. Create Software Validation Plan (SVP)
+mkdir -p plans
+cat > plans/DOC-VAL-SVP-001.md <<'EOF'
+# Software Validation Plan
+## Document Control
+- Document ID: DOC-VAL-SVP-001
+- SIL Level: 3
+...
+EOF
+
+# 2. Setup validation environment
+cd tests/validation
+python3 setup_validation_env.py \
+    --target arm-cortex-m4 \
+    --hil-config hil_brake_system.json \
+    --output evidence/validation/environment_setup.json
+
+# 3. Execute functional validation tests
+./test_functional_validation
+./test_brake_interlock_validation
+./test_door_safety_validation
+
+# 4. Execute performance validation (SIL 3-4 MANDATORY)
+python3 performance_validation.py \
+    --requirements requirements/performance_requirements.json \
+    --sil 3 \
+    --output evidence/validation/performance_validation.json
+
+# 5. Execute safety validation
+./test_safety_validation
+python3 fault_injection.py \
+    --fault-list hazard_log.json \
+    --output evidence/validation/safety_validation.json
+
+# 6. Validate requirements coverage
+workspace.py trace validate --phase validation --sil 3
+workspace.py trace report \
+    --from requirements \
+    --to tests \
+    --format markdown \
+    --output evidence/validation/requirements_coverage.md
+
+# 7. Generate validation report
+python3 tools/validation_reporter.py \
+    --svp plans/DOC-VAL-SVP-001.md \
+    --results evidence/validation/*.json \
+    --format markdown \
+    --output evidence/validation/DOC-VAL-REP-001.md
+
+# 8. Submit for review
+workspace.py wf submit \
+    --deliverable DOC-VAL-REP-001 \
+    --phase validation
+```
+
+---
+
+### 2. Acceptance Testing Workflow (`workflows/acceptance-testing-workflow.md`)
+
+**EN 50128 Reference**: Section 7.7.4.3, Section 5.1.2.8 (Validator approval)  
+**Coverage**: User acceptance testing, customer sign-off, operational readiness
+
+**Key Topics**:
+- User Acceptance Test (UAT) planning and preparation
+- UAT test case development (user-language procedures, no technical jargon)
+- Customer involvement and training for UAT execution
+- UAT execution with daily logs and driver feedback
+- Acceptance criteria evaluation (quantitative scorecard + qualitative feedback)
+- Customer sign-off process (acceptance certificate template)
+- Acceptance evidence collection (comprehensive archive: logs, videos, photos)
+- Pilot installation procedures and commissioning
+- Complete C code examples (1,549 lines, ~62 pages)
+- UAT automation with Python logging
+
+**Example Usage**:
+```bash
+# 1. Create UAT Plan
+mkdir -p plans
+cat > plans/DOC-VAL-UATP-001.md <<'EOF'
+# User Acceptance Test Plan
+## Document Control
+- Document ID: DOC-VAL-UATP-001
+- Customer: Railway Operator XYZ
+...
+EOF
+
+# 2. Develop UAT test cases (user language)
+python3 tools/uat_generator.py \
+    --requirements requirements/user_requirements.json \
+    --template templates/uat_test_case.md \
+    --output tests/uat/test_cases/
+
+# 3. Train customer on UAT procedures
+# Provide: UAT Plan, Test Procedures, Instrumented Software
+
+# 4. Execute UAT with customer
+cd tests/uat
+# Customer executes tests, system logs to uat_results.json
+python3 uat_logger.py \
+    --port /dev/ttyUSB0 \
+    --output evidence/uat/uat_execution_log.json
+
+# 5. Collect customer feedback
+python3 uat_feedback_collector.py \
+    --results evidence/uat/uat_execution_log.json \
+    --output evidence/uat/customer_feedback.json
+
+# 6. Evaluate acceptance criteria
+python3 tools/acceptance_evaluator.py \
+    --results evidence/uat/uat_execution_log.json \
+    --criteria plans/acceptance_criteria.json \
+    --sil 3 \
+    --output evidence/uat/acceptance_evaluation.json
+
+# 7. Generate acceptance certificate (if all criteria met)
+python3 tools/acceptance_certificate_generator.py \
+    --evaluation evidence/uat/acceptance_evaluation.json \
+    --customer "Railway Operator XYZ" \
+    --output evidence/uat/DOC-VAL-ACC-001.pdf
+
+# 8. Submit for final approval
+workspace.py wf submit \
+    --deliverable DOC-VAL-ACC-001 \
+    --phase validation
+```
+
+---
+
+### 3. Operational Validation Workflow (`workflows/operational-validation-workflow.md`)
+
+**EN 50128 Reference**: Section 7.7.4.5 (Testing in operational environment), Section 7.7.4.3  
+**Coverage**: Field testing, pilot installations, long-term operational monitoring
+
+**Key Topics**:
+- Operational Validation Plan template (12-week field test plan)
+- Pilot installation setup and commissioning procedures
+- Environmental stress testing (temperature, vibration, humidity, EMI)
+- Long-term operational monitoring (1,000+ hours continuous operation)
+- Field defect management and emergency response procedures
+- Operational readiness assessment and deployment authorization
+- Operational evidence collection (comprehensive field data)
+- Laboratory vs operational validation comparison
+- Complete C code examples (1,560 lines, ~62 pages)
+- Python field test automation
+
+**Example Usage**:
+```bash
+# 1. Create Operational Validation Plan
+mkdir -p plans
+cat > plans/DOC-VAL-OVP-001.md <<'EOF'
+# Operational Validation Plan
+## Document Control
+- Document ID: DOC-VAL-OVP-001
+- Field Test Site: Test Track A, Pilot Line B
+- Duration: 12 weeks
+...
+EOF
+
+# 2. Commission pilot installation
+cd tests/operational
+python3 commissioning.py \
+    --site "Test Track A" \
+    --hardware-id "HW-PILOT-001" \
+    --output evidence/operational/commissioning_report.json
+
+# 3. Execute environmental stress tests
+./test_environmental_stress
+python3 environmental_test_runner.py \
+    --test-suite environmental_stress_tests.json \
+    --output evidence/operational/environmental_results.json
+
+# 4. Start long-term monitoring (1,000+ hours)
+python3 field_monitor.py \
+    --site "Test Track A" \
+    --duration 1000 \
+    --log-interval 60 \
+    --output evidence/operational/field_monitoring_log.json &
+
+# 5. Collect operational data
+python3 operational_data_collector.py \
+    --monitoring-log evidence/operational/field_monitoring_log.json \
+    --interval daily \
+    --output evidence/operational/daily_reports/
+
+# 6. Analyze field reliability
+python3 tools/reliability_analyzer.py \
+    --field-data evidence/operational/field_monitoring_log.json \
+    --requirements requirements/reliability_requirements.json \
+    --sil 3 \
+    --output evidence/operational/reliability_analysis.json
+
+# 7. Assess operational readiness
+python3 tools/operational_readiness_assessor.py \
+    --validation-results evidence/validation/ \
+    --uat-results evidence/uat/ \
+    --field-results evidence/operational/ \
+    --sil 3 \
+    --output evidence/operational/readiness_assessment.json
+
+# 8. Generate operational validation report
+python3 tools/operational_validator.py \
+    --plan plans/DOC-VAL-OVP-001.md \
+    --results evidence/operational/*.json \
+    --format markdown \
+    --output evidence/operational/DOC-VAL-OP-001.md
+```
+
+---
+
+## Validation Workflow Selection by SIL
+
+| SIL Level | Required Workflows | Key Requirements |
+|-----------|-------------------|------------------|
+| **SIL 0-1** | System Validation | Functional testing (HR), Independent validation (R) |
+| **SIL 2** | System + Acceptance | Functional testing (HR), Performance testing (HR), Independent validation (HR) |
+| **SIL 3-4** | **ALL 3 workflows** | Functional testing (**M**), Performance testing (**M**), Independent validation (**M**), Pilot installation (HR) |
+
+**SIL 3-4 Special Requirements**:
+- Independent Validator (MANDATORY, must not report to Project Manager)
+- 100% functional coverage validation (all requirements traced and validated)
+- Performance validation MANDATORY (Table A.18)
+- Pilot installation Highly Recommended (operational validation)
+- Customer acceptance certificate required
+- Complete traceability from requirements through validation tests
+- Validator has final release approval authority
+
+---
+
+## Tool Integration
+
+### Validation Test Execution (Working Implementations)
+
+**Python Validation Runner**:
+```bash
+# Execute complete validation suite
+python3 tools/validation_runner.py \
+    --config validation_config.json \
+    --sil 3 \
+    --output evidence/validation/validation_results.json
+
+# Validation config includes:
+# - Functional test suites
+# - Performance test suites
+# - Safety test suites
+# - Operational scenarios
+```
+
+**Validation Configuration Example** (`validation_config.json`):
+```json
+{
+  "project": "Railway Door Control System",
+  "sil_level": 3,
+  "software_version": "1.0.0",
+  "test_suites": [
+    {
+      "name": "Functional Validation",
+      "command": "./tests/functional/run_all.sh",
+      "mandatory": true
+    },
+    {
+      "name": "Performance Validation",
+      "command": "./tests/performance/run_all.sh",
+      "mandatory": true
+    },
+    {
+      "name": "Safety Validation",
+      "command": "./tests/safety/run_all.sh",
+      "mandatory": true
+    }
+  ]
+}
+```
+
+---
+
+### Performance Validation Tools (Working Implementations)
+
+**Performance Testing** (MANDATORY SIL 3-4):
+```bash
+# Execute timing validation
+./tests/performance/test_timing_requirements
+
+# Measure execution time, jitter, deadline compliance
+python3 tools/performance_validator.py \
+    --sil 3 \
+    --requirements requirements/timing_requirements.json \
+    --results performance_results.json \
+    --output evidence/validation/performance_validation.json
+
+# For SIL 3-4: Zero deadline misses required
+```
+
+**Resource Usage Validation**:
+```bash
+# Measure CPU, memory, stack usage on target
+python3 tools/resource_validator.py \
+    --binary build/firmware.elf \
+    --map build/firmware.map \
+    --sil 3 \
+    --output evidence/validation/resource_validation.json
+```
+
+---
+
+### Hardware-in-the-Loop (HIL) Validation
+
+**HIL Test Execution**:
+```bash
+# Install pyserial for UART communication
+pip3 install pyserial
+
+# Run HIL validation suite
+python3 tests/hil/hil_validation_runner.py \
+    --port /dev/ttyUSB0 \
+    --baudrate 115200 \
+    --test-suite tests/hil/validation_tests.json \
+    --timeout 600 \
+    --output evidence/validation/hil_results.json
+
+# Validate HIL test results
+python3 tools/hil_validator.py \
+    --results evidence/validation/hil_results.json \
+    --requirements requirements/system_requirements.json \
+    --sil 3 \
+    --output evidence/validation/hil_validation.json
+```
+
+---
+
+### Traceability Integration (Working Implementation)
+
+**Link Validation Tests to Requirements**:
+```bash
+# Create traceability link (validation test → requirement)
+workspace.py trace create \
+    --from tests \
+    --to requirements \
+    --source-id VT-BRAKE-001 \
+    --target-id REQ-SAF-015 \
+    --rationale "Validation test validates emergency brake requirement"
+
+# Create traceability link (validation test → hazard)
+workspace.py trace create \
+    --from tests \
+    --to hazards \
+    --source-id VT-DOOR-INTERLOCK-001 \
+    --target-id HAZ-004 \
+    --rationale "Validation test validates door interlock mitigates unintended movement hazard"
+
+# Validate validation traceability completeness (100% required SIL 3-4)
+workspace.py trace validate --phase validation --sil 3
+
+# Generate traceability report (requirements → validation tests)
+workspace.py trace report \
+    --from requirements \
+    --to tests \
+    --format markdown \
+    --output evidence/validation/requirements_coverage.md
+
+# Verify 100% coverage (SIL 3-4)
+python3 tools/coverage_checker.py \
+    --traceability evidence/validation/requirements_coverage.md \
+    --sil 3 \
+    --output evidence/validation/coverage_validation.json
+```
+
+---
+
+### Workflow Management (Working Implementation)
+
+**Submit Validation Report for Review**:
+```bash
+# Submit validation report to QA
+workspace.py wf submit \
+    --deliverable DOC-VAL-REP-001 \
+    --phase validation
+
+# QA reviews (document template compliance)
+workspace.py wf review \
+    --deliverable DOC-VAL-REP-001 \
+    --reviewer QUA \
+    --status approved \
+    --comments "Template compliance verified. All sections complete."
+
+# VMGR reviews (technical validation)
+workspace.py wf review \
+    --deliverable DOC-VAL-REP-001 \
+    --reviewer VMGR \
+    --status approved \
+    --comments "All validation tests passed. 100% requirements coverage. Approve for release."
+
+# Check workflow status
+workspace.py wf status --deliverable DOC-VAL-REP-001
+```
+
+---
+
+## EN 50128 Section 7.7 Coverage
+
+This skill provides **complete coverage** of EN 50128 Section 7.7 (Overall Software Testing / Final Validation):
+
+| Section | Topic | Coverage in Workflows |
+|---------|-------|----------------------|
+| **7.7.4.1** | Overall Software Test Specification | System Validation Workflow |
+| **7.7.4.2** | Overall Software Testing | System Validation Workflow |
+| **7.7.4.3** | Supplementary validation tests | Acceptance Testing, Operational Validation |
+| **7.7.4.4** | Overall Software Test Report | System Validation Workflow (report generation) |
+| **7.7.4.5** | Testing in operational environment | Operational Validation Workflow |
+| **7.7.4.6-7.7.4.11** | Software Validation Report | System Validation Workflow (SVR template) |
+| **7.7.4.12** | Release Note | System Validation Workflow (release note template) |
+
+---
+
+## Table A.7 Validation Techniques Coverage
+
+| # | Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Workflow Coverage |
+|---|-----------|-------|---------|---------|-------------------|
+| **1** | **Performance Testing** | - | HR | **M** | System Validation (Section 4), Operational Validation (environmental stress) |
+| **2** | **Functional and Black-box Testing** | HR | HR | **M** | System Validation (Section 3), Acceptance Testing (UAT) |
+| **3** | Modelling | - | R | R | System Validation (operational scenarios) |
+
+**SIL 3-4 Mandatory Techniques**:
+- ✅ **Performance Testing (1)** - Covered in System Validation Workflow (timing, resource usage, real-time compliance)
+- ✅ **Functional and Black-box Testing (2)** - Covered in System Validation (functional tests), Acceptance Testing (UAT)
+
+---
+
 ## References
 
-- EN 50128:2011 Section 7.6 (Software Validation)
+- EN 50128:2011 Section 7.7 (Overall Software Testing / Final Validation)
+- EN 50128:2011 Table A.7 (Validation Techniques)
+- EN 50128:2011 Table A.14 (Functional and Black-box Testing)
+- EN 50128:2011 Table A.18 (Performance Testing)
 - EN 50126 Part 1 (RAMS Process)
 - ISO/IEC 25010 (Software Quality)
 - IEC 61508 Part 3 (Software Validation)
