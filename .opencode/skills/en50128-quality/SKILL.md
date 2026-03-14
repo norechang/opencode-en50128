@@ -982,9 +982,459 @@ if __name__ == '__main__':
     sys.exit(gate.evaluate())
 ```
 
+---
+
+## Comprehensive Workflows
+
+This skill provides **4 comprehensive workflows** (248 pages, 6,188 lines) covering all EN 50128 quality assurance activities. These workflows implement EN 50128 Section 6.5 requirements with complete tool integration, code examples, and SIL-specific guidance.
+
+### Workflow 1: Quality Assurance Workflow
+
+**File**: `.opencode/skills/en50128-quality/workflows/quality-assurance-workflow.md` (1,523 lines, ~61 pages)
+
+**Purpose**: Complete EN 50128 quality assurance process for all lifecycle phases
+
+**Key Topics**:
+1. **SQAP Development**: Software Quality Assurance Plan structure and content per EN 50128 Section 6.5.4.3
+2. **Quality Gates Framework**: 6 phase gates (requirements, design, implementation, testing, validation, deployment) with SIL-specific criteria
+3. **Quality Metrics Collection**: Python script for collecting complexity, MISRA C compliance, coverage, and code metrics
+4. **Non-Conformance Management**: NCR process, template, tracking, and resolution workflow
+5. **Quality Audit Process**: Audit planning, execution, finding management, and closure
+6. **Traceability Management**: workspace.py trace integration for 100% traceability validation (MANDATORY SIL 3-4)
+
+**Tool Integration**:
+```bash
+# Quality gate check (automated)
+python3 tools/quality_gate.py implementation 3
+
+# Quality metrics collection
+python3 tools/collect_metrics.py src/ 3
+
+# Non-conformance tracking
+workspace.py wf log-ncr \
+    --ncr-id NCR-2026-005 \
+    --severity MAJOR \
+    --description "MISRA C Rule 21.3 violation: dynamic memory allocation"
+
+# Traceability validation (MANDATORY SIL 3-4)
+workspace.py trace validate --phase testing --sil 3
+```
+
+**Example Scenarios**:
+1. MISRA C Violation Found (Major NCR)
+2. Coverage Requirement Not Met (Gate Rejection)
+3. Traceability Gap Detected (Critical NCR)
+
+---
+
+### Workflow 2: Document Review Workflow
+
+**File**: `.opencode/skills/en50128-quality/workflows/document-review-workflow.md` (1,947 lines, ~78 pages)
+
+**Purpose**: EN 50128 document template compliance review (MANDATORY before technical review)
+
+**Key Topics**:
+1. **EN 50128 Document Requirements**: Annex C Table C.1 mandatory documents, template structure
+2. **Document ID Format Validation**: DOC-[ROLE]-[TYPE]-[NNN] format enforcement
+3. **Document Control Table Validation**: Version, date, author, SIL level, status verification
+4. **Approvals Table Validation**: SIL-specific approvers (Independent Verifier, Independent Validator, Assessor for SIL 3-4)
+5. **Traceability Section Validation**: MANDATORY for SIL 3-4, 100% coverage required
+6. **1-Pass Review Policy**: Developer gets ONE resubmit opportunity, escalate if second review fails
+7. **Automated Document Checking**: Python script for template compliance validation
+
+**QA Review is Gate-Keeper**:
+- QA reviews FORMAT and STRUCTURE (template compliance) FIRST
+- Technical reviewers review CONTENT (requirements correctness, design quality) AFTER QA approval
+- No technical review until QA approves document template compliance
+
+**Tool Integration**:
+```bash
+# Submit document for QA review
+workspace.py wf submit \
+    --deliverable DOC-VER-REP-001 \
+    --phase verification \
+    --author "John Smith" \
+    --version 1.0
+
+# Automated document template check
+python3 tools/document_checker.py \
+    --document docs/DOC-VER-REP-001.md \
+    --sil 3 \
+    --output evidence/qa/doc_review_DOC-VER-REP-001.json
+
+# QA review decision (approve)
+workspace.py wf review \
+    --deliverable DOC-VER-REP-001 \
+    --reviewer QUA \
+    --status approved \
+    --comments "Template compliance verified. Proceed to technical review."
+
+# QA review decision (reject)
+workspace.py wf review \
+    --deliverable DOC-VER-REP-001 \
+    --reviewer QUA \
+    --status rejected \
+    --comments "Document ID format incorrect. Fix and resubmit (1 pass allowed)."
+```
+
+**Example Scenarios**:
+1. Document ID Format Incorrect (REJECT)
+2. Missing Independent Validator for SIL 3 (REJECT)
+3. Traceability Section Empty (REJECT, SIL 3)
+4. All Checks Pass (APPROVE)
+
+---
+
+### Workflow 3: Technical Review Workflow
+
+**File**: `.opencode/skills/en50128-quality/workflows/technical-review-workflow.md` (1,463 lines, ~59 pages)
+
+**Purpose**: Technical content review for design, code, and tests (AFTER document template compliance)
+
+**Key Topics**:
+1. **Design Review Process**: Architecture review and detailed design review with multi-reviewer team
+2. **Code Review Process**: MISRA C compliance (zero mandatory violations SIL 2+), complexity (CCN ≤ 10 SIL 3-4), defensive programming
+3. **Test Review Process**: Test plan review, test specification review, test report review with coverage validation
+4. **Review Meeting Management**: Opening, presentation, walkthrough, defect discussion, wrap-up
+5. **Defect Management**: Severity classification (Critical, Major, Minor), resolution workflow, re-review process
+6. **Review Checklists**: Comprehensive checklists for requirements, design, code, and test reviews
+7. **Automated Technical Checks**: MISRA C (Cppcheck), complexity (Lizard), coverage (gcov/lcov)
+
+**Review Team Composition**:
+- **Design Review**: DES (author), REQ, SAF, IMP, QUA
+- **Code Review**: IMP (author), Peer Developer, QUA
+- **Test Review**: TST (author), REQ, VER, QUA
+
+**Tool Integration**:
+```bash
+# Pre-review automated checks (MUST PASS before submitting)
+# 1. MISRA C compliance
+cppcheck --enable=all --addon=misra.json --xml src/*.c 2> cppcheck_report.xml
+python3 tools/check_misra.py --report cppcheck_report.xml --sil 3 --mandatory-only
+
+# 2. Complexity check
+lizard src/*.c -o lizard_report.txt
+python3 tools/check_complexity.py --report lizard_report.txt --sil 3 --max-ccn 10
+
+# 3. Coverage check
+gcov src/*.c
+lcov --capture --directory . --output-file coverage.info
+python3 tools/check_coverage.py --coverage coverage.info --sil 3 --statement 100 --branch 100
+
+# Submit for technical review (after QA document review approval)
+workspace.py wf submit \
+    --deliverable src/door_controller.c \
+    --phase implementation \
+    --author "Dave Developer" \
+    --version 1.0
+
+# Technical review approval
+workspace.py wf review \
+    --deliverable src/door_controller.c \
+    --reviewer QUA \
+    --status approved \
+    --comments "Code review complete. All checks passed. Proceed to integration."
+```
+
+**Example Scenarios**:
+1. Design Review - Missing Safety Redundancy (REJECT, Critical defect)
+2. Code Review - MISRA C Mandatory Violation (REJECT, malloc used)
+3. Code Review - Defensive Programming Issue (REWORK, missing NULL check)
+4. Test Review - Coverage Incomplete (REJECT, 95% vs 100% required)
+
+---
+
+### Workflow 4: Quality Audit Workflow
+
+**File**: `.opencode/skills/en50128-quality/workflows/quality-audit-workflow.md` (1,255 lines, ~50 pages)
+
+**Purpose**: Independent verification that EN 50128 process is followed (MANDATORY SIL 3-4)
+
+**Key Topics**:
+1. **Process Compliance Audit**: Verify V-Model lifecycle adherence, phase gates enforced, EN 50128 techniques applied
+2. **Artifact Audit**: Verify deliverables meet EN 50128 Annex C requirements, template compliance, review status
+3. **Tool Qualification Audit**: Verify T2/T3 tools qualified per Annex B (MANDATORY SIL 3-4)
+4. **Pre-Release Audit**: Final audit before deployment (MANDATORY SIL 3-4)
+5. **Audit Execution**: Opening meeting, evidence collection, interviews, observations, closing meeting
+6. **Finding Management**: Non-conformance classification (Critical, Major, Minor), corrective action tracking, follow-up audit
+7. **Audit Report Generation**: Audit plan, checklist, findings, corrective actions, closure
+
+**Audit Frequency by SIL**:
+- **SIL 3-4**: Process audit monthly (M), artifact audit per phase (M), tool audit per tool (M), pre-release audit (M)
+- **SIL 2**: Process audit quarterly (HR), artifact audit per phase (HR), pre-release audit (HR)
+- **SIL 0-1**: Optional
+
+**Tool Integration**:
+```bash
+# Create audit record
+workspace.py wf create-audit \
+    --audit-id AUD-2026-Q1-001 \
+    --type process-compliance \
+    --project "Railway Door Controller" \
+    --sil 3 \
+    --start-date 2026-04-10 \
+    --end-date 2026-04-12 \
+    --lead-auditor "Eve Green"
+
+# Run automated audit checks
+./tools/run_audit_checks.sh \
+    --audit-id AUD-2026-Q1-001 \
+    --sil 3 \
+    --output audit_evidence/
+
+# Log audit finding
+workspace.py wf log-finding \
+    --audit-id AUD-2026-Q1-001 \
+    --finding-id F01 \
+    --type non-conformance \
+    --severity critical \
+    --area traceability \
+    --description "3 requirements not traced to design" \
+    --assigned-to "Alice Designer" \
+    --due-date 2026-04-15
+
+# Verify finding resolved
+workspace.py wf verify-finding \
+    --finding-id AUD-2026-Q1-001-F01 \
+    --verified-by "Eve Green (QA)" \
+    --verification-evidence "workspace.py trace validate shows 100% coverage"
+```
+
+**Example Scenarios**:
+1. Process Audit Finds Phase Gate Violation (Critical NC)
+2. Artifact Audit Finds Missing Deliverable (Major NC, SVP missing)
+3. Tool Audit Finds Unqualified T3 Tool (Critical NC, gcc not qualified)
+4. Pre-Release Audit Approves Release (OK, zero NC)
+
+---
+
+## Quality Workflow Selection by SIL
+
+| Workflow | SIL 0-1 | SIL 2 | SIL 3-4 | Frequency |
+|----------|---------|-------|---------|-----------|
+| **Quality Assurance** | Recommended | Highly Recommended | **MANDATORY** | Continuous (all phases) |
+| **Document Review** | Recommended | Highly Recommended | **MANDATORY** | Per deliverable |
+| **Technical Review** | Recommended | Highly Recommended | **MANDATORY** | Per deliverable (after doc review) |
+| **Quality Audit** | Optional | Quarterly (HR) | Monthly (M) + Pre-Release (M) | Periodic + Pre-Release |
+
+**Legend**: M = Mandatory, HR = Highly Recommended, R = Recommended
+
+---
+
+## Tool Integration
+
+All quality workflows integrate with `workspace.py` for traceability and workflow management.
+
+### Traceability Management (MANDATORY SIL 3-4)
+
+**Validate Traceability**:
+```bash
+# Validate requirements → design traceability
+workspace.py trace validate --phase design --sil 3
+
+# Output:
+# Traceability Validation: PASS
+# Coverage: 100% (40/40 requirements traced)
+# Orphan requirements: 0
+# Orphan design elements: 0
+```
+
+**Generate Traceability Report**:
+```bash
+# Generate traceability matrix for inclusion in deliverable
+workspace.py trace report \
+    --from design --to requirements \
+    --format markdown \
+    --output evidence/traceability/design-to-requirements.md
+```
+
+**Create Traceability Link**:
+```bash
+# Link design element to requirement
+workspace.py trace create \
+    --from design --to requirements \
+    --source-id MOD-DOOR-001 --target-id REQ-DOOR-001 \
+    --rationale "DoorController module implements door control requirement"
+```
+
+### Workflow Management
+
+**Submit Deliverable for Review**:
+```bash
+workspace.py wf submit \
+    --deliverable DOC-VER-REP-001 \
+    --phase verification \
+    --author "John Smith" \
+    --version 1.0
+```
+
+**Review Deliverable (QA)**:
+```bash
+# Approve
+workspace.py wf review \
+    --deliverable DOC-VER-REP-001 \
+    --reviewer QUA \
+    --status approved \
+    --comments "Template compliance verified. Proceed to technical review."
+
+# Reject
+workspace.py wf review \
+    --deliverable DOC-VER-REP-001 \
+    --reviewer QUA \
+    --status rejected \
+    --comments "Missing Independent Validator in Approvals table. Fix and resubmit."
+```
+
+**Check Workflow Status**:
+```bash
+workspace.py wf status --deliverable DOC-VER-REP-001
+
+# Output:
+# Deliverable: DOC-VER-REP-001
+# Status: QA_REVIEW
+# Phase: verification
+# Submitted: 2026-03-14 10:30:00
+# Reviewer: QUA (Jane Doe)
+# Comments: Awaiting QA template compliance review
+```
+
+**Log Defect**:
+```bash
+workspace.py wf log-defect \
+    --deliverable src/door_controller.c \
+    --defect-id DEF-2026-125 \
+    --severity CRITICAL \
+    --description "Missing NULL pointer check in door_set_state()" \
+    --assigned-to "Dave Developer" \
+    --due-date 2026-03-26
+```
+
+### Automated Quality Checks
+
+**MISRA C Compliance Check**:
+```bash
+# Run Cppcheck with MISRA addon
+cppcheck --enable=all --addon=misra.json --xml src/*.c 2> cppcheck_report.xml
+
+# Check for mandatory violations (MUST be 0 for SIL 2+)
+python3 tools/check_misra.py \
+    --report cppcheck_report.xml \
+    --sil 3 \
+    --mandatory-only
+
+# Output:
+# MISRA C Compliance Check: PASS
+# Mandatory violations: 0
+# Required violations: 3 (deviations documented)
+# Advisory violations: 12 (reviewed)
+```
+
+**Complexity Check**:
+```bash
+# Run Lizard complexity analysis
+lizard src/*.c -o lizard_report.txt
+
+# Check functions exceeding limit
+python3 tools/check_complexity.py \
+    --report lizard_report.txt \
+    --sil 3 \
+    --max-ccn 10
+
+# Output:
+# Complexity Check: PASS
+# Functions analyzed: 25
+# Functions within limit (CCN ≤ 10): 25
+# Max complexity: 8 (door_emergency_stop)
+```
+
+**Coverage Check**:
+```bash
+# Run unit tests with coverage
+make test
+
+# Generate coverage report
+gcov src/*.c
+lcov --capture --directory . --output-file coverage.info
+
+# Check coverage (SIL 3 requires 100%)
+python3 tools/check_coverage.py \
+    --coverage coverage.info \
+    --sil 3 \
+    --statement 100 \
+    --branch 100 \
+    --condition 100
+
+# Output:
+# Coverage Check: PASS
+# Statement coverage: 100.0% (450/450 lines)
+# Branch coverage: 100.0% (120/120 branches)
+# Condition coverage: 100.0% (80/80 conditions)
+```
+
+---
+
+## EN 50128 Coverage
+
+### Section 6.5: Software Quality Assurance
+
+All workflows implement EN 50128 Section 6.5 requirements:
+
+| Section | Requirement | Workflows | Coverage |
+|---------|-------------|-----------|----------|
+| **6.5.1.1** | Identify, monitor, and control quality activities | Quality Assurance Workflow | Complete |
+| **6.5.1.2** | Provide evidence that activities performed | Quality Audit Workflow | Complete |
+| **6.5.4.2** | Implement Quality Assurance System (ISO 9001) | Quality Assurance Workflow (SQAP) | Complete |
+| **6.5.4.3** | Software Quality Assurance Plan | Quality Assurance Workflow (Section 2) | Complete |
+| **6.5.4.5(c)** | Documentation and configuration control | Document Review Workflow | Complete |
+| **6.5.4.5(d)** | Traceability | All workflows (workspace.py trace) | Complete |
+| **6.5.4.5(e)** | Reviews, audits, inspections | Technical Review + Audit Workflows | Complete |
+
+### Table A.9: Software Quality Assurance Techniques
+
+| Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Workflow Coverage |
+|-----------|-------|---------|---------|------------------|
+| **1. Accredited to EN ISO 9001** | R | HR | HR | Quality Assurance Workflow (SQAP) |
+| **2. Compliant with EN ISO 9001** | **M** | **M** | **M** | Quality Assurance Workflow (SQAP) |
+| **3. Compliant with ISO/IEC 90003** | R | R | R | Quality Assurance Workflow |
+| **4. Company Quality System** | **M** | **M** | **M** | Quality Assurance Workflow |
+| **5. Software Configuration Management** | **M** | **M** | **M** | Quality Audit Workflow (Section 4.5) |
+| **6. Checklists** | R | HR | HR | All workflows (comprehensive checklists) |
+| **7. Traceability** | R | HR | **M** | All workflows (workspace.py trace) |
+| **8. Data Recording and Analysis** | HR | HR | **M** | Quality Assurance Workflow (metrics) |
+
+---
+
+## Statistics
+
+**Total Workflow Content**:
+- **4 workflows**: 6,188 lines (~248 pages)
+- **30+ code examples**: Complete, production-ready C code and Python scripts
+- **80+ tool command examples**: Full workspace.py, Cppcheck, Lizard, gcov integration
+- **12+ complete scenarios**: Real-world examples with solutions
+
+**Workflow Breakdown**:
+1. Quality Assurance Workflow: 1,523 lines (~61 pages)
+2. Document Review Workflow: 1,947 lines (~78 pages)
+3. Technical Review Workflow: 1,463 lines (~59 pages)
+4. Quality Audit Workflow: 1,255 lines (~50 pages)
+
+**Tool Integration**:
+- **workspace.py trace**: 40+ examples (traceability management)
+- **workspace.py wf**: 50+ examples (workflow management)
+- **Cppcheck**: 15+ examples (MISRA C compliance)
+- **Lizard**: 10+ examples (complexity analysis)
+- **gcov/lcov**: 15+ examples (coverage analysis)
+
+---
+
 ## References
 
 - EN 50128:2011 Section 6.3 (Software Quality Assurance)
-- EN 50128:2011 Table A.20 (Software Quality Assurance Techniques)
+- EN 50128:2011 Section 6.5 (Software Quality Assurance)
+- EN 50128:2011 Table A.9 (Software Quality Assurance Techniques)
+- EN 50128:2011 Annex B (Tool Classification and Qualification)
+- EN 50128:2011 Annex C (Document Control Summary - Table C.1)
 - ISO 9001 (Quality Management)
+- ISO/IEC 90003:2014 (Software Engineering - Guidelines for ISO 9001)
 - MISRA C:2012 (Coding Standard)
+- IEEE 1028-2008 (Standard for Software Reviews and Audits)
