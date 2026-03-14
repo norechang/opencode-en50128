@@ -1,0 +1,460 @@
+# Software Interface Specifications - Deliverable Metadata
+# EN 50128:2011 Section 7.3.4.18-19, Table A.3, Table C.1
+# This file defines the metadata, requirements, evidence, and verification criteria
+# for the Software Interface Specifications deliverable.
+
+deliverable_id: "DOC-011-SOFTWARE-INTERFACE-SPEC"
+number: 11
+name: "Software Interface Specifications"
+abbreviation: "Interface Specs"
+phase: "architecture"
+standard_section: "7.3.4.18"
+written_by: "DES"
+first_check: "VER"
+second_check: "VAL"
+template_path: ".opencode/skills/en50128-design/templates/Software-Interface-Specifications-template.md"
+template_exists: true
+
+# =============================================================================
+# SIL-DEPENDENT REQUIREMENTS
+# =============================================================================
+# Requirements scale by SIL level per EN 50128 Table A.3
+# Interface Specifications define all interfaces between software components
+
+sil_requirements:
+  sil_0:
+    mandatory: false  # Interface specifications recommended but not mandatory
+    techniques:
+      - technique_name: "Fully Defined Interface"
+        table_reference: "A.3"
+        technique_id: "D.23"
+        recommendation: "R"
+    additional_requirements:
+      - "Basic interface documentation recommended"
+      - "No specific interface definition techniques mandatory"
+      - "Interface descriptions recommended"
+    evidence_thresholds:
+      interface_completeness: "N/A"
+      interface_formality: "informal"
+      data_structure_definition: false
+      protocol_specification: false
+
+  sil_1:
+    mandatory: true  # HR (Highly Recommended) - treat as mandatory
+    techniques:
+      - technique_name: "Fully Defined Interface"
+        table_reference: "A.3"
+        technique_id: "D.23"
+        recommendation: "HR"
+      - technique_name: "Information Encapsulation"
+        table_reference: "A.3"
+        technique_id: "D.33"
+        recommendation: "R"
+    additional_requirements:
+      - "Software Interface Specifications HIGHLY RECOMMENDED (HR)"
+      - "Fully defined interface HIGHLY RECOMMENDED (all parameters, types, protocols)"
+      - "Information encapsulation RECOMMENDED"
+      - "Internal and external interfaces documented"
+      - "Data structures defined"
+    evidence_thresholds:
+      interface_completeness: "90%"  # HR
+      interface_formality: "semi-formal"
+      data_structure_definition: true  # HR
+      protocol_specification: true  # HR
+
+  sil_2:
+    mandatory: true  # HR for Interface Specifications
+    techniques:
+      - technique_name: "Fully Defined Interface"
+        table_reference: "A.3"
+        technique_id: "D.23"
+        recommendation: "HR"
+      - technique_name: "Information Encapsulation"
+        table_reference: "A.3"
+        technique_id: "D.33"
+        recommendation: "HR"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "M"
+    additional_requirements:
+      - "Software Interface Specifications HIGHLY RECOMMENDED (HR)"
+      - "Fully defined interface HIGHLY RECOMMENDED (all parameters, types, protocols)"
+      - "Information encapsulation HIGHLY RECOMMENDED"
+      - "Modular approach MANDATORY"
+      - "Internal and external interfaces documented"
+      - "Data structures defined (C types: uint8_t, uint16_t, etc.)"
+      - "Function prototypes defined"
+    evidence_thresholds:
+      interface_completeness: "95%"  # HR
+      interface_formality: "semi-formal"
+      data_structure_definition: true  # HR
+      protocol_specification: true  # HR
+
+  sil_3:
+    mandatory: true  # HR for Interface Specifications
+    techniques:
+      - technique_name: "Fully Defined Interface"
+        table_reference: "A.3"
+        technique_id: "D.23"
+        recommendation: "HR"
+      - technique_name: "Information Encapsulation"
+        table_reference: "A.3"
+        technique_id: "D.33"
+        recommendation: "HR"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.3"
+        technique_id: "D.52"
+        recommendation: "M"
+    additional_requirements:
+      - "Software Interface Specifications HIGHLY RECOMMENDED (HR)"
+      - "Fully defined interface HIGHLY RECOMMENDED (all parameters, types, protocols)"
+      - "Information encapsulation HIGHLY RECOMMENDED"
+      - "Modular approach MANDATORY"
+      - "Structured methodology MANDATORY"
+      - "ALL interfaces documented MANDATORY (internal, external, hardware)"
+      - "Data structures defined with C fixed-width types MANDATORY"
+      - "Function prototypes defined MANDATORY"
+      - "Error codes and error handling defined MANDATORY"
+      - "Timing and performance constraints defined MANDATORY"
+    evidence_thresholds:
+      interface_completeness: "100%"  # MANDATORY
+      interface_formality: "formal"
+      data_structure_definition: true  # MANDATORY
+      protocol_specification: true  # MANDATORY
+
+  sil_4:
+    mandatory: true  # HR for Interface Specifications
+    techniques:
+      - technique_name: "Fully Defined Interface"
+        table_reference: "A.3"
+        technique_id: "D.23"
+        recommendation: "HR"
+      - technique_name: "Information Encapsulation"
+        table_reference: "A.3"
+        technique_id: "D.33"
+        recommendation: "HR"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.3"
+        technique_id: "D.52"
+        recommendation: "M"
+      - technique_name: "Semi-formal Methods"
+        table_reference: "A.3"
+        technique_id: "D.46"
+        recommendation: "HR"
+    additional_requirements:
+      - "Software Interface Specifications HIGHLY RECOMMENDED (HR)"
+      - "Fully defined interface HIGHLY RECOMMENDED (all parameters, types, protocols)"
+      - "Information encapsulation HIGHLY RECOMMENDED"
+      - "Modular approach MANDATORY"
+      - "Structured methodology MANDATORY"
+      - "Semi-formal methods HIGHLY RECOMMENDED (state machines, sequence diagrams)"
+      - "ALL interfaces documented MANDATORY (internal, external, hardware)"
+      - "Data structures defined with C fixed-width types MANDATORY"
+      - "Function prototypes defined MANDATORY"
+      - "Error codes and error handling defined MANDATORY"
+      - "Timing and performance constraints defined MANDATORY"
+      - "Interface validation approach defined MANDATORY"
+    evidence_thresholds:
+      interface_completeness: "100%"  # MANDATORY
+      interface_formality: "formal"
+      data_structure_definition: true  # MANDATORY
+      protocol_specification: true  # MANDATORY
+
+# =============================================================================
+# EVIDENCE REQUIREMENTS
+# =============================================================================
+# Evidence required to demonstrate Interface Specifications completeness
+
+evidence_requirements:
+  - evidence_id: "interface-spec-internal-interfaces"
+    description: "Internal software interfaces documented per 7.3.4.18"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "DES"
+    format: "Section in Interface Specifications with interface table"
+    storage_path: "docs/design/Software-Interface-Specifications.md"
+    automation_level: "manual"
+    collect_on_agent_action: "des-create-interface-specs"
+    verification_criteria:
+      - "All internal module-to-module interfaces documented"
+      - "Each interface has unique ID (IF-XXX)"
+      - "Each interface specifies: source module, target module, data exchanged, protocol"
+      - "Data structures defined with C types (uint8_t, uint16_t, struct, enum)"
+      - "Function prototypes defined with return types and parameters"
+      - "Error handling defined for each interface"
+
+  - evidence_id: "interface-spec-external-interfaces"
+    description: "External system interfaces documented per 7.3.4.18"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "DES"
+    format: "Section in Interface Specifications with external interface table"
+    storage_path: "docs/design/Software-Interface-Specifications.md"
+    automation_level: "manual"
+    collect_on_agent_action: "des-create-interface-specs"
+    verification_criteria:
+      - "All external system interfaces documented"
+      - "Each external interface specifies: system name, protocol, data format"
+      - "Communication protocol defined (serial, CAN, Ethernet, etc.)"
+      - "Message format defined (byte layout, endianness)"
+      - "Timing constraints defined (response time, timeout)"
+
+  - evidence_id: "interface-spec-hardware-interfaces"
+    description: "Hardware-software interfaces documented per 7.3.4.18"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "DES"
+    format: "Section in Interface Specifications with HAL interface table"
+    storage_path: "docs/design/Software-Interface-Specifications.md"
+    automation_level: "manual"
+    collect_on_agent_action: "des-create-interface-specs"
+    verification_criteria:
+      - "All hardware-software interfaces documented"
+      - "Hardware Abstraction Layer (HAL) defined"
+      - "Register access functions defined"
+      - "Interrupt handling defined"
+      - "Memory-mapped I/O defined"
+      - "Hardware initialization sequence defined"
+
+  - evidence_id: "interface-spec-data-structures"
+    description: "Data structures and types per 7.3.4.19"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "DES"
+    format: "Section in Interface Specifications with data structure definitions"
+    storage_path: "docs/design/Software-Interface-Specifications.md"
+    automation_level: "manual"
+    collect_on_agent_action: "des-create-interface-specs"
+    verification_criteria:
+      - "All data structures defined (struct, union, enum)"
+      - "C fixed-width types used (uint8_t, uint16_t, uint32_t, etc.)"
+      - "Enumerations defined for state machines and error codes"
+      - "Type definitions consistent across all interfaces"
+      - "Memory layout defined (alignment, padding)"
+      - "Static allocation only (no dynamic structures for SIL 2+)"
+
+  - evidence_id: "interface-spec-baseline"
+    description: "Baselined Interface Specifications approved by VER and VAL"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "CM"
+    format: "Baselined markdown file with approvals"
+    storage_path: "docs/design/Software-Interface-Specifications.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "cm-baseline-deliverable"
+    verification_criteria:
+      - "Document has version 1.0 or higher"
+      - "Document status is 'Approved' or 'Baseline'"
+      - "Approvals section complete (DES author, VER first check, VAL second check, QA, PM)"
+      - "Document under configuration control"
+      - "Baseline recorded in SCMP baseline register"
+
+# =============================================================================
+# DEPENDENCIES
+# =============================================================================
+
+depends_on:
+  - deliverable_id: "DOC-009-SAS"
+    reason: "SAS defines architecture; Interface Specifications define interfaces between components"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-006-SRS"
+    reason: "SRS defines interface requirements; Interface Specifications implement those requirements"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Interface Specifications define contracts; SDS implements modules per those contracts"
+
+  - deliverable_id: "DOC-018-SOURCE-CODE"
+    reason: "Interface Specifications define function prototypes; source code implements those prototypes"
+
+  - deliverable_id: "DOC-022-INTEGRATION-TEST-SPEC"
+    reason: "Interface Specifications define interfaces; Integration Test Specification tests those interfaces"
+
+# =============================================================================
+# VERIFICATION CRITERIA
+# =============================================================================
+
+verification_criteria:
+  completeness:
+    - "All sections of Interface Specifications template completed per 7.3.4.18"
+    - "All internal interfaces documented (module-to-module)"
+    - "All external interfaces documented (system boundaries)"
+    - "All hardware interfaces documented (HAL)"
+    - "All data structures defined per 7.3.4.19"
+    - "All function prototypes defined"
+    - "All error codes and error handling defined"
+    - "All timing and performance constraints defined"
+
+  correctness:
+    - "Interface definitions correct per 7.3.4.19 (data, protocol, timing)"
+    - "C data types correct (fixed-width types: uint8_t, uint16_t, etc.)"
+    - "Function prototypes correct (return type, parameters, const correctness)"
+    - "Protocol specifications correct and implementable"
+    - "Fully defined interface technique applied (HIGHLY RECOMMENDED all SIL)"
+    - "Information encapsulation applied (HR SIL 1-4)"
+    - "Modular approach applied (MANDATORY SIL 2+)"
+
+  consistency:
+    - "Interface definitions consistent with SAS architecture"
+    - "Data types consistent across all interfaces"
+    - "Naming conventions consistent (module_function_name)"
+    - "Error handling approach consistent across all interfaces"
+    - "Timing constraints consistent with performance requirements"
+
+  traceability:
+    - "Forward traceability: SRS interface requirements → Interface Specifications"
+    - "Forward traceability: SAS components → Interface Specifications"
+    - "Forward traceability: Interface Specifications → SDS component designs"
+    - "Backward traceability: Interface Specifications → SAS components"
+    - "References to SAS components in each interface"
+
+# =============================================================================
+# CONFIGURATION MANAGEMENT
+# =============================================================================
+
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After Phase 3 (Architecture) completion, before Phase 4 (Component Design) begins"
+  change_control: "All changes to baselined Interface Specifications require CCB approval"
+  version_control: "docs/design/Software-Interface-Specifications.md under Git control, baseline tagged as baseline-interface-spec-v1.0"
+  review_frequency: "Review when architecture changes or new interfaces added"
+  update_triggers:
+    - "Addition of new software modules"
+    - "Modification of existing module interfaces"
+    - "Change in data structures"
+    - "Change in communication protocols"
+    - "Integration testing reveals interface issues"
+    - "EN 50128 standard updates"
+
+# =============================================================================
+# EN 50128 REFERENCES
+# =============================================================================
+
+en50128_references:
+  - "Section 7.3.4.18: Software Interface Specification for all interfaces"
+  - "Section 7.3.4.19: Interface description addresses data, protocol, timing"
+  - "Section 7.3.4.19a: Data to be exchanged (type, format, range)"
+  - "Section 7.3.4.19b: Data exchange mechanisms (parameters, global data, messages)"
+  - "Section 7.3.4.19c: Protocols and sequences"
+  - "Section 7.3.4.19d: Timing considerations"
+  - "Section 7.3.4.19e: Data flow"
+  - "Section 7.3.4.20: Verification of Interface Specifications"
+  - "Table A.3: Software Architecture and Design techniques"
+  - "Table A.3: Fully Defined Interface (HR for all SIL)"
+  - "Table A.3: Information Encapsulation (R SIL 0-1, HR SIL 2-4)"
+  - "Table A.3: Modular Approach (HR SIL 0-1, M SIL 2-4)"
+  - "Table C.1 (Annex C): Document control summary (Interface Specs mandatory HR for all SIL)"
+
+# =============================================================================
+# NOTES
+# =============================================================================
+
+notes: |
+  CRITICAL INFORMATION:
+  
+  1. **Purpose of Software Interface Specifications**:
+     - Define all internal interfaces (module-to-module)
+     - Define all external interfaces (system boundaries)
+     - Define all hardware-software interfaces (HAL)
+     - Specify data structures, protocols, and timing
+     - Provide complete interface contracts for implementation
+  
+  2. **SIL Requirements**:
+     - SIL 0: Interface specifications recommended (R)
+     - SIL 1-2: Interface Specifications HIGHLY RECOMMENDED (HR)
+     - SIL 3-4: Interface Specifications HIGHLY RECOMMENDED (HR)
+     - Fully Defined Interface HIGHLY RECOMMENDED for ALL SIL levels
+     - Modular Approach MANDATORY for SIL 2+
+     - 100% interface coverage MANDATORY for SIL 3-4
+  
+  3. **Interface Description Requirements** (per 7.3.4.19):
+     a) Data to be exchanged (type, format, range, units)
+     b) Data exchange mechanisms (parameters, global data, messages)
+     c) Protocols and sequences (order, handshaking)
+     d) Timing considerations (delays, timeouts, response times)
+     e) Data flow (direction, source, destination)
+  
+  4. **C Language Interface Patterns**:
+     - Use fixed-width types: uint8_t, uint16_t, uint32_t (not int, long)
+     - Use struct for complex data structures
+     - Use enum for state machines and error codes
+     - Use const for read-only parameters
+     - Use static for module-local functions (encapsulation)
+     - Define function prototypes in .h header files
+     - Document all parameters and return values
+  
+  5. **Fully Defined Interface** (Table A.3, D.23):
+     - Every interface completely specified (no ambiguity)
+     - All parameters documented (type, range, units)
+     - All return values documented (success, error codes)
+     - All preconditions documented (input validation)
+     - All postconditions documented (outputs, side effects)
+     - All error handling documented (error codes, failure modes)
+  
+  6. **Information Encapsulation** (Table A.3, D.33):
+     - Module internals hidden from other modules
+     - Public interface clearly separated from private implementation
+     - Use static keyword for internal functions and data
+     - Minimize global data (use getters/setters)
+     - Opaque pointers for data structures (hide implementation)
+  
+  7. **Modular Approach** (MANDATORY SIL 2+):
+     - Software divided into modules with clear boundaries
+     - Each module has defined responsibilities
+     - Inter-module dependencies minimized
+     - Modules testable independently
+     - Interfaces documented in Interface Specifications
+  
+  8. **Interface Types**:
+     - Internal interfaces: Module A ↔ Module B (function calls, shared data)
+     - External interfaces: Software ↔ External System (protocols, messages)
+     - Hardware interfaces: Software ↔ Hardware (registers, interrupts, I/O)
+  
+  9. **Static Allocation Constraint** (SIL 2+):
+     - No dynamic memory allocation (malloc/free)
+     - All data structures statically allocated
+     - Array sizes known at compile time
+     - No variable-length arrays
+     - Interface Specifications must reflect static allocation
+  
+  10. **Relationship to Other Deliverables**:
+      - SAS: Defines architecture, Interface Specifications define interfaces between components
+      - SRS: Defines interface requirements, Interface Specifications implement requirements
+      - SDS: Uses Interface Specifications as contracts for component implementation
+      - Source Code: Implements function prototypes from Interface Specifications
+      - Integration Test Specification: Tests interfaces per Interface Specifications
+  
+  11. **Agent Workflow**:
+      - DES agent reads SAS (architecture) and SRS (requirements)
+      - DES agent identifies all interfaces (internal, external, hardware)
+      - DES agent creates Interface Specifications per 7.3.4.18-19
+      - DES agent defines data structures with C fixed-width types
+      - DES agent defines function prototypes
+      - VER agent reviews Interface Specifications (first check)
+      - VAL agent reviews Interface Specifications (second check)
+      - QA agent verifies template compliance
+      - CM agent baselines Interface Specifications after approvals
+  
+  12. **Critical Success Factors**:
+      - Created during Architecture phase (after SAS complete)
+      - 100% interface coverage for SIL 3-4
+      - Fully defined interfaces (no ambiguity)
+      - C language compliance (fixed-width types, static allocation)
+      - Information encapsulation (modular boundaries)
+      - Traceability to SAS and SRS
+      - Baselined before Component Design begins
+  
+  13. **Common Pitfalls**:
+      - Using non-standard C types (int, long instead of uint8_t, uint32_t)
+      - Ambiguous parameter descriptions (missing range, units)
+      - Missing error handling (no error codes defined)
+      - Missing timing constraints (delays, timeouts not specified)
+      - Dynamic allocation in interfaces (violates SIL 2+ constraint)
+      - Incomplete encapsulation (exposing internal implementation)
+      - Not baselining before implementation begins

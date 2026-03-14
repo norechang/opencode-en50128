@@ -1,0 +1,335 @@
+# Software Source Code Verification Report
+# EN 50128 Deliverable #19 - Section 7.5.4.8-7.5.4.10
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-019-SOURCE-CODE-VER"
+number: 19
+name: "Software Source Code Verification Report"
+abbreviation: "SOURCE-CODE-VER"
+
+# ===== Lifecycle Context =====
+phase: "implementation"
+standard_section: "7.5.4.8"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "VER"
+first_check: "QUA"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-implementation/templates/Software-Source-Code-Verification-Report-template.md"
+template_exists: true
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_name: "Static Analysis"
+        table_reference: "A.19"
+        technique_id: "D.51"
+        recommendation: "R"
+    additional_requirements:
+      - "Verification addresses adequacy, coding standards, traceability"
+      - "Independent verifier recommended"
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Static Analysis"
+        table_reference: "A.19"
+        technique_id: "D.51"
+        recommendation: "HR"
+      - technique_name: "Data Flow Analysis"
+        table_reference: "A.19"
+        technique_id: "D.11"
+        recommendation: "R"
+    additional_requirements:
+      - "Static analysis tool used"
+      - "Code review performed"
+      - "Complexity verified"
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Static Analysis"
+        table_reference: "A.19"
+        technique_id: "D.51"
+        recommendation: "HR"
+      - technique_name: "Data Flow Analysis"
+        table_reference: "A.19"
+        technique_id: "D.11"
+        recommendation: "HR"
+      - technique_name: "Control Flow Analysis"
+        table_reference: "A.19"
+        technique_id: "D.9"
+        recommendation: "HR"
+    additional_requirements:
+      - "MISRA C compliance verified"
+      - "Independent code review"
+      - "Complexity limits verified"
+      - "Static allocation verified"
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Static Analysis"
+        table_reference: "A.19"
+        technique_id: "D.51"
+        recommendation: "M"
+      - technique_name: "Data Flow Analysis"
+        table_reference: "A.19"
+        technique_id: "D.11"
+        recommendation: "HR"
+      - technique_name: "Control Flow Analysis"
+        table_reference: "A.19"
+        technique_id: "D.9"
+        recommendation: "HR"
+    additional_requirements:
+      - "Static Analysis MANDATORY"
+      - "MISRA C zero violations verified"
+      - "Independent verification MANDATORY"
+      - "Coverage verified (100% statement/branch/condition)"
+      - "Defensive programming verified"
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Static Analysis"
+        table_reference: "A.19"
+        technique_id: "D.51"
+        recommendation: "M"
+      - technique_name: "Data Flow Analysis"
+        table_reference: "A.19"
+        technique_id: "D.11"
+        recommendation: "HR"
+      - technique_name: "Control Flow Analysis"
+        table_reference: "A.19"
+        technique_id: "D.9"
+        recommendation: "HR"
+      - technique_name: "Formal Proof"
+        table_reference: "A.19"
+        technique_id: "D.29"
+        recommendation: "R"
+    additional_requirements:
+      - "All SIL 3 requirements apply"
+      - "MC/DC coverage verified (100%)"
+      - "Formal proof for critical functions (recommended)"
+      - "Diverse verification techniques"
+
+# ===== Required Content Sections =====
+required_content:
+  - section: "1. Verification Summary"
+    description: "Overall verification status, pass/fail, major findings"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "2. Identity and Configuration"
+    description: "Items verified, verifier names, tool versions per Section 6.2.4.13a"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "3. Adequacy Verification"
+    description: "Source code adequacy as implementation of design (Section 7.5.4.10a)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "4. Technique Verification"
+    description: "Correct use of techniques from Table A.4 (Section 7.5.4.10b)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "5. Coding Standards Verification"
+    description: "Correct application of coding standards (Section 7.5.4.10c)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "6. Readability and Traceability Verification"
+    description: "Code meets general requirements (Section 7.5.4.10d)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "7. Component Test Report Verification"
+    description: "Adequacy of test report as record of tests (Section 7.5.4.10e)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "8. Static Analysis Results"
+    description: "MISRA C, Cppcheck, Clang analysis results"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "9. Complexity Verification"
+    description: "Cyclomatic complexity analysis results"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "10. Coverage Verification"
+    description: "Test coverage results vs. SIL requirements"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "11. Non-Conformances"
+    description: "Items not conforming to specifications (Section 6.2.4.13b)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "12. Detected Errors and Deficiencies"
+    description: "Errors or deficiencies found (Section 6.2.4.13d)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "source-code-ver-report"
+    description: "Complete verification report conforming to EN 50128 Section 7.5.4.8-7.5.4.10 and 6.2.4.13"
+    mandatory_sil: 0
+    source: "VER agent source code verification"
+    format: "Markdown"
+    storage_path: "docs/verification/Software-Source-Code-Verification-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "verify-source-code"
+    verification_criteria:
+      - "All required sections present (Section 7.5.4.10, 6.2.4.13)"
+      - "Adequacy of implementation verified"
+      - "Coding standards application verified"
+      - "Traceability verified"
+      - "Component test report verified"
+  
+  - evidence_id: "static-analysis-evidence"
+    description: "Static analysis tool reports (MISRA C, Cppcheck, Clang) referenced in verification report"
+    mandatory_sil: 2
+    source: "Static analysis tools execution by VER agent"
+    format: "XML reports"
+    storage_path: "evidence/static-analysis/"
+    automation_level: "automatic"
+    collect_on_agent_action: "verify-source-code"
+    verification_criteria:
+      - "MISRA C report shows zero mandatory violations (SIL 2+)"
+      - "MISRA C report shows zero required violations (SIL 3+)"
+      - "Cppcheck shows no critical issues"
+      - "Clang shows no warnings"
+  
+  - evidence_id: "complexity-verification-evidence"
+    description: "Complexity analysis results showing all functions within SIL limits"
+    mandatory_sil: 1
+    source: "Lizard tool execution by VER agent"
+    format: "JSON"
+    storage_path: "evidence/metrics/complexity-verified.json"
+    automation_level: "automatic"
+    collect_on_agent_action: "verify-source-code"
+    verification_criteria:
+      - "All functions within complexity limits"
+      - "Complexity balanced (Section 7.5.4.2)"
+  
+  - evidence_id: "coverage-verification-evidence"
+    description: "Coverage analysis results vs. SIL requirements"
+    mandatory_sil: 1
+    source: "gcov/lcov execution by TST/VER agent"
+    format: "HTML + JSON"
+    storage_path: "evidence/coverage/"
+    automation_level: "automatic"
+    collect_on_agent_action: "verify-source-code"
+    verification_criteria:
+      - "Coverage meets SIL requirements"
+      - "Statement: 100% (SIL 3+), 90% (SIL 2), 80% (SIL 1)"
+      - "Branch: 100% (SIL 2+), 80% (SIL 1)"
+      - "Condition: 100% (SIL 3+)"
+      - "MC/DC: 100% (SIL 4)"
+  
+  - evidence_id: "code-review-records"
+    description: "Code review checklists and records per component"
+    mandatory_sil: 1
+    source: "QUA agent code review"
+    format: "Markdown"
+    storage_path: "evidence/reviews/code-reviews/"
+    automation_level: "manual"
+    collect_on_agent_action: "verify-source-code"
+    verification_criteria:
+      - "100% code review coverage"
+      - "Independent reviewer (SIL 3+)"
+      - "All review findings addressed"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Verification checks adequacy against design specification (Section 7.5.4.10a)"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-020-COMPONENT-TEST-SPEC"
+    reason: "Verification checks component test specification basis"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-018-SOURCE-CODE"
+    reason: "Source code is the artifact being verified (Section 7.5.4.8)"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-021-COMPONENT-TEST-REPORT"
+    reason: "Verification checks adequacy of test report (Section 7.5.4.10e)"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-022-INTEGRATION-TEST-SPEC"
+    reason: "Verified source code proceeds to integration"
+  
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Validation references source code verification evidence"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All sections required by EN 50128 Section 7.5.4.10 and 6.2.4.13 present"
+    - "All verification activities documented"
+    - "All static analysis results included"
+    - "All review records referenced"
+  
+  correctness:
+    - "Verification addresses all Section 7.5.4.10 requirements (a-e)"
+    - "Independent verifier (SIL 3+)"
+    - "Static analysis MANDATORY applied (SIL 3+)"
+    - "Coverage requirements verified"
+  
+  consistency:
+    - "Findings consistent across analysis methods"
+    - "Non-conformances properly documented"
+    - "Deficiencies linked to corrective actions"
+  
+  traceability:
+    - "All source code files verified"
+    - "All verification activities traceable to requirements"
+    - "All findings traceable to resolution"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After source code verification and all findings resolved"
+  change_control: "CCB approval required (verification report baseline)"
+  version_control: "Git repository under docs/verification/"
+  review_frequency: "At integration phase or when source code changes"
+  
+  update_triggers:
+    - "Source code change after baseline"
+    - "New defect found in code"
+    - "Coding standards change"
+    - "Tool version change requiring re-verification"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "7.5.4.8-7.5.4.10"
+    title: "Software Source Code Verification Report Requirements"
+    description: "Primary requirements for verification report"
+  
+  - section: "6.2.4.13"
+    title: "Software Verification Report Generic Requirements"
+    description: "Generic verification report requirements"
+  
+  - section: "7.5.4.10"
+    title: "Verification Activities"
+    description: "Specific items verification must address (a-e)"
+  
+  - section: "Table A.19"
+    title: "Static Analysis Techniques"
+    description: "Static Analysis MANDATORY for SIL 3+"
+  
+  - section: "Annex C Table C.1"
+    title: "Document Control Summary"
+    description: "Source Code Verification Report is deliverable #19"
+
+# ===== Notes =====
+notes: |
+  Source Code Verification Report is MANDATORY for all SIL levels (EN 50128 Section 7.5.4.8).
+  Verification must address adequacy, techniques, coding standards, traceability, and test report (Section 7.5.4.10).
+  Static Analysis is MANDATORY for SIL 3+ (Table A.19).
+  Independent verifier MANDATORY for SIL 3-4.
+  MISRA C compliance must be verified (zero mandatory violations SIL 2+, zero required violations SIL 3+).
+  Coverage requirements must be verified: Statement 100% (SIL 3+), Branch 100% (SIL 2+), Condition 100% (SIL 3+), MC/DC 100% (SIL 4).
+  Complexity limits must be verified: ≤10 (SIL 3-4), ≤15 (SIL 2), ≤20 (SIL 0-1).
+  Report follows generic verification report format (Section 6.2.4.13).

@@ -1,0 +1,385 @@
+# Source Code of Application Data/Algorithms
+# EN 50128 Deliverable #34 - Section 8.4.4
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-034-APP-SOURCE-CODE"
+number: 34
+name: "Source Code of Application Data/Algorithms"
+abbreviation: "App Source Code"
+
+# ===== Lifecycle Context =====
+phase: "application"
+standard_section: "8.4.4"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "DES"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-implementation/templates/Application-Source-Code-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: false
+    techniques: []
+    additional_requirements: []
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Diagrammatic Formal Languages"
+        table_reference: "A.16"
+        technique_id: "A.16"
+        recommendation: "R"
+    additional_requirements:
+      - "Production of source code of application data/algorithms"
+      - "Compilation of source code"
+      - "Diagrammatic languages recommended for application algorithms"
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Diagrammatic Formal Languages"
+        table_reference: "A.16"
+        technique_id: "A.16"
+        recommendation: "HR"
+      - technique_name: "Design and Coding Standards"
+        table_reference: "A.12"
+        technique_id: "A.12"
+        recommendation: "HR"
+    additional_requirements:
+      - "Production of source code of application data/algorithms"
+      - "Compilation of source code"
+      - "Diagrammatic languages recommended for application algorithms"
+      - "Coding standards applied"
+      - "Source code documented"
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Diagrammatic Formal Languages"
+        table_reference: "A.16"
+        technique_id: "A.16"
+        recommendation: "HR"
+      - technique_name: "Design and Coding Standards"
+        table_reference: "A.12"
+        technique_id: "A.12"
+        recommendation: "M"
+    additional_requirements:
+      - "Production of source code of application data/algorithms (MANDATORY)"
+      - "Compilation of source code (MANDATORY)"
+      - "Diagrammatic languages highly recommended for application algorithms"
+      - "Coding standards applied (MANDATORY)"
+      - "Source code documented (MANDATORY)"
+      - "Traceability to application architecture (MANDATORY)"
+      - "Traceability to application requirements (MANDATORY)"
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Diagrammatic Formal Languages"
+        table_reference: "A.16"
+        technique_id: "A.16"
+        recommendation: "HR"
+      - technique_name: "Design and Coding Standards"
+        table_reference: "A.12"
+        technique_id: "A.12"
+        recommendation: "M"
+    additional_requirements:
+      - "Production of source code of application data/algorithms (MANDATORY)"
+      - "Compilation of source code (MANDATORY)"
+      - "Diagrammatic languages highly recommended for application algorithms"
+      - "Coding standards applied (MANDATORY)"
+      - "Source code documented (MANDATORY)"
+      - "Traceability to application architecture (MANDATORY)"
+      - "Traceability to application requirements (MANDATORY)"
+      - "Formal verification highly recommended"
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "app-source-code-files"
+    description: "Source code files for application data and algorithms"
+    mandatory_sil: 1
+    source: "DES agent or application tools"
+    format: "Source code (diagrammatic languages, XML, JSON, CSV, or compiled format)"
+    storage_path: "src/application/"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/des create-app-source-code"
+    verification_criteria:
+      - "All application data defined in source form"
+      - "All application algorithms defined in source form"
+      - "Source code compiles without errors"
+      - "Source code follows coding standards"
+
+  - evidence_id: "app-data-source-files"
+    description: "Source files for application data (parameters, configurations)"
+    mandatory_sil: 1
+    source: "DES agent or application configuration tools"
+    format: "Data format (XML, JSON, YAML, CSV, or domain-specific format)"
+    storage_path: "src/application/data/"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/des create-app-data-source"
+    verification_criteria:
+      - "All application data elements present"
+      - "Data format valid"
+      - "Data values correct for installation"
+      - "Compatible with generic software interfaces"
+
+  - evidence_id: "app-algorithms-source-files"
+    description: "Source files for application algorithms (function blocks, state charts, ladder logic)"
+    mandatory_sil: 1
+    source: "DES agent or application development tools"
+    format: "Diagrammatic languages (function blocks, state charts, ladder diagrams) or generated code"
+    storage_path: "src/application/algorithms/"
+    automation_level: "manual"
+    collect_on_agent_action: "/des create-app-algorithms-source"
+    verification_criteria:
+      - "All application algorithms present"
+      - "Diagrammatic languages used (recommended per 8.4.4.1)"
+      - "Algorithms compile/translate to executable form"
+      - "Compatible with generic software execution model"
+
+  - evidence_id: "app-source-code-compilation-log"
+    description: "Compilation log for application source code"
+    mandatory_sil: 1
+    source: "Compiler or application tool"
+    format: "Build log (text)"
+    storage_path: "build/application/compilation.log"
+    automation_level: "automatic"
+    collect_on_agent_action: "/des compile-app-source"
+    verification_criteria:
+      - "Compilation successful (no errors)"
+      - "No critical warnings"
+      - "Generated artifacts available"
+
+  - evidence_id: "app-source-code-documentation"
+    description: "Documentation of application source code structure and content"
+    mandatory_sil: 2
+    source: "DES agent"
+    format: "Markdown"
+    storage_path: "docs/application/source-code/source-code-documentation.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/des document-app-source"
+    verification_criteria:
+      - "Source code structure documented"
+      - "Data elements documented"
+      - "Algorithms documented"
+      - "Interfaces documented"
+      - "Usage instructions provided"
+
+  - evidence_id: "app-source-traceability-matrix"
+    description: "Traceability matrix linking source code to application architecture and requirements"
+    mandatory_sil: 2
+    source: "DES agent"
+    format: "Markdown table or CSV"
+    storage_path: "docs/application/source-code/source-traceability-matrix.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/des create-app-source-traceability"
+    verification_criteria:
+      - "Every application requirement traced to source code"
+      - "Every architecture element traced to source code"
+      - "100% traceability for SIL 3+ (MANDATORY)"
+
+  - evidence_id: "app-coding-standards-compliance"
+    description: "Coding standards compliance check for application source code"
+    mandatory_sil: 2
+    source: "VER agent or static analysis tools"
+    format: "Compliance report (Markdown)"
+    storage_path: "docs/application/verification/coding-standards-compliance.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver check-app-coding-standards"
+    verification_criteria:
+      - "Coding standards applied (MANDATORY SIL 3+)"
+      - "No critical standard violations"
+      - "Violations justified or resolved"
+
+  - evidence_id: "app-source-review-records"
+    description: "Review records from VER and VAL checks"
+    mandatory_sil: 1
+    source: "VER and VAL agents"
+    format: "Review meeting minutes (Markdown)"
+    storage_path: "docs/application/reviews/app-source-code-review-records.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver review, /val review"
+    verification_criteria:
+      - "All review findings documented"
+      - "Resolution status tracked"
+      - "Sign-offs from VER and VAL"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-031-APP-ARCH-DESIGN"
+    reason: "Source code implements application architecture and design"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-028-APP-REQ-SPEC"
+    reason: "Source code realizes application requirements"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-029-APP-PREP-PLAN"
+    reason: "Source code production per Application Preparation Plan"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-033-APP-TEST-REPORT"
+    reason: "Tests execute against application source code"
+  
+  - deliverable_id: "DOC-032-APP-PREP-VER"
+    reason: "Verification checks source code correctness and completeness"
+  
+  - deliverable_id: "DOC-035-APP-DATA-VER"
+    reason: "Application Data/Algorithms Verification Report verifies source code"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All application data in source form"
+    - "All application algorithms in source form"
+    - "All source code documented (SIL 2+)"
+    - "Traceability to architecture complete (SIL 2+, MANDATORY SIL 3+)"
+    - "Traceability to requirements complete (SIL 2+, MANDATORY SIL 3+)"
+  
+  correctness:
+    - "Source code implements application architecture correctly"
+    - "Source code realizes application requirements correctly"
+    - "Source code compiles without errors"
+    - "Data values correct for installation"
+    - "Algorithm logic correct"
+  
+  consistency:
+    - "Source code consistent with application architecture"
+    - "Source code consistent with application requirements"
+    - "Data elements consistent across source files"
+    - "Interfaces consistent with generic software"
+  
+  traceability:
+    - "Traceability to application architecture (SIL 2+)"
+    - "Traceability to application requirements (SIL 2+)"
+    - "100% traceability for SIL 3+ (MANDATORY)"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Application Source Code Baseline"
+  baseline_trigger: "After VER and VAL approval"
+  change_control: "All changes via CCB, full regression testing required"
+  versioning: "Semantic versioning (MAJOR.MINOR.PATCH)"
+  storage_location: "config/baselines/application-source-code/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "8.4.4"
+    title: "Application Data/Algorithms Production"
+    relevance: "Primary section defining application source code production"
+  - section: "8.4.4.1"
+    title: "Application source code production and compilation"
+    relevance: "Production and compilation of source code; diagrammatic languages recommended"
+  - section: "Table A.16"
+    title: "Diagrammatic Formal Languages"
+    relevance: "Diagrammatic languages for application algorithms (function blocks, state charts, ladder logic)"
+  - section: "Table A.12"
+    title: "Coding Standards"
+    relevance: "Coding standards for application source code (MANDATORY SIL 3+)"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Source Code of Application Data/Algorithms is deliverable #34, written by DES, checked by VER and VAL"
+
+# ===== Notes =====
+notes: |
+  **Source Code of Application Data/Algorithms (Deliverable #34)**
+  
+  This deliverable is the **executable source code** for application data and algorithms in systems
+  configured by application data/algorithms (EN 50128 Section 8). It is NOT required for generic
+  software-only systems.
+  
+  **Purpose**: Provide source code for application-specific data and algorithms that configure the
+  generic software for a specific installation.
+  
+  **Key Content** (EN 50128 8.4.4.1):
+  1. **Source code** of application data (parameters, configurations, object descriptions)
+  2. **Source code** of application algorithms (function blocks, state charts, ladder logic)
+  3. **Compilation** of source code to executable form
+  
+  **Difference from Generic Software Source Code (DOC-018)**:
+  - DOC-018 (Source Code): Source code of **generic software** (C code)
+  - DOC-034 (App Source Code): Source code of **application data/algorithms** (data files, diagrams)
+  
+  **Application Data Source Format**:
+  Typically structured data formats:
+  - XML, JSON, YAML (structured data)
+  - CSV (tabular data)
+  - Database files
+  - Domain-specific configuration formats
+  
+  Examples for interlocking:
+  - Signal identities and locations
+  - Point identities and types
+  - Track section definitions
+  - Speed limits
+  - Route definitions
+  
+  **Application Algorithms Source Format**:
+  **Diagrammatic languages RECOMMENDED** (EN 50128 8.4.4.1, Table A.16):
+  - Function block diagrams (FBD)
+  - State charts / State machines
+  - Relay ladder diagrams (RLD)
+  - Sequential function charts (SFC)
+  
+  These are typically:
+  - Created using specialized application tools (T2/T3 tools)
+  - Converted/compiled to executable code
+  - Executed by generic software runtime
+  
+  Examples for interlocking:
+  - Signal management logic (function blocks)
+  - Point management logic (state charts)
+  - Route setting logic (ladder logic)
+  
+  **Compilation** (EN 50128 8.4.4.1):
+  Application source code must be compiled or translated to executable form:
+  - Data files validated and loaded into runtime format
+  - Algorithms translated/compiled to executable code or bytecode
+  - Compilation must succeed without errors
+  
+  **Coding Standards** (Table A.12):
+  - MANDATORY for SIL 3+ (highly recommended SIL 2)
+  - May be specific to application tools and languages
+  - Should cover: naming conventions, structure, documentation, error handling
+  
+  **Traceability** (SIL 2+, MANDATORY SIL 3+):
+  - Every application requirement traced to source code element
+  - Every architecture component traced to source code file
+  - 100% bidirectional traceability for SIL 3+
+  
+  **DES Agent Responsibility**:
+  - Create application data source files (parameters, configurations)
+  - Create application algorithms source files (diagrammatic languages recommended)
+  - Compile/translate source code to executable form
+  - Document source code structure and content (SIL 2+)
+  - Create traceability to architecture and requirements (SIL 2+, MANDATORY SIL 3+)
+  - Apply coding standards (MANDATORY SIL 3+)
+  
+  **VER Agent Responsibility**:
+  - Verify all application data in source form
+  - Verify all application algorithms in source form
+  - Verify source code compiles without errors
+  - Verify coding standards applied (MANDATORY SIL 3+)
+  - Verify traceability complete (SIL 2+, MANDATORY SIL 3+)
+  - Verify source code correct and complete (recorded in DOC-032)
+  
+  **VAL Agent Responsibility**:
+  - Validate source code realizes application requirements
+  - Validate source code implements application architecture
+  - Validate source code correct for installation
+  - Provide final acceptance
+  
+  **Typical Application Tools** (T2/T3 classification):
+  - Interlocking configuration tools (ladder logic editors)
+  - Signalling data editors
+  - Function block diagram editors
+  - State chart editors
+  - Configuration management tools
+  
+  These tools are classified per EN 50128 6.7 and require validation (DOC-027).

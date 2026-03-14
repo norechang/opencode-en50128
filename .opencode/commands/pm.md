@@ -299,9 +299,114 @@ Reporting to COD...
 ✓ COD notified: Phase ready for verification
 ```
 
-#### `/pm status <phase-id>`
+#### `/pm status` (General Project Status)
 
-**Description**: Show current status of phase execution
+**Description**: Show overall project status by reading LIFECYCLE_STATE.md
+
+**Usage**:
+```bash
+/pm status
+```
+
+**Behavior**:
+1. **Read active workspace** from `.workspace` file at `/home/norechang/work/EN50128/.workspace`
+2. Read `LIFECYCLE_STATE.md` from `examples/<active_workspace>/LIFECYCLE_STATE.md`
+3. Extract and display:
+   - Project information (name, SIL level, lifecycle model, COD mode)
+   - Current phase and status
+   - Phase history (completion status for all phases)
+   - Recent gate checks (last 3)
+   - Deliverable status for current phase
+   - Quality metrics summary
+   - Active risks and issues
+   - Traceability status
+   - Next steps and pending actions
+
+**Output Format**:
+```
+═══════════════════════════════════════════════════════
+PM Project Status Report
+═══════════════════════════════════════════════════════
+
+📁 Active Workspace: train_door_control2 (SIL 3)
+   Path: examples/train_door_control2/
+
+Project Information:
+  Name: train_door_control2
+  SIL Level: 3 (Strict Gatekeeper mode)
+  Lifecycle Model: V-Model
+  Current Phase: Integration (Phase 6)
+  Phase Started: 2026-02-25
+  Days in Phase: 1
+  Overall Completion: 55% (5 of 9 phases)
+
+Phase Progress:
+  ✓ Phase 0: Initialization - Complete (2026-02-18)
+  ✓ Phase 1: Planning - PASSED (5/5 criteria) - 2026-02-18
+  ✓ Phase 2: Requirements - PASSED (15/15 criteria) - 2026-02-19
+  ✓ Phase 3: Architecture & Design - PASSED (12/12 criteria) - 2026-02-21
+  ✓ Phase 4: Component Design - PASSED (12/12 criteria) - 2026-02-22
+  ✓ Phase 5: Implementation & Testing - PASSED (12/12 criteria) - 2026-02-25
+  ▶ Phase 6: Integration - In Progress (AUTHORIZED - 2026-02-25)
+  ☐ Phase 7: Validation - Not Started
+  ☐ Phase 8: Assessment - Not Started (MANDATORY SIL 3)
+  ☐ Phase 9: Deployment - Not Started
+
+Current Phase: Phase 6 (Integration)
+  Status: Ready to begin
+  Entry Conditions: ✅ ALL SATISFIED
+  Expected Deliverables:
+    ⏳ Software Integration Test Report (73 test cases)
+    ⏳ Software/Hardware Integration Test Report (48 test cases)
+    ⏳ Software Integration Verification Report
+
+Recent Gate Checks:
+  2026-02-25: Phase 5 (Implementation & Testing) - PASSED (12/12)
+  2026-02-22: Phase 4 (Component Design) - PASSED (12/12)
+  2026-02-21: Phase 3 (Architecture & Design) - PASSED (12/12)
+
+Quality Metrics (Phase 5):
+  Implementation: 53/53 components (~3,740 LOC)
+  Testing: 262/262 tests passing (100%)
+  Coverage: Statement 99.8%, Branch 99.6%, MC/DC 28/28 ✅
+  Defects: 0 open
+
+Traceability:
+  System Req → SW Req: 100% (50/50)
+  SW Req → Architecture: 100% (50/50)
+  Architecture → Design: 100% (53/53)
+  Design → Code: 100% (53/53)
+  Code → Unit Tests: 100% (53/53)
+  Components → Integration Tests: 0% (pending Phase 6)
+
+Active Risks:
+  RISK-003: WCET not measured on target hardware (Medium/High)
+    Mitigation: Phase 6 P0 activity
+
+Active Issues: None
+
+Next Steps:
+  1. Execute integration testing (73 SW + 48 HW test cases)
+  2. Measure WCET on target hardware (RISK-003)
+  3. Submit integration reports to QUA
+  4. Coordinate VER/VAL independent reviews
+  5. Request COD gate check
+
+Recommended Command:
+  /pm execute-phase integration
+```
+
+**Implementation Notes**:
+- PM reads LIFECYCLE_STATE.md directly (same source as COD)
+- PM provides project management perspective (team, schedule, risks)
+- For lifecycle authority decisions, PM should invoke `/cod status`
+- PM status focuses on: team coordination, deliverables, risks, quality metrics
+
+---
+
+#### `/pm status <phase-id>` (Phase Execution Status)
+
+**Description**: Show current status of specific phase execution (during automated phase execution)
 
 **Output**:
 ```

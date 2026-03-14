@@ -1,0 +1,392 @@
+# Application Architecture and Design
+# EN 50128 Deliverable #31 - Section 8.4.3
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-031-APP-ARCH-DESIGN"
+number: 31
+name: "Application Architecture and Design"
+abbreviation: "App Arch Design"
+
+# ===== Lifecycle Context =====
+phase: "application"
+standard_section: "8.4.3"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "DES"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-design/templates/Application-Architecture-and-Design-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: false
+    techniques: []
+    additional_requirements: []
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.3"
+        technique_id: "D.52"
+        recommendation: "R"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "HR"
+    additional_requirements:
+      - "Specify quantity and type of generic hardware components"
+      - "Specify quantity and type of generic software components"
+      - "Define location of components in application architecture"
+      - "Define location of application data in architecture"
+      - "Define location of application algorithms in architecture"
+      - "Design application data and algorithms"
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.3"
+        technique_id: "D.52"
+        recommendation: "HR"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Defensive Programming"
+        table_reference: "A.3"
+        technique_id: "D.14"
+        recommendation: "HR"
+    additional_requirements:
+      - "Specify quantity and type of generic hardware components"
+      - "Specify quantity and type of generic software components"
+      - "Define location of components in application architecture"
+      - "Define location of application data in architecture"
+      - "Define location of application algorithms in architecture"
+      - "Design application data and algorithms"
+      - "Traceability to application requirements"
+      - "Interface specifications for application data/algorithms"
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.3"
+        technique_id: "D.52"
+        recommendation: "M"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Defensive Programming"
+        table_reference: "A.3"
+        technique_id: "D.14"
+        recommendation: "HR"
+      - technique_name: "Information Encapsulation"
+        table_reference: "A.3"
+        technique_id: "D.33"
+        recommendation: "HR"
+    additional_requirements:
+      - "Specify quantity and type of generic hardware components (MANDATORY)"
+      - "Specify quantity and type of generic software components (MANDATORY)"
+      - "Define location of components in application architecture (MANDATORY)"
+      - "Define location of application data in architecture (MANDATORY)"
+      - "Define location of application algorithms in architecture (MANDATORY)"
+      - "Design application data and algorithms (MANDATORY)"
+      - "100% traceability to application requirements (MANDATORY)"
+      - "Interface specifications for application data/algorithms (MANDATORY)"
+      - "Fully defined interfaces (MANDATORY)"
+      - "Data encapsulation (MANDATORY)"
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.3"
+        technique_id: "D.52"
+        recommendation: "M"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Defensive Programming"
+        table_reference: "A.3"
+        technique_id: "D.14"
+        recommendation: "HR"
+      - technique_name: "Information Encapsulation"
+        table_reference: "A.3"
+        technique_id: "D.33"
+        recommendation: "HR"
+    additional_requirements:
+      - "Specify quantity and type of generic hardware components (MANDATORY)"
+      - "Specify quantity and type of generic software components (MANDATORY)"
+      - "Define location of components in application architecture (MANDATORY)"
+      - "Define location of application data in architecture (MANDATORY)"
+      - "Define location of application algorithms in architecture (MANDATORY)"
+      - "Design application data and algorithms (MANDATORY)"
+      - "100% traceability to application requirements (MANDATORY)"
+      - "Interface specifications for application data/algorithms (MANDATORY)"
+      - "Fully defined interfaces (MANDATORY)"
+      - "Data encapsulation (MANDATORY)"
+      - "Formal verification highly recommended"
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "app-arch-design-document"
+    description: "Complete Application Architecture and Design document per EN 50128 8.4.3"
+    mandatory_sil: 1
+    source: "DES agent"
+    format: "Markdown with YAML frontmatter"
+    storage_path: "docs/application/architecture/Application-Architecture-and-Design.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/des create-app-architecture"
+    verification_criteria:
+      - "Quantity and type of generic hardware components specified"
+      - "Quantity and type of generic software components specified"
+      - "Location of components in application architecture defined"
+      - "Location of application data in architecture defined"
+      - "Location of application algorithms in architecture defined"
+      - "Application data and algorithms designed"
+
+  - evidence_id: "app-component-specification"
+    description: "Specification of generic hardware and software components used in application"
+    mandatory_sil: 1
+    source: "DES agent"
+    format: "YAML or Markdown table"
+    storage_path: "docs/application/architecture/component-specification.yaml"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/des specify-app-components"
+    verification_criteria:
+      - "All hardware components listed with quantity and type"
+      - "All software components listed with quantity and type"
+      - "Component locations specified"
+      - "Compatibility with generic software verified"
+
+  - evidence_id: "app-data-design"
+    description: "Design of application data processed by generic software"
+    mandatory_sil: 1
+    source: "DES agent"
+    format: "YAML, CSV, or database schema"
+    storage_path: "docs/application/architecture/application-data-design.yaml"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/des design-app-data"
+    verification_criteria:
+      - "All application data elements defined"
+      - "Data types specified and compatible with generic software"
+      - "Data locations in architecture specified"
+      - "Data interfaces specified"
+      - "Traceability to application requirements (SIL 2+)"
+
+  - evidence_id: "app-algorithms-design"
+    description: "Design of application algorithms processed by generic software"
+    mandatory_sil: 1
+    source: "DES agent"
+    format: "Diagrammatic languages (function blocks, state charts, ladder diagrams) or pseudocode"
+    storage_path: "docs/application/architecture/application-algorithms-design/"
+    automation_level: "manual"
+    collect_on_agent_action: "/des design-app-algorithms"
+    verification_criteria:
+      - "All application algorithms defined"
+      - "Algorithm interfaces specified"
+      - "Algorithm locations in architecture specified"
+      - "Diagrammatic languages used (recommended per 8.4.4.1)"
+      - "Traceability to application requirements (SIL 2+)"
+
+  - evidence_id: "app-architecture-diagram"
+    description: "Architecture diagram showing component locations and application data/algorithms placement"
+    mandatory_sil: 1
+    source: "DES agent"
+    format: "Diagram (PNG, SVG, or PlantUML)"
+    storage_path: "docs/application/architecture/architecture-diagram.png"
+    automation_level: "manual"
+    collect_on_agent_action: "/des create-app-arch-diagram"
+    verification_criteria:
+      - "All components shown with locations"
+      - "Application data placement shown"
+      - "Application algorithms placement shown"
+      - "Interfaces between components shown"
+      - "Clear and understandable"
+
+  - evidence_id: "app-interface-specifications"
+    description: "Interface specifications for application data and algorithms"
+    mandatory_sil: 2
+    source: "DES agent"
+    format: "Markdown or YAML"
+    storage_path: "docs/application/architecture/interface-specifications.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/des specify-app-interfaces"
+    verification_criteria:
+      - "All interfaces between application data/algorithms and generic software specified"
+      - "Data formats defined"
+      - "Protocol specifications provided"
+      - "Fully defined interfaces for SIL 3+ (MANDATORY)"
+
+  - evidence_id: "app-arch-traceability-matrix"
+    description: "Traceability matrix linking application architecture to application requirements"
+    mandatory_sil: 2
+    source: "DES agent"
+    format: "Markdown table or CSV"
+    storage_path: "docs/application/architecture/arch-traceability-matrix.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/des create-app-arch-traceability"
+    verification_criteria:
+      - "Every application requirement traced to architecture element"
+      - "100% traceability for SIL 3+ (MANDATORY)"
+
+  - evidence_id: "app-arch-review-records"
+    description: "Review records from VER and VAL checks"
+    mandatory_sil: 1
+    source: "VER and VAL agents"
+    format: "Review meeting minutes (Markdown)"
+    storage_path: "docs/application/reviews/app-arch-review-records.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver review, /val review"
+    verification_criteria:
+      - "All review findings documented"
+      - "Resolution status tracked"
+      - "Sign-offs from VER and VAL"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-028-APP-REQ-SPEC"
+    reason: "Application architecture realizes application requirements"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-009-SAS"
+    reason: "Application architecture uses generic software architecture"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-029-APP-PREP-PLAN"
+    reason: "Application architecture designed per Application Preparation Plan"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-030-APP-TEST-SPEC"
+    reason: "Application tests verify coherency with application architecture"
+  
+  - deliverable_id: "DOC-034-APP-SOURCE-CODE"
+    reason: "Application source code implements application architecture"
+  
+  - deliverable_id: "DOC-032-APP-PREP-VER"
+    reason: "Verification report verifies application architecture"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All generic hardware components specified (quantity and type)"
+    - "All generic software components specified (quantity and type)"
+    - "All component locations in architecture defined"
+    - "All application data locations in architecture defined"
+    - "All application algorithms locations in architecture defined"
+    - "All application data and algorithms designed"
+    - "All interfaces specified (SIL 2+, MANDATORY SIL 3+)"
+    - "All SIL-appropriate techniques applied per Table A.3"
+  
+  correctness:
+    - "Component specifications correct and compatible with generic software"
+    - "Application data design correct and compatible with generic software interfaces"
+    - "Application algorithms design correct and compatible with generic software"
+    - "Architecture realizes all application requirements"
+  
+  consistency:
+    - "No conflicting component specifications"
+    - "Application data design consistent with generic software interfaces"
+    - "Application algorithms design consistent with generic software"
+    - "All cross-references valid"
+    - "Terminology consistent with application requirements"
+  
+  traceability:
+    - "Traceability to application requirements (SIL 2+)"
+    - "100% traceability to application requirements (MANDATORY SIL 3+)"
+    - "Every application requirement realized in architecture"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Application Architecture and Design Baseline"
+  baseline_trigger: "After VER and VAL approval"
+  change_control: "All changes via CCB, impact assessment on application data/algorithms"
+  versioning: "Semantic versioning (MAJOR.MINOR.PATCH)"
+  storage_location: "config/baselines/application-architecture/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "8.4.3"
+    title: "Architecture and Design"
+    relevance: "Primary section defining Application Architecture and Design"
+  - section: "8.4.4.1"
+    title: "Application Data/Algorithms Production"
+    relevance: "Diagrammatic languages recommended for application algorithms"
+  - section: "Table A.3"
+    title: "Software Architecture techniques"
+    relevance: "Applicable techniques (Structured Methodology, Modular Approach, Defensive Programming)"
+  - section: "Table A.16"
+    title: "Diagrammatic Formal Languages"
+    relevance: "Diagrammatic languages for application algorithms design"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Application Architecture and Design is deliverable #31, written by DES, checked by VER and VAL"
+
+# ===== Notes =====
+notes: |
+  **Application Architecture and Design (Deliverable #31)**
+  
+  This deliverable defines the architecture and design of **application data and algorithms** for systems
+  configured by application data/algorithms (EN 50128 Section 8). It is NOT required for generic
+  software-only systems.
+  
+  **Purpose**: Define how generic hardware and software components are used in the specific application,
+  and design the application data and algorithms that configure the generic software for the specific
+  installation.
+  
+  **Key Content** (EN 50128 8.4.3):
+  1. **Quantity and type** of generic hardware components to be used
+  2. **Quantity and type** of generic software components to be used
+  3. **Location** of components in specific application architecture
+  4. **Location** of application data in specific application architecture
+  5. **Location** of application algorithms in specific application architecture
+  6. **Design** of application data processed by generic software
+  7. **Design** of application algorithms processed by generic software
+  
+  **Difference from Generic Software Architecture (DOC-009-SAS)**:
+  - DOC-009 (SAS): Architecture of the **generic software** (reusable across installations)
+  - DOC-031 (App Arch Design): Architecture for a **specific installation** using the generic software
+  
+  **Application Data**: Typically parameter values, object descriptions (identity, type, location)
+  Example for interlocking: signal identities, point identities, track sections, speed limits
+  
+  **Application Algorithms**: Typically function block diagrams, state charts, relay ladder diagrams
+  Example for interlocking: signal management logic, point management logic, route logic
+  
+  **Design Approach** (EN 50128 8.4.4.1):
+  - **Diagrammatic languages RECOMMENDED** for application algorithms (Table A.16)
+  - Function block diagrams, state charts, ladder diagrams
+  - Convertible to source code via specialized languages
+  
+  **DES Agent Responsibility**:
+  - Specify quantity and type of generic hardware components
+  - Specify quantity and type of generic software components
+  - Define component locations in architecture
+  - Define application data locations in architecture
+  - Define application algorithms locations in architecture
+  - Design application data (structure, types, values)
+  - Design application algorithms (logic, interfaces)
+  - Create architecture diagram
+  - Specify interfaces (MANDATORY SIL 3+)
+  - Create traceability to application requirements (SIL 2+, MANDATORY SIL 3+)
+  
+  **VER Agent Responsibility**:
+  - Verify all content per 8.4.3 present
+  - Verify compatibility with generic software
+  - Verify traceability to application requirements (SIL 2+, MANDATORY SIL 3+)
+  - Verify interfaces fully defined (MANDATORY SIL 3+)
+  - Record results in DOC-032 (Application Preparation Verification Report)
+  
+  **VAL Agent Responsibility**:
+  - Validate architecture realizes all application requirements
+  - Validate application data design correct for installation
+  - Validate application algorithms design correct for installation
+  - Validate architecture compatible with generic software capabilities

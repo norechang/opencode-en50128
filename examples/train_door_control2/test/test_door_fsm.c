@@ -16,11 +16,15 @@
 #include "test_harness.h"
 #include "test_mocks.h"
 #include "../src/door_control/door_fsm.h"
+#include "../src/fault_detection/fault_detection.h"
 #include "../src/common/types.h"
 #include "../src/common/error_codes.h"
 
 /* Test counter for this suite */
 static int mod001_test_count = 0;
+
+/* Mock fault_detection module instance */
+static fault_detection_t mock_fault_detection;
 
 /*===========================================================================*/
 /* Mock HAL Functions (stubs for testing)                                   */
@@ -54,9 +58,13 @@ error_t sensor_hal_read_position(door_side_t side, uint16_t* position_raw) {
     return ERROR_SUCCESS;
 }
 
-bool sensor_hal_read_obstacle(door_side_t side) {
+error_t sensor_hal_read_obstacle(door_side_t side, bool* obstacle_detected) {
     (void)side;
-    return mock_obstacle_sensor;
+    if (obstacle_detected == NULL) {
+        return ERROR_NULL_POINTER;
+    }
+    *obstacle_detected = mock_obstacle_sensor;
+    return ERROR_SUCCESS;
 }
 
 error_t actuator_hal_set_door_pwm(door_side_t side, int8_t duty_cycle) {
@@ -81,15 +89,6 @@ bool safety_monitor_is_safe_to_open(void) {
     return mock_is_safe_to_open;
 }
 
-void fault_detection_report_fault(uint16_t code, uint8_t severity) {
-    mock_reported_fault_code = code;
-    mock_reported_fault_severity = severity;
-}
-
-bool fault_detection_is_critical_fault_active(void) {
-    return mock_critical_fault_active;
-}
-
 /* NOTE: get_system_time_ms() is now in test_mocks.c */
 
 /* Mock reset function */
@@ -106,6 +105,9 @@ void reset_mocks(void) {
     mock_pwm_error = ERROR_SUCCESS;     /* Reset PWM fault injection */
     mock_lock_error = ERROR_SUCCESS;    /* Reset lock fault injection */
     reset_hardware_mocks();  /* Reset time from test_mocks.c */
+    
+    /* Initialize mock fault detection module */
+    (void)fault_detection_init(&mock_fault_detection);
 }
 
 /*===========================================================================*/
@@ -121,7 +123,7 @@ bool test_door_fsm_init_success_nominal(void) {
     
     reset_mocks();
     
-    result = door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    result = door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     TEST_ASSERT_EQUAL(ERROR_SUCCESS, result);
     TEST_ASSERT_EQUAL(DOOR_STATE_CLOSED, fsm.current_state);
@@ -142,7 +144,7 @@ bool test_door_fsm_init_null_pointer(void) {
     
     reset_mocks();
     
-    result = door_fsm_init(NULL, DOOR_SIDE_LEFT);
+    result = door_fsm_init(NULL, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     TEST_ASSERT_EQUAL(ERROR_NULL_POINTER, result);
     
@@ -158,7 +160,7 @@ bool test_door_fsm_init_invalid_side(void) {
     
     reset_mocks();
     
-    result = door_fsm_init(&fsm, DOOR_SIDE_MAX);
+    result = door_fsm_init(&fsm, DOOR_SIDE_MAX, &mock_fault_detection);
     
     TEST_ASSERT_EQUAL(ERROR_INVALID_PARAMETER, result);
     
@@ -174,11 +176,30 @@ bool test_door_fsm_init_right_door(void) {
     
     reset_mocks();
     
-    result = door_fsm_init(&fsm, DOOR_SIDE_RIGHT);
+    result = door_fsm_init(&fsm, DOOR_SIDE_RIGHT, &mock_fault_detection);
     
     TEST_ASSERT_EQUAL(ERROR_SUCCESS, result);
     TEST_ASSERT_EQUAL(DOOR_SIDE_RIGHT, fsm.side);
     TEST_ASSERT_EQUAL(DOOR_STATE_CLOSED, fsm.current_state);
+    
+    return true;
+}
+
+/**
+ * TC-MOD001-005: Initialization Failure (NULL fault_detection pointer)
+ * 
+ * @note FIX for DEF-INTEGRATION-001 (2026-02-26):
+ *       New test case to verify fault_detection pointer validation.
+ */
+bool test_door_fsm_init_null_fault_detection(void) {
+    door_fsm_t fsm;
+    error_t result;
+    
+    reset_mocks();
+    
+    result = door_fsm_init(&fsm, DOOR_SIDE_LEFT, NULL);
+    
+    TEST_ASSERT_EQUAL(ERROR_NULL_POINTER, result);
     
     return true;
 }
@@ -195,7 +216,7 @@ bool test_door_fsm_update_closed_no_events(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     mock_position_sensor = 0;  /* 0% = closed */
     mock_critical_fault_active = false;
@@ -219,7 +240,7 @@ bool test_door_fsm_update_opening_timeout(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Set to OPENING state, simulate timeout */
     fsm.current_state = DOOR_STATE_OPENING;
@@ -246,7 +267,7 @@ bool test_door_fsm_update_closing_obstacle(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Set to CLOSING state */
     fsm.current_state = DOOR_STATE_CLOSING;
@@ -273,7 +294,7 @@ bool test_door_fsm_update_critical_fault(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     fsm.current_state = DOOR_STATE_OPENING;
     mock_critical_fault_active = true;  /* Simulate critical fault */
@@ -313,7 +334,7 @@ bool test_door_fsm_process_event_success(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     result = door_fsm_process_event(&fsm, DOOR_EVENT_OPEN_CMD);
     
@@ -331,7 +352,7 @@ bool test_door_fsm_process_event_emergency(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     result = door_fsm_process_event(&fsm, DOOR_EVENT_EMERGENCY_RELEASE);
     
@@ -356,7 +377,7 @@ bool test_door_fsm_process_event_queue_full(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Fill queue with all 8 queueable event types (EMERGENCY_RELEASE bypasses queue) */
     result = door_fsm_process_event(&fsm, DOOR_EVENT_OPEN_CMD);          /* 1 */
@@ -396,7 +417,7 @@ bool test_door_fsm_process_event_duplicate(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Add first event */
     result = door_fsm_process_event(&fsm, DOOR_EVENT_OPEN_CMD);
@@ -427,7 +448,7 @@ bool test_door_fsm_update_closed_to_opening(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Queue open command */
     door_fsm_process_event(&fsm, DOOR_EVENT_OPEN_CMD);
@@ -459,7 +480,7 @@ bool test_door_fsm_update_opening_to_open(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Manually set to OPENING state (bypass buggy event queue) */
     fsm.current_state = DOOR_STATE_OPENING;
@@ -503,7 +524,7 @@ bool test_door_fsm_process_event_invalid(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     result = door_fsm_process_event(&fsm, DOOR_EVENT_MAX);
     
@@ -524,7 +545,7 @@ bool test_door_fsm_enter_safe_state_success(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     fsm.current_state = DOOR_STATE_OPENING;
     
@@ -546,7 +567,7 @@ bool test_door_fsm_safe_state_lock_if_closed(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     fsm.position = 0;  /* Fully closed */
     
@@ -566,7 +587,7 @@ bool test_door_fsm_safe_state_unlock_if_open(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     fsm.position = 80;  /* Partially open */
     
@@ -590,7 +611,7 @@ bool test_door_fsm_get_state_success(void) {
     door_state_t state;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     fsm.current_state = DOOR_STATE_OPEN;
     
@@ -628,7 +649,7 @@ bool test_door_fsm_get_position_success(void) {
     uint8_t position;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     fsm.position = 75;
     
@@ -666,7 +687,7 @@ bool test_door_fsm_is_locked_true(void) {
     bool locked;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     fsm.locked = true;
     
@@ -685,7 +706,7 @@ bool test_door_fsm_is_locked_false(void) {
     bool locked;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     fsm.locked = false;
     
@@ -724,7 +745,7 @@ bool test_door_fsm_sensor_failure(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Set sensor to return error */
     mock_sensor_error = ERROR_HARDWARE_FAILURE;
@@ -748,7 +769,7 @@ bool test_door_fsm_open_to_closing(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Set to OPEN state manually */
     fsm.current_state = DOOR_STATE_OPEN;
@@ -778,7 +799,7 @@ bool test_door_fsm_open_close_blocked(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Set to OPEN state manually */
     fsm.current_state = DOOR_STATE_OPEN;
@@ -808,7 +829,7 @@ bool test_door_fsm_opening_obstacle(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Set to OPENING state */
     fsm.current_state = DOOR_STATE_OPENING;
@@ -837,7 +858,7 @@ bool test_door_fsm_closing_to_closed(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Set to CLOSING state */
     fsm.current_state = DOOR_STATE_CLOSING;
@@ -865,7 +886,7 @@ bool test_door_fsm_closing_timeout(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Set to CLOSING state */
     fsm.current_state = DOOR_STATE_CLOSING;
@@ -900,7 +921,7 @@ bool test_door_fsm_locked_unlock(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Set to LOCKED state */
     fsm.current_state = DOOR_STATE_LOCKED;
@@ -933,7 +954,7 @@ bool test_door_fsm_emergency_state(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Trigger emergency */
     door_fsm_process_event(&fsm, DOOR_EVENT_EMERGENCY_RELEASE);
@@ -960,7 +981,7 @@ bool test_door_fsm_fault_state_closed(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Enter fault state while closed */
     fsm.position = 0;  /* Closed */
@@ -986,7 +1007,7 @@ bool test_door_fsm_fault_state_open(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Enter fault state while open */
     fsm.position = 80;  /* Open */
@@ -1012,7 +1033,7 @@ bool test_door_fsm_invalid_state(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Force invalid state */
     fsm.current_state = (door_state_t)99;
@@ -1051,7 +1072,7 @@ bool test_door_fsm_transition_opening_unlock(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Set to CLOSED but locked, then try to open */
     fsm.current_state = DOOR_STATE_CLOSED;
@@ -1080,7 +1101,7 @@ bool test_door_fsm_transition_locked_not_closed(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Set door to partially open */
     fsm.current_state = DOOR_STATE_CLOSED;
@@ -1108,7 +1129,7 @@ bool test_door_fsm_event_queue_search(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Add multiple events to queue */
     door_fsm_process_event(&fsm, DOOR_EVENT_OPEN_CMD);
@@ -1139,7 +1160,7 @@ bool test_door_fsm_closed_safety_interlock_fail(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Queue open command */
     door_fsm_process_event(&fsm, DOOR_EVENT_OPEN_CMD);
@@ -1172,7 +1193,7 @@ bool test_door_fsm_locked_to_opening(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Manually set to LOCKED state (door closed and locked) */
     fsm.current_state = DOOR_STATE_LOCKED;
@@ -1216,7 +1237,7 @@ bool test_door_fsm_closed_to_locked(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Setup: Door must be CLOSED before locking */
     fsm.current_state = DOOR_STATE_CLOSED;
@@ -1262,7 +1283,7 @@ bool test_door_fsm_lock_actuator_failure(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Setup: Door CLOSED, ready to lock */
     fsm.current_state = DOOR_STATE_CLOSED;
@@ -1303,7 +1324,7 @@ bool test_door_fsm_lock_door_not_closed(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Setup: Door NOT fully closed (position > 5%) */
     fsm.current_state = DOOR_STATE_CLOSED;
@@ -1342,7 +1363,7 @@ bool test_door_fsm_lock_pwm_stop_failure(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Setup: Door CLOSED, ready to lock */
     fsm.current_state = DOOR_STATE_CLOSED;
@@ -1391,7 +1412,7 @@ bool test_door_fsm_opening_pwm_failure(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Setup: Door CLOSED, ready to open */
     fsm.current_state = DOOR_STATE_CLOSED;
@@ -1428,7 +1449,7 @@ bool test_door_fsm_open_pwm_failure(void) {
     door_fsm_t fsm;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Setup: Door OPENING, about to reach fully open */
     fsm.current_state = DOOR_STATE_OPENING;
@@ -1459,7 +1480,7 @@ bool test_door_fsm_closing_pwm_failure(void) {
     error_t result;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Setup: Door OPEN, ready to close */
     fsm.current_state = DOOR_STATE_OPEN;
@@ -1496,7 +1517,7 @@ bool test_door_fsm_closed_pwm_failure(void) {
     door_fsm_t fsm;
     
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
     
     /* Setup: Door CLOSING, about to reach fully closed */
     fsm.current_state = DOOR_STATE_CLOSING;
@@ -1536,7 +1557,7 @@ bool test_door_fsm_closed_pwm_failure(void) {
 bool test_door_fsm_opening_no_obstacle_no_timeout(void) {
     door_fsm_t fsm;
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
 
     fsm.current_state = DOOR_STATE_OPENING;
     fsm.state_entry_time_ms = 0U;
@@ -1566,7 +1587,7 @@ bool test_door_fsm_opening_no_obstacle_no_timeout(void) {
 bool test_door_fsm_open_no_close_cmd(void) {
     door_fsm_t fsm;
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
 
     fsm.current_state = DOOR_STATE_OPEN;
     /* Position at 100% (fully open) */
@@ -1595,7 +1616,7 @@ bool test_door_fsm_open_no_close_cmd(void) {
 bool test_door_fsm_closing_no_obstacle_no_timeout(void) {
     door_fsm_t fsm;
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
 
     fsm.current_state = DOOR_STATE_CLOSING;
     fsm.state_entry_time_ms = 0U;
@@ -1623,7 +1644,7 @@ bool test_door_fsm_closing_no_obstacle_no_timeout(void) {
 bool test_door_fsm_locked_no_unlock_cmd(void) {
     door_fsm_t fsm;
     reset_mocks();
-    door_fsm_init(&fsm, DOOR_SIDE_LEFT);
+    door_fsm_init(&fsm, DOOR_SIDE_LEFT, &mock_fault_detection);
 
     fsm.current_state = DOOR_STATE_LOCKED;
     fsm.locked = true;
@@ -1653,27 +1674,29 @@ void run_door_fsm_tests(void) {
     mod001_test_count++;
     run_test("TC-MOD001-004: door_fsm_init - right door", test_door_fsm_init_right_door);
     mod001_test_count++;
+    run_test("TC-MOD001-005: door_fsm_init - NULL fault_detection", test_door_fsm_init_null_fault_detection);
+    mod001_test_count++;
     
     /* door_fsm_update() tests */
-    run_test("TC-MOD001-005: door_fsm_update - closed no events", test_door_fsm_update_closed_no_events);
+    run_test("TC-MOD001-006: door_fsm_update - closed no events", test_door_fsm_update_closed_no_events);
     mod001_test_count++;
-    run_test("TC-MOD001-006: door_fsm_update - closed to opening", test_door_fsm_update_closed_to_opening);
+    run_test("TC-MOD001-007: door_fsm_update - closed to opening", test_door_fsm_update_closed_to_opening);
     mod001_test_count++;
-    run_test("TC-MOD001-007: door_fsm_update - opening to open", test_door_fsm_update_opening_to_open);
+    run_test("TC-MOD001-008: door_fsm_update - opening to open", test_door_fsm_update_opening_to_open);
     mod001_test_count++;
-    run_test("TC-MOD001-008: door_fsm_update - opening timeout", test_door_fsm_update_opening_timeout);
+    run_test("TC-MOD001-009: door_fsm_update - opening timeout", test_door_fsm_update_opening_timeout);
     mod001_test_count++;
-    run_test("TC-MOD001-009: door_fsm_update - closing obstacle", test_door_fsm_update_closing_obstacle);
+    run_test("TC-MOD001-010: door_fsm_update - closing obstacle", test_door_fsm_update_closing_obstacle);
     mod001_test_count++;
-    run_test("TC-MOD001-010: door_fsm_update - critical fault", test_door_fsm_update_critical_fault);
+    run_test("TC-MOD001-011: door_fsm_update - critical fault", test_door_fsm_update_critical_fault);
     mod001_test_count++;
-    run_test("TC-MOD001-011: door_fsm_update - NULL pointer", test_door_fsm_update_null_pointer);
+    run_test("TC-MOD001-012: door_fsm_update - NULL pointer", test_door_fsm_update_null_pointer);
     mod001_test_count++;
     
     /* door_fsm_process_event() tests */
-    run_test("TC-MOD001-012: door_fsm_process_event - success", test_door_fsm_process_event_success);
+    run_test("TC-MOD001-013: door_fsm_process_event - success", test_door_fsm_process_event_success);
     mod001_test_count++;
-    run_test("TC-MOD001-013: door_fsm_process_event - emergency", test_door_fsm_process_event_emergency);
+    run_test("TC-MOD001-014: door_fsm_process_event - emergency", test_door_fsm_process_event_emergency);
     mod001_test_count++;
     run_test("TC-MOD001-014: door_fsm_process_event - queue full", test_door_fsm_process_event_queue_full);
     mod001_test_count++;

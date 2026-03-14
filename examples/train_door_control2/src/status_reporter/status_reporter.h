@@ -24,6 +24,7 @@
 
 #include "../common/types.h"
 #include "../common/error_codes.h"
+#include "../door_control/door_fsm.h"  /* For door_fsm_t */
 
 /*===========================================================================*/
 /* Constants                                                                 */
@@ -54,7 +55,12 @@ typedef struct {
 } can_msg_door_status_t;
 
 /**
- * @brief Status reporter state structure (24 bytes)
+ * @brief Status reporter state structure (32/40 bytes depending on pointer size)
+ * 
+ * @note FIX for DEF-INTEGRATION-002 (2026-02-26):
+ *       Added door FSM pointers to enable access to door position/state/lock status.
+ *       This fixes SIGSEGV when calling door_fsm_get_position() with incorrect parameters.
+ *       Pointers are const to match door_fsm accessor function signatures.
  */
 typedef struct {
     can_msg_door_status_t last_can_msg;  /**< Last CAN message (8 bytes) */
@@ -62,7 +68,9 @@ typedef struct {
     uint32_t can_tx_count;               /**< CAN TX count (4 bytes) */
     uint8_t can_tx_error_count;          /**< CAN TX error count (1 byte) */
     uint32_t last_update_time_ms;        /**< Last update timestamp (4 bytes) */
-    /* Total: 21 bytes (3 bytes padding for alignment) */
+    const door_fsm_t* left_door_fsm;     /**< Pointer to left door FSM (4/8 bytes, const) */
+    const door_fsm_t* right_door_fsm;    /**< Pointer to right door FSM (4/8 bytes, const) */
+    /* Total: 29 bytes + 2*ptr_size (37/45 bytes, rounded to 32/40 with padding) */
 } status_reporter_t;
 
 /*===========================================================================*/
@@ -71,12 +79,20 @@ typedef struct {
 
 /**
  * @brief Initialize status reporter
- * @param[in,out] sr Pointer to status reporter structure
+ * @param[in,out] sr Pointer to status reporter structure (must not be NULL)
+ * @param[in] left_fsm Pointer to left door FSM (must not be NULL for SIL 3, const - read-only access)
+ * @param[in] right_fsm Pointer to right door FSM (must not be NULL for SIL 3, const - read-only access)
  * @return ERROR_SUCCESS on success, error code otherwise
- * @complexity 2 (1 base + 1 IF)
+ * @pre sr, left_fsm, right_fsm must not be NULL
+ * @post sr initialized with FSM pointers stored
+ * @complexity 4 (1 base + 3 IF decisions)
  * @traceability DOC-COMPDES-2026-001 Section 3.5.2
+ * 
+ * @note FIX for DEF-INTEGRATION-002 (2026-02-26):
+ *       Added door FSM parameters for proper module integration.
+ *       FSM pointers are const - status_reporter only reads door state.
  */
-error_t status_reporter_init(status_reporter_t* sr);
+error_t status_reporter_init(status_reporter_t* sr, const door_fsm_t* left_fsm, const door_fsm_t* right_fsm);
 
 /**
  * @brief Update status reporter - collect and transmit status if period elapsed

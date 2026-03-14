@@ -1,3 +1,14 @@
+---
+name: en50128-lifecycle-coordination
+description: Project management and coordination for EN 50128 railway software development
+license: Proprietary
+compatibility: opencode
+metadata:
+  standard: EN 50128:2011
+  domain: railway-software
+  role: lifecycle-coordinator
+---
+
 # EN 50128 Lifecycle Coordination Skill
 
 ## Skill Overview

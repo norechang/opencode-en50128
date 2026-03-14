@@ -1,0 +1,460 @@
+deliverable_id: "DOC-024-INT-VER-REPORT"
+number: 24
+name: "Software Integration Verification Report"
+abbreviation: "Int Ver Report"
+phase: "integration"
+standard_section: "7.6.4.5"
+written_by: "VER"
+first_check: "QUA"
+second_check: "NONE"
+template_path: ".opencode/skills/en50128-integration/templates/Software-Integration-Verification-Report-template.md"
+template_exists: true
+
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_id: "A.5"
+        technique_name: "Verification and Testing"
+        recommendation: "R"
+        table_reference: "A.5"
+    additional_requirements:
+      - "Integration test specification reviewed"
+      - "Integration test report reviewed"
+      - "Traceability verified"
+    evidence_thresholds:
+      min_traceability_coverage: 70
+    verification_requirements:
+      independent_verification: false
+      static_analysis: false
+      formal_review: false
+
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_id: "A.5"
+        technique_name: "Verification and Testing"
+        recommendation: "HR"
+        table_reference: "A.5"
+      - technique_id: "D.58"
+        technique_name: "Traceability"
+        recommendation: "HR"
+        table_reference: "A.5"
+    additional_requirements:
+      - "Integration test specification reviewed"
+      - "Integration test report reviewed"
+      - "Traceability verified (highly recommended)"
+      - "Interface coverage verified"
+    evidence_thresholds:
+      min_traceability_coverage: 90
+    verification_requirements:
+      independent_verification: false
+      static_analysis: false
+      formal_review: false
+
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_id: "A.5"
+        technique_name: "Verification and Testing"
+        recommendation: "HR"
+        table_reference: "A.5"
+      - technique_id: "D.58"
+        technique_name: "Traceability"
+        recommendation: "HR"
+        table_reference: "A.5"
+      - technique_id: "A.19"
+        technique_name: "Static Analysis"
+        recommendation: "HR"
+        table_reference: "A.19"
+    additional_requirements:
+      - "Integration test specification reviewed (highly recommended)"
+      - "Integration test report reviewed (highly recommended)"
+      - "Traceability verified 100% (highly recommended)"
+      - "Interface coverage verified 100% (MANDATORY)"
+      - "Static analysis of integration code (highly recommended)"
+    evidence_thresholds:
+      min_traceability_coverage: 100
+    verification_requirements:
+      independent_verification: false
+      static_analysis: true
+      formal_review: true
+
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_id: "A.5"
+        technique_name: "Verification and Testing"
+        recommendation: "M"
+        table_reference: "A.5"
+      - technique_id: "D.58"
+        technique_name: "Traceability"
+        recommendation: "M"
+        table_reference: "A.5"
+      - technique_id: "A.19"
+        technique_name: "Static Analysis"
+        recommendation: "M"
+        table_reference: "A.19"
+    additional_requirements:
+      - "Independent verification (MANDATORY)"
+      - "Integration test specification reviewed (MANDATORY)"
+      - "Integration test report reviewed (MANDATORY)"
+      - "Traceability verified 100% (MANDATORY)"
+      - "Interface coverage verified 100% (MANDATORY)"
+      - "Static analysis of integration code (MANDATORY)"
+      - "EN 50128 technique compliance verified (MANDATORY)"
+      - "Verifier independent from INT, DES, IMP, TST (MANDATORY)"
+    evidence_thresholds:
+      min_traceability_coverage: 100
+    verification_requirements:
+      independent_verification: true
+      static_analysis: true
+      formal_review: true
+
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_id: "A.5"
+        technique_name: "Verification and Testing"
+        recommendation: "M"
+        table_reference: "A.5"
+      - technique_id: "D.58"
+        technique_name: "Traceability"
+        recommendation: "M"
+        table_reference: "A.5"
+      - technique_id: "A.19"
+        technique_name: "Static Analysis"
+        recommendation: "M"
+        table_reference: "A.19"
+    additional_requirements:
+      - "Independent verification (MANDATORY)"
+      - "Integration test specification reviewed (MANDATORY)"
+      - "Integration test report reviewed (MANDATORY)"
+      - "Traceability verified 100% (MANDATORY)"
+      - "Interface coverage verified 100% (MANDATORY)"
+      - "Static analysis of integration code (MANDATORY)"
+      - "EN 50128 technique compliance verified (MANDATORY)"
+      - "Verifier independent from INT, DES, IMP, TST (MANDATORY)"
+      - "Formal verification review (MANDATORY)"
+    evidence_thresholds:
+      min_traceability_coverage: 100
+    verification_requirements:
+      independent_verification: true
+      static_analysis: true
+      formal_review: true
+
+evidence_requirements:
+  - evidence_id: "integration-test-spec-review"
+    description: "Review of Integration Test Specification for completeness and correctness"
+    mandatory_sil: 0
+    source: "VER agent"
+    format: "Structured checklist in markdown with status, notes for each item"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 3.1"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver review-integration-test-spec"
+    verification_criteria:
+      - "Document completeness checked"
+      - "Integration strategy reviewed"
+      - "Test cases reviewed"
+      - "Traceability matrix reviewed"
+      - "Entry/exit criteria reviewed"
+
+  - evidence_id: "integration-test-report-review"
+    description: "Review of Integration Test Report for completeness and correctness"
+    mandatory_sil: 0
+    source: "VER agent"
+    format: "Structured checklist in markdown with status, notes for each item"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 3.2"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver review-integration-test-report"
+    verification_criteria:
+      - "Document completeness checked"
+      - "Test execution completeness verified"
+      - "Test results reviewed"
+      - "Defects reviewed"
+      - "Entry/exit criteria verified"
+
+  - evidence_id: "traceability-verification"
+    description: "Verification of traceability from architecture/design to integration tests"
+    mandatory_sil: 1
+    source: "VER agent, CM agent"
+    format: "Structured tables with forward and reverse traceability analysis"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 3.3"
+    automation_level: "automatic"
+    collect_on_agent_action: "/cm verify-integration-traceability"
+    verification_criteria:
+      - "Architecture → integration tests traced"
+      - "Design → integration tests traced"
+      - "Reverse traceability checked (no orphan test cases)"
+      - "Coverage = 100% (SIL 2+)"
+
+  - evidence_id: "interface-coverage-verification"
+    description: "Verification that all component interfaces are tested"
+    mandatory_sil: 1
+    source: "VER agent, CM agent"
+    format: "Structured table with interface type, total, tested, coverage percentage"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 3.4"
+    automation_level: "automatic"
+    collect_on_agent_action: "/ver verify-interface-coverage"
+    verification_criteria:
+      - "All software-software interfaces tested"
+      - "All hardware-software interfaces tested"
+      - "All external interfaces tested"
+      - "Coverage = 100% (MANDATORY all SILs)"
+
+  - evidence_id: "static-analysis-integration-code"
+    description: "Static analysis of integration code (stubs, drivers, test harness) (SIL 2+)"
+    mandatory_sil: 2
+    source: "VER agent, cppcheck, PC-lint"
+    format: "Structured table with issue type, count, severity, resolution status"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 3.5"
+    automation_level: "automatic"
+    collect_on_agent_action: "/ver analyze-integration-code"
+    verification_criteria:
+      - "Static analysis tool used (cppcheck, PC-lint, Clang)"
+      - "MISRA C violations checked"
+      - "Coding standard violations checked"
+      - "Critical issues resolved"
+
+  - evidence_id: "en50128-technique-compliance"
+    description: "Verification that EN 50128 integration techniques were applied"
+    mandatory_sil: 0
+    source: "VER agent"
+    format: "Structured table with technique, recommendation level, applied status, evidence"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 3.6"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-en50128-compliance"
+    verification_criteria:
+      - "Table A.6 techniques checked (Functional Testing, Performance Testing)"
+      - "Mandatory techniques applied (SIL-dependent)"
+      - "Highly recommended techniques applied or justified"
+      - "Evidence documented"
+
+  - evidence_id: "verification-issues-log"
+    description: "Log of all issues found during verification with resolution status"
+    mandatory_sil: 0
+    source: "VER agent"
+    format: "Structured table with issue ID, severity, description, activity, status, resolution"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 4.2"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver log-verification-issue"
+    verification_criteria:
+      - "All issues logged with unique ID"
+      - "Severity classification appropriate"
+      - "Resolution documented"
+      - "Zero open critical/high issues (SIL 3-4)"
+
+  - evidence_id: "verification-metrics"
+    description: "Verification metrics including completeness, pass rate, traceability, coverage"
+    mandatory_sil: 0
+    source: "VER agent"
+    format: "Structured table with metric, value, target, status"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 4.3"
+    automation_level: "automatic"
+    collect_on_agent_action: "/ver calculate-verification-metrics"
+    verification_criteria:
+      - "All metrics calculated"
+      - "Targets defined per SIL level"
+      - "Status determined (met/not met)"
+      - "All targets met for PASS"
+
+  - evidence_id: "en50128-compliance-assessment"
+    description: "Assessment of compliance with EN 50128 Sections 6.2 and 7.6"
+    mandatory_sil: 0
+    source: "VER agent"
+    format: "Structured tables with requirements, status, evidence"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 5"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver assess-en50128-compliance"
+    verification_criteria:
+      - "Section 7.6 (Integration) compliance checked"
+      - "Section 6.2 (Verification) compliance checked"
+      - "Independence requirements checked (SIL 3-4)"
+      - "Overall compliance status determined"
+
+  - evidence_id: "independence-verification"
+    description: "Verification that Verifier is independent from development team (SIL 3-4)"
+    mandatory_sil: 3
+    source: "VER agent, QUA agent"
+    format: "Structured table with independence requirements, status, evidence"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 5.3"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-independence"
+    verification_criteria:
+      - "Verifier independent from Integrator"
+      - "Verifier independent from Implementer"
+      - "Verifier independent from Designer"
+      - "Verifier independent from Tester"
+
+  - evidence_id: "verification-decision"
+    description: "Final verification decision (APPROVE / DO NOT APPROVE / CONDITIONAL)"
+    mandatory_sil: 0
+    source: "VER agent"
+    format: "Structured section with decision, rationale, conditions (if any)"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 6"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver make-verification-decision"
+    verification_criteria:
+      - "Decision clear (APPROVE / DO NOT APPROVE / CONDITIONAL)"
+      - "Rationale provided"
+      - "Conditions documented (if conditional)"
+      - "Recommendation for next steps"
+
+depends_on:
+  - deliverable_id: "DOC-022-INT-TEST-SPEC"
+    reason: "Integration test specification is verified"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-023-INT-TEST-REPORT"
+    reason: "Integration test report is verified"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-009-SAS"
+    reason: "Architecture specification used for traceability verification"
+    dependency_type: "informational"
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Design specification used for traceability verification"
+    dependency_type: "informational"
+  - deliverable_id: "DOC-004-SVP"
+    reason: "Verification plan defines integration verification approach"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Integration verification evidence feeds into validation"
+
+verification_criteria:
+  completeness:
+    - "All verification activities performed"
+    - "All required checklists complete"
+    - "All verification evidence collected"
+    - "All issues documented and resolved (or justified)"
+    - "EN 50128 compliance assessed"
+    - "Verification decision provided"
+  
+  correctness:
+    - "Verification checklists applied correctly"
+    - "Traceability coverage calculated correctly"
+    - "Interface coverage calculated correctly"
+    - "Issues severity classification appropriate"
+    - "Verification decision justified"
+  
+  consistency:
+    - "Verification activities consistent with SVP"
+    - "Document IDs match referenced documents"
+    - "No contradictions in verification findings"
+    - "Verification metrics consistent with test report"
+  
+  traceability:
+    - "Verification activities traced to SVP"
+    - "Issues traced to verification activities"
+    - "Evidence traced to verification activities"
+    - "Decision traced to verification results"
+
+configuration_management:
+  baseline_criteria:
+    - "All verification activities complete"
+    - "All critical/high issues resolved (SIL 3-4)"
+    - "Verification decision = APPROVE or CONDITIONAL PASS"
+    - "QA approval obtained"
+    - "V&V Manager approval obtained (SIL 3-4)"
+  
+  change_control:
+    - "Changes to integration tests require re-verification"
+    - "New issues require verification review"
+    - "Version controlled with integration test documents"
+  
+  versioning:
+    - "Version number: X.Y (X = major verification cycle, Y = minor updates)"
+    - "Major version increments with new integration test report"
+    - "Minor version increments with issue resolution"
+  
+  archival:
+    - "Archive with integration test specification and report"
+    - "Archive verification evidence (checklists, analysis results)"
+    - "Retain for project lifetime + 10 years (railway requirement)"
+
+en50128_references:
+  - section: "6.2"
+    description: "Software Verification - PRIMARY section for verification process"
+  - section: "7.6"
+    description: "Software Integration - integration verification requirements"
+  - section: "7.6.4.5"
+    description: "Software Integration Verification Report required"
+  - section: "Table A.5"
+    description: "Verification and Testing techniques"
+  - section: "Table A.19"
+    description: "Static Analysis techniques - MANDATORY SIL 3-4"
+  - section: "D.58"
+    description: "Traceability - MANDATORY SIL 3-4"
+  - section: "5.3.5"
+    description: "Verifier role - independence requirements (SIL 3-4)"
+
+notes: |
+  **Purpose**: The Software Integration Verification Report provides independent verification that software
+  integration was performed correctly, all component interfaces are tested, and the integrated software
+  meets integration requirements per EN 50128.
+
+  **Key Characteristics**:
+  1. **Independent Verification**: Performed by independent Verifier (MANDATORY SIL 3-4)
+  2. **Document Review**: Reviews integration test specification and report for completeness
+  3. **Traceability Verification**: Verifies 100% traceability from architecture/design to integration tests
+  4. **Interface Coverage Verification**: Verifies 100% interface coverage (MANDATORY all SILs)
+  5. **Static Analysis**: Analyzes integration code (stubs, drivers, test harness) (SIL 2+)
+  6. **EN 50128 Compliance**: Verifies integration techniques per Table A.6 applied
+
+  **SIL-Specific Requirements**:
+  - **SIL 0-1**: Basic document review and traceability verification
+  - **SIL 2**: Traceability 100% + static analysis of integration code
+  - **SIL 3-4**: Independent verification + traceability 100% + static analysis + EN 50128 compliance
+
+  **Verification Activities**:
+  1. **Integration Test Specification Review**: Verify completeness, correctness, traceability
+  2. **Integration Test Report Review**: Verify test execution, results, defects, pass/fail
+  3. **Traceability Verification**: Verify architecture/design → integration tests (100% coverage)
+  4. **Interface Coverage Verification**: Verify all interfaces tested (100% coverage)
+  5. **Static Analysis**: Analyze integration code (stubs, drivers, test harness) (SIL 2+)
+  6. **EN 50128 Compliance**: Verify Table A.6 techniques applied
+  7. **Independence Verification**: Verify Verifier independence (SIL 3-4)
+
+  **Workflow**:
+  1. VER reviews Integration Test Specification (completeness, correctness)
+  2. VER reviews Integration Test Report (test execution, results, defects)
+  3. CM/VER verify traceability (architecture/design → integration tests)
+  4. VER verifies interface coverage (100% MANDATORY)
+  5. VER performs static analysis of integration code (SIL 2+)
+  6. VER verifies EN 50128 technique compliance (Table A.6)
+  7. VER verifies independence requirements met (SIL 3-4)
+  8. VER logs all issues found
+  9. VER calculates verification metrics
+  10. VER assesses EN 50128 compliance (Sections 6.2, 7.6)
+  11. VER makes verification decision (APPROVE / DO NOT APPROVE / CONDITIONAL)
+  12. QUA reviews for template compliance
+  13. V&V Manager approves (SIL 3-4)
+
+  **Verification Decision Criteria** (SIL 3-4):
+  - **APPROVE**: All verification activities passed, zero open critical/high issues, 100% traceability/coverage
+  - **CONDITIONAL PASS**: Minor issues with documented conditions and timeline
+  - **DO NOT APPROVE**: Critical/high issues open, or traceability/coverage incomplete
+
+  **Independence Requirements** (SIL 3-4):
+  - Verifier SHALL be independent from Integrator, Implementer, Designer, Tester
+  - Verifier SHALL NOT be Requirements Manager, Designer, Implementer, Integrator, Tester, or Validator
+  - V&V Manager approval REQUIRED (independent from PM)
+
+  **Critical Dependencies**:
+  - Integration Test Specification defines WHAT was planned
+  - Integration Test Report documents WHAT was executed
+  - Integration Verification Report verifies CORRECTNESS and COMPLETENESS
+
+  **Template Compliance**:
+  - Document ID format: DOC-024-INT-VER-REPORT-YYYY-NNN
+  - Approvals section MUST include V&V Manager signature (SIL 3-4)
+  - All verification checklists MUST be complete
+  - Verification decision MUST be clear (APPROVE / DO NOT APPROVE / CONDITIONAL)
+
+  **Evidence Automation**:
+  - Document reviews: SEMI-AUTOMATIC (VER reviews, tool checks structure)
+  - Traceability verification: AUTOMATIC (CM tool parses IDs)
+  - Interface coverage: AUTOMATIC (CM tool calculates coverage)
+  - Static analysis: AUTOMATIC (cppcheck, PC-lint, Clang)
+  - EN 50128 compliance: MANUAL (VER assesses technique application)
+  - Verification decision: MANUAL (VER judgment based on all evidence)

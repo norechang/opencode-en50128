@@ -95,13 +95,15 @@ All EN 50128 document templates are available in the `templates/` directory. Eac
 | Template File | Document Type | EN 50128 Reference | Lifecycle Phase |
 |---------------|---------------|-------------------|-----------------|
 | **`DOCUMENT-HEADER-TEMPLATE.md`** | General header structure (mandatory for ALL documents) | Annex C | All phases |
-| **`SQAP-template.md`** | Software Quality Assurance Plan | Section 6.5, Table A.9 | Phase 1 (Planning) |
-| **`SCMP-template.md`** | Software Configuration Management Plan | Section 6.6, Table A.9 | Phase 1 (Planning) |
-| **`SVP-template.md`** | Software Verification Plan | Section 6.2, Table A.5 | Phase 1 (Planning) |
-| **`SVaP-template.md`** | Software Validation Plan | Section 7.7, Table A.7 | Phase 1 (Planning) |
-| **`SRS-template.md`** | Software Requirements Specification | Section 7.2, Table A.2 | Phase 2 (Requirements) |
-| **`SAS-template.md`** | Software Architecture Specification | Section 7.3, Table A.3 | Phase 3 (Architecture & Design) |
-| **`SDS-template.md`** | Software Design Specification | Section 7.4, Table A.4 | Phase 3 (Architecture & Design) |
+| **`Software-Quality-Assurance-Plan-template.md`** | Software Quality Assurance Plan | Section 6.5, Table A.9 | Phase 1 (Planning) |
+| **`Software-Configuration-Management-Plan-template.md`** | Software Configuration Management Plan | Section 6.6, Table A.9 | Phase 1 (Planning) |
+| **`Software-Verification-Plan-template.md`** | Software Verification Plan | Section 6.2, Table A.5 | Phase 1 (Planning) |
+| **`Software-Validation-Plan-template.md`** | Software Validation Plan | Section 7.7, Table A.7 | Phase 1 (Planning) |
+
+**Note**: Specification templates (SRS, SAS, SDS) have been moved to their domain-specific skill directories:
+- **SRS** → `en50128-requirements/templates/Software-Requirements-Specification-template.md`
+- **SAS** → `en50128-design/templates/Software-Architecture-Specification-template.md`
+- **SDS** → `en50128-design/templates/Software-Design-Specification-template.md`
 
 ### Template Usage
 
@@ -145,7 +147,7 @@ All EN 50128 document templates are available in the `templates/` directory. Eac
 cat .opencode/skills/en50128-documentation/templates/DOCUMENT-HEADER-TEMPLATE.md
 
 # View SQAP template
-cat .opencode/skills/en50128-documentation/templates/SQAP-template.md
+cat .opencode/skills/en50128-documentation/templates/Software-Quality-Assurance-Plan-template.md
 
 # List all templates
 ls -l .opencode/skills/en50128-documentation/templates/

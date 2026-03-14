@@ -1,0 +1,287 @@
+# Software Component Design Verification Report
+# EN 50128 Deliverable #17 - Section 7.4.4.11, Component Design Phase
+
+deliverable_id: "DOC-017-COMP-DESIGN-VER"
+number: 17
+name: "Software Component Design Verification Report"
+abbreviation: "Comp Design Ver Rep"
+phase: "component-design"
+standard_section: "7.4.4.11"
+written_by: "VER"
+first_check: "NONE"
+second_check: "VAL"
+template_path: ".opencode/skills/en50128-design/templates/Software-Component-Design-Verification-Report-template.md"
+template_exists: false
+
+sil_requirements:
+  sil_0:
+    mandatory: false
+    techniques:
+      - technique_id: "D.1"
+        technique_name: "Design Verification"
+        recommendation: "R"
+        table_reference: "A.5"
+    additional_requirements:
+      - "Basic design review recommended"
+      - "No specific verification techniques mandatory"
+
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_id: "D.58"
+        technique_name: "Traceability"
+        recommendation: "HR"
+        table_reference: "A.5"
+      - technique_id: "D.37"
+        technique_name: "Metrics"
+        recommendation: "R"
+        table_reference: "A.5"
+    additional_requirements:
+      - "Component Design Verification Report HIGHLY RECOMMENDED"
+      - "Design completeness verification HIGHLY RECOMMENDED"
+      - "Traceability to architecture and requirements"
+      - "Design quality verification HIGHLY RECOMMENDED"
+
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_id: "D.58"
+        technique_name: "Traceability"
+        recommendation: "HR"
+        table_reference: "A.5"
+      - technique_id: "D.37"
+        technique_name: "Metrics"
+        recommendation: "R"
+        table_reference: "A.5"
+    additional_requirements:
+      - "Component Design Verification Report HIGHLY RECOMMENDED"
+      - "Design completeness verification HIGHLY RECOMMENDED"
+      - "Traceability to architecture and requirements (HIGHLY RECOMMENDED)"
+      - "Design quality verification HIGHLY RECOMMENDED"
+      - "Cyclomatic complexity verification (≤15)"
+      - "Defensive programming patterns verified"
+
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_id: "D.58"
+        technique_name: "Traceability"
+        recommendation: "M"
+        table_reference: "A.5"
+      - technique_id: "D.37"
+        technique_name: "Metrics"
+        recommendation: "HR"
+        table_reference: "A.5"
+      - technique_id: "A.19"
+        technique_name: "Static Analysis"
+        recommendation: "M"
+        table_reference: "A.5"
+    additional_requirements:
+      - "INDEPENDENT VERIFICATION MANDATORY"
+      - "Design completeness verification MANDATORY"
+      - "Traceability verification MANDATORY"
+      - "Design quality verification MANDATORY"
+      - "Cyclomatic complexity verification (≤10) MANDATORY"
+      - "Defensive programming patterns verified MANDATORY"
+      - "Static allocation verified MANDATORY"
+      - "No recursion verified MANDATORY"
+
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_id: "D.58"
+        technique_name: "Traceability"
+        recommendation: "M"
+        table_reference: "A.5"
+      - technique_id: "D.37"
+        technique_name: "Metrics"
+        recommendation: "HR"
+        table_reference: "A.5"
+      - technique_id: "A.19"
+        technique_name: "Static Analysis"
+        recommendation: "M"
+        table_reference: "A.5"
+    additional_requirements:
+      - "All SIL 3 requirements apply"
+      - "Rigorous independent verification MANDATORY"
+      - "Formal design review MANDATORY"
+
+evidence_requirements:
+  - evidence_id: "component-design-ver-report"
+    description: "Complete component design verification report"
+    mandatory_sil: 1
+    source: "VER agent design verification"
+    format: "Markdown"
+    storage_path: "docs/component-design/Software-Component-Design-Verification-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "verify-component-design"
+    verification_criteria:
+      - "All required sections present"
+      - "Design completeness verified"
+      - "Design quality verified"
+      - "Traceability verified"
+      - "All non-conformities identified"
+
+  - evidence_id: "design-completeness-check"
+    description: "Verification that all architecture components have detailed design"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Structured checklist"
+    storage_path: "docs/component-design/Software-Component-Design-Verification-Report.md Section 2"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "verify-design-completeness"
+    verification_criteria:
+      - "All modules from architecture have design"
+      - "All interfaces fully specified"
+      - "All data structures defined"
+      - "All algorithms described"
+
+  - evidence_id: "design-quality-check"
+    description: "Verification of design quality (modularity, complexity, defensive programming)"
+    mandatory_sil: 1
+    source: "VER agent, lizard tool"
+    format: "Structured analysis"
+    storage_path: "docs/component-design/Software-Component-Design-Verification-Report.md Section 3"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "verify-design-quality"
+    verification_criteria:
+      - "Cyclomatic complexity ≤ threshold (10 SIL 3-4, 15 SIL 2)"
+      - "Modular design verified"
+      - "Defensive programming patterns present"
+      - "Static allocation only (SIL 2+)"
+      - "No recursion (SIL 3-4)"
+
+  - evidence_id: "design-traceability-matrix"
+    description: "Traceability from architecture and requirements to component design"
+    mandatory_sil: 1
+    source: "VER agent, CM agent"
+    format: "CSV"
+    storage_path: "evidence/traceability/component_design_traceability.csv"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "verify-design-traceability"
+    verification_criteria:
+      - "All architecture modules traced to design"
+      - "All requirements traced to design elements"
+      - "Bi-directional traceability"
+      - "No orphaned design elements"
+
+  - evidence_id: "complexity-analysis"
+    description: "Cyclomatic complexity analysis for all designed functions"
+    mandatory_sil: 2
+    source: "VER agent, lizard tool"
+    format: "Structured table"
+    storage_path: "docs/component-design/Software-Component-Design-Verification-Report.md Section 4"
+    automation_level: "automatic"
+    collect_on_agent_action: "verify-complexity"
+    verification_criteria:
+      - "Complexity measured for all functions"
+      - "Complexity ≤10 (SIL 3-4) or ≤15 (SIL 2)"
+      - "High complexity functions justified or refactored"
+
+  - evidence_id: "design-non-conformities"
+    description: "List of design non-conformities and issues"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Structured table"
+    storage_path: "docs/component-design/Software-Component-Design-Verification-Report.md Section 5"
+    automation_level: "manual"
+    collect_on_agent_action: "verify-component-design"
+    verification_criteria:
+      - "All non-conformities documented with severity"
+      - "Critical non-conformities must be resolved"
+      - "Each finding has recommended resolution"
+
+  - evidence_id: "independent-verification-statement"
+    description: "Independent Verifier statement (SIL 3-4)"
+    mandatory_sil: 3
+    source: "VER agent (independent)"
+    format: "Signed statement"
+    storage_path: "docs/component-design/Software-Component-Design-Verification-Report.md Approvals"
+    automation_level: "manual"
+    collect_on_agent_action: "verify-component-design"
+    verification_criteria:
+      - "Verifier independent from designer"
+      - "Verifier signature and date"
+      - "Independence documented"
+
+depends_on:
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Software Design Specification being verified"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-009-SAS"
+    reason: "Architecture specification for traceability"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-006-SRS"
+    reason: "Requirements for traceability"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-018-SOURCE-CODE"
+    reason: "Verified design guides implementation"
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Validation checks verification completeness"
+
+verification_criteria:
+  completeness:
+    - "All architecture modules have detailed design"
+    - "All interfaces fully specified"
+    - "All data structures defined"
+    - "All algorithms described"
+    - "Traceability complete"
+  correctness:
+    - "Design correctly implements architecture"
+    - "Design traceable to requirements"
+    - "Complexity within limits"
+    - "Design patterns appropriate"
+  consistency:
+    - "Design internally consistent"
+    - "Interfaces consistent across modules"
+    - "Data structures consistent"
+  traceability:
+    - "All architecture elements traced to design"
+    - "All requirements traced to design"
+    - "Bi-directional traceability maintained"
+
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After component design verified and approved"
+  change_control: "CCB approval for design changes"
+  version_control: "Git repository under docs/component-design/"
+  review_frequency: "At design updates"
+
+en50128_references:
+  - section: "7.4.4.11"
+    description: "Component Design Verification Report"
+  - section: "7.4"
+    description: "Software Component Design"
+  - section: "Table A.5"
+    description: "Verification techniques by SIL"
+  - section: "Annex C Table C.1"
+    description: "Deliverable #17"
+
+notes: |
+  **Purpose**: Verifies that Software Component Design (SDS) is complete, correct,
+  traceable, and meets quality criteria.
+
+  **Key Verifications**:
+  - Design completeness (all architecture modules have detailed design)
+  - Design quality (modularity, complexity, defensive programming)
+  - Traceability (architecture → design, requirements → design)
+  - Cyclomatic complexity within limits (≤10 SIL 3-4, ≤15 SIL 2)
+  - Static allocation only (SIL 2+)
+  - No recursion (SIL 3-4)
+
+  **SIL-Specific Requirements**:
+  - **SIL 0**: Optional
+  - **SIL 1-2**: HIGHLY RECOMMENDED, traceability verification
+  - **SIL 3-4**: MANDATORY, independent verification, complexity ≤10
+
+  **Workflow**:
+  1. DES creates Software Design Specification (SDS)
+  2. VER reviews SDS for completeness
+  3. VER verifies design quality (complexity, patterns)
+  4. VER verifies traceability (architecture → design, requirements → design)
+  5. VER identifies non-conformities
+  6. DES resolves critical non-conformities
+  7. VER creates Component Design Verification Report
+  8. VAL approves verification report

@@ -1,56 +1,45 @@
 # Configuration Audit Report
 
-**Document ID:** DOC-CAR-YYYY-NNN  
-**Project:** [Project Name]  
-**System/Subsystem:** [System Name]  
-**SIL Level:** [0 | 1 | 2 | 3 | 4]
+**TEMPLATE VERSION**: 2.0  
+**REFERENCE**: EN 50128:2011 Section [X.Y]
 
 ---
 
-## Document Control
+## STANDARD HEADER
 
-| Version | Date | Author | Change Description | Status |
-|---------|------|--------|-------------------|--------|
-| 0.1 | YYYY-MM-DD | [Name] | Initial draft | Draft |
+| Field | Value |
+|-------|-------|
+| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Version** | [X.Y] |
+| **Date** | [YYYY-MM-DD] |
+| **Project** | [Project Name] |
+| **SIL Level** | [0, 1, 2, 3, or 4] |
+| **Author** | [Name], [Role] |
+| **Reviewer** | [Name], [Role] |
+| **Approver** | [Name], [Role] |
+| **Status** | [Draft \| Review \| Approved \| Baseline] |
 
----
+## DOCUMENT CONTROL
 
-## Approvals (SIL-Dependent)
+| Version | Date | Author | Changes | Approved By |
+|---------|------|--------|---------|-------------|
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
 
-| Role | Name | Signature | Date | SIL Requirement |
-|------|------|-----------|------|----------------|
-| **Configuration Manager** | [Name] | [Signature] | YYYY-MM-DD | All SILs |
-| **Project Manager** | [Name] | [Signature] | YYYY-MM-DD | All SILs |
-| **Quality Assurance** | [Name] | [Signature] | YYYY-MM-DD | SIL 1+ |
-| **Independent Verifier** | [Name] | [Signature] | YYYY-MM-DD | SIL 3-4 |
-| **Assessor** | [Name] | [Signature] | YYYY-MM-DD | SIL 3-4 |
+## APPROVALS
 
-**Independence Note (SIL 3-4):**
-- Verifier SHALL NOT be Requirements Manager, Designer, Implementer, Integrator, or Tester
-- Validator SHALL NOT report to Project Manager
-- Assessor SHALL be independent of development organization
+**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
+**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
 
----
-
-## Executive Summary
-
-**Audit Type:** [Physical Configuration Audit (PCA) | Functional Configuration Audit (FCA) | Internal Configuration Audit | Baseline Audit]
-
-**Audit Date:** YYYY-MM-DD  
-**Audit Location:** [Location]  
-**Baseline/Release Audited:** [Baseline ID or Release version]
-
-**Overall Result:** [Pass | Pass with Observations | Fail]
-
-**Key Findings:**
-- [Summary finding 1]
-- [Summary finding 2]
-- [Summary finding 3]
-
-**Critical Issues:** [Number]  
-**Major Issues:** [Number]  
-**Minor Issues:** [Number]  
-**Observations:** [Number]
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| **Author** | [Name] | | YYYY-MM-DD |
+| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
+| **QA Manager** | [Name] | | YYYY-MM-DD |
+| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
+| **Project Manager** | [Name] | | YYYY-MM-DD |
+| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
 
 ---
 

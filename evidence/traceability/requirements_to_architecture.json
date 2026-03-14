@@ -1,0 +1,11 @@
+{
+  "name": "requirements_to_architecture",
+  "source_type": "requirements",
+  "target_type": "architecture",
+  "project": "UnknownProject",
+  "links": [],
+  "coverage": 0.0,
+  "version": "1.0",
+  "created_date": "2026-03-13T22:40:13.386759",
+  "modified_date": "2026-03-13T22:40:13.386759"
+}

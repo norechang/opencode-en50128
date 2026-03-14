@@ -1,0 +1,474 @@
+# Software Component Test Specification - Deliverable Metadata
+# EN 50128:2011 Section 7.4.4.7-10, Table A.5, Table A.21, Table C.1
+# This file defines the metadata, requirements, evidence, and verification criteria
+# for the Software Component Test Specification deliverable.
+
+deliverable_id: "DOC-020-COMPONENT-TEST-SPEC"
+number: 20
+name: "Software Component Test Specification"
+abbreviation: "Comp Test Spec"
+phase: "component-design"
+standard_section: "7.4.4.7"
+written_by: "TST"
+first_check: "VER"
+second_check: "VAL"
+template_path: ".opencode/skills/en50128-testing/templates/Component-Test-Specification-template.md"
+template_exists: true
+
+# =============================================================================
+# SIL-DEPENDENT REQUIREMENTS
+# =============================================================================
+# Requirements scale by SIL level per EN 50128 Table A.5, A.13, A.21
+# Component Test Specification defines unit-level tests (white-box)
+
+sil_requirements:
+  sil_0:
+    mandatory: false  # Component Test Specification recommended but not mandatory
+    techniques:
+      - technique_name: "Dynamic Analysis and Testing"
+        table_reference: "A.5"
+        technique_id: "A.13"
+        recommendation: "R"
+    additional_requirements:
+      - "Basic component testing recommended"
+      - "No specific test techniques mandatory"
+      - "Unit test framework recommended"
+    evidence_thresholds:
+      min_test_cases_per_function: "N/A"
+      min_coverage_statement: "N/A"
+      min_coverage_branch: "N/A"
+      min_coverage_condition: "N/A"
+      fault_injection_required: false
+
+  sil_1:
+    mandatory: true  # HR (Highly Recommended) - treat as mandatory
+    techniques:
+      - technique_name: "Dynamic Analysis and Testing"
+        table_reference: "A.5"
+        technique_id: "A.13"
+        recommendation: "HR"
+      - technique_name: "Test Coverage for Code"
+        table_reference: "A.5"
+        technique_id: "A.21"
+        recommendation: "HR"
+      - technique_name: "Boundary Value Analysis"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "HR"
+    additional_requirements:
+      - "Software Component Test Specification HIGHLY RECOMMENDED (HR)"
+      - "Unit testing HIGHLY RECOMMENDED"
+      - "Test coverage (statement, branch) HIGHLY RECOMMENDED"
+      - "Boundary value analysis HIGHLY RECOMMENDED"
+      - "Test cases for all functions HIGHLY RECOMMENDED"
+    evidence_thresholds:
+      min_test_cases_per_function: "2"  # HR
+      min_coverage_statement: "90%"  # HR
+      min_coverage_branch: "85%"  # HR
+      min_coverage_condition: "N/A"
+      fault_injection_required: false
+
+  sil_2:
+    mandatory: true  # HR for Component Test Specification
+    techniques:
+      - technique_name: "Dynamic Analysis and Testing"
+        table_reference: "A.5"
+        technique_id: "A.13"
+        recommendation: "HR"
+      - technique_name: "Test Coverage for Code"
+        table_reference: "A.5"
+        technique_id: "A.21"
+        recommendation: "HR"
+      - technique_name: "Boundary Value Analysis"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Branch Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "M"
+    additional_requirements:
+      - "Software Component Test Specification HIGHLY RECOMMENDED (HR)"
+      - "Unit testing HIGHLY RECOMMENDED"
+      - "Test coverage: Statement (HR), Branch (MANDATORY)"
+      - "Boundary value analysis HIGHLY RECOMMENDED"
+      - "Test cases for all functions HIGHLY RECOMMENDED"
+      - "White-box testing approach HIGHLY RECOMMENDED"
+    evidence_thresholds:
+      min_test_cases_per_function: "3"  # HR
+      min_coverage_statement: "95%"  # HR
+      min_coverage_branch: "100%"  # MANDATORY
+      min_coverage_condition: "N/A"
+      fault_injection_required: false
+
+  sil_3:
+    mandatory: true  # HR for Component Test Specification
+    techniques:
+      - technique_name: "Dynamic Analysis and Testing"
+        table_reference: "A.5"
+        technique_id: "A.13"
+        recommendation: "M"
+      - technique_name: "Test Coverage for Code"
+        table_reference: "A.5"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "Boundary Value Analysis"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Statement Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "Branch Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "Condition Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "Fault Insertion Testing"
+        table_reference: "A.13"
+        technique_id: "A.13"
+        recommendation: "HR"
+    additional_requirements:
+      - "Software Component Test Specification HIGHLY RECOMMENDED (HR)"
+      - "Unit testing MANDATORY"
+      - "Test coverage: Statement (M), Branch (M), Condition (M)"
+      - "Boundary value analysis MANDATORY"
+      - "Test cases for ALL functions MANDATORY"
+      - "White-box testing approach MANDATORY"
+      - "Fault injection testing HIGHLY RECOMMENDED"
+      - "Test cases for all error conditions MANDATORY"
+    evidence_thresholds:
+      min_test_cases_per_function: "5"  # MANDATORY
+      min_coverage_statement: "100%"  # MANDATORY
+      min_coverage_branch: "100%"  # MANDATORY
+      min_coverage_condition: "100%"  # MANDATORY
+      fault_injection_required: true  # HR
+
+  sil_4:
+    mandatory: true  # HR for Component Test Specification
+    techniques:
+      - technique_name: "Dynamic Analysis and Testing"
+        table_reference: "A.5"
+        technique_id: "A.13"
+        recommendation: "M"
+      - technique_name: "Test Coverage for Code"
+        table_reference: "A.5"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "Boundary Value Analysis"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Statement Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "Branch Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "Condition Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "MC/DC Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "HR"
+      - technique_name: "Fault Insertion Testing"
+        table_reference: "A.13"
+        technique_id: "A.13"
+        recommendation: "HR"
+    additional_requirements:
+      - "Software Component Test Specification HIGHLY RECOMMENDED (HR)"
+      - "Unit testing MANDATORY"
+      - "Test coverage: Statement (M), Branch (M), Condition (M), MC/DC (HR - treat as M)"
+      - "Boundary value analysis MANDATORY"
+      - "Test cases for ALL functions MANDATORY"
+      - "White-box testing approach MANDATORY"
+      - "Fault injection testing HIGHLY RECOMMENDED"
+      - "Test cases for all error conditions MANDATORY"
+      - "Test cases for all failure modes MANDATORY"
+    evidence_thresholds:
+      min_test_cases_per_function: "10"  # MANDATORY
+      min_coverage_statement: "100%"  # MANDATORY
+      min_coverage_branch: "100%"  # MANDATORY
+      min_coverage_condition: "100%"  # MANDATORY
+      min_coverage_mcdc: "100%"  # HR (treat as M for SIL 4)
+      fault_injection_required: true  # HR
+
+# =============================================================================
+# EVIDENCE REQUIREMENTS
+# =============================================================================
+# Evidence required to demonstrate Component Test Specification completeness
+
+evidence_requirements:
+  - evidence_id: "component-test-spec-test-cases"
+    description: "Unit test cases for all functions per 7.4.4.9"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "TST"
+    format: "Section in Component Test Specification with test case table"
+    storage_path: "docs/test/Component-Test-Specification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "tst-create-component-test-spec"
+    verification_criteria:
+      - "Test cases for ALL functions defined"
+      - "Each test case has unique ID (UTC-XXX)"
+      - "Each test case traces to SDS module/function"
+      - "Each test case includes: purpose, inputs, expected outputs, pass criteria"
+      - "White-box test cases (use internal knowledge)"
+      - "Boundary value test cases defined (MANDATORY SIL 3-4)"
+      - "Minimum number of test cases per function meets SIL threshold"
+
+  - evidence_id: "component-test-spec-coverage-targets"
+    description: "Coverage targets per SIL level per 7.4.4.9"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "TST"
+    format: "Section in Component Test Specification"
+    storage_path: "docs/test/Component-Test-Specification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "tst-create-component-test-spec"
+    verification_criteria:
+      - "Statement coverage target defined per SIL"
+      - "Branch coverage target defined per SIL"
+      - "Condition coverage target defined (SIL 3-4)"
+      - "MC/DC coverage target defined (SIL 4)"
+      - "Coverage targets: 100% statement (SIL 3-4), 100% branch (SIL 2+), 100% condition (SIL 3-4)"
+      - "Coverage measurement approach defined (gcov/lcov)"
+
+  - evidence_id: "component-test-spec-fault-injection"
+    description: "Fault injection test cases (HIGHLY RECOMMENDED SIL 3-4)"
+    mandatory_sil: 3  # HR for SIL 3-4
+    source: "TST"
+    format: "Section in Component Test Specification with fault injection test table"
+    storage_path: "docs/test/Component-Test-Specification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "tst-create-component-test-spec"
+    verification_criteria:
+      - "Fault injection tests defined for error handling"
+      - "NULL pointer injection tests defined"
+      - "Invalid parameter injection tests defined"
+      - "Boundary overflow injection tests defined"
+      - "Expected error handling behavior documented"
+
+  - evidence_id: "component-test-spec-traceability"
+    description: "Traceability to SDS per 7.4.4.9"
+    mandatory_sil: 3  # MANDATORY for SIL 3-4, HR for SIL 1-2
+    source: "TST"
+    format: "Traceability matrix table in Component Test Specification"
+    storage_path: "docs/test/Component-Test-Specification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "tst-create-component-test-spec"
+    verification_criteria:
+      - "Forward traceability: SDS modules/functions → test cases"
+      - "Backward traceability: test cases → SDS modules/functions"
+      - "All SDS modules have unit tests"
+      - "All SDS functions have unit tests"
+      - "100% module/function coverage (SIL 3-4)"
+
+  - evidence_id: "component-test-spec-baseline"
+    description: "Baselined Component Test Specification approved by VER and VAL"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "CM"
+    format: "Baselined markdown file with approvals"
+    storage_path: "docs/test/Component-Test-Specification.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "cm-baseline-deliverable"
+    verification_criteria:
+      - "Document has version 1.0 or higher"
+      - "Document status is 'Approved' or 'Baseline'"
+      - "Approvals section complete (TST author, VER first check, VAL second check, QA, PM)"
+      - "Document under configuration control"
+      - "Baseline recorded in SCMP baseline register"
+
+# =============================================================================
+# DEPENDENCIES
+# =============================================================================
+
+depends_on:
+  - deliverable_id: "DOC-010-SDS"
+    reason: "SDS defines modules/functions; Component Test Specification defines tests for those modules/functions"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-004-SVP"
+    reason: "SVP defines verification approach including component testing"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-021-COMPONENT-TEST-REPORT"
+    reason: "Component Test Specification defines test cases; Component Test Report documents execution results"
+
+  - deliverable_id: "DOC-019-SOURCE-CODE-VER"
+    reason: "Component Test Specification provides test evidence for Source Code Verification Report"
+
+# =============================================================================
+# VERIFICATION CRITERIA
+# =============================================================================
+
+verification_criteria:
+  completeness:
+    - "All sections of Component Test Specification template completed per 7.4.4.8"
+    - "All SDS modules have test cases per 7.4.4.9"
+    - "All SDS functions have test cases per 7.4.4.9"
+    - "All EN 50128 Table A.13 and A.21 mandatory techniques addressed"
+    - "Coverage targets defined per SIL level"
+    - "Traceability matrix complete (SDS → test cases)"
+    - "Fault injection tests complete (HR SIL 3-4)"
+    - "Test environment specification complete"
+
+  correctness:
+    - "Test cases correctly test SDS modules/functions per 7.4.4.9"
+    - "Test techniques appropriate for target SIL level per Table A.13, A.21"
+    - "White-box approach correct (use internal knowledge)"
+    - "Boundary value analysis correct (MANDATORY SIL 3-4)"
+    - "Coverage targets correct (100% statement, branch, condition for SIL 3-4)"
+    - "Fault injection tests correct (HR SIL 3-4)"
+
+  consistency:
+    - "Test cases consistent with SVP verification approach"
+    - "Coverage targets consistent with SIL requirements"
+    - "Test techniques consistent with Table A.13, A.21"
+    - "Traceability matrix consistent with SDS"
+
+  traceability:
+    - "Forward traceability: SDS modules/functions → test cases (100% for SIL 3-4)"
+    - "Backward traceability: test cases → SDS modules/functions"
+    - "Forward traceability: Component Test Specification → Component Test Report"
+    - "References to SDS sections in each test case"
+
+# =============================================================================
+# CONFIGURATION MANAGEMENT
+# =============================================================================
+
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After Phase 4 (Component Design) completion, before Phase 5 (Implementation) testing begins"
+  change_control: "All changes to baselined Component Test Specification require CCB approval"
+  version_control: "docs/test/Component-Test-Specification.md under Git control, baseline tagged as baseline-component-test-spec-v1.0"
+  review_frequency: "Review when SDS changes or new modules/functions added"
+  update_triggers:
+    - "Addition of new SDS modules or functions"
+    - "Modification of existing SDS modules or functions"
+    - "Change in SIL level"
+    - "Identification of missing test coverage"
+    - "Lessons learned from test execution"
+    - "EN 50128 standard updates"
+
+# =============================================================================
+# EN 50128 REFERENCES
+# =============================================================================
+
+en50128_references:
+  - "Section 7.4.4.7: Component Test Specification written by Tester based on SDS"
+  - "Section 7.4.4.8: Component Test Specification per generic requirements"
+  - "Section 7.4.4.9: Component Test Specification defines test cases and coverage"
+  - "Section 7.4.4.10: Component Test Specification chooses techniques from Table A.5"
+  - "Section 7.5.4.5: Component Test Report based on Component Test Specification"
+  - "Section 7.5.4.10: Verification of Component Test Specification adequacy"
+  - "Table A.5: Verification and Testing techniques"
+  - "Table A.13: Dynamic Analysis and Testing techniques"
+  - "Table A.21: Test Coverage for Code (statement, branch, condition, MC/DC)"
+  - "Table C.1 (Annex C): Document control summary (Component Test Spec mandatory HR for SIL 1+)"
+
+# =============================================================================
+# NOTES
+# =============================================================================
+
+notes: |
+  CRITICAL INFORMATION:
+  
+  1. **Component Test Specification vs. Overall Test Specification**:
+     - Component Test Specification: Unit-level tests (white-box, per SDS)
+     - Overall Test Specification: System-level tests (black-box, per SRS)
+     - Component tests use internal knowledge, Overall tests do not
+  
+  2. **SIL Requirements**:
+     - SIL 0: Component Test Specification recommended (R)
+     - SIL 1-2: Component Test Specification HIGHLY RECOMMENDED (HR)
+     - SIL 3-4: Component Test Specification HIGHLY RECOMMENDED (HR)
+     - Unit testing MANDATORY for SIL 3-4
+     - Coverage: 100% statement, branch, condition (SIL 3-4)
+  
+  3. **Coverage Requirements** (Table A.21):
+     - SIL 0: No mandatory coverage
+     - SIL 1: Statement (HR), Branch (HR)
+     - SIL 2: Statement (HR), Branch (MANDATORY)
+     - SIL 3: Statement (M), Branch (M), Condition (M)
+     - SIL 4: Statement (M), Branch (M), Condition (M), MC/DC (HR - treat as M)
+  
+  4. **White-Box Testing**:
+     - Test cases use knowledge of internal implementation
+     - Test specific code paths, branches, conditions
+     - Test error handling (NULL checks, bounds checks)
+     - Test all return values
+     - Measure code coverage with gcov/lcov
+  
+  5. **Unit Test Structure**:
+     - Test Case ID (UTC-XXX)
+     - Traced SDS module/function (MOD-XXX / FUNC-YYY)
+     - Purpose (what is being tested)
+     - Inputs (parameters, globals, state)
+     - Expected outputs (return value, side effects)
+     - Pass criteria (success/failure conditions)
+  
+  6. **Boundary Value Analysis** (MANDATORY SIL 3-4):
+     - Test minimum value
+     - Test maximum value
+     - Test just below minimum (error case)
+     - Test just above maximum (error case)
+     - Test typical value (middle of range)
+  
+  7. **Fault Injection Testing** (HR SIL 3-4):
+     - Inject NULL pointers, verify error handling
+     - Inject invalid parameters, verify rejection
+     - Inject boundary overflows, verify detection
+     - Inject error conditions, verify recovery
+  
+  8. **Test Frameworks for C**:
+     - Unity (lightweight, embedded-friendly)
+     - CUnit (full-featured)
+     - Google Test (C++ but supports C)
+     - Custom test harness
+  
+  9. **Coverage Tools**:
+     - gcov: GNU coverage tool (generates .gcda files)
+     - lcov: HTML report generator for gcov
+     - Bullseye: Commercial coverage tool
+     - mcdc_analyzer.py: Custom MC/DC analyzer (platform tool)
+  
+  10. **Relationship to Other Deliverables**:
+      - SDS: Defines modules/functions, Component Test Specification tests them
+      - Component Test Report: Executes tests from Component Test Specification
+      - Source Code Verification Report: Uses Component Test Report as evidence
+      - Overall Test Specification: System-level tests (different scope)
+  
+  11. **Agent Workflow**:
+      - TST agent reads SDS (module/function designs)
+      - TST agent creates Component Test Specification per 7.4.4.7-10
+      - TST agent defines test cases for all functions
+      - TST agent defines coverage targets per SIL level
+      - TST agent defines fault injection tests (SIL 3-4)
+      - VER agent reviews Component Test Specification (first check)
+      - VAL agent reviews Component Test Specification (second check)
+      - QA agent verifies template compliance
+      - CM agent baselines Component Test Specification
+  
+  12. **Critical Success Factors**:
+      - Created during Component Design phase (after SDS complete)
+      - 100% module/function coverage for SIL 3-4
+      - White-box approach (internal knowledge)
+      - Coverage targets aligned with SIL level
+      - Fault injection tests defined (SIL 3-4)
+      - Baselined before implementation begins
+  
+  13. **Common Pitfalls**:
+      - Using black-box approach (wrong test level)
+      - Missing boundary value tests (MANDATORY SIL 3-4)
+      - Missing fault injection tests (HR SIL 3-4)
+      - Incomplete coverage targets (must specify statement, branch, condition)
+      - Not baselining before implementation begins
+      - Confusing with Overall Test Specification (different scope)

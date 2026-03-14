@@ -1,0 +1,462 @@
+# Software Deployment Manual
+# EN 50128 Deliverable #37 - Section 9.1.4.6-9.1.4.7
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-037-SDM"
+number: 37
+name: "Software Deployment Manual"
+abbreviation: "SDM"
+
+# ===== Lifecycle Context =====
+phase: "deployment"
+standard_section: "9.1.4.6"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "PM"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-deployment/templates/Software-Deployment-Manual-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques: []
+    additional_requirements:
+      - "Define procedures to identify software release"
+      - "Define procedures to install software release"
+    evidence_thresholds: {}
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+    additional_requirements:
+      - "Define procedures to correctly identify software release per 9.1.4.7 (MANDATORY)"
+      - "Define procedures to correctly install software release per 9.1.4.7 (MANDATORY)"
+      - "Step-by-step installation instructions"
+      - "Software identification verification procedures"
+      - "Installation verification procedures"
+      - "Reference to self-identification mechanisms per 9.1.4.11"
+    evidence_thresholds: {}
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "HR"
+    additional_requirements:
+      - "Define procedures to correctly identify software release per 9.1.4.7 (MANDATORY)"
+      - "Define procedures to correctly install software release per 9.1.4.7 (MANDATORY)"
+      - "Step-by-step installation instructions with verification at each step"
+      - "Software identification verification procedures using self-identification"
+      - "Installation verification procedures"
+      - "Rollback procedures reference per 9.1.4.10"
+      - "Error detection procedures per 9.1.4.20"
+      - "Incremental deployment procedures per 9.1.4.8 (RECOMMENDED)"
+      - "Version compatibility checking procedures"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 15
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "M"
+    additional_requirements:
+      - "Define procedures to correctly identify software release per 9.1.4.7 (MANDATORY)"
+      - "Define procedures to correctly install software release per 9.1.4.7 (MANDATORY)"
+      - "Step-by-step installation instructions with verification at each step (MANDATORY)"
+      - "Software identification verification procedures using self-identification (MANDATORY)"
+      - "Installation verification procedures (MANDATORY)"
+      - "Rollback procedures reference per 9.1.4.10 (MANDATORY)"
+      - "Error detection procedures per 9.1.4.20 (MANDATORY)"
+      - "Incremental deployment procedures per 9.1.4.8 (HIGHLY RECOMMENDED)"
+      - "Version compatibility checking procedures (HIGHLY RECOMMENDED)"
+      - "Diagnostic information access procedures per 9.1.4.15"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Traceability requirements per 6.5.4.14-6.5.4.17 (MANDATORY)"
+      - "Internal consistency verified per 9.1.4.17(b) (MANDATORY)"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      cyclomatic_complexity_max: 10
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "M"
+    additional_requirements:
+      - "Define procedures to correctly identify software release per 9.1.4.7 (MANDATORY)"
+      - "Define procedures to correctly install software release per 9.1.4.7 (MANDATORY)"
+      - "Step-by-step installation instructions with verification at each step (MANDATORY)"
+      - "Software identification verification procedures using self-identification (MANDATORY)"
+      - "Installation verification procedures (MANDATORY)"
+      - "Rollback procedures reference per 9.1.4.10 (MANDATORY)"
+      - "Error detection procedures per 9.1.4.20 (MANDATORY)"
+      - "Incremental deployment procedures per 9.1.4.8 (HIGHLY RECOMMENDED)"
+      - "Version compatibility checking procedures (HIGHLY RECOMMENDED)"
+      - "Diagnostic information access procedures per 9.1.4.15"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Traceability requirements per 6.5.4.14-6.5.4.17 (MANDATORY)"
+      - "Internal consistency verified per 9.1.4.17(b) (MANDATORY)"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      test_coverage_mcdc: 100
+      cyclomatic_complexity_max: 10
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "software-identification-procedures"
+    description: "Step-by-step procedures to correctly identify software release per 9.1.4.7"
+    mandatory_sil: 0
+    source: "PM agent"
+    format: "Markdown with numbered steps"
+    storage_path: "docs/deployment/manual/software-identification-procedures.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm create-identification-procedures"
+    verification_criteria:
+      - "Procedures reference self-identification mechanisms per 9.1.4.11"
+      - "Version information extraction procedures"
+      - "Configuration data version extraction procedures"
+      - "Product identity verification procedures"
+      - "Verification at loading process and after loading"
+
+  - evidence_id: "software-installation-procedures"
+    description: "Step-by-step procedures to correctly install software release per 9.1.4.7"
+    mandatory_sil: 0
+    source: "PM agent"
+    format: "Markdown with numbered steps"
+    storage_path: "docs/deployment/manual/software-installation-procedures.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm create-installation-procedures"
+    verification_criteria:
+      - "Pre-installation checks defined"
+      - "Installation steps detailed and sequential"
+      - "Post-installation verification defined"
+      - "Verification at each critical step (SIL 2+)"
+      - "Error handling procedures defined"
+      - "Installation abort procedures defined"
+
+  - evidence_id: "installation-verification-checklist"
+    description: "Checklist to verify correct installation"
+    mandatory_sil: 0
+    source: "PM agent"
+    format: "Markdown checklist"
+    storage_path: "docs/deployment/manual/installation-verification-checklist.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm create-installation-checklist"
+    verification_criteria:
+      - "Software version verification using self-identification"
+      - "Configuration data verification"
+      - "Hardware compatibility verification"
+      - "Functional testing after installation"
+      - "Safety function verification"
+      - "Diagnostic information verification per 9.1.4.15"
+
+  - evidence_id: "rollback-procedure-reference"
+    description: "Reference to rollback procedures from Deployment Plan per 9.1.4.10"
+    mandatory_sil: 0
+    source: "PM agent"
+    format: "Markdown reference"
+    storage_path: "docs/deployment/manual/rollback-procedure-reference.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm link-rollback-procedures"
+    verification_criteria:
+      - "Rollback trigger conditions referenced"
+      - "Rollback procedure steps referenced or included"
+      - "Rollback verification referenced or included"
+
+  - evidence_id: "incremental-deployment-procedures"
+    description: "Procedures for incremental deployment (component-by-component) per 9.1.4.8"
+    mandatory_sil: 2
+    source: "PM agent"
+    format: "Markdown with step-by-step procedures"
+    storage_path: "docs/deployment/manual/incremental-deployment-procedures.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm create-incremental-deployment"
+    verification_criteria:
+      - "Component deployment order defined"
+      - "Version compatibility checking procedures per 9.1.4.8"
+      - "Incompatible version activation exclusion procedures"
+      - "Component integration verification after each increment"
+
+  - evidence_id: "error-detection-procedures"
+    description: "Procedures for error detection in storage, transfer, transmission, duplication per 9.1.4.20"
+    mandatory_sil: 2
+    source: "PM agent"
+    format: "Markdown"
+    storage_path: "docs/deployment/manual/error-detection-procedures.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm create-error-detection-procedures"
+    verification_criteria:
+      - "Storage error detection procedures"
+      - "Transfer error detection procedures (e.g., checksums, CRCs)"
+      - "Transmission error detection procedures"
+      - "Duplication error detection procedures"
+      - "Error response procedures (abort, retry, alert)"
+
+  - evidence_id: "diagnostic-access-procedures"
+    description: "Procedures to access diagnostic information per 9.1.4.15"
+    mandatory_sil: 1
+    source: "PM agent"
+    format: "Markdown"
+    storage_path: "docs/deployment/manual/diagnostic-access-procedures.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm create-diagnostic-procedures"
+    verification_criteria:
+      - "Diagnostic information access methods defined"
+      - "Fault monitoring information access defined"
+      - "Diagnostic output interpretation guidance"
+
+  - evidence_id: "deployment-manual-readability-check"
+    description: "Readability verification per 5.3.2.7-5.3.2.10 and 9.1.4.17(a)"
+    mandatory_sil: 3
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/deployment/verification/deployment-manual-readability-check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-deployment-manual-readability"
+    verification_criteria:
+      - "Clear and unambiguous language"
+      - "Consistent terminology"
+      - "Proper document structure"
+      - "Adequate detail level"
+      - "Procedures understandable by target audience"
+
+  - evidence_id: "deployment-manual-traceability-check"
+    description: "Traceability verification per 6.5.4.14-6.5.4.17 and 9.1.4.17(a)"
+    mandatory_sil: 3
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/deployment/verification/deployment-manual-traceability-check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-deployment-manual-traceability"
+    verification_criteria:
+      - "Traceability to Deployment Plan (DOC-036)"
+      - "Traceability to self-identification mechanisms (DOC-010)"
+      - "Traceability to configuration management procedures (DOC-003)"
+      - "All references valid and complete"
+
+  - evidence_id: "deployment-manual-consistency-check"
+    description: "Internal consistency verification per 9.1.4.17(b)"
+    mandatory_sil: 3
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/deployment/verification/deployment-manual-consistency-check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-deployment-manual-consistency"
+    verification_criteria:
+      - "No conflicting procedures"
+      - "All cross-references valid"
+      - "Consistent terminology throughout"
+      - "Procedures compatible with each other"
+
+  - evidence_id: "deployment-manual-requirements-check"
+    description: "Verification against 9.1.4.7 requirements per 9.1.4.17(a)"
+    mandatory_sil: 0
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/deployment/verification/deployment-manual-requirements-check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-deployment-manual-requirements"
+    verification_criteria:
+      - "Procedures to correctly identify software release present per 9.1.4.7"
+      - "Procedures to correctly install software release present per 9.1.4.7"
+      - "All 9.1.4.7 requirements addressed"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-036-SRDP"
+    reason: "Deployment Manual implements procedures defined in Deployment Plan"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Deployment Manual references self-identification mechanisms from SDS"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-003-SCMP"
+    reason: "Deployment Manual follows configuration management procedures from SCMP"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-039-DEPLOYMENT-RECORDS"
+    reason: "Deployment Records created by following Deployment Manual"
+  
+  - deliverable_id: "DOC-040-DEPLOYMENT-VER"
+    reason: "Deployment Verification Report verifies Deployment Manual per 9.1.4.17"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "Procedures to correctly identify software release per 9.1.4.7 (MANDATORY)"
+    - "Procedures to correctly install software release per 9.1.4.7 (MANDATORY)"
+    - "Installation verification procedures complete"
+    - "Reference to self-identification mechanisms per 9.1.4.11"
+    - "Reference to rollback procedures per 9.1.4.10"
+    - "Incremental deployment procedures (HR SIL 3-4, R SIL 1-2)"
+    - "Error detection procedures per 9.1.4.20 (SIL 2+)"
+    - "All SIL-appropriate techniques applied per Table A.9"
+  
+  correctness:
+    - "Identification procedures correct and use self-identification mechanisms"
+    - "Installation procedures correct and technically feasible"
+    - "Verification procedures adequate for safety"
+    - "Error detection procedures adequate per 9.1.4.20"
+    - "Procedures tested or reviewed by experts"
+  
+  consistency:
+    - "Internal consistency per 9.1.4.17(b) (MANDATORY SIL 3+)"
+    - "Consistent with Deployment Plan (DOC-036)"
+    - "Consistent with SCMP (DOC-003)"
+    - "Consistent with self-identification design (DOC-010)"
+    - "No conflicting procedures"
+    - "All cross-references valid"
+  
+  traceability:
+    - "Traceability per 6.5.4.14-6.5.4.17 and 9.1.4.17(a) (MANDATORY SIL 3+)"
+    - "Traceability to Deployment Plan (DOC-036)"
+    - "Traceability to SCMP (DOC-003)"
+    - "Traceability to SDS self-identification design (DOC-010)"
+  
+  readability:
+    - "Readability per 5.3.2.7-5.3.2.10 and 9.1.4.17(a) (MANDATORY SIL 3+)"
+    - "Clear and unambiguous language"
+    - "Consistent terminology"
+    - "Adequate detail for target audience"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Deployment Manual Baseline"
+  baseline_trigger: "After VER approval per 9.1.4.17"
+  change_control: "All changes via CCB, impact assessment on deployment procedures"
+  versioning: "Semantic versioning (MAJOR.MINOR.PATCH)"
+  storage_location: "config/baselines/deployment-manual/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "9.1.4.6"
+    title: "Software Deployment Manual"
+    relevance: "Primary section requiring Deployment Manual"
+  - section: "9.1.4.7"
+    title: "Deployment Manual content"
+    relevance: "Procedures to correctly identify and install software release (MANDATORY)"
+  - section: "9.1.4.17"
+    title: "Deployment Manual verification"
+    relevance: "Verification of readability, traceability, 9.1.4.7 requirements, internal consistency"
+  - section: "9.1.4.10"
+    title: "Rollback procedure"
+    relevance: "Deployment Manual shall reference rollback procedures"
+  - section: "9.1.4.11"
+    title: "Self-identification mechanisms"
+    relevance: "Deployment Manual shall reference self-identification for software identification"
+  - section: "9.1.4.8"
+    title: "Incremental deployment"
+    relevance: "Procedures for incremental deployment (HR SIL 3-4, R SIL 1-2)"
+  - section: "9.1.4.20"
+    title: "Error detection"
+    relevance: "Procedures for error detection in storage, transfer, transmission, duplication"
+  - section: "9.1.4.15"
+    title: "Diagnostic information"
+    relevance: "Procedures to access diagnostic information"
+  - section: "5.3.2.7-5.3.2.10"
+    title: "Readability requirements"
+    relevance: "General requirements for readability per 9.1.4.17(a) (MANDATORY SIL 3+)"
+  - section: "6.5.4.14-6.5.4.17"
+    title: "Traceability requirements"
+    relevance: "General requirements for traceability per 9.1.4.17(a) (MANDATORY SIL 3+)"
+  - section: "Table A.9"
+    title: "Software Quality Assurance techniques"
+    relevance: "Configuration Management (M), Traceability (R/HR/M), Data Recording (HR/M)"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Software Deployment Manual is deliverable #37, written by PM, checked by VER and VAL"
+
+# ===== Notes =====
+notes: |
+  **Software Deployment Manual (Deliverable #37)**
+  
+  **Purpose**: Define step-by-step procedures to correctly identify and install software releases
+  in operational environments per EN 50128 Section 9.1.4.6-9.1.4.7.
+  
+  **Key Content** (EN 50128 9.1.4.7):
+  1. Procedures to correctly identify software release (MANDATORY)
+  2. Procedures to correctly install software release (MANDATORY)
+  
+  **Additional Content**:
+  3. Installation verification procedures
+  4. Reference to self-identification mechanisms per 9.1.4.11
+  5. Reference to rollback procedures per 9.1.4.10
+  6. Incremental deployment procedures per 9.1.4.8 (HR SIL 3-4, R SIL 1-2)
+  7. Error detection procedures per 9.1.4.20 (SIL 2+)
+  8. Diagnostic information access procedures per 9.1.4.15
+  
+  **Verification Requirements** (EN 50128 9.1.4.17):
+  - Readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+  - Traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+  - Requirements per 9.1.4.7 met (MANDATORY all SILs)
+  - Internal consistency (MANDATORY SIL 3+)
+  - Results recorded in Deployment Verification Report (DOC-040)
+  
+  **PM Agent Responsibility**:
+  - Write detailed step-by-step installation procedures
+  - Define software identification procedures using self-identification
+  - Define installation verification procedures
+  - Reference rollback procedures from Deployment Plan
+  - Define incremental deployment procedures (SIL 2+)
+  - Define error detection procedures (SIL 2+)
+  - Define diagnostic access procedures
+  
+  **VER Agent Responsibility**:
+  - Verify readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+  - Verify traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+  - Verify requirements per 9.1.4.7 met (MANDATORY)
+  - Verify internal consistency (MANDATORY SIL 3+)
+  - Record verification results in DOC-040 (Deployment Verification Report)
+  
+  **VAL Agent Responsibility**:
+  - Validate procedures usable by deployment personnel
+  - Validate procedures adequate for operational environment
+  - Validate error detection adequate for safety
+  
+  **Target Audience**: Deployment personnel (may not be software engineers)
+  
+  **Key Distinction**:
+  - DOC-036 (Deployment Plan): HIGH-LEVEL plan (what, who, when)
+  - DOC-037 (Deployment Manual): DETAILED procedures (how, step-by-step)

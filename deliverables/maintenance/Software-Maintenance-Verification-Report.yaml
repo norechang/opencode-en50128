@@ -1,0 +1,425 @@
+# Software Maintenance Verification Report
+# EN 50128 Deliverable #44 - Section 9.2.4.6(b)
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-044-SMVR"
+number: 44
+name: "Software Maintenance Verification Report"
+abbreviation: "SMVR"
+
+# ===== Lifecycle Context =====
+phase: "maintenance"
+standard_section: "9.2.4.6"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "VER"
+first_check: "QUA"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-verification/templates/Software-Maintenance-Verification-Report-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_name: "Verification"
+        table_reference: "A.10"
+        technique_id: "A.5"
+        recommendation: "R"
+    additional_requirements:
+      - "Verify maintenance records complete per 9.2.4.6(a)"
+      - "Verify change authorization obtained per 9.2.4.6(d)"
+      - "Verify modifications do not introduce new errors"
+    evidence_thresholds: {}
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Verification"
+        table_reference: "A.10"
+        technique_id: "A.5"
+        recommendation: "HR"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "HR"
+    additional_requirements:
+      - "Verify maintenance records complete per 9.2.4.6(a) (MANDATORY)"
+      - "Verify change authorization obtained per 9.2.4.6(d) (MANDATORY)"
+      - "Verify modifications do not introduce new errors (MANDATORY)"
+      - "Verify impact analysis performed per Table A.10 (HR)"
+      - "Verify regression testing performed per 9.2.4.10(d)"
+      - "Verify maintenance follows Software Maintenance Plan"
+    evidence_thresholds: {}
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Verification"
+        table_reference: "A.10"
+        technique_id: "A.5"
+        recommendation: "HR"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "HR"
+      - technique_name: "Static Analysis"
+        table_reference: "A.10"
+        technique_id: "A.19"
+        recommendation: "HR"
+    additional_requirements:
+      - "Verify maintenance records complete per 9.2.4.6(a) (MANDATORY)"
+      - "Verify change authorization obtained per 9.2.4.6(d) (MANDATORY)"
+      - "Verify modifications do not introduce new errors (MANDATORY)"
+      - "Verify impact analysis performed per Table A.10 (HR)"
+      - "Verify regression testing performed per 9.2.4.10(d) (MANDATORY)"
+      - "Verify maintenance follows Software Maintenance Plan (MANDATORY)"
+      - "Verify static analysis performed (MISRA C compliance)"
+      - "Verify safety impact analysis performed per 9.2.4.19"
+      - "Verify traceability maintained per Table A.10"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 15
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Verification"
+        table_reference: "A.10"
+        technique_id: "A.5"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "M"
+      - technique_name: "Static Analysis"
+        table_reference: "A.10"
+        technique_id: "A.19"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.10"
+        technique_id: "D.58"
+        recommendation: "M"
+    additional_requirements:
+      - "INDEPENDENT VERIFICATION MANDATORY per 9.2.4.6(b)"
+      - "Verify maintenance records complete per 9.2.4.6(a) (MANDATORY)"
+      - "Verify change authorization obtained per 9.2.4.6(d) (MANDATORY)"
+      - "Verify modifications do not introduce new errors (MANDATORY)"
+      - "Verify impact analysis performed per Table A.10 (MANDATORY)"
+      - "Verify regression testing performed per 9.2.4.10(d) (MANDATORY)"
+      - "Verify maintenance follows Software Maintenance Plan (MANDATORY)"
+      - "Verify static analysis performed (MISRA C compliance MANDATORY)"
+      - "Verify safety impact analysis performed per 9.2.4.19 (MANDATORY)"
+      - "Verify traceability maintained per Table A.10 (MANDATORY)"
+      - "Verify cumulative impact analysis performed per 9.2.4.19"
+      - "Verify test coverage 100% (statement, branch, condition)"
+      - "Verify complexity ≤ 10"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      cyclomatic_complexity_max: 10
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Verification"
+        table_reference: "A.10"
+        technique_id: "A.5"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "M"
+      - technique_name: "Static Analysis"
+        table_reference: "A.10"
+        technique_id: "A.19"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.10"
+        technique_id: "D.58"
+        recommendation: "M"
+    additional_requirements:
+      - "All SIL 3 requirements apply"
+      - "INDEPENDENT VERIFICATION MANDATORY per 9.2.4.6(b)"
+      - "Verify maintenance records complete per 9.2.4.6(a) (MANDATORY)"
+      - "Verify change authorization obtained per 9.2.4.6(d) (MANDATORY)"
+      - "Verify modifications do not introduce new errors (MANDATORY)"
+      - "Verify impact analysis performed per Table A.10 (MANDATORY)"
+      - "Verify regression testing performed per 9.2.4.10(d) (MANDATORY)"
+      - "Verify maintenance follows Software Maintenance Plan (MANDATORY)"
+      - "Verify static analysis performed (MISRA C compliance MANDATORY)"
+      - "Verify safety impact analysis performed per 9.2.4.19 (MANDATORY)"
+      - "Verify traceability maintained per Table A.10 (MANDATORY)"
+      - "Verify cumulative impact analysis performed per 9.2.4.19 (MANDATORY)"
+      - "Verify test coverage 100% (statement, branch, condition, MC/DC)"
+      - "Verify complexity ≤ 10"
+      - "Verify digital signatures on change authorizations"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      test_coverage_mcdc: 100
+      cyclomatic_complexity_max: 10
+
+# ===== Required Content Sections =====
+required_content:
+  - section: "1. Verification Overview"
+    description: "Scope, objectives, verification approach for maintenance changes"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "2. Maintenance Records Verification"
+    description: "Verification that maintenance records are complete per 9.2.4.6(a)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "3. Change Authorization Verification"
+    description: "Verification that all changes have proper authorization per 9.2.4.6(d)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "4. Impact Analysis Verification"
+    description: "Verification that impact analysis performed per Table A.10"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "5. Regression Testing Verification"
+    description: "Verification that regression testing performed per 9.2.4.10(d)"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "6. Static Analysis Verification"
+    description: "Verification that static analysis performed (MISRA C compliance)"
+    mandatory_for: ["SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "7. Safety Impact Verification"
+    description: "Verification that safety impact analysis performed per 9.2.4.19"
+    mandatory_for: ["SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "8. Traceability Verification"
+    description: "Verification that traceability maintained per Table A.10"
+    mandatory_for: ["SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "9. Test Coverage Verification"
+    description: "Verification that test coverage meets SIL requirements (100% for SIL 3-4)"
+    mandatory_for: ["SIL_3", "SIL_4"]
+  
+  - section: "10. Complexity Verification"
+    description: "Verification that cyclomatic complexity within limits (≤10 for SIL 3-4)"
+    mandatory_for: ["SIL_3", "SIL_4"]
+  
+  - section: "11. Cumulative Impact Verification"
+    description: "Verification that cumulative impact analysis performed per 9.2.4.19"
+    mandatory_for: ["SIL_3", "SIL_4"]
+  
+  - section: "12. Verification Conclusion"
+    description: "Overall verification conclusion: PASS/FAIL with justification"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "smvr-document"
+    description: "Complete Software Maintenance Verification Report per 9.2.4.6(b)"
+    mandatory_sil: 0
+    source: "VER agent verification activities"
+    format: "Markdown"
+    storage_path: "docs/verification/Software-Maintenance-Verification-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "maintenance-verification-complete"
+    verification_criteria:
+      - "All required sections present"
+      - "Verification performed per SVP techniques"
+      - "Independent verification for SIL 3-4"
+      - "Verification conclusion present (PASS/FAIL)"
+  
+  - evidence_id: "maintenance-records-checklist"
+    description: "Checklist verifying completeness of maintenance records per 9.2.4.6(a)"
+    mandatory_sil: 0
+    source: "VER agent checklist"
+    format: "Markdown"
+    storage_path: "docs/verification/maintenance-records-checklist.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "maintenance-verification-complete"
+    verification_criteria:
+      - "Error reports verified complete"
+      - "Error logs verified complete"
+      - "Maintenance activity records verified complete"
+      - "Change authorization records verified complete"
+  
+  - evidence_id: "change-authorization-verification"
+    description: "Evidence that all changes have proper CCB authorization per 9.2.4.6(d)"
+    mandatory_sil: 0
+    source: "VER agent + CM agent"
+    format: "CSV"
+    storage_path: "evidence/verification/change-authorization-verification.csv"
+    automation_level: "automatic"
+    collect_on_agent_action: "maintenance-verification-complete"
+    verification_criteria:
+      - "All changes linked to authorization records"
+      - "No unauthorized changes deployed"
+      - "Digital signatures verified (SIL 4)"
+  
+  - evidence_id: "impact-analysis-verification"
+    description: "Verification that impact analysis performed per Table A.10"
+    mandatory_sil: 1
+    source: "VER agent review of impact analysis"
+    format: "Markdown"
+    storage_path: "docs/verification/impact-analysis-verification.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "maintenance-verification-complete"
+    verification_criteria:
+      - "Impact analysis performed for each change (SIL 1+ HR, SIL 3+ M)"
+      - "Safety impact assessed (SIL 2+)"
+      - "Cumulative impact assessed (SIL 3+)"
+  
+  - evidence_id: "regression-test-verification"
+    description: "Verification that regression testing performed per 9.2.4.10(d)"
+    mandatory_sil: 1
+    source: "VER agent review of TST regression test results"
+    format: "Markdown"
+    storage_path: "docs/verification/regression-test-verification.md"
+    automation_level: "automatic"
+    collect_on_agent_action: "maintenance-verification-complete"
+    verification_criteria:
+      - "Regression tests executed for each change"
+      - "All regression tests pass"
+      - "Coverage maintained (SIL 3+ 100% statement/branch/condition)"
+  
+  - evidence_id: "static-analysis-verification"
+    description: "Verification that static analysis performed (MISRA C compliance)"
+    mandatory_sil: 2
+    source: "VER agent static analysis review"
+    format: "Markdown"
+    storage_path: "docs/verification/static-analysis-verification.md"
+    automation_level: "automatic"
+    collect_on_agent_action: "maintenance-verification-complete"
+    verification_criteria:
+      - "Static analysis performed on changed code"
+      - "MISRA C compliance verified (zero mandatory violations SIL 2+)"
+      - "Complexity within limits (≤10 SIL 3-4, ≤15 SIL 2)"
+  
+  - evidence_id: "traceability-verification"
+    description: "Verification that traceability maintained per Table A.10"
+    mandatory_sil: 2
+    source: "VER agent traceability analysis"
+    format: "CSV"
+    storage_path: "evidence/verification/traceability-verification.csv"
+    automation_level: "automatic"
+    collect_on_agent_action: "maintenance-verification-complete"
+    verification_criteria:
+      - "Error → Change Request traceable"
+      - "Change Request → Code Change traceable"
+      - "Code Change → Test traceable"
+      - "Test → Release traceable"
+      - "100% traceability (SIL 3+)"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-041-SMP"
+    reason: "Software Maintenance Plan defines verification requirements per 9.2.4.6(b)"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-004-SVP"
+    reason: "Software Verification Plan defines verification techniques and approach"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-043-SMR"
+    reason: "Software Maintenance Records are the subject of verification"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-005-SVAP"
+    reason: "Validation uses verification results as input"
+  
+  - deliverable_id: "DOC-041-SMP"
+    reason: "Verification findings inform updates to Software Maintenance Plan"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All required sections present per 9.2.4.6(b)"
+    - "Maintenance records verified complete per 9.2.4.6(a)"
+    - "Change authorizations verified per 9.2.4.6(d)"
+    - "Impact analysis verified per Table A.10 (SIL 1+ HR, SIL 3+ M)"
+    - "Regression testing verified per 9.2.4.10(d) (SIL 1+)"
+    - "Static analysis verified (SIL 2+)"
+    - "Traceability verified (SIL 2+ HR, SIL 3+ M)"
+    - "Verification conclusion present (PASS/FAIL)"
+  
+  correctness:
+    - "Verification performed per SVP techniques"
+    - "Independent verification for SIL 3-4 per 9.2.4.6(b)"
+    - "Verification evidence complete and objective"
+    - "Deviations identified and documented"
+    - "Verification conclusion justified"
+  
+  consistency:
+    - "Verification approach consistent with SVP"
+    - "Verification criteria consistent with SIL level"
+    - "Verification evidence consistent with findings"
+  
+  traceability:
+    - "Verification activities traceable to SVP"
+    - "Verification findings traceable to maintenance records"
+    - "Deviations traceable to corrective actions"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_required: false
+  baseline_timing: "N/A (created per maintenance release)"
+  change_control: "Report created per maintenance release, no CCB required for report creation"
+  version_control: "Git repository under docs/verification/"
+  review_frequency: "Created per maintenance release"
+  
+  update_triggers:
+    - "Maintenance release prepared for deployment"
+    - "Significant maintenance activity completed"
+    - "Quarterly maintenance verification review"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "9.2"
+    title: "Software Maintenance"
+    description: "Primary section for software maintenance"
+  
+  - section: "9.2.4.6"
+    title: "Software Maintenance Procedures"
+    description: "Mandatory procedures including verification (b)"
+  
+  - section: "9.2.4.6(b)"
+    title: "Verification, Validation, and Assessment of Any Modification"
+    description: "Primary requirement for maintenance verification"
+  
+  - section: "9.2.4.10(d)"
+    title: "Regression Testing"
+    description: "Regression testing required for maintenance changes"
+  
+  - section: "9.2.4.19"
+    title: "Safety Impact Analysis"
+    description: "Safety impact analysis required for SIL 2+ maintenance"
+  
+  - section: "Table A.10"
+    title: "Maintenance Techniques and Measures"
+    description: "Techniques for maintenance verification"
+  
+  - section: "6.2"
+    title: "Software Verification"
+    description: "General verification requirements applicable to maintenance"
+
+# ===== Notes =====
+notes: |
+  Software Maintenance Verification is MANDATORY for ALL SIL levels per EN 50128 Section 9.2.4.6(b).
+  Verification SHALL verify: maintenance records, change authorization, impact analysis, regression testing.
+  Independent verification MANDATORY for SIL 3-4 per Section 9.2.4.6(b).
+  Verification follows Software Verification Plan (SVP) techniques per Section 6.2.
+  Impact Analysis verification: HIGHLY RECOMMENDED SIL 1-2, MANDATORY SIL 3-4 (Table A.10).
+  Traceability verification: HIGHLY RECOMMENDED SIL 2, MANDATORY SIL 3-4 (Table A.10).
+  Static analysis verification: MANDATORY SIL 2+ (MISRA C compliance).
+  Test coverage verification: 100% statement/branch/condition for SIL 3+, 100% MC/DC for SIL 4.
+  Complexity verification: ≤10 for SIL 3-4, ≤15 for SIL 2.
+  Verification Report created per maintenance release.
+  Verification conclusion must be PASS/FAIL with justification.
+
+tags:
+  - "maintenance"
+  - "verification"
+  - "per-release-deliverable"
+  - "independent-verification-sil-3-4"

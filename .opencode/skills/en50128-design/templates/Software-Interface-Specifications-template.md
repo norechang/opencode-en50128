@@ -1,42 +1,45 @@
 # Software Interface Specifications (SIS)
 
-**Document ID**: DOC-DES-YYYY-NNN  
-**Project**: [Project Name]  
-**Software Component**: [Component Name]  
-**SIL Level**: [0/1/2/3/4]  
-**Version**: [X.Y]  
-**Date**: [YYYY-MM-DD]
+**TEMPLATE VERSION**: 2.0  
+**REFERENCE**: EN 50128:2011 Section [X.Y]
 
 ---
 
-## Document Control
+## STANDARD HEADER
+
+| Field | Value |
+|-------|-------|
+| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Version** | [X.Y] |
+| **Date** | [YYYY-MM-DD] |
+| **Project** | [Project Name] |
+| **SIL Level** | [0, 1, 2, 3, or 4] |
+| **Author** | [Name], [Role] |
+| **Reviewer** | [Name], [Role] |
+| **Approver** | [Name], [Role] |
+| **Status** | [Draft \| Review \| Approved \| Baseline] |
+
+## DOCUMENT CONTROL
 
 | Version | Date | Author | Changes | Approved By |
 |---------|------|--------|---------|-------------|
-| 0.1 | YYYY-MM-DD | [Author] | Initial draft | - |
-| 1.0 | YYYY-MM-DD | [Author] | First release | [Approver] |
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
 
----
+## APPROVALS
 
-## Approvals
+**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
+**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Designer** (Author) | [Name] | | YYYY-MM-DD |
-| **Verifier** (Reviewer) | [Name] | | YYYY-MM-DD |
-| **Quality Assurance** (Template Check) | [Name] | | YYYY-MM-DD |
-| **Project Manager** (Approval) | [Name] | | YYYY-MM-DD |
-
----
-
-## EN 50128 References
-
-| Section | Title | Relevance |
-|---------|-------|-----------|
-| **7.3** | Software Architecture and Design | PRIMARY - Design phase |
-| **Table A.3** | Software Architecture techniques | Design techniques by SIL |
-| **Table A.4** | Software Design and Implementation | Implementation guidance |
-| **Annex C** | Documentation Requirements | Deliverable requirements |
+| **Author** | [Name] | | YYYY-MM-DD |
+| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
+| **QA Manager** | [Name] | | YYYY-MM-DD |
+| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
+| **Project Manager** | [Name] | | YYYY-MM-DD |
+| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
 
 ---
 

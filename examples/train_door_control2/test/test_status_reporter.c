@@ -23,15 +23,27 @@
  *       To avoid multiply-defined symbols this file defines the authoritative
  *       versions; test_command_processor.c's stubs are superseded — see Makefile
  *       notes.  All stubs are controlled via file-scope variables below.
+ * 
+ * FIX for DEF-INTEGRATION-002 (2026-02-26):
+ *   Updated stubs to accept door_fsm_t* instead of door_side_t enum.
+ *   Added mock door FSM structures for testing.
  */
 
 #include "test_harness.h"
 #include "test_mocks.h"
 #include "../src/status_reporter/status_reporter.h"
 #include "../src/sensor_hal/sensor_hal.h"   /* can_message_t */
+#include "../src/door_control/door_fsm.h"   /* door_fsm_t */
 
 /* Forward declaration */
 void run_status_reporter_tests(void);
+
+/* =========================================================================
+ * Mock door FSM structures (minimal for testing)
+ * ========================================================================= */
+ 
+static door_fsm_t mock_left_fsm;
+static door_fsm_t mock_right_fsm;
 
 /* =========================================================================
  * Stub state (controlled by tests)
@@ -51,24 +63,41 @@ static uint32_t      stub_sr_can_send_calls = 0U;
 
 /* =========================================================================
  * Local stubs (status_reporter.c extern declarations)
+ * 
+ * FIX for DEF-INTEGRATION-002: Changed signatures to accept door_fsm_t*
  * ========================================================================= */
 
-uint8_t door_fsm_get_position(door_side_t side)
+uint8_t door_fsm_get_position(const door_fsm_t* fsm)
 {
-    return (side == DOOR_SIDE_LEFT) ? stub_sr_left_pos : stub_sr_right_pos;
+    if (fsm == &mock_left_fsm) {
+        return stub_sr_left_pos;
+    } else if (fsm == &mock_right_fsm) {
+        return stub_sr_right_pos;
+    }
+    return 0U;
 }
 
 /* door_fsm_get_state — also needed by command_processor.c; provide single
  * definition here.  test_command_processor.c provides its own local version
  * but since they have the same signature the linker only needs one. */
-uint8_t door_fsm_get_state(door_side_t side)
+door_state_t door_fsm_get_state(const door_fsm_t* fsm)
 {
-    return (side == DOOR_SIDE_LEFT) ? stub_sr_left_state : stub_sr_right_state;
+    if (fsm == &mock_left_fsm) {
+        return (door_state_t)stub_sr_left_state;
+    } else if (fsm == &mock_right_fsm) {
+        return (door_state_t)stub_sr_right_state;
+    }
+    return DOOR_STATE_FAULT;
 }
 
-bool door_fsm_is_locked(door_side_t side)
+bool door_fsm_is_locked(const door_fsm_t* fsm)
 {
-    return (side == DOOR_SIDE_LEFT) ? stub_sr_left_locked : stub_sr_right_locked;
+    if (fsm == &mock_left_fsm) {
+        return stub_sr_left_locked;
+    } else if (fsm == &mock_right_fsm) {
+        return stub_sr_right_locked;
+    }
+    return false;
 }
 
 uint8_t fault_detection_get_active_faults(const void* fd, uint16_t* buffer, uint8_t buffer_size)
@@ -117,7 +146,8 @@ static void sr_setup(void)
     stub_sr_can_send_result = ERROR_SUCCESS;
     stub_sr_can_send_calls  = 0U;
     mock_set_system_time(0U);
-    (void)status_reporter_init(&g_sr);
+    /* FIX: Pass door FSM pointers */
+    (void)status_reporter_init(&g_sr, &mock_left_fsm, &mock_right_fsm);
 }
 
 /* =========================================================================
@@ -126,22 +156,47 @@ static void sr_setup(void)
 static bool test_sr_init_success(void)
 {
     status_reporter_t sr;
-    error_t result = status_reporter_init(&sr);
+    error_t result = status_reporter_init(&sr, &mock_left_fsm, &mock_right_fsm);
 
     TEST_ASSERT_EQUAL(ERROR_SUCCESS, result);
     TEST_ASSERT_EQUAL(0U, sr.can_tx_count);
     TEST_ASSERT_EQUAL(0U, sr.can_tx_error_count);
     TEST_ASSERT_EQUAL(1U, sr.last_can_msg.door_left_locked);
     TEST_ASSERT_EQUAL(1U, sr.last_can_msg.door_right_locked);
+    /* Verify FSM pointers stored (pointer comparison) */
+    TEST_ASSERT(sr.left_door_fsm == &mock_left_fsm);
+    TEST_ASSERT(sr.right_door_fsm == &mock_right_fsm);
     return true;
 }
 
 /* =========================================================================
- * TC-MOD005-002  init — NULL → ERROR_NULL_POINTER
+ * TC-MOD005-002  init — NULL status reporter → ERROR_NULL_POINTER
  * ========================================================================= */
 static bool test_sr_init_null(void)
 {
-    error_t result = status_reporter_init(NULL);
+    error_t result = status_reporter_init(NULL, &mock_left_fsm, &mock_right_fsm);
+    TEST_ASSERT_EQUAL(ERROR_NULL_POINTER, result);
+    return true;
+}
+
+/* =========================================================================
+ * TC-MOD005-002b  init — NULL left FSM → ERROR_NULL_POINTER
+ * ========================================================================= */
+static bool test_sr_init_null_left_fsm(void)
+{
+    status_reporter_t sr;
+    error_t result = status_reporter_init(&sr, NULL, &mock_right_fsm);
+    TEST_ASSERT_EQUAL(ERROR_NULL_POINTER, result);
+    return true;
+}
+
+/* =========================================================================
+ * TC-MOD005-002c  init — NULL right FSM → ERROR_NULL_POINTER
+ * ========================================================================= */
+static bool test_sr_init_null_right_fsm(void)
+{
+    status_reporter_t sr;
+    error_t result = status_reporter_init(&sr, &mock_left_fsm, NULL);
     TEST_ASSERT_EQUAL(ERROR_NULL_POINTER, result);
     return true;
 }
@@ -361,11 +416,13 @@ static bool test_sr_send_can_status_locked_fields(void)
  * ========================================================================= */
 void run_status_reporter_tests(void)
 {
-    const int NUM_TESTS = 16;
+    const int NUM_TESTS = 19;  /* Updated: added 3 new NULL check tests */
     test_suite_begin("MOD-005: status_reporter");
 
     run_test("TC-MOD005-001: init success",                             test_sr_init_success);
-    run_test("TC-MOD005-002: init NULL",                                test_sr_init_null);
+    run_test("TC-MOD005-002: init NULL sr",                             test_sr_init_null);
+    run_test("TC-MOD005-002b: init NULL left FSM",                      test_sr_init_null_left_fsm);
+    run_test("TC-MOD005-002c: init NULL right FSM",                     test_sr_init_null_right_fsm);
     run_test("TC-MOD005-003: update NULL",                              test_sr_update_null);
     run_test("TC-MOD005-004: update period not elapsed",                test_sr_update_period_not_elapsed);
     run_test("TC-MOD005-005: update period elapsed TX success",         test_sr_update_period_elapsed_tx_success);

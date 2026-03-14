@@ -1,0 +1,416 @@
+# Software Maintenance Records
+# EN 50128 Deliverable #43 - Section 9.2.4.6(a)
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-043-SMR"
+number: 43
+name: "Software Maintenance Records"
+abbreviation: "SMR"
+
+# ===== Lifecycle Context =====
+phase: "maintenance"
+standard_section: "9.2.4.6"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "CM"
+first_check: "QUA"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-configuration/templates/Software-Maintenance-Records-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.10"
+        technique_id: "D.48"
+        recommendation: "M"
+    additional_requirements:
+      - "Maintain error reporting records per 9.2.4.6(a)"
+      - "Maintain error logs per 9.2.4.6(a)"
+      - "Maintain maintenance activity records per 9.2.4.6(a)"
+      - "Maintain change authorization records per 9.2.4.6(a)"
+      - "Link to SCMP configuration records"
+    evidence_thresholds: {}
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.10"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "HR"
+    additional_requirements:
+      - "Maintain error reporting records per 9.2.4.6(a) (MANDATORY)"
+      - "Maintain error logs with root cause analysis per 9.2.4.6(a) (MANDATORY)"
+      - "Maintain maintenance activity records per 9.2.4.6(a) (MANDATORY)"
+      - "Maintain change authorization records per 9.2.4.6(a) (MANDATORY)"
+      - "Record impact analysis results per Table A.10"
+      - "Link to SCMP configuration records (MANDATORY)"
+      - "Maintain traceability to change requests"
+    evidence_thresholds: {}
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.10"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "HR"
+      - technique_name: "Traceability"
+        table_reference: "A.10"
+        technique_id: "D.58"
+        recommendation: "HR"
+    additional_requirements:
+      - "Maintain error reporting records per 9.2.4.6(a) (MANDATORY)"
+      - "Maintain error logs with root cause analysis per 9.2.4.6(a) (MANDATORY)"
+      - "Maintain maintenance activity records per 9.2.4.6(a) (MANDATORY)"
+      - "Maintain change authorization records per 9.2.4.6(a) (MANDATORY)"
+      - "Record impact analysis results per Table A.10 (MANDATORY)"
+      - "Link to SCMP configuration records (MANDATORY)"
+      - "Maintain traceability to change requests (MANDATORY)"
+      - "Record regression test results per 9.2.4.10(d)"
+      - "Record safety impact analysis per 9.2.4.19"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 15
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.10"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.10"
+        technique_id: "D.58"
+        recommendation: "M"
+    additional_requirements:
+      - "Maintain error reporting records per 9.2.4.6(a) (MANDATORY)"
+      - "Maintain error logs with root cause analysis per 9.2.4.6(a) (MANDATORY)"
+      - "Maintain maintenance activity records per 9.2.4.6(a) (MANDATORY)"
+      - "Maintain change authorization records per 9.2.4.6(a) (MANDATORY)"
+      - "Record impact analysis results per Table A.10 (MANDATORY)"
+      - "Link to SCMP configuration records (MANDATORY)"
+      - "Maintain traceability to change requests (MANDATORY)"
+      - "Record regression test results per 9.2.4.10(d) (MANDATORY)"
+      - "Record safety impact analysis per 9.2.4.19 (MANDATORY)"
+      - "Maintain cumulative change impact analysis per 9.2.4.19"
+      - "Record independent verification results"
+      - "Record independent validation results"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      cyclomatic_complexity_max: 10
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.10"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.10"
+        technique_id: "D.58"
+        recommendation: "M"
+    additional_requirements:
+      - "All SIL 3 requirements apply"
+      - "Maintain error reporting records per 9.2.4.6(a) (MANDATORY)"
+      - "Maintain error logs with root cause analysis per 9.2.4.6(a) (MANDATORY)"
+      - "Maintain maintenance activity records per 9.2.4.6(a) (MANDATORY)"
+      - "Maintain change authorization records per 9.2.4.6(a) (MANDATORY)"
+      - "Record impact analysis results per Table A.10 (MANDATORY)"
+      - "Link to SCMP configuration records (MANDATORY)"
+      - "Maintain traceability to change requests (MANDATORY)"
+      - "Record regression test results per 9.2.4.10(d) (MANDATORY)"
+      - "Record safety impact analysis per 9.2.4.19 (MANDATORY)"
+      - "Maintain cumulative change impact analysis per 9.2.4.19 (MANDATORY)"
+      - "Record independent verification results (MANDATORY)"
+      - "Record independent validation results (MANDATORY)"
+      - "Record independent assessment results (MANDATORY)"
+      - "Digital signatures for all change authorizations"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      test_coverage_mcdc: 100
+      cyclomatic_complexity_max: 10
+
+# ===== Required Content Sections =====
+required_content:
+  - section: "1. Error Reporting Records"
+    description: "Error reports from operation, customer feedback, field failures"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "2. Error Logs"
+    description: "Error log entries with timestamps, severity, root cause analysis"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "3. Maintenance Activity Records"
+    description: "Maintenance activities performed: date, type, personnel, hours"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "4. Change Authorization Records"
+    description: "Change requests with authorization, approver, date, justification"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "5. Impact Analysis Records"
+    description: "Impact analysis results for each change per Table A.10"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "6. Traceability Records"
+    description: "Traceability links: error → change request → code change → test → release"
+    mandatory_for: ["SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "7. Regression Test Records"
+    description: "Regression test results for each maintenance change per 9.2.4.10(d)"
+    mandatory_for: ["SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "8. Safety Impact Analysis Records"
+    description: "Safety impact analysis for each change per 9.2.4.19"
+    mandatory_for: ["SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "9. Cumulative Change Impact Records"
+    description: "Cumulative impact analysis of multiple changes per 9.2.4.19"
+    mandatory_for: ["SIL_3", "SIL_4"]
+  
+  - section: "10. Verification and Validation Records"
+    description: "Independent V&V records for maintenance changes"
+    mandatory_for: ["SIL_3", "SIL_4"]
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "error-report-database"
+    description: "Database of all error reports from operation, customers, field"
+    mandatory_sil: 0
+    source: "Operations team, customer support, field service"
+    format: "Database (SQL/CSV export)"
+    storage_path: "maintenance/error-reports/"
+    automation_level: "automatic"
+    collect_on_agent_action: "error-reported"
+    verification_criteria:
+      - "Each error report has unique ID"
+      - "Each error report has timestamp, severity, description"
+      - "Each error report linked to software version"
+      - "Root cause analysis performed (SIL 1+)"
+  
+  - evidence_id: "error-log-files"
+    description: "Error log files from deployed software systems"
+    mandatory_sil: 0
+    source: "Deployed software systems, log aggregation tools"
+    format: "Log files (text/JSON)"
+    storage_path: "maintenance/error-logs/"
+    automation_level: "automatic"
+    collect_on_agent_action: "error-logged"
+    verification_criteria:
+      - "Error logs timestamped"
+      - "Error logs include severity level"
+      - "Error logs include stack trace or context"
+      - "Error logs aggregated and analyzed (SIL 1+)"
+  
+  - evidence_id: "maintenance-activity-log"
+    description: "Log of all maintenance activities performed"
+    mandatory_sil: 0
+    source: "CM agent maintenance tracking"
+    format: "CSV/Markdown"
+    storage_path: "maintenance/activity-log.csv"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "maintenance-performed"
+    verification_criteria:
+      - "Each activity has date, type, personnel"
+      - "Each activity linked to change request"
+      - "Hours spent recorded"
+      - "Outcome recorded (success/failure)"
+  
+  - evidence_id: "change-authorization-records"
+    description: "Records of change authorizations from CCB or authority"
+    mandatory_sil: 0
+    source: "CCB meeting minutes, CM agent change tracking"
+    format: "CSV/Markdown"
+    storage_path: "maintenance/change-authorizations.csv"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "change-authorized"
+    verification_criteria:
+      - "Each authorization has unique ID"
+      - "Each authorization linked to change request"
+      - "Approver and date recorded"
+      - "Justification recorded"
+      - "Digital signature (SIL 4)"
+  
+  - evidence_id: "impact-analysis-records"
+    description: "Impact analysis results for each change per Table A.10"
+    mandatory_sil: 1
+    source: "CM agent + SAF agent impact analysis"
+    format: "Markdown/PDF"
+    storage_path: "maintenance/impact-analysis/"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "impact-analysis-complete"
+    verification_criteria:
+      - "Impact analysis performed for each change (SIL 1+ HR, SIL 3+ M)"
+      - "Safety impact assessed (SIL 2+)"
+      - "Cumulative impact assessed (SIL 3+)"
+      - "Mitigation actions identified"
+  
+  - evidence_id: "traceability-records"
+    description: "Traceability matrix for maintenance changes"
+    mandatory_sil: 2
+    source: "CM agent traceability tracking"
+    format: "CSV"
+    storage_path: "maintenance/traceability.csv"
+    automation_level: "automatic"
+    collect_on_agent_action: "change-deployed"
+    verification_criteria:
+      - "Error → Change Request traceable"
+      - "Change Request → Code Change traceable"
+      - "Code Change → Test traceable"
+      - "Test → Release traceable"
+      - "100% traceability (SIL 3+)"
+  
+  - evidence_id: "regression-test-records"
+    description: "Regression test results for each maintenance change per 9.2.4.10(d)"
+    mandatory_sil: 2
+    source: "TST agent regression testing"
+    format: "XML/JSON (test results)"
+    storage_path: "maintenance/regression-tests/"
+    automation_level: "automatic"
+    collect_on_agent_action: "regression-test-complete"
+    verification_criteria:
+      - "Regression tests executed for each change"
+      - "All tests pass (SIL 2+)"
+      - "Coverage maintained (SIL 3+ statement/branch/condition 100%)"
+      - "Test results stored with change ID"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-041-SMP"
+    reason: "Software Maintenance Plan defines maintenance procedures and record-keeping requirements"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-003-SCMP"
+    reason: "SCMP defines configuration management procedures that maintenance records must follow"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-042-CHANGE-RECORDS"
+    reason: "Software Change Records provide input for maintenance record tracking"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-044-SMV"
+    reason: "Software Maintenance Verification Report verifies maintenance records completeness"
+  
+  - deliverable_id: "DOC-041-SMP"
+    reason: "Maintenance records inform updates to Software Maintenance Plan (feedback loop)"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All error reports recorded per 9.2.4.6(a)"
+    - "All error logs maintained per 9.2.4.6(a)"
+    - "All maintenance activities recorded per 9.2.4.6(a)"
+    - "All change authorizations recorded per 9.2.4.6(a)"
+    - "Impact analysis recorded for each change (SIL 1+ HR, SIL 3+ M)"
+    - "Traceability complete (SIL 2+ HR, SIL 3+ M)"
+    - "Regression test results recorded (SIL 2+)"
+  
+  correctness:
+    - "Error reports have unique IDs and timestamps"
+    - "Error logs include severity and context"
+    - "Maintenance activities link to change requests"
+    - "Change authorizations have approver and justification"
+    - "Impact analysis follows Table A.10 techniques"
+    - "Safety impact assessed per 9.2.4.19 (SIL 2+)"
+  
+  consistency:
+    - "Record format consistent across all maintenance activities"
+    - "IDs consistent between error reports, change requests, code changes"
+    - "Traceability links valid (no broken references)"
+    - "Change authorization IDs consistent with CCB records"
+  
+  traceability:
+    - "Error reports traceable to change requests"
+    - "Change requests traceable to code changes"
+    - "Code changes traceable to tests"
+    - "Tests traceable to releases"
+    - "100% traceability for SIL 3+"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_required: false
+  baseline_timing: "N/A (continuous maintenance records)"
+  change_control: "Maintenance records added continuously, no CCB required for record addition"
+  version_control: "Git repository under maintenance/"
+  review_frequency: "Quarterly review of maintenance record completeness by QUA"
+  
+  update_triggers:
+    - "New error reported"
+    - "Maintenance activity performed"
+    - "Change authorized by CCB"
+    - "Impact analysis completed"
+    - "Regression test completed"
+    - "Software release deployed"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "9.2"
+    title: "Software Maintenance"
+    description: "Primary section for software maintenance"
+  
+  - section: "9.2.4.6"
+    title: "Software Maintenance Procedures"
+    description: "Mandatory procedures including maintenance records (a)"
+  
+  - section: "9.2.4.6(a)"
+    title: "Control of Error Reporting, Error Logs, Maintenance Records"
+    description: "Primary requirement for maintenance records"
+  
+  - section: "9.2.4.10(d)"
+    title: "Regression Testing"
+    description: "Regression testing required for maintenance changes"
+  
+  - section: "9.2.4.19"
+    title: "Safety Impact Analysis"
+    description: "Safety impact analysis required for SIL 2+ maintenance"
+  
+  - section: "Table A.10"
+    title: "Maintenance Techniques and Measures"
+    description: "Techniques for maintenance (Configuration Management MANDATORY all SILs)"
+
+# ===== Notes =====
+notes: |
+  Software Maintenance Records are MANDATORY for ALL SIL levels per EN 50128 Section 9.2.4.6(a).
+  Records include: error reporting, error logs, maintenance activity records, change authorization records.
+  Configuration Management is MANDATORY for all SIL levels (Table A.10).
+  Impact Analysis is HIGHLY RECOMMENDED for SIL 1-2, MANDATORY for SIL 3-4 (Table A.10).
+  Traceability is HIGHLY RECOMMENDED for SIL 2, MANDATORY for SIL 3-4 (Table A.10).
+  Regression testing records MANDATORY for SIL 2+ per Section 9.2.4.10(d).
+  Safety impact analysis records MANDATORY for SIL 2+ per Section 9.2.4.19.
+  Maintenance records are continuous (not baselined), reviewed quarterly by QUA.
+  Maintenance records feed into Software Maintenance Verification Report (DOC-044).
+
+tags:
+  - "maintenance"
+  - "continuous-deliverable"
+  - "configuration-management"
+  - "traceability"

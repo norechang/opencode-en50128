@@ -1,0 +1,372 @@
+# Application Requirements Specification
+# EN 50128 Deliverable #28 - Section 8.4.2
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-028-APP-REQ-SPEC"
+number: 28
+name: "Application Requirements Specification"
+abbreviation: "App Req Spec"
+
+# ===== Lifecycle Context =====
+phase: "application"
+standard_section: "8.4.2"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "REQ"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-application/templates/Application-Requirements-Specification-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: false
+    techniques: []
+    additional_requirements: []
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.2"
+        technique_id: "D.52"
+        recommendation: "R"
+      - technique_name: "Decision Tables"
+        table_reference: "A.2"
+        technique_id: "D.13"
+        recommendation: "R"
+    additional_requirements:
+      - "Requirements specific to installation (track layout, signal locations, speed limits)"
+      - "Reference to application conditions of generic software"
+      - "Reference to application tools conditions"
+      - "Specify requirements for application data and algorithms"
+      - "Each requirement has unique ID"
+      - "Requirements must be testable"
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.2"
+        technique_id: "D.52"
+        recommendation: "R"
+      - technique_name: "Modelling"
+        table_reference: "A.2"
+        technique_id: "A.17"
+        recommendation: "R"
+      - technique_name: "Decision Tables"
+        table_reference: "A.2"
+        technique_id: "D.13"
+        recommendation: "R"
+    additional_requirements:
+      - "Requirements specific to installation (track layout, signal locations, speed limits)"
+      - "Reference to application conditions of generic software"
+      - "Reference to application tools conditions"
+      - "Specify requirements for application data and algorithms"
+      - "Each requirement has unique ID"
+      - "Requirements must be testable"
+      - "Traceability to generic software requirements"
+      - "Traceability to application conditions"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 15
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Formal Methods"
+        table_reference: "A.2"
+        technique_id: "D.28"
+        recommendation: "HR"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.2"
+        technique_id: "D.52"
+        recommendation: "HR"
+      - technique_name: "Modelling"
+        table_reference: "A.2"
+        technique_id: "A.17"
+        recommendation: "HR"
+      - technique_name: "Decision Tables"
+        table_reference: "A.2"
+        technique_id: "D.13"
+        recommendation: "HR"
+    additional_requirements:
+      - "Requirements specific to installation (track layout, signal locations, speed limits)"
+      - "Reference to application conditions of generic software (MANDATORY)"
+      - "Reference to application tools conditions (MANDATORY)"
+      - "Specify requirements for application data and algorithms (MANDATORY)"
+      - "Each requirement has unique ID (MANDATORY)"
+      - "Requirements must be testable (MANDATORY)"
+      - "100% traceability to generic software requirements (MANDATORY)"
+      - "100% traceability to application conditions (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Internal consistency verification (MANDATORY)"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      cyclomatic_complexity_max: 10
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Formal Methods"
+        table_reference: "A.2"
+        technique_id: "D.28"
+        recommendation: "HR"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.2"
+        technique_id: "D.52"
+        recommendation: "HR"
+      - technique_name: "Modelling"
+        table_reference: "A.2"
+        technique_id: "A.17"
+        recommendation: "HR"
+      - technique_name: "Decision Tables"
+        table_reference: "A.2"
+        technique_id: "D.13"
+        recommendation: "HR"
+    additional_requirements:
+      - "Requirements specific to installation (track layout, signal locations, speed limits)"
+      - "Reference to application conditions of generic software (MANDATORY)"
+      - "Reference to application tools conditions (MANDATORY)"
+      - "Specify requirements for application data and algorithms (MANDATORY)"
+      - "Each requirement has unique ID (MANDATORY)"
+      - "Requirements must be testable (MANDATORY)"
+      - "100% traceability to generic software requirements (MANDATORY)"
+      - "100% traceability to application conditions (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Internal consistency verification (MANDATORY)"
+      - "Formal verification highly recommended"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      test_coverage_mcdc: 100
+      cyclomatic_complexity_max: 10
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "app-req-traceability-matrix"
+    description: "Traceability matrix linking application requirements to generic software requirements and application conditions"
+    mandatory_sil: 2
+    source: "REQ agent"
+    format: "Markdown table or CSV"
+    storage_path: "docs/application/requirements/traceability-matrix.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/req create-app-traceability"
+    verification_criteria:
+      - "Every application requirement traced to generic software requirement or application condition"
+      - "No orphaned application requirements"
+      - "Traceability bidirectional (forward and backward)"
+
+  - evidence_id: "app-req-specification-document"
+    description: "Complete Application Requirements Specification document per EN 50128 8.4.2"
+    mandatory_sil: 1
+    source: "REQ agent"
+    format: "Markdown with YAML frontmatter"
+    storage_path: "docs/application/requirements/Application-Requirements-Specification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/req create-app-requirements"
+    verification_criteria:
+      - "Installation-specific requirements present (track layout, signal locations, speed limits)"
+      - "Reference to generic software application conditions"
+      - "Reference to application tools conditions"
+      - "Application data and algorithms requirements specified"
+      - "All requirements have unique IDs"
+      - "All requirements are testable"
+
+  - evidence_id: "app-req-installation-data"
+    description: "Installation-specific data (track layout, signal locations, speed limits, etc.)"
+    mandatory_sil: 1
+    source: "REQ agent from customer input"
+    format: "YAML or CSV"
+    storage_path: "docs/application/requirements/installation-data.yaml"
+    automation_level: "manual"
+    collect_on_agent_action: "/req capture-installation-data"
+    verification_criteria:
+      - "All installation-specific parameters documented"
+      - "Data format validated against generic software application conditions"
+      - "Completeness verified against application requirements"
+
+  - evidence_id: "app-req-consistency-check"
+    description: "Internal consistency verification of Application Requirements Specification"
+    mandatory_sil: 2
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/application/verification/app-req-consistency-check.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver verify-app-requirements"
+    verification_criteria:
+      - "No conflicting requirements"
+      - "All references valid"
+      - "Terminology consistent with generic software"
+      - "Data types compatible with generic software interfaces"
+
+  - evidence_id: "app-req-readability-check"
+    description: "Readability verification per EN 50128 5.3.2.7-5.3.2.10"
+    mandatory_sil: 3
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/application/verification/app-req-readability-check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-app-req-readability"
+    verification_criteria:
+      - "Clear and unambiguous language"
+      - "Consistent terminology"
+      - "Proper document structure"
+      - "Adequate detail level"
+
+  - evidence_id: "app-req-review-records"
+    description: "Review records from VER and VAL checks"
+    mandatory_sil: 1
+    source: "VER and VAL agents"
+    format: "Review meeting minutes (Markdown)"
+    storage_path: "docs/application/reviews/app-req-review-records.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver review, /val review"
+    verification_criteria:
+      - "All review findings documented"
+      - "Resolution status tracked"
+      - "Sign-offs from VER and VAL"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-006-SRS"
+    reason: "Application requirements must be compatible with generic software requirements"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-009-SAS"
+    reason: "Application requirements must reference generic software application conditions"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-029-APP-PREP-PLAN"
+    reason: "Application development process defined in Application Preparation Plan"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-031-APP-ARCH-DESIGN"
+    reason: "Application architecture must realize application requirements"
+  
+  - deliverable_id: "DOC-030-APP-TEST-SPEC"
+    reason: "Application tests verify application requirements"
+  
+  - deliverable_id: "DOC-032-APP-PREP-VER"
+    reason: "Verification report verifies application requirements specification"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All installation-specific requirements documented (track layout, signals, speed limits, etc.)"
+    - "All application data requirements specified"
+    - "All application algorithm requirements specified"
+    - "Reference to generic software application conditions complete"
+    - "Reference to application tools conditions complete"
+    - "All SIL-appropriate techniques applied per Table A.2"
+  
+  correctness:
+    - "Requirements compatible with generic software capabilities"
+    - "Requirements compatible with application tools capabilities"
+    - "Data types compatible with generic software interfaces"
+    - "Installation data accurate and validated"
+    - "All requirements testable"
+  
+  consistency:
+    - "No conflicting requirements"
+    - "Terminology consistent with generic software"
+    - "Terminology consistent with application tools"
+    - "All cross-references valid"
+    - "Internal consistency verified per 8.4.2.5(b)"
+  
+  traceability:
+    - "Every application requirement has unique ID"
+    - "Traceability to generic software requirements (SIL 2+)"
+    - "Traceability to application conditions (SIL 2+)"
+    - "100% traceability for SIL 3+ (MANDATORY)"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Application Requirements Baseline"
+  baseline_trigger: "After VER and VAL approval"
+  change_control: "All changes via CCB, impact assessment on application data/algorithms"
+  versioning: "Semantic versioning (MAJOR.MINOR.PATCH)"
+  storage_location: "config/baselines/application-requirements/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "8.4.2"
+    title: "Application Requirements Specification"
+    relevance: "Primary section defining Application Requirements Specification"
+  - section: "8.4.2.1"
+    title: "Application Requirements Specification - Responsibility"
+    relevance: "Written by Requirements Manager (REQ)"
+  - section: "8.4.2.2"
+    title: "Installation-specific requirements"
+    relevance: "Requirements for specific installation (track layout, signal locations, speed limits)"
+  - section: "8.4.2.3"
+    title: "Application data and algorithms requirements"
+    relevance: "Requirements for application data and algorithms processed by generic software"
+  - section: "8.4.2.5"
+    title: "Application Requirements Verification"
+    relevance: "Verification of readability, traceability, and internal consistency"
+  - section: "5.3.2.7-5.3.2.10"
+    title: "Readability requirements"
+    relevance: "General requirements for readability applicable to application requirements"
+  - section: "6.5.4.14-6.5.4.17"
+    title: "Traceability requirements"
+    relevance: "General requirements for traceability applicable to application requirements"
+  - section: "Table A.2"
+    title: "Software Requirements Specification techniques"
+    relevance: "Applicable techniques (Structured Methodology, Formal Methods, Modelling, Decision Tables)"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Application Requirements Specification is deliverable #28, written by REQ, checked by VER and VAL"
+
+# ===== Notes =====
+notes: |
+  **Application Requirements Specification (Deliverable #28)**
+  
+  This deliverable is specific to **systems configured by application data/algorithms** (EN 50128 Section 8).
+  It is NOT required for generic software-only systems.
+  
+  **Purpose**: Define requirements for a specific installation using approved generic software.
+  Typical examples: interlocking system configured for specific railway station, signalling system
+  customized for specific track layout.
+  
+  **Key Content** (EN 50128 8.4.2.2-8.4.2.3):
+  1. Installation-specific requirements (track layout, signal locations, speed limits)
+  2. Reference to application conditions of generic software
+  3. Reference to application tools conditions
+  4. Standards with which application shall comply (e.g., signalling principles)
+  5. Requirements for application data and algorithms processed by generic software
+  
+  **Difference from Generic Software Requirements (DOC-006-SRS)**:
+  - DOC-006 (SRS): Requirements for the **generic software** (reusable across installations)
+  - DOC-028 (App Req Spec): Requirements for a **specific installation** using the generic software
+  
+  **Verification Requirements** (EN 50128 8.4.2.5):
+  - Readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+  - Traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+  - Internal consistency (MANDATORY SIL 3+)
+  - Results recorded in Application Data/Algorithms Verification Report (DOC-035)
+  
+  **REQ Agent Responsibility**:
+  - Capture installation-specific requirements from customer
+  - Reference generic software application conditions (from DOC-009-SAS)
+  - Reference application tools conditions
+  - Create traceability to generic software requirements
+  - Ensure all requirements testable and have unique IDs
+  
+  **VER Agent Responsibility**:
+  - Verify readability (SIL 3+)
+  - Verify traceability (SIL 2+, MANDATORY SIL 3+)
+  - Verify internal consistency (SIL 2+, MANDATORY SIL 3+)
+  - Verify compatibility with generic software capabilities
+  - Record results in DOC-032 (Application Preparation Verification Report)
+  
+  **VAL Agent Responsibility**:
+  - Validate application requirements against customer needs
+  - Validate installation data accuracy
+  - Validate application requirements realizable with generic software

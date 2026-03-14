@@ -1,0 +1,60 @@
+{
+  "name": "software_requirement_to_architecture_component",
+  "source_type": "software_requirement",
+  "target_type": "architecture_component",
+  "project": "UnknownProject",
+  "links": [
+    {
+      "source_id": "SW-REQ-001",
+      "source_type": "software_requirement",
+      "target_id": "ARCH-COMP-001",
+      "target_type": "architecture_component",
+      "link_type": "allocated_to",
+      "rationale": "Test requirement traceability",
+      "verified": false,
+      "verified_by": "",
+      "verified_date": "",
+      "confidence": "high",
+      "source_document": "Test Document",
+      "created_date": "2026-03-13T22:42:44.097093",
+      "modified_date": "2026-03-13T22:42:44.097093",
+      "version": "1.0"
+    },
+    {
+      "source_id": "SW-REQ-002",
+      "source_type": "software_requirement",
+      "target_id": "ARCH-COMP-001",
+      "target_type": "architecture_component",
+      "link_type": "allocated_to",
+      "rationale": "Another test link",
+      "verified": false,
+      "verified_by": "",
+      "verified_date": "",
+      "confidence": "high",
+      "source_document": "Test Document",
+      "created_date": "2026-03-13T22:42:44.097109",
+      "modified_date": "2026-03-13T22:42:44.097109",
+      "version": "1.0"
+    },
+    {
+      "source_id": "SW-REQ-003",
+      "source_type": "software_requirement",
+      "target_id": "ARCH-COMP-002",
+      "target_type": "architecture_component",
+      "link_type": "allocated_to",
+      "rationale": "Third test link",
+      "verified": true,
+      "verified_by": "VER",
+      "verified_date": "2026-03-13",
+      "confidence": "high",
+      "source_document": "Test Document",
+      "created_date": "2026-03-13T22:42:44.097115",
+      "modified_date": "2026-03-13T22:42:44.097115",
+      "version": "1.0"
+    }
+  ],
+  "coverage": 0.0,
+  "version": "1.0",
+  "created_date": "2026-03-13T22:42:44.097125",
+  "modified_date": "2026-03-13T22:42:44.097125"
+}

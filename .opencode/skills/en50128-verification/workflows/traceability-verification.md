@@ -111,13 +111,16 @@ void test_calculate_speed_valid(void) {
 ### Required Tools
 
 ```bash
-# Python traceability tools
-python3 tools/traceability/extract_traces.py --help
-python3 tools/traceability/check_traceability.py --help
-python3 tools/traceability/generate_matrix.py --help
+# Unified workspace CLI with traceability manager
+workspace.py trace --help
+workspace.py trace extract --help
+workspace.py trace validate --help
+workspace.py trace create --help
+workspace.py trace check-gaps --help
+workspace.py trace query --help
+workspace.py trace report --help
 
-# Install dependencies
-pip3 install pyyaml jinja2 graphviz
+# Ensure workspace.py is in PATH or use full path: tools/workspace.py
 ```
 
 ---
@@ -127,51 +130,68 @@ pip3 install pyyaml jinja2 graphviz
 ### 1.1 Extract Requirement IDs from SRS
 
 ```bash
-# Extract all requirement IDs from SRS
-python3 tools/traceability/extract_traces.py \
-    --input DOC-SRS-*.md \
-    --type requirements \
-    --output traces/requirements.yaml
+# Extract all requirement traceability links from SRS
+workspace.py trace extract \
+    --document DOC-SRS-*.md \
+    --type requirements_to_design \
+    --merge
 
-# Expected format:
-# - REQ-FUNC-001: Train speed calculation algorithm
-# - REQ-FUNC-002: Emergency brake activation
-# - REQ-SAF-001: Safe state entry within 100ms
-# - ...
+# Or extract to specific matrix file
+workspace.py trace extract \
+    --document DOC-SRS-*.md \
+    --type requirements_to_design \
+    --output evidence/traceability/requirements_to_design.csv
+
+# Result: Traceability links stored in CSV format
+# Can query with: workspace.py trace query --matrix requirements_to_design
 ```
 
 ### 1.2 Extract Design Traces from SAS/SDS
 
 ```bash
-# Extract design elements with requirement traces
-python3 tools/traceability/extract_traces.py \
-    --input DOC-SAS-*.md DOC-SDS-*.md \
-    --type design \
-    --output traces/design.yaml
+# Extract design-to-architecture traceability from architecture documents
+workspace.py trace extract \
+    --document DOC-SAS-*.md \
+    --type architecture_to_design \
+    --merge
 
-# Expected format:
-# - DES-ARCH-003:
-#     description: Speed calculation module
-#     traces: [REQ-FUNC-001]
-# - DES-COMP-015:
-#     description: calculate_speed() function
-#     traces: [REQ-FUNC-001, DES-ARCH-003]
+# Extract design-to-implementation traceability from design documents
+workspace.py trace extract \
+    --document DOC-SDS-*.md \
+    --type design_to_implementation \
+    --merge
+
+# Query design traces
+workspace.py trace query \
+    --source ARCH-COMP-003 \
+    --direction forward \
+    --matrix architecture_to_design
 ```
 
 ### 1.3 Check Requirements Coverage
 
 ```bash
-# Check that all requirements are traced to design
-python3 tools/traceability/check_traceability.py \
-    --source traces/requirements.yaml \
-    --target traces/design.yaml \
-    --direction forward \
-    --output reports/traceability/req-to-design.txt
+# Validate requirements-to-design traceability completeness
+workspace.py trace validate \
+    --phase design \
+    --sil 3
+
+# Check specific matrix for gaps
+workspace.py trace check-gaps \
+    --phase design \
+    --sil 3
+
+# Generate detailed validation report
+workspace.py trace report \
+    --from requirements \
+    --to design \
+    --format markdown \
+    --output reports/traceability/req-to-design-report.md
 
 # Expected output:
 # Requirements traced to design: 48/50 (96%)
-# Orphan requirements (no design):
-#   - REQ-FUNC-042: Data logging (not yet designed)
+# Missing traces:
+#   - REQ-FUNC-042: Data logging (no design element)
 #   - REQ-PERF-003: Response time < 10ms (missing trace in design)
 ```
 
@@ -188,28 +208,43 @@ python3 tools/traceability/check_traceability.py \
 ### 2.1 Extract Code Traces
 
 ```bash
-# Extract @trace tags from source code
-python3 tools/traceability/extract_traces.py \
-    --input src/*.c include/*.h \
-    --type code \
-    --output traces/code.yaml
+# Extract traceability links from source code @trace tags
+workspace.py trace extract \
+    --document src/*.c \
+    --type implementation_to_tests \
+    --merge
 
-# Expected format:
-# - CODE-FUNC-calculate_speed:
-#     file: src/speed_calc.c
-#     line: 120
-#     traces: [REQ-FUNC-001, DES-ARCH-003, DES-COMP-015]
+# Extract from header files
+workspace.py trace extract \
+    --document include/*.h \
+    --type implementation_to_tests \
+    --merge
+
+# Query code traces
+workspace.py trace query \
+    --source calculate_speed \
+    --matrix implementation_to_tests
 ```
 
 ### 2.2 Check Design Coverage in Code
 
 ```bash
-# Check that all design elements are implemented
-python3 tools/traceability/check_traceability.py \
-    --source traces/design.yaml \
-    --target traces/code.yaml \
-    --direction forward \
-    --output reports/traceability/design-to-code.txt
+# Validate design-to-implementation traceability
+workspace.py trace validate \
+    --phase implementation \
+    --sil 3
+
+# Check for gaps in design-to-implementation
+workspace.py trace check-gaps \
+    --phase implementation \
+    --sil 3
+
+# Generate report
+workspace.py trace report \
+    --from design \
+    --to implementation \
+    --format markdown \
+    --output reports/traceability/design-to-code-report.md
 
 # Expected output:
 # Design elements implemented: 45/45 (100%) ✓
@@ -225,28 +260,38 @@ python3 tools/traceability/check_traceability.py \
 ### 3.1 Extract Test Traces
 
 ```bash
-# Extract @trace tags from test code
-python3 tools/traceability/extract_traces.py \
-    --input tests/*.c \
-    --type tests \
-    --output traces/tests.yaml
+# Extract traceability links from test code @trace tags
+workspace.py trace extract \
+    --document tests/*.c \
+    --type tests_to_requirements \
+    --merge
 
-# Expected format:
-# - TEST-test_calculate_speed_valid:
-#     file: tests/test_speed_calc.c
-#     line: 45
-#     traces: [REQ-FUNC-001, CODE-FUNC-calculate_speed]
+# Query test traces
+workspace.py trace query \
+    --source test_calculate_speed_valid \
+    --matrix tests_to_requirements \
+    --direction backward
 ```
 
 ### 3.2 Check Code Coverage by Tests
 
 ```bash
-# Check that all code is tested
-python3 tools/traceability/check_traceability.py \
-    --source traces/code.yaml \
-    --target traces/tests.yaml \
-    --direction forward \
-    --output reports/traceability/code-to-test.txt
+# Validate implementation-to-tests traceability
+workspace.py trace validate \
+    --phase tests \
+    --sil 3
+
+# Check for untested code
+workspace.py trace check-gaps \
+    --phase tests \
+    --sil 3
+
+# Generate coverage report
+workspace.py trace report \
+    --from implementation \
+    --to tests \
+    --format markdown \
+    --output reports/traceability/code-to-test-report.md
 
 # Expected output:
 # Code functions tested: 120/120 (100%) ✓
@@ -262,12 +307,23 @@ python3 tools/traceability/check_traceability.py \
 ### 4.1 Check Backward Traceability from Tests
 
 ```bash
-# Verify all tests trace back to requirements
-python3 tools/traceability/check_traceability.py \
-    --source traces/tests.yaml \
-    --target traces/requirements.yaml \
+# Verify all tests trace back to requirements (backward direction)
+workspace.py trace query \
+    --matrix tests_to_requirements \
+    --direction backward
+
+# Validate backward traceability completeness
+workspace.py trace validate \
+    --phase tests \
     --direction backward \
-    --output reports/traceability/test-to-req.txt
+    --sil 3
+
+# Generate backward traceability report
+workspace.py trace report \
+    --from tests \
+    --to requirements \
+    --format markdown \
+    --output reports/traceability/test-to-req-report.md
 
 # Expected output:
 # Tests traced to requirements: 250/250 (100%) ✓
@@ -284,22 +340,30 @@ python3 tools/traceability/check_traceability.py \
 
 ```bash
 # Generate full traceability matrix (Requirements → Design → Code → Tests)
-python3 tools/traceability/generate_matrix.py \
-    --requirements traces/requirements.yaml \
-    --design traces/design.yaml \
-    --code traces/code.yaml \
-    --tests traces/tests.yaml \
-    --output reports/traceability/traceability-matrix.html \
-    --format html
+workspace.py trace create \
+    --from requirements \
+    --to design,implementation,tests
+
+# Generate HTML report for visualization
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format html \
+    --output reports/traceability/traceability-matrix.html
 
 # Generate CSV for analysis
-python3 tools/traceability/generate_matrix.py \
-    --requirements traces/requirements.yaml \
-    --design traces/design.yaml \
-    --code traces/code.yaml \
-    --tests traces/tests.yaml \
-    --output reports/traceability/traceability-matrix.csv \
-    --format csv
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format csv \
+    --output reports/traceability/traceability-matrix.csv
+
+# Generate Markdown report
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format markdown \
+    --output reports/traceability/traceability-matrix.md
 ```
 
 ### 5.2 Review Traceability Matrix
@@ -326,13 +390,24 @@ xdg-open reports/traceability/traceability-matrix.html
 
 ```bash
 # Find requirements with no design/code/tests
-python3 tools/traceability/find_gaps.py \
-    --requirements traces/requirements.yaml \
-    --design traces/design.yaml \
-    --code traces/code.yaml \
-    --tests traces/tests.yaml \
-    --gap-type orphan-requirements \
-    --output reports/traceability/orphan-requirements.txt
+workspace.py trace check-gaps \
+    --phase design \
+    --sil 3
+
+workspace.py trace check-gaps \
+    --phase implementation \
+    --sil 3
+
+workspace.py trace check-gaps \
+    --phase tests \
+    --sil 3
+
+# Generate comprehensive gap report
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format markdown \
+    --output reports/traceability/orphan-requirements.md
 
 # Expected: 0 orphan requirements for SIL 3-4
 ```
@@ -341,11 +416,22 @@ python3 tools/traceability/find_gaps.py \
 
 ```bash
 # Find code with no requirement trace (gold plating)
-python3 tools/traceability/find_gaps.py \
-    --requirements traces/requirements.yaml \
-    --code traces/code.yaml \
-    --gap-type orphan-code \
-    --output reports/traceability/orphan-code.txt
+workspace.py trace query \
+    --matrix implementation_to_tests \
+    --direction backward
+
+# Check for untraced implementation
+workspace.py trace check-gaps \
+    --phase implementation \
+    --direction backward \
+    --sil 3
+
+# Generate orphan code report
+workspace.py trace report \
+    --from implementation \
+    --to requirements \
+    --format markdown \
+    --output reports/traceability/orphan-code.md
 
 # Expected: 0 orphan code (except utilities with justification)
 ```
@@ -390,14 +476,26 @@ wc -l reports/traceability/safety-requirements.txt
 ### 7.2 Verify Safety Traceability Completeness
 
 ```bash
-# Check that ALL safety requirements are fully traced
-python3 tools/traceability/check_safety_traceability.py \
-    --requirements traces/requirements.yaml \
-    --design traces/design.yaml \
-    --code traces/code.yaml \
-    --tests traces/tests.yaml \
-    --safety-only \
-    --output reports/traceability/safety-traceability-report.txt
+# Check that ALL safety requirements (REQ-SAF-*) are fully traced
+# Query safety requirements specifically
+workspace.py trace query \
+    --source "REQ-SAF-*" \
+    --direction forward \
+    --matrix requirements_to_design
+
+# Validate safety traceability
+workspace.py trace validate \
+    --phase design,implementation,tests \
+    --sil 3 \
+    --safety-only
+
+# Generate safety traceability report
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format markdown \
+    --filter "REQ-SAF-*" \
+    --output reports/traceability/safety-traceability-report.md
 
 # Expected output:
 # Safety Requirements: 12
@@ -412,11 +510,19 @@ python3 tools/traceability/check_safety_traceability.py \
 
 ```bash
 # Verify safety requirements have adequate test coverage
-python3 tools/traceability/check_safety_test_coverage.py \
-    --requirements traces/requirements.yaml \
-    --tests traces/tests.yaml \
-    --coverage reports/coverage/coverage_filtered.info \
-    --output reports/traceability/safety-test-coverage.txt
+# Generate comprehensive safety test traceability report
+workspace.py trace report \
+    --from requirements \
+    --to tests \
+    --format markdown \
+    --filter "REQ-SAF-*" \
+    --output reports/traceability/safety-test-coverage.md
+
+# Cross-reference with code coverage data (if available)
+# Note: For detailed coverage metrics (statement/branch/condition),
+# use gcov/lcov tools in conjunction with traceability data
+# Example: lcov --capture --directory . --output-file coverage.info
+#          lcov --extract coverage.info '*/safety/*' --output-file safety_coverage.info
 
 # Expected: 100% statement, branch, condition coverage for safety functions
 ```
@@ -468,8 +574,11 @@ See Appendix A: Full Traceability Matrix (HTML/CSV)
 
 ## 5. Tools Used
 
-- Python traceability scripts (tools/traceability/)
-- Manual review for complex traces
+- **Traceability Manager** (`workspace.py trace`) - Extraction, validation, gap analysis, reporting
+  - Commands: extract, validate, create, check-gaps, query, report, visualize
+  - Storage: CSV (evidence/traceability/*.csv), JSON, Markdown
+  - Version: 1.0.0 (see tools/README_TRACEABILITY.md)
+- Manual review for complex traces and safety-critical validations
 
 ## 6. Overall Assessment
 
@@ -500,70 +609,74 @@ echo ""
 
 # 1. Extract all traces
 echo "1. Extracting traceability information..."
-python3 tools/traceability/extract_traces.py --input DOC-SRS-*.md --type requirements --output traces/requirements.yaml
-python3 tools/traceability/extract_traces.py --input DOC-SAS-*.md DOC-SDS-*.md --type design --output traces/design.yaml
-python3 tools/traceability/extract_traces.py --input src/*.c include/*.h --type code --output traces/code.yaml
-python3 tools/traceability/extract_traces.py --input tests/*.c --type tests --output traces/tests.yaml
+workspace.py trace extract --document DOC-SRS-*.md --type requirements_to_design --merge
+workspace.py trace extract --document DOC-SAS-*.md --type architecture_to_design --merge
+workspace.py trace extract --document DOC-SDS-*.md --type design_to_implementation --merge
+workspace.py trace extract --document src/*.c include/*.h --type implementation_to_tests --merge
+workspace.py trace extract --document tests/*.c --type tests_to_requirements --merge
 echo "✓ Extraction complete"
 echo ""
 
-# 2. Check forward traceability
-echo "2. Checking forward traceability..."
-python3 tools/traceability/check_traceability.py --source traces/requirements.yaml --target traces/design.yaml --direction forward
-python3 tools/traceability/check_traceability.py --source traces/design.yaml --target traces/code.yaml --direction forward
-python3 tools/traceability/check_traceability.py --source traces/code.yaml --target traces/tests.yaml --direction forward
-echo "✓ Forward traceability complete"
+# 2. Validate traceability for each phase
+echo "2. Validating traceability..."
+workspace.py trace validate --phase design --sil 3
+workspace.py trace validate --phase implementation --sil 3
+workspace.py trace validate --phase tests --sil 3
+echo "✓ Validation complete"
 echo ""
 
-# 3. Check backward traceability
-echo "3. Checking backward traceability..."
-python3 tools/traceability/check_traceability.py --source traces/tests.yaml --target traces/requirements.yaml --direction backward
-echo "✓ Backward traceability complete"
+# 3. Check for gaps
+echo "3. Checking for traceability gaps..."
+workspace.py trace check-gaps --phase design --sil 3
+workspace.py trace check-gaps --phase implementation --sil 3
+workspace.py trace check-gaps --phase tests --sil 3
+echo "✓ Gap analysis complete"
 echo ""
 
-# 4. Generate traceability matrix
+# 4. Generate comprehensive traceability matrix
 echo "4. Generating traceability matrix..."
-python3 tools/traceability/generate_matrix.py \
-    --requirements traces/requirements.yaml \
-    --design traces/design.yaml \
-    --code traces/code.yaml \
-    --tests traces/tests.yaml \
-    --output reports/traceability/traceability-matrix.html \
-    --format html
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format html \
+    --output reports/traceability/traceability-matrix.html
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format markdown \
+    --output reports/traceability/traceability-matrix.md
 echo "✓ Matrix generated: reports/traceability/traceability-matrix.html"
 echo ""
 
-# 5. Check for gaps
-echo "5. Checking for traceability gaps..."
-python3 tools/traceability/find_gaps.py \
-    --requirements traces/requirements.yaml \
-    --design traces/design.yaml \
-    --code traces/code.yaml \
-    --tests traces/tests.yaml \
-    --output reports/traceability/gaps-report.txt
-
-if [ -s reports/traceability/gaps-report.txt ]; then
-    echo "✗ Traceability gaps found (see gaps-report.txt)"
-    exit 1
-else
-    echo "✓ No traceability gaps"
-fi
-echo ""
-
-# 6. Safety requirements check
-echo "6. Verifying safety requirements traceability..."
-python3 tools/traceability/check_safety_traceability.py \
-    --requirements traces/requirements.yaml \
-    --design traces/design.yaml \
-    --code traces/code.yaml \
-    --tests traces/tests.yaml \
-    --safety-only \
-    --output reports/traceability/safety-traceability.txt
+# 5. Generate safety-specific report
+echo "5. Verifying safety requirements traceability..."
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format markdown \
+    --filter "REQ-SAF-*" \
+    --output reports/traceability/safety-traceability.md
 echo "✓ Safety traceability verified"
 echo ""
 
+# 6. Visualize traceability
+echo "6. Generating traceability visualization..."
+workspace.py trace visualize \
+    --from requirements \
+    --to verification \
+    --format mermaid \
+    --output reports/traceability/traceability-graph.mmd
+echo "✓ Visualization complete"
+echo ""
+
 echo "===== Traceability Verification COMPLETE ====="
-echo "Overall Status: PASS"
+echo "Overall Status: PASS (verify all reports for detailed status)"
+echo ""
+echo "Generated reports:"
+echo "  - reports/traceability/traceability-matrix.html"
+echo "  - reports/traceability/traceability-matrix.md"
+echo "  - reports/traceability/safety-traceability.md"
+echo "  - reports/traceability/traceability-graph.mmd"
 ```
 
 ---

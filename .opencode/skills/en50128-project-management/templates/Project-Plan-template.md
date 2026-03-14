@@ -1,55 +1,45 @@
 # Project Plan
 
-**Document ID:** DOC-PP-YYYY-NNN  
-**Project:** [Project Name]  
-**System/Subsystem:** [System Name]  
-**SIL Level:** [0 | 1 | 2 | 3 | 4]
+**TEMPLATE VERSION**: 2.0  
+**REFERENCE**: EN 50128:2011 Section [X.Y]
 
 ---
 
-## Document Control
+## STANDARD HEADER
 
-| Version | Date | Author | Change Description | Status |
-|---------|------|--------|-------------------|--------|
-| 0.1 | YYYY-MM-DD | [Name] | Initial draft | Draft |
+| Field | Value |
+|-------|-------|
+| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Version** | [X.Y] |
+| **Date** | [YYYY-MM-DD] |
+| **Project** | [Project Name] |
+| **SIL Level** | [0, 1, 2, 3, or 4] |
+| **Author** | [Name], [Role] |
+| **Reviewer** | [Name], [Role] |
+| **Approver** | [Name], [Role] |
+| **Status** | [Draft \| Review \| Approved \| Baseline] |
 
----
+## DOCUMENT CONTROL
 
-## Approvals (SIL-Dependent)
+| Version | Date | Author | Changes | Approved By |
+|---------|------|--------|---------|-------------|
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
 
-| Role | Name | Signature | Date | SIL Requirement |
-|------|------|-----------|------|----------------|
-| **Project Manager** | [Name] | [Signature] | YYYY-MM-DD | All SILs |
-| **Lifecycle Coordinator** | [Name] | [Signature] | YYYY-MM-DD | All SILs |
-| **Software Manager** | [Name] | [Signature] | YYYY-MM-DD | All SILs |
-| **Quality Assurance** | [Name] | [Signature] | YYYY-MM-DD | SIL 1+ |
-| **V&V Manager** | [Name] | [Signature] | YYYY-MM-DD | SIL 3-4 |
-| **Customer/Sponsor** | [Name] | [Signature] | YYYY-MM-DD | All SILs |
+## APPROVALS
 
-**Independence Note (SIL 3-4):**
-- V&V Manager SHALL be independent from Project Manager
-- Validator SHALL NOT report to Project Manager
+**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
+**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
 
----
-
-## Executive Summary
-
-**Project Overview:**
-[Brief description of the project, its objectives, and expected outcomes]
-
-**Key Information:**
-- **SIL Level:** [0 | 1 | 2 | 3 | 4]
-- **Project Start Date:** YYYY-MM-DD
-- **Project End Date:** YYYY-MM-DD
-- **Duration:** [X months/years]
-- **Total Effort:** [X person-months]
-- **Total Budget:** [Currency amount]
-
-**Key Milestones:**
-1. [Milestone 1] - YYYY-MM-DD
-2. [Milestone 2] - YYYY-MM-DD
-3. [Milestone 3] - YYYY-MM-DD
-4. [Milestone 4] - YYYY-MM-DD
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| **Author** | [Name] | | YYYY-MM-DD |
+| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
+| **QA Manager** | [Name] | | YYYY-MM-DD |
+| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
+| **Project Manager** | [Name] | | YYYY-MM-DD |
+| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
 
 ---
 

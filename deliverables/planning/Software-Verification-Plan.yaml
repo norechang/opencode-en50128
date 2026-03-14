@@ -1,0 +1,556 @@
+# Software Verification Plan (SVP) - Deliverable Metadata
+# EN 50128:2011 Section 6.2, Table C.1
+# This file defines the metadata, requirements, evidence, and verification criteria
+# for the Software Verification Plan deliverable.
+
+deliverable_id: "DOC-004-SVP"
+number: 4
+name: "Software Verification Plan"
+abbreviation: "SVP"
+phase: "planning"
+standard_section: "6.2.4"
+written_by: "VER"
+first_check: "NONE"  # No first check for planning documents
+second_check: "VAL"
+template_path: ".opencode/skills/en50128-documentation/templates/Software-Verification-Plan-template.md"
+template_exists: true
+
+# =============================================================================
+# SIL-DEPENDENT REQUIREMENTS
+# =============================================================================
+# Requirements scale by SIL level per EN 50128 Tables A.5, A.13, A.19, A.21
+# Verification is process-independent and applies to all lifecycle phases
+
+sil_requirements:
+  sil_0:
+    mandatory: false  # Verification recommended but not mandatory
+    techniques:
+      - technique_name: "Software Verification"
+        table_reference: "A.5"
+        technique_id: "A.5"
+        recommendation: "R"
+      - technique_name: "Dynamic Analysis and Testing"
+        table_reference: "A.5"
+        technique_id: "A.13"
+        recommendation: "R"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "R"
+    additional_requirements:
+      - "Basic verification activities recommended"
+      - "No specific techniques mandatory"
+      - "No independence requirement"
+      - "Static analysis recommended"
+    evidence_thresholds:
+      min_coverage_statement: "N/A"
+      min_coverage_branch: "N/A"
+      min_coverage_condition: "N/A"
+      min_coverage_mcdc: "N/A"
+      max_cyclomatic_complexity: 20
+      misra_compliance: "recommended"
+      static_analysis_required: false
+      independent_verification: false
+
+  sil_1:
+    mandatory: true  # HR (Highly Recommended) - treat as mandatory
+    techniques:
+      - technique_name: "Dynamic Analysis and Testing"
+        table_reference: "A.5"
+        technique_id: "A.13"
+        recommendation: "HR"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "HR"
+      - technique_name: "Static Analysis"
+        table_reference: "A.5"
+        technique_id: "A.19"
+        recommendation: "HR"
+      - technique_name: "Test Coverage for Code"
+        table_reference: "A.5"
+        technique_id: "A.21"
+        recommendation: "HR"
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.5"
+        technique_id: "A.14"
+        recommendation: "HR"
+    additional_requirements:
+      - "Software Verification Plan HIGHLY RECOMMENDED (HR)"
+      - "Dynamic analysis and testing HIGHLY RECOMMENDED"
+      - "Static analysis HIGHLY RECOMMENDED"
+      - "Traceability HIGHLY RECOMMENDED"
+      - "Test coverage (statement, branch) HIGHLY RECOMMENDED"
+      - "No mandatory independence requirement"
+    evidence_thresholds:
+      min_coverage_statement: "90%"  # HR
+      min_coverage_branch: "85%"  # HR
+      min_coverage_condition: "N/A"
+      min_coverage_mcdc: "N/A"
+      max_cyclomatic_complexity: 15
+      misra_compliance: "highly recommended"
+      static_analysis_required: true  # HR
+      independent_verification: false
+
+  sil_2:
+    mandatory: true  # HR for SVP
+    techniques:
+      - technique_name: "Dynamic Analysis and Testing"
+        table_reference: "A.5"
+        technique_id: "A.13"
+        recommendation: "HR"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "HR"
+      - technique_name: "Static Analysis"
+        table_reference: "A.5"
+        technique_id: "A.19"
+        recommendation: "HR"
+      - technique_name: "Test Coverage for Code"
+        table_reference: "A.5"
+        technique_id: "A.21"
+        recommendation: "HR"
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.5"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Branch Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "M"
+    additional_requirements:
+      - "Software Verification Plan HIGHLY RECOMMENDED (HR)"
+      - "Dynamic analysis and testing HIGHLY RECOMMENDED"
+      - "Static analysis HIGHLY RECOMMENDED"
+      - "Traceability HIGHLY RECOMMENDED"
+      - "Test coverage: Statement (HR), Branch (MANDATORY)"
+      - "MISRA C:2012 compliance MANDATORY (zero mandatory violations)"
+      - "No mandatory independence requirement"
+    evidence_thresholds:
+      min_coverage_statement: "95%"  # HR
+      min_coverage_branch: "100%"  # MANDATORY
+      min_coverage_condition: "N/A"
+      min_coverage_mcdc: "N/A"
+      max_cyclomatic_complexity: 15
+      misra_compliance: "mandatory"
+      static_analysis_required: true  # HR
+      independent_verification: false
+
+  sil_3:
+    mandatory: true  # HR for SVP
+    techniques:
+      - technique_name: "Dynamic Analysis and Testing"
+        table_reference: "A.5"
+        technique_id: "A.13"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Static Analysis"
+        table_reference: "A.5"
+        technique_id: "A.19"
+        recommendation: "M"
+      - technique_name: "Test Coverage for Code"
+        table_reference: "A.5"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.5"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Statement Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "Branch Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "Data Flow Analysis"
+        table_reference: "A.19"
+        technique_id: "A.19"
+        recommendation: "M"
+      - technique_name: "Control Flow Analysis"
+        table_reference: "A.19"
+        technique_id: "A.19"
+        recommendation: "M"
+    additional_requirements:
+      - "Software Verification Plan HIGHLY RECOMMENDED (HR)"
+      - "INDEPENDENT VERIFICATION MANDATORY (VER team separate from DEV team)"
+      - "Dynamic analysis and testing MANDATORY"
+      - "Static analysis MANDATORY (data flow, control flow)"
+      - "Traceability MANDATORY (requirements → design → code → tests)"
+      - "Test coverage: Statement (M), Branch (M), Condition (M)"
+      - "MISRA C:2012 compliance MANDATORY (zero mandatory + required violations)"
+      - "Cyclomatic complexity ≤ 10 MANDATORY"
+      - "Independent Verifier MANDATORY"
+    evidence_thresholds:
+      min_coverage_statement: "100%"  # MANDATORY
+      min_coverage_branch: "100%"  # MANDATORY
+      min_coverage_condition: "100%"  # MANDATORY
+      min_coverage_mcdc: "N/A"
+      max_cyclomatic_complexity: 10  # MANDATORY
+      misra_compliance: "mandatory"
+      static_analysis_required: true  # MANDATORY
+      independent_verification: true  # MANDATORY
+
+  sil_4:
+    mandatory: true  # HR for SVP
+    techniques:
+      - technique_name: "Dynamic Analysis and Testing"
+        table_reference: "A.5"
+        technique_id: "A.13"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Static Analysis"
+        table_reference: "A.5"
+        technique_id: "A.19"
+        recommendation: "M"
+      - technique_name: "Test Coverage for Code"
+        table_reference: "A.5"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.5"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Statement Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "Branch Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "M"
+      - technique_name: "MC/DC Coverage"
+        table_reference: "A.21"
+        technique_id: "A.21"
+        recommendation: "HR"
+      - technique_name: "Data Flow Analysis"
+        table_reference: "A.19"
+        technique_id: "A.19"
+        recommendation: "M"
+      - technique_name: "Control Flow Analysis"
+        table_reference: "A.19"
+        technique_id: "A.19"
+        recommendation: "M"
+      - technique_name: "Formal Proof"
+        table_reference: "A.5"
+        technique_id: "D.29"
+        recommendation: "HR"
+    additional_requirements:
+      - "Software Verification Plan HIGHLY RECOMMENDED (HR)"
+      - "INDEPENDENT VERIFICATION MANDATORY (VER team separate from DEV team)"
+      - "Dynamic analysis and testing MANDATORY"
+      - "Static analysis MANDATORY (data flow, control flow)"
+      - "Traceability MANDATORY (requirements → design → code → tests)"
+      - "Test coverage: Statement (M), Branch (M), Condition (M), MC/DC (HR)"
+      - "MISRA C:2012 compliance MANDATORY (zero mandatory + required violations)"
+      - "Cyclomatic complexity ≤ 10 MANDATORY"
+      - "Independent Verifier MANDATORY"
+      - "Formal proof HIGHLY RECOMMENDED"
+    evidence_thresholds:
+      min_coverage_statement: "100%"  # MANDATORY
+      min_coverage_branch: "100%"  # MANDATORY
+      min_coverage_condition: "100%"  # MANDATORY
+      min_coverage_mcdc: "100%"  # HR (treat as M for SIL 4)
+      max_cyclomatic_complexity: 10  # MANDATORY
+      misra_compliance: "mandatory"
+      static_analysis_required: true  # MANDATORY
+      independent_verification: true  # MANDATORY
+
+# =============================================================================
+# EVIDENCE REQUIREMENTS
+# =============================================================================
+# Evidence required to demonstrate SVP completeness and compliance
+
+evidence_requirements:
+  - evidence_id: "svp-verification-strategy"
+    description: "Documented verification strategy covering all lifecycle phases per 6.2.4.3"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "VER"
+    format: "Section in SVP document (markdown)"
+    storage_path: "docs/plans/SVP.md"
+    automation_level: "manual"
+    collect_on_agent_action: "ver-create-svp"
+    verification_criteria:
+      - "Strategy covers all lifecycle phases (requirements, architecture, design, implementation, integration, validation)"
+      - "Strategy defines verification activities per phase"
+      - "Strategy references EN 50128 Table A.5 techniques"
+      - "Strategy addresses SIL-specific requirements"
+
+  - evidence_id: "svp-verification-techniques"
+    description: "Documented verification techniques and tools per 6.2.4.5 (Table A.5)"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "VER"
+    format: "Section in SVP document with technique mapping table"
+    storage_path: "docs/plans/SVP.md"
+    automation_level: "manual"
+    collect_on_agent_action: "ver-create-svp"
+    verification_criteria:
+      - "All mandatory techniques listed for target SIL level"
+      - "Static analysis techniques defined (data flow, control flow, MISRA C)"
+      - "Dynamic analysis techniques defined (unit testing, integration testing)"
+      - "Test coverage techniques defined (statement, branch, condition, MC/DC)"
+      - "Tools identified for each technique (Cppcheck, PC-lint, gcov/lcov)"
+      - "Tool qualification status documented (T1/T2/T3)"
+
+  - evidence_id: "svp-independence-plan"
+    description: "Independence plan for verification activities (SIL 3-4 MANDATORY)"
+    mandatory_sil: 3  # MANDATORY for SIL 3-4
+    source: "VER"
+    format: "Section in SVP document"
+    storage_path: "docs/plans/SVP.md"
+    automation_level: "manual"
+    collect_on_agent_action: "ver-create-svp"
+    verification_criteria:
+      - "Verifier independence from Designer/Implementer/Tester documented"
+      - "Organizational independence demonstrated (separate reporting line)"
+      - "Personnel independence demonstrated (different individuals)"
+      - "Technical independence demonstrated (separate tools/environment)"
+
+  - evidence_id: "svp-traceability-approach"
+    description: "Traceability approach (requirements → design → code → tests)"
+    mandatory_sil: 3  # MANDATORY for SIL 3-4, HR for SIL 1-2
+    source: "VER"
+    format: "Section in SVP document"
+    storage_path: "docs/plans/SVP.md"
+    automation_level: "manual"
+    collect_on_agent_action: "ver-create-svp"
+    verification_criteria:
+      - "Forward traceability defined (requirements → design → code → tests)"
+      - "Backward traceability defined (tests → code → design → requirements)"
+      - "Traceability matrix format defined"
+      - "Traceability tools identified"
+      - "Traceability verification criteria defined"
+
+  - evidence_id: "svp-verification-reporting"
+    description: "Verification reporting structure and format per 6.2.4.8"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "VER"
+    format: "Section in SVP document"
+    storage_path: "docs/plans/SVP.md"
+    automation_level: "manual"
+    collect_on_agent_action: "ver-create-svp"
+    verification_criteria:
+      - "Verification report format defined per 6.2.4.13"
+      - "Evidence collection approach defined"
+      - "Evidence storage location defined"
+      - "Deviation handling process defined"
+      - "Report review and approval process defined"
+
+  - evidence_id: "svp-baseline"
+    description: "Baselined SVP document approved by PM and VAL"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "CM"
+    format: "Baselined markdown file with approvals"
+    storage_path: "docs/plans/SVP.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "cm-baseline-deliverable"
+    verification_criteria:
+      - "Document has version 1.0 or higher"
+      - "Document status is 'Approved' or 'Baseline'"
+      - "Approvals section complete (VER author, QA, PM)"
+      - "Approvals section includes VAL (second check)"
+      - "Independent Verifier approval present (SIL 3-4)"
+      - "Document under configuration control"
+      - "Baseline recorded in SCMP baseline register"
+
+# =============================================================================
+# DEPENDENCIES
+# =============================================================================
+
+depends_on:
+  - deliverable_id: "DOC-001-SQAP"
+    reason: "SQAP defines quality framework; SVP implements verification quality processes"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-003-SCMP"
+    reason: "SCMP defines configuration management for verification artifacts and evidence"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-008-REQ-VER"
+    reason: "SVP defines verification approach; Requirements Verification Report implements it for Phase 2"
+
+  - deliverable_id: "DOC-012-ARCHITECTURE-DESIGN-VER"
+    reason: "SVP defines verification approach; Architecture/Design Verification Report implements it for Phase 3"
+
+  - deliverable_id: "DOC-019-SOURCE-CODE-VER"
+    reason: "SVP defines verification approach; Source Code Verification Report implements it for Phase 5"
+
+  - deliverable_id: "DOC-024-INTEGRATION-VER"
+    reason: "SVP defines verification approach; Integration Verification Report implements it for Phase 6"
+
+  - deliverable_id: "DOC-005-SVAP"
+    reason: "SVP verification techniques inform validation techniques (coordinate V&V activities)"
+
+# =============================================================================
+# VERIFICATION CRITERIA
+# =============================================================================
+
+verification_criteria:
+  completeness:
+    - "All sections of SVP template completed per 6.2.4.3-6.2.4.9"
+    - "Verification strategy covers all lifecycle phases (7.2-7.7)"
+    - "All EN 50128 Table A.5 mandatory techniques addressed for target SIL"
+    - "All verification activities defined with entry/exit criteria"
+    - "All verification roles and responsibilities defined"
+    - "All verification tools identified with qualification status"
+    - "Independence plan complete (SIL 3-4)"
+    - "Traceability approach complete (SIL 3-4 mandatory)"
+
+  correctness:
+    - "Verification techniques appropriate for target SIL level"
+    - "Static analysis techniques align with Table A.19 (data flow, control flow)"
+    - "Dynamic analysis techniques align with Table A.13 (unit testing, integration testing)"
+    - "Test coverage techniques align with Table A.21 (statement, branch, condition, MC/DC)"
+    - "Verification activities align with lifecycle phase outputs"
+    - "Tool selection appropriate for C language and MISRA C verification"
+    - "Independence requirements met per 5.3.5.10 (SIL 3-4)"
+
+  consistency:
+    - "Verification strategy consistent with SQAP quality processes"
+    - "Traceability approach consistent with SCMP traceability requirements"
+    - "Tool usage consistent across all lifecycle phases"
+    - "Verification reporting format consistent per 6.2.4.13"
+    - "Coverage thresholds consistent with SIL requirements"
+    - "Complexity thresholds consistent with SIL requirements"
+
+  traceability:
+    - "Forward traceability: SQAP quality requirements → SVP verification activities"
+    - "Forward traceability: SVP verification techniques → Verification Reports per phase"
+    - "Backward traceability: Verification Reports → SVP verification plan"
+    - "References to EN 50128 Table A.5, A.13, A.19, A.21 present"
+
+# =============================================================================
+# CONFIGURATION MANAGEMENT
+# =============================================================================
+
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After Phase 1 (Planning) completion, before Phase 2 (Requirements) begins"
+  change_control: "All changes to baselined SVP require CCB approval (Change Control Board)"
+  version_control: "docs/plans/SVP.md under Git control, baseline tagged as baseline-svp-v1.0"
+  review_frequency: "Review annually or when lifecycle phase gates fail verification criteria"
+  update_triggers:
+    - "Addition of new verification tools"
+    - "Change in SIL level"
+    - "Change in verification approach or techniques"
+    - "Identification of new verification activities"
+    - "Lessons learned from Verification Reports"
+    - "EN 50128 standard updates"
+    - "Tool qualification status changes"
+
+# =============================================================================
+# EN 50128 REFERENCES
+# =============================================================================
+
+en50128_references:
+  - "Section 6.2: Software Verification"
+  - "Section 6.2.4: Verification Documentation (SVP and Verification Reports)"
+  - "Section 6.2.4.1: Verification documented by SVP and Verification Reports"
+  - "Section 6.2.4.2: SVP written under responsibility of Verifier"
+  - "Section 6.2.4.3: SVP describes activities to ensure proper verification"
+  - "Section 6.2.4.4: SVP may be sub-divided by phase or component"
+  - "Section 6.2.4.5: SVP documents criteria, techniques, and tools per Table A.5"
+  - "Section 6.2.4.6: SVP describes activities to ensure correctness and completeness"
+  - "Section 6.2.4.7: Functional, performance, and safety requirements verification"
+  - "Section 6.2.4.8: Verification results retained per SVP format"
+  - "Section 6.2.4.9: SVP addresses organization, plans, techniques, tools, evidence"
+  - "Section 6.2.4.10-11: SQAP Verification Report for SVP itself"
+  - "Section 6.2.4.12-13: Verification Reports per phase"
+  - "Section 5.3.5: Verifier role and responsibilities"
+  - "Section 5.3.5.10: Verifier independence requirements (SIL 3-4)"
+  - "Table A.5: Verification and Testing techniques by SIL"
+  - "Table A.13: Dynamic Analysis and Testing techniques"
+  - "Table A.19: Static Analysis techniques"
+  - "Table A.21: Test Coverage for Code (statement, branch, condition, MC/DC)"
+  - "Table C.1 (Annex C): Document control summary (SVP mandatory HR for all SIL)"
+
+# =============================================================================
+# NOTES
+# =============================================================================
+
+notes: |
+  CRITICAL INFORMATION:
+  
+  1. **Verification vs. Validation**:
+     - Verification: "Are we building the product right?" (outputs match specifications)
+     - Validation: "Are we building the right product?" (meets user needs)
+     - SVP covers verification; Software Validation Plan (SVaP) covers validation
+  
+  2. **SIL Requirements**:
+     - SIL 0: Verification recommended (R), no mandatory techniques
+     - SIL 1-2: SVP HIGHLY RECOMMENDED (HR), dynamic analysis HR, static analysis HR
+     - SIL 3-4: SVP HIGHLY RECOMMENDED (HR), dynamic analysis MANDATORY (M), static analysis MANDATORY (M)
+     - Independence MANDATORY for SIL 3-4 (Verifier separate from DEV team)
+  
+  3. **EN 50128 Table A.5 Verification Techniques** (minimum required):
+     - Dynamic Analysis and Testing (Table A.13): SIL 3-4 MANDATORY
+     - Static Analysis (Table A.19): SIL 3-4 MANDATORY
+     - Test Coverage for Code (Table A.21): SIL 3-4 MANDATORY
+     - Functional and Black-Box Testing (Table A.14): SIL 3-4 MANDATORY
+     - Traceability (D.58): SIL 3-4 MANDATORY
+  
+  4. **Test Coverage Requirements** (Table A.21):
+     - SIL 0: No mandatory coverage
+     - SIL 1: Statement (HR), Branch (HR)
+     - SIL 2: Statement (HR), Branch (MANDATORY)
+     - SIL 3: Statement (M), Branch (M), Condition (M)
+     - SIL 4: Statement (M), Branch (M), Condition (M), MC/DC (HR - treat as M)
+  
+  5. **Static Analysis Requirements** (Table A.19):
+     - SIL 3-4: Data flow analysis (M), Control flow analysis (M)
+     - Tools: Cppcheck, PC-lint Plus, Clang Static Analyzer
+     - MISRA C:2012 compliance verification MANDATORY for SIL 2+
+  
+  6. **Independence Requirements** (Section 5.3.5.10):
+     - SIL 0-2: No mandatory independence
+     - SIL 3-4: Verifier SHALL NOT be Designer, Implementer, Integrator, or Tester
+     - SIL 3-4: Organizational independence required (separate reporting line)
+  
+  7. **SVP Contents** (Section 6.2.4.9):
+     - Verification organization (roles, responsibilities)
+     - Verification plans per phase (requirements, architecture, design, implementation, integration)
+     - Verification techniques and tools (Table A.5)
+     - Verification criteria and acceptance thresholds
+     - Evidence collection and storage
+     - Verification reporting format (per 6.2.4.13)
+  
+  8. **Tool Qualification**:
+     - T1: No error introduction, inspection sufficient (Cppcheck, gcov)
+     - T2: May introduce errors, tool validation required (compilers)
+     - T3: Safety-critical output, tool qualification required
+     - Tool selection and qualification status must be documented in SVP
+  
+  9. **Verification Reports** (Section 6.2.4.12-13):
+     - One Verification Report per lifecycle phase
+     - Format defined in 6.2.4.13 (phase, activities, results, deviations, conclusion)
+     - Reports implement SVP verification plan per phase
+     - Reports feed evidence to SVP continuous improvement
+  
+  10. **Relationship to Other Plans**:
+      - SQAP: Defines quality framework, SVP implements verification quality processes
+      - SCMP: Defines configuration management for verification artifacts
+      - SVaP: Defines validation (different from verification)
+      - Overall Test Specification: Test plan, SVP defines test verification criteria
+  
+  11. **Agent Workflow**:
+      - VER agent creates SVP using /ver plan command
+      - SVP baselined in Phase 1 (Planning)
+      - VER agent references SVP when creating Verification Reports per phase
+      - VER agent updates SVP based on lessons learned from verification activities
+  
+  12. **Critical Success Factors**:
+      - Early establishment (Phase 1, before requirements)
+      - Independence preserved (SIL 3-4)
+      - Tool selection appropriate for C and MISRA C
+      - Coverage thresholds aligned with SIL level
+      - Traceability approach comprehensive (SIL 3-4)
+      - Verification reporting format standardized per 6.2.4.13

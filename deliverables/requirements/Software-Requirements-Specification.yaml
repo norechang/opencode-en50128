@@ -1,0 +1,369 @@
+# Software Requirements Specification (SRS)
+# EN 50128 Deliverable #6 - Section 7.2
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-006-SRS"
+number: 6
+name: "Software Requirements Specification"
+abbreviation: "SRS"
+
+# ===== Lifecycle Context =====
+phase: "requirements"
+standard_section: "7.2"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "REQ"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-requirements/templates/Software-Requirements-Specification-template.md"
+template_exists: true
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: false
+    techniques: []
+    additional_requirements: []
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.2"
+        technique_id: "D.52"
+        recommendation: "R"
+      - technique_name: "Decision Tables"
+        table_reference: "A.2"
+        technique_id: "D.13"
+        recommendation: "R"
+    additional_requirements:
+      - "Requirements must be testable"
+      - "Each requirement has unique ID"
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.2"
+        technique_id: "D.52"
+        recommendation: "R"
+      - technique_name: "Modelling"
+        table_reference: "A.2"
+        technique_id: "A.17"
+        recommendation: "R"
+      - technique_name: "Decision Tables"
+        table_reference: "A.2"
+        technique_id: "D.13"
+        recommendation: "R"
+    additional_requirements:
+      - "Requirements must be testable"
+      - "Each requirement has unique ID"
+      - "Traceability to system requirements"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 15
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Formal Methods"
+        table_reference: "A.2"
+        technique_id: "D.28"
+        recommendation: "HR"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.2"
+        technique_id: "D.52"
+        recommendation: "HR"
+      - technique_name: "Modelling"
+        table_reference: "A.2"
+        technique_id: "A.17"
+        recommendation: "HR"
+      - technique_name: "Decision Tables"
+        table_reference: "A.2"
+        technique_id: "D.13"
+        recommendation: "HR"
+    additional_requirements:
+      - "Requirements must be testable"
+      - "Each requirement has unique ID"
+      - "100% traceability to system requirements MANDATORY"
+      - "100% traceability from requirements to tests MANDATORY"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      cyclomatic_complexity_max: 10
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Formal Methods"
+        table_reference: "A.2"
+        technique_id: "D.28"
+        recommendation: "HR"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.2"
+        technique_id: "D.52"
+        recommendation: "HR"
+      - technique_name: "Modelling"
+        table_reference: "A.2"
+        technique_id: "A.17"
+        recommendation: "HR"
+      - technique_name: "Decision Tables"
+        table_reference: "A.2"
+        technique_id: "D.13"
+        recommendation: "HR"
+    additional_requirements:
+      - "Requirements must be testable"
+      - "Each requirement has unique ID"
+      - "100% traceability to system requirements MANDATORY"
+      - "100% traceability from requirements to tests MANDATORY"
+      - "Formal specification for safety-critical requirements"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      test_coverage_mcdc: 100
+      cyclomatic_complexity_max: 10
+
+# ===== Required Content Sections =====
+required_sections:
+  - section_id: "document-control"
+    title: "Document Control"
+    mandatory: true
+    content_requirements:
+      - "Document ID in format DOC-XXX-YYYY-NNN"
+      - "Document Control table (version, date, author, status)"
+      - "Approvals table with signatures (author, VER, VAL)"
+      - "Change history table"
+  
+  - section_id: "introduction"
+    title: "1. Introduction"
+    mandatory: true
+    subsections:
+      - section_id: "purpose"
+        title: "1.1 Purpose"
+        mandatory: true
+        content_requirements:
+          - "Purpose of this document"
+          - "Intended audience"
+      
+      - section_id: "scope"
+        title: "1.2 Scope"
+        mandatory: true
+        content_requirements:
+          - "Scope of software system"
+          - "What is in scope"
+          - "What is out of scope"
+      
+      - section_id: "definitions"
+        title: "1.3 Definitions and Abbreviations"
+        mandatory: true
+        content_requirements:
+          - "Terms and definitions"
+          - "Abbreviations"
+      
+      - section_id: "references"
+        title: "1.4 References"
+        mandatory: true
+        content_requirements:
+          - "EN 50128:2011"
+          - "System requirements document"
+          - "SQAP, SCMP references"
+  
+  - section_id: "functional-requirements"
+    title: "2. Functional Requirements"
+    mandatory: true
+    content_requirements:
+      - "Each requirement with unique ID (REQ-<MODULE>-<NNN>)"
+      - "Requirements use SHALL (mandatory), SHOULD (recommended), MAY (optional)"
+      - "Each requirement is testable and unambiguous"
+      - "Each requirement has SIL level assigned"
+      - "Rationale for each requirement"
+  
+  - section_id: "performance-requirements"
+    title: "3. Performance Requirements"
+    mandatory: true
+    content_requirements:
+      - "Timing requirements (response time, throughput)"
+      - "Resource requirements (memory, CPU)"
+      - "Capacity requirements"
+  
+  - section_id: "interface-requirements"
+    title: "4. Interface Requirements"
+    mandatory: true
+    content_requirements:
+      - "Hardware interfaces"
+      - "Software interfaces"
+      - "Communication interfaces"
+      - "User interfaces"
+  
+  - section_id: "safety-requirements"
+    title: "5. Safety Requirements"
+    mandatory: true
+    sil_requirement: 1
+    content_requirements:
+      - "Safety functions"
+      - "Safety-critical requirements (derived from Hazard Log)"
+      - "SIL assignments per requirement"
+      - "Safety constraints"
+  
+  - section_id: "quality-requirements"
+    title: "6. Quality Requirements"
+    mandatory: true
+    content_requirements:
+      - "Reliability requirements"
+      - "Maintainability requirements"
+      - "Portability requirements"
+  
+  - section_id: "constraints"
+    title: "7. Constraints"
+    mandatory: true
+    content_requirements:
+      - "Design constraints"
+      - "Implementation constraints (language, tools)"
+      - "Regulatory constraints"
+  
+  - section_id: "traceability-matrix"
+    title: "8. Traceability Matrix"
+    mandatory: true
+    sil_requirement: 3
+    content_requirements:
+      - "System requirements to software requirements mapping"
+      - "Software requirements to test cases mapping (forward reference)"
+      - "100% coverage of system requirements (SIL 3+)"
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "system-req-traceability"
+    description: "Traceability matrix from system requirements to software requirements"
+    mandatory_sil: 3
+    source: "REQ agent traceability analysis"
+    format: "CSV"
+    storage_path: "evidence/traceability/system_to_software_reqs.csv"
+    automation_level: "automatic"
+    collect_on_agent_action: "design-complete"
+    verification_criteria:
+      - "All system requirements have at least one software requirement link"
+      - "All software requirements trace to at least one system requirement"
+      - "100% coverage for SIL 3+"
+  
+  - evidence_id: "req-test-traceability"
+    description: "Traceability matrix from requirements to test cases"
+    mandatory_sil: 3
+    source: "REQ agent + TST agent traceability analysis"
+    format: "CSV"
+    storage_path: "evidence/traceability/req_to_test.csv"
+    automation_level: "automatic"
+    collect_on_agent_action: "test-run"
+    verification_criteria:
+      - "All software requirements have at least one test case"
+      - "All test cases trace to at least one requirement"
+      - "100% coverage for SIL 3+"
+  
+  - evidence_id: "req-review-record"
+    description: "Requirements review record"
+    mandatory_sil: 1
+    source: "QUA agent requirements review"
+    format: "Markdown"
+    storage_path: "evidence/reviews/srs_review.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "review-complete"
+    verification_criteria:
+      - "All requirements reviewed"
+      - "Review checklist complete"
+      - "All issues resolved or tracked"
+  
+  - evidence_id: "hazard-log-references"
+    description: "References to Hazard Log entries for safety requirements"
+    mandatory_sil: 2
+    source: "SAF agent hazard analysis"
+    format: "Embedded in SRS"
+    automation_level: "semi-automatic"
+    verification_criteria:
+      - "All safety requirements trace to hazards"
+      - "All identified hazards have mitigating requirements"
+  
+  - evidence_id: "sil-assignment-justification"
+    description: "Justification for SIL assignments per requirement"
+    mandatory_sil: 2
+    source: "REQ agent + SAF agent"
+    format: "Embedded in SRS"
+    automation_level: "semi-automatic"
+    verification_criteria:
+      - "All requirements have SIL assignment"
+      - "SIL assignments have rationale"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All required sections present per schema"
+    - "All requirements have unique IDs matching pattern REQ-<MODULE>-<NNN>"
+    - "All requirements have SIL assignments (SIL 1+)"
+    - "Traceability matrix complete (SIL 3+: 100% system req coverage)"
+    - "All referenced documents exist (System Requirements, SQAP, SCMP)"
+  
+  correctness:
+    - "Requirements use SHALL (mandatory), SHOULD (recommended), MAY (optional) correctly"
+    - "Each requirement is unambiguous (single interpretation)"
+    - "Each requirement is testable (can be verified by test)"
+    - "Each requirement is atomic (one requirement per ID)"
+    - "SIL assignments are justified"
+  
+  consistency:
+    - "No conflicting requirements"
+    - "Terminology consistent with SQAP glossary"
+    - "All requirement IDs unique within document"
+    - "All traceability links valid (referenced items exist)"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-001-SQAP"
+    reason: "Quality standards, document ID scheme, approval process defined"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-003-SCMP"
+    reason: "Configuration management process, baseline procedure defined"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "EXTERNAL-SYSTEM-REQ"
+    reason: "System requirements must exist for traceability"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-007-OVERALL-TEST-SPEC"
+    reason: "Test specification verifies requirements"
+  
+  - deliverable_id: "DOC-008-REQ-VER"
+    reason: "Requirements verification report"
+  
+  - deliverable_id: "DOC-009-SAS"
+    reason: "Software architecture derives from requirements"
+  
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Software design implements requirements"
+
+# ===== Configuration Management =====
+baseline:
+  create_baseline: true
+  baseline_name: "SRS-v{{version}}"
+  cm_control: "full"
+
+# ===== Metadata =====
+notes: |
+  SRS is the foundation document for the entire software lifecycle.
+  All subsequent deliverables (design, code, tests) must trace back to SRS.
+  
+  For SIL 3-4 projects:
+  - 100% traceability is MANDATORY (not just highly recommended)
+  - Independent verification by VER agent required
+  - Formal methods highly recommended for safety-critical requirements
+  
+  Requirements ID Format: REQ-<MODULE>-<NNN>
+  Example: REQ-DOOR-001, REQ-BRAKE-042
+
+tags:
+  - "requirements"
+  - "baseline-deliverable"
+  - "sil-1-mandatory"
+  - "traceability-source"

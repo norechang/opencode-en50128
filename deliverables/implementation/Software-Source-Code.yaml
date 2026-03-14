@@ -1,0 +1,388 @@
+# Software Source Code
+# EN 50128 Deliverable #18 - Section 7.5
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-018-SOURCE-CODE"
+number: 18
+name: "Software Source Code"
+abbreviation: "SOURCE-CODE"
+
+# ===== Lifecycle Context =====
+phase: "implementation"
+standard_section: "7.5"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "IMP"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-implementation/templates/source-code-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Programming"
+        table_reference: "A.4"
+        technique_id: "D.53"
+        recommendation: "R"
+    additional_requirements:
+      - "Source code readable and understandable"
+      - "Configuration control before testing"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 20
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Programming"
+        table_reference: "A.4"
+        technique_id: "D.53"
+        recommendation: "R"
+      - technique_name: "Design and Coding Standards"
+        table_reference: "A.4"
+        technique_id: "A.12"
+        recommendation: "HR"
+    additional_requirements:
+      - "Coding standards applied"
+      - "Source code comments required"
+      - "Complexity balanced"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 20
+      test_coverage_statement: 80
+      test_coverage_branch: 80
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Programming"
+        table_reference: "A.4"
+        technique_id: "D.53"
+        recommendation: "HR"
+      - technique_name: "Modular Approach"
+        table_reference: "A.4"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Design and Coding Standards"
+        table_reference: "A.4"
+        technique_id: "A.12"
+        recommendation: "HR"
+      - technique_name: "Analysable Programs"
+        table_reference: "A.4"
+        technique_id: "D.2"
+        recommendation: "HR"
+    additional_requirements:
+      - "MISRA C:2012 MANDATORY"
+      - "Static allocation only (no malloc/free)"
+      - "Defensive programming"
+      - "Fixed-width types (uint8_t, uint16_t, etc.)"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 15
+      test_coverage_statement: 90
+      test_coverage_branch: 100
+      misra_mandatory_violations: 0
+      misra_required_violations: 10
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.4"
+        technique_id: "D.52"
+        recommendation: "M"
+      - technique_name: "Modular Approach"
+        table_reference: "A.4"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Design and Coding Standards"
+        table_reference: "A.4"
+        technique_id: "A.12"
+        recommendation: "M"
+      - technique_name: "Analysable Programs"
+        table_reference: "A.4"
+        technique_id: "D.2"
+        recommendation: "M"
+      - technique_name: "Structured Programming"
+        table_reference: "A.4"
+        technique_id: "D.53"
+        recommendation: "M"
+    additional_requirements:
+      - "MISRA C:2012 MANDATORY (zero mandatory violations)"
+      - "Static allocation MANDATORY"
+      - "No recursion"
+      - "Defensive programming MANDATORY"
+      - "All pointers validated"
+      - "All return values checked"
+      - "Fixed-width types MANDATORY"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 10
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      misra_mandatory_violations: 0
+      misra_required_violations: 0
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.4"
+        technique_id: "D.52"
+        recommendation: "M"
+      - technique_name: "Modular Approach"
+        table_reference: "A.4"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Design and Coding Standards"
+        table_reference: "A.4"
+        technique_id: "A.12"
+        recommendation: "M"
+      - technique_name: "Analysable Programs"
+        table_reference: "A.4"
+        technique_id: "D.2"
+        recommendation: "M"
+      - technique_name: "Structured Programming"
+        table_reference: "A.4"
+        technique_id: "D.53"
+        recommendation: "M"
+      - technique_name: "Strongly Typed Language"
+        table_reference: "A.4"
+        technique_id: "D.49"
+        recommendation: "HR"
+    additional_requirements:
+      - "All SIL 3 requirements apply"
+      - "No function pointers (highly recommended)"
+      - "Formal methods for critical functions (highly recommended)"
+      - "Diverse implementation techniques considered"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 10
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      test_coverage_mcdc: 100
+      misra_mandatory_violations: 0
+      misra_required_violations: 0
+
+# ===== Required Content Sections =====
+required_content:
+  - section: "src/"
+    description: "C source files (.c) implementing design components"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "include/"
+    description: "C header files (.h) with interfaces, data structures, constants"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "tests/"
+    description: "Unit test code (component tests) using Unity or similar framework"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "Supporting Documentation"
+    description: "Makefile, build instructions, code comments, Doxygen config"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "source-code-files"
+    description: "Complete C source code files (.c, .h) under version control"
+    mandatory_sil: 0
+    source: "IMP agent code implementation"
+    format: "C source files"
+    storage_path: "src/, include/"
+    automation_level: "manual"
+    collect_on_agent_action: "implementation-complete"
+    verification_criteria:
+      - "All design components implemented"
+      - "Code readable, understandable, testable (Section 7.5.4.3)"
+      - "Code under configuration control (Section 7.5.4.4)"
+      - "Code matches design specification"
+  
+  - evidence_id: "misra-c-compliance"
+    description: "MISRA C:2012 compliance report (PC-lint, Cppcheck, or similar)"
+    mandatory_sil: 2
+    source: "PC-lint Plus, Cppcheck static analysis"
+    format: "XML"
+    storage_path: "evidence/static-analysis/misra-report.xml"
+    automation_level: "automatic"
+    collect_on_agent_action: "implementation-complete"
+    verification_criteria:
+      - "Zero mandatory violations (SIL 2+)"
+      - "Zero required violations (SIL 3+)"
+      - "Advisory violations documented and justified"
+  
+  - evidence_id: "complexity-metrics"
+    description: "Cyclomatic complexity report showing all functions within limits"
+    mandatory_sil: 1
+    source: "Lizard complexity tool"
+    format: "JSON"
+    storage_path: "evidence/metrics/complexity.json"
+    automation_level: "automatic"
+    collect_on_agent_action: "implementation-complete"
+    verification_criteria:
+      - "All functions ≤ 10 (SIL 3-4)"
+      - "All functions ≤ 15 (SIL 2)"
+      - "All functions ≤ 20 (SIL 0-1)"
+      - "Size and complexity balanced (Section 7.5.4.2)"
+  
+  - evidence_id: "static-analysis-report"
+    description: "Static analysis report (Cppcheck, Clang Static Analyzer) showing no critical issues"
+    mandatory_sil: 2
+    source: "Cppcheck, Clang Static Analyzer"
+    format: "XML"
+    storage_path: "evidence/static-analysis/cppcheck-report.xml, evidence/static-analysis/clang-report.xml"
+    automation_level: "automatic"
+    collect_on_agent_action: "implementation-complete"
+    verification_criteria:
+      - "No critical or high severity issues"
+      - "Medium/low issues documented and justified"
+      - "Buffer overflow checks passed"
+      - "NULL pointer checks passed"
+  
+  - evidence_id: "unit-test-code"
+    description: "Unit test code (component tests) using Unity framework"
+    mandatory_sil: 0
+    source: "TST agent test implementation"
+    format: "C source files"
+    storage_path: "tests/unit/"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "testing-complete"
+    verification_criteria:
+      - "Test code for all components"
+      - "Tests executable and passing"
+      - "Test code also MISRA C compliant (SIL 3+)"
+  
+  - evidence_id: "test-coverage-report"
+    description: "Code coverage report from gcov/lcov showing SIL-appropriate coverage"
+    mandatory_sil: 1
+    source: "gcov, lcov coverage tools"
+    format: "HTML + JSON"
+    storage_path: "evidence/coverage/lcov-report/"
+    automation_level: "automatic"
+    collect_on_agent_action: "testing-complete"
+    verification_criteria:
+      - "Statement coverage: 100% (SIL 3+), 90% (SIL 2), 80% (SIL 1)"
+      - "Branch coverage: 100% (SIL 2+), 80% (SIL 1)"
+      - "Condition coverage: 100% (SIL 3+)"
+      - "MC/DC coverage: 100% (SIL 4) for safety-critical functions"
+  
+  - evidence_id: "build-artifacts"
+    description: "Compiled binaries, object files, linker map files"
+    mandatory_sil: 0
+    source: "GCC compiler and linker"
+    format: "Binary + map files"
+    storage_path: "build/"
+    automation_level: "automatic"
+    collect_on_agent_action: "build-complete"
+    verification_criteria:
+      - "Clean build (no warnings with -Wall -Wextra)"
+      - "Linker map shows memory layout"
+      - "Binary reproducible from source"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Source code implements Software Design Specification per Section 7.5.4.1"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-020-COMPONENT-TEST-SPEC"
+    reason: "Component Test Specification guides unit test implementation"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-019-SOURCE-CODE-VER"
+    reason: "Software Source Code Verification Report verifies source code (Section 7.5.4.8)"
+  
+  - deliverable_id: "DOC-021-COMPONENT-TEST-REPORT"
+    reason: "Software Component Test Report documents testing of source code (Section 7.5.4.5)"
+  
+  - deliverable_id: "DOC-022-INTEGRATION-TEST-SPEC"
+    reason: "Integration tests verify source code integration"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All design components implemented"
+    - "All component interfaces implemented"
+    - "All unit tests implemented"
+    - "Build system complete (Makefile, scripts)"
+  
+  correctness:
+    - "Code implements design specification (Section 7.5.4.10a)"
+    - "Coding standards correctly applied (Section 7.5.4.10c)"
+    - "MISRA C compliance (zero violations SIL 3+)"
+    - "Complexity within limits"
+    - "Static analysis clean"
+  
+  consistency:
+    - "Code consistent with design"
+    - "Interfaces consistent with Software Interface Specification"
+    - "Data structures consistent with design"
+    - "Error handling consistent with design"
+  
+  traceability:
+    - "All code traceable to design components"
+    - "All code traceable to requirements"
+    - "All unit tests traceable to design components"
+    - "Traceability meets requirements (Section 7.5.4.10d)"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_required: true
+  baseline_timing: "Before commencement of documented testing (Section 7.5.4.4)"
+  change_control: "CCB approval required for all changes after baseline"
+  version_control: "Git repository (src/, include/, tests/)"
+  review_frequency: "At component completion or weekly during implementation"
+  
+  update_triggers:
+    - "Design change impacting implementation"
+    - "Requirements change impacting code"
+    - "Defect fix"
+    - "Code review finding"
+    - "Static analysis issue"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "7.5"
+    title: "Component Implementation and Testing"
+    description: "Primary section for source code requirements"
+  
+  - section: "7.5.4.1"
+    title: "Source Code Implementation"
+    description: "Implementer responsibility, based on design"
+  
+  - section: "7.5.4.2"
+    title: "Size and Complexity"
+    description: "Balanced size and complexity required"
+  
+  - section: "7.5.4.3"
+    title: "Readability and Testability"
+    description: "Code must be readable, understandable, testable"
+  
+  - section: "7.5.4.4"
+    title: "Configuration Control"
+    description: "Code under CM before testing"
+  
+  - section: "Table A.4"
+    title: "Software Design and Implementation Techniques"
+    description: "Techniques apply to implementation"
+  
+  - section: "Table A.12"
+    title: "Good Programming Practice"
+    description: "Good practices for C implementation"
+  
+  - section: "Annex C Table C.1"
+    title: "Document Control Summary"
+    description: "Source Code is deliverable #18"
+
+# ===== Notes =====
+notes: |
+  Source code is MANDATORY for all SIL levels (EN 50128 Section 7.5).
+  MISRA C:2012 MANDATORY for SIL 2+ (zero mandatory violations).
+  Static allocation MANDATORY for SIL 2+ (no malloc/calloc/realloc/free).
+  Cyclomatic complexity: ≤10 (SIL 3-4), ≤15 (SIL 2), ≤20 (SIL 0-1).
+  Test coverage: Statement 100% (SIL 3+), Branch 100% (SIL 2+), Condition 100% (SIL 3+), MC/DC 100% (SIL 4).
+  Code must be under configuration control BEFORE testing begins (Section 7.5.4.4).
+  Source code verification addresses adequacy, technique use, coding standards, and traceability (Section 7.5.4.10).

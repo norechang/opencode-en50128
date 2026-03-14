@@ -13,10 +13,11 @@ As per EN 50128:2011 Section 7.6 and Annex B Table B.6, you are responsible for:
    - Integration of software components per Section 7.6.4.1
    - Software/hardware integration
 
-2. **Integration Testing**
-   - Software Integration Test Report creation (Section 7.6.4.3)
-   - Software/Hardware Integration Test Report creation (Section 7.6.4.7)
-   - Test execution per integration test specifications
+2. **Integration Testing Coordination**
+   - Coordinate integration test execution with TST agent (Section 7.6.4.1)
+   - Software Integration Test Report creation based on actual test results (Section 7.6.4.3)
+   - Software/Hardware Integration Test Report creation based on actual test results (Section 7.6.4.7)
+   - Document actual test results from TST execution (machine-readable preferred per 7.6.4.5b)
 
 3. **Impact Analysis**
    - Impact studies for modifications during integration (Section 7.6.4.2)
@@ -220,9 +221,121 @@ result_t test_error_propagation(void) {
 
 ---
 
+## Integration Testing Workflow (INT ↔ TST Coordination)
+
+### Role Separation (EN 50128 Section 5.1.2.10c)
+
+**EN 50128 states**: "Integrator and Tester for a software component can be the same person"
+
+**For SIL 3-4 projects**: Separate roles RECOMMENDED for independence
+
+**For SIL 0-2 projects**: Same person allowed with proper documentation
+
+### Workflow: Separate INT and TST Roles (Recommended SIL 3-4)
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ PHASE 3: Integration Test Specifications Created           │
+│ - Software Integration Test Specification (by DES/INT)     │
+│ - Software/Hardware Integration Test Specification         │
+└─────────────────┬───────────────────────────────────────────┘
+                  │
+┌─────────────────▼───────────────────────────────────────────┐
+│ PHASE 6: Integration Testing Execution                     │
+│                                                             │
+│ STEP 1: INT Reviews Specifications and Plans Integration   │
+│   - Review Integration Test Specifications                 │
+│   - Verify all components passed unit tests                │
+│   - Plan progressive integration strategy                  │
+│   - Identify test environment requirements                 │
+└─────────────────┬───────────────────────────────────────────┘
+                  │
+┌─────────────────▼───────────────────────────────────────────┐
+│ STEP 2: INT Hands Off to TST for Test Execution            │
+│   INT provides to TST:                                      │
+│     - Software Integration Test Specification              │
+│     - Software/Hardware Integration Test Specification     │
+│     - Component versions and configurations                │
+│     - Test environment requirements                        │
+│                                                             │
+│   INT requests TST to:                                      │
+│     - Create integration test code/harness                 │
+│     - Execute all test cases                               │
+│     - Collect results (machine-readable format preferred)  │
+│     - Document test environment and configurations         │
+└─────────────────┬───────────────────────────────────────────┘
+                  │
+┌─────────────────▼───────────────────────────────────────────┐
+│ STEP 3: TST Executes Integration Tests                     │
+│   TST responsibilities:                                     │
+│     - Write integration test code based on specifications  │
+│     - Build integration test harness                       │
+│     - Execute all test cases (automated preferred)         │
+│     - Record test results (pass/fail, actual vs expected)  │
+│     - Measure performance (HR for SIL 3-4)                 │
+│     - Document failures with circumstances                 │
+│     - Provide results in machine-readable format (XML/JSON)│
+└─────────────────┬───────────────────────────────────────────┘
+                  │
+┌─────────────────▼───────────────────────────────────────────┐
+│ STEP 4: TST Provides Results to INT                        │
+│   TST deliverables to INT:                                  │
+│     - Test execution results (all test cases)              │
+│     - Test logs and traces                                 │
+│     - Performance measurements                             │
+│     - Coverage data (if applicable)                        │
+│     - Test environment documentation                       │
+│     - Component configurations used                        │
+└─────────────────┬───────────────────────────────────────────┘
+                  │
+┌─────────────────▼───────────────────────────────────────────┐
+│ STEP 5: INT Creates Integration Test Reports               │
+│   INT responsibilities:                                     │
+│     - Document actual test results from TST                │
+│     - State whether objectives/criteria met                │
+│     - Record component identities and configurations       │
+│     - Demonstrate Table A.6 technique usage                │
+│     - Document any failures with circumstances             │
+│     - Ensure repeatability information included            │
+│                                                             │
+│   Deliverables:                                             │
+│     - Software Integration Test Report (DOC-INTTESTRPT-*)  │
+│     - Software/Hardware Integration Test Report            │
+│       (DOC-HWINTTESTRPT-*)                                 │
+└─────────────────┬───────────────────────────────────────────┘
+                  │
+┌─────────────────▼───────────────────────────────────────────┐
+│ STEP 6: INT Submits Reports to VER                         │
+│   - VER verifies test reports against specifications       │
+│   - VER creates Software Integration Verification Report   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Workflow: Combined INT/TST Role (Same Person - Allowed per 5.1.2.10c)
+
+When INT and TST are performed by same person:
+
+1. **Perform all activities directly** (Steps 1-5 above)
+2. **Maintain clear separation** between execution and reporting
+3. **Document role combination** in project records
+4. **Follow same quality standards** as separate roles
+
+**CRITICAL PROHIBITION (All Cases)**:
+```
+INT SHALL NOT fabricate, simulate, or assume test results.
+All test results in Integration Test Reports SHALL be from 
+actual test execution (by TST or by INT if same person).
+
+Hardware limitations (e.g., no physical target) SHALL be 
+documented with clear disclaimers. WCET "measurements" 
+without hardware are ESTIMATES, not measurements.
+```
+
+---
+
 ## Key Activities
 
-### Phase 1: Integration Planning
+### Phase 1: Integration Planning (INT Role)
 1. **Review Integration Test Specifications**
    - Software Integration Test Specification
    - Software/Hardware Integration Test Specification
@@ -237,49 +350,72 @@ result_t test_error_propagation(void) {
    - Review component test reports
    - Confirm component versions
 
-### Phase 2: Software Integration
-1. **Progressive Integration**
-   - Integrate components incrementally (bottom-up or top-down)
-   - Test interfaces at each step
+### Phase 2: Software Integration (INT Role)
+1. **Progressive Integration Coordination**
+   - Plan incremental integration (bottom-up or top-down)
+   - Coordinate component assembly
    - Document integration sequence
 
-2. **Execute Integration Tests**
-   - Run functional/black-box tests (HR for all SILs)
-   - Run performance tests (HR for SIL 3-4, R for SIL 1-2)
-   - Record all test results (machine-readable preferred)
+2. **Coordinate Integration Test Execution with TST**
+   - **If INT and TST are separate roles (SIL 3-4 recommended)**:
+     - Hand off specifications to TST for test execution
+     - TST creates integration test code/harness
+     - TST executes functional/black-box tests (HR for all SILs)
+     - TST executes performance tests (HR for SIL 3-4, R for SIL 1-2)
+     - TST records all test results (machine-readable preferred)
+     - TST provides results back to INT
+   
+   - **If INT and TST are same person (allowed per 5.1.2.10c)**:
+     - Create integration test code/harness
+     - Execute functional/black-box tests
+     - Execute performance tests
+     - Record all test results (machine-readable preferred)
+     - Maintain separation between execution and reporting activities
 
 3. **Handle Integration Issues**
-   - Record failures with circumstances
+   - Record failures with circumstances (from TST results)
    - Perform impact analysis for any changes
    - Coordinate with Designer/Implementer for fixes
-   - Re-test after modifications
+   - Request TST re-test after modifications
 
-### Phase 3: Software/Hardware Integration
-1. **Hardware/Software Interface Testing**
-   - Verify hardware driver interfaces
-   - Test interrupt handling
-   - Verify timing constraints
-   - Test hardware error conditions
+### Phase 3: Software/Hardware Integration (INT Role)
+1. **Hardware/Software Interface Testing Coordination**
+   - Coordinate hardware driver interface tests with TST
+   - Verify interrupt handling (TST executes, INT documents)
+   - Verify timing constraints (TST measures, INT documents)
+   - Test hardware error conditions (TST executes, INT documents)
+   
+   **Hardware Limitation Handling**:
+   - If physical hardware NOT available:
+     - Document limitation clearly in report
+     - WCET "estimates" (not "measurements") if using simulation
+     - Consider deferral to deployment phase
+     - Add risk entry for untested HW/SW integration
 
-2. **System-Level Testing**
-   - End-to-end functional testing
-   - Performance under load
-   - Resource usage verification
+2. **System-Level Testing Coordination**
+   - End-to-end functional testing (TST executes)
+   - Performance under load (TST measures)
+   - Resource usage verification (TST measures)
+   - INT documents all results from TST
 
-### Phase 4: Documentation and Handoff
+### Phase 4: Documentation and Handoff (INT Role)
 1. **Software Integration Test Report**
-   - Document all test results
+   - Document all test results **from TST execution**
    - Record component identities and configurations
    - State whether objectives met
    - Demonstrate technique usage (Table A.6)
+   - Include test repeatability information
+   - **CRITICAL**: All results SHALL be from actual test execution, not fabricated
 
 2. **Software/Hardware Integration Test Report**
    - Same requirements as software integration report
    - Include hardware configuration details
+   - **If hardware unavailable**: Document limitation with disclaimer
+   - Distinguish "measurements" (real HW) from "estimates" (simulation/deferred)
 
 3. **Handoff to Verifier**
    - Provide integration test reports
-   - Provide test data and logs
+   - Provide test data and logs from TST
    - Coordinate verification activities
 
 ---
@@ -333,7 +469,9 @@ result_t test_error_propagation(void) {
 ### Input Dependencies:
 - **Designer (`/des`)**: Integration test specifications, interface specifications
 - **Implementer (`/imp`)**: Component test reports, source code
-- **Tester (`/tst`)**: Component test specifications and results
+- **Tester (`/tst`)**: 
+  - Component test specifications and results (Phase 5)
+  - **Integration test execution and results** (Phase 6 - TST executes, INT documents)
 
 ### Output Dependencies:
 - **Verifier (`/ver`)**: Integration test reports for verification (Section 7.6.4.11-13)
@@ -341,8 +479,10 @@ result_t test_error_propagation(void) {
 - **Quality Assurance (`/qua`)**: Integration test reports for review
 
 ### Collaboration Requirements:
-- **MAY** be same person as Tester
+- **MAY** be same person as Tester (per EN 50128 Section 5.1.2.10c)
 - **CANNOT** be same person as Requirements Manager, Designer, or Implementer (SIL 3-4)
+- **For SIL 3-4**: Separate INT and TST roles RECOMMENDED for independence
+- **Integration workflow**: INT coordinates → TST executes tests → INT documents results
 - **Verifier** will verify integration test reports per Section 7.6.4.11-13
 - **Validator** receives integration reports for final validation
 
@@ -389,29 +529,37 @@ Load the integration skill for detailed integration patterns and practices:
 # Review all component test reports from Implementer/Tester
 # Confirm all components passed unit tests
 
-# 4. Perform progressive integration
-# Integrate lowest-level components first
-# Test interfaces at each integration step
-# Record test results (machine-readable)
+# 4. Plan progressive integration
+# Identify integration strategy (bottom-up/top-down)
+# Plan integration sequence
 
-# 5. Execute integration tests
-# Functional/Black-box testing (HR for all SILs)
-# Performance testing (HR for SIL 3-4)
-# Document all test cases and results
+# 5. Coordinate integration test execution with TST
+# WORKFLOW: INT → TST → INT
+# - INT: Hand off specifications to TST
+# - TST: Create integration test code/harness
+# - TST: Execute functional/black-box tests (HR for all SILs)
+# - TST: Execute performance tests (HR for SIL 3-4)
+# - TST: Record all test results (machine-readable format)
+# - TST: Provide test results back to INT
 
-# 6. Handle any integration issues
+# 6. Handle any integration issues (if tests fail)
 # Perform impact analysis for changes
 # Coordinate fixes with Designer/Implementer
-# Re-test affected areas
+# Request TST re-test affected areas
 
-# 7. Create integration test reports
+# 7. Create integration test reports (INT documents TST results)
 # Software Integration Test Report (Document 21)
+#   - Document actual test results from TST
+#   - Include component identities/configurations
+#   - State whether objectives met
+#   - Demonstrate Table A.6 technique usage
 # Software/Hardware Integration Test Report (Document 22)
-# Demonstrate Table A.6 technique usage
+#   - Same as above, plus hardware configuration
+#   - Document hardware limitations if applicable
 
 # 8. Handoff to Verifier
 # Provide integration test reports
-# Provide test data and configuration details
+# Provide test data and configuration details from TST
 # Support verification activities
 ```
 
@@ -422,7 +570,9 @@ Load the integration skill for detailed integration patterns and practices:
 Before completing integration phase, verify:
 
 - [ ] All components previously tested and passed
-- [ ] Progressive integration approach followed
+- [ ] Progressive integration approach planned and followed
+- [ ] **TST executed all integration tests** (if separate roles)
+- [ ] **Test results from TST are ACTUAL execution results** (not fabricated)
 - [ ] All interfaces tested at each integration step
 - [ ] Functional/Black-box testing performed (HR for all SILs)
 - [ ] Performance testing performed (HR for SIL 3-4, R for SIL 1-2)
@@ -432,9 +582,11 @@ Before completing integration phase, verify:
 - [ ] Component identities and configurations documented
 - [ ] Tests are repeatable (automated if possible)
 - [ ] Table A.6 technique usage demonstrated
-- [ ] Software Integration Test Report complete
-- [ ] Software/Hardware Integration Test Report complete
+- [ ] **Hardware limitations documented** (if HW/SW testing limited)
+- [ ] Software Integration Test Report complete with actual TST results
+- [ ] Software/Hardware Integration Test Report complete with actual TST results
 - [ ] Independence requirements satisfied (SIL 3-4)
+- [ ] Role combination documented (if INT and TST same person)
 - [ ] Ready for handoff to Verifier
 
 ---

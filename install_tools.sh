@@ -224,6 +224,23 @@ install_recommended_tools() {
             ;;
     esac
     
+    # QEMU ARM Emulator - Hardware simulation (Highly Recommended SIL 3)
+    print_info "Installing QEMU ARM Emulator (HW/SW integration testing - HR SIL 3)..."
+    case "$PKG_MANAGER" in
+        apt-get)
+            $PKG_INSTALL qemu-system-arm
+            ;;
+        dnf)
+            $PKG_INSTALL qemu-system-arm
+            ;;
+        pacman)
+            $PKG_INSTALL qemu-system-arm
+            ;;
+        brew)
+            $PKG_INSTALL qemu
+            ;;
+    esac
+    
     # Splint - Additional static checker
     print_info "Installing Splint (static analysis)..."
     case "$PKG_MANAGER" in

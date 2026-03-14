@@ -354,7 +354,7 @@ The following techniques from Table A.5 are MANDATORY for SIL 4:
 - **Status**: MANDATORY
 - **Rationale**: Required by EN 50128 for SIL 3-4
 - **Implementation**: Bidirectional traceability from requirements → design → code → tests
-- **Tools**: @trace tags, traceability matrix generation (tools/traceability/)
+- **Tools**: @trace tags, Traceability Manager (`workspace.py trace`)
 - **Deliverable**: Traceability Matrix per phase
 
 **Technique 8: Test Coverage for Code (Table A.21)**
@@ -910,7 +910,7 @@ tools/
 
 2. **Traceability Verification**:
    - **Method**: Automated trace checking + manual review
-   - **Tool**: `python3 tools/traceability/check_traceability.py`
+   - **Tool**: `workspace.py trace validate --phase requirements`
    - **Criteria**:
      - All system requirements traced to software requirements
      - No orphan software requirements (all have source)
@@ -981,7 +981,7 @@ tools/
 
 3. **Traceability Verification**:
    - **Method**: Automated + manual trace checking
-   - **Tool**: `python3 tools/traceability/check_traceability.py --phase design`
+   - **Tool**: `workspace.py trace validate --phase design`
    - **Criteria**:
      - All requirements traced to design elements
      - All design elements traced to requirements
@@ -1127,7 +1127,7 @@ tools/
 
 5. **Traceability Verification**:
    - **Method**: @trace tag verification + manual check
-   - **Tool**: `python3 tools/traceability/check_traceability.py --phase code`
+   - **Tool**: `workspace.py trace validate --phase implementation`
    - **Criteria**:
      - All design elements traced to code
      - All functions have @trace tags

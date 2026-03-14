@@ -2,6 +2,16 @@
 
 **AI-powered development platform for EN 50128:2011 compliant railway software**
 
+## 🔄 Platform Transformation in Progress
+
+**Status**: Transitioning from role-based agent commands to document-centric workflows with full tool automation.
+
+**What's Changing**: We're enhancing the platform to support natural, document-centric development workflows where users work directly with requirements, design, and test documents while tools provide automated EN 50128 compliance support (traceability validation, coverage analysis, workflow management).
+
+**Progress**: 38% complete (5 of 13 skills enhanced with comprehensive workflows, working tool integration, and zero placeholder dependencies)
+
+**Impact**: Already functional for requirements, design, implementation, verification, and testing workflows. See [`SUMMARY.md`](SUMMARY.md) for detailed status.
+
 ---
 
 ## ⚠️ IMPORTANT: OpenCode TUI Required

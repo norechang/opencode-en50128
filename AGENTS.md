@@ -581,6 +581,13 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 - Approve baselines and releases
 - Manage project risks and issues
 - Report to senior management
+- Monitor project status via LIFECYCLE_STATE.md
+
+**Key Commands**:
+- `/pm status` - Overall project status report (reads LIFECYCLE_STATE.md)
+- `/pm status <phase-id>` - Specific phase execution status
+- `/pm execute-phase <phase-id>` - Automated phase orchestration with QUA flow
+- `/pm resolve-defects <phase-id>` - Coordinate defect resolution after VER/VAL rejection
 
 **Independence Constraints**:
 - **SIL 3-4:** Validator SHALL NOT report to Project Manager
@@ -957,12 +964,12 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 # Defensive programming
 # Unit tests
 
-# 7. TST: Test
+# 7. TST: Test (Unit Tests - Phase 5)
 /tst
 # Execute unit tests
-# Execute integration tests
 # Measure coverage (100% for SIL 3+)
 # Fault injection
+# Provide test results to IMP
 
 # 8. QUA: Code review (MANDATORY all SILs, BEFORE VER)
 /qua
@@ -980,17 +987,21 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 # Verify QA reviews performed
 # Collect evidence
 
-# 10. INT: Integration
+# 10. INT: Integration (Phase 6 - INT → TST → INT workflow)
 /int
-# Integrate components
-# Integration testing
-# Interface testing
-# Performance testing
+# INT: Review integration test specifications
+# INT: Coordinate integration test execution with TST
+# TST: Create integration test code/harness
+# TST: Execute all integration tests (functional, performance)
+# TST: Record results in machine-readable format (XML/JSON)
+# TST: Provide test results to INT
+# INT: Document actual TST results in Integration Test Reports
+# INT: NO fabrication of test results allowed
 
 # 11. QUA: Integration test review (MANDATORY SIL 3-4)
 /qua
 # Verify integration test documentation follows template
-# Review integration test results
+# Review integration test results from TST
 # Generate QA Integration Test Review Report
 
 # 12. VAL: Validate

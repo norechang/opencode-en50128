@@ -1,0 +1,515 @@
+# Deployment Records
+# EN 50128 Deliverable #39 - Section 9.1.4.12-9.1.4.13
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-039-DEPLOYMENT-RECORDS"
+number: 39
+name: "Deployment Records"
+abbreviation: "Deploy Records"
+
+# ===== Lifecycle Context =====
+phase: "deployment"
+standard_section: "9.1.4.12"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "PM"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-deployment/templates/Deployment-Records-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques: []
+    additional_requirements:
+      - "Evidence that intended software has been loaded"
+      - "Record stored with delivered system documents"
+    evidence_thresholds: {}
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "HR"
+    additional_requirements:
+      - "Evidence that intended software loaded per 9.1.4.13 (MANDATORY)"
+      - "Inspection of self-identification mechanisms per 9.1.4.11 (MANDATORY)"
+      - "Record stored with delivered system documents (MANDATORY)"
+      - "Part of commissioning and acceptance (MANDATORY)"
+      - "Installation identification (location, system ID)"
+      - "Deployment date and personnel"
+      - "Software version verified"
+    evidence_thresholds: {}
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "HR"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "HR"
+    additional_requirements:
+      - "Evidence that intended software loaded per 9.1.4.13 (MANDATORY)"
+      - "Inspection of self-identification mechanisms per 9.1.4.11 (MANDATORY)"
+      - "Record stored with delivered system documents (MANDATORY)"
+      - "Part of commissioning and acceptance (MANDATORY)"
+      - "Installation identification (location, system ID)"
+      - "Deployment date and personnel"
+      - "Software version verified using self-identification"
+      - "Configuration data version verified"
+      - "Hardware configuration recorded"
+      - "Deployment procedure compliance documented"
+      - "Installation verification results"
+      - "Traceability to installation per 9.1.4.14"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 15
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "M"
+    additional_requirements:
+      - "Evidence that intended software loaded per 9.1.4.13 (MANDATORY)"
+      - "Inspection of self-identification mechanisms per 9.1.4.11 (MANDATORY)"
+      - "Record stored with delivered system documents (MANDATORY)"
+      - "Part of commissioning and acceptance (MANDATORY)"
+      - "Installation identification (location, system ID) (MANDATORY)"
+      - "Deployment date and personnel (MANDATORY)"
+      - "Software version verified using self-identification (MANDATORY)"
+      - "Configuration data version verified (MANDATORY)"
+      - "Hardware configuration recorded (MANDATORY)"
+      - "Deployment procedure compliance documented (MANDATORY)"
+      - "Installation verification results (MANDATORY)"
+      - "Traceability to installation per 9.1.4.14 (MANDATORY)"
+      - "Sign-off by deployment personnel (MANDATORY)"
+      - "Sign-off by commissioning authority (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Traceability requirements per 6.5.4.14-6.5.4.17 (MANDATORY)"
+      - "Internal consistency verified per 9.1.4.18(b) (MANDATORY)"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      cyclomatic_complexity_max: 10
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "M"
+    additional_requirements:
+      - "Evidence that intended software loaded per 9.1.4.13 (MANDATORY)"
+      - "Inspection of self-identification mechanisms per 9.1.4.11 (MANDATORY)"
+      - "Record stored with delivered system documents (MANDATORY)"
+      - "Part of commissioning and acceptance (MANDATORY)"
+      - "Installation identification (location, system ID) (MANDATORY)"
+      - "Deployment date and personnel (MANDATORY)"
+      - "Software version verified using self-identification (MANDATORY)"
+      - "Configuration data version verified (MANDATORY)"
+      - "Hardware configuration recorded (MANDATORY)"
+      - "Deployment procedure compliance documented (MANDATORY)"
+      - "Installation verification results (MANDATORY)"
+      - "Traceability to installation per 9.1.4.14 (MANDATORY)"
+      - "Sign-off by deployment personnel (MANDATORY)"
+      - "Sign-off by commissioning authority (MANDATORY)"
+      - "Independent verification of deployment (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Traceability requirements per 6.5.4.14-6.5.4.17 (MANDATORY)"
+      - "Internal consistency verified per 9.1.4.18(b) (MANDATORY)"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      test_coverage_mcdc: 100
+      cyclomatic_complexity_max: 10
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "software-identification-evidence"
+    description: "Evidence that intended software loaded via self-identification inspection per 9.1.4.13"
+    mandatory_sil: 0
+    source: "Deployment personnel, PM agent records"
+    format: "Markdown or CSV with self-identification data"
+    storage_path: "docs/deployment/records/software-identification-evidence.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/pm record-software-identification"
+    verification_criteria:
+      - "Software version from self-identification recorded"
+      - "Configuration data version from self-identification recorded"
+      - "Product identity from self-identification recorded"
+      - "Self-identification extracted at loading process"
+      - "Self-identification extracted after loading"
+      - "Recorded identification matches intended release"
+
+  - evidence_id: "installation-identification"
+    description: "Installation identification (location, system ID, site details)"
+    mandatory_sil: 0
+    source: "Deployment personnel, PM agent records"
+    format: "Markdown or structured data"
+    storage_path: "docs/deployment/records/installation-identification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm record-installation-id"
+    verification_criteria:
+      - "Installation location recorded (geographic, facility)"
+      - "System identifier recorded"
+      - "Site contact information recorded"
+      - "Installation environment recorded"
+      - "Traceability to installation per 9.1.4.14 (SIL 1+)"
+
+  - evidence_id: "deployment-metadata"
+    description: "Deployment date, personnel, and process information"
+    mandatory_sil: 0
+    source: "Deployment personnel, PM agent records"
+    format: "Markdown"
+    storage_path: "docs/deployment/records/deployment-metadata.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm record-deployment-metadata"
+    verification_criteria:
+      - "Deployment date and time recorded"
+      - "Deployment personnel names and roles recorded"
+      - "Deployment procedure version followed recorded"
+      - "Deployment Manual version used recorded (DOC-037)"
+      - "Deployment duration recorded"
+
+  - evidence_id: "hardware-configuration-record"
+    description: "Hardware configuration at installation per 9.1.4.5(b)"
+    mandatory_sil: 1
+    source: "Deployment personnel, PM agent records"
+    format: "Markdown or CSV"
+    storage_path: "docs/deployment/records/hardware-configuration.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm record-hardware-config"
+    verification_criteria:
+      - "Hardware platform identified (model, version)"
+      - "CPU, memory, storage specifications recorded"
+      - "Peripheral devices recorded"
+      - "Hardware serial numbers recorded (SIL 2+)"
+      - "Hardware compatibility verified against Release Notes (DOC-038)"
+
+  - evidence_id: "installation-verification-results"
+    description: "Results of installation verification per Deployment Manual"
+    mandatory_sil: 0
+    source: "Deployment personnel, PM agent records"
+    format: "Markdown checklist with results"
+    storage_path: "docs/deployment/records/installation-verification-results.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/pm record-installation-verification"
+    verification_criteria:
+      - "All installation verification checks performed per DOC-037"
+      - "All checks passed (or deviations documented)"
+      - "Functional tests results recorded"
+      - "Safety function tests results recorded (SIL 1+)"
+      - "Performance tests results recorded (SIL 2+)"
+
+  - evidence_id: "commissioning-acceptance-evidence"
+    description: "Evidence that record is part of commissioning and acceptance per 9.1.4.13"
+    mandatory_sil: 0
+    source: "Commissioning authority, PM agent records"
+    format: "Markdown with sign-offs"
+    storage_path: "docs/deployment/records/commissioning-acceptance.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm record-commissioning-acceptance"
+    verification_criteria:
+      - "Commissioning checklist completed"
+      - "Acceptance criteria met"
+      - "Sign-off by commissioning authority (SIL 3+)"
+      - "Sign-off by customer representative (if applicable)"
+      - "Date of commissioning and acceptance"
+
+  - evidence_id: "deployment-procedure-compliance"
+    description: "Evidence of compliance with Deployment Manual procedures"
+    mandatory_sil: 1
+    source: "Deployment personnel, PM agent records"
+    format: "Markdown checklist"
+    storage_path: "docs/deployment/records/procedure-compliance.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/pm record-procedure-compliance"
+    verification_criteria:
+      - "All Deployment Manual steps followed (DOC-037)"
+      - "Deviations documented with justification"
+      - "Deviation approvals obtained (SIL 2+)"
+      - "Procedure compliance verified by deployment personnel"
+
+  - evidence_id: "deployment-personnel-signoffs"
+    description: "Sign-offs by deployment personnel and authorities"
+    mandatory_sil: 1
+    source: "Deployment personnel, commissioning authority"
+    format: "Markdown with signatures/approvals"
+    storage_path: "docs/deployment/records/personnel-signoffs.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm collect-signoffs"
+    verification_criteria:
+      - "Deployment personnel sign-off (SIL 1+, MANDATORY SIL 3+)"
+      - "Commissioning authority sign-off (SIL 1+, MANDATORY SIL 3+)"
+      - "Independent verifier sign-off (MANDATORY SIL 4)"
+      - "Customer representative sign-off (if applicable)"
+      - "Date and role recorded for each sign-off"
+
+  - evidence_id: "deployment-records-readability-check"
+    description: "Readability verification per 5.3.2.7-5.3.2.10 and 9.1.4.18(a)"
+    mandatory_sil: 3
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/deployment/verification/deployment-records-readability-check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-deployment-records-readability"
+    verification_criteria:
+      - "Clear and unambiguous language"
+      - "Consistent terminology"
+      - "Proper document structure"
+      - "Adequate detail level"
+
+  - evidence_id: "deployment-records-traceability-check"
+    description: "Traceability verification per 6.5.4.14-6.5.4.17 and 9.1.4.18(a)"
+    mandatory_sil: 3
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/deployment/verification/deployment-records-traceability-check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-deployment-records-traceability"
+    verification_criteria:
+      - "Traceability to Deployment Plan (DOC-036)"
+      - "Traceability to Deployment Manual (DOC-037)"
+      - "Traceability to Release Notes (DOC-038)"
+      - "Traceability to installation per 9.1.4.14 (MANDATORY SIL 1+)"
+      - "All references valid and complete"
+
+  - evidence_id: "deployment-records-consistency-check"
+    description: "Internal consistency verification per 9.1.4.18(b)"
+    mandatory_sil: 3
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/deployment/verification/deployment-records-consistency-check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-deployment-records-consistency"
+    verification_criteria:
+      - "No conflicting information"
+      - "All cross-references valid"
+      - "Consistent terminology throughout"
+      - "Software identification consistent across all records"
+
+  - evidence_id: "deployment-records-requirements-check"
+    description: "Verification against 9.1.4.13 requirements per 9.1.4.18(a)"
+    mandatory_sil: 0
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/deployment/verification/deployment-records-requirements-check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-deployment-records-requirements"
+    verification_criteria:
+      - "Evidence that intended software loaded present per 9.1.4.13 (MANDATORY)"
+      - "Self-identification inspection documented per 9.1.4.11 (MANDATORY)"
+      - "All 9.1.4.13 requirements addressed"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-036-SRDP"
+    reason: "Deployment Records follow procedures from Deployment Plan"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-037-SDM"
+    reason: "Deployment Records created by following Deployment Manual"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-038-RELEASE-NOTES"
+    reason: "Deployment Records verify compatibility with Release Notes"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-018-SOURCE-CODE"
+    reason: "Self-identification mechanisms in source code inspected per 9.1.4.11"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-040-DEPLOYMENT-VER"
+    reason: "Deployment Verification Report verifies Deployment Records per 9.1.4.18"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "Evidence that intended software loaded per 9.1.4.13 (MANDATORY)"
+    - "Self-identification inspection per 9.1.4.11 (MANDATORY)"
+    - "Record stored with delivered system documents (MANDATORY)"
+    - "Part of commissioning and acceptance (MANDATORY)"
+    - "Installation identification complete (SIL 1+)"
+    - "Deployment metadata complete (SIL 1+)"
+    - "Hardware configuration recorded (SIL 1+)"
+    - "Installation verification results recorded (SIL 1+)"
+    - "Procedure compliance documented (SIL 1+)"
+    - "Sign-offs obtained (SIL 3+ MANDATORY)"
+    - "All SIL-appropriate techniques applied per Table A.9"
+  
+  correctness:
+    - "Software identification matches intended release"
+    - "Self-identification data accurately recorded"
+    - "Installation identification accurate"
+    - "Hardware configuration accurate"
+    - "Verification results accurate"
+    - "Commissioning and acceptance legitimate"
+  
+  consistency:
+    - "Internal consistency per 9.1.4.18(b) (MANDATORY SIL 3+)"
+    - "Consistent with Deployment Plan (DOC-036)"
+    - "Consistent with Deployment Manual (DOC-037)"
+    - "Consistent with Release Notes (DOC-038)"
+    - "No conflicting information"
+    - "All cross-references valid"
+  
+  traceability:
+    - "Traceability per 6.5.4.14-6.5.4.17 and 9.1.4.18(a) (MANDATORY SIL 3+)"
+    - "Traceability to installation per 9.1.4.14 (MANDATORY SIL 1+)"
+    - "Traceability to Deployment Plan (DOC-036)"
+    - "Traceability to Deployment Manual (DOC-037)"
+    - "Traceability to Release Notes (DOC-038)"
+  
+  readability:
+    - "Readability per 5.3.2.7-5.3.2.10 and 9.1.4.18(a) (MANDATORY SIL 3+)"
+    - "Clear and unambiguous language"
+    - "Consistent terminology"
+    - "Adequate detail for future reference"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Deployment Records Baseline"
+  baseline_trigger: "After commissioning and acceptance sign-off"
+  change_control: "Deployment Records are IMMUTABLE after sign-off (part of legal/safety documentation)"
+  versioning: "No versioning - records are snapshots at deployment time"
+  storage_location: "config/baselines/deployment-records/<installation-id>/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "9.1.4.12"
+    title: "Deployment Record"
+    relevance: "Primary section requiring Deployment Record"
+  - section: "9.1.4.13"
+    title: "Deployment Record content"
+    relevance: "Evidence of intended software loaded via self-identification inspection (MANDATORY)"
+  - section: "9.1.4.18"
+    title: "Deployment Record verification"
+    relevance: "Verification of readability, traceability, 9.1.4.13 requirements, internal consistency"
+  - section: "9.1.4.11"
+    title: "Self-identification mechanisms"
+    relevance: "Deployment Record shall document inspection of self-identification"
+  - section: "9.1.4.14"
+    title: "Traceability to installations"
+    relevance: "Deployment Record provides traceability to delivered installations (MANDATORY SIL 1+)"
+  - section: "5.3.2.7-5.3.2.10"
+    title: "Readability requirements"
+    relevance: "General requirements for readability per 9.1.4.18(a) (MANDATORY SIL 3+)"
+  - section: "6.5.4.14-6.5.4.17"
+    title: "Traceability requirements"
+    relevance: "General requirements for traceability per 9.1.4.18(a) (MANDATORY SIL 3+)"
+  - section: "Table A.9"
+    title: "Software Quality Assurance techniques"
+    relevance: "Configuration Management (M), Traceability (R/HR/M), Data Recording (HR/M)"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Deployment Records is deliverable #39, written by deployment team, checked by VER and VAL"
+
+# ===== Notes =====
+notes: |
+  **Deployment Records (Deliverable #39)**
+  
+  **Purpose**: Provide evidence that the intended software has been correctly loaded at a specific
+  installation, via inspection of embedded self-identification mechanisms per EN 50128 Section 9.1.4.12-9.1.4.13.
+  
+  **Key Content** (EN 50128 9.1.4.13 - MANDATORY):
+  1. **Evidence that intended software loaded** (MANDATORY all SILs)
+  2. **Inspection of self-identification mechanisms** per 9.1.4.11 (MANDATORY all SILs)
+  3. **Stored with delivered system documents** (MANDATORY all SILs)
+  4. **Part of commissioning and acceptance** (MANDATORY all SILs)
+  
+  **Additional Content** (industry best practices, SIL 1+):
+  5. Installation identification (location, system ID)
+  6. Deployment date and personnel
+  7. Hardware configuration
+  8. Installation verification results
+  9. Deployment procedure compliance
+  10. Sign-offs by deployment personnel and commissioning authority
+  
+  **Critical Safety Function**:
+  Deployment Records provide **LEGAL and SAFETY EVIDENCE** that the CORRECT software
+  has been loaded at a specific installation. This is critical for:
+  - Safety certification and regulatory compliance
+  - Critical fault traceability per 9.1.4.14 NOTE (identify all affected installations)
+  - Commissioning and acceptance (legal handover)
+  - Audit trail for safety investigations
+  
+  **Verification Requirements** (EN 50128 9.1.4.18):
+  - Readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+  - Traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+  - Requirements per 9.1.4.13 met (MANDATORY all SILs)
+  - Internal consistency (MANDATORY SIL 3+)
+  - Results recorded in Deployment Verification Report (DOC-040)
+  
+  **PM Agent Responsibility**:
+  - Coordinate deployment record collection
+  - Record software identification from self-identification mechanisms
+  - Record installation identification (location, system ID)
+  - Record deployment metadata (date, personnel, procedures)
+  - Record hardware configuration
+  - Record installation verification results
+  - Collect sign-offs from deployment personnel and commissioning authority
+  - Store records with delivered system documents
+  - Ensure traceability to installation per 9.1.4.14
+  
+  **VER Agent Responsibility**:
+  - Verify readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+  - Verify traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+  - Verify requirements per 9.1.4.13 met (MANDATORY)
+  - Verify internal consistency (MANDATORY SIL 3+)
+  - Verify self-identification inspection documented
+  - Record verification results in DOC-040 (Deployment Verification Report)
+  
+  **VAL Agent Responsibility**:
+  - Validate deployment records complete and accurate
+  - Validate self-identification inspection adequate
+  - Validate commissioning and acceptance legitimate
+  
+  **Configuration Management**:
+  Deployment Records are **IMMUTABLE** after commissioning/acceptance sign-off.
+  They are part of the legal and safety documentation for the installation.
+  No changes permitted - any corrections require new deployment with new records.
+  
+  **Traceability to Installations** (EN 50128 9.1.4.14):
+  Deployment Records enable traceability from software baseline to all installations.
+  This is CRITICAL when critical faults are discovered - records allow identification
+  of all affected installations for corrective action.

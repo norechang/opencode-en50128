@@ -1,0 +1,336 @@
+# Software Architecture Specification (SAS)
+# EN 50128 Deliverable #9 - Section 7.3
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-009-SAS"
+number: 9
+name: "Software Architecture Specification"
+abbreviation: "SAS"
+
+# ===== Lifecycle Context =====
+phase: "architecture"
+standard_section: "7.3"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "DES"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-design/templates/Software-Architecture-Specification-template.md"
+template_exists: true
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.3"
+        technique_id: "D.52"
+        recommendation: "R"
+    additional_requirements:
+      - "Software components identified"
+      - "Interfaces defined"
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.3"
+        technique_id: "D.52"
+        recommendation: "HR"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "HR"
+      - technique_name: "Defensive Programming"
+        table_reference: "A.3"
+        technique_id: "D.14"
+        recommendation: "R"
+    additional_requirements:
+      - "Components traceable to requirements"
+      - "SIL level assigned to each component"
+      - "Fault handling strategy defined"
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.3"
+        technique_id: "D.52"
+        recommendation: "HR"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Defensive Programming"
+        table_reference: "A.3"
+        technique_id: "D.14"
+        recommendation: "HR"
+      - technique_name: "Fully Defined Interface"
+        table_reference: "A.3"
+        technique_id: "D.33"
+        recommendation: "HR"
+    additional_requirements:
+      - "Modular design MANDATORY"
+      - "Component independence analysis"
+      - "Pre-existing software justified"
+      - "Hardware/software interactions detailed"
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.3"
+        technique_id: "D.52"
+        recommendation: "M"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Defensive Programming"
+        table_reference: "A.3"
+        technique_id: "D.14"
+        recommendation: "HR"
+      - technique_name: "Fully Defined Interface"
+        table_reference: "A.3"
+        technique_id: "D.33"
+        recommendation: "HR"
+      - technique_name: "Information Encapsulation"
+        table_reference: "A.3"
+        technique_id: "D.34"
+        recommendation: "HR"
+    additional_requirements:
+      - "Structured Methodology MANDATORY"
+      - "Modular Approach MANDATORY"
+      - "Pre-existing software failure analysis MANDATORY (Section 7.3.4.7c)"
+      - "Failure detection strategy for pre-existing software"
+      - "Independence evidence for mixed-SIL components"
+      - "Technique justification per Section 4.8, 4.9"
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Structured Methodology"
+        table_reference: "A.3"
+        technique_id: "D.52"
+        recommendation: "M"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Defensive Programming"
+        table_reference: "A.3"
+        technique_id: "D.14"
+        recommendation: "HR"
+      - technique_name: "Fully Defined Interface"
+        table_reference: "A.3"
+        technique_id: "D.33"
+        recommendation: "HR"
+      - technique_name: "Information Encapsulation"
+        table_reference: "A.3"
+        technique_id: "D.34"
+        recommendation: "HR"
+      - technique_name: "Fault Detection and Diagnosis"
+        table_reference: "A.3"
+        technique_id: "D.26"
+        recommendation: "HR"
+    additional_requirements:
+      - "All SIL 3 requirements apply"
+      - "Fault detection and diagnosis HIGHLY RECOMMENDED"
+      - "Pre-existing software MANDATORY failure analysis and protection"
+      - "Diverse architecture techniques considered"
+
+# ===== Required Content Sections =====
+required_content:
+  - section: "1. Architecture Overview"
+    description: "High-level architecture, design philosophy, safety strategy"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "2. Software Components"
+    description: "Component identification, SIL levels, new/existing, validation status"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "3. Hardware/Software Interactions"
+    description: "HW/SW interfaces, memory map, device drivers, interrupt handling"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "4. Component Interfaces"
+    description: "Inter-component interfaces, data flow, control flow"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "5. Traceability to Requirements"
+    description: "Traceability matrix: requirements → architectural components"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "6. Fault Handling Strategy"
+    description: "Fault avoidance, fault detection, fault tolerance mechanisms"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "7. Pre-Existing Software"
+    description: "PESS components, requirements, assumptions, interfaces, failure analysis (SIL 3-4)"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "8. Independence Analysis"
+    description: "Independence evidence for mixed-SIL components (if applicable)"
+    mandatory_for: ["SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "9. Technique Justification"
+    description: "Justification of selected techniques from Table A.3 per Section 4.8, 4.9"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "sas-document"
+    description: "Complete SAS document conforming to EN 50128 Section 7.3.4.1-7.3.4.14"
+    mandatory_sil: 0
+    source: "DES agent architecture design"
+    format: "Markdown"
+    storage_path: "docs/design/SAS.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "architecture-complete"
+    verification_criteria:
+      - "All required sections present (Section 7.3.4.2-7.3.4.14)"
+      - "Complete, consistent, clear, precise, unequivocal (7.3.4.10a)"
+      - "Traceable to SRS (7.3.4.10b)"
+      - "Techniques justified from Table A.3 (7.3.4.14)"
+  
+  - evidence_id: "component-traceability"
+    description: "Traceability matrix from software requirements to architectural components"
+    mandatory_sil: 1
+    source: "DES agent traceability analysis"
+    format: "CSV"
+    storage_path: "evidence/traceability/requirements_to_architecture.csv"
+    automation_level: "automatic"
+    collect_on_agent_action: "architecture-complete"
+    verification_criteria:
+      - "All software requirements traced to at least one component"
+      - "All components traced to at least one requirement"
+      - "SIL level assigned to each component"
+  
+  - evidence_id: "pess-analysis"
+    description: "Pre-existing software failure analysis and protection strategy (SIL 3-4)"
+    mandatory_sil: 3
+    source: "DES agent + SAF agent PESS analysis"
+    format: "Markdown"
+    storage_path: "docs/design/PESS-Analysis.md"
+    automation_level: "manual"
+    collect_on_agent_action: "architecture-complete"
+    verification_criteria:
+      - "All PESS components identified"
+      - "Failure modes analyzed for each PESS component"
+      - "Detection strategy defined for PESS failures"
+      - "Protection strategy defined (containment, isolation)"
+  
+  - evidence_id: "independence-evidence"
+    description: "Independence evidence for mixed-SIL components (if software has multiple SIL levels)"
+    mandatory_sil: 2
+    source: "DES agent independence analysis"
+    format: "Markdown"
+    storage_path: "docs/design/SAS.md (Section 8)"
+    automation_level: "manual"
+    collect_on_agent_action: "architecture-complete"
+    verification_criteria:
+      - "Independence demonstrated OR all components treated as highest SIL (7.3.4.9)"
+      - "Independence evidence recorded in SAS"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-001-SQAP"
+    reason: "SQAP defines quality standards, document ID scheme, lifecycle model"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-003-SCMP"
+    reason: "SCMP defines configuration management for SAS baseline"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-006-SRS"
+    reason: "SAS derives from SRS per EN 50128 Section 7.3.4.1"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Software Design Specification derives from SAS (Section 7.3.4.20)"
+  
+  - deliverable_id: "DOC-011-SOFTWARE-INTERFACE-SPEC"
+    reason: "Software Interface Specification derives from SAS (Section 7.3.4.18)"
+  
+  - deliverable_id: "DOC-012-ARCHITECTURE-DESIGN-VER"
+    reason: "Architecture and Design Verification Report verifies SAS"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All sections required by EN 50128 Section 7.3.4.2-7.3.4.14 present"
+    - "All software components identified with SIL levels"
+    - "All hardware/software interactions detailed"
+    - "All techniques from Table A.3 justified"
+  
+  correctness:
+    - "Architecture feasible for achieving SRS at required SIL (7.3.4.3)"
+    - "Modular approach applied (MANDATORY SIL 2+)"
+    - "Fault handling strategy balanced (7.3.4.11)"
+    - "PESS failure analysis complete (SIL 3-4)"
+  
+  consistency:
+    - "Components consistent with SRS requirements"
+    - "SIL levels consistent with SRS"
+    - "Interfaces consistent between components"
+    - "Technique selections consistent with SIL level"
+  
+  traceability:
+    - "All SRS requirements traceable to architectural components"
+    - "All components traceable to SRS requirements"
+    - "Traceability matrix complete (SIL 1+ HR, SIL 3+ M)"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After Architecture and Design Verification (Phase 3 exit)"
+  change_control: "CCB approval required for all changes (impacts design/code)"
+  version_control: "Git repository under docs/design/"
+  review_frequency: "At design phase transitions or significant architecture changes"
+  
+  update_triggers:
+    - "Requirements change impacting architecture"
+    - "Component boundary change"
+    - "SIL level change for component"
+    - "Pre-existing software addition/removal"
+    - "Fault handling strategy change"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "7.3"
+    title: "Software Architecture and Design"
+    description: "Primary section for architecture requirements"
+  
+  - section: "7.3.4.1-7.3.4.14"
+    title: "Software Architecture Specification Requirements"
+    description: "Specific requirements for SAS content"
+  
+  - section: "7.3.4.7"
+    title: "Pre-Existing Software Requirements"
+    description: "PESS restrictions and failure analysis (SIL 3-4)"
+  
+  - section: "7.3.4.9"
+    title: "Mixed-SIL Component Independence"
+    description: "Independence evidence or treat all as highest SIL"
+  
+  - section: "Table A.3"
+    title: "Software Architecture Techniques"
+    description: "Mandatory/Highly Recommended techniques by SIL"
+  
+  - section: "Annex C Table C.1"
+    title: "Document Control Summary"
+    description: "SAS is deliverable #9"
+
+# ===== Notes =====
+notes: |
+  SAS is MANDATORY for all SIL levels (EN 50128 Section 7.3).
+  Modular Approach is MANDATORY for SIL 2+ (Table A.3).
+  Pre-existing software (PESS) failure analysis MANDATORY for SIL 3-4 (Section 7.3.4.7c).
+  Independence evidence MANDATORY for mixed-SIL components OR treat all as highest SIL (Section 7.3.4.9).
+  SAS must be traceable back to SRS (Section 7.3.4.10b).
+  Techniques from Table A.3 must be justified per Section 4.8, 4.9 (Section 7.3.4.14).
+  Size and complexity of architecture shall be balanced (Section 7.3.4.15).

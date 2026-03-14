@@ -58,6 +58,95 @@ This completion advances Phase 2 (Skill Enhancement) from **23% to 31%** complet
 
 ---
 
+## Tool Integration Update (2026-03-14)
+
+**Status**: ✅ Tool migration complete  
+**Impact**: All traceability tool references updated to use working implementations
+
+### Background
+
+During Phase 2 completion, a critical gap was discovered: the verification skill (along with requirements, design, and implementation skills) referenced placeholder traceability tools that were **designed but never implemented**. All skill workflows contained commands like `python3 tools/traceability/extract_traces.py` which did not exist.
+
+### Tool Implementation
+
+To resolve this, two production-grade tools were implemented and integrated:
+
+1. **Traceability Manager** (`tools/traceability_manager.py`)
+   - **1,539 lines** of Python code
+   - **10 commands**: create, validate, query, check-gaps, report, import, export, extract, visualize, sync
+   - **Storage**: CSV (primary), JSON (queries), Markdown (reports)
+   - **SIL validation**: 80% (SIL 0) → 100% (SIL 3-4) coverage requirements
+   - **Evidence**: `evidence/traceability/*.csv`
+
+2. **Workflow Manager** (`tools/workflow_manager.py`)
+   - **900+ lines** of Python code
+   - **6 commands**: submit, review, approve, baseline, status, history
+   - **Storage**: YAML (workflow state), logs (history)
+   - **SIL workflows**: 4 approvals (SIL 0-2) → 8 approvals (SIL 3-4)
+   - **State**: `.workflow/documents/*.yaml`
+
+3. **Workspace Integration** (`tools/workspace.py`)
+   - Unified CLI: `workspace.py trace <cmd>` and `workspace.py wf <cmd>`
+   - All tools tested and working
+
+### Verification Skill Updates (8 files)
+
+All traceability tool references in the verification skill were migrated from non-existent placeholders to working commands:
+
+| File | References Updated | Status |
+|------|-------------------|--------|
+| `workflows/traceability-verification.md` | 13 commands | ✅ Complete |
+| `workflows/verification-planning.md` | 4 commands | ✅ Complete |
+| `workflows/static-analysis-workflow.md` | 0 (no references) | ✅ Complete |
+| `workflows/verification-reporting.md` | 6 commands | ✅ Complete |
+| `resources/verification-tools-reference.md` | 0 (no references) | ✅ Complete |
+| `resources/verification-metrics.md` | 2 commands | ✅ Complete |
+| `resources/traceability-verification-checklist.md` | 2 commands | ✅ Complete |
+| `SKILL.md` | 1 command | ✅ Complete |
+
+**Total**: 28 traceability command references updated across 8 files
+
+### Command Migration Examples
+
+**OLD (non-existent)**:
+```bash
+python3 tools/traceability/extract_traces.py --input SRS.md --type requirements
+python3 tools/traceability/check_traceability.py --source traces/requirements.yaml
+python3 tools/traceability/generate_matrix.py --from requirements --to design
+```
+
+**NEW (working)**:
+```bash
+workspace.py trace extract --document SRS.md --type requirements_to_design --merge
+workspace.py trace validate --phase design --sil 3
+workspace.py trace create --from requirements --to design
+workspace.py trace report --from requirements --to design --format markdown
+```
+
+### Documentation Created
+
+- `tools/README_TRACEABILITY.md` (659 lines) - User guide
+- `docs/traceability-manager-implementation-report.md` (450 lines) - Implementation details
+- `docs/TOOL-MIGRATION-GUIDE.md` (355 lines) - Command mapping reference
+
+### Verification
+
+All 8 files verified to have **zero remaining placeholder tool references**:
+```bash
+$ grep -r "tools/traceability" .opencode/skills/en50128-verification/
+# (No results - migration complete)
+```
+
+### Impact
+
+- ✅ **All verification workflows now functional** with real tool implementations
+- ✅ **Traceability automation working** for SIL 0-4 projects
+- ✅ **Evidence storage standardized** (CSV/JSON/YAML formats)
+- ✅ **SIL-dependent validation** automatically enforced
+- ✅ **CI/CD integration ready** via unified workspace.py CLI
+
+---
+
 ## Files Created and Enhanced
 
 ### Workflow Files (4 files, ~170 pages, ~6,932 lines)

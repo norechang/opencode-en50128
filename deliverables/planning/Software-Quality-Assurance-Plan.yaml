@@ -1,0 +1,371 @@
+# Software Quality Assurance Plan (SQAP)
+# EN 50128 Deliverable #1 - Section 6.5
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-001-SQAP"
+number: 1
+name: "Software Quality Assurance Plan"
+abbreviation: "SQAP"
+
+# ===== Lifecycle Context =====
+phase: "planning"
+standard_section: "6.5"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "QUA"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-documentation/templates/Software-Quality-Assurance-Plan-template.md"
+template_exists: true
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true  # QA is MANDATORY for ALL SIL levels
+    techniques:
+      - technique_name: "Software Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "R"
+    additional_requirements:
+      - "Quality Assurance System required (EN ISO 9000 compliant)"
+      - "Document control procedures"
+      - "Lifecycle model defined"
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Software Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "HR"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "HR"
+    additional_requirements:
+      - "Quality Assurance System required (EN ISO 9000 compliant)"
+      - "EN ISO 9001 certification highly recommended"
+      - "Entry/exit criteria for all phases"
+      - "Quality metrics defined"
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Software Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "HR"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "HR"
+      - technique_name: "Documentation Standard"
+        table_reference: "A.9"
+        technique_id: "D.16"
+        recommendation: "HR"
+    additional_requirements:
+      - "Quality Assurance System required (EN ISO 9000 compliant)"
+      - "EN ISO 9001 certification highly recommended"
+      - "Independent quality reviews"
+      - "Code review mandatory (100% coverage)"
+      - "Static analysis tools qualified"
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Software Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "M"
+      - technique_name: "Documentation Standard"
+        table_reference: "A.9"
+        technique_id: "D.16"
+        recommendation: "HR"
+      - technique_name: "Software Quality Metrics"
+        table_reference: "A.9"
+        technique_id: "D.47"
+        recommendation: "HR"
+    additional_requirements:
+      - "Quality Assurance System MANDATORY (EN ISO 9000 compliant)"
+      - "EN ISO 9001 certification highly recommended"
+      - "Independent quality assurance function"
+      - "Independent verification and validation"
+      - "Code review mandatory (100% coverage) by independent reviewer"
+      - "Static analysis tools qualified (T2 or T3)"
+      - "All techniques from Annex A justified"
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Software Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "M"
+      - technique_name: "Documentation Standard"
+        table_reference: "A.9"
+        technique_id: "D.16"
+        recommendation: "HR"
+      - technique_name: "Software Quality Metrics"
+        table_reference: "A.9"
+        technique_id: "D.47"
+        recommendation: "HR"
+      - technique_name: "Tool Assessment and Certification"
+        table_reference: "A.9"
+        technique_id: "D.57"
+        recommendation: "HR"
+    additional_requirements:
+      - "Quality Assurance System MANDATORY (EN ISO 9000 compliant)"
+      - "EN ISO 9001 certification MANDATORY"
+      - "Independent quality assurance function (separate organization)"
+      - "Independent verification and validation (separate organization)"
+      - "Code review mandatory (100% coverage) by independent team"
+      - "Static analysis tools qualified (T3 only)"
+      - "All techniques from Annex A justified with evidence"
+      - "Diverse tooling for critical activities"
+
+# ===== Required Content Sections =====
+required_content:
+  - section: "1. Introduction"
+    description: "Purpose, scope, applicable standards"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "2. Quality Organization"
+    description: "Roles, responsibilities, independence requirements"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "3. Lifecycle Model Definition"
+    description: "Activities, tasks, entry/exit criteria, inputs/outputs"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "4. Documentation Structure and Control"
+    description: "Document hierarchy, roles for writing/checking/approval, archiving"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "5. Quality Activities by Phase"
+    description: "Specific quality activities for each lifecycle phase"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "6. Reviews and Audits"
+    description: "Review types, schedules, criteria, checklists"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "7. Methods, Measures and Tools"
+    description: "QA methods, tools, qualification status, justification per Annex A"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "8. Traceability Management"
+    description: "Traceability approach, tools, verification"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "9. Non-Conformance Management"
+    description: "Tracking and tracing of deviations, problem reporting, corrective action"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "10. Quality Metrics"
+    description: "Metrics for quality assessment, thresholds, reporting"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "11. Training"
+    description: "Training requirements for quality activities"
+    mandatory_for: ["SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "12. References"
+    description: "Referenced documents (SCMP, SVP, SVaP, etc.)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "sqap-document"
+    description: "Complete SQAP document conforming to EN 50128 Section 6.5.4.5 with all required sections"
+    mandatory_sil: 0
+    source: "QUA agent document creation"
+    format: "Markdown"
+    storage_path: "docs/plans/SQAP.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "plan-complete"
+    verification_criteria:
+      - "All required sections present (6.5.4.5 a-f)"
+      - "Lifecycle model defined with entry/exit criteria"
+      - "Documentation control procedures specified"
+      - "Methods, measures and tools specified per Annex A"
+      - "Techniques justified per Section 4.7-4.9"
+  
+  - evidence_id: "technique-justification"
+    description: "Justification for each combination of techniques/measures from Annex A appropriate to SIL level"
+    mandatory_sil: 1
+    source: "QUA agent Annex A analysis"
+    format: "Markdown table"
+    storage_path: "docs/plans/SQAP.md (Section 7)"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "plan-complete"
+    verification_criteria:
+      - "All mandatory techniques identified"
+      - "All highly recommended techniques justified if not used"
+      - "Combination satisfies Section 4.8, 4.9, 4.10"
+  
+  - evidence_id: "quality-metrics-definition"
+    description: "Quality metrics, thresholds, and reporting procedures for all lifecycle phases"
+    mandatory_sil: 1
+    source: "QUA agent metrics definition"
+    format: "Markdown table"
+    storage_path: "docs/plans/SQAP.md (Section 10)"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "plan-complete"
+    verification_criteria:
+      - "Metrics defined for each lifecycle phase"
+      - "Thresholds specified (SIL-appropriate)"
+      - "Reporting frequency and method defined"
+  
+  - evidence_id: "independence-demonstration"
+    description: "Evidence that independence requirements are met for Verifier, Validator, and QA (SIL 3-4)"
+    mandatory_sil: 3
+    source: "QUA agent organization analysis + manual org chart"
+    format: "Markdown + PDF org chart"
+    storage_path: "docs/plans/SQAP.md (Section 2), docs/organization/org-chart.pdf"
+    automation_level: "manual"
+    collect_on_agent_action: "plan-complete"
+    verification_criteria:
+      - "Verifier independent from development team"
+      - "Validator independent from project manager"
+      - "QA function independent from development"
+      - "No conflicts of interest"
+  
+  - evidence_id: "sqap-verification-report"
+    description: "Software Quality Assurance Verification Report verifying SQAP completeness and consistency per 6.5.4.8"
+    mandatory_sil: 0
+    source: "VER agent document verification"
+    format: "Markdown"
+    storage_path: "docs/verification/SQAP-Verification-Report.md"
+    automation_level: "automatic"
+    collect_on_agent_action: "verify-sqap"
+    verification_criteria:
+      - "SQAP meets readability/traceability requirements (5.3.2.7-10, 6.5.4.14-17)"
+      - "SQAP meets specific requirements (6.5.4.4-6)"
+      - "Internal consistency verified"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "EXTERNAL-SYSTEM-SAFETY-PLAN"
+    reason: "System-level Safety Plan defines SIL levels and system safety requirements that SQAP must address"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "EXTERNAL-RAMS-PLAN"
+    reason: "System-level RAMS Plan (EN 50126) provides RAMS context for SIL 1+ quality activities"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-003-SCMP"
+    reason: "SQAP references or includes SCMP per EN 50128 Section 6.5.4.5"
+  
+  - deliverable_id: "DOC-004-SVP"
+    reason: "SQAP references SVP per EN 50128 Section 6.5.4.5"
+  
+  - deliverable_id: "DOC-005-SVAP"
+    reason: "SQAP references SVaP per EN 50128 Section 6.5.4.5"
+  
+  - deliverable_id: "DOC-006-SRS"
+    reason: "SRS development follows SQAP quality procedures, standards, and lifecycle model"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All sections required by EN 50128 Section 6.5.4.5 present"
+    - "All SIL-specific requirements addressed"
+    - "All lifecycle phases covered"
+    - "All document types identified"
+  
+  correctness:
+    - "Lifecycle model consistent with EN 50128 V-Model"
+    - "Techniques selected from Annex A tables"
+    - "Independence requirements match SIL level"
+    - "Quality metrics appropriate for SIL level"
+  
+  consistency:
+    - "Roles consistent across sections"
+    - "Entry/exit criteria consistent with lifecycle phases"
+    - "Referenced documents exist or are planned"
+    - "Technique justifications consistent with selections"
+  
+  traceability:
+    - "All EN 50128 Section 6.5.4.5 requirements addressed"
+    - "All Annex A techniques traceable to justification"
+    - "All quality activities traceable to lifecycle phases"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_required: true
+  baseline_timing: "Before commencement of Phase 2 (Requirements)"
+  change_control: "CCB approval required for all changes"
+  version_control: "Git repository under docs/plans/"
+  review_frequency: "Quarterly or at phase transitions"
+  
+  update_triggers:
+    - "Phase transition (new quality activities needed)"
+    - "SIL level change"
+    - "Organization change (personnel, independence)"
+    - "Tool change (new tools, qualification status change)"
+    - "Significant defect pattern (corrective action needed)"
+    - "Audit finding"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "6.5"
+    title: "Software Quality Assurance"
+    description: "Primary section defining SQAP requirements"
+  
+  - section: "6.5.4.5"
+    title: "SQAP Required Content"
+    description: "Mandatory items to be specified in SQAP"
+  
+  - section: "6.5.4.8"
+    title: "SQAP Verification Requirements"
+    description: "Verification activities for SQAP"
+  
+  - section: "Table A.9"
+    title: "Software Quality Assurance Techniques and Measures"
+    description: "Techniques for QA by SIL level"
+  
+  - section: "Annex C Table C.1"
+    title: "Document Control Summary"
+    description: "SQAP is deliverable #1"
+
+# ===== Notes =====
+notes: |
+  SQAP is MANDATORY for ALL SIL levels (0, 1, 2, 3, 4) - EN 50128 Section 6.5.
+  SQAP must be issued at beginning of project (6.5.4.1).
+  SQAP may reference separate SCMP, SVP, SVaP documents (6.5.4.5).
+  SQAP requires verification via Software Quality Assurance Verification Report (6.5.4.8).
+  EN ISO 9001 certification highly recommended (SIL 1+), MANDATORY (SIL 4).
+  Independent QA function MANDATORY for SIL 3-4.
+  SQAP governs all subsequent quality activities - foundational document.

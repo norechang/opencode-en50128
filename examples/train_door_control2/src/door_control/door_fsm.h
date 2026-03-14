@@ -30,6 +30,10 @@
 #include "../common/types.h"
 #include "../common/error_codes.h"
 
+/* Forward declarations - full definitions in other modules */
+typedef struct fault_detection_s fault_detection_t;
+typedef struct safety_monitor_s safety_monitor_t;
+
 /*===========================================================================*/
 /* Door State Enumeration                                                    */
 /*===========================================================================*/
@@ -92,8 +96,11 @@ typedef enum {
  */
 #define DOOR_FSM_MAX_EVENTS           (8U)
 
-/** @brief Door open timeout (5 seconds) */
-#define DOOR_FSM_OPEN_TIMEOUT_MS      (5000U)
+/** @brief Door open timeout (8 seconds) - increased from 5s to accommodate realistic door physics
+ * @note At PWM=80%, door takes ~6.1s to reach 95% open position. 8s provides safety margin.
+ * @fix DEFECT-INT-006 (TC-INT-2-001): FSM was timing out before door reached OPEN threshold
+ */
+#define DOOR_FSM_OPEN_TIMEOUT_MS      (8000U)
 
 /** @brief Door close timeout (7 seconds) */
 #define DOOR_FSM_CLOSE_TIMEOUT_MS     (7000U)
@@ -120,13 +127,27 @@ typedef enum {
 /* Data Structures                                                           */
 /*===========================================================================*/
 
+/* Forward declaration of fault_detection_t - full definition in fault_detection.h */
+struct fault_detection_s;
+typedef struct fault_detection_s fault_detection_t;
+
 /**
  * @brief Door FSM state structure
- * @compliance Static allocation ONLY (85 bytes fixed size after queue reduction)
+ * @compliance Static allocation ONLY (89 bytes fixed size after adding fault_detection pointer)
  * @traceability DOC-COMPDES-2026-001 Section 3.1.14
  * 
  * @note FIX for DEF-DESIGN-001 (2026-02-22):
  *       Event queue size reduced from 16 to 8 elements
+ * 
+ * @note FIX for DEF-INTEGRATION-001 (2026-02-26):
+ *       Added fault_detection_t* pointer for loose coupling with fault detection module.
+ *       This fixes SIGSEGV when calling fault_detection_report_fault() without fd parameter.
+ * 
+ * @note FIX for DEF-INTEGRATION-003 (2026-02-26):
+ *       Added safety_monitor_t* pointer for proper speed interlock integration.
+ *       This fixes TC-INT-SAF-001 failure where safety_monitor_is_safe_to_open() was
+ *       called with NO arguments (undefined behavior). Safety monitor state must be
+ *       accessible to door FSM for correct speed interlock enforcement.
  */
 typedef struct {
     /* State information */
@@ -150,7 +171,11 @@ typedef struct {
     uint8_t event_queue_tail;             /**< Queue tail index (1 byte) */
     uint8_t event_queue_count;            /**< Number of queued events (1 byte) */
     
-    /* Total size: 85 bytes (reduced from 93 bytes, padding may apply for alignment) */
+    /* Module dependencies (loose coupling via pointers) */
+    fault_detection_t* fault_detection;  /**< Fault detection module (4 or 8 bytes pointer) */
+    safety_monitor_t* safety_monitor;     /**< Safety monitor module (4 or 8 bytes pointer) */
+    
+    /* Total size: 93 bytes on 32-bit, 101 bytes on 64-bit (padding may apply for alignment) */
 } door_fsm_t;
 
 /*===========================================================================*/
@@ -161,14 +186,25 @@ typedef struct {
  * @brief Initialize door FSM for specified side
  * @param[in,out] fsm Pointer to door FSM structure (must not be NULL)
  * @param[in] side Door side (LEFT or RIGHT)
+ * @param[in] fd Pointer to fault_detection module (must not be NULL for SIL 3)
+ * @param[in] sm Pointer to safety_monitor module (must not be NULL for SIL 3)
  * @return ERROR_SUCCESS on success, error code otherwise
  * @pre fsm must not be NULL
  * @pre side must be valid (DOOR_SIDE_LEFT or DOOR_SIDE_RIGHT)
+ * @pre fd must not be NULL (fault detection required for safe operation)
+ * @pre sm must not be NULL (safety monitor required for speed interlocks)
  * @post FSM initialized to CLOSED state with default values
- * @complexity 3 (1 base + 2 IF decisions)
+ * @complexity 5 (1 base + 4 IF decisions) [increased from 4 due to sm NULL check]
  * @safety Non-critical (initialization only)
+ * 
+ * @note FIX for DEF-INTEGRATION-001 (2026-02-26):
+ *       Added fault_detection parameter for proper module integration.
+ * 
+ * @note FIX for DEF-INTEGRATION-003 (2026-02-26):
+ *       Added safety_monitor parameter for proper speed interlock integration.
+ *       This fixes TC-INT-SAF-001 failure.
  */
-error_t door_fsm_init(door_fsm_t* fsm, door_side_t side);
+error_t door_fsm_init(door_fsm_t* fsm, door_side_t side, fault_detection_t* fd, safety_monitor_t* sm);
 
 /**
  * @brief Main state machine update function (50ms cycle)

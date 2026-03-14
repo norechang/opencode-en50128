@@ -1,12 +1,7 @@
 # Phase Gate Check Report
 
-**Document ID**: DOC-GATE-YYYY-NNN  
-**Version**: 1.0  
-**Date**: YYYY-MM-DD  
-**Project**: [Project Name]  
-**SIL Level**: [0, 1, 2, 3, or 4]  
-**Author**: Lifecycle Coordinator (COD)  
-**Status**: Final
+**TEMPLATE VERSION**: 2.0  
+**REFERENCE**: EN 50128:2011 Section [X.Y]
 
 ---
 
@@ -14,28 +9,37 @@
 
 | Field | Value |
 |-------|-------|
-| **Document ID** | DOC-GATE-YYYY-NNN |
-| **Version** | 1.0 |
-| **Date** | YYYY-MM-DD |
+| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Version** | [X.Y] |
+| **Date** | [YYYY-MM-DD] |
 | **Project** | [Project Name] |
 | **SIL Level** | [0, 1, 2, 3, or 4] |
-| **Phase** | Phase [X]: [Phase Name] |
-| **Gate Check ID** | GATE-[PHASE]-YYYY-NNN |
-| **Author** | Lifecycle Coordinator (COD) |
-| **Status** | Final |
+| **Author** | [Name], [Role] |
+| **Reviewer** | [Name], [Role] |
+| **Approver** | [Name], [Role] |
+| **Status** | [Draft \| Review \| Approved \| Baseline] |
 
----
+## DOCUMENT CONTROL
 
-## GATE CHECK SUMMARY
+| Version | Date | Author | Changes | Approved By |
+|---------|------|--------|---------|-------------|
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
 
-| Property | Value |
-|----------|-------|
-| **Phase** | Phase [X]: [Phase Name] |
-| **Gate Check Date** | YYYY-MM-DD |
-| **Gate Check Result** | **[PASS / CONDITIONAL PASS / FAIL]** |
-| **Next Phase** | Phase [X+1]: [Next Phase Name] |
-| **Transition Authorized** | [YES / NO / CONDITIONAL] |
-| **Conditions** | [List conditions if conditional pass] |
+## APPROVALS
+
+**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
+**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
+
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| **Author** | [Name] | | YYYY-MM-DD |
+| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
+| **QA Manager** | [Name] | | YYYY-MM-DD |
+| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
+| **Project Manager** | [Name] | | YYYY-MM-DD |
+| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
 
 ---
 

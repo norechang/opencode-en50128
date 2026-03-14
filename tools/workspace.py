@@ -609,17 +609,43 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: workspace.py <command> [options]")
         print()
-        print("Commands:")
+        print("Workspace Commands:")
         print("  list                              - List all workspaces")
         print("  status                            - Show current workspace status")
         print("  switch <project_name>             - Switch to different workspace")
         print("  create <project_name> --sil <0-4> - Create new workspace")
         print("  archive <project_name>            - Archive completed workspace")
         print()
+        print("Traceability Commands:")
+        print("  trace <subcommand> [options]      - Traceability management")
+        print("    create       - Create traceability matrix")
+        print("    validate     - Validate traceability completeness")
+        print("    query        - Query traceability links")
+        print("    check-gaps   - Detect traceability gaps")
+        print("    report       - Generate traceability report")
+        print("    import       - Import traceability data")
+        print("    export       - Export traceability data")
+        print("    extract      - Auto-extract from documents")
+        print("    visualize    - Generate visualizations")
+        print("    sync         - Synchronize formats")
+        print()
+        print("Workflow Commands:")
+        print("  wf <subcommand> [options]         - Workflow management")
+        print("    submit       - Submit document for review")
+        print("    review       - Review and approve/reject")
+        print("    approve      - Mark as approved")
+        print("    baseline     - Create baseline")
+        print("    status       - Generate status report")
+        print("    history      - Show workflow history")
+        print()
         print("Examples:")
         print("  workspace.py list")
         print("  workspace.py switch train_door_control")
         print("  workspace.py create brake_controller --sil 4")
+        print("  workspace.py trace create --from requirements --to architecture")
+        print("  workspace.py trace validate --phase design --sil 3")
+        print("  workspace.py wf submit DOC-SRS-2026-001 --path docs/SRS.md --author-role REQ --author-name 'Jane Doe' --sil 3")
+        print("  workspace.py wf status --all --format markdown")
         sys.exit(1)
 
     command = sys.argv[1]
@@ -654,6 +680,18 @@ def main():
             sys.exit(1)
         project_name = sys.argv[2]
         manager.archive_workspace(project_name)
+    elif command == "trace":
+        # Delegate to traceability_manager.py
+        tool_path = PLATFORM_ROOT / "tools" / "traceability_manager.py"
+        args = ["python3", str(tool_path)] + sys.argv[2:]
+        result = subprocess.run(args)
+        sys.exit(result.returncode)
+    elif command == "wf" or command == "workflow":
+        # Delegate to workflow_manager.py
+        tool_path = PLATFORM_ROOT / "tools" / "workflow_manager.py"
+        args = ["python3", str(tool_path)] + sys.argv[2:]
+        result = subprocess.run(args)
+        sys.exit(result.returncode)
     else:
         print(f"Error: Unknown command '{command}'.")
         print("Run 'workspace.py' for usage.")

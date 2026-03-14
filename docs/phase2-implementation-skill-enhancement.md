@@ -7,6 +7,83 @@
 
 ---
 
+## Tool Integration Update (2026-03-14)
+
+**Status**: ✅ Tool migration complete  
+**Impact**: All traceability tool references updated to use working implementations
+
+### Background
+
+During Phase 2 completion, the implementation skill (along with verification, requirements, and design skills) referenced placeholder traceability tools that were **designed but never implemented**. Workflow commands referenced non-existent scripts like `python3 tools/traceability/extract_traces.py`.
+
+### Implementation Skill Updates (6 files)
+
+All traceability tool references were migrated from placeholders to working `workspace.py` commands:
+
+| File | References Updated | Status |
+|------|-------------------|--------|
+| `workflows/code-review-workflow.md` | 3 commands | ✅ Complete |
+| `workflows/unit-testing-workflow.md` | 4 commands | ✅ Complete |
+| `workflows/misra-c-implementation.md` | 3 sections | ✅ Complete |
+| `resources/code-review-checklist.md` | 2 references | ✅ Complete |
+| `resources/common-pitfalls.md` | 0 (no references) | ✅ Complete |
+| `SKILL.md` | 1 command | ✅ Complete |
+
+**Total**: 13 traceability command references updated across 6 files
+
+### Tool Implementation
+
+Two production-grade tools were implemented and integrated:
+
+1. **Traceability Manager** (`tools/traceability_manager.py`)
+   - **1,539 lines** of production Python code
+   - **10 commands**: create, validate, query, check-gaps, report, import, export, extract, visualize, sync
+   - **Storage**: CSV (primary), JSON (queries), Markdown (reports)
+   - **SIL validation**: Automatic coverage requirement enforcement (100% for SIL 3-4)
+
+2. **Workflow Manager** (`tools/workflow_manager.py`)
+   - **900+ lines** of production Python code
+   - **6 commands**: submit, review, approve, baseline, status, history
+   - **SIL workflows**: Automatic approval routing (4 approvals SIL 0-2, 8 approvals SIL 3-4)
+
+3. **Workspace Integration** (`tools/workspace.py`)
+   - Unified CLI: `workspace.py trace <cmd>` and `workspace.py wf <cmd>`
+
+### Command Migration Examples
+
+**OLD (non-existent)**:
+```bash
+python3 tools/traceability.py create --from-type design --to-type code
+python3 tools/traceability.py link --from DOC-10:MOD-001 --to src/module.c
+python3 tools/traceability.py check-gaps --matrix design_to_code --sil 3
+```
+
+**NEW (working)**:
+```bash
+workspace.py trace create --from design --to code --sil 3
+workspace.py trace import --file traces_code.csv --format csv --merge
+workspace.py trace check-gaps --phase implementation --sil 3
+workspace.py trace report --from design --to code --format markdown
+```
+
+### Verification
+
+All 6 files verified to have **zero remaining placeholder tool references**:
+```bash
+$ grep -r "tools/traceability" .opencode/skills/en50128-implementation/
+# (No results - migration complete)
+```
+
+### Impact
+
+- ✅ **All implementation workflows now functional** with real tool implementations
+- ✅ **Traceability automation working** for implementation phase
+- ✅ **Code review integration ready** with traceability validation
+- ✅ **Unit testing integration ready** with requirement traceability
+- ✅ **Evidence storage standardized** for verification phase
+
+---
+
 ## Executive Summary
 
 The **en50128-implementation** skill has been successfully enhanced from basic templates to a comprehensive knowledge domain with workflows, resources, and tool integration. This skill now provides complete guidance for MISRA C:2012 compliant implementation, defensive programming, unit testing with Unity framework, and code review following EN 50128 Section 7.4-7.5 requirements.

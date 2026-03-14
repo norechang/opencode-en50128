@@ -1,0 +1,279 @@
+# Hardware-Software Integration Test Report
+# EN 50128 Deliverable #14 - Section 7.6.4.11, Integration Phase
+
+deliverable_id: "DOC-014-HW-SW-INT-TEST-REPORT"
+number: 14
+name: "Hardware-Software Integration Test Report"
+abbreviation: "HW-SW Int Test Rep"
+phase: "integration"
+standard_section: "7.6.4.11"
+written_by: "INT"
+first_check: "VER"
+second_check: "VAL"
+template_path: ".opencode/skills/en50128-integration/templates/Hardware-Software-Integration-Test-Report-template.md"
+template_exists: true
+
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+    additional_requirements:
+      - "HW-SW integration test execution documented"
+      - "Test results with pass/fail status"
+      - "Hardware configuration documented"
+    evidence_thresholds:
+      min_hw_test_pass_rate: 80
+      max_open_defects_critical: 0
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+    additional_requirements:
+      - "All HW interface test cases executed"
+      - "Hardware configuration fully documented"
+      - "Performance results on target hardware"
+      - "Test pass rate ≥85%"
+    evidence_thresholds:
+      min_hw_test_pass_rate: 85
+      max_open_defects_critical: 0
+      max_open_defects_high: 3
+
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "R"
+        table_reference: "A.6"
+    additional_requirements:
+      - "100% HW interface test cases executed"
+      - "Performance testing results documented"
+      - "Hardware fault injection results documented"
+      - "Test pass rate ≥90%"
+      - "Zero open critical or high defects"
+    evidence_thresholds:
+      min_hw_test_pass_rate: 90
+      max_open_defects_critical: 0
+      max_open_defects_high: 0
+
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+    additional_requirements:
+      - "100% HW interface test cases executed (MANDATORY)"
+      - "Performance testing results documented (highly recommended)"
+      - "Hardware fault injection results documented (MANDATORY)"
+      - "Test pass rate ≥95%"
+      - "Zero open defects (MANDATORY)"
+      - "Independent verification of test results (MANDATORY)"
+      - "WCET measured on target hardware"
+    evidence_thresholds:
+      min_hw_test_pass_rate: 95
+      max_open_defects_critical: 0
+      max_open_defects_high: 0
+
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+    additional_requirements:
+      - "All SIL 3 requirements apply"
+      - "Rigorous performance analysis on target hardware"
+      - "Diverse fault injection testing"
+
+evidence_requirements:
+  - evidence_id: "hw-sw-test-execution-summary"
+    description: "Summary of all HW-SW integration test cases executed with results"
+    mandatory_sil: 0
+    source: "INT agent, test harness"
+    format: "Structured table"
+    storage_path: "docs/integration/Hardware-Software-Integration-Test-Report.md Section 3"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "int-execute-hw-sw-tests"
+    verification_criteria:
+      - "All test cases from HW-SW Integration Test Specification executed"
+      - "Pass/fail status for each test"
+      - "Execution date and tester recorded"
+
+  - evidence_id: "hw-interface-test-results"
+    description: "Detailed results for hardware interface tests"
+    mandatory_sil: 0
+    source: "INT agent, hardware test logs"
+    format: "Structured table with test case, result, measurements"
+    storage_path: "docs/integration/Hardware-Software-Integration-Test-Report.md Section 4"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "int-test-hw-interfaces"
+    verification_criteria:
+      - "All hardware interfaces tested"
+      - "Actual vs. expected results documented"
+      - "Signal timing documented"
+      - "Any anomalies documented"
+
+  - evidence_id: "driver-bsp-test-results"
+    description: "Test results for device drivers and BSP"
+    mandatory_sil: 1
+    source: "INT agent, driver test logs"
+    format: "Structured table"
+    storage_path: "docs/integration/Hardware-Software-Integration-Test-Report.md Section 5"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "int-test-drivers-bsp"
+    verification_criteria:
+      - "All drivers tested"
+      - "BSP functions tested"
+      - "Driver initialization/shutdown tested"
+      - "Error handling tested"
+
+  - evidence_id: "hw-performance-test-results"
+    description: "Performance test results on target hardware"
+    mandatory_sil: 2
+    source: "INT agent, profiling tools"
+    format: "Structured table with measurements"
+    storage_path: "docs/integration/Hardware-Software-Integration-Test-Report.md Section 6"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "int-test-hw-performance"
+    verification_criteria:
+      - "WCET measured and documented"
+      - "Memory usage measured"
+      - "CPU usage measured"
+      - "I/O throughput measured"
+      - "Performance requirements met"
+
+  - evidence_id: "hw-fault-injection-results"
+    description: "Hardware fault injection test results"
+    mandatory_sil: 2
+    source: "INT agent, fault injection logs"
+    format: "Structured table with fault scenarios and results"
+    storage_path: "docs/integration/Hardware-Software-Integration-Test-Report.md Section 7"
+    automation_level: "manual"
+    collect_on_agent_action: "int-test-hw-faults"
+    verification_criteria:
+      - "All fault scenarios tested"
+      - "Software response documented"
+      - "Recovery mechanisms validated"
+      - "Fault Injection MANDATORY (SIL 3+)"
+
+  - evidence_id: "hw-sw-defect-log"
+    description: "Defects found during HW-SW integration testing"
+    mandatory_sil: 0
+    source: "INT agent, defect tracking"
+    format: "Structured table"
+    storage_path: "docs/integration/Hardware-Software-Integration-Test-Report.md Section 8"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "int-log-hw-sw-defects"
+    verification_criteria:
+      - "All defects logged with severity"
+      - "Root cause analysis"
+      - "Resolution status"
+      - "Zero open critical/high defects (SIL 2+)"
+
+  - evidence_id: "hw-configuration-record"
+    description: "Complete hardware configuration record for testing"
+    mandatory_sil: 0
+    source: "INT agent"
+    format: "Structured section"
+    storage_path: "docs/integration/Hardware-Software-Integration-Test-Report.md Section 2"
+    automation_level: "manual"
+    collect_on_agent_action: "int-record-hw-config"
+    verification_criteria:
+      - "Hardware platform documented"
+      - "Hardware version/revision documented"
+      - "All peripherals documented"
+      - "Tool versions documented"
+
+depends_on:
+  - deliverable_id: "DOC-013-HW-SW-INT-TEST-SPEC"
+    reason: "Test specification defines test cases to execute"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-023-INT-TEST-REPORT"
+    reason: "Software integration must be complete before HW-SW integration"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-018-SOURCE-CODE"
+    reason: "Source code deployed to target hardware"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-024-INT-VER-REPORT"
+    reason: "Integration Verification Report includes HW-SW integration results"
+  - deliverable_id: "DOC-026-OVERALL-TEST-REPORT"
+    reason: "Overall testing includes HW-SW integration evidence"
+
+verification_criteria:
+  completeness:
+    - "All HW-SW test cases executed"
+    - "All hardware interfaces tested"
+    - "Performance results documented (SIL 2+)"
+    - "Fault injection results documented (SIL 2+)"
+    - "All defects documented"
+  correctness:
+    - "Test results accurate"
+    - "Hardware configuration correct"
+    - "Performance measurements valid"
+    - "Pass criteria applied correctly per SIL"
+  consistency:
+    - "Test case IDs match test specification"
+    - "Hardware configuration matches architecture"
+    - "Results consistent with expectations"
+  traceability:
+    - "All test cases traced to test specification"
+    - "All defects traced to test cases"
+
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After HW-SW integration complete and tests pass"
+  change_control: "CCB approval for report changes"
+  version_control: "Git repository under docs/integration/"
+  review_frequency: "At hardware changes or software updates"
+
+en50128_references:
+  - section: "7.6.4.11"
+    description: "Integration Test Report requirements"
+  - section: "7.6"
+    description: "Software Integration"
+  - section: "Table A.6"
+    description: "Integration techniques by SIL"
+  - section: "Annex C Table C.1"
+    description: "Deliverable #14"
+
+notes: |
+  **Purpose**: Documents results of HW-SW integration testing on target hardware.
+  
+  **Key Evidence**:
+  - Hardware interface test results
+  - Device driver test results
+  - BSP test results
+  - Performance on target hardware (WCET, memory, CPU)
+  - Hardware fault injection results
+  
+  **Critical for SIL 3-4**:
+  - 100% hardware interface coverage
+  - WCET measured on target
+  - Hardware fault injection mandatory
+  - Independent verification
+  - Zero open defects

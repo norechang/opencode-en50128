@@ -1,0 +1,373 @@
+# Application Test Specification
+# EN 50128 Deliverable #30 - Section 8.4.4.5-8.4.4.6
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-030-APP-TEST-SPEC"
+number: 30
+name: "Application Test Specification"
+abbreviation: "App Test Spec"
+
+# ===== Lifecycle Context =====
+phase: "application"
+standard_section: "8.4.4.5"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "TST"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-testing/templates/Application-Test-Specification-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: false
+    techniques: []
+    additional_requirements: []
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Boundary Value Analysis"
+        table_reference: "A.14"
+        technique_id: "D.4"
+        recommendation: "R"
+    additional_requirements:
+      - "Tests at intermediate or final stage of data/algorithms preparation"
+      - "Tests ensure coherency and completeness with application principles"
+      - "Tests ensure coherency and completeness with application architecture"
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Boundary Value Analysis"
+        table_reference: "A.14"
+        technique_id: "D.4"
+        recommendation: "HR"
+      - technique_name: "Equivalence Classes and Input Partition Testing"
+        table_reference: "A.14"
+        technique_id: "D.18"
+        recommendation: "R"
+    additional_requirements:
+      - "Tests at intermediate or final stage of data/algorithms preparation"
+      - "Tests ensure coherency and completeness with application principles"
+      - "Tests ensure coherency and completeness with application architecture"
+      - "Traceability to application requirements"
+      - "Readability requirements per 5.3.2.7-5.3.2.10"
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Boundary Value Analysis"
+        table_reference: "A.14"
+        technique_id: "D.4"
+        recommendation: "M"
+      - technique_name: "Equivalence Classes and Input Partition Testing"
+        table_reference: "A.14"
+        technique_id: "D.18"
+        recommendation: "HR"
+    additional_requirements:
+      - "Tests at intermediate or final stage of data/algorithms preparation (MANDATORY)"
+      - "Tests ensure coherency and completeness with application principles (MANDATORY)"
+      - "Tests ensure coherency and completeness with application architecture (MANDATORY)"
+      - "100% traceability to application requirements (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Internal consistency (MANDATORY)"
+      - "All test cases have unique IDs (MANDATORY)"
+      - "Expected results documented for all test cases (MANDATORY)"
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Boundary Value Analysis"
+        table_reference: "A.14"
+        technique_id: "D.4"
+        recommendation: "M"
+      - technique_name: "Equivalence Classes and Input Partition Testing"
+        table_reference: "A.14"
+        technique_id: "D.18"
+        recommendation: "M"
+    additional_requirements:
+      - "Tests at intermediate or final stage of data/algorithms preparation (MANDATORY)"
+      - "Tests ensure coherency and completeness with application principles (MANDATORY)"
+      - "Tests ensure coherency and completeness with application architecture (MANDATORY)"
+      - "100% traceability to application requirements (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Internal consistency (MANDATORY)"
+      - "All test cases have unique IDs (MANDATORY)"
+      - "Expected results documented for all test cases (MANDATORY)"
+      - "Formal verification highly recommended"
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "app-test-spec-document"
+    description: "Complete Application Test Specification document per EN 50128 8.4.4.6"
+    mandatory_sil: 1
+    source: "TST agent"
+    format: "Markdown with YAML frontmatter"
+    storage_path: "docs/application/testing/Application-Test-Specification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/tst create-app-test-spec"
+    verification_criteria:
+      - "Tests specified for intermediate or final stage of data/algorithms preparation"
+      - "Tests ensure coherency with application principles"
+      - "Tests ensure completeness of data/algorithms with application principles"
+      - "Tests ensure coherency with application architecture"
+      - "Tests ensure completeness of data/algorithms with application architecture"
+
+  - evidence_id: "app-test-traceability-matrix"
+    description: "Traceability matrix linking application test cases to application requirements"
+    mandatory_sil: 2
+    source: "TST agent"
+    format: "Markdown table or CSV"
+    storage_path: "docs/application/testing/app-test-traceability-matrix.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/tst create-app-test-traceability"
+    verification_criteria:
+      - "Every application requirement traced to at least one test case"
+      - "Every test case traced to at least one application requirement"
+      - "100% traceability for SIL 3+ (MANDATORY)"
+
+  - evidence_id: "app-test-cases"
+    description: "Detailed application test cases with inputs, procedures, and expected results"
+    mandatory_sil: 1
+    source: "TST agent"
+    format: "YAML or Markdown"
+    storage_path: "tests/application/test-cases/"
+    automation_level: "manual"
+    collect_on_agent_action: "/tst create-app-test-cases"
+    verification_criteria:
+      - "All test cases have unique IDs"
+      - "Test inputs specified"
+      - "Test procedures specified"
+      - "Expected results documented"
+      - "Test coverage of application principles"
+      - "Test coverage of application architecture"
+
+  - evidence_id: "app-data-coherency-tests"
+    description: "Tests verifying coherency of application data/algorithms with application principles"
+    mandatory_sil: 1
+    source: "TST agent"
+    format: "Test specification (YAML)"
+    storage_path: "tests/application/coherency-tests.yaml"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/tst create-app-coherency-tests"
+    verification_criteria:
+      - "All application principles covered"
+      - "Data consistency checks specified"
+      - "Algorithm coherency checks specified"
+      - "Interface coherency checks specified"
+
+  - evidence_id: "app-data-completeness-tests"
+    description: "Tests verifying completeness of application data/algorithms"
+    mandatory_sil: 1
+    source: "TST agent"
+    format: "Test specification (YAML)"
+    storage_path: "tests/application/completeness-tests.yaml"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/tst create-app-completeness-tests"
+    verification_criteria:
+      - "All required application data elements checked"
+      - "All required application algorithms checked"
+      - "No missing data/algorithms"
+      - "Data coverage complete per application requirements"
+
+  - evidence_id: "app-test-spec-verification"
+    description: "Verification report for Application Test Specification per 8.4.4.8"
+    mandatory_sil: 2
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/application/verification/app-test-spec-verification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-app-test-spec"
+    verification_criteria:
+      - "Readability verified per 5.3.2.7-5.3.2.10 (SIL 3+)"
+      - "Traceability verified per 6.5.4.14-6.5.4.17 (SIL 3+)"
+      - "Requirements 8.4.4.6 verified (coherency and completeness tests)"
+      - "Internal consistency verified (SIL 3+)"
+      - "Results recorded in Application Data/Algorithms Verification Report (DOC-035)"
+
+  - evidence_id: "app-test-review-records"
+    description: "Review records from VER and VAL checks"
+    mandatory_sil: 1
+    source: "VER and VAL agents"
+    format: "Review meeting minutes (Markdown)"
+    storage_path: "docs/application/reviews/app-test-spec-review-records.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver review, /val review"
+    verification_criteria:
+      - "All review findings documented"
+      - "Resolution status tracked"
+      - "Sign-offs from VER and VAL"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-028-APP-REQ-SPEC"
+    reason: "Application tests verify application requirements"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-031-APP-ARCH-DESIGN"
+    reason: "Application tests verify coherency with application architecture"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-029-APP-PREP-PLAN"
+    reason: "Application testing per Application Preparation Plan"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-033-APP-TEST-REPORT"
+    reason: "Application Test Report documents execution of test specification"
+  
+  - deliverable_id: "DOC-032-APP-PREP-VER"
+    reason: "Verification report verifies application test specification"
+  
+  - deliverable_id: "DOC-035-APP-DATA-VER"
+    reason: "Application Data/Algorithms Verification Report records test spec verification"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "Tests specified for intermediate stage of data/algorithms preparation"
+    - "Tests specified for final stage of data/algorithms preparation"
+    - "All coherency aspects covered (principles, architecture)"
+    - "All completeness aspects covered (data, algorithms)"
+    - "All application requirements traced to tests (SIL 2+, MANDATORY SIL 3+)"
+    - "All SIL-appropriate techniques applied per Table A.14"
+  
+  correctness:
+    - "Test cases verify coherency with application principles"
+    - "Test cases verify completeness with application principles"
+    - "Test cases verify coherency with application architecture"
+    - "Test cases verify completeness with application architecture"
+    - "Expected results correct and realistic"
+  
+  consistency:
+    - "No conflicting test cases"
+    - "All cross-references valid"
+    - "Terminology consistent with application requirements"
+    - "Internal consistency verified per 8.4.4.8(b) (SIL 3+)"
+  
+  traceability:
+    - "Every test case has unique ID"
+    - "Every test case traced to application requirement (SIL 2+)"
+    - "Every application requirement traced to test case (SIL 2+)"
+    - "100% bidirectional traceability for SIL 3+ (MANDATORY)"
+    - "Readability per 5.3.2.7-5.3.2.10 (SIL 3+)"
+    - "Traceability per 6.5.4.14-6.5.4.17 (SIL 3+)"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Application Test Specification Baseline"
+  baseline_trigger: "After VER and VAL approval"
+  change_control: "All changes via CCB, impact assessment on test execution"
+  versioning: "Semantic versioning (MAJOR.MINOR.PATCH)"
+  storage_location: "config/baselines/application-test-specification/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "8.4.4.5"
+    title: "Application Test Specification - Responsibility"
+    relevance: "Written by Tester (TST)"
+  - section: "8.4.4.6"
+    title: "Application Test Specification - Content"
+    relevance: "Tests at intermediate/final stage ensuring coherency and completeness"
+  - section: "8.4.4.8"
+    title: "Application Test Specification - Verification"
+    relevance: "Verification of readability, traceability, requirements 8.4.4.6, internal consistency"
+  - section: "8.4.5.1"
+    title: "Application Integration and Testing Acceptance"
+    relevance: "Application Test Report documents execution of Application Test Specification"
+  - section: "5.3.2.7-5.3.2.10"
+    title: "Readability requirements"
+    relevance: "General requirements for readability applicable to application test specification"
+  - section: "6.5.4.14-6.5.4.17"
+    title: "Traceability requirements"
+    relevance: "General requirements for traceability applicable to application test specification"
+  - section: "Table A.14"
+    title: "Functional and Black-box Testing techniques"
+    relevance: "Applicable testing techniques (Boundary Value Analysis, Equivalence Classes)"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Application Test Specification is deliverable #30, written by TST, checked by VER and VAL"
+
+# ===== Notes =====
+notes: |
+  **Application Test Specification (Deliverable #30)**
+  
+  This deliverable specifies tests for **application data and algorithms** in systems configured by
+  application data/algorithms (EN 50128 Section 8). It is NOT required for generic software-only systems.
+  
+  **Purpose**: Specify tests to be carried out at intermediate or final stage of data/algorithms preparation
+  to ensure coherency and completeness with application principles and architecture.
+  
+  **Key Content** (EN 50128 8.4.4.6):
+  1. Tests at **intermediate stage** of data/algorithms preparation
+  2. Tests at **final stage** of data/algorithms preparation
+  3. Tests ensuring **coherency** of data/algorithms with **application principles**
+  4. Tests ensuring **completeness** of data/algorithms with **application principles**
+  5. Tests ensuring **coherency** of data/algorithms with **application architecture**
+  6. Tests ensuring **completeness** of data/algorithms with **application architecture**
+  
+  **Difference from Generic Software Test Specifications**:
+  - DOC-007 (Overall Software Test Spec): Tests for generic software requirements
+  - DOC-020 (Component Test Spec): Unit tests for generic software components
+  - DOC-022 (Integration Test Spec): Integration tests for generic software
+  - DOC-030 (App Test Spec): Tests for application data/algorithms coherency and completeness
+  
+  **Test Stages**:
+  - **Intermediate stage**: Tests during data/algorithms preparation (early detection of issues)
+  - **Final stage**: Tests on complete application data/algorithms before deployment
+  
+  **Test Focus**:
+  - **Coherency**: Data/algorithms are internally consistent and consistent with:
+    - Application principles (e.g., signalling principles for interlocking)
+    - Application architecture (e.g., component locations, interfaces)
+  - **Completeness**: All required data/algorithms are present and cover all:
+    - Application requirements (from DOC-028)
+    - Application architecture elements (from DOC-031)
+  
+  **Verification Requirements** (EN 50128 8.4.4.8):
+  - Readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+  - Traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+  - Requirements 8.4.4.6 met (coherency and completeness tests)
+  - Internal consistency (MANDATORY SIL 3+)
+  - Results recorded in Application Data/Algorithms Verification Report (DOC-035)
+  
+  **TST Agent Responsibility**:
+  - Create test specification for intermediate stage testing
+  - Create test specification for final stage testing
+  - Define tests for data/algorithms coherency (principles and architecture)
+  - Define tests for data/algorithms completeness (principles and architecture)
+  - Create traceability to application requirements (SIL 2+, MANDATORY SIL 3+)
+  - Ensure all test cases have unique IDs and expected results
+  
+  **VER Agent Responsibility**:
+  - Verify readability (MANDATORY SIL 3+)
+  - Verify traceability (MANDATORY SIL 3+)
+  - Verify requirements 8.4.4.6 met (coherency and completeness tests specified)
+  - Verify internal consistency (MANDATORY SIL 3+)
+  - Record results in DOC-035 (Application Data/Algorithms Verification Report)
+  
+  **VAL Agent Responsibility**:
+  - Validate test specification covers all application requirements
+  - Validate coherency tests adequate
+  - Validate completeness tests adequate
+  - Validate test specification realizable with available application tools
