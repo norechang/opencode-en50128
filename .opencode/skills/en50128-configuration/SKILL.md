@@ -1225,6 +1225,438 @@ Before approving any baseline release, verify:
 - `/qua` - CM audits, process compliance, quality metrics
 - `/saf` - Safety-critical change evaluation, safety impact analysis
 
+## Comprehensive Workflows
+
+The en50128-configuration skill provides 4 comprehensive workflows covering all aspects of configuration management. Each workflow is 30-45 pages and includes EN 50128 references, SIL-specific guidance, tool integration, and complete examples.
+
+### Workflow 1: Version Control Workflow
+
+**File**: `workflows/version-control-workflow.md` (~947 lines, ~38 pages)
+
+**Purpose**: Git-based version control for EN 50128 compliant projects
+
+**Key Topics**:
+- Repository setup and structure
+- Branching strategies (Git Flow adapted for EN 50128)
+- Commit conventions with traceability (CR references, GPG signing for SIL 3-4)
+- Merge policies (merge commit recommended for SIL 3-4 for audit trail)
+- Tag management (semantic versioning, baseline tags)
+- CI integration with automated validation
+- Git hooks for commit message validation and pre-commit checks
+
+**EN 50128 Coverage**:
+- Section 6.6: Configuration management MANDATORY ALL SIL
+- Table A.9 #5: Software Configuration Management
+- Table A.9 #7: Traceability (Git commit → CR → requirement)
+
+**Tool Integration**:
+```bash
+# Version control with traceability
+git commit -m "fix(sensor): Fix boundary check per REQ-ATP-042
+
+Fixes: CR-2026-034
+Relates-To: REQ-ATP-042, REQ-ATP-043"
+
+# Tag baseline releases
+git tag -a BL-GATE4-001 -m "Gate 4 Implementation Baseline"
+
+# Verify traceability in commit history
+python3 tools/workspace.py trace validate --git-commits
+
+# Generate traceability report from Git
+python3 tools/workspace.py trace export-git-trace --output reports/git-trace.csv
+```
+
+**When to Use**:
+- Project initialization (repository setup)
+- Every commit (commit conventions)
+- Branch management (feature/release/hotfix branches)
+- Baseline tagging (Gate 1-7)
+- CI/CD pipeline integration
+
+---
+
+### Workflow 2: Change Control Workflow
+
+**File**: `workflows/change-control-workflow.md` (~1,045 lines, ~42 pages)
+
+**Purpose**: Formal change request process aligned with EN 50128 Section 6.6.4
+
+**Key Topics**:
+- CR lifecycle (11 states: SUBMITTED → APPROVED → IMPLEMENTATION → VERIFICATION → CLOSED)
+- Impact analysis (affected CIs, safety impact, lifecycle phase impact, effort estimation)
+- Change Control Board (CCB) process (composition, meeting workflow, decision criteria)
+- CR implementation with lifecycle phase re-entry (links to lifecycle-coordination workflow)
+- Re-verification and re-validation (independent for SIL 3-4)
+- Cumulative impact analysis for multiple related CRs
+- Baseline updates after CR closure
+- Nine required aspects per EN 50128 Section 6.6.4.1 (a-i)
+
+**EN 50128 Coverage**:
+- Section 6.6.4: Change control (9 required aspects a-i)
+- Section 6.6.4.1: Detailed change control requirements
+- Section 6.6.4.2: "All changes shall initiate a return to an appropriate phase of the lifecycle"
+- Table A.9 #5: Software Configuration Management
+
+**Tool Integration**:
+```bash
+# Submit change request
+python3 tools/workspace.py wf submit-cr \
+  --title "Fix ATP speed calculation overflow" \
+  --type defect \
+  --severity critical \
+  --affected-cis "CI-SRC-042,CI-TST-123" \
+  --description "Buffer overflow in ATP controller" \
+  --submitter "John Doe (IMP)"
+
+# Track CR status
+python3 tools/workspace.py wf list-cr --status open
+
+# Update CR status (after CCB approval)
+python3 tools/workspace.py wf update-cr-status \
+  --cr-id CR-2026-045 \
+  --status APPROVED \
+  --approver "Alice Smith (PM)"
+
+# Close CR after verification
+python3 tools/workspace.py wf close-cr \
+  --cr-id CR-2026-045 \
+  --verification "Verified by Bob Wilson (VER), unit tests passed, static analysis clean"
+
+# Generate CR impact analysis report
+python3 tools/scripts/cr_impact_analyzer.py --cr-id CR-2026-045
+```
+
+**When to Use**:
+- Any change to baselined CIs (MANDATORY)
+- Defect fixes (all phases)
+- Requirement changes (re-enter Phase 2)
+- Design changes (re-enter Phase 3)
+- Code changes (re-enter Phase 4)
+- Test changes (linked to source changes)
+
+---
+
+### Workflow 3: Baseline Management Workflow
+
+**File**: `workflows/baseline-management-workflow.md` (~1,068 lines, ~43 pages)
+
+**Purpose**: Establish, control, and audit baselines at EN 50128 phase gates
+
+**Key Topics**:
+- Baseline establishment at phase gates (Gate 1-7)
+- Baseline control and freeze management (immutability enforcement)
+- Baseline composition (complete CI inventory with checksums)
+- Physical Configuration Audit (PCA) - MANDATORY SIL 3-4
+- Functional Configuration Audit (FCA) - MANDATORY SIL 3-4
+- Baseline release process (Gate 7 deployment-ready package)
+- Git tag integration (annotated, signed tags for baselines)
+- Baseline manifest generation with checksums and traceability
+
+**EN 50128 Coverage**:
+- Section 6.6.6: Configuration audits (PCA, FCA)
+- Section 6.6.5: Configuration status accounting
+- Annex C Table C.1: Document control summary (baseline triggers)
+- Table A.9 #5: Software Configuration Management
+
+**Tool Integration**:
+```bash
+# Create baseline for Gate 4 (Implementation)
+python3 tools/workspace.py wf create-baseline \
+  --baseline-id BL-GATE4-001 \
+  --phase gate4_implementation \
+  --description "Implementation phase complete, all code and unit tests"
+
+# List all CIs in baseline
+python3 tools/workspace.py wf list-baseline-cis --baseline BL-GATE4-001
+
+# Generate baseline manifest with checksums
+python3 tools/scripts/baseline_manager.py generate-manifest \
+  --baseline BL-GATE4-001 \
+  --output baselines/BL-GATE4-001/baseline-manifest.txt
+
+# Tag baseline in Git (signed tag for SIL 3-4)
+git tag -a -s BL-GATE4-001 -m "Gate 4 Implementation Baseline
+CIs: 198
+LOC: 15,000
+PCA: PASSED
+FCA: PASSED"
+
+# Generate PCA/FCA checklists
+python3 tools/scripts/baseline_manager.py generate-pca-checklist \
+  --baseline BL-GATE4-001 \
+  --output audits/BL-GATE4-001-PCA-checklist.md
+
+python3 tools/scripts/baseline_manager.py generate-fca-checklist \
+  --baseline BL-GATE4-001 \
+  --output audits/BL-GATE4-001-FCA-checklist.md
+
+# Compare two baselines (show differences)
+python3 tools/workspace.py wf compare-baselines \
+  --baseline1 BL-GATE3-001 \
+  --baseline2 BL-GATE4-001
+```
+
+**When to Use**:
+- Gate 1 (Planning baseline)
+- Gate 2 (Requirements baseline)
+- Gate 3 (Architecture/Design baseline)
+- Gate 4 (Implementation baseline)
+- Gate 5 (Integration baseline)
+- Gate 6 (Validation baseline)
+- Gate 7 (Assessment/Deployment baseline)
+- Before any external release
+
+---
+
+### Workflow 4: Configuration Status Accounting
+
+**File**: `workflows/configuration-status-accounting-workflow.md` (~1,000 lines, ~40 pages)
+
+**Purpose**: Track and report CI status, versions, changes, and metrics (MANDATORY SIL 3-4 per Table A.9 #8)
+
+**Key Topics**:
+- Configuration Item (CI) tracking and registry
+- Change Request metrics (count, resolution time, categories, trends)
+- Baseline metrics (count, size, composition, stability)
+- Traceability metrics (requirements coverage, gaps, orphaned items)
+- Status reporting (weekly, monthly, phase gate reports)
+- Data Recording and Analysis (MANDATORY SIL 3-4 per Table A.9 #8)
+- Quality metrics dashboard (real-time HTML dashboard)
+
+**EN 50128 Coverage**:
+- Section 6.6.5: Configuration status accounting throughout lifecycle
+- Table A.9 #8: Data Recording and Analysis (MANDATORY SIL 3-4)
+- Table A.9 #7: Traceability metrics
+- Section 6.6.4: Change control status tracking
+
+**Tool Integration**:
+```bash
+# CI Registry Management
+python3 tools/scripts/ci_registry_manager.py populate  # Initial setup
+python3 tools/scripts/ci_registry_manager.py sync      # Sync with Git
+python3 tools/scripts/ci_registry_manager.py validate  # Validate consistency
+
+# CI Tracking
+python3 tools/workspace.py trace list-cis              # List all CIs
+python3 tools/workspace.py trace add-ci --ci-id CI-SRC-042 --type source --path src/atp.c
+python3 tools/workspace.py trace update-ci-status --ci-id CI-SRC-042 --status baseline
+
+# Change Metrics
+python3 tools/workspace.py wf metrics-cr --period 30   # Last 30 days
+python3 tools/workspace.py wf trend-cr --months 6      # 6-month trend
+
+# Baseline Metrics
+python3 tools/workspace.py wf metrics-baseline          # All baselines
+python3 tools/workspace.py wf analyze-baseline-stability --baseline BL-GATE4-001
+
+# Traceability Metrics
+python3 tools/workspace.py trace metrics                # Complete metrics
+python3 tools/workspace.py trace gaps                   # Identify gaps
+python3 tools/workspace.py trace validate --sil 3       # SIL 3 validation
+python3 tools/workspace.py trace export-matrix --format csv --output reports/trace.csv
+
+# Status Reporting
+python3 tools/scripts/generate_weekly_status_report.py
+python3 tools/scripts/generate_monthly_summary_report.py --month 2026-03
+python3 tools/scripts/generate_gate_report.py --gate gate6_validation --full
+
+# Metrics Dashboard (HTML)
+python3 tools/scripts/generate_metrics_dashboard.py --output reports/dashboard.html
+```
+
+**When to Use**:
+- Weekly status reporting (SIL 3-4 MANDATORY)
+- Monthly summary reporting (SIL 2+ MANDATORY)
+- Phase gate reporting (all gates)
+- Traceability validation (SIL 3-4 MANDATORY)
+- PCA/FCA preparation (data collection)
+- Project management reporting
+- Continuous monitoring (CI/CD dashboards)
+
+---
+
+## Workflow Selection by SIL Level
+
+| Workflow | SIL 0-1 | SIL 2 | SIL 3-4 |
+|----------|---------|-------|---------|
+| **Version Control** | Recommended | Recommended | **MANDATORY** (with GPG signing, merge commits) |
+| **Change Control** | Recommended | **MANDATORY** | **MANDATORY** (with CCB, independent re-verification) |
+| **Baseline Management** | Recommended | **MANDATORY** | **MANDATORY** (with PCA/FCA audits) |
+| **Configuration Status Accounting** | Optional | Highly Recommended | **MANDATORY** (weekly/monthly reports, metrics) |
+
+**Critical for SIL 3-4**:
+- All 4 workflows MANDATORY
+- Independent re-verification after changes (Workflow 2)
+- PCA/FCA audits before baseline release (Workflow 3)
+- Data recording and analysis with weekly/monthly reports (Workflow 4)
+- 100% traceability with automated validation (Workflow 1, 4)
+
+---
+
+## Tool Integration
+
+The en50128-configuration skill integrates extensively with workspace.py and custom automation scripts.
+
+### workspace.py Traceability Commands (trace subcommand)
+
+```bash
+# CI Registry Management
+python3 tools/workspace.py trace list-cis                    # List all CIs
+python3 tools/workspace.py trace list-cis --type source      # Filter by type
+python3 tools/workspace.py trace list-cis --status baseline  # Filter by status
+python3 tools/workspace.py trace add-ci <options>            # Add CI to registry
+python3 tools/workspace.py trace update-ci-status <options>  # Update CI status
+python3 tools/workspace.py trace validate-ci-registry        # Validate registry
+
+# Traceability Metrics
+python3 tools/workspace.py trace metrics                     # Complete traceability metrics
+python3 tools/workspace.py trace metrics --direction forward # Req → Impl/Test
+python3 tools/workspace.py trace metrics --direction backward # Impl/Test → Req
+python3 tools/workspace.py trace gaps                        # Identify gaps
+python3 tools/workspace.py trace list-gaps --type not-implemented
+python3 tools/workspace.py trace list-gaps --type not-tested
+python3 tools/workspace.py trace list-orphans --type source  # Orphaned CIs
+
+# Traceability Validation
+python3 tools/workspace.py trace validate                    # Validate complete matrix
+python3 tools/workspace.py trace validate --sil 3            # SIL 3 validation
+python3 tools/workspace.py trace validate --requirement REQ-ATP-042
+
+# Traceability Export
+python3 tools/workspace.py trace export-matrix --format csv --output reports/trace.csv
+python3 tools/workspace.py trace export-matrix --format xlsx --output reports/trace.xlsx
+
+# Git Integration
+python3 tools/workspace.py trace validate --git-commits      # Verify commit traceability
+python3 tools/workspace.py trace export-git-trace --output reports/git-trace.csv
+```
+
+### workspace.py Workflow Commands (wf subcommand)
+
+```bash
+# Change Request (CR) Management
+python3 tools/workspace.py wf submit-cr <options>            # Submit new CR
+python3 tools/workspace.py wf list-cr                        # List all CRs
+python3 tools/workspace.py wf list-cr --status open          # Filter by status
+python3 tools/workspace.py wf list-cr --severity critical    # Filter by severity
+python3 tools/workspace.py wf update-cr-status <options>     # Update CR status
+python3 tools/workspace.py wf close-cr <options>             # Close CR
+
+# CR Metrics
+python3 tools/workspace.py wf metrics-cr                     # CR metrics (all time)
+python3 tools/workspace.py wf metrics-cr --period 30         # Last 30 days
+python3 tools/workspace.py wf metrics-cr --group-by phase    # Group by phase
+python3 tools/workspace.py wf metrics-cr --group-by severity # Group by severity
+python3 tools/workspace.py wf trend-cr --months 6            # 6-month trend
+
+# Baseline Management
+python3 tools/workspace.py wf create-baseline <options>      # Create new baseline
+python3 tools/workspace.py wf list-baseline-cis <options>    # List CIs in baseline
+python3 tools/workspace.py wf compare-baselines <options>    # Compare two baselines
+python3 tools/workspace.py wf metrics-baseline               # Baseline metrics
+python3 tools/workspace.py wf analyze-baseline-stability <options>
+
+# Document Submission (Workflow Management)
+python3 tools/workspace.py wf submit-document <options>      # Submit doc for approval
+python3 tools/workspace.py wf approve-document <options>     # Approve document
+python3 tools/workspace.py wf reject-document <options>      # Reject document
+
+# Gate Checks (COD integration)
+python3 tools/workspace.py wf gate-check <phase>             # Check gate readiness
+```
+
+### Git Commands (Version Control)
+
+```bash
+# Commit with traceability
+git commit -m "fix(atp): Fix speed calculation overflow
+
+Fixes: CR-2026-045
+Relates-To: REQ-ATP-042, REQ-ATP-043
+Severity: Critical
+Verified-By: Bob Wilson (VER)"
+
+# Tag baseline (annotated, signed for SIL 3-4)
+git tag -a -s BL-GATE4-001 -m "Gate 4 Implementation Baseline"
+
+# List all baseline tags
+git tag -l "BL-*"
+
+# Show baseline details
+git show BL-GATE4-001
+
+# Compare baselines (Git diff)
+git diff BL-GATE3-001..BL-GATE4-001 --stat
+
+# Generate commit log for traceability
+git log --since="2026-01-01" --grep="CR-2026-" --oneline
+```
+
+### Automation Scripts (Custom Python Scripts)
+
+```bash
+# CI Registry Manager (~200 lines)
+python3 tools/scripts/ci_registry_manager.py populate   # Populate from Git
+python3 tools/scripts/ci_registry_manager.py sync       # Sync versions with Git
+python3 tools/scripts/ci_registry_manager.py validate   # Validate consistency
+python3 tools/scripts/ci_registry_manager.py list --type source
+
+# Baseline Manager (~200 lines)
+python3 tools/scripts/baseline_manager.py generate-manifest --baseline BL-GATE4-001
+python3 tools/scripts/baseline_manager.py generate-pca-checklist --baseline BL-GATE4-001
+python3 tools/scripts/baseline_manager.py generate-fca-checklist --baseline BL-GATE4-001
+
+# CR Impact Analyzer (~200 lines)
+python3 tools/scripts/cr_impact_analyzer.py --cr-id CR-2026-045
+
+# CR Tracker (~150 lines)
+python3 tools/scripts/cr_tracker.py --status open
+python3 tools/scripts/cr_tracker.py --older-than 30
+
+# Status Report Generators
+python3 tools/scripts/generate_weekly_status_report.py
+python3 tools/scripts/generate_weekly_status_report.py --week 2026-W11
+python3 tools/scripts/generate_monthly_summary_report.py --month 2026-03
+python3 tools/scripts/generate_gate_report.py --gate gate6_validation --full
+
+# Metrics Dashboard Generator (~200 lines)
+python3 tools/scripts/generate_metrics_dashboard.py --output reports/dashboard.html
+```
+
+---
+
+## EN 50128 Coverage Summary
+
+| EN 50128 Reference | Topic | Coverage |
+|-------------------|-------|----------|
+| **Section 6.6** | Modification and Change Control | Complete (all 4 workflows) |
+| **Section 6.6.3** | Configuration identification | Workflow 4 (CI registry) |
+| **Section 6.6.4** | Change control (9 aspects a-i) | Workflow 2 (complete) |
+| **Section 6.6.5** | Configuration status accounting | Workflow 4 (complete) |
+| **Section 6.6.6** | Configuration audits (PCA/FCA) | Workflow 3 (complete) |
+| **Table A.9 #5** | Software Configuration Management (M ALL SIL) | All 4 workflows |
+| **Table A.9 #7** | Traceability (M SIL 3-4) | Workflow 1, 4 |
+| **Table A.9 #8** | Data Recording and Analysis (M SIL 3-4) | Workflow 4 |
+| **Reference D.48** | Software Configuration Management | Complete |
+| **Reference D.58** | Traceability | Workflow 1, 4 |
+| **Reference D.12** | Data Recording and Analysis | Workflow 4 |
+
+---
+
+## Statistics
+
+**Workflows**: 4 comprehensive workflows  
+**Total Lines**: ~4,060 lines  
+**Total Pages**: ~163 pages (40-43 pages per workflow)  
+**EN 50128 Sections**: Section 6.6 (complete), Table A.9 #5/#7/#8  
+**Tool Commands**: 40+ workspace.py commands, 20+ Git commands  
+**Automation Scripts**: 6 Python scripts (~1,000 lines total)  
+**Complete Examples**: 30+ scenarios across all workflows  
+**SIL Coverage**: SIL 0-4 (all levels)
+
+---
+
 ## Abbreviations
 
 - **CM** = Configuration Manager
