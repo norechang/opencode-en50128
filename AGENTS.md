@@ -2,11 +2,13 @@
 
 This document defines role-based agents for EN 50128 railway software development. Each agent corresponds to a specific role in the software development lifecycle and strictly follows EN 50128 behavioral constraints.
 
+**IMPORTANT**: As of 2026-03-15, all role-based commands have been **DEPRECATED**. Use direct skill invocation instead. See `docs/COMMAND-TO-SKILL-MIGRATION.md` for migration guide.
+
 **Related Documents**:
 - **`LIFECYCLE.md`** - Complete EN 50128 V-Model software development lifecycle (START HERE)
 - **`TOOLS.md`** - Comprehensive tool catalog with usage information for agents (CRITICAL)
-- **`.opencode/skills/`** - Domain-specific skills for each lifecycle phase
-- **`.opencode/commands/`** - Agent command definitions
+- **`.opencode/skills/`** - Domain-specific skills for each lifecycle phase (PRIMARY INTERFACE)
+- **`.opencode/commands-deprecated/`** - Archived command files (historical reference only)
 - **`std/EN50128-2011.md`** - Full EN 50128 standard (LLM-friendly Markdown)
 - **`std/EN 50126-1-2017.md`** - RAMS standard Part 1
 - **`std/EN 50126-2-2017.md`** - RAMS standard Part 2
@@ -265,8 +267,7 @@ EN 50128:2011 defines the following organizational roles:
 | Structured Methodology | R | R | HR | D.52 |
 | Decision Tables | R | R | HR | D.13 |
 
-**Command File**: `.opencode/commands/req.md`  
-**Skills**: `skills/en50128-requirements/`  
+**Skill**: `en50128-requirements`  
 **Standard**: `std/EN50128-2011.md` Section 7.2
 
 ---
@@ -309,8 +310,7 @@ EN 50128:2011 defines the following organizational roles:
 - Option A: 1,7,19,22 + one from 4,5,12,21
 - Option B: 1,4,19,22 + one from 2,5,12,15,21
 
-**Command File**: `.opencode/commands/des.md`
-**Skills**: `skills/en50128-design/`
+**Skill**: `en50128-design`  
 **Standard**: `std/EN50128-2011.md` Section 7.3, Table A.3
 
 ---
@@ -364,8 +364,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 **Approved Combinations (SIL 3-4):** 4,5,6,8 + one from 1 or 2
 
-**Command File**: `.opencode/commands/imp.md`
-**Skills**: `skills/en50128-implementation/`
+**Skill**: `en50128-implementation`  
 **Standard**: `std/EN50128-2011.md` Section 7.4, Table A.4
 
 ---
@@ -401,8 +400,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 | Performance Testing | - | HR | **M** | Table A.18 |
 | Interface Testing | HR | HR | HR | D.34 |
 
-**Command File**: `.opencode/commands/tst.md`
-**Skills**: `skills/en50128-testing/`
+**Skill**: `en50128-testing`  
 **Standard**: `std/EN50128-2011.md` Sections 7.4, 7.5, 7.7, Table A.5
 
 ---
@@ -432,8 +430,8 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 - Redundancy and voting
 - Watchdog implementation
 
-**Command File**: `.opencode/commands/saf.md`
-**Skills**: `skills/en50128-safety.skill`
+**Skill**: `en50128-safety`  
+**Standard**: `std/EN50128-2011.md` Section 7.1, EN 50126
 
 ---
 
@@ -474,8 +472,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 **Approved Combination (SIL 3-4):** 3,5,7,8 + one from 1,2,6
 
-**Command File**: `.opencode/commands/ver.md`
-**Skills**: `skills/en50128-verification/`
+**Skill**: `en50128-verification`  
 **Standard**: `std/EN50128-2011.md` Section 6.2, Table A.5
 
 ---
@@ -503,8 +500,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 | Functional and Black-box Testing | HR | HR | **M** | Table A.14 |
 | Modelling | - | R | R | Table A.17 |
 
-**Command File**: `.opencode/commands/val.md`
-**Skills**: `skills/en50128-validation/`
+**Skill**: `en50128-validation`  
 **Standard**: `std/EN50128-2011.md` Section 7.7, Table A.7
 
 ---
@@ -527,8 +523,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 - Complexity checks
 - Quality gates enforcement
 
-**Command File**: `.opencode/commands/qua.md`
-**Skills**: `skills/en50128-quality/`
+**Skill**: `en50128-quality`  
 **Standard**: `std/EN50128-2011.md` Section 6.5
 
 ---
@@ -557,8 +552,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 | Functional and Black-box Testing | HR | HR | HR | Table A.14 |
 | Performance Testing | - | R | HR | Table A.18 |
 
-**Command File**: `.opencode/commands/int.md`
-**Skills**: `skills/en50128-integration/`
+**Skill**: `en50128-integration`
 **Standard**: `std/EN50128-2011.md` Section 7.6, Table A.6
 
 ---
@@ -592,10 +586,8 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 **Independence Constraints**:
 - **SIL 3-4:** Validator SHALL NOT report to Project Manager
 - **SIL 3-4:** PM has NO influence on Validator's decisions
-- **SIL 3-4:** Verifier independence required (separate from development)
 
-**Command File**: `.opencode/commands/pm.md`
-**Skills**: `skills/en50128-project-management/`
+**Skill**: `en50128-project-management`
 **Standard**: `std/EN50128-2011.md` Section 5, Table B.9
 
 ---
@@ -629,8 +621,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 **Critical:** Configuration Management is **MANDATORY for ALL SIL levels** (0, 1, 2, 3, 4)
 
-**Command File**: `.opencode/commands/cm.md`
-**Skills**: `skills/en50128-configuration/`
+**Skill**: `en50128-configuration`
 **Standard**: `std/EN50128-2011.md` Section 6.6, Table A.9
 
 ---
@@ -709,8 +700,7 @@ EN 50128 requires independent Verifier and Validator roles for SIL 3-4 (Section 
 4. `/vmgr approve-gate <phase>` - Provide V&V approval/rejection to COD
 5. `/vmgr independence-check` - Verify independence requirements met
 
-**Command File**: `.opencode/commands/vmgr.md`  
-**Skills**: `skills/en50128-vv-management/`  
+**Skill**: `en50128-vv-management` (planned)
 **Standard**: `std/EN50128-2011.md` Section 5.1.2.10
 
 ---
@@ -803,8 +793,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 - Provides lifecycle authority above PM (who focuses on team/resource management)
 - Prevents lifecycle violations that could introduce safety risks
 
-**Command File**: `.opencode/commands/cod.md`  
-**Skills**: `skills/en50128-lifecycle-coordination/`  
+**Skill**: `en50128-lifecycle-coordination`  
 **Standard**: `std/EN50128-2011.md` Section 5.3, Annex C
 
 **Related Documents**:
@@ -1056,25 +1045,35 @@ Python scripts may be used for:
 - Any code deployed to target system
 - Any code subject to SIL requirements
 
-## Agent Configuration
+## Agent-to-Skill Mapping
 
-All agent behavior specifications are in `.opencode/commands/`:
-- `req.md` - Requirements Engineer
-- `des.md` - Designer
-- `imp.md` - Implementer
-- `tst.md` - Tester
-- `saf.md` - Safety Engineer
-- `ver.md` - Verifier
-- `val.md` - Validator
-- `qua.md` - Quality Assurance
+**All agent behaviors are now implemented through skills. Load skills directly using the skill tool.**
 
-Each agent file defines:
-1. Role and responsibilities
-2. EN 50128 behavioral constraints
-3. C language specific requirements
-4. Output artifacts
-5. Interaction with other agents
-6. Reference skills
+### Core Development Skills
+
+| Agent Role | Skill Name | EN 50128 Section | Key Workflows |
+|------------|------------|------------------|---------------|
+| Requirements Engineer | `en50128-requirements` | Section 7.2 | Requirements elicitation, SIL assignment, traceability |
+| Designer | `en50128-design` | Section 7.3 | Architecture design, interface design, defensive programming |
+| Implementer | `en50128-implementation` | Section 7.4 | C coding, MISRA C compliance, unit testing |
+| Tester | `en50128-testing` | Sections 7.4, 7.5, 7.7 | Unit testing, coverage analysis, test reporting |
+| Verifier | `en50128-verification` | Section 6.2 | Static analysis, verification reporting, evidence collection |
+| Validator | `en50128-validation` | Section 7.7 | System validation, acceptance testing |
+| Integrator | `en50128-integration` | Section 7.6 | Progressive integration, HW/SW integration |
+| Safety Engineer | `en50128-safety` | Section 7.1, 6.3 | Hazard analysis, FMEA, FTA, safety case |
+
+### Management and Support Skills
+
+| Agent Role | Skill Name | EN 50128 Section | Key Workflows |
+|------------|------------|------------------|---------------|
+| Quality Assurance | `en50128-quality` | Section 6.5 | SQAP, code reviews, quality gates, audits |
+| Configuration Manager | `en50128-configuration` | Section 6.6 | Version control, change control, baselines |
+| Lifecycle Coordinator | `en50128-lifecycle-coordination` | Section 5.3 | V-Model orchestration, phase gates, traceability |
+| Project Manager | `en50128-project-management` | Section 5, Table B.9 | Project coordination, CCB, risk management |
+| Documentation Specialist | `en50128-documentation` | Section 6.1, Annex C | Document templates, automation, compliance |
+| Tool Manager | `en50128-tools` | Section 6.7 | Tool qualification, tool validation |
+
+**Note**: V&V Manager skill (`en50128-vv-management`) is planned but not yet implemented.
 
 ## Standard References
 
