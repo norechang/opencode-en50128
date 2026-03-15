@@ -4,7 +4,7 @@
 
 **Target Audience**: Development agents (REQ, DES, IMP, TST, VER, VAL, INT, SAF, QUA, CM, COD, PM)
 
-**Last Updated**: 2026-02-25
+**Last Updated**: 2026-03-15
 
 ---
 
@@ -683,6 +683,44 @@ python3 tools/static-analysis/check_misra.py --src src/ --project train_door_con
 - **QUA**: MISRA compliance reporting
 
 **TCL Classification**: T2 (Wraps Cppcheck - validation required)
+
+---
+
+### 18. Workflow Manager (workflow_manager.py)
+
+**Category**: Project Management / Lifecycle Enforcement (T1)  
+**Status**: ✅ Available  
+**Version**: 1.0  
+**EN 50128 Reference**: Section 5.3 (Lifecycle), Annex C Table C.1  
+**Location**: `tools/workflow_manager.py`
+
+**Purpose**: Enforces EN 50128 V-Model phase gate transitions with SIL-dependent strictness. Tracks phase approval chains, validates gate criteria, and prevents out-of-sequence lifecycle activities.
+
+**Key Capabilities**:
+- `PHASE_APPROVAL_CHAINS` — defines required approvals per phase per SIL level
+- `GateChecker` class — validates all gate criteria before authorizing transition
+- 5 enforcement rules: deliverables complete, quality criteria met, traceability complete, reviews obtained, baselines established
+- SIL-dependent strictness: Advisory (SIL 0-1), Semi-strict (SIL 2), Strict/blocking (SIL 3-4)
+
+**Usage**:
+```bash
+# Gate check before phase transition
+python3 tools/workflow_manager.py gate-check phase-2 --sil 3 --project-dir .
+
+# Query current phase state
+python3 tools/workflow_manager.py status --project-dir .
+
+# List required approvals for a phase
+python3 tools/workflow_manager.py approvals phase-4 --sil 3
+```
+
+**Agent Usage**:
+- **COD**: Gate enforcement — calls before authorizing any phase transition
+- **PM**: Phase state queries — checks readiness before `execute-phase`
+- **VER**: Pre-verification state check — confirms phase is in correct state
+- **All agents**: Query current lifecycle state
+
+**TCL Classification**: T1 (direct Python implementation, inspectable output)
 
 ---
 

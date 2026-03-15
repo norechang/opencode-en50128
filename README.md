@@ -50,6 +50,9 @@ See [`SETUP.md`](SETUP.md) for complete setup instructions.
 # In OpenCode — initialize lifecycle
 @cod plan --sil 3 --project my_railway_component
 
+# Generate system-level input documents (choose from 5 typical railway systems)
+@cod generate-system
+
 # Execute phases via Project Manager
 @pm execute-phase 1    # Planning: SQAP, SCMP, SVP, SVaP
 @cod gate-check phase-1
@@ -103,26 +106,28 @@ Use the **RailDev** tab for all EN 50128 development work.
 
 #### Core Development Agents
 
-| Agent | `@agent` | EN 50128 Role | Independence (SIL 3-4) |
-|-------|----------|---------------|------------------------|
-| `@req` | `@req create-srs` | Requirements Manager (5.3.1) | No |
-| `@des` | `@des create-sas` | Designer (5.3.2) | No |
-| `@imp` | `@imp implement-all` | Implementer (5.3.3) | No |
-| `@tst` | `@tst run-unit-tests` | Tester (5.3.4) | No |
-| `@int` | `@int plan-integration` | Integrator (5.3.6) | No |
-| `@ver` | `@ver verify-phase 4` | Verifier (5.3.5) | **MANDATORY** |
-| `@val` | `@val validate-phase 6` | Validator (5.3.7) | **MANDATORY** |
-| `@saf` | `@saf perform-fmea` | Safety Engineer (7.1) | No |
+| Agent | EN 50128 Role | Independence (SIL 3-4) |
+|-------|---------------|------------------------|
+| `@req` | Requirements Manager (5.3.1) | No |
+| `@des` | Designer (5.3.2) | No |
+| `@imp` | Implementer (5.3.3) | No |
+| `@tst` | Tester (5.3.4) | No |
+| `@int` | Integrator (5.3.6) | No |
+| `@ver` | Verifier (5.3.5) | **MANDATORY** |
+| `@val` | Validator (5.3.7) | **MANDATORY** |
+| `@saf` | Safety Engineer (7.1) | No |
 
 #### Management and Support Agents
 
-| Agent | `@agent` | EN 50128 Role | Independence (SIL 3-4) |
-|-------|----------|---------------|------------------------|
-| `@cod` | `@cod plan` | Lifecycle Coordinator (5.3) | No |
-| `@pm` | `@pm execute-phase` | Project Manager (Table B.9) | No |
-| `@cm` | `@cm create-baseline` | Configuration Manager (Table B.10) | No |
-| `@qua` | `@qua review-document` | Quality Assurance (6.5) | No |
-| `@vmgr` | `@vmgr review-verification` | V&V Manager (5.1.2.10e) | **MANDATORY** |
+| Agent | EN 50128 Role | Independence (SIL 3-4) |
+|-------|---------------|------------------------|
+| `@cod` | Lifecycle Coordinator (5.3) | No |
+| `@pm` | Project Manager (Table B.9) | No |
+| `@cm` | Configuration Manager (Table B.10) | No |
+| `@qua` | Quality Assurance (6.5) | No |
+| `@vmgr` | V&V Manager (5.1.2.10e) | **MANDATORY** |
+
+**User entry points**: `@cod` and `@pm` only. All other agents are orchestrated internally by COD and PM.
 
 See [`AGENTS.md`](AGENTS.md) for complete role definitions and EN 50128 technique tables.
 
@@ -206,8 +211,9 @@ EN50128/
 │   └── plans/                        # Phase 1 plan templates
 │
 ├── assets/
-│   └── sample_system/                # System-level document templates
+│   └── sample_system/                # System-level document templates + catalogue
 │       ├── README.md                 # Usage guide
+│       ├── TYPICAL-SYSTEMS.md        # Catalogue of 5 typical railway systems
 │       ├── System-Requirements-Specification-TEMPLATE.md
 │       ├── System-Architecture-Description-TEMPLATE.md
 │       ├── System-Safety-Plan-TEMPLATE.md
@@ -216,6 +222,7 @@ EN50128/
 ├── tools/                             # Python + shell analysis tools
 │   ├── mcdc/mcdc_analyzer.py         # MC/DC analysis
 │   ├── workspace.py                  # Workspace management
+│   ├── workflow_manager.py           # Phase gate enforcement
 │   ├── enhelp.py                     # Platform help
 │   └── scripts/                      # Validation scripts
 │
@@ -243,7 +250,9 @@ Per EN 50128 Section 7.2.2, **four system-level documents are MANDATORY inputs**
 
 These are produced by System Engineering (EN 50126/50129) and consumed by Software Engineering (EN 50128).
 
-Complete reference examples are in `assets/sample_system/` — full Train Door Control System content (not generic templates). Copy, adapt, and reference them in Phase 2 when using `@req`.
+**Automated generation**: After `@cod plan`, run `@cod generate-system` to automatically generate all four documents by selecting from the **5 typical railway systems** in `assets/sample_system/TYPICAL-SYSTEMS.md`. Generated documents are placed in `docs/system/`.
+
+**Manual path**: Templates are in `assets/sample_system/`. Copy, adapt, and place them in `docs/system/` before running `@pm execute-phase 2`.
 
 ---
 

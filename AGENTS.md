@@ -4,18 +4,17 @@ This document defines role-based agents for EN 50128 railway software developmen
 
 ## Agent Invocation Syntax
 
-Agents are invoked using the `@agent` syntax in OpenCode:
+User-facing agents are invoked using the `@agent` syntax in OpenCode:
 
 ```
 @cod plan --sil 3 --project MyProject
+@cod generate-system
 @pm execute-phase 2
-@req create-srs --based-on assets/sample_system/System-Requirements-Specification.md
-@ver verify-phase 4 --sil 3
-@qua review-document docs/SRS.md --type srs --sil 3
+@cod gate-check phase-2
 ```
 
 **Normal workflow**: You invoke only `@cod` and `@pm`. They orchestrate all other agents internally.  
-**Direct invocation**: You may invoke any agent directly for targeted tasks.
+**Internal agents** (REQ, DES, IMP, TST, VER, VAL, INT, SAF, QUA, CM, VMGR) are invoked by COD and PM — not directly by the user.
 
 See `docs/USER-GUIDE.md` for complete usage instructions and the V-Model example.
 
@@ -190,17 +189,17 @@ The following tables define mandatory, highly recommended, and recommended techn
 
 | Table | Section | Purpose | Key Agents |
 |-------|---------|---------|------------|
-| **Table A.2** | 7.2 | Software Requirements Specification techniques | `/req` |
-| **Table A.3** | 7.3 | Software Architecture techniques | `/des` |
-| **Table A.4** | 7.4 | Software Design and Implementation techniques | `/des`, `/imp` |
-| **Table A.5** | 6.2, 7.3 | Verification and Testing techniques | `/ver`, `/tst` |
-| **Table A.6** | 7.6 | Integration techniques | `/int` |
-| **Table A.7** | 7.7 | Overall Software Testing/Validation techniques | `/val` |
-| **Table A.8** | 6.3 | Software Analysis techniques | `/saf` |
-| **Table A.9** | 6.5 | Software Quality Assurance techniques | `/qua`, `/cm` |
-| **Table A.13** | - | Dynamic Analysis and Testing | `/tst`, `/ver` |
-| **Table A.19** | - | Static Analysis techniques | `/ver` |
-| **Table A.21** | - | Test Coverage for Code | `/tst` |
+| **Table A.2** | 7.2 | Software Requirements Specification techniques | REQ |
+| **Table A.3** | 7.3 | Software Architecture techniques | DES |
+| **Table A.4** | 7.4 | Software Design and Implementation techniques | DES, IMP |
+| **Table A.5** | 6.2, 7.3 | Verification and Testing techniques | VER, TST |
+| **Table A.6** | 7.6 | Integration techniques | INT |
+| **Table A.7** | 7.7 | Overall Software Testing/Validation techniques | VAL |
+| **Table A.8** | 6.3 | Software Analysis techniques | SAF |
+| **Table A.9** | 6.5 | Software Quality Assurance techniques | QUA, CM |
+| **Table A.13** | - | Dynamic Analysis and Testing | TST, VER |
+| **Table A.19** | - | Static Analysis techniques | VER |
+| **Table A.21** | - | Test Coverage for Code | TST |
 
 **Key to Recommendations:**
 - **M** = Mandatory - Must be used
@@ -259,7 +258,7 @@ EN 50128:2011 defines the following organizational roles:
 
 ## Agent Roles
 
-### 1. Requirements Engineer (`/req`)
+### 1. Requirements Engineer (REQ)
 
 **Role**: Software Requirements Specification per EN 50128 Section 7.2
 
@@ -288,7 +287,7 @@ EN 50128:2011 defines the following organizational roles:
 
 ---
 
-### 2. Designer (`/des`)
+### 2. Designer (DES)
 
 **Role**: Software Architecture and Design per EN 50128 Section 7.3
 
@@ -331,7 +330,7 @@ EN 50128:2011 defines the following organizational roles:
 
 ---
 
-### 3. Implementer (`/imp`)
+### 3. Implementer (IMP)
 
 **Role**: Software Implementation per EN 50128 Section 7.4
 
@@ -385,7 +384,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 ---
 
-### 4. Tester (`/tst`)
+### 4. Tester (TST)
 
 **Role**: Software Testing per EN 50128 Sections 7.4, 7.5, 7.7
 
@@ -421,7 +420,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 ---
 
-### 5. Safety Engineer (`/saf`)
+### 5. Safety Engineer (SAF)
 
 **Role**: Safety Analysis per EN 50128 Section 7.1, EN 50126
 
@@ -451,7 +450,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 ---
 
-### 6. Verifier (`/ver`)
+### 6. Verifier (VER)
 
 **Role**: Software Verification per EN 50128 Section 6.2
 
@@ -493,7 +492,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 ---
 
-### 7. Validator (`/val`)
+### 7. Validator (VAL)
 
 **Role**: Software Validation per EN 50128 Section 7.7
 
@@ -521,7 +520,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 ---
 
-### 8. Quality Assurance (`/qua`)
+### 8. Quality Assurance (QUA)
 
 **Role**: Quality Assurance per EN 50128 Section 6.5
 
@@ -544,7 +543,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 ---
 
-### 9. Integrator (`/int`)
+### 9. Integrator (INT)
 
 **Role**: Software Integration per EN 50128 Section 7.6
 
@@ -573,7 +572,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 ---
 
-### 10. Project Manager (`/pm`)
+### 10. Project Manager (PM)
 
 **Role**: Project Management per EN 50128 Section 5, Table B.9
 
@@ -594,10 +593,10 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 - Monitor project status via LIFECYCLE_STATE.md
 
 **Key Commands**:
-- `/pm status` - Overall project status report (reads LIFECYCLE_STATE.md)
-- `/pm status <phase-id>` - Specific phase execution status
-- `/pm execute-phase <phase-id>` - Automated phase orchestration with QUA flow
-- `/pm resolve-defects <phase-id>` - Coordinate defect resolution after VER/VAL rejection
+- `@pm status` - Overall project status report (reads LIFECYCLE_STATE.md)
+- `@pm status <phase-id>` - Specific phase execution status
+- `@pm execute-phase <phase-id>` - Automated phase orchestration with QUA flow
+- `@pm resolve-defects <phase-id>` - Coordinate defect resolution after VER/VAL rejection
 
 **Independence Constraints**:
 - **SIL 3-4:** Validator SHALL NOT report to Project Manager
@@ -608,7 +607,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 ---
 
-### 11. Configuration Manager (`/cm`)
+### 11. Configuration Manager (CM)
 
 **Role**: Configuration Management per EN 50128 Section 6.6
 
@@ -642,7 +641,7 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 ---
 
-### 12. V&V Manager (`/vmgr`)
+### 12. V&V Manager (VMGR)
 
 **Role**: Verification and Validation Management (Platform Extension Role for SIL 3-4)
 
@@ -709,19 +708,20 @@ EN 50128 requires independent Verifier and Validator roles for SIL 3-4 (Section 
 - Combines Validator responsibilities with Verifier team management
 - Simplifies coordination with COD while preserving independence
 
-**VMGR Commands**:
-1. `/vmgr status` - Report V&V status for all phases
-2. `/vmgr review-verification <phase>` - Review VER report and approve/reject
-3. `/vmgr review-validation <phase>` - Review VAL activities for phase
-4. `/vmgr approve-gate <phase>` - Provide V&V approval/rejection to COD
-5. `/vmgr independence-check` - Verify independence requirements met
+**VMGR is an internal agent** invoked by COD for SIL 3-4 V&V activities. It is not directly invoked by users.
+
+**V&V Activities** (executed internally by COD/VMGR):
+1. Review VER report and approve/reject — triggered after each verification phase
+2. Review VAL activities for phase — triggered before gate-check
+3. Provide V&V approval/rejection to COD — required for strict gate enforcement (SIL 3-4)
+4. Independence check — verify independence requirements met throughout lifecycle
 
 **Skill**: `en50128-vv-management` (planned)
 **Standard**: `std/EN50128-2011.md` Section 5.1.2.10
 
 ---
 
-### 13. Lifecycle Coordinator (`/cod`)
+### 13. Lifecycle Coordinator (`@cod`)
 
 **Role**: Lifecycle Orchestration (Platform Extension Role)
 
@@ -770,10 +770,11 @@ EN 50128 requires independent Verifier and Validator roles for SIL 3-4 (Section 
 ```
 
 **COD Commands**:
-1. `/cod plan --sil [0-4] --project [name]` - Initialize lifecycle tracking, create LIFECYCLE_STATE.md
-2. `/cod gate-check <phase>` - Verify phase completion, authorize transition (or block for SIL 3-4)
-3. `/cod status` - Report current lifecycle state, phase progress, deliverable status
-4. `/cod approve-requirement` - Approve requirement establishment/modification activity
+1. `@cod plan --sil [0-4] --project [name]` - Initialize lifecycle tracking, create LIFECYCLE_STATE.md
+2. `@cod generate-system` - Generate 4 system-level documents from typical systems catalogue
+3. `@cod gate-check <phase>` - Verify phase completion, authorize transition (or block for SIL 3-4)
+4. `@cod status` - Report current lifecycle state, phase progress, deliverable status
+5. `@cod approve-requirement` - Approve requirement establishment/modification activity
 
 **Lifecycle Phases Managed**:
 - Phase 0: Initialization (COD-specific)
@@ -934,6 +935,9 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 # Initialize lifecycle (COD creates LIFECYCLE_STATE.md)
 @cod plan --sil 3 --project MyProject
 
+# Generate system-level documents from typical systems catalogue
+@cod generate-system
+
 # Execute each phase (PM orchestrates all agents internally)
 @pm execute-phase 1    # Planning: SQAP, SCMP, SVP, SVaP
 @cod gate-check phase-1
@@ -945,29 +949,16 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 @cod gate-check phase-3
 
 @pm execute-phase 4    # Implementation + Unit Testing
-# PM internally invokes:
-#   @imp implement-all --sil 3        → src/, include/
-#   @tst create-unit-tests --sil 3    → tests/unit/
-#   @tst run-unit-tests --sil 3       → coverage must be 100% (SIL 3)
-#   @qua review-code --sil 3          → Code-Review-Report.md (APPROVED)
-# COD independently invokes (not PM):
-#   @ver verify-phase 4 --sil 3       → Verification-Report-Phase4.md
-# VMGR reviews and approves (SIL 3-4)
+# PM internally coordinates: implementation, unit testing, code review, coverage
+# COD independently coordinates: verification (VMGR reviews and approves for SIL 3-4)
 @cod gate-check phase-4
 
 @pm execute-phase 5    # Integration
-# PM internally invokes:
-#   @int plan-integration             → Integration-Plan.md
-#   @tst create-integration-tests     → tests/integration/
-#   @tst run-integration-tests        → test-results/integration/
-#   @int create-integration-report    → Integration-Test-Report.md
-#   @qua review-document ...          → QA review loop
-# COD independently invokes:
-#   @ver verify-phase 5 --sil 3       → Verification-Report-Phase5.md
+# PM internally coordinates: integration planning, integration testing, QA review
+# COD independently coordinates: verification of integration phase
 @cod gate-check phase-5
 
-# Phase 6: Validation — COD invokes VAL directly (independence)
-# @val validate-phase 6 --sil 3       → Validation-Report.md
+# Phase 6: Validation — COD coordinates VAL directly (independence requirement)
 @cod gate-check phase-6
 
 # Phase 7: Assessment (SIL 3-4 only)
@@ -1017,26 +1008,26 @@ Each agent **internally loads its skill** when invoked. Users do not load skills
 
 ### Core Development Skills
 
-| Agent | `@agent` Syntax | Skill Loaded Internally | EN 50128 Section |
-|-------|----------------|------------------------|------------------|
-| `@req` | `@req create-srs` | `en50128-requirements` | Section 7.2 |
-| `@des` | `@des create-sas` | `en50128-design` | Section 7.3 |
-| `@imp` | `@imp implement-all` | `en50128-implementation` | Section 7.4 |
-| `@tst` | `@tst run-unit-tests` | `en50128-testing` | Sections 7.4, 7.5, 7.7 |
-| `@ver` | `@ver verify-phase 4` | `en50128-verification` | Section 6.2 |
-| `@val` | `@val validate-phase 6` | `en50128-validation` | Section 7.7 |
-| `@int` | `@int plan-integration` | `en50128-integration` | Section 7.6 |
-| `@saf` | `@saf perform-fmea` | `en50128-safety` | Sections 7.1, 6.3 |
+| Agent | Role | Skill Loaded Internally | EN 50128 Section |
+|-------|------|------------------------|------------------|
+| REQ | Requirements Engineer | `en50128-requirements` | Section 7.2 |
+| DES | Designer | `en50128-design` | Section 7.3 |
+| IMP | Implementer | `en50128-implementation` | Section 7.4 |
+| TST | Tester | `en50128-testing` | Sections 7.4, 7.5, 7.7 |
+| VER | Verifier | `en50128-verification` | Section 6.2 |
+| VAL | Validator | `en50128-validation` | Section 7.7 |
+| INT | Integrator | `en50128-integration` | Section 7.6 |
+| SAF | Safety Engineer | `en50128-safety` | Sections 7.1, 6.3 |
 
 ### Management and Support Skills
 
-| Agent | `@agent` Syntax | Skill Loaded Internally | EN 50128 Section |
-|-------|----------------|------------------------|------------------|
-| `@qua` | `@qua review-document` | `en50128-quality` | Section 6.5 |
-| `@cm` | `@cm create-baseline` | `en50128-configuration` | Section 6.6 |
-| `@cod` | `@cod plan` | `en50128-lifecycle-coordination` | Section 5.3 |
-| `@pm` | `@pm execute-phase` | `en50128-project-management` | Section 5, Table B.9 |
-| `@vmgr` | `@vmgr review-verification` | (planned: `en50128-vv-management`) | Section 5.1.2.10e |
+| Agent | Role | Skill Loaded Internally | EN 50128 Section |
+|-------|------|------------------------|------------------|
+| QUA | Quality Assurance | `en50128-quality` | Section 6.5 |
+| CM | Configuration Manager | `en50128-configuration` | Section 6.6 |
+| COD | Lifecycle Coordinator | `en50128-lifecycle-coordination` | Section 5.3 |
+| PM | Project Manager | `en50128-project-management` | Section 5, Table B.9 |
+| VMGR | V&V Manager | (planned: `en50128-vv-management`) | Section 5.1.2.10e |
 
 ## Standard References
 
@@ -1173,22 +1164,22 @@ This section provides a quick reference for EN 50128:2011 Section 5 and Annex B 
 
 ### Agent Mapping to EN 50128 Roles
 
-| EN 50128 Role | Agent | `@agent` Syntax | Independence Notes |
-|---------------|-------|----------------|-------------------|
-| Project Manager | PM | `@pm` | Not required |
-| Software Manager | PM | `@pm` | Not required (combined with PM in this platform) |
-| Configuration Manager | CM | `@cm` | Not required |
-| Designer | Designer | `@des` | Not required |
-| Implementer | Implementer | `@imp` | Not required |
-| Tester | Tester | `@tst` | Highly recommended for SIL 3-4 |
-| Verifier | Verifier | `@ver` | **Mandatory for SIL 3-4** |
-| Integrator | Integrator | `@int` | Not required |
-| Validator | Validator | `@val` | **Mandatory for SIL 3-4** |
-| Assessor | (external) | N/A | **Mandatory for SIL 3-4** |
+| EN 50128 Role | Agent | Independence Notes |
+|---------------|-------|--------------------|
+| Project Manager | PM | Not required |
+| Software Manager | PM | Not required (combined with PM in this platform) |
+| Configuration Manager | CM | Not required |
+| Designer | DES | Not required |
+| Implementer | IMP | Not required |
+| Tester | TST | Highly recommended for SIL 3-4 |
+| Verifier | VER | **Mandatory for SIL 3-4** |
+| Integrator | INT | Not required |
+| Validator | VAL | **Mandatory for SIL 3-4** |
+| Assessor | (external) | **Mandatory for SIL 3-4** |
 
 **Additional Agents** (platform extensions):
-- Safety Engineer (`@saf`) — Supports safety analysis per Section 7.1
-- Requirements Engineer (`@req`) — Supports requirements phase per Section 7.2
-- Quality Assurance (`@qua`) — Supports QA per Section 6.5
-- V&V Manager (`@vmgr`) — Independent V&V authority for SIL 3-4 (Section 5.1.2.10e)
-- Lifecycle Coordinator (`@cod`) — End-to-end lifecycle orchestration (Section 5.3)
+- Safety Engineer (SAF) — Supports safety analysis per Section 7.1
+- Requirements Engineer (REQ) — Supports requirements phase per Section 7.2
+- Quality Assurance (QUA) — Supports QA per Section 6.5
+- V&V Manager (VMGR) — Independent V&V authority for SIL 3-4 (Section 5.1.2.10e)
+- Lifecycle Coordinator (COD) — End-to-end lifecycle orchestration (Section 5.3)

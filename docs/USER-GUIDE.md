@@ -28,7 +28,7 @@
 
 The EN 50128 Platform is a **document-centric, agent-orchestrated development environment** for creating railway safety software compliant with EN 50128:2011. It provides:
 
-- **13 specialized agents** covering all EN 50128 roles and lifecycle phases
+- **14 specialized agents** covering all EN 50128 roles and lifecycle phases
 - **50+ document templates** for all mandatory deliverables (Annex C)
 - **40+ automation tools** for validation, testing, and verification
 - **Complete V-Model lifecycle** with SIL-dependent phase gate enforcement
@@ -46,15 +46,12 @@ The EN 50128 Platform is a **document-centric, agent-orchestrated development en
 
 ### How It Works
 
-**You provide system-level inputs. Agents produce all deliverables.**
+**You provide a project name and SIL level. Agents produce all deliverables.**
 
 ```
-You provide:
-  assets/sample_system/System-Requirements-Specification.md
-  assets/sample_system/System-Hazard-Log.md
-
 You invoke:
   @cod plan --sil 3 --project TrainDoorControl
+  @cod generate-system           ← select from 5 typical railway systems
 
 COD orchestrates → PM coordinates → Agents create all deliverables:
   ✅ Phase 1: SQAP, SCMP, SVP, SVaP
@@ -131,19 +128,19 @@ Expected output: `[PASS] All validations passed`
 
 ### Your First Project
 
-**1. Prepare system-level inputs:**
-```bash
-mkdir -p assets/sample_system
-# Create System-Requirements-Specification.md
-# Create System-Hazard-Log.md (optional but recommended for SIL 2+)
-```
-
-**2. Start the lifecycle:**
+**1. Initialize the lifecycle:**
 ```
 @cod plan --sil 3 --project MyRailwayComponent
 ```
 
 COD will initialize the workspace, create `LIFECYCLE_STATE.md`, and display the V-Model plan.
+
+**2. Generate system-level input documents:**
+```
+@cod generate-system
+```
+
+COD presents the 5 typical railway systems from `assets/sample_system/TYPICAL-SYSTEMS.md`. Select one (or describe a custom system) and COD generates all four mandatory system-level documents in `docs/system/`.
 
 **3. Execute phases via PM:**
 ```
@@ -169,7 +166,7 @@ Repeat until `@pm execute-phase 8`.
 ```
 EN50128/
 ├── .opencode/
-│   ├── agents/                   # 13 EN 50128 role agents
+│   ├── agents/                   # 13 EN 50128 role agents + primary RailDev mode
 │   │   ├── cod.md               # Lifecycle Coordinator
 │   │   ├── pm.md                # Project Manager
 │   │   ├── req.md               # Requirements Engineer
@@ -198,7 +195,8 @@ EN50128/
 │       ├── en50128-documentation/
 │       └── en50128-project-management/
 ├── assets/
-│   └── sample_system/            # User-provided system-level inputs
+│   └── sample_system/            # System-level document templates + catalogue
+│       ├── TYPICAL-SYSTEMS.md   # 5 typical railway systems for @cod generate-system
 ├── examples/                     # Complete example projects (agent-produced)
 ├── docs/                         # Platform documentation
 │   ├── LIFECYCLE.md             # Complete V-Model lifecycle guide
@@ -258,39 +256,39 @@ The platform follows the EN 50128 V-Model with **9 phases** (Phases 0–8):
 ```
 Phase 0: Initialization
     @cod plan --sil <level> --project <name>
+    @cod generate-system                            ← generate 4 system docs
     ↓
 Phase 1: Planning
     @pm execute-phase 1
-    → @qua create-sqap, @cm create-scmp, @ver create-svp, @val create-svap
+    (PM coordinates: SQAP, SCMP, SVP, SVaP)
     ↓ @cod gate-check phase-1
 Phase 2: Requirements
     @pm execute-phase 2
-    → @req create-srs, @saf create-hazard-log, @cm create-baseline phase-2
+    (PM coordinates: SRS, Hazard Log, traceability baseline)
     ↓ @cod gate-check phase-2
 Phase 3: Architecture & Design
     @pm execute-phase 3
-    → @des create-sas, @des create-sds, @des create-sis, @saf perform-fmea
+    (PM coordinates: SAS, SDS, Interface Specs, FMEA)
     ↓ @cod gate-check phase-3
 Phase 4: Implementation & Unit Testing
     @pm execute-phase 4
-    → @imp implement-all, @tst create-unit-tests, @tst run-unit-tests
-    → @qua review-code (invoked by PM), @ver verify-phase 4 (invoked by COD)
+    (PM coordinates: C source, unit tests, code review, coverage)
+    (COD independently invokes verification — VER is independent of PM)
     ↓ @cod gate-check phase-4
 Phase 5: Integration
     @pm execute-phase 5
-    → @int plan-integration, @tst create-integration-tests, @tst run-integration-tests
-    → @int create-integration-report, @ver verify-phase 5 (invoked by COD)
+    (PM coordinates: integration plan, integration tests, integration report)
+    (COD independently invokes verification)
     ↓ @cod gate-check phase-5
 Phase 6: Validation
-    @cod invoke-val validate-phase 6
-    → @val validate-phase 6
+    (COD invokes validation directly — VAL is independent of PM)
     ↓ @cod gate-check phase-6
 Phase 7: Assessment (SIL 3-4 only)
-    @cod invoke-assessor
+    (External assessor activity)
     ↓ @cod gate-check phase-7
 Phase 8: Deployment
     @pm execute-phase 8
-    → @cm create-baseline phase-8, @cm create-release-package
+    (PM coordinates: release baseline, release package)
     ↓ @cod finish
 ```
 
@@ -307,8 +305,8 @@ Phase 8: Deployment
 When you run `@pm execute-phase <N>`, PM:
 
 1. Reads the phase definition from `.opencode/skills/en50128-project-management/phase-definitions/`
-2. Invokes each agent in dependency order using `@agent <command>` syntax
-3. Runs the QUA approval loop: agent creates document → `@qua review-document` → fix if rejected → resubmit once
+2. Invokes each agent in dependency order
+3. Runs the QUA approval loop: agent creates document → QUA reviews → fix if rejected → resubmit once
 4. Reports phase completion to COD
 5. COD performs gate check before PM proceeds to next phase
 
@@ -316,23 +314,16 @@ When you run `@pm execute-phase <N>`, PM:
 ```
 @pm execute-phase 4
 
-PM → @imp implement-all --sil 3
-IMP → produces src/, writes C code (MISRA C compliant)
+PM coordinates:
+  IMP implements all modules → src/, include/ (MISRA C compliant C code)
+  TST creates unit tests → tests/unit/
+  TST runs unit tests with coverage (MUST be 100% for SIL 3)
+  QUA reviews code → Code-Review-Report.md
 
-PM → @tst create-unit-tests --source src/ --sil 3
-TST → produces tests/unit/
-
-PM → @tst run-unit-tests --sil 3
-TST → runs tests, reports coverage (MUST be 100% for SIL 3)
-
-PM → @qua review-code --path src/ --sil 3
-QUA → produces Code-Review-Report.md
-
-COD → @ver verify-phase 4 --sil 3   (COD invokes, NOT PM)
-VER → runs static analysis, produces Verification-Report-Phase4.md
-
-COD → VMGR reviews Verification Report (SIL 3-4)
-VMGR → approves or rejects
+COD independently:
+  VER performs static analysis → Verification-Report-Phase4.md
+  (VER is independent of PM — SIL 3-4 mandatory)
+  VMGR reviews Verification Report → approves or rejects (SIL 3-4)
 
 COD performs gate check → PASS → PM may proceed to Phase 5
 ```
@@ -344,22 +335,13 @@ Users interact with **two agents** for most operations:
 | Command | Who Invokes | What Happens |
 |---------|-------------|--------------|
 | `@cod plan --sil 3 --project X` | You | COD initializes workspace, creates LIFECYCLE_STATE.md |
+| `@cod generate-system` | You | COD generates 4 system docs from TYPICAL-SYSTEMS.md catalogue |
 | `@cod status` | You | COD reports current phase, completion %, deliverable status |
 | `@cod gate-check phase-N` | You | COD verifies phase criteria and authorizes transition |
 | `@pm execute-phase N` | You | PM coordinates all agents for phase N, produces all deliverables |
 | `@pm status` | You | PM reports team status, active tasks, issues |
 | `@pm resolve-defects phase-N` | You | PM coordinates defect resolution after VER/VAL rejection |
 | `@cod finish` | You | COD performs final compliance check and marks project complete |
-
-For specialized work, you may also invoke agents directly:
-
-| Command | Agent | Use Case |
-|---------|-------|----------|
-| `@req create-srs` | REQ | Create SRS standalone (outside PM orchestration) |
-| `@ver verify-phase 4` | VER | Re-verify after defect fixes |
-| `@qua review-document path/to/doc.md` | QUA | Review a specific document |
-| `@cm create-baseline phase-2` | CM | Baseline a specific phase |
-| `@saf perform-fmea --component X` | SAF | Safety analysis for specific component |
 
 ---
 
@@ -440,20 +422,11 @@ For specialized work, you may also invoke agents directly:
 
 **EN 50128 Basis**: Section 7.2, Table A.2
 
-**PM Orchestration Commands**:
+**Orchestrated by**: PM (Phase 2)
 
-```
-@req create-srs [--based-on <system-req-path>]
-    Create Software Requirements Specification from template.
-    Validates with validate_srs_template.py.
-    Output: docs/Software-Requirements-Specification.md
+**Responsibilities**: Create Software Requirements Specification from system inputs; establish requirements traceability; fix defects identified by VER or QUA review.
 
-@req fix-defects --document <path> --defects <defect-list>
-    Fix defects found during VER or QUA review.
-
-@req update-traceability
-    Update traceability matrix after requirements changes.
-```
+**Output**: `docs/Software-Requirements-Specification.md`, traceability matrix
 
 ---
 
@@ -461,24 +434,11 @@ For specialized work, you may also invoke agents directly:
 
 **EN 50128 Basis**: Section 7.3, Table A.3
 
-**PM Orchestration Commands**:
+**Orchestrated by**: PM (Phase 3)
 
-```
-@des create-sas
-    Create Software Architecture Specification.
-    Output: docs/Software-Architecture-Specification.md
+**Responsibilities**: Create Software Architecture Specification, Software Design Specification, and Software Interface Specifications; fix design defects after VER/QUA review.
 
-@des create-sds
-    Create Software Design Specification (detailed design).
-    Output: docs/Software-Design-Specification.md
-
-@des create-sis
-    Create Software Interface Specifications.
-    Output: docs/Software-Interface-Specifications.md
-
-@des fix-defects --document <path> --defects <defect-list>
-    Fix design defects after VER/QUA review.
-```
+**Outputs**: `docs/Software-Architecture-Specification.md`, `docs/Software-Design-Specification.md`, `docs/Software-Interface-Specifications.md`
 
 ---
 
@@ -486,27 +446,19 @@ For specialized work, you may also invoke agents directly:
 
 **EN 50128 Basis**: Section 7.4, Table A.4
 
-**PM Orchestration Commands**:
+**Orchestrated by**: PM (Phase 4)
 
-```
-@imp implement-all [--sil <0-4>]
-    Implement all modules from SDS in MISRA C compliant C code.
-    Static allocation only (SIL 2+). No recursion (SIL 3-4).
-    Output: src/<module>.c, include/<module>.h
+**Responsibilities**: Implement all modules in MISRA C compliant C code; static allocation only (SIL 2+); no recursion (SIL 3-4); fix implementation defects.
 
-@imp fix-defects --component <name> --defects <defect-list>
-    Fix implementation defects.
-
-@imp run-build
-    Compile all source files, report errors.
-    Output: build/
-```
+**Output**: `src/<module>.c`, `include/<module>.h`, `build/`
 
 ---
 
 ### TST — Tester
 
 **EN 50128 Basis**: Sections 7.4, 7.5, 7.7, Table A.5, Table A.21
+
+**Orchestrated by**: PM (Phases 4, 5)
 
 **Coverage requirements by SIL** (Table A.21):
 
@@ -516,78 +468,31 @@ For specialized work, you may also invoke agents directly:
 | 2 | HR | M | — |
 | 3-4 | M | M | M |
 
-**PM Orchestration Commands**:
+**Responsibilities**: Create and execute unit tests (with gcov/lcov coverage), create and execute integration tests, execute system validation tests.
 
-```
-@tst create-unit-tests [--source <path>] [--sil <0-4>]
-    Create Unity unit tests for all modules.
-    Output: tests/unit/test_<module>.c
-
-@tst run-unit-tests [--sil <0-4>]
-    Execute unit tests with coverage measurement.
-    Validates coverage against SIL requirements.
-    Output: test-results/unit/, coverage/
-
-@tst create-integration-tests
-    Create integration test specifications and test code.
-    Output: tests/integration/
-
-@tst run-integration-tests
-    Execute integration tests, record results.
-    Output: test-results/integration/
-
-@tst run-system-tests
-    Execute system-level validation tests.
-    Output: test-results/system/
-```
+**Outputs**: `tests/unit/`, `tests/integration/`, `test-results/`, `coverage/`
 
 ---
 
 ### VER — Verifier
 
-**EN 50128 Basis**: Section 6.2, Table A.5, Table A.19  
+**EN 50128 Basis**: Section 6.2, Table A.5, Table A.19
 **Independence**: MANDATORY for SIL 3-4 — invoked by COD, NOT PM
 
-**COD Invocation Commands**:
+**Responsibilities**: Perform full static analysis (Cppcheck, Clang), complexity analysis (Lizard, CCN ≤ 10 for SIL 3-4), MISRA C compliance check, coverage and traceability verification.
 
-```
-@ver verify-phase <phase-id> [--sil <0-4>]
-    Perform full verification for a lifecycle phase:
-    - Static analysis (Cppcheck, Clang — MANDATORY SIL 3-4)
-    - Complexity analysis (Lizard — CCN ≤ 10 for SIL 3-4)
-    - MISRA C compliance check
-    - Coverage verification
-    - Traceability verification
-    Output: docs/Verification-Report-Phase<N>.md
-
-@ver re-verify-phase <phase-id> [--sil <0-4>]
-    Re-verify after defect resolution.
-```
+**Output**: `docs/Verification-Report-Phase<N>.md`
 
 ---
 
 ### VAL — Validator
 
-**EN 50128 Basis**: Section 7.7, Table A.7  
-**Independence**: MANDATORY for SIL 3-4 — SHALL NOT report to PM
+**EN 50128 Basis**: Section 7.7, Table A.7
+**Independence**: MANDATORY for SIL 3-4 — SHALL NOT report to PM; invoked by COD directly
 
-**COD Invocation Commands**:
+**Responsibilities**: Execute validation against operational scenarios; perform system-level and performance testing; provide formal release approval per EN 50128 Section 5.1.2.8.
 
-```
-@val create-validation-plan
-    Create Software Validation Plan (SVaP).
-    Output: docs/Software-Validation-Plan.md
-
-@val validate-phase <phase-id> [--sil <0-4>]
-    Execute validation for the phase:
-    - Operational scenario testing
-    - System-level acceptance tests
-    - Performance testing (MANDATORY SIL 3-4)
-    Output: docs/Validation-Report.md
-
-@val approve-release
-    Provide formal release approval per EN 50128 Section 5.1.2.8.
-```
+**Output**: `docs/Validation-Report.md`
 
 ---
 
@@ -595,20 +500,11 @@ For specialized work, you may also invoke agents directly:
 
 **EN 50128 Basis**: Section 7.6, Table A.6
 
-**PM Orchestration Commands**:
+**Orchestrated by**: PM (Phase 5)
 
-```
-@int plan-integration
-    Create integration plan (progressive: bottom-up or top-down).
-    Output: docs/Integration-Plan.md
+**Responsibilities**: Create progressive integration plan (bottom-up or top-down); document integration test results; coordinate defect resolution for integration issues.
 
-@int create-integration-report
-    Document integration test results (actual results from TST).
-    Output: docs/Integration-Test-Report.md
-
-@int fix-defects --defects <defect-list>
-    Coordinate defect resolution for integration issues.
-```
+**Outputs**: `docs/Integration-Plan.md`, `docs/Integration-Test-Report.md`
 
 ---
 
@@ -616,20 +512,11 @@ For specialized work, you may also invoke agents directly:
 
 **EN 50128 Basis**: Section 7.1, Section 6.3, Table A.8
 
-**PM Orchestration Commands**:
+**Orchestrated by**: PM (Phases 2, 3)
 
-```
-@saf create-hazard-log [--based-on <system-hazard-log>]
-    Create software-level Hazard Log.
-    Output: docs/Hazard-Log.md
+**Responsibilities**: Create software-level Hazard Log; perform FMEA; update safety requirements based on findings.
 
-@saf perform-fmea [--component <name>]
-    Perform Failure Mode and Effects Analysis.
-    Output: docs/FMEA-Worksheet.md
-
-@saf update-safety-requirements
-    Update software safety requirements based on FMEA/FTA findings.
-```
+**Outputs**: `docs/Hazard-Log.md`, `docs/FMEA-Worksheet.md`
 
 ---
 
@@ -637,72 +524,33 @@ For specialized work, you may also invoke agents directly:
 
 **EN 50128 Basis**: Section 6.5, Table A.9
 
-**PM Orchestration Commands**:
+**Orchestrated by**: PM (throughout all phases)
 
-```
-@qua review-document <path> --type <doc-type> --sil <0-4>
-    Template compliance review for a document.
-    Checks: Document ID, Document Control table, Approvals table,
-            section completeness, content quality.
-    Output: docs/QA-Review-<document-name>.md
-    Returns: APPROVED or REJECTED (with finding list)
+**Responsibilities**: Perform template compliance review on all documents; perform code review against EN 50128 and MISRA C checklist (124 items); create SQAP.
 
-@qua review-code --path <src-path> --sil <0-4>
-    Code review against EN 50128 and MISRA C checklist (124 items).
-    Output: docs/Code-Review-Report.md
-    Returns: APPROVED or REJECTED
-
-@qua generate-sqap
-    Create Software Quality Assurance Plan.
-    Output: docs/Software-Quality-Assurance-Plan.md
-```
+**Output**: `docs/QA-Review-<document-name>.md`, `docs/Code-Review-Report.md`, `docs/Software-Quality-Assurance-Plan.md`
 
 ---
 
 ### CM — Configuration Manager
 
-**EN 50128 Basis**: Section 6.6, Table A.9  
+**EN 50128 Basis**: Section 6.6, Table A.9
 **Note**: Configuration Management is MANDATORY for ALL SIL levels (0, 1, 2, 3, 4)
 
-**PM Orchestration Commands**:
+**Orchestrated by**: PM (throughout all phases)
 
-```
-@cm create-scmp
-    Create Software Configuration Management Plan.
-    Output: docs/Software-Configuration-Management-Plan.md
+**Responsibilities**: Create SCMP; create Git baselines at each phase; process change requests through CCB workflow.
 
-@cm create-baseline <phase-id>
-    Create a Git baseline for the specified phase.
-    Tags repository: baseline-phase-<N>-<date>
-
-@cm process-change-request --cr <cr-id>
-    Process a change request through CCB workflow.
-```
+**Outputs**: `docs/Software-Configuration-Management-Plan.md`, Git baseline tags
 
 ---
 
 ### VMGR — V&V Manager
 
-**EN 50128 Basis**: Section 5.1.2.10e (Verifier can report to Validator)  
+**EN 50128 Basis**: Section 5.1.2.10e (Verifier can report to Validator)
 **Independence**: MANDATORY for SIL 3-4 — does NOT report to COD or PM
 
-**Commands**:
-
-```
-@vmgr review-verification <phase-id>
-    Technical review of Verification Report.
-    Returns: APPROVED or REJECTED (with findings)
-
-@vmgr approve-gate <phase-id>
-    Provide formal V&V approval/rejection to COD for gate check.
-    VMGR decisions CANNOT be overridden by COD or PM.
-
-@vmgr status
-    Report V&V status for all phases.
-
-@vmgr independence-check
-    Verify independence requirements are met for all V&V roles.
-```
+**Responsibilities**: Independent technical review of Verification Reports; provide formal V&V approval/rejection to COD for gate checks. VMGR decisions CANNOT be overridden by COD or PM.
 
 ---
 
