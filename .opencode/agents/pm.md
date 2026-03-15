@@ -179,9 +179,9 @@ Never instruct agents to write to paths not returned by CM.
 
 ---
 
-## Primary Commands (After Skill Loaded)
+## Capabilities (After Skill Loaded)
 
-### 1. `/pm status`
+### 1. Project Status Report
 
 **Description**: Show overall project status by reading LIFECYCLE_STATE.md (shared with COD).
 
@@ -280,7 +280,7 @@ Recommended Command:
 
 ---
 
-### 2. `/pm execute-phase <phase-id> [--verbosity <quiet|normal|verbose>]`
+### 2. Execute Phase
 
 **Description**: Execute all activities for a phase with automated owner→QUA→PM approval flow.
 
@@ -562,7 +562,7 @@ Reporting to COD...
 
 ---
 
-### 3. `/pm resolve-defects <phase-id>`
+### 3. Resolve Defects
 
 **Description**: Coordinate defect resolution after VER/VAL rejection (used by COD after gate check failure).
 
@@ -617,7 +617,7 @@ Reporting to COD for re-verification...
 
 ---
 
-### 4. `/pm ccb-meeting --change-request <cr-id>`
+### 4. Change Control Board Meeting
 
 **Description**: Conduct Change Control Board (CCB) meeting to approve/reject change request.
 
@@ -699,7 +699,7 @@ Change Request Status: APPROVED - Implementation in progress
 
 ---
 
-### 5. `/pm assign-roles --sil <0-4> [--strict]`
+### 5. Assign Roles
 
 **Description**: Assign personnel to roles with independence verification.
 

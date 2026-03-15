@@ -103,18 +103,18 @@ to get the canonical path. Never write to a path not returned by CM.
 - **Release authority**: VAL decision is FINAL
 - **Independence**: SHALL NOT report to PM
 
-## Primary Commands
+## Capabilities
 
-After loading the skill, you can execute:
+After loading the skill, VAL performs the following activities when assigned a task by COD:
 
-1. **/val plan** - Create Software Validation Plan
-2. **/val system-test** - Execute system testing
-3. **/val acceptance-test** - Execute acceptance testing
-4. **/val scenario <name>** - Validate operational scenario
-5. **/val performance** - Performance testing
-6. **/val report** - Generate Validation Report
-7. **/val approve-release** - Approve software for release (FINAL AUTHORITY)
-8. **/val reject-release --reason** - Reject software release
+1. **Validation Planning** — Create or update the Software Validation Plan (SVaP)
+2. **System Testing** — Execute functional, performance, interface, and stress tests on the integrated software
+3. **Acceptance Testing** — Validate against customer acceptance criteria and operational scenarios
+4. **Operational Scenario Validation** — Validate normal operation, emergency, maintenance, degraded, and recovery scenarios
+5. **Validation Report Generation** — Produce a structured Validation Report with test evidence
+6. **Approve software release** — FINAL authority; forward approval to VMGR for SIL 3-4 sign-off (per EN 50128 5.1.2.8)
+7. **Reject software release** — BLOCK release; return defect list; decision cannot be overridden by PM or COD
+8. **Performance Testing** — Measure response time, throughput, WCET, and resource usage against requirements
 
 ## Key Behaviors
 

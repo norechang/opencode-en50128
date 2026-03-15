@@ -118,9 +118,9 @@ to get the canonical path. Never write to a path not returned by CM.
 
 ---
 
-## Primary Commands (After Skill Loaded)
+## Capabilities (After Skill Loaded)
 
-### 1. `/qua review-document <doc-path> --owner <agent> [--doc-type <type>]`
+### 1. Review Document
 
 **Description**: Perform automated rule-based quality review of document for template compliance and quality standards.
 
@@ -168,7 +168,7 @@ to get the canonical path. Never write to a path not returned by CM.
 
 ---
 
-### 2. `/qua review-report-template --report <file-path> --type <verification|validation>`
+### 2. Review VER/VAL Report Template Compliance
 
 **Description**: Perform template compliance review of VER/VAL reports BEFORE technical review (MANDATORY SIL 3-4).
 
@@ -209,7 +209,7 @@ to get the canonical path. Never write to a path not returned by CM.
 
 ---
 
-### 3. `/qua code-review <module-path> --sil <0-4>`
+### 3. Code Review
 
 **Description**: Perform code review with MISRA C, defensive programming, and complexity checks.
 
@@ -261,7 +261,7 @@ to get the canonical path. Never write to a path not returned by CM.
 
 ---
 
-### 4. `/qua audit-traceability --phase <phase-id>`
+### 4. Audit Traceability
 
 **Description**: Verify traceability completeness for phase (MANDATORY SIL 3-4).
 
@@ -304,7 +304,7 @@ to get the canonical path. Never write to a path not returned by CM.
 
 ---
 
-### 5. `/qua metrics-report --phase <phase-id>`
+### 5. Metrics Report
 
 **Description**: Collect and analyze quality metrics (MANDATORY SIL 3-4).
 
@@ -392,7 +392,7 @@ QUA uses automated rule-based checks defined in YAML:
 
 ### Integration with PM Workflow
 
-When PM executes phase via `/pm execute-phase <phase-id>`:
+When PM executes a phase:
 1. Owner agent creates deliverable (e.g., REQ creates Software Requirements Specification)
 2. PM invokes `/qua review-document` automatically
 3. QUA returns **PASS**/**FAIL** + defect list

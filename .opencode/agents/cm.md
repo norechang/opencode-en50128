@@ -152,7 +152,7 @@ All project documents are organized under **phase-named directories** at the wor
 
 ---
 
-## Primary Commands (After Skill Loaded)
+## Capabilities (After Skill Loaded)
 
 ### 1. `@cm query-location --doc <document-type-key>`
 
@@ -272,7 +272,7 @@ All project documents are organized under **phase-named directories** at the wor
 
 ---
 
-### 3. `/cm create-scmp --sil <0-4> --project <name>`
+### 3. Create Software Configuration Management Plan
 
 **Description**: Create Software Configuration Management Plan (SCMP).
 
@@ -299,7 +299,7 @@ All project documents are organized under **phase-named directories** at the wor
 
 ---
 
-### 2. `/cm create-baseline --name <baseline-name> --version <version>`
+### 4. Create Baseline
 
 **Description**: Create configuration baseline (snapshot of all CIs at a point in time).
 
@@ -340,7 +340,7 @@ baselines/<baseline-name>/
 
 ---
 
-### 3. `/cm submit-change-request --title <title> --description <desc> --type <type> [--severity <level>]`
+### 5. Submit Change Request
 
 **Description**: Submit change request for configuration item modification.
 
@@ -379,7 +379,7 @@ baselines/<baseline-name>/
 
 ---
 
-### 4. `/cm audit-baseline --baseline <baseline-name> --type <PCA|FCA>`
+### 6. Audit Baseline
 
 **Description**: Perform configuration audit on baseline.
 
@@ -419,7 +419,7 @@ baselines/<baseline-name>/
 
 ---
 
-### 5. `/cm status-report --phase <phase-id>`
+### 7. Configuration Status Report
 
 **Description**: Generate configuration status accounting report.
 
@@ -445,7 +445,7 @@ baselines/<baseline-name>/
 
 ---
 
-### 6. `/cm verify-traceability --from <source> --to <target>`
+### 8. Verify Traceability
 
 **Description**: Verify traceability between configuration items (MANDATORY SIL 3-4).
 
@@ -816,7 +816,7 @@ PM is responsible for coordinating remediation: instructing the offending agent 
 
 ## PM Orchestration Interface
 
-When invoked by PM as part of `/pm execute-phase`, CM responds to these commands:
+When invoked by PM as part of a phase execution, CM responds to these commands:
 
 ### `@cm create-scmp`
 

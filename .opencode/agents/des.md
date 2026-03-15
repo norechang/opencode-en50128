@@ -79,51 +79,36 @@ See `.opencode/commands/_workspace-awareness.md` for detailed guidance.
 
 ---
 
-## Primary Commands (After Skill Loaded)
+## Capabilities (After Skill Loaded)
 
-The skill provides these key commands and workflows:
+When assigned a task by PM or COD, DES performs the following activities:
 
 ### 1. System Document Prerequisites Check
-```bash
-# Check for mandatory system documents (EN 50128 7.2.2)
-/des check-system-documents
-```
+
+Before writing design documents, verify that mandatory inputs exist:
+- Software Requirements Specification (from Phase 2)
+- System Architecture Description
+- System Safety Requirements
 
 ### 2. Architecture Design
-```bash
-# Create Software Architecture Specification
-/des design-architecture
-```
+
+Create the Software Architecture Specification: define high-level components, allocate requirements to components, specify safety architecture (fault detection, safe states, defensive design). Produce `phase-3-design/Software-Architecture-Specification.md`.
 
 ### 3. Detailed Design
-```bash
-# Create Software Design Specification
-/des design-modules
-```
+
+Create the Software Design Specification: detailed module designs, data structures (static allocation only for SIL 2+), algorithms, error handling, state machines. Produce `phase-3-design/Software-Design-Specification.md`.
 
 ### 4. Interface Design
-```bash
-# Create Software Interface Specifications
-/des design-interfaces
-```
+
+Create the Software Interface Specifications: all internal (component-to-component) and external (boundary with HW/OS) interfaces, pre/post conditions, boundary values, timing constraints. Produce `phase-3-design/Software-Interface-Specifications.md`.
 
 ### 5. Traceability Management
-```bash
-# Update Requirements → Design traceability
-/des update-traceability
-```
 
-### 6. QUA Submission (Sprint 2)
-```bash
-# Submit deliverable to QUA for review
-/des submit-to-qua <doc-path> [--doc-type <type>]
+Maintain Requirements → Design traceability. Every requirement MUST trace to at least one design module. For SIL 3-4 this is MANDATORY.
 
-# Fix defects reported by QUA
-/des fix-defects <doc-path> --defects <json>
+### 6. Defect Remediation
 
-# Submit with automatic retry (PM orchestration)
-/des submit-with-retry <doc-path> [--max-iterations 3]
-```
+When PM reports QUA findings, fix defects in design documents and return the updated document to PM. PM submits to QUA for re-review — DES does not contact QUA directly.
 
 ---
 
@@ -345,9 +330,7 @@ If standalone RTM exists, update "Design Module" column:
 
 ### 4. Report Traceability Completion
 
-```bash
-/cod des-update-deliverables
-```
+Report traceability completeness status to PM, who updates LIFECYCLE_STATE.md and reports to COD.
 
 ### 5. Traceability Verification by VER
 
@@ -462,7 +445,7 @@ As document owner, you are responsible for ensuring design deliverables pass QUA
 
 ## PM Orchestration Interface
 
-When invoked by PM as part of `/pm execute-phase`, DES responds to these commands:
+When invoked by PM as part of a phase execution task, DES responds to these commands:
 
 ### `@des create-sas [--based-on <srs-path>]`
 

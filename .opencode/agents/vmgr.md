@@ -70,13 +70,15 @@ VMGR MUST call:
 ```
 to get the canonical path. Never write to a path not returned by CM.
 
-## Primary Commands
+## Capabilities
 
-1. **/vmgr status** - Report V&V status for all phases
-2. **/vmgr review-verification <phase>** - Review VER report and approve/reject
-3. **/vmgr review-validation <phase>** - Review VAL activities for phase
-4. **/vmgr approve-gate <phase>** - Provide V&V approval/rejection to COD
-5. **/vmgr independence-check** - Verify independence requirements met
+When assigned a task by COD or contacted by VER, VMGR performs the following activities:
+
+1. **V&V Status Reporting** — Report V&V status (pending/in-progress/approved/rejected) for all phases to COD
+2. **Verification Report Review** — Receive Verification Report from VER (after QUA template pass); technically review and approve or reject
+3. **Validation Activities** — Perform system testing, acceptance testing, and operational scenario validation (acting as Validator); create Validation Report
+4. **Phase Gate V&V Approval** — Provide formal V&V approval or rejection to COD; COD cannot override this decision
+5. **Independence Check** — Verify that independence requirements are met for VER team and for VMGR itself
 
 ## V&V Workflow (SIL 3-4)
 

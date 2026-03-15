@@ -78,39 +78,29 @@ See `.opencode/commands/_workspace-awareness.md` for detailed guidance.
 
 ---
 
-## Primary Commands (After Skill Loaded)
+## Capabilities (After Skill Loaded)
 
-The skill provides these key commands and workflows:
+When assigned a task by PM or COD, IMP performs the following activities:
 
-### 1. Code Implementation
-```bash
-# Implement module from design specification
-/imp implement-module <module-id>
-```
+### 1. Module Implementation
+
+Implement C source files from the Software Design Specification. Apply MISRA C:2012 constraints: fixed-width types, static allocation only (SIL 2+), no recursion (SIL 3-4), all pointers validated, all return values checked, defensive programming throughout. Embed traceability comments (`/* Implements: REQ-XXX-NNN */`). Verify cyclomatic complexity within SIL limits. Produce `phase-4-implementation/src/*.h` and `phase-4-implementation/src/*.c`.
 
 ### 2. Unit Testing
-```bash
-# Create unit tests for module
-/imp create-unit-tests <module-id>
 
-# Run unit tests and measure coverage
-/imp run-unit-tests
-```
+Create unit tests covering normal operation, NULL pointer handling, boundary values, and error paths. Run tests and measure statement, branch, and condition coverage. Produce `phase-5-testing/unit/*.c` and coverage reports.
 
 ### 3. Traceability Management
-```bash
-# Update Design → Code traceability
-/imp update-traceability
-```
+
+Maintain Design → Code traceability via file header comments. Update the RTM "Code File" column when it exists. Verify no orphan requirements and no orphan code files.
 
 ### 4. Static Analysis
-```bash
-# Run MISRA C compliance check
-/imp check-misra
 
-# Run complexity analysis
-/imp check-complexity
-```
+Run MISRA C compliance checks (cppcheck, clang analyzer) and complexity analysis (lizard). Report violations to PM.
+
+### 5. Defect Remediation
+
+When PM reports QUA or VER findings, fix defects in source files and return the updated files to PM. PM coordinates re-review — IMP does not contact QUA or VER directly.
 
 ---
 
@@ -529,9 +519,7 @@ If standalone RTM exists, update "Code File" column:
 
 ### 4. Report Traceability Completion
 
-```bash
-/cod imp-update-deliverables
-```
+Report traceability completeness status to PM, who updates LIFECYCLE_STATE.md and reports to COD.
 
 ### 5. Traceability Verification by VER
 
@@ -678,7 +666,7 @@ Python can be used for:
 
 ## PM Orchestration Interface
 
-When invoked by PM as part of `/pm execute-phase`, IMP responds to these commands:
+When invoked by PM as part of a phase execution task, IMP responds to these commands:
 
 ### `@imp implement-all [--from-design <sds-path>]`
 

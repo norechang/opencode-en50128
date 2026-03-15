@@ -74,17 +74,13 @@ See `.opencode/commands/_workspace-awareness.md` for detailed guidance.
 
 ---
 
-## Primary Commands (After Skill Loaded)
+## Capabilities (After Skill Loaded)
 
-The skill provides these key commands and workflows:
+When assigned a task by PM or COD, REQ performs the following activities:
 
 ### 1. System Document Prerequisites Check
-```bash
-# Check for mandatory system documents (EN 50128 7.2.2)
-/req check-system-documents
-```
 
-**Mandatory system documents** (from System Engineering phase):
+Before writing the SRS, verify that mandatory system documents exist (EN 50128 7.2.2):
 1. System Requirements Specification
 2. System Architecture Description
 3. System Safety Plan
@@ -93,28 +89,16 @@ The skill provides these key commands and workflows:
 If missing, offer to copy templates from `assets/sample_system/`.
 
 ### 2. Requirements Specification
-```bash
-# Extract and document software requirements
-/req specify-requirements
-```
+
+Extract and document software requirements from system documents. Assign unique IDs, SIL levels, acceptance criteria, and verification methods. Produce `phase-2-requirements/Software-Requirements-Specification.md`.
 
 ### 3. Traceability Management
-```bash
-# Update Requirements Traceability Matrix
-/req update-traceability
-```
 
-### 4. QUA Submission (Sprint 2)
-```bash
-# Submit deliverable to QUA for review
-/req submit-to-qua <doc-path> [--doc-type <type>]
+Maintain the Requirements Traceability Matrix. Verify all requirements trace to system requirements. For SIL 3-4 this is MANDATORY.
 
-# Fix defects reported by QUA
-/req fix-defects <doc-path> --defects <json>
+### 4. Defect Remediation
 
-# Submit with automatic retry (PM orchestration)
-/req submit-with-retry <doc-path> [--max-iterations 3]
-```
+When PM reports QUA findings, fix defects in the SRS and return the updated document to PM. PM submits to QUA for re-review — REQ does not contact QUA directly.
 
 ---
 

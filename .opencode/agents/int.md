@@ -98,45 +98,29 @@ See `.opencode/commands/_workspace-awareness.md` for detailed guidance.
 
 ---
 
-## Primary Commands (After Skill Loaded)
+## Capabilities (After Skill Loaded)
 
-The skill provides these key commands and workflows:
+When assigned a task by PM or COD, INT performs the following activities:
 
 ### 1. Integration Planning
-```bash
-# Plan progressive integration strategy
-/int plan-integration
-```
 
-### 2. Integration Execution
-```bash
-# Integrate components progressively
-/int integrate-components
+Review SAS and SDS, determine integration strategy (bottom-up, top-down, or sandwich), and create integration test specifications. Define test cases for all component interfaces. Produce `phase-3-design/Software-Integration-Test-Specification.md` and the Software/Hardware variant. Return spec paths to PM (for QUA review, then PM forwards to TST for execution).
 
-# Coordinate integration test execution with TST
-/int coordinate-integration-tests
-```
+### 2. Component Integration
 
-### 3. Integration Test Reporting
-```bash
-# Create Software Integration Test Report based on TST results
-/int create-integration-test-report
+Progressively combine tested components into composite wholes. Test interfaces at each integration step. Build integration binaries in `phase-6-integration/build/`.
 
-# Create Software/Hardware Integration Test Report
-/int create-hw-integration-report
-```
+### 3. Integration Test Report Creation
+
+Receive actual test results from PM (who obtains them from TST). Document those results — INT MUST NOT fabricate test results. Assess integration completeness. Produce `phase-6-integration/reports/Software-Integration-Test-Report.md` and the Software/Hardware variant.
 
 ### 4. Impact Analysis
-```bash
-# Perform impact analysis for modifications
-/int analyze-impact <change-description>
-```
 
-### 5. Configuration Management
-```bash
-# Document component configurations
-/int document-configuration
-```
+For any modification during integration, identify all impacted components, determine necessary reverification activities, and report to PM.
+
+### 5. Defect Remediation
+
+When PM reports QUA or VER findings, fix integration specifications or reports and return the updated documents to PM. PM coordinates re-review — INT does not contact QUA or VER directly.
 
 ---
 
@@ -449,7 +433,7 @@ Top-Down + Bottom-Up simultaneously, meet in middle
 
 ## PM Orchestration Interface
 
-When invoked by PM as part of `/pm execute-phase integration`, INT responds to these commands:
+When invoked by PM as part of a phase execution task, INT responds to these commands:
 
 ### `@int plan-integration [--from-sas <sas-path>]`
 

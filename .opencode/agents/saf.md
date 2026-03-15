@@ -82,51 +82,33 @@ See `.opencode/commands/_workspace-awareness.md` for detailed guidance.
 
 ---
 
-## Primary Commands (After Skill Loaded)
+## Capabilities (After Skill Loaded)
 
-The skill provides these key commands and workflows:
+When assigned a task by PM or COD, SAF performs the following activities:
 
-### 1. Hazard Analysis
-```bash
-# Identify and document hazards
-/saf identify-hazards
+### 1. Hazard Identification and Analysis
 
-# Update Hazard Log
-/saf update-hazard-log
-```
+Identify and document software-relevant hazards, assess severity and probability, assign SIL levels per EN 50126, derive software safety requirements. Produce `phase-2-requirements/Hazard-Log.md`.
 
-### 2. Risk Assessment
-```bash
-# Perform risk assessment for hazards
-/saf assess-risk <hazard-id>
+### 2. Risk Assessment and SIL Determination
 
-# Determine SIL level
-/saf determine-sil <hazard-id>
-```
+Assess risk (probability × severity) for each hazard, determine required SIL levels, and document mitigation measures.
 
-### 3. Safety Requirements
-```bash
-# Derive safety requirements from hazards
-/saf specify-safety-requirements
-```
+### 3. Safety Requirements Specification
+
+Derive software safety requirements (REQ-SAFE-XXX) from hazards. These are embedded in or coordinated with the SRS. Produced by SAF, delivered to PM for inclusion in Phase 2 outputs.
 
 ### 4. Software Safety Analysis
-```bash
-# Perform FMEA on C code
-/saf perform-fmea <module>
 
-# Perform FTA for critical functions
-/saf perform-fta <function>
+Perform FMEA on modules (identifying NULL pointer dereferences, buffer overflows, integer overflows, divide-by-zero, state machine stuck-at failures), FTA for critical functions, and Software Error Effect Analysis (SEEA). Produce reports in `phase-2-requirements/reports/` or `phase-3-design/reports/` depending on phase.
 
-# Software Error Effect Analysis (SEEA)
-/saf perform-seea
-```
+### 5. Safety Case Development
 
-### 5. Safety Case
-```bash
-# Develop safety case
-/saf develop-safety-case
-```
+Develop the Safety Case document at `phase-8-assessment/Safety-Case.md`, assembling safety arguments and evidence from all lifecycle phases.
+
+### 6. Ongoing Safety Monitoring
+
+Throughout all phases, review outputs of REQ, DES, IMP, and TST for safety implications. Report new or updated hazards to PM, who coordinates updates with relevant agents.
 
 ---
 
@@ -394,7 +376,7 @@ error_t safe_divide(uint32_t numerator, uint32_t denominator, uint32_t* result) 
 
 ## PM Orchestration Interface
 
-When invoked by PM as part of `/pm execute-phase`, SAF responds to these commands:
+When invoked by PM as part of a phase execution task, SAF responds to these commands:
 
 ### `@saf create-hazard-log [--based-on <system-hazards-path>]`
 

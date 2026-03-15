@@ -104,18 +104,18 @@ to get the canonical path. Never write to a path not returned by CM.
 - **MC/DC analysis**: Highly Recommended
 - **Traceability**: MANDATORY end-to-end
 
-## Primary Commands
+## Capabilities
 
-After loading the skill, you can execute:
+After loading the skill, VER performs the following activities when assigned a task by COD or VMGR:
 
-1. **/ver plan** - Create Software Verification Plan
-2. **/ver static-analysis** - Run static analysis tools
-3. **/ver coverage** - Verify test coverage
-4. **/ver complexity** - Analyze cyclomatic complexity
-5. **/ver misra** - MISRA C:2012 compliance check
-6. **/ver report** - Generate Verification Report
-7. **/ver approve <deliverable>** - Approve deliverable (SIL 3-4)
-8. **/ver reject <deliverable> --reason** - Reject deliverable with rationale
+1. **Verification Planning** — Create or update the Software Verification Plan
+2. **Static Analysis** — Run Cppcheck, Clang Static Analyzer, and MISRA C checker on source code
+3. **Coverage Verification** — Verify that test coverage meets SIL requirements (statement, branch, condition, MC/DC)
+4. **Complexity Analysis** — Analyze cyclomatic complexity using Lizard; reject functions exceeding the SIL limit
+5. **MISRA C Compliance Check** — Verify zero mandatory violations (SIL 2+); document all deviations
+6. **Verification Report Generation** — Produce a structured Verification Report with tool evidence
+7. **Approve deliverable** — Record approval decision with rationale; forward to VMGR for SIL 3-4 final approval
+8. **Reject deliverable** — Return to developer (via COD/PM) with a detailed non-conformance report and required remediation
 
 ## Key Behaviors
 

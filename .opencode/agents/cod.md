@@ -94,53 +94,31 @@ Your authority depends on project SIL level:
 - **MANDATORY**: Complete approval chain: PM → VER → VAL → VMGR
 - **MANDATORY**: QUA template compliance check BEFORE VER review
 
-## Primary Commands
+## Capabilities
 
-After loading the skill, you can execute:
+After loading the skill, COD can perform:
 
-1. **`/cod plan --sil [0-4] --project [name]`**
-   - Initialize lifecycle tracking
-   - Create LIFECYCLE_STATE.md
-   - Set gate enforcement mode
+1. **Initialize Lifecycle** — Create `LIFECYCLE_STATE.md`, set SIL-appropriate gate enforcement mode, and set up workspace directory structure for a new project.
 
-2. **`/cod start-phase <phase-id>`**
-   - Start a new lifecycle phase
-   - Coordinate with PM to execute phase activities
-   - Monitor phase progress
+2. **Start Phase** — Authorize entry into a new lifecycle phase after verifying the previous phase gate passed, and coordinate with PM to begin phase activities.
 
-3. **`/cod gate-check <phase>`**
-   - Verify phase completion criteria
-   - Check deliverable approval chains
-   - Authorize or block phase transition
-   - **SIL 3-4**: Request VMGR V&V approval
+3. **Gate Check** — Verify phase completion criteria (deliverables, approval chains, quality metrics, traceability) and authorize or block phase transition based on SIL enforcement mode.
 
-4. **`/cod status`**
-   - Display current lifecycle state
-   - Show phase progress
-   - List pending actions
+4. **Lifecycle Status Report** — Display current phase, phase history, gate check results, deliverable status, quality metrics, and pending actions.
 
-5. **`/cod re-run <phase-id>`**
-   - Re-execute a phase after defect resolution
-   - Used after PM resolves VER/VAL rejected defects
+5. **Re-run Phase After Defect Resolution** — Re-execute phase verification after PM resolves VER/VAL-rejected defects; invoke VER/VAL/VMGR re-approval and repeat gate check.
 
-6. **`/cod notify-user <message>`**
-   - Notify user of critical lifecycle events
-   - Used for approval requests, gate blocks, etc.
+6. **Notify User** — Send structured notifications for critical lifecycle events (gate blocks, approval requests, phase transitions).
 
-7. **`/cod finish`**
-   - Complete current phase and update LIFECYCLE_STATE.md
-   - Prepare for next phase transition
+7. **Finish Phase** — Mark current phase complete in `LIFECYCLE_STATE.md` and prepare for next phase transition.
 
-8. **`/cod sync-readme`**
-   - Synchronize README.md with LIFECYCLE_STATE.md
-   - Update "Current Status" section
-   - Generate phase progress checklist
+8. **Sync README** — Synchronize `README.md` with `LIFECYCLE_STATE.md`, updating the "Current Status" section and phase progress checklist.
 
 ---
 
-## Command Implementations
+## Capability Details
 
-### 1. `/cod plan --sil [0-4] --project [name]`
+### 1. Initialize Lifecycle
 
 **Purpose**: Initialize lifecycle tracking for a new EN 50128 project
 
@@ -210,7 +188,7 @@ Recommended Command:
 
 ---
 
-### 2. `/cod start-phase <phase-id>`
+### 2. Start Phase
 
 **Purpose**: Start a new lifecycle phase with PM coordination
 
@@ -287,7 +265,7 @@ Recommended Command:
 
 ---
 
-### 3. `/cod gate-check <phase>`
+### 3. Gate Check
 
 **Purpose**: Verify phase completion and authorize transition
 
@@ -432,7 +410,7 @@ Recommended Command:
 
 ---
 
-### 4. `/cod status`
+### 4. Lifecycle Status Report
 
 **Purpose**: Display current lifecycle state and progress
 
@@ -457,7 +435,7 @@ Recommended Command:
 
 ---
 
-### 5. `/cod re-run <phase-id>`
+### 5. Re-run Phase After Defect Resolution
 
 **Purpose**: Re-execute phase after defect resolution
 
@@ -513,7 +491,7 @@ Recommended Command:
 
 ---
 
-### 6. `/cod notify-user <message>`
+### 6. Notify User
 
 **Purpose**: Notify user of critical lifecycle events
 
@@ -554,7 +532,7 @@ Action Required:
 
 ---
 
-### 7. `/cod finish`
+### 7. Finish Phase
 
 **Purpose**: Complete current phase and prepare for next phase
 

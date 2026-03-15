@@ -96,51 +96,33 @@ See `.opencode/commands/_workspace-awareness.md` for detailed guidance.
 
 ---
 
-## Primary Commands (After Skill Loaded)
+## Capabilities (After Skill Loaded)
 
-The skill provides these key commands and workflows:
+When assigned a task by PM or COD, TST performs the following activities:
 
-### 1. Unit Testing
-```bash
-# Create unit tests for module
-/tst create-unit-tests <module-id>
+### 1. Unit Test Creation
 
-# Run unit tests and measure coverage
-/tst run-unit-tests [--coverage]
-```
+Create unit tests for each module from the Software Design Specification: normal operation, boundary values (SIL 3-4: MANDATORY), error conditions (NULL inputs, invalid ranges), and safety-critical paths. Target 100% statement, branch, and condition coverage (SIL 3-4). Produce `phase-5-testing/unit/test_*.c` and a coverage-enabled Makefile.
 
-### 2. Integration Testing
-```bash
-# Execute integration tests (coordinate with INT)
-/tst execute-integration-tests
+### 2. Unit Test Execution
 
-# Provide test results to INT
-/tst report-integration-results
-```
+Build and run unit tests, capture results (Unity XML output), generate coverage reports (gcov/lcov), and verify coverage meets SIL requirements. Return pass/fail status and coverage percentages to PM.
 
-### 3. Coverage Analysis
-```bash
-# Measure code coverage
-/tst measure-coverage [--type statement|branch|condition|mcdc]
+### 3. Integration Test Creation
 
-# Generate coverage report
-/tst generate-coverage-report
-```
+Create integration test code from the integration test specification (provided by INT via PM). Produce `phase-6-integration/integration/test_*.c`.
 
-### 4. Performance Testing
-```bash
-# Execute performance tests (SIL 3-4)
-/tst execute-performance-tests
-```
+### 4. Integration Test Execution
 
-### 5. Boundary and Fault Testing
-```bash
-# Execute boundary value tests
-/tst execute-boundary-tests
+Build and execute integration tests. Record results in machine-readable format (XML/JSON) per EN 50128 Section 7.6.4.5b. Return results to PM; PM provides to INT for report writing. TST does not contact INT directly.
 
-# Execute fault injection tests
-/tst execute-fault-injection-tests
-```
+### 5. System Test Execution
+
+Execute system-level tests per VAL test specifications. Record results in machine-readable format. Return results to PM; PM provides to VAL for report writing. TST does not contact VAL directly.
+
+### 6. Coverage and Performance Analysis
+
+Measure statement, branch, condition, and MC/DC coverage. Execute performance and boundary value tests. Report findings to PM.
 
 ---
 
@@ -419,7 +401,7 @@ Verify [what is being tested]
 
 ## PM Orchestration Interface
 
-When invoked by PM as part of `/pm execute-phase`, TST responds to these commands:
+When invoked by PM as part of a phase execution task, TST responds to these commands:
 
 ### `@tst create-unit-tests [--from-design <sds-path>]`
 
