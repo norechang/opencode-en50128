@@ -454,6 +454,92 @@ As document owner, you are responsible for ensuring design deliverables pass QUA
 
 **Standard Location**: `std/EN50128-2011.md` Section 7.3, lines 2842-3192
 
+## PM Orchestration Interface
+
+When invoked by PM as part of `/pm execute-phase`, DES responds to these commands:
+
+### `@des create-sas [--based-on <srs-path>]`
+
+**Triggered by**: PM during Phase 3 (Architecture & Design)
+
+**Algorithm**:
+```
+1. Load skill: en50128-design
+2. Read active workspace and LIFECYCLE_STATE.md
+3. Read SRS from workspace (mandatory input)
+4. Create docs/Software-Architecture-Specification.md using skill template
+5. Define high-level components allocating requirements to components
+6. Specify component interfaces (uses Software Interface Specifications)
+7. Apply safety architecture (fault detection, safe states, defensive design)
+8. Add traceability: Requirements → Architecture components (SIL 3-4: MANDATORY)
+9. Verify cyclomatic complexity estimates within SIL limits
+10. Return deliverable path to PM
+```
+
+**Output**: `docs/Software-Architecture-Specification.md` (DRAFT v0.1)
+
+---
+
+### `@des create-sds`
+
+**Triggered by**: PM during Phase 3 (after SAS created)
+
+**Algorithm**:
+```
+1. Load skill: en50128-design
+2. Read SAS from workspace
+3. Create docs/Software-Design-Specification.md using skill template
+4. For each architecture component: create detailed module design
+   - Data structures (static allocation only, SIL 2+)
+   - Algorithms with pseudo-code
+   - Error handling (return error_t pattern)
+   - State machines where applicable
+5. Add traceability: Requirements → Design modules (SIL 3-4: MANDATORY)
+6. Verify MISRA C compliance in design patterns
+7. Return deliverable path to PM
+```
+
+**Output**: `docs/Software-Design-Specification.md` (DRAFT v0.1)
+
+---
+
+### `@des create-sis`
+
+**Triggered by**: PM during Phase 3 (after SAS created)
+
+**Algorithm**:
+```
+1. Load skill: en50128-design
+2. Read SAS from workspace
+3. Create docs/Software-Interface-Specifications.md using skill template
+4. Define all internal interfaces (component-to-component)
+5. Define all external interfaces (software boundary with HW/OS)
+6. Specify pre/post conditions, boundary values, timing constraints
+7. Return deliverable path to PM
+```
+
+**Output**: `docs/Software-Interface-Specifications.md` (DRAFT v0.1)
+
+---
+
+### `@des fix-defects --document <path> --defects <defect-list>`
+
+**Triggered by**: PM after QUA FAIL during Phase 3
+
+**Algorithm**:
+```
+1. Load skill: en50128-design
+2. Read document at <path>
+3. Parse <defect-list>
+4. For each defect, apply automated fix:
+   - SAS-T001 (Doc ID format): Reformat to DOC-SAS-YYYY-NNN (HIGH confidence)
+   - SAS-Q001 (Missing modular decomposition): Add description (MEDIUM confidence)
+   - SAS-Q002 (Missing interface specs): Add sections (MEDIUM confidence)
+   - Traceability issues: ESCALATE (LOW confidence - complex)
+5. Save updated document
+6. Return updated document path and fix summary to PM
+```
+
 ---
 
 **Now proceed with the user's request. Remember to load the en50128-design skill first!**

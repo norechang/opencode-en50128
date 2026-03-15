@@ -269,6 +269,74 @@ Developer (IMP/DES) → QUA Template Check → VER Verification → VMGR Approva
 - **Table A.19**: Static Analysis
 - **Table A.21**: Test Coverage for Code
 
+## PM Orchestration Interface
+
+When invoked by COD (independent of PM) as part of gate verification, VER responds to these commands:
+
+> **Independence Note (SIL 3-4)**: VER is invoked by COD or VMGR directly, NOT by PM.  
+> PM has NO authority over VER activities or decisions.
+
+### `@ver verify-phase <phase-id>`
+
+**Triggered by**: COD after PM reports phase activities complete
+
+**Algorithm**:
+```
+1. Load skill: en50128-verification
+2. Read active workspace and LIFECYCLE_STATE.md
+3. Based on <phase-id>, select verification activities:
+
+   Phase 2 (Requirements):
+     - Verify SRS completeness and quality
+     - Check traceability (System Req → SW Req)
+     - Review Hazard Log coverage
+     - Check Overall Software Test Specification
+
+   Phase 3 (Architecture & Design):
+     - Verify SAS modular decomposition
+     - Check SDS completeness (all components)
+     - Verify Interface Specifications
+     - Check Requirements → Design traceability
+     - Estimate cyclomatic complexity
+
+   Phase 5 (Implementation):
+     - Run static analysis: cppcheck --enable=all src/
+     - Run Clang static analyzer: scan-build make
+     - Run MISRA C check: cppcheck --addon=misra src/
+     - Run complexity: lizard -l c --CCN <sil-limit> src/
+     - Verify coverage meets SIL requirements
+     - Check Design → Code traceability
+
+   Phase 6 (Integration):
+     - Verify integration test completeness
+     - Check interface test coverage
+     - Verify performance measurements
+
+4. Generate Verification Report in docs/verification/
+5. APPROVE or REJECT phase deliverables
+6. Submit report to QUA for template compliance (1 pass)
+7. After QUA PASS: Submit to VMGR for V&V approval (SIL 3-4)
+8. Return verification status to COD
+```
+
+**Output**: `docs/verification/VER-<PROJECT>-<YYYY>-<NNN>.md`
+
+---
+
+### `@ver re-verify-phase <phase-id>`
+
+**Triggered by**: COD after PM resolves defects
+
+**Algorithm**:
+```
+1. Load skill: en50128-verification
+2. Re-run same verification activities as @ver verify-phase
+3. Verify each previously-found defect is now resolved
+4. Generate updated Verification Report
+5. Submit to QUA, then VMGR
+6. Return updated status to COD
+```
+
 ---
 
 **Now proceed with the user's request. Remember to load the en50128-verification skill first!**

@@ -670,6 +670,70 @@ Python can be used for:
 
 **Standard Location**: `std/EN50128-2011.md` Sections 7.4-7.5, lines 3194-3282
 
+## PM Orchestration Interface
+
+When invoked by PM as part of `/pm execute-phase`, IMP responds to these commands:
+
+### `@imp implement-all [--from-design <sds-path>]`
+
+**Triggered by**: PM during Phase 5 (Component Implementation & Testing)
+
+**Algorithm**:
+```
+1. Load skill: en50128-implementation
+2. Read active workspace, LIFECYCLE_STATE.md, and SDS
+3. For each module in SDS:
+   a. Create src/<module_name>.h (header with interface only)
+   b. Create src/<module_name>.c (implementation)
+   c. Apply MISRA C:2012 constraints:
+      - Fixed-width types (uint8_t, uint16_t, uint32_t)
+      - Static allocation only (SIL 2+) - NO malloc/free
+      - No recursion (SIL 3-4)
+      - All pointers validated before use
+      - All return values checked
+      - Defensive programming (pre-condition checks)
+   d. Embed traceability comment: /* Implements: REQ-XXX-NNN */
+   e. Verify cyclomatic complexity within SIL limits
+4. Create src/Makefile if not present
+5. Return list of created files to PM
+```
+
+**Output**: `src/*.h`, `src/*.c`, `src/Makefile`
+
+---
+
+### `@imp fix-defects --files <file-list> --defects <defect-list>`
+
+**Triggered by**: PM after QUA FAIL or VER rejection during Phase 5
+
+**Algorithm**:
+```
+1. Load skill: en50128-implementation
+2. Read source files in <file-list>
+3. Parse <defect-list> (cppcheck findings, MISRA violations, complexity violations)
+4. For each defect, apply fix:
+   - MISRA-M-required violations: Fix code to comply (HIGH confidence)
+   - Complexity > limit: Refactor function into smaller functions (MEDIUM confidence)
+   - Missing NULL check: Add defensive check at function entry (HIGH confidence)
+   - Missing error check: Add return value check (HIGH confidence)
+   - Dynamic allocation: Replace with static allocation (HIGH confidence)
+5. Save updated source files
+6. Return fix summary to PM
+```
+
+---
+
+### `@imp run-build`
+
+**Triggered by**: PM or VER for verification
+
+**Algorithm**:
+```
+1. Run make in src/ directory
+2. Report build success/failure
+3. If failure: return compiler errors to PM
+```
+
 ---
 
 **Now proceed with the user's request. Remember to load the en50128-implementation skill first!**

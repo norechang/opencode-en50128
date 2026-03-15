@@ -287,6 +287,68 @@ As document owner, you are responsible for ensuring Software Requirements Specif
 
 **Standard Location**: `std/EN50128-2011.md` Section 7.2
 
+## PM Orchestration Interface
+
+When invoked by PM as part of `/pm execute-phase`, REQ responds to these commands:
+
+### `@req create-srs [--based-on <system-req-path>]`
+
+**Triggered by**: PM during Phase 2 (Requirements)
+
+**Algorithm**:
+```
+1. Load skill: en50128-requirements
+2. Read active workspace and LIFECYCLE_STATE.md
+3. If --based-on provided: read system requirements file for traceability
+4. Create docs/Software-Requirements-Specification.md using skill template
+5. Populate with requirements from system requirements (if provided)
+6. Assign unique IDs (REQ-FUN-NNN, REQ-PERF-NNN, etc.)
+7. Assign SIL levels to all requirements
+8. Add traceability to system requirements (SIL 3-4: MANDATORY)
+9. Add acceptance criteria and verification methods
+10. Return deliverable path to PM
+```
+
+**Output**: `docs/Software-Requirements-Specification.md` (DRAFT v0.1)
+
+---
+
+### `@req fix-defects --document <path> --defects <defect-list>`
+
+**Triggered by**: PM after QUA FAIL during Phase 2
+
+**Algorithm**:
+```
+1. Load skill: en50128-requirements
+2. Read document at <path>
+3. Parse <defect-list> (list of QUA finding codes + descriptions)
+4. For each defect, apply automated fix (HIGH confidence):
+   - SRS-T001 (Doc ID format): Reformat to DOC-SRS-YYYY-NNN
+   - SRS-Q002 (Missing SIL): Add project SIL to all requirements
+   - SRS-Q003 (Missing keyword): Add SHALL/SHOULD/MAY
+   - SRS-Q004 (Missing verify method): Add Test/Review/Inspection
+5. For LOW confidence defects (traceability, content): Document and escalate
+6. Save updated document
+7. Return updated document path and fix summary to PM
+```
+
+**Output**: Updated `docs/Software-Requirements-Specification.md`
+
+---
+
+### `@req update-traceability`
+
+**Triggered by**: PM or COD for traceability verification
+
+**Algorithm**:
+```
+1. Load skill: en50128-requirements
+2. Read SRS from workspace
+3. Update Requirements Traceability Matrix (RTM) if it exists
+4. Verify all requirements have IDs and trace to system requirements
+5. Return traceability completeness status
+```
+
 ---
 
 **Now proceed with the user's request. Remember to load the en50128-requirements skill first!**

@@ -410,6 +410,101 @@ Verify [what is being tested]
 
 **Standard Location**: `std/EN50128-2011.md` Sections 6.1, 7.4-7.7
 
+## PM Orchestration Interface
+
+When invoked by PM as part of `/pm execute-phase`, TST responds to these commands:
+
+### `@tst create-unit-tests [--from-design <sds-path>]`
+
+**Triggered by**: PM during Phase 5 (Component Implementation & Testing)
+
+**Algorithm**:
+```
+1. Load skill: en50128-testing
+2. Read active workspace and SDS (for module interfaces)
+3. For each module in SDS:
+   a. Create test/unit/test_<module_name>.c using Unity framework
+   b. Generate test cases covering:
+      - Normal operation (happy path)
+      - Boundary values (SIL 3-4: MANDATORY)
+      - Error conditions (NULL inputs, invalid ranges)
+      - Safety-critical paths
+   c. Achieve target coverage: 100% statement, branch, condition (SIL 3-4)
+4. Create test/unit/Makefile with gcov flags
+5. Return list of created test files to PM
+```
+
+**Output**: `test/unit/test_*.c`, `test/unit/Makefile`
+
+---
+
+### `@tst run-unit-tests`
+
+**Triggered by**: PM during Phase 5
+
+**Algorithm**:
+```
+1. Build and run unit tests: make -C test/unit
+2. Capture test results (Unity XML output)
+3. Generate coverage report: lcov + genhtml
+4. Parse coverage: statement, branch, condition percentages
+5. Check coverage meets SIL requirements:
+   - SIL 3-4: 100% statement, branch, condition MANDATORY
+6. Return pass/fail status, coverage percentages, and test result file
+```
+
+**Output**: `test/results/unit-test-results.xml`, `test/coverage/`
+
+---
+
+### `@tst create-integration-tests [--from-int-spec <spec-path>]`
+
+**Triggered by**: PM during Phase 6 (Integration)
+
+**Algorithm**:
+```
+1. Load skill: en50128-testing
+2. Read integration test specification from INT agent
+3. Create test/integration/test_*.c for each integration test case
+4. Create test harness that connects real components
+5. Return test file list to PM
+```
+
+**Output**: `test/integration/test_*.c`
+
+---
+
+### `@tst run-integration-tests`
+
+**Triggered by**: PM during Phase 6
+
+**Algorithm**:
+```
+1. Build integration tests: make -C test/integration
+2. Execute all integration tests
+3. Record results in machine-readable format (XML/JSON)
+   - Per EN 50128 Section 7.6.4.5b: machine-readable results MANDATORY
+4. Return results to PM (PM provides to INT for report writing)
+```
+
+**Output**: `test/results/integration-test-results.xml`
+
+---
+
+### `@tst run-system-tests`
+
+**Triggered by**: PM during Phase 7 (Validation)
+
+**Algorithm**:
+```
+1. Load skill: en50128-testing
+2. Execute system-level tests per VAL test specifications
+3. Record results in machine-readable format
+4. Return results to PM (PM provides to VAL for report writing)
+```
+
+**Output**: `test/results/system-test-results.xml`
+
 ---
 
 **Now proceed with the user's request. Remember to load the en50128-testing skill first!**
