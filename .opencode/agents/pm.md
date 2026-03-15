@@ -281,32 +281,229 @@ Recommended Command:
 **Description**: Execute all activities for a phase with automated owner→QUA→PM approval flow.
 
 **Phase IDs**:
+- `planning` (Phase 1)
 - `requirements` (Phase 2)
 - `architecture-design` (Phase 3)
 - `component-design` (Phase 4 - EN 50128 Section 7.4)
 - `component-implementation-testing` (Phase 5 - EN 50128 Section 7.5)
 - `integration` (Phase 6)
 - `validation` (Phase 7)
+- `assessment` (Phase 8 - SIL 3-4 only)
+- `deployment` (Phase 9)
 
-**Workflow**:
+**Algorithm**:
 ```
-1. Load phase definition from .opencode/skills/en50128-project-management/phase-definitions/phase-{id}.yaml
-2. For each activity in phase:
-   a. Invoke owner agent to create deliverable(s)
-   b. Owner submits deliverable to QUA for review
-   c. QUA applies rule-based quality checks
-   d. If QUA FAIL:
-      - Return defects to owner
-      - Owner fixes defects automatically
-      - Resubmit to QUA (max 3 iterations)
-      - If still failing after 3 iterations: Escalate to user
-   e. If QUA PASS:
-      - Mark deliverable as QUA-accepted
-      - Add to PM's completed deliverable list
-3. Once all activities complete and all deliverables QUA-accepted:
+1. Load skill: en50128-project-management
+2. Read active workspace and LIFECYCLE_STATE.md
+3. Verify phase is authorized by COD (current_phase matches <phase-id>)
+4. Load phase definition YAML from:
+   .opencode/skills/en50128-project-management/phase-definitions/phase-{id}.yaml
+5. Parse phase definition:
+   - Activities (with owners, dependencies, deliverables)
+   - Agent coordination sequence
+   - Quality criteria
+6. Execute activities in dependency order:
+   For each activity:
+     a. Invoke owner agent with activity details
+     b. Owner creates deliverable(s) using internal skill invocation
+     c. Owner submits deliverable to QUA for review
+     d. QUA applies rule-based quality checks
+     e. If QUA FAIL:
+        - Return defects to owner
+        - Owner fixes defects automatically
+        - Resubmit to QUA (max 3 iterations per defect type)
+        - If still failing after 3 iterations: Escalate to user
+     f. If QUA PASS:
+        - Mark deliverable as QUA-accepted
+        - Add to PM's completed deliverable list
+        - Update LIFECYCLE_STATE.md with deliverable status
+7. Once all activities complete and all deliverables QUA-accepted:
+   - Update LIFECYCLE_STATE.md (phase status = "complete_pending_verification")
    - Report to COD: "Phase complete, ready for verification"
-4. COD invokes VER/VAL for independent verification/validation
-5. COD performs gate check
+8. COD coordinates independent VER/VAL review (PM not involved)
+9. COD performs gate check and authorizes next phase
+```
+
+**Phase-Specific Agent Coordination**:
+
+#### Phase 1: Planning
+```
+Agents Invoked: QUA, CM, VER, VAL
+Workflow:
+  1. PM → QUA: Create Software Quality Assurance Plan (SQAP)
+  2. PM → CM: Create Software Configuration Management Plan (SCMP)
+  3. PM → VER: Create Software Verification Plan (SVP)
+  4. PM → VAL: Create Software Validation Plan (SVaP)
+  5. PM → QUA: Review all planning documents
+  6. PM → COD: Report phase complete
+```
+
+#### Phase 2: Requirements
+```
+Agents Invoked: REQ, SAF, TST, QUA, CM
+Workflow:
+  1. PM → REQ: Create Software Requirements Specification (SRS)
+     - REQ internally invokes skill: en50128-requirements
+     - REQ creates SRS with traceability to system requirements
+  2. PM → SAF: Create Hazard Log (parallel with activity 1)
+     - SAF internally invokes skill: en50128-safety
+     - SAF performs hazard analysis
+  3. PM → TST: Create Overall Software Test Specification (depends on 1, 2)
+     - TST internally invokes skill: en50128-testing
+     - TST creates test spec based on SRS and Hazard Log
+  4. PM → QUA: Review all deliverables (after each completion)
+     - QUA internally invokes skill: en50128-quality
+     - QUA applies template compliance checks
+  5. PM → CM: Baseline requirements documents
+  6. PM → COD: Report phase complete
+```
+
+#### Phase 3: Architecture & Design
+```
+Agents Invoked: DES, VER, QUA, CM
+Workflow:
+  1. PM → DES: Create Software Architecture Specification (SAS)
+     - DES internally invokes skill: en50128-design
+     - DES creates architecture with component breakdown
+  2. PM → DES: Create Software Design Specification (SDS)
+     - DES creates detailed design for each component
+  3. PM → DES: Create Software Interface Specifications
+     - DES defines all internal and external interfaces
+  4. PM → QUA: Review all design documents
+  5. PM → VER: Verify design complexity and traceability
+     - VER internally invokes skill: en50128-verification
+     - VER checks cyclomatic complexity estimates
+  6. PM → CM: Baseline design documents
+  7. PM → COD: Report phase complete
+```
+
+#### Phase 4: Component Design
+```
+Agents Invoked: DES, VER, QUA, CM
+Workflow:
+  1. PM → DES: Create detailed component designs (for all components)
+     - Algorithm specifications
+     - Data structure definitions
+     - State machines
+  2. PM → QUA: Review component designs
+  3. PM → VER: Verify design completeness and traceability
+  4. PM → CM: Baseline component design documents
+  5. PM → COD: Report phase complete
+```
+
+#### Phase 5: Component Implementation & Testing
+```
+Agents Invoked: IMP, TST, QUA, VER, CM
+Workflow:
+  1. PM → IMP: Implement components in C (for all components)
+     - IMP internally invokes skill: en50128-implementation
+     - IMP creates MISRA C compliant code with defensive programming
+  2. PM → TST: Create unit tests (parallel with implementation)
+     - TST internally invokes skill: en50128-testing
+     - TST creates Unity-based unit tests
+  3. PM → TST: Execute unit tests and measure coverage
+     - TST runs tests, generates coverage reports
+  4. PM → QUA: Code review (after each component implementation)
+     - QUA checks MISRA C compliance, complexity, defensive programming
+  5. PM → VER: Static analysis and verification
+     - VER runs cppcheck, clang, lizard
+     - VER verifies coverage meets SIL requirements
+  6. PM → CM: Baseline source code and tests
+  7. PM → COD: Report phase complete
+```
+
+#### Phase 6: Integration
+```
+Agents Invoked: INT, TST, QUA, VER, CM
+Workflow:
+  1. PM → INT: Review integration test specifications
+     - INT internally invokes skill: en50128-integration
+     - INT plans progressive integration strategy
+  2. PM → TST: Create integration test harness
+     - TST creates integration test code
+  3. PM → TST: Execute integration tests (functional, performance)
+     - TST runs tests, records results in machine-readable format
+  4. PM → INT: Document integration test results
+     - INT uses actual TST results (NO fabrication allowed)
+  5. PM → QUA: Review integration test documentation
+  6. PM → VER: Verify integration completeness
+  7. PM → CM: Baseline integrated software
+  8. PM → COD: Report phase complete
+```
+
+#### Phase 7: Validation
+```
+Agents Invoked: VAL, TST, QUA, VER, CM
+Workflow:
+  1. PM → VAL: Plan system validation tests
+     - VAL internally invokes skill: en50128-validation
+     - VAL creates validation test specifications
+  2. PM → TST: Create system test harness
+     - TST creates system-level test code
+  3. PM → TST: Execute system tests on target environment
+     - TST runs validation tests
+  4. PM → VAL: Document validation results
+     - VAL reviews test results and creates validation report
+  5. PM → QUA: Review validation documentation
+  6. PM → VER: Verify validation completeness
+  7. PM → CM: Baseline validated software
+  8. PM → COD: Report phase complete
+```
+
+#### Phase 8: Assessment (SIL 3-4 Only)
+```
+Agents Invoked: ASR (independent assessor)
+Workflow:
+  1. PM → ASR: Provide all project artifacts for assessment
+     - ASR is INDEPENDENT (PM has NO authority)
+     - ASR performs independent safety assessment
+  2. ASR → PM: Report assessment results (informational only)
+  3. PM → COD: Report assessment complete (if ASR approves)
+Note: PM coordinates logistics only, has NO influence on ASR decisions
+```
+
+#### Phase 9: Deployment
+```
+Agents Invoked: CM, VAL, QUA
+Workflow:
+  1. PM → CM: Create release package
+     - CM packages all artifacts (source, docs, tools)
+  2. PM → VAL: Final validation sign-off
+     - VAL confirms release readiness
+  3. PM → QUA: Final quality gate
+     - QUA confirms all quality criteria met
+  4. PM → COD: Report ready for deployment
+  5. COD authorizes deployment
+```
+
+**Agent Invocation Protocol**:
+
+PM invokes agents using the `@agent` syntax internally:
+```
+# Example: PM executing Phase 2 (Requirements)
+# PM internally does:
+
+1. Invoke @req to create SRS:
+   @req create-srs --based-on assets/sample_system/System-Requirements-Specification.md
+   
+   - REQ agent loads skill: en50128-requirements
+   - REQ creates docs/Software-Requirements-Specification.md
+   - REQ returns deliverable path to PM
+
+2. Submit to QUA:
+   @qua review-document docs/Software-Requirements-Specification.md --type srs --sil 3
+   
+   - QUA agent loads skill: en50128-quality
+   - QUA runs validation tool: tools/scripts/validate_srs_template.py
+   - QUA returns PASS/FAIL with defect list
+
+3. If FAIL, invoke REQ to fix:
+   @req fix-defects --document docs/Software-Requirements-Specification.md --defects <defect-list>
+   
+   - REQ fixes defects
+   - REQ resubmits to QUA
+   
+4. Once PASS, mark complete and proceed to next activity
 ```
 
 **Verbosity Levels**:
