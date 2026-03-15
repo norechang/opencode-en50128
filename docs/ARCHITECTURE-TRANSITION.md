@@ -1,53 +1,68 @@
 # EN 50128 Architecture Transition: Roles-Centric to Document-Centric
 
-**Date**: 2026-03-13  
-**Status**: PLANNING  
+**Date**: 2026-03-13 (Original), Updated 2026-03-15  
+**Status**: ✅ **COMPLETE** - Commands deprecated, skill-based architecture implemented  
 **Objective**: Transition from roles-based commands to document-centric workflow
 
 ---
 
 ## Executive Summary
 
-### Current Architecture (Roles-Centric) ❌
+### Current Architecture (Document-Centric, Skill-Based) ✅
 
-Users invoke role-based commands:
-```bash
-/req    # Requirements Engineer
-/des    # Designer
-/imp    # Implementer
-/tst    # Tester
-/ver    # Verifier
-/val    # Validator
-/int    # Integrator
-/saf    # Safety Engineer
-/qua    # Quality Assurance
-/cm     # Configuration Manager
-/pm     # Project Manager
-/cod    # Lifecycle Coordinator
-/vmgr   # V&V Manager
+**As of 2026-03-15**: All role-based commands have been **deprecated**. Users now work with skills directly:
+
 ```
-
-**Problems:**
-- User must know which role to invoke
-- Workflow not intuitive for document creation
-- Doesn't match EN 50128 document-centric process
-- Commands mix role behavior with document creation
-
-### Target Architecture (Document-Centric) ✅
-
-Users work with documents directly:
-```bash
-# User works on documents naturally
-"Create Software Requirements Specification for Train Control System, SIL 4"
-"Review the Software Architecture Specification"
-"Verify the Implementation"
-"Generate Integration Test Report"
+# NEW approach (skill-based, document-centric)
+Load skill: en50128-requirements    # For Software Requirements Specification
+Load skill: en50128-design          # For Software Architecture/Design Specification
+Load skill: en50128-implementation  # For C implementation
+Load skill: en50128-testing         # For test specifications and execution
+Load skill: en50128-verification    # For verification activities
+Load skill: en50128-validation      # For validation activities
+Load skill: en50128-integration     # For integration
+Load skill: en50128-safety          # For safety analysis
+Load skill: en50128-quality         # For quality assurance
+Load skill: en50128-configuration   # For configuration management
+Load skill: en50128-project-management  # For project management
+Load skill: en50128-lifecycle-coordination  # For lifecycle coordination
 ```
 
 **Benefits:**
-- Natural document-centric workflow (matches EN 50128 Annex C)
-- System automatically invokes appropriate agents/skills
-- Roles become background implementation details
+- ✅ Document-centric workflow (matches EN 50128 Annex C)
+- ✅ Skills contain complete workflows, templates, tools
+- ✅ No role-based commands needed
+- ✅ Aligns with original architecture transformation goals
+
+### Old Architecture (Roles-Centric) ❌ DEPRECATED
+
+**Deprecated 2026-03-15**: Role-based commands are no longer supported:
+
+```bash
+# OLD approach (DEPRECATED - DO NOT USE)
+/req    # Requirements Engineer - DEPRECATED
+/des    # Designer - DEPRECATED
+/imp    # Implementer - DEPRECATED
+/tst    # Tester - DEPRECATED
+/ver    # Verifier - DEPRECATED
+/val    # Validator - DEPRECATED
+/int    # Integrator - DEPRECATED
+/saf    # Safety Engineer - DEPRECATED
+/qua    # Quality Assurance - DEPRECATED
+/cm     # Configuration Manager - DEPRECATED
+/pm     # Project Manager - DEPRECATED
+/cod    # Lifecycle Coordinator - DEPRECATED
+/vmgr   # V&V Manager - DEPRECATED
+```
+
+**Problems (why deprecated):**
+- ❌ User must know which role to invoke
+- ❌ Workflow not intuitive for document creation
+- ❌ Doesn't match EN 50128 document-centric process
+- ❌ Commands mix role behavior with document creation
+- ❌ Skills not auto-loaded from commands
+
+**Migration**: See `docs/COMMAND-TO-SKILL-MIGRATION.md` for complete migration guide.
 - Cleaner separation: Documents (user-facing) vs Agents (system-facing)
 
 ---
