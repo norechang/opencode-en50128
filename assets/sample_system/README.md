@@ -46,6 +46,7 @@ Rather than manually copying and adapting the templates, use the **`@cod generat
 | 2 | Level Crossing Protection System | SIL 4 | Infrastructure | Infrastructure projects, full V-Model |
 | 3 | ATP On-Board Unit | SIL 4 | Rolling Stock | Advanced ATP/ETCS projects |
 | 4 | Platform Screen Door System | SIL 2 | Infrastructure | Metro/LRT, SIL 2 certification |
+| 5 | LRT Interlocking System | SIL 4 | Infrastructure | LRT/tram interlocking and signalling |
 
 See **`TYPICAL-SYSTEMS.md`** in this directory for the full catalogue with hazards, functional requirements, safety functions, architecture, and interfaces for each system.
 

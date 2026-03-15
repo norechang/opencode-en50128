@@ -733,6 +733,235 @@ Each catalogue entry is structured with the following sections:
 
 ---
 
+## System 5: Light Rail Transit Interlocking System (SIL 4)
+
+### System Overview
+
+| Attribute | Value |
+|-----------|-------|
+| System Name | Light Rail Transit Interlocking System (LRT-IXL) |
+| Abbreviation | LRT-IXL |
+| SIL Level | SIL 4 |
+| Domain | Infrastructure — Station and Junction Interlocking |
+| Applicable Standards | EN 50128:2011, EN 50129:2018, EN 50126:2017, EN 50159:2010 (communication safety), EN 50121-4 (EMC trackside) |
+| Typical Deployment | Light rail and tram networks with at-grade junctions, stop zones, and depot entry points; may interface with road traffic signals at shared corridors |
+| Safety Authority Context | Infrastructure safety case per EN 50129; national or municipal railway safety authority approval; compatible with CBTC or conventional block signalling |
+
+### Operational Environment
+
+- Installed at trackside locations along LRT routes including stops, junctions, crossovers, and depot approaches
+- Ambient temperature: -30°C to +65°C (exposed trackside cabinets in outdoor urban environments)
+- Humidity: 0% to 100% (including condensation; IP55 minimum for all outdoor enclosures)
+- Vibration: EN 61373 Category 2 (ground-mounted trackside equipment)
+- Power supply: 230 VAC mains primary, 48 VDC battery backup (≥ 8 hours); mains supply from station or trackside distribution
+- EMC: EN 50121-4 (trackside equipment in electrified environment; may include 750 VDC or 600 VDC overhead/third-rail traction supply)
+- LRT operational speeds: 0–80 km/h (typical urban operation); up to 100 km/h on segregated sections
+- Traffic mix: LRT vehicles only on dedicated track; may share at-grade junctions with road vehicles at designated crossing points
+- Network topology: single-track sections with passing loops, double-track sections, at-grade junctions (Y, X, triangle), terminus loops, and depot approaches
+
+### System Boundary
+
+**Inside the system boundary:**
+- Interlocking Processor Unit (IPU) — central vital logic processor for one interlocking zone
+- Point Machine Interface Module (PMIM) — controls and monitors track switch/turnout actuators
+- Signal Control Module (SCM) — drives lineside signals (aspect outputs) and monitors lamp health
+- Train Detection Interface (TDI) — receives occupancy inputs from track circuits or axle counters
+- Route Setting Controller (RSC) — manages route requests, conflict detection, and route locking
+- Occupation Logic Module (OLM) — maintains track section occupancy state
+- Overlap and Flank Protection Logic (OFP) — enforces overlaps and flank protection routes
+- Operator Workstation Interface (OWI) — ATS/CTC interface for manual route setting and status display
+- Maintenance Workstation Interface (MWI) — key-switched local engineering access
+- Wayside communication interface — EN 50159-compliant link to adjacent interlockings and line CTC
+- Vital data recorder — tamper-evident log of all interlocking state changes
+
+**Outside the system boundary:**
+- Centralized Traffic Control (CTC) system — provides route requests; receives interlocking status
+- CBTC Wayside Controller (if fitted) — receives movement authority data; provides train position
+- Track switch/turnout actuators (point machines) — physical devices driven via PMIM
+- Lineside signals — aspect-display devices driven via SCM; lamp monitoring returns via SCM
+- Track circuits or axle counters — sensing devices; occupancy data fed into TDI
+- Road traffic signal controller (at shared at-grade crossings) — receives pre-emption command (non-safety output)
+- Emergency services remote monitoring — receives alarm summary via SCADA (non-safety)
+
+### Hazard List
+
+| ID | Hazard Description | Severity | Frequency | Risk Level | SIL |
+|----|-------------------|----------|-----------|------------|-----|
+| HAZ-001 | Conflicting routes set simultaneously — two trains routed into collision path | Catastrophic | Remote | Intolerable | SIL 4 |
+| HAZ-002 | Point machine moves under a train (train traverses moving switch) | Catastrophic | Remote | Intolerable | SIL 4 |
+| HAZ-003 | Permissive signal aspect displayed on occupied or unproven track ahead | Catastrophic | Remote | Intolerable | SIL 4 |
+| HAZ-004 | Route released (unlocked) while train is still occupying the route | Catastrophic | Remote | Intolerable | SIL 4 |
+| HAZ-005 | Overlap or flank protection not secured before signal cleared | Catastrophic | Remote | Intolerable | SIL 4 |
+| HAZ-006 | False clear track detection — occupied section reported as clear | Catastrophic | Occasional | Intolerable | SIL 4 |
+| HAZ-007 | Signal lamp failure not detected; driver assumes correct aspect | Critical | Occasional | Intolerable | SIL 3 |
+| HAZ-008 | Point position not confirmed before route is cleared to signal | Catastrophic | Remote | Intolerable | SIL 4 |
+| HAZ-009 | Loss of interlocking power causes uncontrolled signal or point state | Catastrophic | Occasional | Intolerable | SIL 4 |
+| HAZ-010 | Unauthorised route set via maintenance override left active | Catastrophic | Remote | Intolerable | SIL 4 |
+| HAZ-011 | Communication fault between adjacent interlockings causes boundary conflict | Catastrophic | Remote | Intolerable | SIL 4 |
+| HAZ-012 | Train overshoot into terminus buffer without stop signal being held | Critical | Occasional | Intolerable | SIL 3 |
+
+**SIL Determination Basis:**
+- HAZ-001 through HAZ-006, HAZ-008 through HAZ-011 directly enable train collisions or derailments — catastrophic irreversible events with potential for multiple fatalities → SIL 4
+- HAZ-007 and HAZ-012: critical but mitigated by backup detection (lamp monitoring for HAZ-007; buffer stop design for HAZ-012) → SIL 3
+- LRT at-grade operation and lower speeds (vs. mainline) do not reduce SIL classification for interlocking conflicts, as collision consequences at 60–80 km/h remain catastrophic
+- Frequency of train movements at junctions (typically 3–6 trains per hour per route) combined with the potential for human error in manual route setting justifies SIL 4 for conflict detection logic
+
+### Functional Requirements
+
+| ID | Requirement | Category |
+|----|-------------|----------|
+| SYS-FR-001 | The system SHALL prevent the setting of any route that would create a conflicting movement with a currently set or locked route | Conflict Detection |
+| SYS-FR-002 | The system SHALL lock all points in the required position and confirm position before clearing any signal for a route | Point Control |
+| SYS-FR-003 | The system SHALL verify that all track sections within a route are unoccupied before clearing the entry signal | Track Clearance |
+| SYS-FR-004 | The system SHALL maintain route locking from the moment a signal is cleared until the train has been detected entering and then fully clearing all sections of the route | Route Locking |
+| SYS-FR-005 | The system SHALL secure and lock all overlap and flank protection elements before clearing any signal | Overlap and Flank Protection |
+| SYS-FR-006 | The system SHALL revert all signals to the most restrictive aspect (danger/stop) and hold all points on loss of power or any vital logic fault | Fail-Safe Default |
+| SYS-FR-007 | The system SHALL monitor the position of every point machine and reject route setting if position is not confirmed within 10 seconds of command | Point Monitoring |
+| SYS-FR-008 | The system SHALL monitor signal lamp health and indicate lamp failure to the operator within 5 seconds of detection | Lamp Monitoring |
+| SYS-FR-009 | The system SHALL transmit interlocking status (route set, signal aspects, point positions, occupancy, faults) to the CTC/ATS system within 1 second of state change | CTC Interface |
+| SYS-FR-010 | The system SHALL accept route requests from CTC/ATS and from a local workstation with equal priority, with local override capability for the maintainer | Route Requesting |
+| SYS-FR-011 | The system SHALL support automatic sequential route setting (train describer) for pre-programmed timetable operation | Auto Route Setting |
+| SYS-FR-012 | The system SHALL log every state change, route event, fault, and operator action with a millisecond-resolution timestamp | Event Logging |
+| SYS-FR-013 | The system SHALL enforce maintenance override time limits (30-minute maximum); auto-cancel and alert operator on expiry | Maintenance Override |
+| SYS-FR-014 | The system SHALL detect and isolate individual module failures without causing a system-wide safe state, where safe degradation is possible | Degraded Operation |
+
+### Safety Functions
+
+| ID | Safety Function | SIL | Derived From |
+|----|----------------|-----|--------------|
+| SF-001 | Route Conflict Prevention: Reject any route request that conflicts with an existing set or locked route | SIL 4 | HAZ-001 |
+| SF-002 | Point Locking and Confirmation: Lock points in position and verify confirmation before signal clearance | SIL 4 | HAZ-002, HAZ-008 |
+| SF-003 | Track Clearance Verification: Verify all route sections unoccupied before clearing signal | SIL 4 | HAZ-003, HAZ-006 |
+| SF-004 | Route Locking: Maintain route lock from signal clear to complete train passage | SIL 4 | HAZ-004 |
+| SF-005 | Overlap and Flank Protection: Secure overlap and flank routes before signal clearance | SIL 4 | HAZ-005 |
+| SF-006 | Fail-Safe on Power Loss or Vital Fault: Drive all signals to stop and inhibit point movement | SIL 4 | HAZ-009 |
+| SF-007 | Safe Boundary Communication: Validate all cross-interlocking messages using EN 50159 safety layer; reject on error | SIL 4 | HAZ-011 |
+| SF-008 | Lamp Health Monitoring: Detect signal lamp failure and report within 5 seconds | SIL 3 | HAZ-007 |
+| SF-009 | Maintenance Override Audit and Timeout: Log, limit, and auto-cancel maintenance overrides | SIL 4 | HAZ-010 |
+| SF-010 | Buffer Stop Approach Protection: Maintain stop signal at terminus buffer approach until safe stop confirmed | SIL 3 | HAZ-012 |
+
+### System Architecture
+
+**Processing Architecture:**
+- Dual-channel (2oo2) Interlocking Processor Unit — two independent vital logic channels (Channel A and Channel B)
+- Both channels execute the same interlocking application logic independently
+- All safety outputs (signal aspects, point commands) driven only when both channels agree (AND-gate output voting)
+- Output disagreement → immediate safe state (all signals to stop, all points locked in last confirmed safe position)
+- Channel comparison cycle: 20 ms
+- Non-vital functions (logging, CTC communication, operator display) handled by a separate non-vital processor (NVP) that receives voted output state from IPU
+
+**Hardware Components:**
+- IPU: Dual-channel SIL 4 safety processor — two independent CPU boards (e.g., STM32H7 or equivalent) sharing a common chassis with galvanic isolation between channels; cross-channel SPI comparison bus
+- PMIM: Per-point-machine relay interface module — drives 110 VDC point motor circuits; reads end-detection contacts (normal/reverse confirmed); hardwired into IPU vital I/O
+- SCM: Per-signal relay output module — drives signal lamp circuits (two-aspect or three-aspect depending on deployment); lamp current monitoring via ADC input; hardwired into IPU vital I/O
+- TDI: Track detection input conditioner — conditions relay or electronic track circuit occupancy inputs (24 VDC or coded AC) into digital signals for IPU vital I/O
+- OWI NVP: Non-vital Ethernet-connected workstation server (e.g., industrial PC) receiving read-only interlocking state from IPU; forwards CTC commands to IPU via authenticated non-vital channel
+- Vital Data Recorder: 16 GB eMMC with hardware write-protect and cryptographic integrity seal; dedicated serial connection to IPU
+- Power system: 230 VAC mains → 48 VDC UPS → 24 VDC regulated for logic; separate 110 VDC supply for point motors; battery autonomy ≥ 8 hours; automatic transfer on mains failure
+
+**Software Components:**
+- Vital Interlocking Logic (VIL): core route conflict, locking, and signal clearance logic; table-driven from a configuration data set (geographic data for the specific station/junction layout)
+- Route Manager (RTM): route request handling, sequential route logic, auto-route (train describer) processing
+- Point Control Manager (PCM): point command generation, position confirmation, timeout monitoring
+- Signal Output Manager (SOM): signal aspect encoding, lamp monitoring input processing
+- Track Occupancy Manager (TOM): occupancy state machine per track section; includes flank protection and overlap management
+- Cross-Boundary Interface (CBI): EN 50159-compliant message encoding, CRC/sequence validation for inter-interlocking communication
+- CTC Interface Driver (CTD): non-vital protocol adapter between IPU vital state and CTC/ATS Ethernet network (runs on NVP)
+- Fault Monitor (FMM): cross-channel comparison, module health, watchdog management, safe state sequencer
+- Event Logger Interface (ELI): timestamped state-change recording with integrity seal
+- Configuration Data Manager (CDM): load and validate geographic interlocking data tables at startup; reject if checksum fails
+- HAL: hardware abstraction for relay I/O, cross-channel SPI, serial event recorder, power monitor
+
+**Configuration Data (Geographic Tables):**
+The VIL is table-driven: all route definitions, conflict matrices, overlap tables, and flank protection assignments are encoded in a separate, independently verified **Interlocking Data Set (IDS)**. The IDS is treated as a safety-critical configuration item subject to full V&V per EN 50128. This separates the generic interlocking engine (reusable software) from the site-specific geographic data (project-specific configuration).
+
+### Communication Interfaces
+
+| Interface | Protocol | Data Rate | Purpose |
+|-----------|----------|-----------|---------|
+| IPU ↔ Adjacent Interlocking (IPU) | EN 50159 Category 2 (Ethernet + TLS + application safety layer) | 100 Mbit/s | Cross-boundary route and occupancy state sharing |
+| IPU ↔ CTC/ATS (via NVP) | Ethernet — proprietary or standard (e.g., EULYNX, TIDS) | 100 Mbit/s | Route requests from CTC; interlocking status to CTC |
+| IPU ↔ PMIM | Vital parallel relay I/O (hardwired) | N/A | Point commands, position confirmation contacts |
+| IPU ↔ SCM | Vital parallel relay I/O (hardwired) | N/A | Signal aspect outputs, lamp monitoring feedback |
+| IPU ↔ TDI | Vital digital inputs (24 VDC, relay-contact conditioned) | N/A | Track section occupancy (clear/occupied) |
+| Channel A ↔ Channel B (IPU internal) | Synchronous SPI cross-link | 10 Mbit/s | Cross-channel voted data comparison |
+| IPU ↔ Vital Data Recorder | Dedicated UART (hardwired) | 115.2 kbit/s | Timestamped safety event logging |
+| NVP ↔ Operator Workstation | Ethernet (non-safety) | 100 Mbit/s | Route requests, status display, alarm management |
+| NVP ↔ SCADA | Ethernet Modbus TCP (non-safety) | 10 Mbit/s | Remote monitoring by operations centre |
+| IPU ↔ CBTC Wayside (if fitted) | EN 50159 Category 2 | 100 Mbit/s | Movement authority data exchange (if CBTC overlay) |
+
+**Key Timing Requirements:**
+- Cross-channel comparison cycle: 20 ms
+- Route setting command received to signal aspect change output: ≤ 3 seconds (includes point movement confirmation)
+- Point command issued to position confirmed (timeout threshold): 10 seconds
+- Occupancy state change to signal output update: ≤ 500 ms
+- Cross-interlocking message safety layer latency budget: ≤ 100 ms
+- Watchdog timeout (no IPU heartbeat): 100 ms → safe state
+
+### Non-Functional Requirements
+
+| Category | Requirement |
+|----------|-------------|
+| Safety Integrity | PFH ≤ 10^-8 per hour (SIL 4 per IEC 61508 Table 2) |
+| Availability | System availability ≥ 99.95% per year (scheduled maintenance excluded) |
+| Reliability | MTBF ≥ 500,000 hours for IPU; ≥ 200,000 hours per PMIM/SCM module |
+| Response Time | Route set command to signal clear: ≤ 3 seconds under normal conditions |
+| Fail-Safe Behaviour | Any single vital component failure drives all controlled signals to stop aspect; no unsafe output possible |
+| Service Life | ≥ 40 years with periodic module replacement |
+| Certifiability | EN 50129 Safety Case; national railway safety authority type approval; site-specific application approval |
+| Maintainability | MTTR ≤ 4 hours for IPU replacement; individual I/O modules hot-swap capable with logged authority |
+| Configuration Verification | Interlocking Data Set (IDS) independently verified by Verifier role before commissioning |
+| Data Retention | Vital Data Recorder retains minimum 30 days of operational history |
+
+### Design Constraints
+
+- Software implemented in C (MISRA C:2012 mandatory, SIL 4 configuration)
+- No dynamic memory allocation; all route tables and state arrays statically sized at compile time for maximum configuration capacity
+- Cyclomatic complexity ≤ 10 per function in vital logic modules
+- 100% statement, branch, and condition (MC/DC) coverage mandatory
+- Configuration data (Interlocking Data Set) treated as a separate V&V item; validated by formal cross-checking against geographic design data
+- Table-driven architecture: VIL engine must be demonstrably independent of any specific geographic configuration (reusable generic engine)
+- Fail-safe relay outputs: all signal and point relay coils de-energise to safe state on power loss (fail-open relay design)
+- Cross-interlocking communication must use EN 50159 Category 2 safety layer with sequence numbering and timeout detection
+- No recursion in vital logic code paths
+- CBTC interface (if present) must not compromise interlocking independence — CBTC data is advisory input only; vital decisions remain in IPU
+- Independent verification and validation teams mandatory (SIL 4)
+- Software versioning: all vital software and IDS items under configuration control with unique version identifiers; change requires full regression test
+
+### Glossary
+
+| Term | Definition |
+|------|-----------|
+| LRT-IXL | Light Rail Transit Interlocking System |
+| IPU | Interlocking Processor Unit — central vital logic processor |
+| PMIM | Point Machine Interface Module — relay interface for turnout actuators |
+| SCM | Signal Control Module — relay interface for lineside signals |
+| TDI | Train Detection Interface — occupancy input conditioner |
+| OWI | Operator Workstation Interface — ATS/CTC facing interface |
+| NVP | Non-Vital Processor — handles non-safety functions (logging, CTC comms, display) |
+| VIL | Vital Interlocking Logic — core table-driven route/conflict/locking software |
+| IDS | Interlocking Data Set — site-specific geographic configuration tables |
+| RTM | Route Manager — route request and auto-route logic |
+| PCM | Point Control Manager — point command and position confirmation |
+| SOM | Signal Output Manager — signal aspect and lamp monitoring |
+| TOM | Track Occupancy Manager — section occupancy state machine |
+| CBI | Cross-Boundary Interface — EN 50159 inter-interlocking safety communication |
+| CTD | CTC Interface Driver — non-vital CTC/ATS protocol adapter |
+| FMM | Fault Monitor — cross-channel comparison and safe state management |
+| CTC | Centralized Traffic Control — supervisory operations control system |
+| ATS | Automatic Train Supervision — train scheduling and monitoring system |
+| CBTC | Communications-Based Train Control |
+| PFH | Probability of Failure per Hour |
+| HAZ | Hazard |
+| SF | Safety Function |
+| SIL | Safety Integrity Level |
+| 2oo2 | Two-out-of-two voting — both channels must agree for output activation |
+| MTBF | Mean Time Between Failures |
+| MTTR | Mean Time To Repair |
+| UPS | Uninterruptible Power Supply |
+
+---
+
 ## Catalogue Metadata
 
 | System | SIL | Domain | Complexity | Recommended For |
@@ -741,7 +970,8 @@ Each catalogue entry is structured with the following sections:
 | Level Crossing Protection System | SIL 4 | Infrastructure | High | Infrastructure projects; full V-Model |
 | ATP On-Board Unit | SIL 4 | Rolling Stock | Very High | Advanced users; ETCS/ATP projects |
 | Platform Screen Door System | SIL 2 | Infrastructure | Medium | Metro/LRT projects; SIL 2 certification |
+| LRT Interlocking System | SIL 4 | Infrastructure | Very High | LRT/tram projects; interlocking and signalling |
 
-**Document Version**: 1.0  
+**Document Version**: 1.1  
 **Last Updated**: 2026-03-15  
 **Maintained By**: EN50128 Platform Team
