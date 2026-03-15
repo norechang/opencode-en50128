@@ -14,7 +14,69 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Safety case template generator
 - Phase 8-9 definitions (Assessment, Deployment)
 
-## [2.0.0] - 2026-02-21
+## [3.0.0] - 2026-03-15
+
+### Architecture Transformation — Agent-Orchestrated, COD/PM-Driven Platform
+
+This release completes the multi-phase architecture transformation (Phases A–E + F cleanup) from a slash-command/skill-centric platform to a fully agent-orchestrated, COD/PM-driven architecture using `@agent` syntax.
+
+#### Phase A: Agent Enhancement
+
+- Updated all 13 EN 50128 subagents with comprehensive skill loading and EN 50128 technique tables
+- Each agent now internally loads its domain skill on invocation
+- Added explicit EN 50128 section references and SIL-dependent behavior tables to all agent definitions
+
+#### Phase B: Lifecycle Coordination Skill
+
+- Created `en50128-lifecycle-coordination` skill with full V-Model workflow documentation
+- Added project state template (`LIFECYCLE_STATE.md`) used by `@cod plan`
+- Added phase gate criteria per SIL level (Advisory/Semi-strict/Strict)
+
+#### Phase C: Project Management Skill
+
+- Created `en50128-project-management` skill for `@pm` orchestration
+- PM now internally coordinates REQ → DES → IMP → TST → INT → VER → VAL → QUA → CM agents
+- Added `execute-phase` workflow with QUA gate loop and VMGR integration (SIL 3-4)
+
+#### Phase D: VMGR Agent
+
+- Added V&V Manager (`@vmgr`) agent — independent V&V authority for SIL 3-4
+- Based on EN 50128 Section 5.1.2.10e ("Verifier can report to Validator")
+- VMGR manages VER team; provides final V&V approval that COD cannot override
+- Added authority structure documentation to `AGENTS.md`
+
+#### Phase E: RailDev Primary Mode
+
+- Created `.opencode/agents/raildev.md` — primary RailDev mode (`mode: primary`, color `#FF6B35`)
+- Converted all 13 EN 50128 agents from `mode: primary` to `mode: subagent`
+- RailDev tab is now the single entry point for all EN 50128 development work
+- `.opencode/commands/` renamed to `.opencode/commands-deprecated/` (old slash commands archived)
+
+#### Phase F: Documentation Cleanup
+
+- **README.md** — complete rewrite reflecting agent-orchestrated architecture (removed all slash-command references, "transformation in progress" status)
+- **LIFECYCLE.md** — appended §20 (EN 50128 Deliverable Reference) and §21 (Phase-to-Document Complete Reference); updated stale cross-references
+- **AGENTS.md** — appended "EN 50128 Role Independence Reference" section (Role Independence Matrix, Role Combination Rules, Role Definitions, Agent Mapping table)
+- **docs/USER-GUIDE.md** — appended "EN 50128 Compliance Reference" section (SIL table, development techniques, coverage requirements, best practices, abbreviations)
+- Created `deprecated/` directory — 45+ obsolete files moved here (slash-command docs, transformation status files, migration reports, duplicate docs)
+
+### Breaking Changes
+
+- **Slash commands removed**: `/cod`, `/req`, `/des`, `/imp`, `/tst`, `/ver`, `/val`, `/saf`, `/qua`, `/pm`, `/cm`, `/int`, `/vmgr`, `/workspace`, `/enhelp` — replaced by `@agent` syntax
+- **Entry point change**: Use `@cod plan` and `@pm execute-phase` instead of `/cod plan` and `/pm execute-phase`
+- **TUTORIAL.md deprecated**: Content superseded by `docs/USER-GUIDE.md` Section 7 (complete SIL 3 Door Speed Monitor walkthrough)
+
+### Migration Guide
+
+| Old (v2.x) | New (v3.0) |
+|------------|------------|
+| `/cod plan --sil 3 --project X` | `@cod plan --sil 3 --project X` |
+| `/pm execute-phase requirements` | `@pm execute-phase 2` |
+| `/req create-srs` | `@req create-srs` |
+| `/ver verify-phase 4` | `@ver verify-phase 4 --sil 3` |
+| `/workspace status` | `@cod status` |
+
+
 
 ### Added - Complete EN 50128 Compliance Implementation
 

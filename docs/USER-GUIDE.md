@@ -1382,3 +1382,138 @@ The originating agent (REQ, DES, etc.) fixes findings and resubmits to QUA once.
 ```
 @cod plan --sil 3 --project MyRailwayComponent
 ```
+
+---
+
+## EN 50128 Compliance Reference
+
+### Safety Integrity Levels (SIL)
+
+EN 50128 defines five SIL levels based on risk:
+
+| SIL | Risk Level | Hazard Impact | Tolerable Hazard Rate |
+|-----|------------|---------------|----------------------|
+| 4 | Very High | Catastrophic - Multiple fatalities | 10^-9 to 10^-8 /hour |
+| 3 | High | Critical - Single fatality | 10^-8 to 10^-7 /hour |
+| 2 | Medium | Marginal - Serious injuries | 10^-7 to 10^-6 /hour |
+| 1 | Low | Negligible - Minor injuries | 10^-6 to 10^-5 /hour |
+| 0 | None | Non-safety related | No requirement |
+
+### Development Techniques by SIL (Tables A.3, A.4)
+
+#### Requirements Engineering
+
+- Structured methods: HR (all SILs)
+- Semi-formal methods: HR (SIL 3-4)
+- Formal methods: R (SIL 3-4)
+
+#### Design
+
+- Modular design: M (SIL 2-4), HR (SIL 0-1)
+- Structured design: M (SIL 2-4), HR (SIL 0-1)
+- Defensive programming: M (SIL 3-4), HR (SIL 0-2)
+
+#### Coding Standards
+
+- Coding standards: M (all SILs)
+- Structured programming: M (SIL 2-4), HR (SIL 0-1)
+- No dynamic objects: HR (SIL 3-4)
+- No dynamic variables: R (SIL 3-4)
+
+### Verification and Coverage Requirements (Table A.5, Table A.21)
+
+#### Code Coverage by SIL
+
+| Coverage Type | SIL 0-1 | SIL 2 | SIL 3-4 |
+|---------------|---------|-------|---------|
+| Statement | HR | HR | M |
+| Branch | HR | M | M |
+| Condition | R | HR | M |
+| MC/DC | - | R | HR |
+
+#### Testing Techniques
+
+- Boundary value analysis: M (SIL 3-4), HR (SIL 0-2)
+- Equivalence partitioning: HR (all SILs)
+- Error guessing: R (all SILs)
+- Fault injection: HR (SIL 2-4)
+
+### Independence Requirements
+
+#### SIL 3-4 Requirements
+
+- Independent verification team (Verifier MANDATORY)
+- Independent validation team (Validator MANDATORY, cannot report to PM)
+- Independent safety assessor (Assessor MANDATORY, often external)
+- Separation of design and test responsibilities
+
+### Common Compliance Challenges
+
+1. **Traceability** — Use the built-in traceability system in SRS; RTM is implicit per EN 50128
+2. **Independence** — Ensure `@ver` and `@val` agents operate independently from `@imp`/`@des`
+3. **Code Coverage** — Use `gcov`/`lcov` with `@tst`; aim for 100% statement/branch/condition (SIL 3-4)
+4. **Documentation** — Use `@qua review-document` to check compliance before each phase gate
+5. **Tool Qualification** — See `TOOLS.md` for T1/T2/T3 tool confidence levels
+
+### Best Practices
+
+1. **Start with Planning** — Run `@cod plan` first; define SIL levels before writing any requirements
+2. **Apply Defensive Programming** — Validate all inputs, check all outputs, handle all errors; use assertions
+3. **Implement Strong Configuration Management** — `@cm create-baseline` at each phase gate
+4. **Perform Regular Reviews** — `@qua review-document` after every major deliverable
+5. **Maintain Evidence** — Keep all verification records; `@ver` evidence is mandatory for SIL 3-4
+
+### Assessment and Certification
+
+**Independent Safety Assessment (ISA)** — Required for SIL 1-4:
+- Review of development process
+- Review of technical documentation
+- Review of verification evidence
+- Assessment report with approval/conditions
+
+**Certification Bodies**: National railway authorities, Notified bodies (e.g., TÜV, Lloyd's Register), Independent safety assessors
+
+### Change Management
+
+**Change Process**:
+1. Change request submitted
+2. Impact analysis performed (safety impact assessed)
+3. Change approved by CCB (via `@pm` / Change Control Board)
+4. Implementation with verification (`@imp`, `@ver`)
+5. Regression testing (`@tst`)
+6. Documentation updated
+7. Change deployed
+
+**Version Management**:
+- Major version: Significant changes requiring re-certification
+- Minor version: Bug fixes and minor enhancements
+- Patch version: Critical safety patches
+
+### Abbreviations
+
+| Abbreviation | Meaning |
+|---|---|
+| CCB | Change Control Board |
+| CM | Configuration Management |
+| FCA | Functional Configuration Audit |
+| FMEA | Failure Mode and Effects Analysis |
+| FTA | Fault Tree Analysis |
+| ISA | Independent Safety Assessor |
+| MC/DC | Modified Condition/Decision Coverage |
+| PCA | Physical Configuration Audit |
+| QA | Quality Assurance |
+| RAMS | Reliability, Availability, Maintainability, Safety |
+| SCMP | Software Configuration Management Plan |
+| SIL | Safety Integrity Level |
+| SQAP | Software Quality Assurance Plan |
+| SRS | Software Requirements Specification |
+| V&V | Verification and Validation |
+
+### Standards References
+
+- EN 50128:2011 - Railway applications - Software for railway control and protection systems
+- EN 50126-1:2017 - Railway applications - RAMS (Part 1)
+- EN 50126-2:2017 - Railway applications - RAMS (Part 2)
+- EN 50129:2018 - Safety related electronic systems for signalling
+- IEC 61508 - Functional safety of E/E/PE safety-related systems
+- MISRA C:2012 - Guidelines for the use of the C language in critical systems

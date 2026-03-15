@@ -1615,11 +1615,10 @@ Use Configuration Manager agent for:
 
 ### 18.2 Related Documents
 - `AGENTS.md` - Role-based agents including COD
-- `.opencode/commands/cod.md` - Lifecycle Coordinator agent definition
+- `.opencode/agents/` - Agent definition files (cod.md, pm.md, req.md, des.md, imp.md, tst.md, int.md, ver.md, val.md, saf.md, qua.md, cm.md, vmgr.md)
 - `.opencode/skills/en50128-lifecycle-coordination/` - COD patterns and workflows
 - `.opencode/skills/` - Domain-specific skills for all lifecycle phases
-- `.opencode/commands/` - Agent command definitions (req, des, imp, tst, int, ver, val, saf, qua, cm, pm)
-- `docs/EN50128-Compliance-Guide.md` - Compliance checklist
+- `docs/USER-GUIDE.md` - Complete platform user guide
 
 ---
 
@@ -1635,3 +1634,386 @@ Use Configuration Manager agent for:
 **Document Status**: Approved  
 **Next Review**: [Date]  
 **Approval**: [Signature]
+
+---
+
+## 20. EN 50128 Deliverable Reference
+
+**Standard**: EN 50128:2011 Railway Software  
+**Purpose**: Complete mapping of lifecycle deliverables with exact names from EN 50128 Section 7
+
+### Important Note on Terminology
+
+EN 50128 uses **EXACT** document names in Section 7 output specifications. All platform phase definitions, agent commands, and QUA checkers MUST use these exact names.
+
+**Naming Convention**:
+- EN 50128 uses **singular or plural** based on the section definition
+- Example: "Software Interface Specification**s**" (plural - 7.3.3 item 3)
+- Example: "Software Architecture Specification" (singular - 7.3.3 item 1)
+
+### Section 7.2: Software Requirements
+
+**EN 50128 Reference**: Section 7.2.3 Output documents
+
+| # | Exact Document Name (EN 50128) | Clause | Written by | File Path |
+|---|--------------------------------|--------|------------|-----------|
+| 1 | **Software Requirements Specification** | 7.2.4.1 | Requirements Manager | `docs/SRS.md` |
+| 2 | **Overall Software Test Specification** | 7.2.4.16 | Tester | `docs/test/Overall-Software-Test-Specification.md` |
+| 3 | **Software Requirements Verification Report** | 7.2.4.27 | Verifier | `docs/reports/Software-Requirements-Verification-Report.md` |
+
+**Notes**:
+- Requirements Traceability Matrix (RTM) is implicit in SRS (not a separate deliverable per EN 50128)
+- Hazard Log is best practice (not in Section 7.2 outputs, but recommended)
+
+### Section 7.3: Architecture and Design
+
+**EN 50128 Reference**: Section 7.3.3 Output documents
+
+| # | Exact Document Name (EN 50128) | Clause | Written by | File Path |
+|---|--------------------------------|--------|------------|-----------|
+| 1 | **Software Architecture Specification** | 7.3.4.1 | Designer | `docs/Software-Architecture-Specification.md` |
+| 2 | **Software Design Specification** | 7.3.4.20 | Designer | `docs/Software-Design-Specification.md` |
+| 3 | **Software Interface Specifications** | 7.3.4.18 | Designer | `docs/Software-Interface-Specifications.md` |
+| 4 | **Software Integration Test Specification** | 7.3.4.25 | Integrator | `docs/test/Software-Integration-Test-Specification.md` |
+| 5 | **Software/Hardware Integration Test Specification** | 7.3.4.33 | Integrator | `docs/test/Software-Hardware-Integration-Test-Specification.md` |
+| 6 | **Software Architecture and Design Verification Report** | 7.3.4.40 | Verifier | `docs/reports/Software-Architecture-and-Design-Verification-Report.md` |
+
+**Key Points**:
+- Item 3 is **plural**: "Software Interface Specification**s**" (covers all interfaces)
+- Items 4 and 5: Test **Specifications** created in Phase 3, Test **Reports** created in Phase 6
+- Item 5: Use forward slash "/" not hyphen in "Software/Hardware"
+
+### Section 7.4: Component Design
+
+**EN 50128 Reference**: Section 7.4.3 Output documents
+
+| # | Exact Document Name (EN 50128) | Clause | Written by | File Path |
+|---|--------------------------------|--------|------------|-----------|
+| 1 | **Software Component Design Specification** | 7.4.4.1 | Designer | `docs/Software-Component-Design-Specification.md` |
+| 2 | **Software Component Test Specification** | 7.4.4.7 | Tester | `docs/test/Software-Component-Test-Specification.md` |
+| 3 | **Software Component Design Verification Report** | 7.4.4.11 | Verifier | `docs/reports/Software-Component-Design-Verification-Report.md` |
+
+**Key Points**:
+- All names are **singular** (one specification per component set)
+- Item 2: Test **Specification** created in Phase 4, Test **Report** created in Phase 5
+
+### Section 7.5: Component Implementation and Testing
+
+**EN 50128 Reference**: Section 7.5.3 Output documents
+
+| # | Exact Document Name (EN 50128) | Clause | Written by | File Path |
+|---|--------------------------------|--------|------------|-----------|
+| 1 | **Software Source Code and supporting documentation** | 7.5.4.1 | Implementer | `src/` + supporting docs |
+| 2 | **Software Component Test Report** | 7.5.4.5 | Tester | `docs/reports/Software-Component-Test-Report.md` |
+| 3 | **Software Source Code Verification Report** | 7.5.4.8 | Verifier | `docs/reports/Software-Source-Code-Verification-Report.md` |
+
+**Key Points**:
+- Item 1: "Software Source Code" (not just "Source Code")
+- Item 1: Lowercase "and" and "supporting documentation"
+- Item 2: "Report" (execution results), not "Specification"
+
+### Section 7.6: Integration
+
+**EN 50128 Reference**: Section 7.6.3 Output documents
+
+| # | Exact Document Name (EN 50128) | Clause | Written by | File Path |
+|---|--------------------------------|--------|------------|-----------|
+| 1 | **Software Integration Test Report** | 7.6.4.3 | Tester | `docs/reports/Software-Integration-Test-Report.md` |
+| 2 | **Software/Hardware Integration Test Report** | 7.6.4.3 | Tester | `docs/reports/Software-Hardware-Integration-Test-Report.md` |
+| 3 | **Software Integration Verification Report** | 7.6.4.6 | Verifier | `docs/reports/Software-Integration-Verification-Report.md` |
+
+**Key Points**:
+- Items 1 and 2: Test **Reports** (execution results of specs from Phase 3)
+- Item 2: Use forward slash "/" not hyphen in "Software/Hardware"
+- V-Model: Specifications created in Phase 3, Reports created in Phase 6
+
+### Section 7.7: Overall Software Testing / Validation
+
+**EN 50128 Reference**: Section 7.7.3 Output documents
+
+| # | Exact Document Name (EN 50128) | Clause | Written by | File Path |
+|---|--------------------------------|--------|------------|-----------|
+| 1 | **Overall Software Test Report** | 7.7.4.1 | Tester | `docs/reports/Overall-Software-Test-Report.md` |
+| 2 | **Software Validation Report** | 7.7.4.6 | Validator | `docs/reports/Software-Validation-Report.md` |
+| 3 | **Release Note** | 7.7.4.15 | Project Manager | `docs/Release-Note.md` |
+
+**Key Points**:
+- Item 1: Test **Report** (execution of Overall Software Test Specification from Phase 2)
+- Item 3: "Release Note" (singular), not "Release Notes"
+- V-Model: Overall Test Specification created in Phase 2, Report created in Phase 7
+
+### Document Naming Conventions
+
+**File Naming Strategy**
+
+Use exact EN 50128 name with hyphens replacing spaces:
+- `Software-Architecture-Specification.md` (recommended)
+- `Software-Interface-Specifications.md` (plural — matches standard!)
+- `Software-Hardware-Integration-Test-Report.md` (use hyphen in filename for "/")
+- `SAS.md`, `SDS.md` — abbreviations NOT recommended
+
+**Document ID Convention**
+
+Format: `DOC-<TYPE>-YYYY-NNN`
+
+| EN 50128 Document Name | Abbreviation | Example ID |
+|------------------------|--------------|------------|
+| Software Requirements Specification | SRS | DOC-SRS-2026-001 |
+| Software Architecture Specification | SAS | DOC-SAS-2026-001 |
+| Software Design Specification | SDS | DOC-SDS-2026-001 |
+| Software Interface Specifications | INTERFACES | DOC-INTERFACES-2026-001 |
+| Software Integration Test Specification | INTTESTSPEC | DOC-INTTESTSPEC-2026-001 |
+| Software/Hardware Integration Test Specification | HWINTTESTSPEC | DOC-HWINTTESTSPEC-2026-001 |
+| Software Component Design Specification | COMPDESIGN | DOC-COMPDESIGN-2026-001 |
+| Software Component Test Specification | COMPTESTSPEC | DOC-COMPTESTSPEC-2026-001 |
+| Software Source Code and supporting documentation | SOURCECODE | DOC-SOURCECODE-2026-001 |
+| Software Component Test Report | COMPTESTRPT | DOC-COMPTESTRPT-2026-001 |
+| Software Integration Test Report | INTTESTRPT | DOC-INTTESTRPT-2026-001 |
+| Software/Hardware Integration Test Report | HWINTTESTRPT | DOC-HWINTTESTRPT-2026-001 |
+| Overall Software Test Report | OVERALLTESTRPT | DOC-OVERALLTESTRPT-2026-001 |
+| Software Validation Report | VALRPT | DOC-VALRPT-2026-001 |
+| Release Note | RELEASE | DOC-RELEASE-2026-001 |
+
+**Verification Report IDs**:
+
+| EN 50128 Verification Report | Abbreviation | Example ID |
+|------------------------------|--------------|------------|
+| Software Requirements Verification Report | REQVER | DOC-REQVER-2026-001 |
+| Software Architecture and Design Verification Report | ARCHDESIGNVER | DOC-ARCHDESIGNVER-2026-001 |
+| Software Component Design Verification Report | COMPDESIGNVER | DOC-COMPDESIGNVER-2026-001 |
+| Software Source Code Verification Report | SOURCECODEVER | DOC-SOURCECODEVER-2026-001 |
+| Software Integration Verification Report | INTVER | DOC-INTVER-2026-001 |
+
+### Document Type Mapping (for QUA checkers)
+
+| EN 50128 Document Name | doc_type (YAML) | QUA Checker File |
+|------------------------|-----------------|------------------|
+| Software Requirements Specification | `SRS` | `srs-checker.yaml` |
+| Overall Software Test Specification | `Overall-Test-Spec` | `overall-test-spec-checker.yaml` |
+| Software Architecture Specification | `SAS` | `sas-checker.yaml` |
+| Software Design Specification | `SDS` | `sds-checker.yaml` |
+| Software Interface Specifications | `Interface-Specs` | `interface-specs-checker.yaml` |
+| Software Integration Test Specification | `Integration-Test-Spec` | `integration-test-spec-checker.yaml` |
+| Software/Hardware Integration Test Specification | `HW-Integration-Test-Spec` | `hw-integration-test-spec-checker.yaml` |
+| Software Component Design Specification | `Component-Design-Spec` | `component-design-spec-checker.yaml` |
+| Software Component Test Specification | `Component-Test-Spec` | `component-test-spec-checker.yaml` |
+
+### Compliance Verification Checklist
+
+- [ ] All phase definitions use exact EN 50128 document names
+- [ ] All file paths match EN 50128 naming (with hyphens for spaces)
+- [ ] All QUA checkers match exact document names (with correct singular/plural)
+- [ ] All agent commands reference exact EN 50128 deliverables
+- [ ] Document IDs follow DOC-<TYPE>-YYYY-NNN convention
+- [ ] V-Model alignment: Test Specs in design phases, Test Reports in execution phases
+- [ ] Verification Reports follow EN 50128 naming conventions
+- [ ] "Software/Hardware" uses forward slash "/" not hyphen
+- [ ] "Software Interface Specifications" is **plural**
+- [ ] "Release Note" is **singular**
+
+---
+
+## 21. Phase-to-Document Complete Reference
+
+**Standard**: EN 50128:2011 Railway Software  
+**Purpose**: Complete reference of all lifecycle phases and their deliverable documents
+
+### Quick Reference Table
+
+| Phase | EN 50128 Section | Documents | Phase Definition File |
+|-------|-----------------|-----------|----------------------|
+| Phase 0: Initialization | Platform Extension | 1 document | N/A (COD internal) |
+| Phase 1: Planning | 5, 6.5, 6.6 | 4 documents | N/A (manual setup) |
+| Phase 2: Requirements | 7.2 | 3 documents | `phase-2-requirements.yaml` |
+| Phase 3: Architecture & Design | 7.3 | 6 documents | `phase-3-architecture-design.yaml` |
+| Phase 4: Component Design | 7.4 | 3 documents | `phase-4-component-design.yaml` |
+| Phase 5: Implementation & Testing | 7.5 | 3 documents | `phase-5-implementation-testing.yaml` |
+| Phase 6: Integration | 7.6 | 3 documents | `phase-6-integration.yaml` |
+| Phase 7: Validation | 7.7 | 3 documents | `phase-7-validation.yaml` |
+| Phase 8: Assessment | 6.4 | 1 document | Not yet created (SIL 3-4 only) |
+| Phase 9: Deployment | 9.1 | Variable | Not yet created |
+
+**Total Documents**: 27 mandatory documents (3 in Phase 1, 24 in Phases 2-7)
+
+### Phase 0: Initialization (Platform Extension)
+
+**Purpose**: Initialize lifecycle tracking and project structure  
+**Owner**: Lifecycle Coordinator (COD)  
+**Command**: `@cod plan --sil [0-4] --project [name]`
+
+| # | Document Name | File Path | Owner | Notes |
+|---|---------------|-----------|-------|-------|
+| 1 | **LIFECYCLE_STATE.md** | `LIFECYCLE_STATE.md` | COD | Tracks project state, phase progress, deliverables |
+
+### Phase 1: Planning (EN 50128 Sections 5, 6.5, 6.6)
+
+**Purpose**: Establish project organization, quality assurance, and configuration management  
+**Primary Agents**: `@pm`, `@cm`, `@qua`  
+**EN 50128 Reference**: Section 5.3.2.5 - "All activities during a phase SHALL be defined and planned"
+
+| # | Document Name | File Path | Owner | EN 50128 Ref |
+|---|---------------|-----------|-------|--------------|
+| 1 | **Software Quality Assurance Plan (SQAP)** | `docs/plans/SQAP.md` | QUA | 6.5.4.2 |
+| 2 | **Software Configuration Management Plan (SCMP)** | `docs/plans/SCMP.md` | CM | 6.6.4.1 |
+| 3 | **Software Verification Plan (SVP)** | `docs/plans/SVP.md` | VER | 6.2.4.2 |
+| 4 | **Software Validation Plan (SVaP)** | `docs/plans/SVaP.md` | VAL | 6.3.4.2 |
+
+**Phase Gate**: `@cod gate-check planning` (MANDATORY all SIL levels)
+
+### Phase 2: Requirements (EN 50128 Section 7.2)
+
+**Purpose**: Define complete, unambiguous software requirements  
+**Primary Agent**: `@req`  
+**Supporting Agents**: `@saf`, `@qua`, `@ver`
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Software Requirements Specification** | `docs/Software-Requirements-Specification.md` | REQ | 7.2.4.1 |
+| 2 | **Overall Software Test Specification** | `docs/test/Overall-Software-Test-Specification.md` | TST | 7.2.4.16 |
+| 3 | **Software Requirements Verification Report** | `docs/reports/Software-Requirements-Verification-Report.md` | VER | 7.2.4.27 |
+
+**Best Practice**: Hazard Log - `docs/Hazard-Log.md` - SAF (EN 50126 / EN 50129)
+
+**Phase Gate**: `@cod gate-check requirements` (MANDATORY all SIL levels)
+
+### Phase 3: Architecture & Design (EN 50128 Section 7.3)
+
+**Purpose**: Define software architecture, design, and interfaces  
+**Primary Agent**: `@des`  
+**Supporting Agents**: `@saf`, `@qua`, `@int`, `@ver`
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Software Architecture Specification** | `docs/Software-Architecture-Specification.md` | DES | 7.3.4.1 |
+| 2 | **Software Design Specification** | `docs/Software-Design-Specification.md` | DES | 7.3.4.20 |
+| 3 | **Software Interface Specifications** | `docs/Software-Interface-Specifications.md` | DES | 7.3.4.18 |
+| 4 | **Software Integration Test Specification** | `docs/test/Software-Integration-Test-Specification.md` | INT | 7.3.4.25 |
+| 5 | **Software/Hardware Integration Test Specification** | `docs/test/Software-Hardware-Integration-Test-Specification.md` | INT | 7.3.4.33 |
+| 6 | **Software Architecture and Design Verification Report** | `docs/reports/Software-Architecture-and-Design-Verification-Report.md` | VER | 7.3.4.40 |
+
+**Important Naming Notes**:
+- #3: **PLURAL** - "Software Interface Specification**s**"
+- #5: Use forward slash **"/"** not hyphen - "Software/Hardware"
+- #4 and #5: Test **Specifications** created in Phase 3, Test **Reports** created in Phase 6 (V-Model)
+
+**Phase Gate**: `@cod gate-check architecture-design` (MANDATORY all SIL levels)
+
+### Phase 4: Component Design (EN 50128 Section 7.4)
+
+**Purpose**: Decompose design into components with detailed specifications  
+**Primary Agents**: `@des`, `@tst`  
+**Supporting Agents**: `@qua`, `@ver`
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Software Component Design Specification** | `docs/Software-Component-Design-Specification.md` | DES | 7.4.4.1 |
+| 2 | **Software Component Test Specification** | `docs/test/Software-Component-Test-Specification.md` | TST | 7.4.4.7 |
+| 3 | **Software Component Design Verification Report** | `docs/reports/Software-Component-Design-Verification-Report.md` | VER | 7.4.4.11 |
+
+**Phase Gate**: `@cod gate-check component-design` (MANDATORY all SIL levels)
+
+### Phase 5: Implementation & Testing (EN 50128 Section 7.5)
+
+**Purpose**: Implement source code and execute unit tests  
+**Primary Agents**: `@imp`, `@tst`  
+**Supporting Agents**: `@qua`, `@ver`
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Software Source Code and supporting documentation** | `src/` + docs | IMP | 7.5.4.1 |
+| 2 | **Software Component Test Report** | `docs/reports/Software-Component-Test-Report.md` | TST | 7.5.4.5 |
+| 3 | **Software Source Code Verification Report** | `docs/reports/Software-Source-Code-Verification-Report.md` | VER | 7.5.4.8 |
+
+**Key Requirements**:
+- MISRA C:2012 compliance (ZERO mandatory violations for SIL 2+)
+- Static allocation only (no `malloc`/`free` for SIL 2+)
+- Cyclomatic complexity ≤10 (SIL 3-4), ≤15 (SIL 2)
+- Coverage: 100% statement/branch/MC/DC (SIL 3-4)
+
+**Phase Gate**: `@cod gate-check implementation-testing` (MANDATORY all SIL levels)
+
+### Phase 6: Integration (EN 50128 Section 7.6)
+
+**Purpose**: Integrate components and test software-hardware integration  
+**Primary Agent**: `@int`  
+**Supporting Agents**: `@tst`, `@qua`, `@ver`
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Software Integration Test Report** | `docs/reports/Software-Integration-Test-Report.md` | INT | 7.6.4.3 |
+| 2 | **Software/Hardware Integration Test Report** | `docs/reports/Software-Hardware-Integration-Test-Report.md` | INT | 7.6.4.7 |
+| 3 | **Software Integration Verification Report** | `docs/reports/Software-Integration-Verification-Report.md` | VER | 7.6.4.11 |
+
+**V-Model Correspondence**:
+- Software Integration Test Specification (Phase 3) → Software Integration Test Report (Phase 6)
+- Software/Hardware Integration Test Specification (Phase 3) → Software/Hardware Integration Test Report (Phase 6)
+
+**Phase Gate**: `@cod gate-check integration` (MANDATORY all SIL levels)
+
+### Phase 7: Validation (EN 50128 Section 7.7)
+
+**Purpose**: Overall software testing and validation for fitness of use  
+**Primary Agents**: `@tst`, `@val`  
+**Supporting Agents**: `@qua`, `@ver`
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Overall Software Test Report** | `docs/reports/Overall-Software-Test-Report.md` | TST | 7.7.4.1 |
+| 2 | **Software Validation Report** | `docs/reports/Software-Validation-Report.md` | VAL | 7.7.4.6 |
+| 3 | **Release Note** | `docs/Release-Note.md` | PM/VAL | 7.7.4.12 |
+
+**Critical Requirements (SIL 3-4)**:
+- Independent validator MANDATORY (does NOT report to Project Manager)
+- Performance Testing MANDATORY (Table A.7)
+- Functional/Black-box Testing MANDATORY (Table A.7)
+
+**Phase Gate**: `@cod gate-check validation` (MANDATORY all SIL levels)
+
+### Phase 8: Assessment (EN 50128 Section 6.4)
+
+**Purpose**: Independent safety assessment (SIL 3-4 ONLY)  
+**Primary Agent**: Assessor (independent)
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Software Assessment Report** | `docs/reports/Software-Assessment-Report.md` | Assessor | 6.4.4.3 |
+
+**Phase Gate**: `@cod gate-check assessment` (MANDATORY SIL 3-4 only)
+
+### Phase 9: Deployment (EN 50128 Section 9.1)
+
+**Purpose**: Deploy software to operational environment  
+**Primary Agents**: `@pm`, `@cm`
+
+| # | Document Name | File Path | Owner | Notes |
+|---|---------------|-----------|-------|-------|
+| 1 | **Deployment Plan** | `docs/Deployment-Plan.md` | PM | Installation procedures |
+| 2 | **Installation Report** | `docs/reports/Installation-Report.md` | PM | Deployment verification |
+| 3 | **Software Baseline** | Configuration items | CM | Final release baseline |
+
+### Summary Statistics
+
+**Documents by Phase**
+
+| Phase | Mandatory Documents | Optional/Supporting | Total |
+|-------|---------------------|---------------------|-------|
+| Phase 0: Initialization | 1 | 0 | 1 |
+| Phase 1: Planning | 4 | 3+ | 7+ |
+| Phase 2: Requirements | 3 | 1 | 4 |
+| Phase 3: Architecture & Design | 6 | 0 | 6 |
+| Phase 4: Component Design | 3 | 0 | 3 |
+| Phase 5: Implementation & Testing | 3 | 0 | 3 |
+| Phase 6: Integration | 3 | 0 | 3 |
+| Phase 7: Validation | 3 | 0 | 3 |
+| Phase 8: Assessment (SIL 3-4) | 1 | 0 | 1 |
+| Phase 9: Deployment | 3 | Variable | 3+ |
+| **TOTAL** | **30** | **4+** | **34+** |
+
+**V-Model Specification → Report Correspondence**
+
+| Specification (Left side) | Phase | Report (Right side) | Phase |
+|---------------------------|-------|---------------------|-------|
+| Overall Software Test Specification | 2 | Overall Software Test Report | 7 |
+| Software Integration Test Specification | 3 | Software Integration Test Report | 6 |
+| Software/Hardware Integration Test Spec | 3 | Software/Hardware Integration Test Report | 6 |
+| Software Component Test Specification | 4 | Software Component Test Report | 5 |

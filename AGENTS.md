@@ -1044,3 +1044,151 @@ Each agent **internally loads its skill** when invoked. Users do not load skills
 - EN 50126:2017 - RAMS
 - MISRA C:2012 - C Coding Standard
 - IEC 61508 - Functional Safety
+
+---
+
+## EN 50128 Role Independence Reference
+
+This section provides a quick reference for EN 50128:2011 Section 5 and Annex B organizational role independence requirements.
+
+### Role Independence Matrix
+
+| Role | SIL 0-1 | SIL 2 | SIL 3-4 |
+|------|---------|-------|---------|
+| Project Manager | No | No | No |
+| Software Manager | No | No | No |
+| Configuration Manager | No | No | No |
+| Designer | No | No | No |
+| Implementer | No | No | No |
+| Tester | No | HR | HR |
+| Verifier | No | HR | **M** |
+| Integrator | No | No | No |
+| Validator | No | HR | **M** |
+| Assessor | N/A | N/A | **M** |
+
+**Legend**: **M** = Mandatory, **HR** = Highly Recommended, **No** = Not required
+
+### Role Combination Rules
+
+**Allowed Combinations** (when independence is not required):
+
+- Software Manager + Designer
+- Designer + Implementer
+- Implementer + Tester (SIL 0-2 only)
+- Integrator + Tester
+
+**Prohibited Combinations** (for SIL 3-4):
+
+- Designer/Implementer + Verifier
+- Any development role + Validator
+- Any role + Assessor
+- Implementer + Tester (own code)
+
+**Best Practice for SIL 3-4 Projects**:
+- Separate teams for Development and Verification/Validation
+- Independent Assessor (often external to the organization)
+- Clear organizational separation with independent reporting lines
+
+### Role Definitions (EN 50128 Section 5, Annex B)
+
+#### Project Manager (Section 5, Table B.9)
+
+**Responsibility**: Overall project responsibility and coordination
+
+**Key Activities**: Overall project planning, coordinate between all roles, resource allocation, schedule management, risk management, stakeholder communication, ensure standards compliance, project-level decision making.
+
+**Independence**: Not required. Oversees the entire project including hardware, system, and software aspects.
+
+#### Software Manager (Section 5.3.1, Table B.1)
+
+**Responsibility**: Overall responsibility for software development activities
+
+**Key Activities**: Establish software development plans, allocate resources, monitor progress, ensure quality assurance, coordinate with other roles, report to management.
+
+**Independence**: Not required. Focuses specifically on software development. In software-only projects, may be the same person as Project Manager.
+
+#### Designer (Section 5.3.2, Table B.2)
+
+**Responsibility**: Software architecture and design
+
+**Key Activities**: Create Software Architecture Specification, create Software Design Specification, define interfaces, apply design techniques per Table A.4, participate in design reviews.
+
+**Independence**: Not required (but designer should not assess their own design). **Agent**: `@des`
+
+#### Implementer (Section 5.3.3, Table B.3)
+
+**Responsibility**: Software implementation (coding)
+
+**Key Activities**: Implement software in C (MISRA C:2012 for SIL 2+), follow coding standards, implement defensive programming, participate in code reviews, create unit tests.
+
+**Independence**: Not required (but implementer should not test their own code alone). **Agent**: `@imp`
+
+#### Tester (Section 5.3.4, Table B.4)
+
+**Responsibility**: Software testing
+
+**Key Activities**: Develop test specifications, execute tests, record test results, perform coverage analysis, report defects.
+
+**Independence**: Not required for SIL 0-2; Highly recommended for SIL 3-4. **Agent**: `@tst`
+
+#### Verifier (Section 5.3.5, Table B.5)
+
+**Responsibility**: Software verification
+
+**Key Activities**: Plan verification activities, perform static analysis, conduct reviews, verify traceability, check compliance with standards, collect evidence.
+
+**Independence**: Not required for SIL 0-1; Highly recommended for SIL 2; **MANDATORY for SIL 3-4**. For SIL 3-4, verifier MUST NOT be designer or implementer. **Agent**: `@ver`
+
+#### Integrator (Section 5.3.6, Table B.6)
+
+**Responsibility**: Software integration
+
+**Key Activities**: Plan integration strategy, integrate software modules, resolve integration issues, perform integration testing, document integration results.
+
+**Independence**: Not required. **Agent**: `@int`
+
+#### Validator (Section 5.3.7, Table B.7)
+
+**Responsibility**: Software validation
+
+**Key Activities**: Plan validation activities, perform system testing, conduct acceptance testing, validate operational scenarios, obtain customer acceptance.
+
+**Independence**: Not required for SIL 0-1; Highly recommended for SIL 2; **MANDATORY for SIL 3-4**. For SIL 3-4, validator MUST NOT be involved in development and MUST NOT report to Project Manager. **Agent**: `@val`
+
+#### Assessor (Section 5.3.8, Table B.8)
+
+**Responsibility**: Independent safety assessment
+
+**Key Activities**: Review all lifecycle artifacts, assess compliance with EN 50128, review safety case, verify independence of verification/validation, issue assessment report, approve for deployment.
+
+**Independence**: **MANDATORY for SIL 3-4**. Assessor MUST be completely independent of development, often external to the organization. Required for final approval before deployment.
+
+#### Configuration Manager (Section 5, Table B.10)
+
+**Responsibility**: Configuration and change management
+
+**Key Activities**: Establish and maintain configuration management system, control configuration items, manage baselines, control changes, maintain version control, manage release process, track configuration status, conduct configuration audits.
+
+**Independence**: Not required. **Agent**: `@cm`
+
+### Agent Mapping to EN 50128 Roles
+
+| EN 50128 Role | Agent | `@agent` Syntax | Independence Notes |
+|---------------|-------|----------------|-------------------|
+| Project Manager | PM | `@pm` | Not required |
+| Software Manager | PM | `@pm` | Not required (combined with PM in this platform) |
+| Configuration Manager | CM | `@cm` | Not required |
+| Designer | Designer | `@des` | Not required |
+| Implementer | Implementer | `@imp` | Not required |
+| Tester | Tester | `@tst` | Highly recommended for SIL 3-4 |
+| Verifier | Verifier | `@ver` | **Mandatory for SIL 3-4** |
+| Integrator | Integrator | `@int` | Not required |
+| Validator | Validator | `@val` | **Mandatory for SIL 3-4** |
+| Assessor | (external) | N/A | **Mandatory for SIL 3-4** |
+
+**Additional Agents** (platform extensions):
+- Safety Engineer (`@saf`) — Supports safety analysis per Section 7.1
+- Requirements Engineer (`@req`) — Supports requirements phase per Section 7.2
+- Quality Assurance (`@qua`) — Supports QA per Section 6.5
+- V&V Manager (`@vmgr`) — Independent V&V authority for SIL 3-4 (Section 5.1.2.10e)
+- Lifecycle Coordinator (`@cod`) — End-to-end lifecycle orchestration (Section 5.3)
