@@ -2,13 +2,29 @@
 
 This document defines role-based agents for EN 50128 railway software development. Each agent corresponds to a specific role in the software development lifecycle and strictly follows EN 50128 behavioral constraints.
 
-**IMPORTANT**: As of 2026-03-15, all role-based commands have been **DEPRECATED**. Use direct skill invocation instead. See `docs/COMMAND-TO-SKILL-MIGRATION.md` for migration guide.
+## Agent Invocation Syntax
+
+Agents are invoked using the `@agent` syntax in OpenCode:
+
+```
+@cod plan --sil 3 --project MyProject
+@pm execute-phase 2
+@req create-srs --based-on assets/sample_system/System-Requirements-Specification.md
+@ver verify-phase 4 --sil 3
+@qua review-document docs/SRS.md --type srs --sil 3
+```
+
+**Normal workflow**: You invoke only `@cod` and `@pm`. They orchestrate all other agents internally.  
+**Direct invocation**: You may invoke any agent directly for targeted tasks.
+
+See `docs/USER-GUIDE.md` for complete usage instructions and the V-Model example.
 
 **Related Documents**:
-- **`LIFECYCLE.md`** - Complete EN 50128 V-Model software development lifecycle (START HERE)
+- **`docs/USER-GUIDE.md`** - Complete usage guide with agent commands and V-Model example (START HERE)
+- **`LIFECYCLE.md`** - Complete EN 50128 V-Model software development lifecycle
 - **`TOOLS.md`** - Comprehensive tool catalog with usage information for agents (CRITICAL)
-- **`.opencode/skills/`** - Domain-specific skills for each lifecycle phase (PRIMARY INTERFACE)
-- **`.opencode/commands-deprecated/`** - Archived command files (historical reference only)
+- **`.opencode/agents/`** - Agent definition files (one per role)
+- **`.opencode/skills/`** - Domain-specific skills loaded internally by agents
 - **`std/EN50128-2011.md`** - Full EN 50128 standard (LLM-friendly Markdown)
 - **`std/EN 50126-1-2017.md`** - RAMS standard Part 1
 - **`std/EN 50126-2-2017.md`** - RAMS standard Part 2
@@ -823,7 +839,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 │         │ - Generate traceability
 └────┬────┘
      │ (Software Requirements Specification, Traceability)
-     │ COD Gate Check: /cod gate-check requirements
+     │ COD Gate Check: @cod gate-check phase-2
      ▼
 ┌─────────┐
 │   DES   │ Design
@@ -832,7 +848,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 │         │ - Interface design
 └────┬────┘
      │ (Software Architecture Specification, Software Design Specification)
-     │ COD Gate Check: /cod gate-check design
+     │ COD Gate Check: @cod gate-check phase-3
      ▼
 ┌─────────┐
 │   IMP   │ Implementation (C)
@@ -841,7 +857,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 │         │ - MISRA C compliance
 └────┬────┘
      │ (Source code, Unit tests)
-     │ COD Gate Check: /cod gate-check implementation
+     │ COD Gate Check: @cod gate-check phase-4
      ▼
 ┌─────────┐
 │   TST   │ Testing
@@ -858,7 +874,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 │         │ - Interface testing
 └────┬────┘
      │ (Integration report)
-     │ COD Gate Check: /cod gate-check integration
+     │ COD Gate Check: @cod gate-check phase-5
      ▼
 ┌─────────┐
 │   VER   │ Verification
@@ -875,7 +891,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 │         │ - Customer approval
 └────┬────┘
      │ (Validation report)
-     │ COD Gate Check: /cod gate-check validation
+     │ COD Gate Check: @cod gate-check phase-6
      ▼
 ┌─────────┐
 │  DONE   │ Ready for Deployment
@@ -913,103 +929,53 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 ### Example Workflow
 
 ```bash
-# 1. REQ: Define requirements
-/req
-# Create requirements specification
-# Assign SIL levels
-# Generate traceability matrix
+# ── USER INVOKES ONLY TWO COMMANDS ────────────────────────────────────────────
 
-# 2. SAF: Safety analysis
-/saf
-# Identify hazards
-# Perform FMEA on C code
-# Define safety requirements
-# Design fault detection
+# Initialize lifecycle (COD creates LIFECYCLE_STATE.md)
+@cod plan --sil 3 --project MyProject
 
-# 3. QUA: Document template compliance (MANDATORY SIL 3-4, BEFORE VER)
-/qua
-# Verify Document ID format (DOC-XXX-YYYY-NNN)
-# Verify Document Control table
-# Verify Approvals table with SIL-specific roles
-# Generate QA Template Compliance Report
+# Execute each phase (PM orchestrates all agents internally)
+@pm execute-phase 1    # Planning: SQAP, SCMP, SVP, SVaP
+@cod gate-check phase-1
 
-# 4. DES: Design architecture
-/des
-# Create architecture (C modules, interfaces)
-# Design for static allocation
-# Ensure complexity limits
-# Design review
+@pm execute-phase 2    # Requirements: SRS, Hazard Log
+@cod gate-check phase-2
 
-# 5. QUA: Design document template compliance (MANDATORY SIL 3-4, BEFORE VER)
-/qua
-# Verify design documents follow template
-# Design review - complexity, defensive programming
-# Generate QA Design Review Report
+@pm execute-phase 3    # Design: SAS, SDS, SIS, FMEA
+@cod gate-check phase-3
 
-# 6. IMP: Implement in C
-/imp
-# Write C code (MISRA C compliant)
-# Static allocation only
-# Defensive programming
-# Unit tests
+@pm execute-phase 4    # Implementation + Unit Testing
+# PM internally invokes:
+#   @imp implement-all --sil 3        → src/, include/
+#   @tst create-unit-tests --sil 3    → tests/unit/
+#   @tst run-unit-tests --sil 3       → coverage must be 100% (SIL 3)
+#   @qua review-code --sil 3          → Code-Review-Report.md (APPROVED)
+# COD independently invokes (not PM):
+#   @ver verify-phase 4 --sil 3       → Verification-Report-Phase4.md
+# VMGR reviews and approves (SIL 3-4)
+@cod gate-check phase-4
 
-# 7. TST: Test (Unit Tests - Phase 5)
-/tst
-# Execute unit tests
-# Measure coverage (100% for SIL 3+)
-# Fault injection
-# Provide test results to IMP
+@pm execute-phase 5    # Integration
+# PM internally invokes:
+#   @int plan-integration             → Integration-Plan.md
+#   @tst create-integration-tests     → tests/integration/
+#   @tst run-integration-tests        → test-results/integration/
+#   @int create-integration-report    → Integration-Test-Report.md
+#   @qua review-document ...          → QA review loop
+# COD independently invokes:
+#   @ver verify-phase 5 --sil 3       → Verification-Report-Phase5.md
+@cod gate-check phase-5
 
-# 8. QUA: Code review (MANDATORY all SILs, BEFORE VER)
-/qua
-# Review C code
-# Check MISRA C compliance (zero mandatory violations SIL 2+)
-# Verify complexity (≤10 SIL 3-4, ≤15 SIL 2)
-# Check defensive programming
-# Generate QA Code Review Report
+# Phase 6: Validation — COD invokes VAL directly (independence)
+# @val validate-phase 6 --sil 3       → Validation-Report.md
+@cod gate-check phase-6
 
-# 9. VER: Verify
-/ver
-# Run static analysis (PC-lint, Cppcheck)
-# Check coverage
-# Verify complexity
-# Verify QA reviews performed
-# Collect evidence
+# Phase 7: Assessment (SIL 3-4 only)
+@cod gate-check phase-7
 
-# 10. INT: Integration (Phase 6 - INT → TST → INT workflow)
-/int
-# INT: Review integration test specifications
-# INT: Coordinate integration test execution with TST
-# TST: Create integration test code/harness
-# TST: Execute all integration tests (functional, performance)
-# TST: Record results in machine-readable format (XML/JSON)
-# TST: Provide test results to INT
-# INT: Document actual TST results in Integration Test Reports
-# INT: NO fabrication of test results allowed
+@pm execute-phase 8    # Deployment: release package, final baseline
 
-# 11. QUA: Integration test review (MANDATORY SIL 3-4)
-/qua
-# Verify integration test documentation follows template
-# Review integration test results from TST
-# Generate QA Integration Test Review Report
-
-# 12. VAL: Validate
-/val
-# System testing on target
-# Operational scenarios
-# Acceptance testing
-# Customer approval
-
-# 13. QUA: Validation review (MANDATORY SIL 3-4)
-/qua
-# Verify validation documentation follows template
-# Review validation test results
-# Generate QA Validation Review Report
-
-# Throughout: COD, CM, PM
-/cod # Lifecycle coordination, phase gates, compliance enforcement
-/cm  # Configuration management, change control, baselines
-/pm  # Project coordination, CCB, risk management (reports to COD)
+@cod finish            # Final compliance check, project archived
 ```
 
 ## C Language Compliance Summary
@@ -1047,33 +1013,30 @@ Python scripts may be used for:
 
 ## Agent-to-Skill Mapping
 
-**All agent behaviors are now implemented through skills. Load skills directly using the skill tool.**
+Each agent **internally loads its skill** when invoked. Users do not load skills directly — agents load them automatically as their first step.
 
 ### Core Development Skills
 
-| Agent Role | Skill Name | EN 50128 Section | Key Workflows |
-|------------|------------|------------------|---------------|
-| Requirements Engineer | `en50128-requirements` | Section 7.2 | Requirements elicitation, SIL assignment, traceability |
-| Designer | `en50128-design` | Section 7.3 | Architecture design, interface design, defensive programming |
-| Implementer | `en50128-implementation` | Section 7.4 | C coding, MISRA C compliance, unit testing |
-| Tester | `en50128-testing` | Sections 7.4, 7.5, 7.7 | Unit testing, coverage analysis, test reporting |
-| Verifier | `en50128-verification` | Section 6.2 | Static analysis, verification reporting, evidence collection |
-| Validator | `en50128-validation` | Section 7.7 | System validation, acceptance testing |
-| Integrator | `en50128-integration` | Section 7.6 | Progressive integration, HW/SW integration |
-| Safety Engineer | `en50128-safety` | Section 7.1, 6.3 | Hazard analysis, FMEA, FTA, safety case |
+| Agent | `@agent` Syntax | Skill Loaded Internally | EN 50128 Section |
+|-------|----------------|------------------------|------------------|
+| `@req` | `@req create-srs` | `en50128-requirements` | Section 7.2 |
+| `@des` | `@des create-sas` | `en50128-design` | Section 7.3 |
+| `@imp` | `@imp implement-all` | `en50128-implementation` | Section 7.4 |
+| `@tst` | `@tst run-unit-tests` | `en50128-testing` | Sections 7.4, 7.5, 7.7 |
+| `@ver` | `@ver verify-phase 4` | `en50128-verification` | Section 6.2 |
+| `@val` | `@val validate-phase 6` | `en50128-validation` | Section 7.7 |
+| `@int` | `@int plan-integration` | `en50128-integration` | Section 7.6 |
+| `@saf` | `@saf perform-fmea` | `en50128-safety` | Sections 7.1, 6.3 |
 
 ### Management and Support Skills
 
-| Agent Role | Skill Name | EN 50128 Section | Key Workflows |
-|------------|------------|------------------|---------------|
-| Quality Assurance | `en50128-quality` | Section 6.5 | SQAP, code reviews, quality gates, audits |
-| Configuration Manager | `en50128-configuration` | Section 6.6 | Version control, change control, baselines |
-| Lifecycle Coordinator | `en50128-lifecycle-coordination` | Section 5.3 | V-Model orchestration, phase gates, traceability |
-| Project Manager | `en50128-project-management` | Section 5, Table B.9 | Project coordination, CCB, risk management |
-| Documentation Specialist | `en50128-documentation` | Section 6.1, Annex C | Document templates, automation, compliance |
-| Tool Manager | `en50128-tools` | Section 6.7 | Tool qualification, tool validation |
-
-**Note**: V&V Manager skill (`en50128-vv-management`) is planned but not yet implemented.
+| Agent | `@agent` Syntax | Skill Loaded Internally | EN 50128 Section |
+|-------|----------------|------------------------|------------------|
+| `@qua` | `@qua review-document` | `en50128-quality` | Section 6.5 |
+| `@cm` | `@cm create-baseline` | `en50128-configuration` | Section 6.6 |
+| `@cod` | `@cod plan` | `en50128-lifecycle-coordination` | Section 5.3 |
+| `@pm` | `@pm execute-phase` | `en50128-project-management` | Section 5, Table B.9 |
+| `@vmgr` | `@vmgr review-verification` | (planned: `en50128-vv-management`) | Section 5.1.2.10e |
 
 ## Standard References
 
