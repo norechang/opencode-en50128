@@ -1,0 +1,493 @@
+deliverable_id: "DOC-021-COMP-TEST-REPORT"
+number: 21
+name: "Software Component Test Report"
+abbreviation: "Comp Test Report"
+phase: "implementation"
+standard_section: "7.5.4.6"
+written_by: "TST"
+first_check: "VER"
+second_check: "QUA"
+template_path: ".opencode/skills/en50128-testing/templates/Component-Test-Report-template.md"
+template_exists: true
+
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_id: "A.13"
+        technique_name: "Dynamic Analysis and Testing"
+        recommendation: "R"
+        table_reference: "A.13"
+    additional_requirements:
+      - "Test execution results documented"
+      - "Defects tracked and resolved"
+      - "Pass/fail assessment provided"
+    evidence_thresholds:
+      min_coverage_statement: 0
+      min_coverage_branch: 0
+      min_coverage_condition: 0
+      max_open_defects_critical: 0
+      max_open_defects_high: 5
+    test_requirements:
+      functional_testing: true
+      boundary_testing: false
+      error_handling_testing: false
+      fault_injection: false
+      independent_testing: false
+
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_id: "A.13"
+        technique_name: "Dynamic Analysis and Testing"
+        recommendation: "HR"
+        table_reference: "A.13"
+      - technique_id: "A.21"
+        technique_name: "Test Coverage for Code"
+        recommendation: "HR"
+        table_reference: "A.21"
+    additional_requirements:
+      - "Statement coverage ≥60% (highly recommended)"
+      - "Branch coverage ≥50% (highly recommended)"
+      - "All test cases executed and documented"
+      - "Defects tracked with severity classification"
+      - "Re-test results documented"
+    evidence_thresholds:
+      min_coverage_statement: 60
+      min_coverage_branch: 50
+      min_coverage_condition: 0
+      max_open_defects_critical: 0
+      max_open_defects_high: 3
+    test_requirements:
+      functional_testing: true
+      boundary_testing: true
+      error_handling_testing: true
+      fault_injection: false
+      independent_testing: false
+
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_id: "A.13"
+        technique_name: "Dynamic Analysis and Testing"
+        recommendation: "M"
+        table_reference: "A.13"
+      - technique_id: "A.21"
+        technique_name: "Test Coverage for Code"
+        recommendation: "M"
+        table_reference: "A.21"
+    additional_requirements:
+      - "Statement coverage ≥80% (highly recommended)"
+      - "Branch coverage 100% (MANDATORY)"
+      - "All requirements traced to test cases"
+      - "Zero open critical or high defects"
+      - "Independent review of test results (highly recommended)"
+      - "Memory leak testing (valgrind)"
+      - "MISRA C violations must be resolved before PASS"
+    evidence_thresholds:
+      min_coverage_statement: 80
+      min_coverage_branch: 100
+      min_coverage_condition: 0
+      max_open_defects_critical: 0
+      max_open_defects_high: 0
+    test_requirements:
+      functional_testing: true
+      boundary_testing: true
+      error_handling_testing: true
+      fault_injection: true
+      independent_testing: false
+
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_id: "A.13"
+        technique_name: "Dynamic Analysis and Testing"
+        recommendation: "M"
+        table_reference: "A.13"
+      - technique_id: "A.21"
+        technique_name: "Test Coverage for Code"
+        recommendation: "M"
+        table_reference: "A.21"
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "M"
+        table_reference: "A.14"
+    additional_requirements:
+      - "Statement coverage 100% (MANDATORY)"
+      - "Branch coverage 100% (MANDATORY)"
+      - "Condition coverage 100% (MANDATORY)"
+      - "Independent testing (MANDATORY)"
+      - "All requirements traced to test cases (MANDATORY)"
+      - "Zero open defects (MANDATORY for deployment)"
+      - "Fault injection testing (MANDATORY)"
+      - "Memory analysis (valgrind) - zero errors"
+      - "MISRA C compliance verified (zero mandatory violations)"
+      - "Cyclomatic complexity ≤10 verified"
+      - "Independent verification of test results (MANDATORY)"
+    evidence_thresholds:
+      min_coverage_statement: 100
+      min_coverage_branch: 100
+      min_coverage_condition: 100
+      max_open_defects_critical: 0
+      max_open_defects_high: 0
+    test_requirements:
+      functional_testing: true
+      boundary_testing: true
+      error_handling_testing: true
+      fault_injection: true
+      independent_testing: true
+
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_id: "A.13"
+        technique_name: "Dynamic Analysis and Testing"
+        recommendation: "M"
+        table_reference: "A.13"
+      - technique_id: "A.21"
+        technique_name: "Test Coverage for Code"
+        recommendation: "M"
+        table_reference: "A.21"
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "M"
+        table_reference: "A.14"
+    additional_requirements:
+      - "Statement coverage 100% (MANDATORY)"
+      - "Branch coverage 100% (MANDATORY)"
+      - "Condition coverage 100% (MANDATORY)"
+      - "MC/DC coverage 100% (highly recommended)"
+      - "Independent testing (MANDATORY)"
+      - "All requirements traced to test cases (MANDATORY)"
+      - "Zero open defects (MANDATORY for deployment)"
+      - "Fault injection testing (MANDATORY)"
+      - "Memory analysis (valgrind) - zero errors"
+      - "MISRA C compliance verified (zero mandatory and required violations)"
+      - "Cyclomatic complexity ≤10 verified"
+      - "Independent verification of test results (MANDATORY)"
+      - "Formal test case review (MANDATORY)"
+    evidence_thresholds:
+      min_coverage_statement: 100
+      min_coverage_branch: 100
+      min_coverage_condition: 100
+      max_open_defects_critical: 0
+      max_open_defects_high: 0
+    test_requirements:
+      functional_testing: true
+      boundary_testing: true
+      error_handling_testing: true
+      fault_injection: true
+      independent_testing: true
+
+evidence_requirements:
+  - evidence_id: "test-execution-summary"
+    description: "Summary of all test cases executed with pass/fail results"
+    mandatory_sil: 0
+    source: "TST agent, Unity/CUnit test framework"
+    format: "Structured table in markdown with module, test suite, executed, passed, failed, blocked counts"
+    storage_path: "deliverables/implementation/Software-Component-Test-Report.md"
+    automation_level: "automatic"
+    collect_on_agent_action: "/tst execute-component-tests"
+    verification_criteria:
+      - "All test cases from Component Test Specification executed"
+      - "Pass/fail status recorded for each test case"
+      - "Execution date recorded"
+      - "Test environment documented"
+
+  - evidence_id: "test-case-results-detailed"
+    description: "Detailed results for each test case including inputs, expected results, actual results"
+    mandatory_sil: 0
+    source: "TST agent, test execution logs"
+    format: "Structured section per test case with code blocks for inputs/outputs"
+    storage_path: "deliverables/implementation/Software-Component-Test-Report.md Section 4"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/tst execute-component-tests"
+    verification_criteria:
+      - "Test case ID matches Component Test Specification"
+      - "Requirement ID traced"
+      - "Expected result matches test specification"
+      - "Actual result documented"
+      - "Pass/fail status clear"
+
+  - evidence_id: "coverage-report"
+    description: "Code coverage metrics (statement, branch, condition) per module and overall"
+    mandatory_sil: 1
+    source: "gcov/lcov, Bullseye Coverage"
+    format: "HTML report + structured table in markdown"
+    storage_path: "tests/coverage/index.html, deliverables/implementation/Software-Component-Test-Report.md Section 5"
+    automation_level: "automatic"
+    collect_on_agent_action: "/tst measure-coverage"
+    verification_criteria:
+      - "Coverage measured for all modules"
+      - "Statement, branch, condition coverage reported"
+      - "Coverage thresholds met per SIL level"
+      - "Uncovered code justified"
+
+  - evidence_id: "uncovered-code-analysis"
+    description: "Analysis of uncovered code with justification for each uncovered line/branch"
+    mandatory_sil: 2
+    source: "VER agent reviewing lcov output"
+    format: "Structured table with module, function, lines, reason, justification"
+    storage_path: "deliverables/implementation/Software-Component-Test-Report.md Section 5.2"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver analyze-uncovered-code"
+    verification_criteria:
+      - "All uncovered lines identified"
+      - "Each uncovered line has justification"
+      - "Justifications approved by VER"
+      - "Coverage waivers documented"
+
+  - evidence_id: "defect-log"
+    description: "Complete log of all defects found during testing with severity, status, resolution"
+    mandatory_sil: 0
+    source: "TST agent, defect tracking"
+    format: "Structured table with defect ID, severity, description, module, test case, status, resolution"
+    storage_path: "deliverables/implementation/Software-Component-Test-Report.md Section 6, tests/defects.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/tst track-defect"
+    verification_criteria:
+      - "All defects logged with unique ID"
+      - "Severity classification (Critical, High, Medium, Low)"
+      - "Root cause documented"
+      - "Resolution documented"
+      - "Re-test results documented"
+
+  - evidence_id: "retest-results"
+    description: "Results of re-testing after defect fixes"
+    mandatory_sil: 0
+    source: "TST agent, re-test execution"
+    format: "Structured table with defect ID, original test, re-test date, result, status"
+    storage_path: "deliverables/implementation/Software-Component-Test-Report.md Section 6.3"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/tst retest-defect"
+    verification_criteria:
+      - "All fixed defects re-tested"
+      - "Re-test pass/fail status documented"
+      - "Regression testing performed"
+      - "All critical/high defects closed"
+
+  - evidence_id: "requirements-traceability"
+    description: "Traceability from requirements to test cases with coverage status"
+    mandatory_sil: 1
+    source: "TST agent, CM agent"
+    format: "Structured table with requirement ID, test cases, execution status, result, coverage"
+    storage_path: "deliverables/implementation/Software-Component-Test-Report.md Section 7"
+    automation_level: "automatic"
+    collect_on_agent_action: "/cm trace-requirements-to-tests"
+    verification_criteria:
+      - "All requirements traced to test cases"
+      - "All test cases traced to requirements"
+      - "No orphaned test cases"
+      - "No untested requirements"
+
+  - evidence_id: "quality-metrics"
+    description: "Quality metrics including cyclomatic complexity, MISRA C violations, static analysis results"
+    mandatory_sil: 2
+    source: "VER agent, cppcheck, lizard"
+    format: "Structured table with metric, value, target, status"
+    storage_path: "deliverables/implementation/Software-Component-Test-Report.md Section 8.2"
+    automation_level: "automatic"
+    collect_on_agent_action: "/ver measure-quality-metrics"
+    verification_criteria:
+      - "Cyclomatic complexity ≤ threshold per SIL"
+      - "MISRA C violations = 0 mandatory (SIL 2+)"
+      - "Static analysis warnings = 0 critical"
+      - "Memory leaks = 0 (valgrind)"
+
+  - evidence_id: "pass-fail-assessment"
+    description: "Overall pass/fail assessment with criteria checklist and recommendation"
+    mandatory_sil: 0
+    source: "TST agent"
+    format: "Structured section with pass criteria checklist and overall result"
+    storage_path: "deliverables/implementation/Software-Component-Test-Report.md Section 9"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/tst assess-component-tests"
+    verification_criteria:
+      - "All pass criteria evaluated"
+      - "Overall PASS/FAIL determination clear"
+      - "Outstanding issues documented"
+      - "Recommendation for integration provided"
+
+  - evidence_id: "test-artifacts"
+    description: "Complete test artifacts including logs, coverage reports, memory check reports"
+    mandatory_sil: 1
+    source: "TST agent, test tools"
+    format: "Directory of files (logs, HTML reports, XML data)"
+    storage_path: "tests/artifacts/"
+    automation_level: "automatic"
+    collect_on_agent_action: "/tst execute-component-tests"
+    verification_criteria:
+      - "Test execution logs complete"
+      - "Coverage reports generated"
+      - "Memory check reports available (SIL 2+)"
+      - "Static analysis reports available (SIL 2+)"
+
+  - evidence_id: "independent-verification-statement"
+    description: "Statement from independent Verifier that test results have been reviewed and verified (SIL 3-4)"
+    mandatory_sil: 3
+    source: "VER agent (independent)"
+    format: "Signed statement in Approvals section"
+    storage_path: "deliverables/implementation/Software-Component-Test-Report.md Approvals section"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver approve-component-test-report"
+    verification_criteria:
+      - "Verifier is independent from TST, IMP, DES"
+      - "Verifier signature and date recorded"
+      - "Verification statement covers all test results"
+      - "Any concerns documented"
+
+depends_on:
+  - deliverable_id: "DOC-020-COMP-TEST-SPEC"
+    reason: "Defines all test cases that must be executed"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-018-SOURCE-CODE"
+    reason: "Source code being tested"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Traceability to design specifications"
+    dependency_type: "informational"
+  - deliverable_id: "DOC-006-SRS"
+    reason: "Traceability to requirements"
+    dependency_type: "informational"
+  - deliverable_id: "DOC-004-SVP"
+    reason: "Defines test approach and coverage thresholds"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-019-SOURCE-CODE-VER"
+    reason: "Test results used as verification evidence"
+  - deliverable_id: "DOC-022-INTEGRATION-TEST-SPEC"
+    reason: "Tested components passed to integration phase"
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Overall quality evidence for validation"
+
+verification_criteria:
+  completeness:
+    - "All test cases from Component Test Specification executed"
+    - "All modules tested"
+    - "All requirements traced to test cases"
+    - "All defects documented and resolved (or justified)"
+    - "Coverage analysis complete for all modules"
+    - "Pass/fail assessment provided"
+    - "Recommendation for integration provided"
+  
+  correctness:
+    - "Test results accurately reflect actual test execution"
+    - "Coverage metrics calculated correctly"
+    - "Defect severity classification appropriate"
+    - "Traceability to requirements accurate"
+    - "Pass criteria applied correctly per SIL level"
+  
+  consistency:
+    - "Test case IDs match Component Test Specification"
+    - "Requirement IDs match Software Requirements Specification"
+    - "Module names match Software Design Specification"
+    - "Coverage thresholds match SIL level requirements"
+    - "No contradictions between test results and assessment"
+  
+  traceability:
+    - "Every test case traced to Component Test Specification"
+    - "Every requirement traced to test results"
+    - "Every defect traced to test case and module"
+    - "Coverage gaps traced to uncovered code analysis"
+    - "Bi-directional traceability maintained"
+
+configuration_management:
+  baseline_criteria:
+    - "All test cases executed successfully (or justified)"
+    - "Coverage thresholds met per SIL level"
+    - "Zero open critical or high defects"
+    - "Independent verification complete (SIL 3-4)"
+    - "QA approval obtained"
+  
+  change_control:
+    - "Changes to test results require re-execution"
+    - "Defect fixes require re-test and updated report"
+    - "Coverage improvements require updated analysis"
+    - "Version controlled with test specification"
+  
+  versioning:
+    - "Version number: X.Y (X = major test cycle, Y = defect fix iteration)"
+    - "Each re-test cycle increments minor version"
+    - "Major version increments with new test specification"
+  
+  archival:
+    - "Archive test artifacts (logs, coverage, memory reports)"
+    - "Archive test execution environment configuration"
+    - "Retain for project lifetime + 10 years (railway requirement)"
+
+en50128_references:
+  - section: "7.5.4.6"
+    description: "Component Test Report - documents results of component testing"
+  - section: "7.4.4.12"
+    description: "Software Module Testing Report required"
+  - section: "Table A.13"
+    description: "Dynamic Analysis and Testing techniques"
+  - section: "Table A.21"
+    description: "Test Coverage for Code - statement, branch, condition requirements by SIL"
+  - section: "Table A.14"
+    description: "Functional and Black-Box Testing"
+  - section: "5.3.4"
+    description: "Tester role responsibilities"
+  - section: "5.3.5"
+    description: "Verifier role - independent verification (SIL 3-4)"
+
+notes: |
+  **Purpose**: The Component Test Report documents the execution and results of all component (unit) tests
+  defined in the Component Test Specification. It provides evidence that all software modules have been
+  thoroughly tested and meet quality criteria before integration.
+
+  **Key Characteristics**:
+  1. **Test Execution Evidence**: Documents actual test execution with pass/fail results
+  2. **Coverage Evidence**: Provides coverage metrics (statement, branch, condition per SIL)
+  3. **Defect Tracking**: Complete log of defects found, fixed, and re-tested
+  4. **Quality Metrics**: Code quality metrics (complexity, MISRA C, static analysis)
+  5. **Traceability**: Traces requirements → test cases → results
+  6. **Pass/Fail Assessment**: Clear recommendation for integration
+
+  **SIL-Specific Requirements**:
+  - **SIL 0**: Basic test execution documentation
+  - **SIL 1-2**: Coverage metrics (statement ≥60%, branch 100% for SIL 2)
+  - **SIL 3-4**: 100% statement, branch, condition coverage + independent verification
+
+  **Workflow**:
+  1. TST executes all test cases from Component Test Specification
+  2. TST measures coverage using gcov/lcov
+  3. TST logs all defects with severity classification
+  4. IMP fixes defects
+  5. TST re-tests fixed defects
+  6. VER analyzes uncovered code and justifies (SIL 2+)
+  7. TST creates Component Test Report
+  8. QUA reviews report for template compliance (1 pass, SIL 3-4)
+  9. VER performs independent verification (SIL 3-4)
+  10. QUA approves final report
+
+  **Pass Criteria** (SIL 3-4):
+  - All test cases executed: 100%
+  - Test pass rate: ≥95%
+  - Coverage: Statement 100%, Branch 100%, Condition 100%
+  - Open defects: 0 critical, 0 high
+  - MISRA C violations: 0 mandatory, 0 required
+  - Cyclomatic complexity: ≤10 all functions
+  - Independent verification: Complete
+
+  **Critical Dependencies**:
+  - Component Test Specification defines WHAT to test
+  - Component Test Report documents RESULTS of testing
+  - If test results FAIL, components must be reworked before integration
+  - Report feeds into Source Code Verification Report as evidence
+
+  **Template Compliance**:
+  - Document ID format: DOC-021-COMP-TEST-REPORT-YYYY-NNN
+  - Approvals section MUST include VER signature (SIL 3-4)
+  - All sections from template MUST be present
+  - Coverage tables MUST be populated with actual values
+  - Defect log MUST show resolution status
+
+  **Evidence Automation**:
+  - Test execution results: AUTOMATIC (Unity/CUnit XML output)
+  - Coverage metrics: AUTOMATIC (gcov/lcov HTML + XML)
+  - Defect tracking: SEMI-AUTOMATIC (TST logs, tool tracks)
+  - Quality metrics: AUTOMATIC (cppcheck, lizard, valgrind)
+  - Traceability: AUTOMATIC (CM tool, parsing test IDs)
+  - Pass/fail assessment: SEMI-AUTOMATIC (automated checks + TST judgment)

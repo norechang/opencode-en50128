@@ -1,30 +1,45 @@
 # Project Status Report
 
-**Document ID:** DOC-SR-YYYY-NNN  
-**Project:** [Project Name]  
-**Reporting Period:** [Week/Month] [YYYY-MM-DD to YYYY-MM-DD]  
-**Report Date:** YYYY-MM-DD  
-**SIL Level:** [0 | 1 | 2 | 3 | 4]
+**TEMPLATE VERSION**: 2.0  
+**REFERENCE**: EN 50128:2011 Section [X.Y]
 
 ---
 
-## Executive Summary
+## STANDARD HEADER
 
-**Overall Project Status:** 🟢 On Track | 🟡 At Risk | 🔴 Critical Issues
+| Field | Value |
+|-------|-------|
+| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Version** | [X.Y] |
+| **Date** | [YYYY-MM-DD] |
+| **Project** | [Project Name] |
+| **SIL Level** | [0, 1, 2, 3, or 4] |
+| **Author** | [Name], [Role] |
+| **Reviewer** | [Name], [Role] |
+| **Approver** | [Name], [Role] |
+| **Status** | [Draft \| Review \| Approved \| Baseline] |
 
-**Key Highlights This Period:**
-- [Highlight 1 - major accomplishment]
-- [Highlight 2 - major accomplishment]
-- [Highlight 3 - major accomplishment]
+## DOCUMENT CONTROL
 
-**Top Issues/Risks:**
-1. [Issue/Risk 1 - brief description]
-2. [Issue/Risk 2 - brief description]
-3. [Issue/Risk 3 - brief description]
+| Version | Date | Author | Changes | Approved By |
+|---------|------|--------|---------|-------------|
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
 
-**Decisions Required:**
-- [Decision 1 - what needs to be decided and by whom]
-- [Decision 2 - what needs to be decided and by whom]
+## APPROVALS
+
+**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
+**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
+
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| **Author** | [Name] | | YYYY-MM-DD |
+| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
+| **QA Manager** | [Name] | | YYYY-MM-DD |
+| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
+| **Project Manager** | [Name] | | YYYY-MM-DD |
+| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
 
 ---
 

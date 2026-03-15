@@ -1,0 +1,460 @@
+# Software Assessment Plan
+# EN 50128 Deliverable #45 - Section 6.4.4.4-6.4.4.7
+# SIL 3-4 ONLY
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-045-SAP"
+number: 45
+name: "Software Assessment Plan"
+abbreviation: "SAP"
+
+# ===== Lifecycle Context =====
+phase: "assessment"
+standard_section: "6.4.4.4"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "ASR"
+first_check: "VER"
+second_check: "NONE"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-quality/templates/Software-Assessment-Plan-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: false
+    techniques: []
+    additional_requirements:
+      - "No assessment required for SIL 0 per 6.4.1.2"
+      - "ISO 9001 certificate sufficient for SIL 0"
+    evidence_thresholds: {}
+  
+  sil_1:
+    mandatory: false
+    techniques: []
+    additional_requirements:
+      - "Assessment RECOMMENDED for SIL 1 but not MANDATORY"
+      - "If assessment performed, follow SIL 1 requirements"
+    evidence_thresholds: {}
+  
+  sil_2:
+    mandatory: false
+    techniques: []
+    additional_requirements:
+      - "Assessment RECOMMENDED for SIL 2 but not MANDATORY"
+      - "If assessment performed, follow SIL 2 requirements"
+    evidence_thresholds: {}
+  
+  sil_3:
+    mandatory: true
+    techniques: []
+    additional_requirements:
+      - "Independent Assessor MANDATORY per 6.4.4.1"
+      - "Independence per 5.1.2.6 and 5.1.2.7 (MANDATORY)"
+      - "Software Assessment Plan SHALL be written per 6.4.4.4 (MANDATORY)"
+      - "Aspects with which assessment deals per 6.4.4.5(a) (MANDATORY)"
+      - "Activities throughout assessment and sequential link per 6.4.4.5(b) (MANDATORY)"
+      - "Documents to be considered per 6.4.4.5(c) (MANDATORY)"
+      - "Pass/fail criteria and non-conformance handling per 6.4.4.5(d) (MANDATORY)"
+      - "Requirements for Assessment Report content and form per 6.4.4.5(e) (MANDATORY)"
+      - "Access to all project documentation per 6.4.4.3 (MANDATORY)"
+      - "Assessor agrees scope/contents of SVaP per 6.4.4.14 (MANDATORY)"
+      - "Early Assessor involvement recommended per NOTE 6.4.4.15"
+      - "Verification per 6.4.4.7: readability, traceability, 6.4.4.5 requirements, internal consistency (MANDATORY)"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      cyclomatic_complexity_max: 10
+  
+  sil_4:
+    mandatory: true
+    techniques: []
+    additional_requirements:
+      - "Independent Assessor MANDATORY per 6.4.4.1"
+      - "Independence per 5.1.2.6 and 5.1.2.7 (MANDATORY)"
+      - "Software Assessment Plan SHALL be written per 6.4.4.4 (MANDATORY)"
+      - "Aspects with which assessment deals per 6.4.4.5(a) (MANDATORY)"
+      - "Activities throughout assessment and sequential link per 6.4.4.5(b) (MANDATORY)"
+      - "Documents to be considered per 6.4.4.5(c) (MANDATORY)"
+      - "Pass/fail criteria and non-conformance handling per 6.4.4.5(d) (MANDATORY)"
+      - "Requirements for Assessment Report content and form per 6.4.4.5(e) (MANDATORY)"
+      - "Access to all project documentation per 6.4.4.3 (MANDATORY)"
+      - "Assessor agrees scope/contents of SVaP per 6.4.4.14 (MANDATORY)"
+      - "Early Assessor involvement recommended per NOTE 6.4.4.15"
+      - "Verification per 6.4.4.7: readability, traceability, 6.4.4.5 requirements, internal consistency (MANDATORY)"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      test_coverage_mcdc: 100
+      cyclomatic_complexity_max: 10
+
+# ===== Required Content =====
+required_content:
+  sil_0:
+    - "Not applicable - no assessment required per 6.4.1.2"
+  
+  sil_1:
+    - "Optional - if performed, use SIL 1 assessment criteria"
+  
+  sil_2:
+    - "Optional - if performed, use SIL 2 assessment criteria"
+  
+  sil_3:
+    - "Document Control (ID, version, approval, change history)"
+    - "Assessor Information (name, qualifications, independence evidence per 5.1.2.6-5.1.2.7)"
+    - "Assessment Scope (aspects covered per 6.4.4.5(a))"
+    - "Assessment Activities (activities and sequential link to engineering per 6.4.4.5(b))"
+    - "Documents to be Considered (list per 6.4.4.5(c))"
+    - "Pass/Fail Criteria (criteria and non-conformance handling per 6.4.4.5(d))"
+    - "Assessment Report Requirements (content and form per 6.4.4.5(e))"
+    - "Access to Documentation (procedures per 6.4.4.3)"
+    - "SVaP Agreement (scope and contents per 6.4.4.14)"
+    - "Audit and Inspection Plan (optional per 6.4.4.15)"
+    - "Assessment Schedule and Milestones"
+    - "Assessment Resources and Tools"
+  
+  sil_4:
+    - "Document Control (ID, version, approval, change history)"
+    - "Assessor Information (name, qualifications, independence evidence per 5.1.2.6-5.1.2.7)"
+    - "Assessment Scope (aspects covered per 6.4.4.5(a))"
+    - "Assessment Activities (activities and sequential link to engineering per 6.4.4.5(b))"
+    - "Documents to be Considered (list per 6.4.4.5(c))"
+    - "Pass/Fail Criteria (criteria and non-conformance handling per 6.4.4.5(d))"
+    - "Assessment Report Requirements (content and form per 6.4.4.5(e))"
+    - "Access to Documentation (procedures per 6.4.4.3)"
+    - "SVaP Agreement (scope and contents per 6.4.4.14)"
+    - "Audit and Inspection Plan (optional per 6.4.4.15)"
+    - "Assessment Schedule and Milestones"
+    - "Assessment Resources and Tools"
+    - "SIL 4 specific assessment criteria (enhanced rigor)"
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "assessor-independence-evidence"
+    description: "Evidence of Assessor independence per 5.1.2.6 and 5.1.2.7"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown"
+    storage_path: "docs/assessment/assessor-independence.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr provide-independence-evidence"
+    verification_criteria:
+      - "Assessor not part of development team"
+      - "Assessor not reporting to project management"
+      - "Assessor has no financial interest in project outcome"
+      - "Assessor qualifications documented per Annex B Table B.8"
+      - "Independence maintained throughout lifecycle"
+
+  - evidence_id: "assessment-scope-definition"
+    description: "Assessment scope per 6.4.4.5(a)"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown"
+    storage_path: "docs/assessment/assessment-scope.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr define-assessment-scope"
+    verification_criteria:
+      - "Aspects of assessment clearly defined"
+      - "Lifecycle phases to be assessed identified"
+      - "Deliverables to be assessed identified"
+      - "Processes to be assessed identified"
+      - "Techniques to be assessed identified"
+      - "SIL-specific requirements addressed"
+
+  - evidence_id: "assessment-activities-plan"
+    description: "Assessment activities and sequential link per 6.4.4.5(b)"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown"
+    storage_path: "docs/assessment/assessment-activities.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr plan-assessment-activities"
+    verification_criteria:
+      - "Assessment activities defined"
+      - "Sequential link to engineering activities"
+      - "Timing of assessment activities"
+      - "Assessment milestones identified"
+      - "Review and audit points defined"
+      - "Test witnessing plan (if applicable)"
+
+  - evidence_id: "documents-list"
+    description: "Documents to be considered per 6.4.4.5(c)"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown table"
+    storage_path: "docs/assessment/documents-list.md"
+    automation_level: "semi-automated"
+    collect_on_agent_action: "/asr list-documents"
+    verification_criteria:
+      - "All deliverables per Table C.1 listed"
+      - "System Safety Requirements Specification included per 6.4.2"
+      - "Software Requirements Specification included per 6.4.2"
+      - "All lifecycle deliverables included per 6.4.2"
+      - "Supporting documents identified"
+      - "Document versions specified"
+
+  - evidence_id: "pass-fail-criteria"
+    description: "Pass/fail criteria and non-conformance handling per 6.4.4.5(d)"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown"
+    storage_path: "docs/assessment/pass-fail-criteria.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr define-pass-fail-criteria"
+    verification_criteria:
+      - "Pass criteria defined for each assessment aspect"
+      - "Fail criteria defined for each assessment aspect"
+      - "Non-conformance classification (major/minor)"
+      - "Non-conformance handling procedures"
+      - "Resolution process for non-conformances"
+      - "Escalation path defined"
+
+  - evidence_id: "assessment-report-requirements"
+    description: "Assessment Report content and form requirements per 6.4.4.5(e)"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown"
+    storage_path: "docs/assessment/report-requirements.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr define-report-requirements"
+    verification_criteria:
+      - "Report structure defined"
+      - "Report content requirements defined per 6.4.4.17-6.4.4.19"
+      - "Report format specified"
+      - "Conclusion and recommendations requirements per 6.4.4.17"
+      - "Non-conformity listing requirements per 6.4.4.19"
+      - "Activities summary requirements per 6.4.4.18"
+
+  - evidence_id: "svap-agreement"
+    description: "Assessor agreement on SVaP scope and contents per 6.4.4.14"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown (agreement document)"
+    storage_path: "docs/assessment/svap-agreement.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr agree-svap"
+    verification_criteria:
+      - "SVaP scope reviewed by Assessor"
+      - "SVaP contents agreed by Assessor"
+      - "Assessor presence during testing specified"
+      - "Validation criteria agreed"
+      - "Acceptance criteria agreed"
+      - "Agreement documented and signed"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-006-SRS"
+    reason: "Software Requirements Specification is input per 6.4.2"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-001-SQAP"
+    reason: "Quality assurance plan informs assessment scope"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-004-SVP"
+    reason: "Verification plan informs assessment activities"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-005-SVAP"
+    reason: "Validation plan requires Assessor agreement per 6.4.4.14"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-046-SAR"
+    reason: "Assessment Report must meet Assessment Plan requirements per 6.4.4.17"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "Aspects with which assessment deals per 6.4.4.5(a) (MANDATORY)"
+    - "Activities throughout assessment and sequential link per 6.4.4.5(b) (MANDATORY)"
+    - "Documents to be considered per 6.4.4.5(c) (MANDATORY)"
+    - "Pass/fail criteria and non-conformance handling per 6.4.4.5(d) (MANDATORY)"
+    - "Requirements for Assessment Report content and form per 6.4.4.5(e) (MANDATORY)"
+    - "All requirements per 6.4.4.5 addressed (MANDATORY)"
+  
+  correctness:
+    - "Assessment scope appropriate for SIL level"
+    - "Assessment activities technically feasible"
+    - "Pass/fail criteria appropriate and measurable"
+    - "Document list complete per Table C.1"
+    - "Report requirements meet standard per 6.4.4.17-6.4.4.19"
+    - "Assessor independence requirements met per 5.1.2.6-5.1.2.7"
+  
+  consistency:
+    - "Internal consistency per 6.4.4.7(b) (MANDATORY SIL 3+)"
+    - "Consistent with SQAP (DOC-001)"
+    - "Consistent with SVP (DOC-004)"
+    - "Consistent with SVaP (DOC-005)"
+    - "No conflicting assessment criteria"
+  
+  traceability:
+    - "Traceability per 5.3.2.7-5.3.2.10 and 6.5.4.14-6.5.4.17 per 6.4.4.7(a) (MANDATORY SIL 3+)"
+    - "Traceability to System Safety Requirements Specification"
+    - "Traceability to Software Requirements Specification"
+    - "Traceability to EN 50128 requirements"
+    - "Traceability to all deliverables in Table C.1"
+  
+  readability:
+    - "Readability per 5.3.2.7-5.3.2.10 per 6.4.4.7(a) (MANDATORY SIL 3+)"
+    - "Clear and unambiguous language"
+    - "Consistent terminology"
+    - "Target audience appropriateness (Assessor, VER, project team)"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Software Assessment Plan Baseline"
+  baseline_trigger: "After VER approval and before assessment activities begin"
+  change_control: "All changes via ASR, impact assessment on assessment schedule and activities"
+  versioning: "Semantic versioning (MAJOR.MINOR.PATCH)"
+  storage_location: "config/baselines/assessment-plan/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "6.4"
+    title: "Software assessment"
+    relevance: "Primary section defining software assessment requirements"
+  - section: "6.4.1.1"
+    title: "Assessment objective"
+    relevance: "Evaluate lifecycle processes and outputs for SIL and fitness"
+  - section: "6.4.1.2"
+    title: "SIL 0 exception"
+    relevance: "No assessment required for SIL 0 if ISO 9001 certificate available"
+  - section: "6.4.2"
+    title: "Input documents"
+    relevance: "System Safety Requirements Specification, Software Requirements Specification, all necessary documents"
+  - section: "6.4.3"
+    title: "Output documents"
+    relevance: "Software Assessment Plan, Software Assessment Report, Software Assessment Verification Report"
+  - section: "6.4.4.1"
+    title: "Independent Assessor"
+    relevance: "Assessor SHALL be independent per 5.1.2.6 and 5.1.2.7 (MANDATORY SIL 3-4)"
+  - section: "6.4.4.3"
+    title: "Access to documentation"
+    relevance: "Assessor SHALL have access to all project documentation throughout development (MANDATORY)"
+  - section: "6.4.4.4"
+    title: "Software Assessment Plan"
+    relevance: "Software Assessment Plan SHALL be written under Assessor responsibility (MANDATORY SIL 3-4)"
+  - section: "6.4.4.5"
+    title: "Assessment Plan scope"
+    relevance: "Plan SHALL include: (a) aspects, (b) activities, (c) documents, (d) pass/fail, (e) report requirements (ALL MANDATORY)"
+  - section: "6.4.4.5(a)"
+    title: "Assessment aspects"
+    relevance: "Aspects with which assessment deals (MANDATORY)"
+  - section: "6.4.4.5(b)"
+    title: "Assessment activities"
+    relevance: "Activities and sequential link to engineering (MANDATORY)"
+  - section: "6.4.4.5(c)"
+    title: "Documents to be considered"
+    relevance: "Documents list (MANDATORY)"
+  - section: "6.4.4.5(d)"
+    title: "Pass/fail criteria"
+    relevance: "Pass/fail criteria and non-conformance handling (MANDATORY)"
+  - section: "6.4.4.5(e)"
+    title: "Report requirements"
+    relevance: "Requirements for Assessment Report content and form (MANDATORY)"
+  - section: "6.4.4.7"
+    title: "Assessment Plan verification"
+    relevance: "Verification of readability, traceability, 6.4.4.5 requirements, internal consistency (MANDATORY)"
+  - section: "6.4.4.14"
+    title: "SVaP agreement"
+    relevance: "Assessor SHALL agree scope and contents of Software Validation Plan (MANDATORY SIL 3-4)"
+  - section: "6.4.4.15"
+    title: "Audits and inspections"
+    relevance: "Assessor MAY carry out audits and inspections, early involvement recommended"
+  - section: "5.1.2.6"
+    title: "Independence requirements"
+    relevance: "Independence definition for Assessor role"
+  - section: "5.1.2.7"
+    title: "Independence criteria"
+    relevance: "Criteria for establishing independence"
+  - section: "5.3.2.7-5.3.2.10"
+    title: "Readability requirements"
+    relevance: "General requirements for readability per 6.4.4.7(a) (MANDATORY SIL 3+)"
+  - section: "6.5.4.14-6.5.4.17"
+    title: "Traceability requirements"
+    relevance: "General requirements for traceability per 6.4.4.7(a) (MANDATORY SIL 3+)"
+  - section: "Annex B Table B.8"
+    title: "Assessor competency"
+    relevance: "Competency requirements for Assessor role"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Software Assessment Plan is deliverable #45, written by ASR, checked by VER"
+
+# ===== Notes =====
+notes: |
+  **Software Assessment Plan (Deliverable #45)**
+  
+  **Applicability**: MANDATORY for SIL 3-4 ONLY per EN 50128 6.4.1.1
+  - SIL 0: No assessment required if ISO 9001 certificate available per 6.4.1.2
+  - SIL 1-2: Assessment recommended but not mandatory
+  - SIL 3-4: Independent assessment MANDATORY per 6.4.4.1
+  
+  **Purpose**: Define the plan for independent assessment to evaluate that lifecycle processes
+  and outputs are such that the software is of the defined SIL and fit for its intended application
+  per EN 50128 Section 6.4.
+  
+  **Key Requirements** (EN 50128 6.4.4.5 - ALL MANDATORY for SIL 3-4):
+  1. **Aspects with which assessment deals** (6.4.4.5(a))
+  2. **Activities throughout assessment and sequential link to engineering** (6.4.4.5(b))
+  3. **Documents to be considered** (6.4.4.5(c))
+  4. **Pass/fail criteria and non-conformance handling** (6.4.4.5(d))
+  5. **Requirements for Assessment Report content and form** (6.4.4.5(e))
+  
+  **Critical Requirements**:
+  - **Independent Assessor** per 5.1.2.6 and 5.1.2.7 (MANDATORY SIL 3-4)
+  - **Access to all project documentation** throughout development per 6.4.4.3 (MANDATORY)
+  - **Assessor agrees SVaP scope and contents** per 6.4.4.14 (MANDATORY SIL 3-4)
+  - **Early Assessor involvement** recommended per NOTE 6.4.4.15
+  
+  **Assessment Scope** (EN 50128 6.4.4.8-6.4.4.15):
+  - Software fit for intended purpose per 6.4.4.8
+  - Appropriate techniques from Annex A selected and applied per 6.4.4.9
+  - Configuration and change management system per 6.4.4.10
+  - Competency of project staff per Annex B per 6.4.4.11
+  - Safety-related application conditions per 6.4.4.12
+  - Verification and validation activities per 6.4.4.13
+  - Agreement on SVaP scope and contents per 6.4.4.14
+  - Audits and inspections (optional) per 6.4.4.15
+  
+  **Verification Requirements** (EN 50128 6.4.4.7 - MANDATORY SIL 3-4):
+  - Readability per 5.3.2.7-5.3.2.10 (MANDATORY)
+  - Traceability per 6.5.4.14-6.5.4.17 (MANDATORY)
+  - Requirements per 6.4.4.5 met (MANDATORY)
+  - Internal consistency (MANDATORY)
+  - Results recorded in Software Assessment Verification Report
+  
+  **ASR Agent Responsibility**:
+  - Establish independence per 5.1.2.6 and 5.1.2.7
+  - Define assessment scope per 6.4.4.5(a)
+  - Plan assessment activities and sequential link per 6.4.4.5(b)
+  - List all documents to be considered per 6.4.4.5(c)
+  - Define pass/fail criteria and non-conformance handling per 6.4.4.5(d)
+  - Define Assessment Report requirements per 6.4.4.5(e)
+  - Agree SVaP scope and contents with VAL per 6.4.4.14
+  - Plan audits and inspections (optional) per 6.4.4.15
+  - Early involvement in project per NOTE 6.4.4.15
+  
+  **VER Agent Responsibility**:
+  - Verify readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+  - Verify traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+  - Verify requirements per 6.4.4.5 met (MANDATORY)
+  - Verify internal consistency (MANDATORY SIL 3+)
+  - Record results in Software Assessment Verification Report per 6.4.4.7
+  
+  **Independence Requirements** (5.1.2.6 and 5.1.2.7):
+  - Assessor not part of development team
+  - Assessor not reporting to project management
+  - Assessor has no financial interest in project outcome
+  - Assessor maintains independence throughout lifecycle
+  - Independence evidence documented
+  
+  **Relation to Other Deliverables**:
+  - Input: System Safety Requirements Specification, Software Requirements Specification per 6.4.2
+  - Informs: Software Assessment Report (DOC-046) per 6.4.4.17
+  - Verified by: Software Assessment Verification Report per 6.4.4.7
+  - Agreement with: Software Validation Plan (DOC-005) per 6.4.4.14

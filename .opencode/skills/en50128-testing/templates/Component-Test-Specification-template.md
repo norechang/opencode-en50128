@@ -1,12 +1,7 @@
 # Component Test Specification
 
-**Document ID**: DOC-COMPTEST-YYYY-NNN  
-**Version**: 1.0  
-**Date**: YYYY-MM-DD  
-**Project**: [Project Name]  
-**SIL Level**: [0, 1, 2, 3, or 4]  
-**Author**: Tester (TST)  
-**Status**: Approved
+**TEMPLATE VERSION**: 1.0  
+**REFERENCE**: EN 50128:2011 Section [X.Y], Table [A.N]
 
 ---
 
@@ -14,35 +9,37 @@
 
 | Field | Value |
 |-------|-------|
-| **Document ID** | DOC-COMPTEST-YYYY-NNN |
-| **Version** | 1.0 |
-| **Date** | YYYY-MM-DD |
+| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Version** | [X.Y] |
+| **Date** | [YYYY-MM-DD] |
 | **Project** | [Project Name] |
 | **SIL Level** | [0, 1, 2, 3, or 4] |
-| **Author** | Tester (TST) |
-| **Reviewer** | [Name, Role] |
-| **Approver** | [Name], QA Manager |
-| **Status** | Approved |
-
----
+| **Author** | [Name], [Role] |
+| **Reviewer** | [Name], [Role] |
+| **Approver** | [Name], [Role] |
+| **Status** | [Draft \| Review \| Approved \| Baseline] |
 
 ## DOCUMENT CONTROL
 
 | Version | Date | Author | Changes | Approved By |
 |---------|------|--------|---------|-------------|
-| 0.1 | YYYY-MM-DD | TST | Initial draft | - |
-| 1.0 | YYYY-MM-DD | TST | First approved version | QA Manager |
-
----
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
 
 ## APPROVALS
 
+**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
+**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
+
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Author (Tester)** | [Name] | | YYYY-MM-DD |
-| **Reviewer** | [Name] | | YYYY-MM-DD |
+| **Author** | [Name] | | YYYY-MM-DD |
+| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
 | **QA Manager** | [Name] | | YYYY-MM-DD |
-| **Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
+| **Project Manager** | [Name] | | YYYY-MM-DD |
+| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
 
 ---
 

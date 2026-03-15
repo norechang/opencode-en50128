@@ -1,0 +1,525 @@
+# Software Architecture and Design Verification Report - Deliverable Metadata
+# EN 50128:2011 Section 7.3.4.20-21, Section 7.4.4.12-13, Section 6.2.4.12-13, Table C.1
+# This file defines the metadata, requirements, evidence, and verification criteria
+# for the Software Architecture and Design Verification Report deliverable.
+
+deliverable_id: "DOC-012-ARCHITECTURE-DESIGN-VER"
+number: 12
+name: "Software Architecture and Design Verification Report"
+abbreviation: "Arch/Des Ver Rpt"
+phase: "architecture"
+standard_section: "7.3.4.20"
+written_by: "VER"
+first_check: "NONE"
+second_check: "VAL"
+template_path: ".opencode/skills/en50128-design/templates/Software-Architecture-and-Design-Verification-Report-template.md"
+template_exists: true
+
+# =============================================================================
+# SIL-DEPENDENT REQUIREMENTS
+# =============================================================================
+# Requirements scale by SIL level per EN 50128 Table A.5
+# Architecture and Design Verification Report documents verification of SAS, SDS, SIS
+
+sil_requirements:
+  sil_0:
+    mandatory: false  # Verification report recommended but not mandatory
+    techniques:
+      - technique_name: "Verification Report"
+        table_reference: "A.5"
+        technique_id: "D.1"
+        recommendation: "R"
+    additional_requirements:
+      - "Basic architecture/design review recommended"
+      - "No specific verification techniques mandatory"
+      - "Design review recommended"
+    evidence_thresholds:
+      architecture_completeness_check: false
+      design_completeness_check: false
+      modularity_check: false
+      complexity_check: false
+      traceability_verification: false
+      independent_verification: false
+
+  sil_1:
+    mandatory: true  # HR (Highly Recommended) - treat as mandatory
+    techniques:
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "HR"
+      - technique_name: "Design Review"
+        table_reference: "A.3"
+        technique_id: "A.3"
+        recommendation: "HR"
+      - technique_name: "Metrics"
+        table_reference: "A.5"
+        technique_id: "D.37"
+        recommendation: "R"
+    additional_requirements:
+      - "Architecture and Design Verification Report HIGHLY RECOMMENDED (HR)"
+      - "Architecture completeness verification HIGHLY RECOMMENDED"
+      - "Design completeness verification HIGHLY RECOMMENDED"
+      - "Traceability verification HIGHLY RECOMMENDED"
+      - "Design review by Verifier HIGHLY RECOMMENDED"
+      - "Modularity assessment RECOMMENDED"
+      - "No mandatory independence requirement"
+    evidence_thresholds:
+      architecture_completeness_check: true  # HR
+      design_completeness_check: true  # HR
+      modularity_check: true  # R
+      complexity_check: true  # R (max 15)
+      traceability_verification: true  # HR
+      independent_verification: false
+
+  sil_2:
+    mandatory: true  # HR for Architecture/Design Verification Report
+    techniques:
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "HR"
+      - technique_name: "Design Review"
+        table_reference: "A.3"
+        technique_id: "A.3"
+        recommendation: "HR"
+      - technique_name: "Metrics"
+        table_reference: "A.5"
+        technique_id: "D.37"
+        recommendation: "R"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "M"
+    additional_requirements:
+      - "Architecture and Design Verification Report HIGHLY RECOMMENDED (HR)"
+      - "Architecture completeness verification HIGHLY RECOMMENDED"
+      - "Design completeness verification HIGHLY RECOMMENDED"
+      - "Traceability verification HIGHLY RECOMMENDED"
+      - "Design review by Verifier HIGHLY RECOMMENDED"
+      - "Modularity assessment MANDATORY (Modular Approach required)"
+      - "Complexity assessment RECOMMENDED (max 15)"
+      - "No mandatory independence requirement"
+    evidence_thresholds:
+      architecture_completeness_check: true  # HR
+      design_completeness_check: true  # HR
+      modularity_check: true  # MANDATORY (SIL 2+)
+      complexity_check: true  # R (max 15)
+      traceability_verification: true  # HR
+      independent_verification: false
+
+  sil_3:
+    mandatory: true  # HR for Architecture/Design Verification Report
+    techniques:
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Design Review"
+        table_reference: "A.3"
+        technique_id: "A.3"
+        recommendation: "HR"
+      - technique_name: "Metrics"
+        table_reference: "A.5"
+        technique_id: "D.37"
+        recommendation: "HR"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.3"
+        technique_id: "D.52"
+        recommendation: "M"
+    additional_requirements:
+      - "Architecture and Design Verification Report HIGHLY RECOMMENDED (HR)"
+      - "INDEPENDENT VERIFICATION MANDATORY (VER team separate from DES team)"
+      - "Architecture completeness verification MANDATORY"
+      - "Design completeness verification MANDATORY"
+      - "Traceability verification MANDATORY (requirements → architecture → design)"
+      - "Design review by Verifier MANDATORY"
+      - "Modularity assessment MANDATORY (Modular Approach required)"
+      - "Complexity assessment MANDATORY (max 10)"
+      - "Metrics collection MANDATORY"
+      - "Independent Verifier MANDATORY"
+    evidence_thresholds:
+      architecture_completeness_check: true  # MANDATORY
+      design_completeness_check: true  # MANDATORY
+      modularity_check: true  # MANDATORY
+      complexity_check: true  # MANDATORY (max 10)
+      traceability_verification: true  # MANDATORY
+      independent_verification: true  # MANDATORY
+
+  sil_4:
+    mandatory: true  # HR for Architecture/Design Verification Report
+    techniques:
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Design Review"
+        table_reference: "A.3"
+        technique_id: "A.3"
+        recommendation: "HR"
+      - technique_name: "Metrics"
+        table_reference: "A.5"
+        technique_id: "D.37"
+        recommendation: "HR"
+      - technique_name: "Modular Approach"
+        table_reference: "A.3"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.3"
+        technique_id: "D.52"
+        recommendation: "M"
+      - technique_name: "Formal Methods"
+        table_reference: "A.3"
+        technique_id: "D.28"
+        recommendation: "HR"
+    additional_requirements:
+      - "Architecture and Design Verification Report HIGHLY RECOMMENDED (HR)"
+      - "INDEPENDENT VERIFICATION MANDATORY (VER team separate from DES team)"
+      - "Architecture completeness verification MANDATORY"
+      - "Design completeness verification MANDATORY (rigorous)"
+      - "Traceability verification MANDATORY (requirements → architecture → design)"
+      - "Design review by Verifier MANDATORY"
+      - "Modularity assessment MANDATORY (Modular Approach required)"
+      - "Complexity assessment MANDATORY (max 10)"
+      - "Metrics collection MANDATORY"
+      - "Formal methods consideration HIGHLY RECOMMENDED"
+      - "Independent Verifier MANDATORY"
+    evidence_thresholds:
+      architecture_completeness_check: true  # MANDATORY
+      design_completeness_check: true  # MANDATORY
+      modularity_check: true  # MANDATORY
+      complexity_check: true  # MANDATORY (max 10)
+      traceability_verification: true  # MANDATORY
+      independent_verification: true  # MANDATORY
+
+# =============================================================================
+# EVIDENCE REQUIREMENTS
+# =============================================================================
+# Evidence required to demonstrate Architecture/Design Verification Report completeness
+
+evidence_requirements:
+  - evidence_id: "arch-design-ver-completeness-check"
+    description: "Architecture and design completeness verification per 7.3.4.21"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "VER"
+    format: "Section in Architecture/Design Verification Report"
+    storage_path: "docs/reports/Architecture-Design-Verification-Report.md"
+    automation_level: "manual"
+    collect_on_agent_action: "ver-verify-architecture-design"
+    verification_criteria:
+      - "All SRS requirements addressed in architecture (SAS)"
+      - "All architecture components detailed in design (SDS)"
+      - "All interfaces specified (Interface Specifications)"
+      - "All safety requirements addressed in architecture"
+      - "All performance requirements addressed in architecture"
+      - "Missing architecture/design elements identified"
+
+  - evidence_id: "arch-design-ver-modularity-check"
+    description: "Modularity verification (MANDATORY SIL 2+)"
+    mandatory_sil: 2  # MANDATORY for SIL 2+
+    source: "VER"
+    format: "Section in Architecture/Design Verification Report with modularity assessment"
+    storage_path: "docs/reports/Architecture-Design-Verification-Report.md"
+    automation_level: "manual"
+    collect_on_agent_action: "ver-verify-architecture-design"
+    verification_criteria:
+      - "Modular Approach applied (MANDATORY SIL 2+)"
+      - "Software divided into modules with clear boundaries"
+      - "Module cohesion high (single responsibility)"
+      - "Module coupling low (minimal dependencies)"
+      - "Information encapsulation applied (HR SIL 2+)"
+      - "Module interfaces fully defined"
+
+  - evidence_id: "arch-design-ver-complexity-check"
+    description: "Complexity verification (MANDATORY SIL 3-4)"
+    mandatory_sil: 3  # MANDATORY for SIL 3-4
+    source: "VER"
+    format: "Section in Architecture/Design Verification Report with complexity metrics"
+    storage_path: "docs/reports/Architecture-Design-Verification-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "ver-verify-architecture-design"
+    verification_criteria:
+      - "Cyclomatic complexity assessed for all modules"
+      - "Complexity threshold: ≤10 (SIL 3-4), ≤15 (SIL 2)"
+      - "No recursion (HR SIL 3-4)"
+      - "All functions single-purpose (low complexity)"
+      - "Control flow simple and analyzable"
+
+  - evidence_id: "arch-design-ver-traceability-check"
+    description: "Traceability verification (MANDATORY SIL 3-4)"
+    mandatory_sil: 3  # MANDATORY for SIL 3-4, HR for SIL 1-2
+    source: "VER"
+    format: "Section in Architecture/Design Verification Report with traceability analysis"
+    storage_path: "docs/reports/Architecture-Design-Verification-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "ver-verify-architecture-design"
+    verification_criteria:
+      - "Forward traceability complete (SRS → SAS → SDS)"
+      - "Backward traceability complete (SDS → SAS → SRS)"
+      - "All SRS requirements trace to architecture components"
+      - "All architecture components trace to design modules"
+      - "All design modules trace to SRS requirements"
+      - "Orphan design elements identified (no parent requirement)"
+      - "Traceability matrix reviewed and approved"
+
+  - evidence_id: "arch-design-ver-techniques-check"
+    description: "EN 50128 architecture/design techniques verification per Table A.3"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "VER"
+    format: "Section in Architecture/Design Verification Report"
+    storage_path: "docs/reports/Architecture-Design-Verification-Report.md"
+    automation_level: "manual"
+    collect_on_agent_action: "ver-verify-architecture-design"
+    verification_criteria:
+      - "All mandatory techniques applied for target SIL level"
+      - "Structured methodology applied (MANDATORY SIL 3-4)"
+      - "Modular Approach applied (MANDATORY SIL 2+)"
+      - "Defensive programming considered (HR SIL 2+)"
+      - "Fully Defined Interface applied (HR all SIL)"
+      - "Information encapsulation applied (HR SIL 2+)"
+      - "Techniques documented in SAS and SDS"
+
+  - evidence_id: "arch-design-ver-report-approval"
+    description: "Architecture/Design Verification Report approved by VAL and VMGR (SIL 3-4)"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "VER"
+    format: "Approvals section in Architecture/Design Verification Report"
+    storage_path: "docs/reports/Architecture-Design-Verification-Report.md"
+    automation_level: "manual"
+    collect_on_agent_action: "ver-verify-architecture-design"
+    verification_criteria:
+      - "Document has version 1.0 or higher"
+      - "Approvals section complete (VER author, QA, VAL second check, PM)"
+      - "Independent Verifier approval present (SIL 3-4)"
+      - "V&V Manager approval present (SIL 3-4)"
+      - "Verification result clearly stated (PASS/FAIL/CONDITIONAL)"
+      - "All findings documented and addressed"
+
+# =============================================================================
+# DEPENDENCIES
+# =============================================================================
+
+depends_on:
+  - deliverable_id: "DOC-009-SAS"
+    reason: "SAS is subject of verification"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-010-SDS"
+    reason: "SDS is subject of verification"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-011-SOFTWARE-INTERFACE-SPEC"
+    reason: "Interface Specifications are subject of verification"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-004-SVP"
+    reason: "SVP defines verification approach"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-006-SRS"
+    reason: "SRS provides requirements for traceability verification"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-018-SOURCE-CODE"
+    reason: "Architecture/design verification must pass before implementation begins"
+
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Provides architecture/design verification evidence"
+
+# =============================================================================
+# VERIFICATION CRITERIA
+# =============================================================================
+
+verification_criteria:
+  completeness:
+    - "All sections of Architecture/Design Verification Report template completed per 7.3.4.21"
+    - "All SAS components reviewed for completeness"
+    - "All SDS modules reviewed for completeness"
+    - "All Interface Specifications reviewed"
+    - "Traceability verification complete (SRS → SAS → SDS)"
+    - "Modularity assessment complete (MANDATORY SIL 2+)"
+    - "Complexity assessment complete (MANDATORY SIL 3-4)"
+    - "All EN 50128 Table A.3 techniques verified"
+    - "All findings documented with severity and status"
+    - "Verification decision stated (PASS/FAIL/CONDITIONAL)"
+
+  correctness:
+    - "Verification activities correct per SVP verification plan"
+    - "Modularity criteria correct (high cohesion, low coupling)"
+    - "Complexity criteria correct (≤10 SIL 3-4, ≤15 SIL 2)"
+    - "Traceability analysis correct (all requirements traced)"
+    - "EN 50128 Table A.3 technique assessment correct"
+    - "Independent verification performed (SIL 3-4)"
+    - "Findings accurately reflect architecture/design issues"
+
+  consistency:
+    - "Verification approach consistent with SVP"
+    - "Modularity criteria consistent across all modules"
+    - "Complexity thresholds consistent with SIL requirements"
+    - "Traceability format consistent with SCMP"
+    - "Findings classification consistent (critical/major/minor)"
+    - "Verification result consistent with findings"
+
+  traceability:
+    - "Forward traceability: SVP verification criteria → Verification Report activities"
+    - "Forward traceability: Verification Report findings → SAS/SDS updates"
+    - "Backward traceability: Verification Report → SVP verification plan"
+    - "References to SAS/SDS sections in findings"
+    - "References to EN 50128 Table A.3 techniques present"
+
+# =============================================================================
+# CONFIGURATION MANAGEMENT
+# =============================================================================
+
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After Phase 4 (Component Design) gate check, before Phase 5 (Implementation) begins"
+  change_control: "All changes to baselined Architecture/Design Verification Report require CCB approval"
+  version_control: "docs/reports/Architecture-Design-Verification-Report.md under Git control"
+  review_frequency: "Review when architecture or design is updated"
+  update_triggers:
+    - "SAS updated with new architecture"
+    - "SDS updated with new design"
+    - "SAS/SDS updated to address verification findings"
+    - "Change in SIL level"
+    - "Re-verification requested by PM or COD"
+    - "EN 50128 standard updates"
+
+# =============================================================================
+# EN 50128 REFERENCES
+# =============================================================================
+
+en50128_references:
+  - "Section 6.2.4.12: Verification Reports written by Verifier"
+  - "Section 6.2.4.13: Verification Report documents phase, activities, results, deviations, conclusion"
+  - "Section 7.3.4.20: Architecture and Design Verification Report written by Verifier"
+  - "Section 7.3.4.21: Architecture/design verification per generic requirements 6.2.4.13"
+  - "Section 7.3.4.21a: Completeness of architecture/design against SRS"
+  - "Section 7.3.4.21b: Consistency between architecture and design"
+  - "Section 7.3.4.21c: Adequacy of architecture/design techniques (Table A.3)"
+  - "Section 7.3.4.21d: Traceability between SRS, SAS, SDS"
+  - "Section 7.3.4.21e: Interface specifications adequacy"
+  - "Section 7.4.4.12: Component Design Verification Report"
+  - "Section 5.3.5: Verifier role and responsibilities"
+  - "Section 5.3.5.10: Verifier independence requirements (SIL 3-4)"
+  - "Table A.3: Software Architecture and Design techniques by SIL"
+  - "Table A.5: Verification and Testing techniques"
+  - "Table C.1 (Annex C): Document control summary (Arch/Design Ver Report mandatory HR for all SIL)"
+
+# =============================================================================
+# NOTES
+# =============================================================================
+
+notes: |
+  CRITICAL INFORMATION:
+  
+  1. **Purpose of Architecture and Design Verification Report**:
+     - Verify SAS completeness and correctness
+     - Verify SDS completeness and correctness
+     - Verify Interface Specifications completeness
+     - Verify traceability (SRS → SAS → SDS)
+     - Verify modularity (MANDATORY SIL 2+)
+     - Verify complexity (MANDATORY SIL 3-4)
+     - Provide independent verification evidence (SIL 3-4)
+  
+  2. **SIL Requirements**:
+     - SIL 0: Architecture/design verification recommended (R)
+     - SIL 1-2: Architecture/Design Verification Report HIGHLY RECOMMENDED (HR)
+     - SIL 3-4: Architecture/Design Verification Report HIGHLY RECOMMENDED (HR)
+     - Independent verification MANDATORY for SIL 3-4
+     - Traceability verification MANDATORY for SIL 3-4
+     - Modularity verification MANDATORY for SIL 2+
+     - Complexity verification MANDATORY for SIL 3-4
+  
+  3. **Verification Activities** (per 7.3.4.21):
+     a) Completeness: All SRS requirements addressed in architecture/design
+     b) Consistency: Architecture and design consistent with each other
+     c) Techniques: EN 50128 Table A.3 techniques applied
+     d) Traceability: SRS → SAS → SDS
+     e) Interfaces: Interface Specifications adequacy
+  
+  4. **Modularity Verification** (MANDATORY SIL 2+):
+     - Modular Approach applied (Table A.3)
+     - Software divided into modules with clear boundaries
+     - High cohesion (module does one thing well)
+     - Low coupling (minimal dependencies between modules)
+     - Information encapsulation (module internals hidden)
+     - Module interfaces fully defined
+  
+  5. **Complexity Verification** (MANDATORY SIL 3-4):
+     - Cyclomatic complexity ≤10 (SIL 3-4), ≤15 (SIL 2)
+     - No recursion (HR SIL 3-4)
+     - Single-purpose functions
+     - Simple control flow
+     - Tool: Lizard complexity analyzer
+  
+  6. **Independence Requirements** (SIL 3-4):
+     - Verifier SHALL NOT be Designer (Section 5.3.5.10)
+     - Organizational independence required (separate reporting line)
+     - Personnel independence required (different individuals)
+     - V&V Manager approval required (platform extension role)
+  
+  7. **Verification Result**:
+     - PASS: All criteria met, no critical findings
+     - FAIL: Critical findings prevent implementation phase
+     - CONDITIONAL: Minor findings, can proceed with action plan
+  
+  8. **Findings Classification**:
+     - Critical: Blocks phase transition (missing modules, modularity violations, complexity violations)
+     - Major: Should be fixed before transition (traceability gaps, design issues)
+     - Minor: Should be fixed eventually (documentation issues)
+  
+  9. **Traceability Verification**:
+     - Forward: SRS → SAS → SDS (all requirements covered)
+     - Backward: SDS → SAS → SRS (no orphans)
+     - Traceability matrix reviewed line by line
+     - 100% traceability MANDATORY for SIL 3-4
+  
+  10. **Relationship to Other Deliverables**:
+      - SAS: Subject of verification
+      - SDS: Subject of verification
+      - Interface Specifications: Subject of verification
+      - SVP: Defines verification approach
+      - SRS: Provides requirements for traceability
+      - Source Code: Cannot begin until architecture/design verification passes
+      - Validation Report: Uses Architecture/Design Verification Report as evidence
+  
+  11. **Agent Workflow**:
+      - DES agent creates SAS, SDS, Interface Specifications
+      - DES agent submits to VER for verification
+      - VER agent reads SVP to understand verification criteria
+      - VER agent performs verification activities per 7.3.4.21
+      - VER agent assesses modularity (MANDATORY SIL 2+)
+      - VER agent assesses complexity (MANDATORY SIL 3-4)
+      - VER agent creates Architecture/Design Verification Report
+      - VER agent submits report to QA for template compliance check
+      - QA agent reviews report (one pass only)
+      - VER agent submits report to VAL for second check (SIL 3-4)
+      - VAL/VMGR approves or rejects report
+      - If PASS: COD authorizes transition to Phase 5 (Implementation)
+      - If FAIL: DES agent fixes SAS/SDS, VER re-verifies
+  
+  12. **Critical Success Factors**:
+      - Independence preserved (SIL 3-4)
+      - All SAS components and SDS modules reviewed individually
+      - Modularity verified (MANDATORY SIL 2+)
+      - Complexity verified ≤10 (MANDATORY SIL 3-4)
+      - Traceability 100% complete (SIL 3-4)
+      - Verification decision clear (PASS/FAIL/CONDITIONAL)
+      - Findings actionable with clear remediation
+      - Report approved before implementation begins
+  
+  13. **Common Pitfalls**:
+      - Not checking modularity (MANDATORY SIL 2+)
+      - Not checking complexity (MANDATORY SIL 3-4)
+      - Not verifying traceability completeness (missing requirements)
+      - Incomplete independence (same person as Designer for SIL 3-4)
+      - Ambiguous verification decision (unclear PASS/FAIL)
+      - Not documenting findings (issues not captured)
+      - Allowing implementation to begin before architecture/design verification passes

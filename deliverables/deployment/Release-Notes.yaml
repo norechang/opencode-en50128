@@ -1,0 +1,486 @@
+# Release Notes
+# EN 50128 Deliverable #38 - Section 9.1.4.4-9.1.4.5
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-038-RELEASE-NOTES"
+number: 38
+name: "Release Notes"
+abbreviation: "Release Notes"
+
+# ===== Lifecycle Context =====
+phase: "deployment"
+standard_section: "9.1.4.4"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "DES"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-deployment/templates/Release-Notes-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques: []
+    additional_requirements:
+      - "Define application conditions to be adhered to"
+      - "Provide compatibility information"
+      - "Define restrictions in using the software"
+    evidence_thresholds: {}
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+    additional_requirements:
+      - "Define application conditions to be adhered to per 9.1.4.5(a) (MANDATORY)"
+      - "Provide compatibility information per 9.1.4.5(b) (MANDATORY)"
+      - "Provide software-to-software compatibility information"
+      - "Provide software-to-hardware compatibility information"
+      - "Define all restrictions in using the software per 9.1.4.5(c) (MANDATORY)"
+      - "Reference validation restrictions from 7.7.4.12"
+    evidence_thresholds: {}
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "HR"
+    additional_requirements:
+      - "Define application conditions to be adhered to per 9.1.4.5(a) (MANDATORY)"
+      - "Provide compatibility information per 9.1.4.5(b) (MANDATORY)"
+      - "Provide software-to-software compatibility information"
+      - "Provide software-to-hardware compatibility information"
+      - "Define all restrictions in using the software per 9.1.4.5(c) (MANDATORY)"
+      - "Reference validation restrictions from 7.7.4.12"
+      - "Software version identification"
+      - "Changes from previous release"
+      - "Known issues and workarounds"
+      - "Application conditions traceability to SRS/SAS"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 15
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "M"
+    additional_requirements:
+      - "Define application conditions to be adhered to per 9.1.4.5(a) (MANDATORY)"
+      - "Provide compatibility information per 9.1.4.5(b) (MANDATORY)"
+      - "Provide software-to-software compatibility information (MANDATORY)"
+      - "Provide software-to-hardware compatibility information (MANDATORY)"
+      - "Define all restrictions in using the software per 9.1.4.5(c) (MANDATORY)"
+      - "Reference validation restrictions from 7.7.4.12 (MANDATORY)"
+      - "Software version identification (MANDATORY)"
+      - "Changes from previous release (MANDATORY)"
+      - "Known issues and workarounds (MANDATORY)"
+      - "Application conditions traceability to SRS/SAS (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Traceability requirements per 6.5.4.14-6.5.4.17 (MANDATORY)"
+      - "Internal consistency verified per 9.1.4.19(b) (MANDATORY)"
+      - "Safety-related changes clearly identified"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      cyclomatic_complexity_max: 10
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "M"
+    additional_requirements:
+      - "Define application conditions to be adhered to per 9.1.4.5(a) (MANDATORY)"
+      - "Provide compatibility information per 9.1.4.5(b) (MANDATORY)"
+      - "Provide software-to-software compatibility information (MANDATORY)"
+      - "Provide software-to-hardware compatibility information (MANDATORY)"
+      - "Define all restrictions in using the software per 9.1.4.5(c) (MANDATORY)"
+      - "Reference validation restrictions from 7.7.4.12 (MANDATORY)"
+      - "Software version identification (MANDATORY)"
+      - "Changes from previous release (MANDATORY)"
+      - "Known issues and workarounds (MANDATORY)"
+      - "Application conditions traceability to SRS/SAS (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Traceability requirements per 6.5.4.14-6.5.4.17 (MANDATORY)"
+      - "Internal consistency verified per 9.1.4.19(b) (MANDATORY)"
+      - "Safety-related changes clearly identified and justified"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      test_coverage_mcdc: 100
+      cyclomatic_complexity_max: 10
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "application-conditions"
+    description: "Application conditions to be adhered to per 9.1.4.5(a)"
+    mandatory_sil: 0
+    source: "DES agent"
+    format: "Markdown list"
+    storage_path: "docs/deployment/release-notes/application-conditions.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/des define-application-conditions"
+    verification_criteria:
+      - "Operating environment conditions (temperature, humidity, vibration)"
+      - "Operational conditions (load limits, usage constraints)"
+      - "Environmental conditions for safety operation"
+      - "Training requirements for operators"
+      - "Maintenance requirements"
+      - "Traceability to SRS/SAS (SIL 2+)"
+
+  - evidence_id: "compatibility-information-software"
+    description: "Software-to-software compatibility information per 9.1.4.5(b)"
+    mandatory_sil: 0
+    source: "DES agent"
+    format: "Markdown table or list"
+    storage_path: "docs/deployment/release-notes/software-compatibility.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/des define-software-compatibility"
+    verification_criteria:
+      - "Compatible software component versions listed"
+      - "Incompatible software component versions listed"
+      - "Version dependencies documented"
+      - "Interface compatibility documented"
+      - "Protocol compatibility documented"
+
+  - evidence_id: "compatibility-information-hardware"
+    description: "Software-to-hardware compatibility information per 9.1.4.5(b)"
+    mandatory_sil: 0
+    source: "DES agent"
+    format: "Markdown table or list"
+    storage_path: "docs/deployment/release-notes/hardware-compatibility.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/des define-hardware-compatibility"
+    verification_criteria:
+      - "Compatible hardware platforms listed"
+      - "Incompatible hardware platforms listed"
+      - "Hardware requirements documented (CPU, memory, storage)"
+      - "Hardware interface requirements documented"
+      - "Peripheral requirements documented"
+
+  - evidence_id: "usage-restrictions"
+    description: "All restrictions in using the software per 9.1.4.5(c) and 7.7.4.12"
+    mandatory_sil: 0
+    source: "DES agent"
+    format: "Markdown list"
+    storage_path: "docs/deployment/release-notes/usage-restrictions.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/des define-usage-restrictions"
+    verification_criteria:
+      - "Operational restrictions documented"
+      - "Configuration restrictions documented"
+      - "Performance restrictions documented"
+      - "Safety-related restrictions clearly marked"
+      - "Reference to validation restrictions from 7.7.4.12"
+      - "Consequences of violating restrictions explained"
+
+  - evidence_id: "release-identification"
+    description: "Software version identification information"
+    mandatory_sil: 1
+    source: "DES agent"
+    format: "Markdown"
+    storage_path: "docs/deployment/release-notes/release-identification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/des identify-release"
+    verification_criteria:
+      - "Software version number"
+      - "Release date"
+      - "Product name and identity"
+      - "Configuration data version (if applicable)"
+      - "Baseline identifier"
+      - "Correspondence to self-identification per 9.1.4.11"
+
+  - evidence_id: "release-changes"
+    description: "Changes from previous release (new features, bug fixes, improvements)"
+    mandatory_sil: 1
+    source: "DES agent"
+    format: "Markdown with categorization"
+    storage_path: "docs/deployment/release-notes/release-changes.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/des document-changes"
+    verification_criteria:
+      - "New features documented"
+      - "Bug fixes documented with issue references"
+      - "Improvements documented"
+      - "Safety-related changes clearly identified (SIL 3+)"
+      - "Impact on existing functionality documented"
+      - "Traceability to change requests (SIL 2+)"
+
+  - evidence_id: "known-issues"
+    description: "Known issues and workarounds"
+    mandatory_sil: 1
+    source: "DES agent"
+    format: "Markdown list with severity classification"
+    storage_path: "docs/deployment/release-notes/known-issues.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/des document-known-issues"
+    verification_criteria:
+      - "Known issues listed with severity"
+      - "Workarounds provided where available"
+      - "Safety impact assessed for each issue"
+      - "Issue tracking references included"
+      - "No safety-critical issues unresolved (SIL 3+)"
+
+  - evidence_id: "release-notes-readability-check"
+    description: "Readability verification per 5.3.2.7-5.3.2.10 and 9.1.4.19(a)"
+    mandatory_sil: 3
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/deployment/verification/release-notes-readability-check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-release-notes-readability"
+    verification_criteria:
+      - "Clear and unambiguous language"
+      - "Consistent terminology"
+      - "Proper document structure"
+      - "Adequate detail level"
+      - "Target audience appropriateness (users, operators, maintainers)"
+
+  - evidence_id: "release-notes-traceability-check"
+    description: "Traceability verification per 6.5.4.14-6.5.4.17 and 9.1.4.19(a)"
+    mandatory_sil: 3
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/deployment/verification/release-notes-traceability-check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-release-notes-traceability"
+    verification_criteria:
+      - "Application conditions traced to SRS/SAS"
+      - "Compatibility information traced to design documents"
+      - "Restrictions traced to validation report (7.7.4.12)"
+      - "Changes traced to change requests"
+      - "All references valid and complete"
+
+  - evidence_id: "release-notes-consistency-check"
+    description: "Internal consistency verification per 9.1.4.19(b)"
+    mandatory_sil: 3
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/deployment/verification/release-notes-consistency-check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-release-notes-consistency"
+    verification_criteria:
+      - "No conflicting information"
+      - "All cross-references valid"
+      - "Consistent terminology throughout"
+      - "Version information consistent with baseline"
+
+  - evidence_id: "release-notes-requirements-check"
+    description: "Verification against 9.1.4.5 requirements per 9.1.4.19(a)"
+    mandatory_sil: 0
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/deployment/verification/release-notes-requirements-check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-release-notes-requirements"
+    verification_criteria:
+      - "Application conditions defined per 9.1.4.5(a) (MANDATORY)"
+      - "Compatibility information provided per 9.1.4.5(b) (MANDATORY)"
+      - "Restrictions defined per 9.1.4.5(c) (MANDATORY)"
+      - "All 9.1.4.5 requirements addressed"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-006-SRS"
+    reason: "Application conditions must trace to software requirements"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-009-SAS"
+    reason: "Application conditions must trace to software architecture"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Restrictions from validation per 7.7.4.12"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-003-SCMP"
+    reason: "Release identification follows configuration management"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-036-SRDP"
+    reason: "Release Notes align with Deployment Plan"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-040-DEPLOYMENT-VER"
+    reason: "Deployment Verification Report verifies Release Notes per 9.1.4.19"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "Application conditions defined per 9.1.4.5(a) (MANDATORY)"
+    - "Software-to-software compatibility information per 9.1.4.5(b) (MANDATORY)"
+    - "Software-to-hardware compatibility information per 9.1.4.5(b) (MANDATORY)"
+    - "All usage restrictions per 9.1.4.5(c) (MANDATORY)"
+    - "Reference to validation restrictions from 7.7.4.12 (MANDATORY)"
+    - "Release identification complete (version, date, baseline)"
+    - "Changes from previous release documented (SIL 1+)"
+    - "Known issues documented (SIL 1+)"
+    - "All SIL-appropriate techniques applied per Table A.9"
+  
+  correctness:
+    - "Application conditions accurate and realistic"
+    - "Compatibility information accurate and tested"
+    - "Restrictions accurate and justified"
+    - "Release identification matches baseline and self-identification"
+    - "Changes accurately reflect modifications"
+    - "Known issues accurately describe problems"
+  
+  consistency:
+    - "Internal consistency per 9.1.4.19(b) (MANDATORY SIL 3+)"
+    - "Consistent with SRS (application conditions)"
+    - "Consistent with SAS (application conditions)"
+    - "Consistent with Validation Report (restrictions per 7.7.4.12)"
+    - "Consistent with SCMP (version identification)"
+    - "No conflicting information"
+    - "All cross-references valid"
+  
+  traceability:
+    - "Traceability per 6.5.4.14-6.5.4.17 and 9.1.4.19(a) (MANDATORY SIL 3+)"
+    - "Application conditions traced to SRS/SAS (SIL 2+, MANDATORY SIL 3+)"
+    - "Compatibility information traced to design documents (SIL 2+)"
+    - "Restrictions traced to validation report (SIL 2+, MANDATORY SIL 3+)"
+    - "Changes traced to change requests (SIL 2+)"
+  
+  readability:
+    - "Readability per 5.3.2.7-5.3.2.10 and 9.1.4.19(a) (MANDATORY SIL 3+)"
+    - "Clear and unambiguous language"
+    - "Consistent terminology"
+    - "Target audience appropriateness"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Release Notes Baseline"
+  baseline_trigger: "After VER approval per 9.1.4.19"
+  change_control: "All changes via CCB, linked to software baseline"
+  versioning: "Semantic versioning matching software release (MAJOR.MINOR.PATCH)"
+  storage_location: "config/baselines/release-notes/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "9.1.4.4"
+    title: "Release Note responsibility"
+    relevance: "Written by Designer (DES) on basis of input documents from 9.1.2"
+  - section: "9.1.4.5"
+    title: "Release Note content"
+    relevance: "Application conditions (a), compatibility (b), restrictions (c) - ALL MANDATORY"
+  - section: "9.1.4.5(a)"
+    title: "Application conditions"
+    relevance: "Application conditions to be adhered to (MANDATORY)"
+  - section: "9.1.4.5(b)"
+    title: "Compatibility information"
+    relevance: "Software-software and software-hardware compatibility (MANDATORY)"
+  - section: "9.1.4.5(c)"
+    title: "Usage restrictions"
+    relevance: "All restrictions in using the software (MANDATORY)"
+  - section: "9.1.4.19"
+    title: "Release Note verification"
+    relevance: "Verification of readability, traceability, 9.1.4.5 requirements, internal consistency"
+  - section: "7.7.4.12"
+    title: "Validation restrictions"
+    relevance: "Restrictions to be referenced in Release Notes per 9.1.4.5(c)"
+  - section: "9.1.4.11"
+    title: "Self-identification mechanisms"
+    relevance: "Release Notes version identification shall correspond to self-identification"
+  - section: "5.3.2.7-5.3.2.10"
+    title: "Readability requirements"
+    relevance: "General requirements for readability per 9.1.4.19(a) (MANDATORY SIL 3+)"
+  - section: "6.5.4.14-6.5.4.17"
+    title: "Traceability requirements"
+    relevance: "General requirements for traceability per 9.1.4.19(a) (MANDATORY SIL 3+)"
+  - section: "Table A.9"
+    title: "Software Quality Assurance techniques"
+    relevance: "Configuration Management (M), Traceability (R/HR/M), Data Recording (HR/M)"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Release Notes is deliverable #38, written by DES, checked by VER and VAL"
+
+# ===== Notes =====
+notes: |
+  **Release Notes (Deliverable #38)**
+  
+  **Purpose**: Provide essential information about application conditions, compatibility, and restrictions
+  for a software release per EN 50128 Section 9.1.4.4-9.1.4.5.
+  
+  **Key Content** (EN 50128 9.1.4.5 - ALL MANDATORY):
+  1. **Application conditions** to be adhered to (9.1.4.5(a))
+  2. **Compatibility information** among software components and between software and hardware (9.1.4.5(b))
+  3. **All restrictions** in using the software (9.1.4.5(c), reference 7.7.4.12)
+  
+  **Additional Content** (industry best practices, SIL 1+):
+  4. Release identification (version, date, baseline)
+  5. Changes from previous release (new features, bug fixes, improvements)
+  6. Known issues and workarounds
+  
+  **Verification Requirements** (EN 50128 9.1.4.19):
+  - Readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+  - Traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+  - Requirements per 9.1.4.5 met (MANDATORY all SILs)
+  - Internal consistency (MANDATORY SIL 3+)
+  - Results recorded in Deployment Verification Report (DOC-040)
+  
+  **DES Agent Responsibility**:
+  - Define application conditions per 9.1.4.5(a) (operating environment, operational, training, maintenance)
+  - Provide software-to-software compatibility per 9.1.4.5(b)
+  - Provide software-to-hardware compatibility per 9.1.4.5(b)
+  - Define all usage restrictions per 9.1.4.5(c)
+  - Reference validation restrictions from 7.7.4.12
+  - Identify release (version, date, baseline)
+  - Document changes from previous release
+  - Document known issues and workarounds
+  - Ensure traceability to SRS/SAS for application conditions (SIL 2+)
+  
+  **VER Agent Responsibility**:
+  - Verify readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+  - Verify traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+  - Verify requirements per 9.1.4.5 met (MANDATORY)
+  - Verify internal consistency (MANDATORY SIL 3+)
+  - Record verification results in DOC-040 (Deployment Verification Report)
+  
+  **VAL Agent Responsibility**:
+  - Validate application conditions realistic and adequate
+  - Validate compatibility information accurate
+  - Validate restrictions adequate for safety
+  - Validate known issues do not violate safety requirements (SIL 3+)
+  
+  **Target Audience**: Users, operators, system integrators, maintainers
+  
+  **Key Safety Aspect**:
+  Release Notes are CRITICAL for safety because they define the BOUNDARIES within which
+  the software has been validated. Using software outside these boundaries (violating
+  application conditions or restrictions) VOIDS validation and may compromise safety.

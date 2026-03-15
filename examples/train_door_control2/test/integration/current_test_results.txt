@@ -1,0 +1,28 @@
+================================================================================
+     Software Integration Test Suite - Train Door Control System (SIL 3)
+================================================================================
+Document:    DOC-INTTEST-2026-001 v1.0
+Project:     train_door_control2
+SIL Level:   SIL 3
+Phase:       Phase 6 Activity 0b (Integration Test Execution)
+Platform:    Linux x86_64 (host PC simulation)
+Total Tests: 73
+================================================================================
+
+  [TC-INT-1-001        ] Actuator HAL Initialization ... FAIL
+    Error: ASSERTION FAILED: Left lock should be engaged (line 308)
+  [TC-INT-1-002        ] Actuator HAL Motor Control ... PASS (0 ms)
+  [TC-INT-1-003        ] Actuator HAL Lock Control ... PASS (0 ms)
+  [TC-INT-1-004        ] Sensor HAL Initialization ... PASS (0 ms)
+  [TC-INT-1-005        ] Sensor HAL Position Reading ... FAIL
+    Error: ASSERTION FAILED: Position should be near 50% (line 394)
+  [TC-INT-1-006        ] Sensor HAL Obstacle Detection ... PASS (0 ms)
+  [TC-INT-1-007        ] Sensor HAL Speed Reading ... FAIL
+    Error: ASSERTION FAILED: Primary speed should be 50 (5.0 km/h) (line 452)
+  [TC-INT-1-008        ] Communication HAL Initialization ... PASS (0 ms)
+  [TC-INT-1-009        ] Communication HAL CAN Transmit ... FAIL
+    Error: ASSERTION FAILED: Message ID should match (line 504)
+  [TC-INT-1-010        ] Communication HAL CAN Receive ... PASS (0 ms)
+  [TC-INT-1-011        ] HAL Layer Combined Operation ... FAIL
+    Error: ASSERTION FAILED: Position should be > 0 (line 570)
+  [TC-INT-2-001        ] Door FSM + Actuator HAL Integration ... 

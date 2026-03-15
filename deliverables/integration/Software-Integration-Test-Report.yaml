@@ -1,0 +1,481 @@
+deliverable_id: "DOC-023-INT-TEST-REPORT"
+number: 23
+name: "Software Integration Test Report"
+abbreviation: "Int Test Report"
+phase: "integration"
+standard_section: "7.6.4.4"
+written_by: "INT"
+first_check: "VER"
+second_check: "QUA"
+template_path: ".opencode/skills/en50128-integration/templates/Software-Integration-Test-Report-template.md"
+template_exists: true
+
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.14"
+    additional_requirements:
+      - "Integration test execution documented"
+      - "Interface test results reported"
+      - "Defects tracked and resolved"
+      - "Pass/fail assessment provided"
+    evidence_thresholds:
+      min_interface_coverage: 70
+      max_open_defects_critical: 0
+      max_open_defects_high: 5
+    test_requirements:
+      interface_testing: true
+      performance_testing: false
+      regression_testing: false
+      independent_verification: false
+
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.14"
+    additional_requirements:
+      - "All integration test cases executed and documented"
+      - "Interface coverage ≥90%"
+      - "Defects tracked with severity classification"
+      - "Regression test results documented"
+      - "Re-test results documented"
+    evidence_thresholds:
+      min_interface_coverage: 90
+      max_open_defects_critical: 0
+      max_open_defects_high: 3
+    test_requirements:
+      interface_testing: true
+      performance_testing: false
+      regression_testing: true
+      independent_verification: false
+
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.14"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "R"
+        table_reference: "A.18"
+    additional_requirements:
+      - "100% interface coverage (MANDATORY)"
+      - "All test cases executed and documented"
+      - "Zero open critical or high defects"
+      - "Performance test results documented"
+      - "Regression testing after each phase"
+      - "Independent review of test results (highly recommended)"
+    evidence_thresholds:
+      min_interface_coverage: 100
+      max_open_defects_critical: 0
+      max_open_defects_high: 0
+    test_requirements:
+      interface_testing: true
+      performance_testing: true
+      regression_testing: true
+      independent_verification: false
+
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.14"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "HR"
+        table_reference: "A.18"
+    additional_requirements:
+      - "100% interface coverage (MANDATORY)"
+      - "All test cases executed and documented (MANDATORY)"
+      - "Zero open defects (MANDATORY for deployment)"
+      - "Performance testing results documented (highly recommended)"
+      - "Regression testing after each phase (MANDATORY)"
+      - "Independent verification of test results (MANDATORY)"
+      - "Progressive integration documented (MANDATORY)"
+      - "Error handling across interfaces verified"
+    evidence_thresholds:
+      min_interface_coverage: 100
+      max_open_defects_critical: 0
+      max_open_defects_high: 0
+    test_requirements:
+      interface_testing: true
+      performance_testing: true
+      regression_testing: true
+      independent_verification: true
+
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.14"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "HR"
+        table_reference: "A.18"
+    additional_requirements:
+      - "100% interface coverage (MANDATORY)"
+      - "All test cases executed and documented (MANDATORY)"
+      - "Zero open defects (MANDATORY for deployment)"
+      - "Performance testing results documented (highly recommended)"
+      - "Regression testing after each phase (MANDATORY)"
+      - "Independent verification of test results (MANDATORY)"
+      - "Progressive integration documented (MANDATORY)"
+      - "Error handling across interfaces verified (MANDATORY)"
+      - "Formal test review (MANDATORY)"
+    evidence_thresholds:
+      min_interface_coverage: 100
+      max_open_defects_critical: 0
+      max_open_defects_high: 0
+    test_requirements:
+      interface_testing: true
+      performance_testing: true
+      regression_testing: true
+      independent_verification: true
+
+evidence_requirements:
+  - evidence_id: "integration-test-execution-summary"
+    description: "Summary of all integration test cases executed with pass/fail results"
+    mandatory_sil: 0
+    source: "INT agent, test framework"
+    format: "Structured tables in markdown with test category, phase, executed, passed, failed, blocked counts"
+    storage_path: "deliverables/integration/Software-Integration-Test-Report.md Section 3"
+    automation_level: "automatic"
+    collect_on_agent_action: "/int execute-integration-tests"
+    verification_criteria:
+      - "All test cases from Integration Test Specification executed"
+      - "Pass/fail status recorded for each test case"
+      - "Execution date recorded"
+      - "Test environment documented"
+
+  - evidence_id: "integration-phase-results"
+    description: "Results for each integration phase with components integrated and tests executed"
+    mandatory_sil: 0
+    source: "INT agent"
+    format: "Structured sections per phase with scope, components, steps, test results, phase summary"
+    storage_path: "deliverables/integration/Software-Integration-Test-Report.md Section 4"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/int execute-integration-phase"
+    verification_criteria:
+      - "Each phase documented separately"
+      - "Components integrated documented"
+      - "Integration steps executed documented"
+      - "Test results for phase documented"
+      - "Exit criteria evaluated"
+
+  - evidence_id: "interface-test-results"
+    description: "Detailed results for interface testing between components"
+    mandatory_sil: 0
+    source: "INT agent, TST agent, test framework"
+    format: "Structured table with test case ID, interface, components, result, notes"
+    storage_path: "deliverables/integration/Software-Integration-Test-Report.md Section 5.1"
+    automation_level: "automatic"
+    collect_on_agent_action: "/int execute-interface-tests"
+    verification_criteria:
+      - "All interface tests from specification executed"
+      - "Pass/fail status clear"
+      - "Failed tests traced to defects"
+      - "Interface coverage calculated"
+
+  - evidence_id: "functional-integration-test-results"
+    description: "Results for functional testing of integrated components"
+    mandatory_sil: 0
+    source: "INT agent, TST agent"
+    format: "Structured table with test case ID, phase, components, result, notes"
+    storage_path: "deliverables/integration/Software-Integration-Test-Report.md Section 5.2"
+    automation_level: "automatic"
+    collect_on_agent_action: "/int execute-functional-integration-tests"
+    verification_criteria:
+      - "All functional integration tests executed"
+      - "Pass/fail status clear"
+      - "Failed tests traced to defects"
+
+  - evidence_id: "performance-integration-test-results"
+    description: "Results for performance testing of integrated components (SIL 2+)"
+    mandatory_sil: 2
+    source: "INT agent, TST agent, profiler tools"
+    format: "Structured table with test case ID, metric, target, actual, result, notes"
+    storage_path: "deliverables/integration/Software-Integration-Test-Report.md Section 5.3"
+    automation_level: "automatic"
+    collect_on_agent_action: "/int execute-performance-integration-tests"
+    verification_criteria:
+      - "All performance tests executed"
+      - "Actual measurements recorded"
+      - "Comparison with targets documented"
+      - "Performance targets met or justified"
+
+  - evidence_id: "error-handling-test-results"
+    description: "Results for error handling testing across component interfaces"
+    mandatory_sil: 1
+    source: "INT agent, TST agent"
+    format: "Structured table with test case ID, components, error condition, expected behavior, result"
+    storage_path: "deliverables/integration/Software-Integration-Test-Report.md Section 5.4"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/int execute-error-handling-tests"
+    verification_criteria:
+      - "All error handling tests executed"
+      - "Error detection verified"
+      - "Error propagation verified"
+      - "Error recovery verified"
+
+  - evidence_id: "regression-test-results"
+    description: "Results for regression testing after each integration phase"
+    mandatory_sil: 1
+    source: "INT agent, TST agent"
+    format: "Structured table with test case ID, phase, description, baseline, result"
+    storage_path: "deliverables/integration/Software-Integration-Test-Report.md Section 5.5"
+    automation_level: "automatic"
+    collect_on_agent_action: "/int execute-regression-tests"
+    verification_criteria:
+      - "Regression tests executed after each phase"
+      - "Previously integrated components retested"
+      - "No regressions introduced (or justified)"
+
+  - evidence_id: "interface-coverage-analysis"
+    description: "Analysis of interface test coverage with traceability to architecture"
+    mandatory_sil: 1
+    source: "CM agent, INT agent"
+    format: "Structured table with architecture component, interface, test case IDs, coverage status"
+    storage_path: "deliverables/integration/Software-Integration-Test-Report.md Section 6"
+    automation_level: "automatic"
+    collect_on_agent_action: "/cm verify-interface-coverage"
+    verification_criteria:
+      - "All interfaces from architecture traced"
+      - "Coverage percentage calculated"
+      - "Coverage = 100% (SIL 2+)"
+      - "Untested interfaces justified"
+
+  - evidence_id: "integration-defect-log"
+    description: "Complete log of all defects found during integration testing"
+    mandatory_sil: 0
+    source: "INT agent, defect tracking"
+    format: "Structured table with defect ID, severity, description, component, test case, status, resolution"
+    storage_path: "deliverables/integration/Software-Integration-Test-Report.md Section 7, tests/defects.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/int track-defect"
+    verification_criteria:
+      - "All defects logged with unique ID"
+      - "Severity classification (Critical, High, Medium, Low)"
+      - "Root cause documented"
+      - "Resolution documented"
+      - "Re-test results documented"
+
+  - evidence_id: "integration-retest-results"
+    description: "Results of re-testing after defect fixes"
+    mandatory_sil: 0
+    source: "INT agent, re-test execution"
+    format: "Structured table with defect ID, original test, re-test date, result, status"
+    storage_path: "deliverables/integration/Software-Integration-Test-Report.md Section 7"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/int retest-defect"
+    verification_criteria:
+      - "All fixed defects re-tested"
+      - "Re-test pass/fail status documented"
+      - "Regression testing performed"
+      - "All critical/high defects closed"
+
+  - evidence_id: "integration-pass-fail-assessment"
+    description: "Overall pass/fail assessment with criteria checklist and recommendation"
+    mandatory_sil: 0
+    source: "INT agent"
+    format: "Structured section with pass criteria checklist and overall result"
+    storage_path: "deliverables/integration/Software-Integration-Test-Report.md Section 8"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/int assess-integration"
+    verification_criteria:
+      - "All pass criteria evaluated"
+      - "Overall PASS/FAIL determination clear"
+      - "Outstanding issues documented"
+      - "Recommendation for validation provided"
+
+  - evidence_id: "integration-artifacts"
+    description: "Complete integration artifacts including logs, coverage reports, performance data"
+    mandatory_sil: 1
+    source: "INT agent, test tools"
+    format: "Directory of files (logs, reports, XML data)"
+    storage_path: "tests/integration/artifacts/"
+    automation_level: "automatic"
+    collect_on_agent_action: "/int execute-integration-tests"
+    verification_criteria:
+      - "Integration test execution logs complete"
+      - "Interface test results available"
+      - "Performance profiling data available (SIL 2+)"
+      - "Error logs available"
+
+  - evidence_id: "independent-verification-statement"
+    description: "Statement from independent Verifier that integration test results have been reviewed and verified (SIL 3-4)"
+    mandatory_sil: 3
+    source: "VER agent (independent)"
+    format: "Signed statement in Approvals section"
+    storage_path: "deliverables/integration/Software-Integration-Test-Report.md Approvals section"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver approve-integration-test-report"
+    verification_criteria:
+      - "Verifier is independent from INT, IMP, DES, TST"
+      - "Verifier signature and date recorded"
+      - "Verification statement covers all integration test results"
+      - "Any concerns documented"
+
+depends_on:
+  - deliverable_id: "DOC-022-INT-TEST-SPEC"
+    reason: "Defines all integration test cases that must be executed"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-021-COMP-TEST-REPORT"
+    reason: "Components must pass unit tests before integration"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-009-SAS"
+    reason: "Architecture specification defines interfaces to verify"
+    dependency_type: "informational"
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Design specification defines interface details"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-024-INT-VER-REPORT"
+    reason: "Integration test results used in integration verification"
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Integration testing feeds into validation"
+
+verification_criteria:
+  completeness:
+    - "All integration test cases from Integration Test Specification executed"
+    - "All integration phases documented"
+    - "All interfaces tested and reported"
+    - "All defects documented and resolved (or justified)"
+    - "Interface coverage analysis complete"
+    - "Pass/fail assessment provided"
+    - "Recommendation for validation provided"
+  
+  correctness:
+    - "Test results accurately reflect actual integration test execution"
+    - "Interface coverage calculated correctly"
+    - "Performance measurements accurate (SIL 2+)"
+    - "Defect severity classification appropriate"
+    - "Pass criteria applied correctly per SIL level"
+  
+  consistency:
+    - "Test case IDs match Integration Test Specification"
+    - "Interface names match Architecture and Design Specifications"
+    - "Component names match Design Specification"
+    - "No contradictions between test results and assessment"
+  
+  traceability:
+    - "Every test case traced to Integration Test Specification"
+    - "Every interface traced to architecture specification"
+    - "Every defect traced to test case and component"
+    - "Bi-directional traceability maintained"
+
+configuration_management:
+  baseline_criteria:
+    - "All integration test cases executed successfully (or justified)"
+    - "Interface coverage thresholds met per SIL level"
+    - "Zero open critical or high defects"
+    - "Independent verification complete (SIL 3-4)"
+    - "QA approval obtained"
+  
+  change_control:
+    - "Changes to test results require re-execution"
+    - "Defect fixes require re-test and updated report"
+    - "New integration phases require updated report"
+    - "Version controlled with integration test specification"
+  
+  versioning:
+    - "Version number: X.Y (X = major integration cycle, Y = defect fix iteration)"
+    - "Each re-test cycle increments minor version"
+    - "Major version increments with new integration test specification"
+  
+  archival:
+    - "Archive integration artifacts (logs, performance data, reports)"
+    - "Archive integration test environment configuration"
+    - "Retain for project lifetime + 10 years (railway requirement)"
+
+en50128_references:
+  - section: "7.6"
+    description: "Software Integration - PRIMARY section for integration process"
+  - section: "7.6.4.4"
+    description: "Software Integration Test Report - documents results of integration testing"
+  - section: "Table A.6"
+    description: "Techniques and Measures for Software Integration"
+  - section: "Table A.14"
+    description: "Functional and Black-Box Testing - interface testing"
+  - section: "Table A.18"
+    description: "Performance Testing - highly recommended for SIL 3-4"
+  - section: "5.3.6"
+    description: "Integrator role responsibilities"
+  - section: "5.3.5"
+    description: "Verifier role - independent verification (SIL 3-4)"
+
+notes: |
+  **Purpose**: The Software Integration Test Report documents the execution and results of all integration
+  tests defined in the Integration Test Specification. It provides evidence that software components have
+  been successfully integrated and all interfaces function correctly.
+
+  **Key Characteristics**:
+  1. **Integration Evidence**: Documents actual integration execution with phases, components, steps
+  2. **Interface Testing**: Provides interface test results (100% coverage for SIL 2+)
+  3. **Progressive Integration**: Documents each integration phase separately
+  4. **Performance Evidence**: Performance test results for integrated components (SIL 2+)
+  5. **Regression Testing**: Verifies previously integrated components still work
+  6. **Defect Tracking**: Complete log of integration defects found, fixed, and re-tested
+
+  **SIL-Specific Requirements**:
+  - **SIL 0**: Basic integration test execution documentation
+  - **SIL 1**: Interface coverage ≥90% + regression testing
+  - **SIL 2**: 100% interface coverage + performance testing
+  - **SIL 3-4**: 100% interface coverage + performance testing + independent verification
+
+  **Workflow**:
+  1. INT executes integration according to phases in Integration Test Specification
+  2. INT/TST execute all interface test cases
+  3. INT/TST execute functional, performance, error handling, regression tests
+  4. INT logs all defects with severity classification
+  5. IMP fixes defects in components
+  6. INT re-tests fixed defects
+  7. CM verifies interface coverage (100% for SIL 2+)
+  8. INT creates Integration Test Report
+  9. QUA reviews report for template compliance (1 pass, SIL 3-4)
+  10. VER performs independent verification (SIL 3-4)
+  11. QUA approves final report
+
+  **Pass Criteria** (SIL 3-4):
+  - All integration test cases executed: 100%
+  - Test pass rate: ≥95%
+  - Interface coverage: 100%
+  - Open defects: 0 critical, 0 high
+  - Performance targets: Met (or justified)
+  - Regression tests: All passed
+  - Independent verification: Complete
+
+  **Critical Dependencies**:
+  - Integration Test Specification defines WHAT to test
+  - Integration Test Report documents RESULTS of testing
+  - Component Test Report confirms components ready for integration
+  - If integration results FAIL, must rework before validation
+  - Report feeds into Validation Report as evidence
+
+  **Template Compliance**:
+  - Document ID format: DOC-023-INT-TEST-REPORT-YYYY-NNN
+  - Approvals section MUST include VER signature (SIL 3-4)
+  - All sections from template MUST be present
+  - Interface coverage tables MUST be populated with actual values
+  - Defect log MUST show resolution status
+
+  **Evidence Automation**:
+  - Test execution results: AUTOMATIC (test framework XML output)
+  - Interface coverage: AUTOMATIC (CM tool, parsing test IDs)
+  - Performance metrics: AUTOMATIC (profiler tools, logs)
+  - Defect tracking: SEMI-AUTOMATIC (INT logs, tool tracks)
+  - Phase documentation: SEMI-AUTOMATIC (INT documents, tool captures logs)
+  - Pass/fail assessment: SEMI-AUTOMATIC (automated checks + INT judgment)

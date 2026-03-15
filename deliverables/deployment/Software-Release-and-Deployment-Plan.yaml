@@ -1,0 +1,499 @@
+# Software Release and Deployment Plan
+# EN 50128 Deliverable #36 - Section 9.1
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-036-SRDP"
+number: 36
+name: "Software Release and Deployment Plan"
+abbreviation: "SRDP"
+
+# ===== Lifecycle Context =====
+phase: "deployment"
+standard_section: "9.1"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "PM"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-deployment/templates/Software-Release-and-Deployment-Plan-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques: []
+    additional_requirements:
+      - "Define deployment procedures"
+      - "Define rollback procedures"
+      - "Define deployment responsibilities"
+      - "Define deployment schedule"
+    evidence_thresholds: {}
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "R"
+    additional_requirements:
+      - "Define deployment procedures (MANDATORY)"
+      - "Define rollback procedures per 9.1.4.10 (MANDATORY)"
+      - "Define deployment responsibilities (MANDATORY)"
+      - "Define deployment schedule"
+      - "Software baseline recording per 9.1.4.2"
+      - "Reproducibility procedures per 9.1.4.3"
+      - "Self-identification mechanisms per 9.1.4.11"
+      - "Traceability to installations per 9.1.4.14"
+    evidence_thresholds: {}
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "HR"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "HR"
+    additional_requirements:
+      - "Define deployment procedures (MANDATORY)"
+      - "Define rollback procedures per 9.1.4.10 (MANDATORY)"
+      - "Define deployment responsibilities (MANDATORY)"
+      - "Define deployment schedule"
+      - "Software baseline recording per 9.1.4.2 (MANDATORY)"
+      - "Reproducibility procedures per 9.1.4.3 (MANDATORY)"
+      - "Self-identification mechanisms per 9.1.4.11 (MANDATORY)"
+      - "Traceability to installations per 9.1.4.14 (MANDATORY)"
+      - "Incremental deployment facilities per 9.1.4.8 (RECOMMENDED)"
+      - "Error detection for storage/transfer/transmission per 9.1.4.20"
+      - "Configuration management for co-present versions per 9.1.4.9"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 15
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "M"
+    additional_requirements:
+      - "Define deployment procedures (MANDATORY)"
+      - "Define rollback procedures per 9.1.4.10 (MANDATORY)"
+      - "Define deployment responsibilities (MANDATORY)"
+      - "Define deployment schedule (MANDATORY)"
+      - "Software baseline recording per 9.1.4.2 (MANDATORY)"
+      - "Reproducibility procedures per 9.1.4.3 (MANDATORY)"
+      - "Self-identification mechanisms per 9.1.4.11 (MANDATORY)"
+      - "Traceability to installations per 9.1.4.14 (MANDATORY)"
+      - "Incremental deployment facilities per 9.1.4.8 (HIGHLY RECOMMENDED)"
+      - "Error detection for storage/transfer/transmission per 9.1.4.20 (MANDATORY)"
+      - "Configuration management for co-present versions per 9.1.4.9 (MANDATORY)"
+      - "Version incompatibility exclusion per 9.1.4.8"
+      - "Diagnostic information per 9.1.4.15 (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      cyclomatic_complexity_max: 10
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "M"
+    additional_requirements:
+      - "Define deployment procedures (MANDATORY)"
+      - "Define rollback procedures per 9.1.4.10 (MANDATORY)"
+      - "Define deployment responsibilities (MANDATORY)"
+      - "Define deployment schedule (MANDATORY)"
+      - "Software baseline recording per 9.1.4.2 (MANDATORY)"
+      - "Reproducibility procedures per 9.1.4.3 (MANDATORY)"
+      - "Self-identification mechanisms per 9.1.4.11 (MANDATORY)"
+      - "Traceability to installations per 9.1.4.14 (MANDATORY)"
+      - "Incremental deployment facilities per 9.1.4.8 (HIGHLY RECOMMENDED)"
+      - "Error detection for storage/transfer/transmission per 9.1.4.20 (MANDATORY)"
+      - "Configuration management for co-present versions per 9.1.4.9 (MANDATORY)"
+      - "Version incompatibility exclusion per 9.1.4.8"
+      - "Diagnostic information per 9.1.4.15 (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Code protection recommended per 9.1.4.11 NOTE"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      test_coverage_mcdc: 100
+      cyclomatic_complexity_max: 10
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "deployment-procedures-document"
+    description: "Complete deployment procedures defining how to identify and install software releases"
+    mandatory_sil: 0
+    source: "PM agent"
+    format: "Markdown with step-by-step procedures"
+    storage_path: "docs/deployment/procedures/deployment-procedures.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm create-deployment-procedures"
+    verification_criteria:
+      - "Software identification procedures defined per 9.1.4.7"
+      - "Software installation procedures defined per 9.1.4.7"
+      - "Installation verification procedures defined"
+      - "Commissioning procedures defined"
+      - "Acceptance procedures defined"
+
+  - evidence_id: "rollback-procedures"
+    description: "Rollback procedures to return to previous release per 9.1.4.10"
+    mandatory_sil: 0
+    source: "PM agent"
+    format: "Markdown with step-by-step procedures"
+    storage_path: "docs/deployment/procedures/rollback-procedures.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm create-rollback-procedures"
+    verification_criteria:
+      - "Rollback trigger conditions defined"
+      - "Rollback procedures step-by-step"
+      - "Rollback verification procedures"
+      - "Rollback testing procedures"
+      - "Data preservation during rollback addressed"
+
+  - evidence_id: "baseline-recording-procedures"
+    description: "Procedures for recording and maintaining software baselines per 9.1.4.2"
+    mandatory_sil: 1
+    source: "CM agent"
+    format: "Markdown"
+    storage_path: "docs/deployment/procedures/baseline-recording.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/cm create-baseline-procedures"
+    verification_criteria:
+      - "Baseline recording procedures defined"
+      - "Baseline content defined (all configuration items)"
+      - "Baseline storage location defined"
+      - "Baseline reproducibility procedures per 9.1.4.3"
+      - "Traceability to baseline maintained"
+
+  - evidence_id: "self-identification-specification"
+    description: "Specification of embedded self-identification mechanisms per 9.1.4.11"
+    mandatory_sil: 1
+    source: "DES agent"
+    format: "Markdown"
+    storage_path: "docs/deployment/self-identification-spec.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/des specify-self-identification"
+    verification_criteria:
+      - "Version information embedded"
+      - "Configuration data version embedded"
+      - "Product identity embedded"
+      - "Self-identification accessible at loading"
+      - "Self-identification accessible after loading"
+      - "Code protection considered per 9.1.4.11 NOTE"
+
+  - evidence_id: "incremental-deployment-facilities"
+    description: "Facilities to exclude activation of incompatible versions per 9.1.4.8"
+    mandatory_sil: 2
+    source: "DES agent"
+    format: "Design document (Markdown)"
+    storage_path: "docs/deployment/incremental-deployment-design.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/des design-incremental-deployment"
+    verification_criteria:
+      - "Version compatibility checking implemented"
+      - "Incompatible versions prevented from activating"
+      - "Component version dependencies tracked"
+      - "Activation control mechanisms defined"
+
+  - evidence_id: "installation-traceability-database"
+    description: "Database tracking deployed software to installations per 9.1.4.14"
+    mandatory_sil: 1
+    source: "CM agent"
+    format: "Database or CSV"
+    storage_path: "config/deployment/installation-traceability.csv"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/cm track-installation"
+    verification_criteria:
+      - "Every installation has software version recorded"
+      - "Critical fault traceability enabled per 9.1.4.14 NOTE"
+      - "Deployment date recorded"
+      - "Deployment personnel recorded"
+
+  - evidence_id: "error-detection-mechanisms"
+    description: "Error detection for storage, transfer, transmission, duplication per 9.1.4.20"
+    mandatory_sil: 2
+    source: "DES agent"
+    format: "Design document (Markdown)"
+    storage_path: "docs/deployment/error-detection-design.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/des design-error-detection"
+    verification_criteria:
+      - "Storage error detection mechanisms defined"
+      - "Transfer error detection mechanisms defined"
+      - "Transmission error detection mechanisms defined"
+      - "Duplication error detection mechanisms defined"
+      - "Executable code coding recommended per 9.1.4.20"
+
+  - evidence_id: "configuration-management-procedures"
+    description: "Procedures to prevent harm from co-present versions per 9.1.4.9"
+    mandatory_sil: 1
+    source: "CM agent"
+    format: "Markdown"
+    storage_path: "docs/deployment/version-coexistence-procedures.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/cm define-version-coexistence"
+    verification_criteria:
+      - "Version coexistence scenarios identified"
+      - "Harm prevention procedures defined"
+      - "Version isolation mechanisms defined"
+      - "Version conflict detection mechanisms"
+
+  - evidence_id: "diagnostic-information-specification"
+    description: "Diagnostic information provided by software per 9.1.4.15"
+    mandatory_sil: 1
+    source: "DES agent"
+    format: "Markdown"
+    storage_path: "docs/deployment/diagnostic-info-spec.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/des specify-diagnostics"
+    verification_criteria:
+      - "Fault monitoring capabilities defined"
+      - "Diagnostic outputs specified"
+      - "Diagnostic information accessibility defined"
+      - "Diagnostic information format defined"
+
+  - evidence_id: "deployment-schedule"
+    description: "Deployment schedule with milestones and responsibilities"
+    mandatory_sil: 0
+    source: "PM agent"
+    format: "Markdown or Gantt chart"
+    storage_path: "docs/deployment/deployment-schedule.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm create-deployment-schedule"
+    verification_criteria:
+      - "Deployment milestones defined"
+      - "Deployment responsibilities assigned"
+      - "Deployment timeline defined"
+      - "Dependencies identified"
+      - "Risk mitigation activities scheduled"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Deployment only proceeds after successful validation"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-003-SCMP"
+    reason: "Configuration management procedures defined in SCMP"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Self-identification mechanisms designed in SDS"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-018-SOURCE-CODE"
+    reason: "Source code contains self-identification mechanisms"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-037-SDM"
+    reason: "Deployment Manual implements procedures defined in Deployment Plan"
+  
+  - deliverable_id: "DOC-038-RELEASE-NOTES"
+    reason: "Release Notes document application conditions from Deployment Plan"
+  
+  - deliverable_id: "DOC-039-DEPLOYMENT-RECORDS"
+    reason: "Deployment Records follow procedures from Deployment Plan"
+  
+  - deliverable_id: "DOC-040-DEPLOYMENT-VER"
+    reason: "Deployment Verification Report verifies Deployment Plan compliance"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "Deployment procedures complete and step-by-step"
+    - "Rollback procedures complete per 9.1.4.10"
+    - "Responsibilities assigned to all deployment activities"
+    - "Deployment schedule complete with milestones"
+    - "Software baseline recording procedures per 9.1.4.2"
+    - "Reproducibility procedures per 9.1.4.3"
+    - "Self-identification mechanisms specified per 9.1.4.11"
+    - "Traceability to installations per 9.1.4.14"
+    - "All SIL-appropriate techniques applied per Table A.9"
+  
+  correctness:
+    - "Deployment procedures technically correct and feasible"
+    - "Rollback procedures technically correct and tested"
+    - "Responsibilities appropriately assigned per Section 5"
+    - "Schedule realistic and achievable"
+    - "Baseline recording procedures preserve reproducibility"
+    - "Self-identification mechanisms adequate for traceability"
+  
+  consistency:
+    - "Deployment procedures consistent with SCMP"
+    - "Deployment procedures consistent with validation results"
+    - "Responsibilities consistent with organizational structure"
+    - "Schedule consistent with project constraints"
+    - "All cross-references valid"
+  
+  traceability:
+    - "Traceability to validation report (deployment authorization)"
+    - "Traceability to SCMP (configuration management)"
+    - "Traceability to SDS (self-identification design)"
+    - "Traceability to installations per 9.1.4.14 (SIL 1+)"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Deployment Plan Baseline"
+  baseline_trigger: "After VER and VAL approval"
+  change_control: "All changes via CCB, impact assessment on deployment activities"
+  versioning: "Semantic versioning (MAJOR.MINOR.PATCH)"
+  storage_location: "config/baselines/deployment-plan/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "9.1"
+    title: "Software deployment"
+    relevance: "Primary section defining software deployment requirements"
+  - section: "9.1.4.1"
+    title: "Deployment responsibility"
+    relevance: "Deployment carried out under responsibility of project manager"
+  - section: "9.1.4.2"
+    title: "Software baseline recording"
+    relevance: "Software baseline shall be recorded and kept traceable"
+  - section: "9.1.4.3"
+    title: "Reproducibility"
+    relevance: "Software release shall be reproducible throughout baseline lifecycle"
+  - section: "9.1.4.7"
+    title: "Deployment Manual requirements"
+    relevance: "Procedures to correctly identify and install software release"
+  - section: "9.1.4.8"
+    title: "Incremental deployment"
+    relevance: "Facilities to exclude incompatible versions (HR SIL 3-4, R SIL 1-2)"
+  - section: "9.1.4.9"
+    title: "Configuration management for co-present versions"
+    relevance: "Ensure no harm from co-presence of different versions"
+  - section: "9.1.4.10"
+    title: "Rollback procedure"
+    relevance: "Rollback procedure shall be available (MANDATORY all SILs)"
+  - section: "9.1.4.11"
+    title: "Self-identification mechanisms"
+    relevance: "Software shall have embedded self-identification (version, product identity)"
+  - section: "9.1.4.14"
+    title: "Traceability to installations"
+    relevance: "Deployed software shall be traceable to delivered installations"
+  - section: "9.1.4.15"
+    title: "Diagnostic information"
+    relevance: "Diagnostic information shall be provided as part of fault monitoring"
+  - section: "9.1.4.20"
+    title: "Error detection"
+    relevance: "Measures for error detection in storage, transfer, transmission, duplication"
+  - section: "5.3.2.7-5.3.2.10"
+    title: "Readability requirements"
+    relevance: "General requirements for readability (MANDATORY SIL 3+)"
+  - section: "Table A.9"
+    title: "Software Quality Assurance techniques"
+    relevance: "Configuration Management (M all SILs), Traceability (R/HR/M), Data Recording (HR/M)"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Software Release and Deployment Plan is deliverable #36, written by PM, checked by VER and VAL"
+
+# ===== Notes =====
+notes: |
+  **Software Release and Deployment Plan (Deliverable #36)**
+  
+  **Purpose**: Define the overall plan for deploying validated software into operational environments
+  while preserving software safety integrity level and dependability per EN 50128 Section 9.1.
+  
+  **Key Content** (EN 50128 9.1):
+  1. Deployment procedures (identification, installation)
+  2. Rollback procedures (MANDATORY per 9.1.4.10)
+  3. Deployment responsibilities (PM responsible per 9.1.4.1)
+  4. Deployment schedule
+  5. Software baseline recording procedures per 9.1.4.2
+  6. Reproducibility procedures per 9.1.4.3
+  7. Self-identification mechanisms specification per 9.1.4.11
+  8. Traceability to installations per 9.1.4.14
+  9. Error detection mechanisms per 9.1.4.20
+  10. Configuration management for version coexistence per 9.1.4.9
+  
+  **Deployment Objectives** (EN 50128 9.1.1.1):
+  - Ensure software performs as required
+  - Preserve required software safety integrity level
+  - Preserve dependability when deployed in final application environment
+  
+  **Key Requirements**:
+  - **Rollback capability** (9.1.4.10): MANDATORY for all SIL levels
+  - **Self-identification** (9.1.4.11): Version, configuration data, product identity embedded
+  - **Baseline reproducibility** (9.1.4.3): Throughout baseline lifecycle
+  - **Installation traceability** (9.1.4.14): Critical for fault correction across installations
+  - **Incremental deployment** (9.1.4.8): HR for SIL 3-4, R for SIL 1-2
+  - **Error detection** (9.1.4.20): Storage, transfer, transmission, duplication
+  
+  **PM Agent Responsibility**:
+  - Overall deployment planning and coordination (9.1.4.1)
+  - Define deployment procedures and schedule
+  - Define rollback procedures (MANDATORY)
+  - Assign deployment responsibilities
+  - Coordinate with CM for baseline recording
+  - Coordinate with DES for self-identification and error detection
+  
+  **VER Agent Responsibility**:
+  - Verify deployment procedures complete and correct
+  - Verify rollback procedures adequate
+  - Verify self-identification mechanisms adequate
+  - Verify traceability mechanisms adequate
+  - Record verification results in DOC-040 (Deployment Verification Report)
+  
+  **VAL Agent Responsibility**:
+  - Validate deployment plan meets operational needs
+  - Validate rollback procedures adequate for safety
+  - Validate deployment schedule realistic
+  
+  **CM Agent Responsibility**:
+  - Define baseline recording procedures per 9.1.4.2
+  - Define reproducibility procedures per 9.1.4.3
+  - Define installation traceability procedures per 9.1.4.14
+  - Define version coexistence procedures per 9.1.4.9
+  
+  **DES Agent Responsibility**:
+  - Specify self-identification mechanisms per 9.1.4.11
+  - Design incremental deployment facilities per 9.1.4.8
+  - Design error detection mechanisms per 9.1.4.20
+  - Specify diagnostic information per 9.1.4.15
+  
+  **Feeds Into**:
+  - DOC-037 (Software Deployment Manual): Implements procedures
+  - DOC-038 (Release Notes): Documents application conditions
+  - DOC-039 (Deployment Records): Follows procedures
+  - DOC-040 (Deployment Verification Report): Verifies plan

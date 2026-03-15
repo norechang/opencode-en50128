@@ -1,0 +1,555 @@
+# Software Assessment Report
+# EN 50128 Deliverable #46 - Section 6.4.4.16-6.4.4.19
+# SIL 3-4 ONLY
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-046-SAR"
+number: 46
+name: "Software Assessment Report"
+abbreviation: "SAR"
+
+# ===== Lifecycle Context =====
+phase: "assessment"
+standard_section: "6.4.4.16"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "ASR"
+first_check: "VER"
+second_check: "NONE"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-quality/templates/Software-Assessment-Report-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: false
+    techniques: []
+    additional_requirements:
+      - "No assessment required for SIL 0 per 6.4.1.2"
+      - "ISO 9001 certificate sufficient for SIL 0"
+    evidence_thresholds: {}
+  
+  sil_1:
+    mandatory: false
+    techniques: []
+    additional_requirements:
+      - "Assessment RECOMMENDED for SIL 1 but not MANDATORY"
+      - "If assessment performed, follow SIL 1 requirements"
+    evidence_thresholds: {}
+  
+  sil_2:
+    mandatory: false
+    techniques: []
+    additional_requirements:
+      - "Assessment RECOMMENDED for SIL 2 but not MANDATORY"
+      - "If assessment performed, follow SIL 2 requirements"
+    evidence_thresholds: {}
+  
+  sil_3:
+    mandatory: true
+    techniques: []
+    additional_requirements:
+      - "Independent Assessor MANDATORY per 6.4.4.1"
+      - "Independence per 5.1.2.6 and 5.1.2.7 (MANDATORY)"
+      - "Software Assessment Report SHALL be written per 6.4.4.16 (MANDATORY)"
+      - "Report SHALL meet Software Assessment Plan requirements per 6.4.4.17 (MANDATORY)"
+      - "Report SHALL provide conclusion and recommendations per 6.4.4.17 (MANDATORY)"
+      - "Assessor activities recorded as consistent base per 6.4.4.18 (MANDATORY)"
+      - "Activities summarized in report per 6.4.4.18 (MANDATORY)"
+      - "Non-conformities identified and evaluated per 6.4.4.19 (MANDATORY)"
+      - "Non-conformities and judgments listed in report per 6.4.4.19 (MANDATORY)"
+      - "Impact on final result judged per 6.4.4.19 (MANDATORY)"
+      - "Assessment covers: software fit for purpose per 6.4.4.8"
+      - "Assessment covers: techniques from Annex A per 6.4.4.9"
+      - "Assessment covers: configuration and change management per 6.4.4.10"
+      - "Assessment covers: staff competency per Annex B per 6.4.4.11"
+      - "Assessment covers: safety-related application conditions per 6.4.4.12"
+      - "Assessment covers: verification and validation activities per 6.4.4.13"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      cyclomatic_complexity_max: 10
+  
+  sil_4:
+    mandatory: true
+    techniques: []
+    additional_requirements:
+      - "Independent Assessor MANDATORY per 6.4.4.1"
+      - "Independence per 5.1.2.6 and 5.1.2.7 (MANDATORY)"
+      - "Software Assessment Report SHALL be written per 6.4.4.16 (MANDATORY)"
+      - "Report SHALL meet Software Assessment Plan requirements per 6.4.4.17 (MANDATORY)"
+      - "Report SHALL provide conclusion and recommendations per 6.4.4.17 (MANDATORY)"
+      - "Assessor activities recorded as consistent base per 6.4.4.18 (MANDATORY)"
+      - "Activities summarized in report per 6.4.4.18 (MANDATORY)"
+      - "Non-conformities identified and evaluated per 6.4.4.19 (MANDATORY)"
+      - "Non-conformities and judgments listed in report per 6.4.4.19 (MANDATORY)"
+      - "Impact on final result judged per 6.4.4.19 (MANDATORY)"
+      - "Assessment covers: software fit for purpose per 6.4.4.8"
+      - "Assessment covers: techniques from Annex A per 6.4.4.9"
+      - "Assessment covers: configuration and change management per 6.4.4.10"
+      - "Assessment covers: staff competency per Annex B per 6.4.4.11"
+      - "Assessment covers: safety-related application conditions per 6.4.4.12"
+      - "Assessment covers: verification and validation activities per 6.4.4.13"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      test_coverage_mcdc: 100
+      cyclomatic_complexity_max: 10
+
+# ===== Required Content =====
+required_content:
+  sil_0:
+    - "Not applicable - no assessment required per 6.4.1.2"
+  
+  sil_1:
+    - "Optional - if performed, use SIL 1 assessment criteria"
+  
+  sil_2:
+    - "Optional - if performed, use SIL 2 assessment criteria"
+  
+  sil_3:
+    - "Document Control (ID, version, approval, change history)"
+    - "Assessor Information (name, qualifications, independence evidence per 5.1.2.6-5.1.2.7)"
+    - "Assessment Plan Reference (DOC-045)"
+    - "Compliance with Assessment Plan (per 6.4.4.17)"
+    - "Summary of Assessor Activities (per 6.4.4.18)"
+    - "Software Fitness for Purpose Assessment (per 6.4.4.8)"
+    - "Annex A Techniques Assessment (per 6.4.4.9)"
+    - "Configuration and Change Management Assessment (per 6.4.4.10)"
+    - "Staff Competency Assessment (per Annex B, per 6.4.4.11)"
+    - "Safety-Related Application Conditions Assessment (per 6.4.4.12)"
+    - "Verification and Validation Activities Assessment (per 6.4.4.13)"
+    - "SVaP Agreement Status (per 6.4.4.14)"
+    - "Audits and Inspections Summary (per 6.4.4.15)"
+    - "Non-Conformities List (per 6.4.4.19)"
+    - "Non-Conformity Judgments (per 6.4.4.19)"
+    - "Impact on Final Result (per 6.4.4.19)"
+    - "Conclusion (per 6.4.4.17)"
+    - "Recommendations (per 6.4.4.17)"
+  
+  sil_4:
+    - "Document Control (ID, version, approval, change history)"
+    - "Assessor Information (name, qualifications, independence evidence per 5.1.2.6-5.1.2.7)"
+    - "Assessment Plan Reference (DOC-045)"
+    - "Compliance with Assessment Plan (per 6.4.4.17)"
+    - "Summary of Assessor Activities (per 6.4.4.18)"
+    - "Software Fitness for Purpose Assessment (per 6.4.4.8)"
+    - "Annex A Techniques Assessment (per 6.4.4.9)"
+    - "Configuration and Change Management Assessment (per 6.4.4.10)"
+    - "Staff Competency Assessment (per Annex B, per 6.4.4.11)"
+    - "Safety-Related Application Conditions Assessment (per 6.4.4.12)"
+    - "Verification and Validation Activities Assessment (per 6.4.4.13)"
+    - "SVaP Agreement Status (per 6.4.4.14)"
+    - "Audits and Inspections Summary (per 6.4.4.15)"
+    - "Non-Conformities List (per 6.4.4.19)"
+    - "Non-Conformity Judgments (per 6.4.4.19)"
+    - "Impact on Final Result (per 6.4.4.19)"
+    - "Conclusion (per 6.4.4.17)"
+    - "Recommendations (per 6.4.4.17)"
+    - "SIL 4 specific assessment findings (enhanced rigor)"
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "assessor-activity-records"
+    description: "Consistent base of Assessor activities per 6.4.4.18"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown (activity log)"
+    storage_path: "docs/assessment/activity-records.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr record-activity"
+    verification_criteria:
+      - "All assessment activities recorded"
+      - "Activity dates and participants"
+      - "Activity findings documented"
+      - "Activity evidence collected"
+      - "Activity traceability to Assessment Plan"
+      - "Activities summarized in Assessment Report per 6.4.4.18"
+
+  - evidence_id: "fitness-for-purpose-assessment"
+    description: "Assessment that software is fit for intended purpose per 6.4.4.8"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown assessment"
+    storage_path: "docs/assessment/fitness-assessment.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr assess-fitness"
+    verification_criteria:
+      - "Software purpose identified"
+      - "System Safety Requirements Specification reviewed"
+      - "Software responds correctly to safety issues"
+      - "Software fit for intended application"
+      - "Evidence supporting fitness assessment"
+      - "Conclusion documented in Assessment Report"
+
+  - evidence_id: "annex-a-techniques-assessment"
+    description: "Assessment of Annex A techniques per 6.4.4.9"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown assessment"
+    storage_path: "docs/assessment/techniques-assessment.md"
+    automation_level: "semi-automated"
+    collect_on_agent_action: "/asr assess-techniques"
+    verification_criteria:
+      - "Appropriate techniques from Annex A selected"
+      - "Techniques suitable for SIL level"
+      - "Extent of technique application (all or part of software)"
+      - "Evidence of proper technique application"
+      - "Technique effectiveness evaluated"
+      - "Technique combination justified per 4.8 and 4.9"
+
+  - evidence_id: "configuration-change-assessment"
+    description: "Assessment of configuration and change management per 6.4.4.10"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown assessment"
+    storage_path: "docs/assessment/config-change-assessment.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr assess-config-change"
+    verification_criteria:
+      - "Configuration management system assessed"
+      - "Change management system assessed"
+      - "Evidence of system use and application"
+      - "SCMP compliance verified"
+      - "Baseline management effective"
+      - "Change control effective"
+
+  - evidence_id: "staff-competency-assessment"
+    description: "Assessment of project staff competency per 6.4.4.11"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown assessment"
+    storage_path: "docs/assessment/staff-competency-assessment.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr assess-staff-competency"
+    verification_criteria:
+      - "Evidence of staff competency per Annex B reviewed"
+      - "Roles and responsibilities per Annex B tables"
+      - "Qualifications appropriate for SIL level"
+      - "Independence requirements met (SIL 3-4)"
+      - "Training and experience verified"
+      - "Organization structure assessed per 5.1"
+
+  - evidence_id: "application-conditions-assessment"
+    description: "Assessment of safety-related application conditions per 6.4.4.12"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown assessment"
+    storage_path: "docs/assessment/application-conditions-assessment.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr assess-application-conditions"
+    verification_criteria:
+      - "Safety-related application conditions identified"
+      - "Deviations noted and assessed"
+      - "Non-compliances to requirements assessed"
+      - "Non-conformities impact on safety judged"
+      - "Project justifications acceptable"
+      - "Results stated in Assessment Report per 6.4.4.12"
+
+  - evidence_id: "vv-activities-assessment"
+    description: "Assessment of verification and validation activities per 6.4.4.13"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown assessment"
+    storage_path: "docs/assessment/vv-assessment.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr assess-vv-activities"
+    verification_criteria:
+      - "Verification activities assessed"
+      - "Validation activities assessed"
+      - "Supporting evidence reviewed"
+      - "SVP compliance verified"
+      - "SVaP compliance verified"
+      - "Test witnessing performed (if planned)"
+      - "Additional V&V work requested (if needed per 6.4.4.15)"
+
+  - evidence_id: "non-conformities-list"
+    description: "List of non-conformities per 6.4.4.19"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown table"
+    storage_path: "docs/assessment/non-conformities.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr list-non-conformities"
+    verification_criteria:
+      - "All non-conformities identified"
+      - "Non-conformity description clear"
+      - "Non-conformity classification (major/minor)"
+      - "Impact on final result evaluated per 6.4.4.19"
+      - "Assessor judgment documented per 6.4.4.19"
+      - "Non-conformities and judgments listed in report per 6.4.4.19"
+
+  - evidence_id: "assessment-conclusion"
+    description: "Assessment conclusion and recommendations per 6.4.4.17"
+    mandatory_sil: 3
+    source: "ASR agent"
+    format: "Markdown"
+    storage_path: "docs/assessment/conclusion.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/asr provide-conclusion"
+    verification_criteria:
+      - "Conclusion provided per 6.4.4.17"
+      - "Overall SIL achievement assessed"
+      - "Software fitness for intended application assessed"
+      - "Recommendations provided per 6.4.4.17"
+      - "Recommendations actionable and specific"
+      - "Conclusion meets Assessment Plan requirements per 6.4.4.17"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-045-SAP"
+    reason: "Assessment Report must meet Assessment Plan requirements per 6.4.4.17"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-006-SRS"
+    reason: "Software Requirements Specification assessed per 6.4.4.8"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-003-SCMP"
+    reason: "Configuration Management Plan assessed per 6.4.4.10"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-004-SVP"
+    reason: "Verification activities assessed per 6.4.4.13"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-005-SVAP"
+    reason: "Validation activities assessed per 6.4.4.13"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-026-SVAL"
+    reason: "Validation Report assessed per 6.4.4.13"
+    dependency_type: "informational"
+
+feeds_into: []
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "Meets Software Assessment Plan requirements per 6.4.4.17 (MANDATORY)"
+    - "Provides conclusion per 6.4.4.17 (MANDATORY)"
+    - "Provides recommendations per 6.4.4.17 (MANDATORY)"
+    - "Assessor activities recorded per 6.4.4.18 (MANDATORY)"
+    - "Activities summarized per 6.4.4.18 (MANDATORY)"
+    - "Non-conformities identified and evaluated per 6.4.4.19 (MANDATORY)"
+    - "Non-conformities and judgments listed per 6.4.4.19 (MANDATORY)"
+    - "Impact on final result judged per 6.4.4.19 (MANDATORY)"
+    - "All assessment scope areas covered per 6.4.4.8-6.4.4.13 (MANDATORY)"
+  
+  correctness:
+    - "Assessment technically correct"
+    - "Fitness for purpose assessment accurate per 6.4.4.8"
+    - "Techniques assessment accurate per 6.4.4.9"
+    - "Configuration/change assessment accurate per 6.4.4.10"
+    - "Staff competency assessment accurate per 6.4.4.11"
+    - "Application conditions assessment accurate per 6.4.4.12"
+    - "V&V activities assessment accurate per 6.4.4.13"
+    - "Non-conformity impact judgments accurate"
+    - "Conclusion supported by evidence"
+    - "Recommendations actionable and appropriate"
+  
+  consistency:
+    - "Consistent with Software Assessment Plan (DOC-045)"
+    - "Consistent across all assessment areas"
+    - "Conclusion consistent with findings"
+    - "Recommendations consistent with non-conformities"
+    - "No conflicting assessments"
+  
+  traceability:
+    - "Traceability to Software Assessment Plan (DOC-045)"
+    - "Traceability to all deliverables assessed"
+    - "Traceability to System Safety Requirements Specification"
+    - "Traceability to Software Requirements Specification"
+    - "Traceability to EN 50128 requirements"
+    - "Traceability of all non-conformities to standard requirements"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Software Assessment Report Baseline"
+  baseline_trigger: "After VER approval and acceptance of assessment"
+  change_control: "Assessment Report is FINAL once issued; corrections via errata only"
+  versioning: "Semantic versioning (MAJOR.MINOR.PATCH)"
+  storage_location: "config/baselines/assessment-report/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "6.4"
+    title: "Software assessment"
+    relevance: "Primary section defining software assessment requirements"
+  - section: "6.4.1.1"
+    title: "Assessment objective"
+    relevance: "Evaluate lifecycle processes and outputs for SIL and fitness"
+  - section: "6.4.1.2"
+    title: "SIL 0 exception"
+    relevance: "No assessment required for SIL 0 if ISO 9001 certificate available"
+  - section: "6.4.2"
+    title: "Input documents"
+    relevance: "System Safety Requirements Specification, Software Requirements Specification, all necessary documents"
+  - section: "6.4.3"
+    title: "Output documents"
+    relevance: "Software Assessment Plan, Software Assessment Report, Software Assessment Verification Report"
+  - section: "6.4.4.1"
+    title: "Independent Assessor"
+    relevance: "Assessor SHALL be independent per 5.1.2.6 and 5.1.2.7 (MANDATORY SIL 3-4)"
+  - section: "6.4.4.2"
+    title: "Reuse of Assessment Report"
+    relevance: "Software with Assessment Report from another Assessor does not require new assessment if fit for use"
+  - section: "6.4.4.8"
+    title: "Fitness for purpose"
+    relevance: "Assessor SHALL assess software is fit for purpose and responds to safety issues (MANDATORY)"
+  - section: "6.4.4.9"
+    title: "Annex A techniques"
+    relevance: "Assessor SHALL assess appropriate techniques selected and applied per SIL (MANDATORY)"
+  - section: "6.4.4.10"
+    title: "Configuration and change management"
+    relevance: "Assessor SHALL assess configuration and change management system and evidence (MANDATORY)"
+  - section: "6.4.4.11"
+    title: "Staff competency"
+    relevance: "Assessor SHALL review staff competency per Annex B and organization per 5.1 (MANDATORY)"
+  - section: "6.4.4.12"
+    title: "Application conditions"
+    relevance: "Assessor SHALL check safety-related application conditions, deviations, non-compliances (MANDATORY)"
+  - section: "6.4.4.13"
+    title: "V&V activities"
+    relevance: "Assessor SHALL assess verification and validation activities and supporting evidence (MANDATORY)"
+  - section: "6.4.4.14"
+    title: "SVaP agreement"
+    relevance: "Assessor SHALL agree scope and contents of Software Validation Plan (MANDATORY SIL 3-4)"
+  - section: "6.4.4.15"
+    title: "Audits and inspections"
+    relevance: "Assessor MAY carry out audits, inspections, test witnessing; may request additional V&V"
+  - section: "6.4.4.16"
+    title: "Software Assessment Report"
+    relevance: "Software Assessment Report SHALL be written under Assessor responsibility (MANDATORY SIL 3-4)"
+  - section: "6.4.4.17"
+    title: "Report requirements"
+    relevance: "Report SHALL meet Assessment Plan and provide conclusion and recommendations (MANDATORY)"
+  - section: "6.4.4.18"
+    title: "Activity recording"
+    relevance: "Assessor SHALL record activities as consistent base, summarized in report (MANDATORY)"
+  - section: "6.4.4.19"
+    title: "Non-conformities"
+    relevance: "Assessor SHALL identify, evaluate, judge non-conformities and list in report (MANDATORY)"
+  - section: "5.1"
+    title: "Organization"
+    relevance: "Organization assessed per 6.4.4.11"
+  - section: "5.1.2.6"
+    title: "Independence requirements"
+    relevance: "Independence definition for Assessor role"
+  - section: "5.1.2.7"
+    title: "Independence criteria"
+    relevance: "Criteria for establishing independence"
+  - section: "4.8"
+    title: "Combination of techniques"
+    relevance: "Technique combination assessed per 6.4.4.9"
+  - section: "4.9"
+    title: "Justification of techniques"
+    relevance: "Technique justification assessed per 6.4.4.9"
+  - section: "Annex A"
+    title: "Techniques and measures"
+    relevance: "Techniques assessed per 6.4.4.9"
+  - section: "Annex B"
+    title: "Roles and competency"
+    relevance: "Staff competency assessed per 6.4.4.11"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Software Assessment Report is deliverable #46, written by ASR, checked by VER"
+
+# ===== Notes =====
+notes: |
+  **Software Assessment Report (Deliverable #46)**
+  
+  **Applicability**: MANDATORY for SIL 3-4 ONLY per EN 50128 6.4.1.1
+  - SIL 0: No assessment required if ISO 9001 certificate available per 6.4.1.2
+  - SIL 1-2: Assessment recommended but not mandatory
+  - SIL 3-4: Independent assessment MANDATORY per 6.4.4.1
+  
+  **Purpose**: Document the results of independent assessment to evaluate that lifecycle processes
+  and outputs are such that the software is of the defined SIL and fit for its intended application
+  per EN 50128 Section 6.4.
+  
+  **Key Requirements** (EN 50128 6.4.4.16-6.4.4.19 - ALL MANDATORY for SIL 3-4):
+  1. **Meet Software Assessment Plan requirements** (6.4.4.17)
+  2. **Provide conclusion** (6.4.4.17)
+  3. **Provide recommendations** (6.4.4.17)
+  4. **Record Assessor activities as consistent base** (6.4.4.18)
+  5. **Summarize activities in report** (6.4.4.18)
+  6. **Identify and evaluate non-conformities** (6.4.4.19)
+  7. **Judge impact on final result** (6.4.4.19)
+  8. **List non-conformities and judgments** (6.4.4.19)
+  
+  **Assessment Scope** (EN 50128 6.4.4.8-6.4.4.15 - ALL MANDATORY):
+  1. **Software fit for intended purpose** per 6.4.4.8
+  2. **Appropriate techniques from Annex A** selected and applied per 6.4.4.9
+  3. **Configuration and change management system** per 6.4.4.10
+  4. **Competency of project staff** per Annex B per 6.4.4.11
+  5. **Safety-related application conditions** per 6.4.4.12
+  6. **Verification and validation activities** per 6.4.4.13
+  7. **Agreement on SVaP scope and contents** per 6.4.4.14
+  8. **Audits and inspections** (if performed) per 6.4.4.15
+  
+  **Critical Requirements**:
+  - **Independent Assessor** per 5.1.2.6 and 5.1.2.7 (MANDATORY SIL 3-4)
+  - **Consistent activity records** per 6.4.4.18 (MANDATORY)
+  - **Non-conformity evaluation** per 6.4.4.19 (MANDATORY)
+  - **Conclusion and recommendations** per 6.4.4.17 (MANDATORY)
+  - **Compliance with Assessment Plan** per 6.4.4.17 (MANDATORY)
+  
+  **Non-Conformity Handling** (EN 50128 6.4.4.19):
+  - Identify non-conformities with EN 50128 requirements
+  - Evaluate each non-conformity
+  - Judge impact on final result (SIL achievement, fitness for application)
+  - List non-conformities and judgments in report
+  - Provide recommendations for resolution
+  
+  **Reuse of Assessment Reports** (EN 50128 6.4.4.2):
+  - Software with Assessment Report from another Assessor does not require new assessment
+  - Current Assessor SHALL check software is fit for intended use in intended environment
+  - Former assessment SHALL state software achieved SIL at least equal to required level
+  
+  **ASR Agent Responsibility**:
+  - Record all assessment activities per 6.4.4.18
+  - Assess software fitness for purpose per 6.4.4.8
+  - Assess Annex A techniques per 6.4.4.9
+  - Assess configuration and change management per 6.4.4.10
+  - Assess staff competency per Annex B per 6.4.4.11
+  - Assess safety-related application conditions per 6.4.4.12
+  - Assess verification and validation activities per 6.4.4.13
+  - Identify and evaluate non-conformities per 6.4.4.19
+  - Judge impact on final result per 6.4.4.19
+  - Provide conclusion and recommendations per 6.4.4.17
+  - Meet Software Assessment Plan requirements per 6.4.4.17
+  - Summarize activities in report per 6.4.4.18
+  - List non-conformities and judgments per 6.4.4.19
+  
+  **VER Agent Responsibility**:
+  - First check of Software Assessment Report
+  - Verify report meets Assessment Plan requirements
+  - Verify completeness per 6.4.4.17-6.4.4.19
+  - Verify traceability to Assessment Plan
+  - Verify consistency of findings and conclusion
+  
+  **Independence Requirements** (5.1.2.6 and 5.1.2.7):
+  - Assessor not part of development team
+  - Assessor not reporting to project management
+  - Assessor has no financial interest in project outcome
+  - Assessor maintains independence throughout lifecycle
+  - Independence evidence documented
+  
+  **Assessment Report is FINAL**:
+  - Once issued, Assessment Report is final document
+  - Changes only via errata (corrections of factual errors)
+  - No substantive changes after issuance
+  - New assessment required for substantive changes
+  
+  **Relation to Other Deliverables**:
+  - Input: Software Assessment Plan (DOC-045) per 6.4.4.17
+  - Input: All deliverables per Table C.1
+  - Input: System Safety Requirements Specification per 6.4.2
+  - Input: Software Requirements Specification per 6.4.2
+  - Verified by: VER agent (first check)
+  - Approval: Final authority for software release per Section 6.4

@@ -105,7 +105,7 @@ typedef struct {
  * @brief Fault detection module state structure
  * @compliance Static allocation ONLY (259 bytes fixed size)
  */
-typedef struct {
+typedef struct fault_detection_s {
     fault_entry_t fault_log[FAULT_LOG_SIZE];  /**< Circular fault log (256 bytes) */
     uint8_t fault_log_head;                   /**< Next write index (1 byte) */
     uint8_t fault_log_count;                  /**< Active fault count (1 byte) */

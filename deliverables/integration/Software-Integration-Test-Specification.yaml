@@ -1,0 +1,465 @@
+deliverable_id: "DOC-022-INT-TEST-SPEC"
+number: 22
+name: "Software Integration Test Specification"
+abbreviation: "Int Test Spec"
+phase: "integration"
+standard_section: "7.6.4.3"
+written_by: "INT"
+first_check: "VER"
+second_check: "QUA"
+template_path: ".opencode/skills/en50128-integration/templates/Software-Integration-Test-Specification-template.md"
+template_exists: true
+
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.14"
+    additional_requirements:
+      - "Integration strategy documented"
+      - "Interface test cases defined"
+      - "Integration test environment specified"
+    evidence_thresholds:
+      min_interface_coverage: 70
+      min_integration_phases: 1
+    integration_requirements:
+      progressive_integration: true
+      interface_testing: true
+      performance_testing: false
+      independent_testing: false
+
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.14"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "-"
+        table_reference: "A.18"
+    additional_requirements:
+      - "Integration strategy justified"
+      - "All component interfaces tested"
+      - "Traceability to architecture specification"
+      - "Regression testing planned"
+    evidence_thresholds:
+      min_interface_coverage: 90
+      min_integration_phases: 2
+    integration_requirements:
+      progressive_integration: true
+      interface_testing: true
+      performance_testing: false
+      independent_testing: false
+
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.14"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "R"
+        table_reference: "A.18"
+    additional_requirements:
+      - "Integration strategy justified with risk analysis"
+      - "100% component interface coverage (MANDATORY)"
+      - "Traceability to architecture and design specifications"
+      - "Regression testing after each integration phase"
+      - "Performance test cases defined"
+      - "Error handling across interfaces tested"
+    evidence_thresholds:
+      min_interface_coverage: 100
+      min_integration_phases: 3
+    integration_requirements:
+      progressive_integration: true
+      interface_testing: true
+      performance_testing: true
+      independent_testing: false
+
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.14"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "HR"
+        table_reference: "A.18"
+    additional_requirements:
+      - "Integration strategy justified with risk analysis (MANDATORY)"
+      - "100% component interface coverage (MANDATORY)"
+      - "Traceability to architecture and design specifications (MANDATORY)"
+      - "Regression testing after each integration phase (MANDATORY)"
+      - "Performance test cases defined (highly recommended)"
+      - "Error handling across interfaces tested (MANDATORY)"
+      - "Independent review of integration test specification (MANDATORY)"
+      - "Progressive integration (not big-bang) (MANDATORY)"
+      - "Interface timing and synchronization tested"
+    evidence_thresholds:
+      min_interface_coverage: 100
+      min_integration_phases: 4
+    integration_requirements:
+      progressive_integration: true
+      interface_testing: true
+      performance_testing: true
+      independent_testing: true
+
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.14"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "HR"
+        table_reference: "A.18"
+    additional_requirements:
+      - "Integration strategy justified with risk analysis (MANDATORY)"
+      - "100% component interface coverage (MANDATORY)"
+      - "Traceability to architecture and design specifications (MANDATORY)"
+      - "Regression testing after each integration phase (MANDATORY)"
+      - "Performance test cases defined (highly recommended)"
+      - "Error handling across interfaces tested (MANDATORY)"
+      - "Independent review of integration test specification (MANDATORY)"
+      - "Progressive integration (not big-bang) (MANDATORY)"
+      - "Interface timing and synchronization tested (MANDATORY)"
+      - "Formal test case review (MANDATORY)"
+    evidence_thresholds:
+      min_interface_coverage: 100
+      min_integration_phases: 4
+    integration_requirements:
+      progressive_integration: true
+      interface_testing: true
+      performance_testing: true
+      independent_testing: true
+
+evidence_requirements:
+  - evidence_id: "integration-strategy"
+    description: "Documented integration strategy with approach, phases, and justification"
+    mandatory_sil: 0
+    source: "INT agent"
+    format: "Structured section in markdown with strategy, phases, integration order"
+    storage_path: "deliverables/integration/Software-Integration-Test-Specification.md Section 2"
+    automation_level: "manual"
+    collect_on_agent_action: "/int plan-integration"
+    verification_criteria:
+      - "Integration approach documented (bottom-up/top-down/sandwich)"
+      - "Integration phases defined"
+      - "Integration order specified"
+      - "Rationale for strategy provided"
+
+  - evidence_id: "interface-test-cases"
+    description: "Test cases for all component interfaces"
+    mandatory_sil: 0
+    source: "INT agent"
+    format: "Structured table with test case ID, interface, components, description, priority, SIL"
+    storage_path: "deliverables/integration/Software-Integration-Test-Specification.md Section 4.2"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/int define-interface-tests"
+    verification_criteria:
+      - "All interfaces from architecture specification covered"
+      - "Each test case has unique ID (TC-INT-IF-XXX)"
+      - "Priority assigned"
+      - "Pass/fail criteria defined"
+
+  - evidence_id: "functional-integration-test-cases"
+    description: "Functional test cases for integrated components"
+    mandatory_sil: 0
+    source: "INT agent"
+    format: "Structured table with test case ID, phase, components, description, priority"
+    storage_path: "deliverables/integration/Software-Integration-Test-Specification.md Section 4.3"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/int define-functional-tests"
+    verification_criteria:
+      - "Test cases cover integrated functionality"
+      - "Test cases mapped to integration phases"
+      - "Pass/fail criteria defined"
+
+  - evidence_id: "performance-test-cases"
+    description: "Performance test cases for integrated components (SIL 2+)"
+    mandatory_sil: 2
+    source: "INT agent"
+    format: "Structured table with test case ID, components, metric, target, priority"
+    storage_path: "deliverables/integration/Software-Integration-Test-Specification.md Section 4.4"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/int define-performance-tests"
+    verification_criteria:
+      - "Execution time targets defined"
+      - "Memory usage targets defined"
+      - "Resource contention tested"
+      - "Performance metrics measurable"
+
+  - evidence_id: "error-handling-test-cases"
+    description: "Test cases for error propagation and handling across interfaces"
+    mandatory_sil: 1
+    source: "INT agent"
+    format: "Structured table with test case ID, components, error condition, expected behavior"
+    storage_path: "deliverables/integration/Software-Integration-Test-Specification.md Section 4.5"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/int define-error-tests"
+    verification_criteria:
+      - "Error detection tested"
+      - "Error propagation tested"
+      - "Error recovery tested"
+      - "Defensive programming measures tested"
+
+  - evidence_id: "regression-test-cases"
+    description: "Regression test cases after each integration phase"
+    mandatory_sil: 1
+    source: "INT agent"
+    format: "Structured table with test case ID, phase, description, baseline version"
+    storage_path: "deliverables/integration/Software-Integration-Test-Specification.md Section 4.6"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/int define-regression-tests"
+    verification_criteria:
+      - "Regression tests defined for each phase"
+      - "Previously integrated components retested"
+      - "Baseline version documented"
+
+  - evidence_id: "architecture-traceability"
+    description: "Traceability from architecture interfaces to integration test cases"
+    mandatory_sil: 1
+    source: "CM agent"
+    format: "Structured table with architecture component, interface, test case IDs, coverage status"
+    storage_path: "deliverables/integration/Software-Integration-Test-Specification.md Section 5.1"
+    automation_level: "automatic"
+    collect_on_agent_action: "/cm trace-architecture-to-integration-tests"
+    verification_criteria:
+      - "All architecture interfaces traced"
+      - "No untested interfaces"
+      - "Bi-directional traceability"
+      - "Coverage = 100% (SIL 2+)"
+
+  - evidence_id: "design-traceability"
+    description: "Traceability from design interface specifications to integration test cases"
+    mandatory_sil: 1
+    source: "CM agent"
+    format: "Structured table with design module, interface spec, test case IDs, coverage status"
+    storage_path: "deliverables/integration/Software-Integration-Test-Specification.md Section 5.2"
+    automation_level: "automatic"
+    collect_on_agent_action: "/cm trace-design-to-integration-tests"
+    verification_criteria:
+      - "All design interface specs traced"
+      - "No untested interface specs"
+      - "Bi-directional traceability"
+
+  - evidence_id: "integration-test-environment"
+    description: "Specification of integration test environment including hardware, software, tools"
+    mandatory_sil: 0
+    source: "INT agent"
+    format: "Structured section with hardware, software, tools, test data"
+    storage_path: "deliverables/integration/Software-Integration-Test-Specification.md Section 3"
+    automation_level: "manual"
+    collect_on_agent_action: "/int specify-test-environment"
+    verification_criteria:
+      - "Hardware environment documented"
+      - "Software environment documented (OS, compiler, test framework)"
+      - "Tools documented (version control, build, coverage)"
+      - "Test data management defined"
+
+  - evidence_id: "stubs-and-drivers"
+    description: "Specification of stubs and drivers required for integration"
+    mandatory_sil: 0
+    source: "INT agent"
+    format: "Structured tables with stub/driver name, simulates component, functionality, owner"
+    storage_path: "deliverables/integration/Software-Integration-Test-Specification.md Section 2.3"
+    automation_level: "manual"
+    collect_on_agent_action: "/int specify-stubs-drivers"
+    verification_criteria:
+      - "All required stubs documented"
+      - "All required drivers documented"
+      - "Stub/driver functionality specified"
+      - "Stub/driver owners assigned"
+
+  - evidence_id: "integration-phase-procedures"
+    description: "Detailed procedures for each integration phase with entry/exit criteria"
+    mandatory_sil: 0
+    source: "INT agent"
+    format: "Structured sections per phase with scope, components, steps, test cases, criteria"
+    storage_path: "deliverables/integration/Software-Integration-Test-Specification.md Section 6"
+    automation_level: "manual"
+    collect_on_agent_action: "/int define-phase-procedures"
+    verification_criteria:
+      - "Each phase has entry criteria"
+      - "Each phase has exit criteria"
+      - "Integration steps documented"
+      - "Test cases assigned to phases"
+
+  - evidence_id: "independent-review-statement"
+    description: "Statement from independent Verifier that integration test specification has been reviewed (SIL 3-4)"
+    mandatory_sil: 3
+    source: "VER agent (independent)"
+    format: "Signed statement in Approvals section"
+    storage_path: "deliverables/integration/Software-Integration-Test-Specification.md Approvals section"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver approve-integration-test-spec"
+    verification_criteria:
+      - "Verifier is independent from INT, DES, IMP"
+      - "Verifier signature and date recorded"
+      - "Review covers completeness and correctness"
+      - "Any concerns documented"
+
+depends_on:
+  - deliverable_id: "DOC-009-SAS"
+    reason: "Architecture interfaces define what to integrate"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Design specifications define interface details"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-011-SOFTWARE-INTERFACE-SPEC"
+    reason: "Interface specifications define interface contracts"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-021-COMP-TEST-REPORT"
+    reason: "Components must pass unit tests before integration"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-004-SVP"
+    reason: "Defines integration test approach and criteria"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-023-INT-TEST-REPORT"
+    reason: "Defines test cases to be executed"
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Integration testing feeds into validation"
+
+verification_criteria:
+  completeness:
+    - "All component interfaces from architecture specification covered"
+    - "Integration strategy documented with phases and order"
+    - "Test cases defined for all interfaces (100% coverage for SIL 2+)"
+    - "Test environment specified"
+    - "Stubs and drivers identified"
+    - "Entry and exit criteria defined for each phase"
+    - "Traceability matrices complete"
+  
+  correctness:
+    - "Integration strategy appropriate for project"
+    - "Test cases correctly test interfaces"
+    - "Pass/fail criteria are measurable"
+    - "Performance targets are realistic and testable"
+    - "Error handling test cases cover all error paths"
+  
+  consistency:
+    - "Interface names match architecture and design specifications"
+    - "Component names match design specifications"
+    - "Test case IDs follow naming convention (TC-INT-XXX)"
+    - "Integration phases are logically sequenced"
+    - "No contradictions in test specifications"
+  
+  traceability:
+    - "Every architecture interface traced to test cases"
+    - "Every design interface specification traced to test cases"
+    - "Every test case traced to architecture or design"
+    - "Bi-directional traceability maintained"
+    - "Traceability coverage = 100% (SIL 2+)"
+
+configuration_management:
+  baseline_criteria:
+    - "All test cases defined and reviewed"
+    - "100% interface coverage achieved (SIL 2+)"
+    - "Independent review complete (SIL 3-4)"
+    - "QA template compliance approved"
+    - "Traceability matrices complete"
+  
+  change_control:
+    - "Changes to integration strategy require VER approval"
+    - "Changes to test cases require INT approval"
+    - "New interfaces require new test cases"
+    - "Version controlled with architecture and design specifications"
+  
+  versioning:
+    - "Version number: X.Y (X = major revision, Y = minor updates)"
+    - "Major version increments with architecture changes"
+    - "Minor version increments with test case additions/modifications"
+  
+  archival:
+    - "Archive with architecture and design specifications"
+    - "Retain for project lifetime + 10 years (railway requirement)"
+
+en50128_references:
+  - section: "7.6"
+    description: "Software Integration - PRIMARY section for integration process"
+  - section: "7.6.4.3"
+    description: "Software Integration Test Specification required"
+  - section: "Table A.6"
+    description: "Techniques and Measures for Software Integration"
+  - section: "Table A.14"
+    description: "Functional and Black-Box Testing - interface testing"
+  - section: "Table A.18"
+    description: "Performance Testing - highly recommended for SIL 3-4"
+  - section: "5.3.6"
+    description: "Integrator role responsibilities"
+  - section: "5.3.5"
+    description: "Verifier role - independent review (SIL 3-4)"
+
+notes: |
+  **Purpose**: The Software Integration Test Specification defines the strategy, test cases, and procedures
+  for integrating software components into larger assemblies and testing the interfaces between components.
+
+  **Key Characteristics**:
+  1. **Integration Strategy**: Documents approach (bottom-up, top-down, sandwich, big-bang)
+  2. **Interface Testing**: Test cases for all component interfaces (100% coverage for SIL 2+)
+  3. **Progressive Integration**: Phased integration with testing at each phase
+  4. **Regression Testing**: Test previously integrated components after each phase
+  5. **Performance Testing**: Timing and resource usage of integrated components (SIL 2+)
+  6. **Traceability**: Complete traceability to architecture and design specifications
+
+  **SIL-Specific Requirements**:
+  - **SIL 0-1**: Basic integration strategy and interface testing
+  - **SIL 2**: 100% interface coverage + performance testing
+  - **SIL 3-4**: 100% interface coverage + performance testing + independent review
+
+  **Integration Strategies**:
+  - **Bottom-Up**: Start with low-level modules, integrate upward (requires drivers)
+  - **Top-Down**: Start with high-level modules, integrate downward (requires stubs)
+  - **Sandwich**: Combination of bottom-up and top-down
+  - **Big-Bang**: Integrate all at once (NOT RECOMMENDED for SIL 3-4)
+
+  **Workflow**:
+  1. INT reviews architecture and design specifications
+  2. INT selects integration strategy based on project characteristics
+  3. INT defines integration phases and order
+  4. INT identifies required stubs and drivers
+  5. INT creates interface test cases for all component interfaces
+  6. INT creates functional, performance, error handling, regression test cases
+  7. INT creates traceability matrices
+  8. QUA reviews for template compliance (1 pass, SIL 3-4)
+  9. VER performs independent review (SIL 3-4)
+  10. QUA approves final specification
+
+  **Test Case Categories**:
+  1. **Interface Tests** (TC-INT-IF-XXX): Test data flow, error propagation, timing across interfaces
+  2. **Functional Tests** (TC-INT-FUNC-XXX): Test integrated functionality against requirements
+  3. **Performance Tests** (TC-INT-PERF-XXX): Test execution time, memory usage, resource contention
+  4. **Error Handling Tests** (TC-INT-ERR-XXX): Test error detection, propagation, recovery
+  5. **Regression Tests** (TC-INT-REG-XXX): Re-test previously integrated components
+
+  **Critical Dependencies**:
+  - Architecture Specification defines component structure and interfaces
+  - Design Specification defines interface details (parameters, return values, protocols)
+  - Interface Specifications define interface contracts
+  - Component Test Report confirms components ready for integration
+
+  **Template Compliance**:
+  - Document ID format: DOC-022-INT-TEST-SPEC-YYYY-NNN
+  - Approvals section MUST include VER signature (SIL 3-4)
+  - All sections from template MUST be present
+  - Traceability matrices MUST show 100% coverage (SIL 2+)
+  - Integration phases MUST have entry/exit criteria
+
+  **Evidence Automation**:
+  - Integration strategy: MANUAL (INT designs strategy)
+  - Test cases: SEMI-AUTOMATIC (INT creates, tool manages IDs)
+  - Traceability: AUTOMATIC (CM tool parses IDs from specifications)
+  - Test environment: MANUAL (INT documents configuration)

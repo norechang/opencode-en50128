@@ -1,0 +1,559 @@
+# Software Maintenance Plan
+# EN 50128 Deliverable #41 - Section 9.2.4.5-9.2.4.6
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-041-SMP"
+number: 41
+name: "Software Maintenance Plan"
+abbreviation: "SMP"
+
+# ===== Lifecycle Context =====
+phase: "maintenance"
+standard_section: "9.2.4.5"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "PM"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-maintenance/templates/Software-Maintenance-Plan-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques: []
+    additional_requirements:
+      - "Establish software maintenance procedures per 9.2.4.6"
+      - "Address error reporting and error logs per 9.2.4.6(a)"
+      - "Address maintenance records per 9.2.4.6(a)"
+      - "Address change authorization per 9.2.4.6(a)"
+      - "Address configuration control per 9.2.4.6(a)"
+      - "Address verification, validation, assessment per 9.2.4.6(b)"
+      - "Define approval authority per 9.2.4.6(c)"
+      - "Define modification authorization per 9.2.4.6(d)"
+    evidence_thresholds: {}
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.10"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "HR"
+    additional_requirements:
+      - "Establish software maintenance procedures per 9.2.4.6 (MANDATORY)"
+      - "Address error reporting and error logs per 9.2.4.6(a) (MANDATORY)"
+      - "Address maintenance records per 9.2.4.6(a) (MANDATORY)"
+      - "Address change authorization per 9.2.4.6(a) (MANDATORY)"
+      - "Address configuration control per 9.2.4.6(a) (MANDATORY)"
+      - "Address techniques from Table A.10 per 9.2.4.6(a) (MANDATORY)"
+      - "Address verification, validation, assessment per 9.2.4.6(b) (MANDATORY)"
+      - "Define approval authority per 9.2.4.6(c) (MANDATORY)"
+      - "Define modification authorization per 9.2.4.6(d) (MANDATORY)"
+      - "Follow ISO/IEC 90003 guidelines per 9.2.4.3"
+      - "Address maintainability per ISO/IEC 9126 series per 9.2.4.4"
+      - "Major/minor maintenance decision process per 9.2.4.2"
+      - "Same expertise level as initial development per 9.2.4.17"
+    evidence_thresholds: {}
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.10"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "HR"
+      - technique_name: "Traceability"
+        table_reference: "A.10"
+        technique_id: "D.58"
+        recommendation: "HR"
+    additional_requirements:
+      - "Establish software maintenance procedures per 9.2.4.6 (MANDATORY)"
+      - "Address error reporting and error logs per 9.2.4.6(a) (MANDATORY)"
+      - "Address maintenance records per 9.2.4.6(a) (MANDATORY)"
+      - "Address change authorization per 9.2.4.6(a) (MANDATORY)"
+      - "Address configuration control per 9.2.4.6(a) (MANDATORY)"
+      - "Address techniques from Table A.10 per 9.2.4.6(a) (MANDATORY)"
+      - "Address verification, validation, assessment per 9.2.4.6(b) (MANDATORY)"
+      - "Define approval authority per 9.2.4.6(c) (MANDATORY)"
+      - "Define modification authorization per 9.2.4.6(d) (MANDATORY)"
+      - "Follow ISO/IEC 90003 guidelines per 9.2.4.3 (MANDATORY)"
+      - "Address maintainability per ISO/IEC 9126 series per 9.2.4.4"
+      - "Major/minor maintenance decision process per 9.2.4.2 (MANDATORY)"
+      - "Same expertise level as initial development per 9.2.4.17 (MANDATORY)"
+      - "Safety impact analysis process per 9.2.4.19"
+      - "Mitigation actions per 9.2.4.20"
+      - "Regression testing procedures per 9.2.4.10(d)"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 15
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.10"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.10"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Regression Testing"
+        table_reference: "A.10"
+        technique_id: "A.20"
+        recommendation: "HR"
+    additional_requirements:
+      - "Establish software maintenance procedures per 9.2.4.6 (MANDATORY)"
+      - "Address error reporting and error logs per 9.2.4.6(a) (MANDATORY)"
+      - "Address maintenance records per 9.2.4.6(a) (MANDATORY)"
+      - "Address change authorization per 9.2.4.6(a) (MANDATORY)"
+      - "Address configuration control per 9.2.4.6(a) (MANDATORY)"
+      - "Address techniques from Table A.10 per 9.2.4.6(a) (MANDATORY)"
+      - "Address verification, validation, assessment per 9.2.4.6(b) (MANDATORY)"
+      - "Define approval authority per 9.2.4.6(c) (MANDATORY)"
+      - "Define modification authorization per 9.2.4.6(d) (MANDATORY)"
+      - "Follow ISO/IEC 90003 guidelines per 9.2.4.3 (MANDATORY)"
+      - "Address maintainability per ISO/IEC 9126 series per 9.2.4.4 (MANDATORY)"
+      - "Major/minor maintenance decision process per 9.2.4.2 (MANDATORY, submitted to Assessor)"
+      - "Same expertise level as initial development per 9.2.4.17 (MANDATORY)"
+      - "Safety impact analysis process per 9.2.4.19 (MANDATORY)"
+      - "Mitigation actions per 9.2.4.20 (MANDATORY)"
+      - "Regression testing procedures per 9.2.4.10(d) (MANDATORY)"
+      - "Same independence as initial development per 9.2.4.17 (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Traceability requirements per 6.5.4.14-6.5.4.17 (MANDATORY)"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      cyclomatic_complexity_max: 10
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.10"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.10"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Regression Testing"
+        table_reference: "A.10"
+        technique_id: "A.20"
+        recommendation: "HR"
+    additional_requirements:
+      - "Establish software maintenance procedures per 9.2.4.6 (MANDATORY)"
+      - "Address error reporting and error logs per 9.2.4.6(a) (MANDATORY)"
+      - "Address maintenance records per 9.2.4.6(a) (MANDATORY)"
+      - "Address change authorization per 9.2.4.6(a) (MANDATORY)"
+      - "Address configuration control per 9.2.4.6(a) (MANDATORY)"
+      - "Address techniques from Table A.10 per 9.2.4.6(a) (MANDATORY)"
+      - "Address verification, validation, assessment per 9.2.4.6(b) (MANDATORY)"
+      - "Define approval authority per 9.2.4.6(c) (MANDATORY)"
+      - "Define modification authorization per 9.2.4.6(d) (MANDATORY)"
+      - "Follow ISO/IEC 90003 guidelines per 9.2.4.3 (MANDATORY)"
+      - "Address maintainability per ISO/IEC 9126 series per 9.2.4.4 (MANDATORY)"
+      - "Major/minor maintenance decision process per 9.2.4.2 (MANDATORY, submitted to Assessor)"
+      - "Same expertise level as initial development per 9.2.4.17 (MANDATORY)"
+      - "Safety impact analysis process per 9.2.4.19 (MANDATORY)"
+      - "Mitigation actions per 9.2.4.20 (MANDATORY)"
+      - "Regression testing procedures per 9.2.4.10(d) (MANDATORY)"
+      - "Same independence as initial development per 9.2.4.17 (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Traceability requirements per 6.5.4.14-6.5.4.17 (MANDATORY)"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      test_coverage_mcdc: 100
+      cyclomatic_complexity_max: 10
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "error-reporting-procedures"
+    description: "Error reporting and error log procedures per 9.2.4.6(a)"
+    mandatory_sil: 0
+    source: "PM agent"
+    format: "Markdown procedures"
+    storage_path: "docs/maintenance/procedures/error-reporting.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm define-error-reporting"
+    verification_criteria:
+      - "Error reporting process defined"
+      - "Error log format and storage defined"
+      - "Error classification (severity, priority) defined"
+      - "Error escalation process defined"
+      - "Error tracking system defined"
+
+  - evidence_id: "maintenance-records-procedures"
+    description: "Maintenance records procedures per 9.2.4.6(a)"
+    mandatory_sil: 0
+    source: "PM agent"
+    format: "Markdown procedures"
+    storage_path: "docs/maintenance/procedures/maintenance-records.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm define-maintenance-records"
+    verification_criteria:
+      - "Maintenance record creation process"
+      - "Maintenance record content requirements per 9.2.4.8"
+      - "Maintenance record storage and retention"
+      - "Maintenance record access control"
+
+  - evidence_id: "change-authorization-procedures"
+    description: "Change authorization procedures per 9.2.4.6(a) and 9.2.4.6(d)"
+    mandatory_sil: 0
+    source: "PM agent"
+    format: "Markdown procedures"
+    storage_path: "docs/maintenance/procedures/change-authorization.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm define-change-authorization"
+    verification_criteria:
+      - "Change request process defined"
+      - "Change approval authority defined per 9.2.4.6(c)"
+      - "Change authorization criteria defined"
+      - "Change approval workflow defined"
+      - "Major/minor maintenance decision process per 9.2.4.2"
+
+  - evidence_id: "configuration-control-procedures"
+    description: "Software/system configuration control procedures per 9.2.4.6(a)"
+    mandatory_sil: 0
+    source: "CM agent"
+    format: "Markdown procedures"
+    storage_path: "docs/maintenance/procedures/configuration-control.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/cm define-config-control"
+    verification_criteria:
+      - "Configuration identification during maintenance"
+      - "Configuration status accounting for changes"
+      - "Configuration audit procedures"
+      - "Baseline management for maintained software"
+      - "Same level as initial development per 9.2.4.17"
+
+  - evidence_id: "verification-validation-assessment-procedures"
+    description: "Verification, validation, assessment procedures per 9.2.4.6(b)"
+    mandatory_sil: 0
+    source: "PM agent"
+    format: "Markdown procedures"
+    storage_path: "docs/maintenance/procedures/vva-procedures.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm define-vva-procedures"
+    verification_criteria:
+      - "Verification procedures for modifications defined"
+      - "Validation procedures for modifications defined"
+      - "Assessment procedures for modifications defined (SIL 3+)"
+      - "Independence requirements per 9.2.4.10(d) and 9.2.4.17"
+      - "Same level as initial development per 9.2.4.17"
+
+  - evidence_id: "approval-authority-definition"
+    description: "Definition of approval authority per 9.2.4.6(c)"
+    mandatory_sil: 0
+    source: "PM agent"
+    format: "Markdown"
+    storage_path: "docs/maintenance/approval-authority.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm define-approval-authority"
+    verification_criteria:
+      - "Authority for change approval defined"
+      - "Authority roles and responsibilities"
+      - "Approval criteria"
+      - "Escalation path for disputes"
+
+  - evidence_id: "table-a10-techniques-selection"
+    description: "Selection and justification of Table A.10 techniques per 9.2.4.6(a) and 9.2.4.16"
+    mandatory_sil: 1
+    source: "PM agent"
+    format: "Markdown table with justification"
+    storage_path: "docs/maintenance/table-a10-selection.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm select-table-a10-techniques"
+    verification_criteria:
+      - "All mandatory techniques for SIL level selected"
+      - "Highly recommended techniques selected or justified"
+      - "Technique combination justified per 4.8 and 4.9"
+      - "Techniques satisfy SIL requirements"
+
+  - evidence_id: "major-minor-decision-process"
+    description: "Major/minor maintenance decision process per 9.2.4.2"
+    mandatory_sil: 0
+    source: "PM agent"
+    format: "Markdown decision tree/criteria"
+    storage_path: "docs/maintenance/major-minor-decision.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm define-major-minor-criteria"
+    verification_criteria:
+      - "Major maintenance criteria defined"
+      - "Minor maintenance criteria defined"
+      - "Decision justification process"
+      - "Decision recording requirements"
+      - "Assessor submission requirements (SIL 3+)"
+
+  - evidence_id: "safety-impact-analysis-process"
+    description: "Safety impact analysis process per 9.2.4.19"
+    mandatory_sil: 1
+    source: "SAF agent"
+    format: "Markdown process description"
+    storage_path: "docs/maintenance/safety-impact-analysis.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/saf define-safety-impact-process"
+    verification_criteria:
+      - "Safety impact analysis required for all changes"
+      - "Safety impact criteria defined"
+      - "Safety impact documentation requirements"
+      - "Safety impact approval requirements"
+
+  - evidence_id: "mitigation-actions-process"
+    description: "Mitigation actions process per 9.2.4.20"
+    mandatory_sil: 1
+    source: "SAF agent"
+    format: "Markdown process description"
+    storage_path: "docs/maintenance/mitigation-actions.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/saf define-mitigation-process"
+    verification_criteria:
+      - "Risk identification during maintenance"
+      - "Mitigation action proportionality"
+      - "System integrity preservation"
+      - "Temporary mitigation until correction"
+
+  - evidence_id: "regression-testing-procedures"
+    description: "Regression testing procedures per 9.2.4.10(d)"
+    mandatory_sil: 1
+    source: "TST agent"
+    format: "Markdown procedures"
+    storage_path: "docs/maintenance/regression-testing.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/tst define-regression-testing"
+    verification_criteria:
+      - "Regression test selection criteria"
+      - "Regression test scope per impact"
+      - "Regression test execution procedures"
+      - "Regression test pass/fail criteria"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-003-SCMP"
+    reason: "Maintenance procedures build on configuration management"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-004-SVP"
+    reason: "Maintenance verification follows verification plan approach"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-005-SVAP"
+    reason: "Maintenance validation follows validation plan approach"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-042-CHANGE-RECORDS"
+    reason: "Change Records created per Software Maintenance Plan"
+  
+  - deliverable_id: "DOC-043-MAINT-RECORDS"
+    reason: "Maintenance Records created per Software Maintenance Plan"
+  
+  - deliverable_id: "DOC-044-MAINT-VER"
+    reason: "Maintenance Verification Report verifies Software Maintenance Plan"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "Error reporting procedures per 9.2.4.6(a) (MANDATORY)"
+    - "Error log procedures per 9.2.4.6(a) (MANDATORY)"
+    - "Maintenance records procedures per 9.2.4.6(a) (MANDATORY)"
+    - "Change authorization procedures per 9.2.4.6(a) (MANDATORY)"
+    - "Configuration control procedures per 9.2.4.6(a) (MANDATORY)"
+    - "Table A.10 techniques addressed per 9.2.4.6(a) (MANDATORY)"
+    - "Verification procedures per 9.2.4.6(b) (MANDATORY)"
+    - "Validation procedures per 9.2.4.6(b) (MANDATORY)"
+    - "Assessment procedures per 9.2.4.6(b) (MANDATORY)"
+    - "Approval authority defined per 9.2.4.6(c) (MANDATORY)"
+    - "Modification authorization per 9.2.4.6(d) (MANDATORY)"
+    - "All requirements per 9.2.4.6 addressed"
+  
+  correctness:
+    - "Procedures technically correct and feasible"
+    - "Authority definitions appropriate and clear"
+    - "Techniques appropriate for SIL level"
+    - "Major/minor criteria appropriate"
+    - "Safety impact process adequate"
+    - "Same level as initial development per 9.2.4.17"
+  
+  consistency:
+    - "Internal consistency per 9.2.4.12(b) (MANDATORY SIL 3+)"
+    - "Consistent with SCMP (DOC-003)"
+    - "Consistent with SVP (DOC-004)"
+    - "Consistent with SVAP (DOC-005)"
+    - "No conflicting procedures"
+  
+  traceability:
+    - "Traceability per 6.5.4.14-6.5.4.17 and 9.2.4.12(a) (MANDATORY SIL 3+)"
+    - "Traceability to SCMP"
+    - "Traceability to SVP"
+    - "Traceability to SVAP"
+    - "Traceability to ISO/IEC 90003"
+  
+  readability:
+    - "Readability per 5.3.2.7-5.3.2.10 and 9.2.4.12(a) (MANDATORY SIL 3+)"
+    - "Clear and unambiguous language"
+    - "Consistent terminology"
+    - "Target audience appropriateness"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Software Maintenance Plan Baseline"
+  baseline_trigger: "After VER and VAL approval"
+  change_control: "All changes via CCB, impact assessment on maintenance activities"
+  versioning: "Semantic versioning (MAJOR.MINOR.PATCH)"
+  storage_location: "config/baselines/maintenance-plan/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "9.2"
+    title: "Software maintenance"
+    relevance: "Primary section defining software maintenance requirements"
+  - section: "9.2.4.1"
+    title: "Retroactive applicability"
+    relevance: "Section 9.2 applies to all changes, even minor"
+  - section: "9.2.4.2"
+    title: "Major/minor decision"
+    relevance: "Major/minor decision process required, submitted to Assessor (SIL 3+)"
+  - section: "9.2.4.3"
+    title: "ISO/IEC 90003"
+    relevance: "Maintenance follows ISO/IEC 90003 guidelines"
+  - section: "9.2.4.4"
+    title: "Maintainability"
+    relevance: "Address maintainability per ISO/IEC 9126 series"
+  - section: "9.2.4.5"
+    title: "Software Maintenance Plan"
+    relevance: "Software Maintenance Plan shall be written"
+  - section: "9.2.4.6"
+    title: "Software Maintenance Plan content"
+    relevance: "Procedures for error reporting, records, change auth, config, VVA, approval (ALL MANDATORY)"
+  - section: "9.2.4.6(a)"
+    title: "Error reporting, logs, records, authorization, configuration, Table A.10"
+    relevance: "MANDATORY content for Software Maintenance Plan"
+  - section: "9.2.4.6(b)"
+    title: "Verification, validation, assessment"
+    relevance: "MANDATORY content for Software Maintenance Plan"
+  - section: "9.2.4.6(c)"
+    title: "Approval authority"
+    relevance: "MANDATORY content for Software Maintenance Plan"
+  - section: "9.2.4.6(d)"
+    title: "Modification authorization"
+    relevance: "MANDATORY content for Software Maintenance Plan"
+  - section: "9.2.4.12"
+    title: "Maintenance Plan verification"
+    relevance: "Verification of readability, traceability, 9.2.4.6 requirements, internal consistency"
+  - section: "9.2.4.16"
+    title: "Table A.10 techniques"
+    relevance: "Techniques from Table A.10 shall be chosen and justified"
+  - section: "9.2.4.17"
+    title: "Same level as initial development"
+    relevance: "Same expertise, tools, docs, planning, management, CM, independence (MANDATORY)"
+  - section: "9.2.4.19"
+    title: "Safety impact analysis"
+    relevance: "Safety impact analysis for each reported problem or enhancement (MANDATORY)"
+  - section: "9.2.4.20"
+    title: "Mitigation actions"
+    relevance: "Mitigation proportionate to risk while problems corrected (MANDATORY)"
+  - section: "5.3.2.7-5.3.2.10"
+    title: "Readability requirements"
+    relevance: "General requirements for readability per 9.2.4.12(a) (MANDATORY SIL 3+)"
+  - section: "6.5.4.14-6.5.4.17"
+    title: "Traceability requirements"
+    relevance: "General requirements for traceability per 9.2.4.12(a) (MANDATORY SIL 3+)"
+  - section: "6.6"
+    title: "Modification and change control"
+    relevance: "Related section on modification and change control"
+  - section: "Table A.10"
+    title: "Software Maintenance techniques"
+    relevance: "Techniques to be selected and justified per 9.2.4.16"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Software Maintenance Plan is deliverable #41, written by PM, checked by VER and VAL"
+
+# ===== Notes =====
+notes: |
+  **Software Maintenance Plan (Deliverable #41)**
+  
+  **Purpose**: Establish procedures for software maintenance to preserve software safety integrity
+  level and dependability when making corrections, enhancements, or adaptations per EN 50128 Section 9.2.
+  
+  **Applicability** (EN 50128 9.2.4.1):
+  Section 9.2 applies to ALL changes, even minor ones. This is NOT retrospective for existing software
+  unless subjected to major modifications, but highly recommended.
+  
+  **Key Content** (EN 50128 9.2.4.6 - ALL MANDATORY):
+  1. **Error reporting and error logs** (9.2.4.6(a))
+  2. **Maintenance records** (9.2.4.6(a))
+  3. **Change authorization** (9.2.4.6(a))
+  4. **Software/system configuration control** (9.2.4.6(a))
+  5. **Table A.10 techniques and measures** (9.2.4.6(a))
+  6. **Verification, validation, assessment of modifications** (9.2.4.6(b))
+  7. **Definition of approval authority** (9.2.4.6(c))
+  8. **Authorization for modification** (9.2.4.6(d))
+  
+  **Additional Requirements**:
+  9. Major/minor maintenance decision process per 9.2.4.2 (submitted to Assessor for SIL 3+)
+  10. Safety impact analysis process per 9.2.4.19 (MANDATORY all SILs)
+  11. Mitigation actions process per 9.2.4.20 (MANDATORY all SILs)
+  12. Regression testing procedures per 9.2.4.10(d)
+  13. Follow ISO/IEC 90003 guidelines per 9.2.4.3
+  14. Address maintainability per ISO/IEC 9126 series per 9.2.4.4
+  
+  **Critical Requirement** (EN 50128 9.2.4.17):
+  Maintenance SHALL be performed with AT LEAST THE SAME LEVEL as initial development:
+  - Expertise (qualified personnel)
+  - Tools (same or equivalent quality)
+  - Documentation (same standards)
+  - Planning and management (same rigor)
+  - Configuration management (same control)
+  - Change control (same process)
+  - Document control (same standards)
+  - **Independence of involved parties** (same independence for VER, VAL at SIL 3+)
+  
+  **Verification Requirements** (EN 50128 9.2.4.12):
+  - Readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+  - Traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+  - Requirements per 9.2.4.6 met (MANDATORY all SILs)
+  - Internal consistency (MANDATORY SIL 3+)
+  - Results recorded in DOC-044 (Maintenance Verification Report)
+  
+  **PM Agent Responsibility**:
+  - Define all maintenance procedures per 9.2.4.6
+  - Select and justify Table A.10 techniques per 9.2.4.16
+  - Establish major/minor decision process per 9.2.4.2
+  - Ensure same level as initial development per 9.2.4.17
+  - Coordinate with CM, SAF, TST for procedures
+  
+  **VER Agent Responsibility**:
+  - Verify readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+  - Verify traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+  - Verify requirements per 9.2.4.6 met (MANDATORY)
+  - Verify internal consistency (MANDATORY SIL 3+)
+  - Record results in DOC-044 (Maintenance Verification Report)
+  
+  **VAL Agent Responsibility**:
+  - Validate maintenance procedures adequate for safety
+  - Validate same level as initial development
+  - Validate independence requirements met (SIL 3+)

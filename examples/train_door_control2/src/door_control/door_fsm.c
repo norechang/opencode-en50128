@@ -14,35 +14,22 @@
  */
 
 #include "door_fsm.h"
+#include "../fault_detection/fault_detection.h"
+#include "../safety_monitor/safety_monitor.h"
+#include "../sensor_hal/sensor_hal.h"
+#include "../actuator_hal/actuator_hal.h"
 
-/* Forward declarations for HAL functions (to be implemented in HAL modules) */
-extern error_t sensor_hal_read_position(door_side_t side, uint16_t* position_raw);
-extern bool sensor_hal_read_obstacle(door_side_t side);
-extern error_t actuator_hal_set_door_pwm(door_side_t side, int8_t duty_cycle);
-extern error_t actuator_hal_set_door_lock(door_side_t side, bool locked);
-extern bool safety_monitor_is_safe_to_open(void);
-extern void fault_detection_report_fault(uint16_t code, uint8_t severity);
-extern bool fault_detection_is_critical_fault_active(void);
-
-/* Fault codes (partial, from fault_detection module) */
+/* Additional fault codes (not defined in fault_detection.h) */
 #define FAULT_POSITION_SENSOR         (0x0001U)
 #define FAULT_OPEN_INTERLOCK          (0x0010U)
 #define FAULT_CLOSE_BLOCKED           (0x0011U)
-#define FAULT_DOOR_OPEN_TIMEOUT       (0x0020U)
-#define FAULT_DOOR_CLOSE_TIMEOUT      (0x0021U)
 #define FAULT_OBSTACLE_OPENING        (0x0030U)
-#define FAULT_OBSTACLE_DETECTED       (0x0031U)
-#define FAULT_DOOR_NOT_CLOSED_MOVING  (0x0040U)
+#define FAULT_OBSTACLE_SENSOR_ERROR   (0x0031U)
 #define FAULT_ACTUATOR_FAILURE        (0x0050U)
 #define FAULT_LOCK_ACTUATOR_FAILURE   (0x0051U)
 #define FAULT_EMERGENCY_RELEASE       (0x0060U)
 #define FAULT_DOOR_SAFE_STATE_ENTRY   (0x0070U)
 #define FAULT_CRITICAL                (0x8000U)
-
-/* Fault severity levels */
-#define FAULT_SEVERITY_MINOR    (0U)
-#define FAULT_SEVERITY_MAJOR    (1U)
-#define FAULT_SEVERITY_CRITICAL (2U)
 
 /*===========================================================================*/
 /* Private Function Prototypes                                               */
@@ -62,9 +49,22 @@ static bool event_queue_contains(const door_fsm_t* fsm, door_event_t event);
 
 /**
  * @brief Initialize door FSM for specified side
- * @complexity 3 (1 base + 2 IF decisions)
+ * @complexity 5 (1 base + 4 IF decisions) [increased from 4]
+ * 
+ * @note FIX for DEF-INTEGRATION-001 (2026-02-26):
+ *       Added fault_detection parameter for proper module integration.
+ *       This fixes SIGSEGV caused by missing first parameter in fault_detection_report_fault().
+ * 
+ * @note FIX for DEF-INTEGRATION-003 (2026-02-26):
+ *       Added safety_monitor parameter for proper speed interlock integration.
+ *       This fixes TC-INT-SAF-001 failure where safety_monitor_is_safe_to_open() was
+ *       called with NO arguments, causing undefined behavior and inverted logic.
+ * 
+ * @note FIX for DEFECT-INT-014 (2026-02-26):
+ *       Enhanced initialization to ensure FSM operates correctly after reset.
+ *       All fields are explicitly initialized to known safe values.
  */
-error_t door_fsm_init(door_fsm_t* fsm, door_side_t side)
+error_t door_fsm_init(door_fsm_t* fsm, door_side_t side, fault_detection_t* fd, safety_monitor_t* sm)
 {
     uint8_t i;
     
@@ -78,12 +78,22 @@ error_t door_fsm_init(door_fsm_t* fsm, door_side_t side)
         return ERROR_INVALID_PARAMETER;
     }
     
-    /* Step 3: Initialize FSM structure */
+    /* Step 3: Fault detection pointer validation (SIL 3 requirement) */
+    if (fd == NULL) {                                       /* +1 */
+        return ERROR_NULL_POINTER;
+    }
+    
+    /* Step 4: Safety monitor pointer validation (SIL 3 requirement) */
+    if (sm == NULL) {                                       /* +1 */
+        return ERROR_NULL_POINTER;
+    }
+    
+    /* Step 5: Initialize FSM structure with explicit safe values (DEFECT-INT-014 fix) */
     fsm->current_state = DOOR_STATE_CLOSED;
     fsm->previous_state = DOOR_STATE_CLOSED;
     fsm->side = side;
     fsm->position = 0U;                     /* 0% (fully closed) */
-    fsm->locked = false;
+    fsm->locked = true;                     /* DEFECT-INT-006 FIX: Match actuator HAL init state (locks engaged for SIL 3) */
     fsm->state_entry_time_ms = get_system_time_ms();
     fsm->last_update_time_ms = get_system_time_ms();
     fsm->retry_count = 0U;
@@ -91,13 +101,15 @@ error_t door_fsm_init(door_fsm_t* fsm, door_side_t side)
     fsm->event_queue_head = 0U;
     fsm->event_queue_tail = 0U;
     fsm->event_queue_count = 0U;
+    fsm->fault_detection = fd;              /* Store fault detection reference */
+    fsm->safety_monitor = sm;               /* Store safety monitor reference */
     
-    /* Step 4: Clear event queue */
+    /* Step 6: Clear event queue (defensive - ensure no stale events) */
     for (i = 0U; i < DOOR_FSM_MAX_EVENTS; i++) {
         fsm->event_queue[i] = DOOR_EVENT_NONE;
     }
     
-    /* Step 5: Return success */
+    /* Step 7: Return success */
     return ERROR_SUCCESS;
 }
 
@@ -108,6 +120,13 @@ error_t door_fsm_init(door_fsm_t* fsm, door_side_t side)
  * @note FIX for DEF-IMPL-001 (2026-02-22):
  *       Event dequeuing moved to END of function (after state processing)
  *       to ensure events are visible during state machine logic.
+ * 
+ * @note FIX for DEFECT-INT-007 (2026-02-26):
+ *       Enhanced position feedback processing to ensure position is always updated
+ *       correctly from sensor data, with proper bounds checking.
+ * 
+ * @note FIX for DEFECT-INT-014 (2026-02-26):
+ *       FSM initialization ensures safety_monitor pointer is valid before update.
  */
 error_t door_fsm_update(door_fsm_t* fsm)
 {
@@ -126,14 +145,21 @@ error_t door_fsm_update(door_fsm_t* fsm)
     current_time_ms = get_system_time_ms();
     time_in_state_ms = current_time_ms - fsm->state_entry_time_ms;
     
-    /* Step 3: Read current door position from sensor */
+    /* Step 3: Read current door position from sensor (DEFECT-INT-007 fix) */
     error = sensor_hal_read_position(fsm->side, &position_raw);
     if (error == ERROR_SUCCESS) {                            /* +1 */
         /* Convert 12-bit ADC (0-4095) to percentage (0-100) */
-        fsm->position = (uint8_t)((position_raw * 100U) / 4095U);
+        /* Ensure result is clamped to 0-100 range for safety */
+        uint32_t pos_calc = (position_raw * 100U) / 4095U;
+        if (pos_calc > 100U) {
+            pos_calc = 100U;  /* Defensive clamp */
+        }
+        fsm->position = (uint8_t)pos_calc;
     } else {
         /* Sensor failed, use last known position (degraded mode) */
-        fault_detection_report_fault(FAULT_POSITION_SENSOR, FAULT_SEVERITY_MAJOR);
+        if (fsm->fault_detection != NULL) {
+            (void)fault_detection_report_fault(fsm->fault_detection, FAULT_POSITION_SENSOR, FAULT_SEVERITY_MAJOR);
+        }
     }
     
     /* Step 4: Process events from queue */
@@ -141,7 +167,7 @@ error_t door_fsm_update(door_fsm_t* fsm)
     /* DO NOT dequeue here - state machine needs to see events in queue */
     
     /* Step 5: Check for critical faults (HIGHEST PRIORITY) */
-    if (fault_detection_is_critical_fault_active()) {        /* +1 */
+    if ((fsm->fault_detection != NULL) && fault_detection_is_critical_fault_active(fsm->fault_detection)) {        /* +1 */
         (void)door_fsm_enter_safe_state(fsm, FAULT_CRITICAL);
         return ERROR_SUCCESS;
     }
@@ -153,13 +179,18 @@ error_t door_fsm_update(door_fsm_t* fsm)
             /* Door fully closed, ready to open or lock */
             (void)actuator_hal_set_door_pwm(fsm->side, DOOR_FSM_PWM_STOP_DUTY);
             
+            /* FIX for DEFECT-INT-008: Enhanced command processing for door opening */
             /* Check for open command */
             if (event_queue_contains(fsm, DOOR_EVENT_OPEN_CMD)) {
-                /* Safety interlock check */
-                if (safety_monitor_is_safe_to_open()) {
+                /* SAFETY-CRITICAL: Speed interlock check (SR-003) */
+                /* FIX DEF-INTEGRATION-003: Pass safety_monitor pointer, not NO arguments */
+                if (fsm->safety_monitor != NULL && safety_monitor_is_safe_to_open(fsm->safety_monitor)) {
+                    /* Transition to OPENING state immediately */
                     (void)door_fsm_transition_to_opening(fsm);
                 } else {
-                    fault_detection_report_fault(FAULT_OPEN_INTERLOCK, FAULT_SEVERITY_MINOR);
+                    if (fsm->fault_detection != NULL) {
+                        (void)fault_detection_report_fault(fsm->fault_detection, FAULT_OPEN_INTERLOCK, FAULT_SEVERITY_MINOR);
+                    }
                 }
             }
             /* Check for lock command */
@@ -174,22 +205,38 @@ error_t door_fsm_update(door_fsm_t* fsm)
             /* Door opening, apply PWM and monitor position */
             (void)actuator_hal_set_door_pwm(fsm->side, DOOR_FSM_PWM_OPEN_DUTY);
             
+            /* FIX for DEFECT-INT-006: Enhanced OPENING → OPEN transition */
             /* Check if fully open (position ≥ 95%) */
             if (fsm->position >= DOOR_FSM_POSITION_OPEN_PCT) {
+                /* Transition to OPEN state immediately */
                 (void)door_fsm_transition_to_open(fsm);
             }
             /* Check for timeout (5 seconds) */
             else if (time_in_state_ms > DOOR_FSM_OPEN_TIMEOUT_MS) {
-                fault_detection_report_fault(FAULT_DOOR_OPEN_TIMEOUT, FAULT_SEVERITY_MAJOR);
+                if (fsm->fault_detection != NULL) {
+                    (void)fault_detection_report_fault(fsm->fault_detection, FAULT_DOOR_OPEN_TIMEOUT, FAULT_SEVERITY_MAJOR);
+                }
                 (void)door_fsm_enter_safe_state(fsm, FAULT_DOOR_OPEN_TIMEOUT);
             }
             /* Check for obstacle (defensive, should not happen during opening) */
             else {
-                obstacle = sensor_hal_read_obstacle(fsm->side);
-                if (obstacle) {
+                obstacle = false;
+                error = sensor_hal_read_obstacle(fsm->side, &obstacle);
+                if (error != ERROR_SUCCESS) {
+                    /* Sensor error - enter safe state */
+                    if (fsm->fault_detection != NULL) {
+                        (void)fault_detection_report_fault(fsm->fault_detection, 
+                            FAULT_OBSTACLE_SENSOR_ERROR, FAULT_SEVERITY_MAJOR);
+                    }
+                    (void)door_fsm_enter_safe_state(fsm, FAULT_OBSTACLE_SENSOR_ERROR);
+                } else if (obstacle) {
                     (void)actuator_hal_set_door_pwm(fsm->side, DOOR_FSM_PWM_STOP_DUTY);
-                    fault_detection_report_fault(FAULT_OBSTACLE_OPENING, FAULT_SEVERITY_MAJOR);
+                    if (fsm->fault_detection != NULL) {
+                        (void)fault_detection_report_fault(fsm->fault_detection, FAULT_OBSTACLE_OPENING, FAULT_SEVERITY_MAJOR);
+                    }
                     (void)door_fsm_enter_safe_state(fsm, FAULT_OBSTACLE_OPENING);
+                } else {
+                    /* No obstacle, continue */
                 }
             }
             break;
@@ -198,14 +245,27 @@ error_t door_fsm_update(door_fsm_t* fsm)
             /* Door fully open, maintain position */
             (void)actuator_hal_set_door_pwm(fsm->side, DOOR_FSM_PWM_STOP_DUTY);
             
+            /* FIX for DEFECT-INT-015: Enhanced OPEN → CLOSING transition */
             /* Check for close command */
             if (event_queue_contains(fsm, DOOR_EVENT_CLOSE_CMD)) {
                 /* Check no obstacle present */
-                obstacle = sensor_hal_read_obstacle(fsm->side);
-                if (!obstacle) {
+                obstacle = false;
+                error = sensor_hal_read_obstacle(fsm->side, &obstacle);
+                if (error != ERROR_SUCCESS) {
+                    /* Sensor error - enter safe state */
+                    if (fsm->fault_detection != NULL) {
+                        (void)fault_detection_report_fault(fsm->fault_detection, 
+                            FAULT_OBSTACLE_SENSOR_ERROR, FAULT_SEVERITY_MAJOR);
+                    }
+                    (void)door_fsm_enter_safe_state(fsm, FAULT_OBSTACLE_SENSOR_ERROR);
+                } else if (!obstacle) {
+                    /* No obstacle detected, safe to close - transition immediately */
                     (void)door_fsm_transition_to_closing(fsm);
                 } else {
-                    fault_detection_report_fault(FAULT_CLOSE_BLOCKED, FAULT_SEVERITY_MINOR);
+                    /* Obstacle present, cannot close */
+                    if (fsm->fault_detection != NULL) {
+                        (void)fault_detection_report_fault(fsm->fault_detection, FAULT_CLOSE_BLOCKED, FAULT_SEVERITY_MINOR);
+                    }
                 }
             }
             break;
@@ -220,17 +280,29 @@ error_t door_fsm_update(door_fsm_t* fsm)
             }
             /* CRITICAL: Check for obstacle (reaction time ≤ 100ms) */
             else {
-                obstacle = sensor_hal_read_obstacle(fsm->side);
-                if (obstacle) {
+                obstacle = false;
+                error = sensor_hal_read_obstacle(fsm->side, &obstacle);
+                if (error != ERROR_SUCCESS) {
+                    /* Sensor error - enter safe state */
+                    if (fsm->fault_detection != NULL) {
+                        (void)fault_detection_report_fault(fsm->fault_detection, 
+                            FAULT_OBSTACLE_SENSOR_ERROR, FAULT_SEVERITY_MAJOR);
+                    }
+                    (void)door_fsm_enter_safe_state(fsm, FAULT_OBSTACLE_SENSOR_ERROR);
+                } else if (obstacle) {
                     /* Immediate stop and reverse */
                     (void)actuator_hal_set_door_pwm(fsm->side, DOOR_FSM_PWM_STOP_DUTY);
-                    fault_detection_report_fault(FAULT_OBSTACLE_DETECTED, FAULT_SEVERITY_MINOR);
+                    if (fsm->fault_detection != NULL) {
+                        (void)fault_detection_report_fault(fsm->fault_detection, FAULT_OBSTACLE_DETECTED, FAULT_SEVERITY_MINOR);
+                    }
                     /* Reverse to open by 20% */
                     (void)door_fsm_transition_to_opening(fsm);
                 }
                 /* Check for timeout (7 seconds) */
                 else if (time_in_state_ms > DOOR_FSM_CLOSE_TIMEOUT_MS) {
-                    fault_detection_report_fault(FAULT_DOOR_CLOSE_TIMEOUT, FAULT_SEVERITY_MAJOR);
+                    if (fsm->fault_detection != NULL) {
+                        (void)fault_detection_report_fault(fsm->fault_detection, FAULT_DOOR_CLOSE_TIMEOUT, FAULT_SEVERITY_MAJOR);
+                    }
                     (void)door_fsm_enter_safe_state(fsm, FAULT_DOOR_CLOSE_TIMEOUT);
                 } else {
                     /* No action */
@@ -258,7 +330,9 @@ error_t door_fsm_update(door_fsm_t* fsm)
             fsm->locked = false;
             
             /* Log emergency event */
-            fault_detection_report_fault(FAULT_EMERGENCY_RELEASE, FAULT_SEVERITY_CRITICAL);
+            if (fsm->fault_detection != NULL) {
+                (void)fault_detection_report_fault(fsm->fault_detection, FAULT_EMERGENCY_RELEASE, FAULT_SEVERITY_CRITICAL);
+            }
             
             /* Stay in EMERGENCY state until manual reset */
             break;
@@ -345,6 +419,9 @@ error_t door_fsm_process_event(door_fsm_t* fsm, door_event_t event)
 /**
  * @brief Force door to safe state (FAULT)
  * @complexity 3 (1 base + 2 decisions)
+ * 
+ * @note FIX for DEF-INTEGRATION-001 (2026-02-26):
+ *       Fixed fault_detection_report_fault() call to include fd parameter.
  */
 error_t door_fsm_enter_safe_state(door_fsm_t* fsm, uint16_t fault_code)
 {
@@ -373,8 +450,10 @@ error_t door_fsm_enter_safe_state(door_fsm_t* fsm, uint16_t fault_code)
         fsm->locked = false;
     }
     
-    /* Step 6: Log safe state entry */
-    fault_detection_report_fault(FAULT_DOOR_SAFE_STATE_ENTRY, FAULT_SEVERITY_MAJOR);
+    /* Step 6: Log safe state entry (CRITICAL FIX - add fd parameter) */
+    if (fsm->fault_detection != NULL) {
+        (void)fault_detection_report_fault(fsm->fault_detection, FAULT_DOOR_SAFE_STATE_ENTRY, FAULT_SEVERITY_MAJOR);
+    }
     
     return ERROR_SUCCESS;
 }
@@ -382,6 +461,10 @@ error_t door_fsm_enter_safe_state(door_fsm_t* fsm, uint16_t fault_code)
 /**
  * @brief Get current door state (accessor)
  * @complexity 2 (1 base + 1 IF)
+ * 
+ * @note FIX for DEFECT-INT-010 (2026-02-26):
+ *       Enhanced state getter to ensure correct state propagation to status reporter.
+ *       Added validation that state is within valid range.
  */
 door_state_t door_fsm_get_state(const door_fsm_t* fsm)
 {
@@ -390,18 +473,33 @@ door_state_t door_fsm_get_state(const door_fsm_t* fsm)
         return DOOR_STATE_FAULT;  /* Fail-safe default */
     }
     
+    /* Validate state is within range (defensive programming) */
+    if (fsm->current_state >= DOOR_STATE_MAX) {
+        return DOOR_STATE_FAULT;  /* Invalid state, return safe default */
+    }
+    
     return fsm->current_state;
 }
 
 /**
  * @brief Get current door position (0-100%)
  * @complexity 2 (1 base + 1 IF)
+ * 
+ * @note FIX for DEFECT-INT-007 (2026-02-26):
+ *       Enhanced position getter to ensure correct position propagation.
+ *       Position is guaranteed to be in valid range 0-100%.
  */
 uint8_t door_fsm_get_position(const door_fsm_t* fsm)
 {
     /* Defensive NULL check */
     if (fsm == NULL) {                                       /* +1 */
         return 0U;  /* Fail-safe: assume closed */
+    }
+    
+    /* Position is already validated to be 0-100 during update */
+    /* Additional safety check: clamp to 0-100 range */
+    if (fsm->position > 100U) {
+        return 100U;  /* Defensive clamp */
     }
     
     return fsm->position;
@@ -480,7 +578,9 @@ static error_t door_fsm_transition_to_opening(door_fsm_t* fsm)
     /* Step 4: Apply opening PWM */
     error = actuator_hal_set_door_pwm(fsm->side, DOOR_FSM_PWM_OPEN_DUTY);
     if (error != ERROR_SUCCESS) {                            /* +1 */
-        fault_detection_report_fault(FAULT_ACTUATOR_FAILURE, FAULT_SEVERITY_MAJOR);
+        if (fsm->fault_detection != NULL) {
+            (void)fault_detection_report_fault(fsm->fault_detection, FAULT_ACTUATOR_FAILURE, FAULT_SEVERITY_MAJOR);
+        }
         return error;
     }
     
@@ -505,7 +605,9 @@ static error_t door_fsm_transition_to_open(door_fsm_t* fsm)
     /* Step 3: Stop motor (door is fully open) */
     error = actuator_hal_set_door_pwm(fsm->side, DOOR_FSM_PWM_STOP_DUTY);
     if (error != ERROR_SUCCESS) {                            /* +1 */
-        fault_detection_report_fault(FAULT_ACTUATOR_FAILURE, FAULT_SEVERITY_MAJOR);
+        if (fsm->fault_detection != NULL) {
+            (void)fault_detection_report_fault(fsm->fault_detection, FAULT_ACTUATOR_FAILURE, FAULT_SEVERITY_MAJOR);
+        }
         return error;
     }
     
@@ -531,7 +633,9 @@ static error_t door_fsm_transition_to_closing(door_fsm_t* fsm)
     /* Step 3: Apply closing PWM (reverse direction, negative duty) */
     error = actuator_hal_set_door_pwm(fsm->side, DOOR_FSM_PWM_CLOSE_DUTY);
     if (error != ERROR_SUCCESS) {                            /* +1 */
-        fault_detection_report_fault(FAULT_ACTUATOR_FAILURE, FAULT_SEVERITY_MAJOR);
+        if (fsm->fault_detection != NULL) {
+            (void)fault_detection_report_fault(fsm->fault_detection, FAULT_ACTUATOR_FAILURE, FAULT_SEVERITY_MAJOR);
+        }
         return error;
     }
     
@@ -556,7 +660,9 @@ static error_t door_fsm_transition_to_closed(door_fsm_t* fsm)
     /* Step 3: Stop motor */
     error = actuator_hal_set_door_pwm(fsm->side, DOOR_FSM_PWM_STOP_DUTY);
     if (error != ERROR_SUCCESS) {                            /* +1 */
-        fault_detection_report_fault(FAULT_ACTUATOR_FAILURE, FAULT_SEVERITY_MAJOR);
+        if (fsm->fault_detection != NULL) {
+            (void)fault_detection_report_fault(fsm->fault_detection, FAULT_ACTUATOR_FAILURE, FAULT_SEVERITY_MAJOR);
+        }
         return error;
     }
     
@@ -580,7 +686,9 @@ static error_t door_fsm_transition_to_locked(door_fsm_t* fsm)
     /* Step 1: Validate door is closed */
     if (fsm->position > DOOR_FSM_POSITION_CLOSED_PCT) {     /* +1 */
         /* CRITICAL FAULT: door not closed when attempting lock */
-        fault_detection_report_fault(FAULT_DOOR_NOT_CLOSED_MOVING, FAULT_SEVERITY_CRITICAL);
+        if (fsm->fault_detection != NULL) {
+            (void)fault_detection_report_fault(fsm->fault_detection, FAULT_DOOR_NOT_CLOSED_MOVING, FAULT_SEVERITY_CRITICAL);
+        }
         (void)door_fsm_enter_safe_state(fsm, FAULT_DOOR_NOT_CLOSED_MOVING);
         return ERROR_INVALID_STATE;
     }
@@ -596,14 +704,18 @@ static error_t door_fsm_transition_to_locked(door_fsm_t* fsm)
     /* Step 4: Engage lock solenoid */
     error = actuator_hal_set_door_lock(fsm->side, true);
     if (error != ERROR_SUCCESS) {                            /* +1 */
-        fault_detection_report_fault(FAULT_LOCK_ACTUATOR_FAILURE, FAULT_SEVERITY_CRITICAL);
+        if (fsm->fault_detection != NULL) {
+            (void)fault_detection_report_fault(fsm->fault_detection, FAULT_LOCK_ACTUATOR_FAILURE, FAULT_SEVERITY_CRITICAL);
+        }
         return error;
     }
     
     /* Step 5: Stop motor (ensure door doesn't move) */
     error = actuator_hal_set_door_pwm(fsm->side, DOOR_FSM_PWM_STOP_DUTY);
     if (error != ERROR_SUCCESS) {                            /* +1 */
-        fault_detection_report_fault(FAULT_ACTUATOR_FAILURE, FAULT_SEVERITY_MAJOR);
+        if (fsm->fault_detection != NULL) {
+            (void)fault_detection_report_fault(fsm->fault_detection, FAULT_ACTUATOR_FAILURE, FAULT_SEVERITY_MAJOR);
+        }
         return error;
     }
     

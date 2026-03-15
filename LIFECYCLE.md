@@ -61,6 +61,7 @@ The V-Model is MANDATORY for SIL 2-4 and shows the relationship between developm
 
 The EN 50128 lifecycle consists of the following phases (orchestrated by Lifecycle Coordinator):
 
+0. **Initialization** (Platform Extension — COD-specific)
 1. **Software Planning & Management** (Sections 5, 6.5, 6.6)
 2. **Software Requirements** (Section 7.2)
 3. **Software Architecture & Design** (Section 7.3)
@@ -70,36 +71,80 @@ The EN 50128 lifecycle consists of the following phases (orchestrated by Lifecyc
 7. **Software Assessment** (Section 6.4)
 8. **Software Deployment & Maintenance** (Section 7.8)
 
-**Lifecycle Coordinator (COD)**: The COD agent (`/cod`) orchestrates the complete lifecycle with SIL-dependent phase gate enforcement. See COD sections at the end of each phase for gate checkpoint details.
+**Lifecycle Coordinator (COD)**: The COD agent (`@cod`) orchestrates the complete lifecycle with SIL-dependent phase gate enforcement. See COD sections at the end of each phase for gate checkpoint details.
 
 ---
 
-## 2. Phase 1: Software Planning (Sections 5, 6.5, 6.6)
+## 2. Phase 0: Initialization (COD-Specific)
 
 ### 2.1 Objectives
+- Initialize project workspace and lifecycle tracking
+- Establish SIL level and project identity
+- Generate system-level input documents required for Phase 2 (Requirements)
+
+### 2.2 Key Activities
+1. Run `@cod plan --sil <level> --project <name>` to create `LIFECYCLE_STATE.md`
+2. Run `@cod generate-system` to generate the four mandatory system-level documents:
+   - System Requirements Specification
+   - System Architecture Description
+   - System Safety Plan
+   - System Safety Requirements Specification
+3. Review generated documents; refine if needed before Phase 2
+
+### 2.3 Commands
+
+| Command | Purpose |
+|---------|---------|
+| `@cod plan --sil <level> --project <name>` | Initialize LIFECYCLE_STATE.md, define SIL level |
+| `@cod generate-system` | Generate 4 system docs from TYPICAL-SYSTEMS.md catalogue |
+| `@cod generate-system --system <N>` | Generate non-interactively using system N from catalogue |
+
+**System Documents Catalogue**: `assets/sample_system/TYPICAL-SYSTEMS.md`
+- System 1: Train Door Control System (SIL 3)
+- System 2: Level Crossing Protection System (SIL 4)
+- System 3: ATP On-Board Unit (SIL 4)
+- System 4: Platform Screen Door Control System (SIL 2)
+- System 5: LRT Interlocking System (SIL 4)
+
+### 2.4 Output
+- `LIFECYCLE_STATE.md` — project state tracker (created by `@cod plan`)
+- `docs/system/System-Requirements-Specification.md`
+- `docs/system/System-Architecture-Description.md`
+- `docs/system/System-Safety-Plan.md`
+- `docs/system/System-Safety-Requirements-Specification.md`
+
+### 2.5 EN 50128 References
+- Section 7.2.2: System inputs required before software requirements (PRIMARY)
+- Section 5.3: Lifecycle planning and documentation
+
+---
+
+## 3. Phase 1: Software Planning (Sections 5, 6.5, 6.6)
+
+### 3.1 Objectives
 - Define project organization and responsibilities
 - Establish quality assurance plan
 - Define verification and validation strategies
 - Establish configuration management
 - Determine SIL levels
 
-### 2.2 Key Activities
+### 3.2 Key Activities
 1. Establish Software Quality Assurance Plan (SQAP)
 2. Establish Software Configuration Management Plan (SCMP)
 3. Establish Software Verification Plan (SVP)
 4. Establish Software Validation Plan (SVaP)
 5. Define project standards and guidelines
 
-### 2.3 Agents Involved
-- Project Manager (`/pm`) - overall project coordination, CCB leadership
+### 3.3 Agents Involved
+- Project Manager (PM) - overall project coordination, CCB leadership
 - Software Manager - software development responsibility (per EN 50128 Section 5.3.1)
-- Configuration Manager (`/cm`) - version control, change management, baselines
-- Quality Assurance (`/qua`) - SQAP development and enforcement
-- Safety Engineer (`/saf`) - safety planning and SIL determination
+- Configuration Manager (CM) - version control, change management, baselines
+- Quality Assurance (QUA) - SQAP development and enforcement
+- Safety Engineer (SAF) - safety planning and SIL determination
 
 **Note**: EN 50128 defines both "Project Manager" (Table B.9) and "Software Manager" (Section 5.3.1). Project Manager has overall project coordination responsibility, while Software Manager focuses on software development activities.
 
-### 2.4 Deliverables
+### 3.4 Deliverables
 - [ ] Software Quality Assurance Plan (SQAP)
 - [ ] Software Configuration Management Plan (SCMP)
 - [ ] Software Verification Plan (SVP)
@@ -107,26 +152,27 @@ The EN 50128 lifecycle consists of the following phases (orchestrated by Lifecyc
 - [ ] Project Standards Document
 - [ ] Tool Qualification Plan (if applicable)
 
-### 2.5 EN 50128 References
+### 3.5 EN 50128 References
 - Section 5: Organizational requirements
 - Section 6.5: Software quality assurance
 - Section 6.6: Modification and change control
 - Table A.1: Software lifecycle phases and related documents
 
-### 2.6 Entry Criteria
-- System requirements available
-- SIL level determined
+### 3.6 Entry Criteria
+- Phase 0 complete: `LIFECYCLE_STATE.md` initialized (via `@cod plan`)
+- System-level documents available (via `@cod generate-system` or manually prepared)
+- SIL level determined and documented
 - Project authorization obtained
 
-### 2.7 Exit Criteria
+### 3.7 Exit Criteria
 - All planning documents approved
 - Quality gates defined
 - Verification/validation strategies established
 - Configuration management in place
 
-### 2.8 Phase Gate (COD Checkpoint)
+### 3.8 Phase Gate (COD Checkpoint)
 
-**Command**: `/cod gate-check planning`
+**Command**: `@cod gate-check planning`
 
 The Lifecycle Coordinator (COD) enforces phase gate compliance before allowing transition to Phase 2 (Requirements). Gate enforcement is SIL-dependent:
 
@@ -144,7 +190,7 @@ The Lifecycle Coordinator (COD) enforces phase gate compliance before allowing t
 - [ ] Configuration management system operational
 - [ ] Project organization defined with role assignments
 - [ ] SIL level determined and documented
-- [ ] LIFECYCLE_STATE.md initialized (via `/cod plan --sil [0-4] --project [name]`)
+- [ ] LIFECYCLE_STATE.md initialized (via `@cod plan --sil [0-4] --project [name]`)
 
 **EN 50128 Reference**: Section 5.3.2.5 - "All activities to be performed during a phase shall be defined and planned prior to commencement"
 
@@ -152,7 +198,7 @@ The Lifecycle Coordinator (COD) enforces phase gate compliance before allowing t
 - Verifies all planning deliverables present in project repository
 - Checks document approval status in LIFECYCLE_STATE.md
 - Validates configuration management baseline established
-- For SIL 3-4: BLOCKS any `/req` invocation until gate passed
+- For SIL 3-4: BLOCKS Phase 2 (Requirements) until gate passed
 
 ---
 
@@ -174,9 +220,9 @@ The Lifecycle Coordinator (COD) enforces phase gate compliance before allowing t
 7. Review and approve requirements
 
 ### 3.3 Agents Involved
-- Requirements Engineer (`/req`) - PRIMARY
-- Safety Engineer (`/saf`)
-- Quality Assurance (`/qua`) - **Document template compliance check BEFORE VER**
+- Requirements Engineer (REQ) - PRIMARY
+- Safety Engineer (SAF)
+- Quality Assurance (QUA) - **Document template compliance check BEFORE VER**
 
 ### 3.4 Skills Required
 - `en50128-requirements` - Requirements engineering patterns
@@ -236,7 +282,7 @@ The Lifecycle Coordinator (COD) enforces phase gate compliance before allowing t
 
 ### 3.11 Phase Gate (COD Checkpoint)
 
-**Command**: `/cod gate-check requirements`
+**Command**: `@cod gate-check requirements`
 
 The Lifecycle Coordinator (COD) enforces requirements phase completion before allowing transition to Phase 3 (Design).
 
@@ -252,7 +298,7 @@ The Lifecycle Coordinator (COD) enforces requirements phase completion before al
 - [ ] SHALL/SHOULD/MAY keywords used correctly
 - [ ] C language constraints considered in requirements
 - [ ] Requirements baseline established by Configuration Manager
-- [ ] USER APPROVAL obtained for requirement establishment (mandatory via `/cod approve-requirement`)
+- [ ] USER APPROVAL obtained for requirement establishment (mandatory via `@cod approve-requirement`)
 
 **EN 50128 Requirements (Section 7.2)**:
 - Techniques from Table A.2 applied (Structured Methodology HR for SIL 3-4)
@@ -264,7 +310,7 @@ The Lifecycle Coordinator (COD) enforces requirements phase completion before al
 - Validates traceability completeness (all requirements traced bidirectionally)
 - Checks SIL assignment for all requirements
 - Verifies hazard analysis completeness (FMEA/FTA for SIL 3-4)
-- For SIL 3-4: BLOCKS any `/des` invocation until gate passed
+- For SIL 3-4: BLOCKS Phase 3 (Design) until gate passed
 - For SIL 2: Requires justification if criteria incomplete
 - For SIL 0-1: Provides warnings only
 
@@ -289,10 +335,10 @@ The Lifecycle Coordinator (COD) enforces requirements phase completion before al
 8. **QA document template compliance check (MANDATORY before VER for SIL 3-4)**
 
 ### 4.3 Agents Involved
-- Designer (`/des`) - PRIMARY
-- Safety Engineer (`/saf`)
-- Quality Assurance (`/qua`) - **Document template compliance check BEFORE VER**
-- Requirements Engineer (`/req`) - for traceability
+- Designer (DES) - PRIMARY
+- Safety Engineer (SAF)
+- Quality Assurance (QUA) - **Document template compliance check BEFORE VER**
+- Requirements Engineer (REQ) - for traceability
 
 ### 4.4 Skills Required
 - `en50128-design` - Architecture and design patterns
@@ -381,7 +427,7 @@ The Lifecycle Coordinator (COD) enforces requirements phase completion before al
 
 ### 4.12 Phase Gate (COD Checkpoint)
 
-**Command**: `/cod gate-check design`
+**Command**: `@cod gate-check design`
 
 The Lifecycle Coordinator (COD) enforces design phase completion before allowing transition to Phase 4 (Implementation).
 
@@ -413,7 +459,7 @@ The Lifecycle Coordinator (COD) enforces design phase completion before allowing
 - Checks complexity limits appropriate for SIL level
 - Verifies defensive programming patterns documented
 - Confirms static allocation strategy (SIL 2+)
-- For SIL 3-4: BLOCKS any `/imp` invocation until gate passed
+- For SIL 3-4: BLOCKS Phase 4 (Implementation) until gate passed
 - For SIL 2: Requires justification if FMEA/FTA not performed
 - For SIL 0-1: Provides warnings only
 
@@ -437,10 +483,10 @@ The Lifecycle Coordinator (COD) enforces design phase completion before allowing
 7. Document code
 
 ### 5.3 Agents Involved
-- Implementer (`/imp`) - PRIMARY
-- Tester (`/tst`)
-- Verifier (`/ver`)
-- Quality Assurance (`/qua`)
+- Implementer (IMP) - PRIMARY
+- Tester (TST)
+- Verifier (VER)
+- Quality Assurance (QUA)
 
 ### 5.4 Skills Required
 - `en50128-implementation` - MISRA C coding patterns
@@ -546,7 +592,7 @@ The Lifecycle Coordinator (COD) enforces design phase completion before allowing
 
 ### 5.13 Phase Gate (COD Checkpoint)
 
-**Command**: `/cod gate-check implementation`
+**Command**: `@cod gate-check implementation`
 
 The Lifecycle Coordinator (COD) enforces implementation phase completion before allowing transition to Phase 5 (Integration).
 
@@ -583,7 +629,7 @@ The Lifecycle Coordinator (COD) enforces implementation phase completion before 
 - Verifies complexity metrics for all functions
 - Confirms traceability from code to design
 - Validates unit test pass rate (must be 100%)
-- For SIL 3-4: BLOCKS any `/int` invocation until gate passed
+- For SIL 3-4: BLOCKS Phase 5 (Integration) until gate passed
 - For SIL 2: Requires justification if coverage < 100% statement/branch
 - For SIL 0-1: Provides warnings if recommended thresholds not met
 
@@ -608,12 +654,12 @@ The Lifecycle Coordinator (COD) enforces implementation phase completion before 
 7. Resolve integration issues
 
 ### 6.3 Agents Involved
-- Integrator (`/int`) - PRIMARY
-- Tester (`/tst`)
-- Implementer (`/imp`)
-- Designer (`/des`)
-- Verifier (`/ver`)
-- Configuration Manager (`/cm`) - for integration baselines
+- Integrator (INT) - PRIMARY
+- Tester (TST)
+- Implementer (IMP)
+- Designer (DES)
+- Verifier (VER)
+- Configuration Manager (CM) - for integration baselines
 
 ### 6.4 Skills Required
 - `en50128-integration` - Integration strategies and testing
@@ -679,7 +725,7 @@ The Lifecycle Coordinator (COD) enforces implementation phase completion before 
 
 ### 6.11 Phase Gate (COD Checkpoint)
 
-**Command**: `/cod gate-check integration`
+**Command**: `@cod gate-check integration`
 
 The Lifecycle Coordinator (COD) enforces integration phase completion before allowing transition to Phase 6 (Validation).
 
@@ -712,7 +758,7 @@ The Lifecycle Coordinator (COD) enforces integration phase completion before all
 - Verifies performance testing performed (SIL 3-4)
 - Confirms integration issues resolved (no open critical/high issues)
 - Validates baseline established
-- For SIL 3-4: BLOCKS any `/val` invocation until gate passed
+- For SIL 3-4: BLOCKS Phase 6 (Validation) until gate passed
 - For SIL 2: Requires justification if performance testing not performed
 - For SIL 0-1: Provides warnings only
 
@@ -734,9 +780,9 @@ The Lifecycle Coordinator (COD) enforces integration phase completion before all
 5. Perform performance testing (mandatory SIL 3-4)
 
 ### 7.3 Agents Involved
-- Validator (`/val`) - PRIMARY (MUST be independent for SIL 3-4)
-- Tester (`/tst`)
-- Safety Engineer (`/saf`)
+- Validator (VAL) - PRIMARY (MUST be independent for SIL 3-4)
+- Tester (TST)
+- Safety Engineer (SAF)
 - Customer/End User
 
 **CRITICAL:** For SIL 3-4, Validator MUST be independent and SHALL NOT report to Project Manager.
@@ -802,7 +848,7 @@ The Lifecycle Coordinator (COD) enforces integration phase completion before all
 
 ### 7.11 Phase Gate (COD Checkpoint)
 
-**Command**: `/cod gate-check validation`
+**Command**: `@cod gate-check validation`
 
 The Lifecycle Coordinator (COD) enforces validation phase completion before allowing transition to Phase 7 (Assessment).
 
@@ -864,8 +910,8 @@ COD SHALL verify validator role assignment and organizational independence befor
 7. Collect evidence
 
 ### 8.3 Agents Involved
-- Verifier (`/ver`) - PRIMARY (must be independent for SIL 3-4)
-- Quality Assurance (`/qua`)
+- Verifier (VER) - PRIMARY (must be independent for SIL 3-4)
+- Quality Assurance (QUA)
 - All other agents (peer verification)
 
 ### 8.4 Skills Required
@@ -964,7 +1010,7 @@ COD SHALL verify validator role assignment and organizational independence befor
 - **Assessor** (independent, mandatory for SIL 3-4, per EN 50128 Section 5.3.8, Table B.8)
 - **Project Manager** (overall project responsibility)
 - **Software Manager** (software development responsibility)
-- Quality Assurance (`/qua`)
+- Quality Assurance (QUA)
 
 **Note**: The Assessor role is explicitly defined in EN 50128 Section 5.3.8 and MUST be completely independent for SIL 3-4.
 
@@ -992,7 +1038,7 @@ COD SHALL verify validator role assignment and organizational independence befor
 
 ### 9.7 Phase Gate (COD Checkpoint)
 
-**Command**: `/cod gate-check assessment`
+**Command**: `@cod gate-check assessment`
 
 The Lifecycle Coordinator (COD) enforces assessment phase completion before allowing transition to Phase 8 (Deployment). This gate is MANDATORY for SIL 3-4 projects.
 
@@ -1065,10 +1111,11 @@ Assessor          Lifecycle Coordinator (COD)
 
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
-| `/cod plan --sil [0-4] --project [name]` | Initialize lifecycle tracking | At project start (Phase 0) |
-| `/cod gate-check <phase>` | Verify phase completion, authorize transition | After each phase completion |
-| `/cod status` | View current lifecycle state | Anytime during project |
-| `/cod approve-requirement` | Approve requirement activities | Auto-triggered when `/req` invoked |
+| `@cod plan --sil [0-4] --project [name]` | Initialize lifecycle tracking | At project start (Phase 0) |
+| `@cod generate-system` | Generate 4 system-level documents | After `@cod plan`, before Phase 1 |
+| `@cod gate-check <phase>` | Verify phase completion, authorize transition | After each phase completion |
+| `@cod status` | View current lifecycle state | Anytime during project |
+| `@cod approve-requirement` | Approve requirement activities | Before REQ activities begin |
 
 ### 10.3 SIL-Dependent Gate Enforcement
 
@@ -1098,7 +1145,7 @@ COD manages 8 phase gates corresponding to the EN 50128 lifecycle:
 COD operates as a **background orchestrator** that:
 - Intercepts agent invocations to validate lifecycle context
 - Blocks out-of-sequence activities (SIL 3-4) or warns (SIL 0-2)
-- Requires user approval for `/req` invocations (all SIL levels)
+- Requires user approval for requirement activities (all SIL levels)
 - Tracks deliverables in `LIFECYCLE_STATE.md`
 - Enforces phase gates with SIL-dependent authority
 - Preserves independence of Validator and Assessor roles (does NOT control them)
@@ -1120,11 +1167,11 @@ COD maintains project state in `LIFECYCLE_STATE.md` (project root), which tracks
 
 COD enforces **mandatory user approval** for all requirement establishment and modification activities:
 
-1. User invokes `/req` for requirement activities
-2. COD intercepts the invocation
+1. PM begins requirements phase activities on behalf of REQ
+2. COD intercepts the activity
 3. COD prompts user: "Requirement activity requires explicit approval. Approve? [Y/N]"
-4. If approved: COD allows `/req` to proceed and logs approval in LIFECYCLE_STATE.md
-5. If denied: COD blocks `/req` invocation
+4. If approved: COD allows REQ activities to proceed and logs approval in LIFECYCLE_STATE.md
+5. If denied: COD blocks the requirement phase activity
 
 **Rationale**: Requirements are the foundation of safety-critical systems. Explicit user approval ensures conscious decision-making and accountability.
 
@@ -1146,183 +1193,88 @@ COD's role is **lifecycle compliance enforcement**, not **technical oversight** 
 
 ```bash
 # Phase 0: Initialization (COD)
-/cod plan --sil 3 --project train_door_control
+@cod plan --sil 3 --project train_door_control
 # Initialize lifecycle tracking, create LIFECYCLE_STATE.md
 # COD monitors all subsequent activities
 
+# Generate system-level documents
+@cod generate-system
+# Prompts for selection from 5 typical railway systems (TYPICAL-SYSTEMS.md)
+# Generates: System-Requirements-Specification.md, System-Architecture.md,
+#            Hazard-Log.md, RAMS-Requirements.md in docs/system/
+
 # Phase 1: Planning
-/pm   # Project coordination, establish CCB
-/cm   # Establish SCMP, version control, baselines
-/qua  # Establish SQAP, quality processes
-# (Create SQAP, SCMP, SVP, SVaP documents)
+@pm execute-phase 1
+# PM coordinates: project planning, CCB setup, SQAP, SCMP, SVP, SVaP
+# Internally: QUA establishes quality processes, CM establishes version control
 
 # COD Phase Gate Check
-/cod gate-check planning
+@cod gate-check planning
 # COD verifies all planning documents approved before allowing requirements phase
 
 # Phase 2: Requirements
-/req  # COD intercepts - requires user approval for requirement activities
-# Create Software Requirements Specification, requirements.md
-# Establish traceability matrix
-# Assign SIL levels
-
-/saf
-# Perform hazard analysis
-# Define safety requirements
-
-/qua
-# MANDATORY: Document template compliance check (SIL 3-4)
-# Verify Document ID format (DOC-XXX-YYYY-NNN)
-# Verify Document Control table present
-# Verify Approvals table with correct SIL-specific roles
-# Generate QA Template Compliance Report
-
-/ver
-# Independent verification (mandatory SIL 3-4)
-# Verify requirements quality, traceability, safety analysis
-# Verify QA template compliance was performed
-
-/cm
-# Baseline requirements (requirements freeze)
+@pm execute-phase 2
+# PM coordinates: REQ creates SRS from system-level inputs
+# Internally: SAF performs hazard analysis, QUA checks template compliance,
+#             VER verifies requirements, CM baselines requirements
+# USER APPROVAL required before REQ activities proceed
 
 # COD Phase Gate Check
-/cod gate-check requirements
-# COD verifies Software Requirements Specification complete, traceability complete, hazard analysis done, user approval obtained
+@cod gate-check requirements
+# COD verifies SRS complete, traceability complete, hazard analysis done, user approval obtained
 # COD verifies QA template compliance check performed (MANDATORY SIL 3-4)
 
 # Phase 3: Design
-/des
-# Create Software Architecture Specification
-# Create Software Design Specification
-# Define interfaces
-
-/saf
-# Perform FMEA/FTA on design
-# Design safety mechanisms
-
-/qua
-# MANDATORY: Document template compliance check (SIL 3-4)
-# Design review - verify complexity limits, defensive programming
-# Verify Document ID, Document Control, Approvals table
-# Generate QA Template Compliance Report
-
-/ver
-# Independent verification (mandatory SIL 3-4)
-# Verify design quality, traceability to requirements
-# Verify QA template compliance and design review performed
-
-/cm
-# Baseline design (design freeze)
+@pm execute-phase 3
+# PM coordinates: DES creates SAS, SDS, interface specs
+# Internally: SAF performs FMEA/FTA, QUA checks template compliance,
+#             VER verifies design, CM baselines design
 
 # COD Phase Gate Check
-/cod gate-check design
+@cod gate-check design
 # COD verifies design complete, traceability to requirements, complexity limits defined
 # COD verifies QA template compliance check performed (MANDATORY SIL 3-4)
 
 # Phase 4: Implementation & Unit Testing
-/imp
-# Implement C code (MISRA C:2012 compliant)
-# Static allocation only (SIL 2+)
-# Write unit tests
-
-/tst
-# Execute unit tests
-# Measure coverage (100% statement, branch, condition for SIL 3)
-
-/qua
-# MANDATORY: Code review (includes template compliance for code documentation)
-# Check MISRA C compliance (zero mandatory violations for SIL 2+)
-# Verify complexity within limits (≤10 for SIL 3-4)
-# Check defensive programming patterns
-# Verify code documentation follows standards
-# Generate QA Code Review Report
-
-/ver
-# Run static analysis (PC-lint, Cppcheck)
-# Verify complexity (≤10 for SIL 3-4)
-# Check MISRA C compliance
-# Verify QA code review performed
+@pm execute-phase 4
+# PM coordinates: IMP implements C code (MISRA C:2012), TST writes and executes unit tests
+# Internally: QUA performs code review (MISRA C compliance, complexity ≤10),
+#             VER runs static analysis, CM baselines code
+# COD independently coordinates: VMGR reviews and approves verification (SIL 3-4)
 
 # COD Phase Gate Check
-/cod gate-check implementation
+@cod gate-check implementation
 # COD verifies MISRA C compliance, coverage met (100% for SIL 3), complexity ≤10
 # COD verifies QA code review performed (MANDATORY all SILs)
 
 # Phase 5: Integration
-/int
-# Integrate components progressively
-# Execute integration tests
-# Interface testing
-# Performance testing (highly recommended SIL 3-4)
-
-/qua
-# MANDATORY: Integration test review (includes template compliance)
-# Verify integration test specification follows template
-# Verify integration test results documentation complete
-# Generate QA Integration Test Review Report
-
-/ver
-# Verify integration test coverage
-# Verify all interfaces tested
-# Verify QA review performed
-
-/cm
-# Establish integration baseline
+@pm execute-phase 5
+# PM coordinates: INT integrates components, TST executes integration tests
+# Internally: QUA reviews integration test report, VER verifies integration,
+#             CM establishes integration baseline
 
 # COD Phase Gate Check
-/cod gate-check integration
+@cod gate-check integration
 # COD verifies all integration tests pass, interfaces tested, baseline established
 # COD verifies QA integration test review performed (MANDATORY SIL 3-4)
 
 # Phase 6: Validation
-/val  # COD verifies validator independence (mandatory SIL 3-4)
-# System testing on target environment
-# User acceptance testing (UAT)
-# Safety validation
-# Performance testing (mandatory SIL 3-4)
-
-/qua
-# MANDATORY: Validation review (includes template compliance)
-# Verify validation plan and report follow template
-# Verify UAT results documentation complete
-# Generate QA Validation Review Report
-
-/ver
-# Verify validation test coverage
-# Verify all requirements validated
-# Verify QA review performed
-
-# Phase 7: Verification (continuous throughout)
-/ver  # COD verifies verifier independence (mandatory SIL 3-4)
-# Collect all verification evidence
-# Verify complete traceability
-# Generate verification report
-
-# COD Phase Gate Check
-/cod gate-check validation
+# COD coordinates VAL directly (independence requirement — VAL does not report to PM)
+@cod gate-check validation
 # COD verifies all tests pass, customer acceptance, validator independence
 # COD verifies QA validation review performed (MANDATORY SIL 3-4)
 
-# Phase 8: Assessment
-/qua
-# Software assessment
-# Compliance verification
-# Generate assessment report
-
-/cm
-# Establish release baseline
-# Archive all evidence
-
-/pm
-# Obtain deployment approval
-# Coordinate with assessor
-
-# COD Phase Gate Check
-/cod gate-check assessment
+# Phase 7: Assessment (SIL 3-4 only)
+# Independent assessor reviews all lifecycle artifacts and issues approval certificate
+@cod gate-check assessment
 # COD verifies assessment complete, assessor independence, deployment authorization
 
+# Phase 8: Deployment
+@pm execute-phase 8
+# PM coordinates: CM establishes final baseline, deployment package prepared
+
 # COD Status Check (anytime)
-/cod status
+@cod status
 # View current phase, progress, deliverable status, gate compliance
 ```
 
@@ -1330,41 +1282,37 @@ COD's role is **lifecycle compliance enforcement**, not **technical oversight** 
 
 ```bash
 # Simplified workflow for lower SIL levels
-/cod plan --sil 0 --project prototype  # Optional for SIL 0-1 (advisory mode)
-/req  # Define basic requirements (no user approval required for SIL 0-1)
-/des  # Basic design
-/imp  # Implement and test
-/tst  # Test with 80% coverage
-/cm   # Basic version control
-# COD provides warnings only, does not block transitions
+@cod plan --sil 0 --project prototype  # Optional for SIL 0-1 (advisory mode)
+@pm execute-phase 2  # Requirements (no user approval gate for SIL 0-1)
+@pm execute-phase 3  # Basic design
+@pm execute-phase 4  # Implement and test (80% coverage)
+@pm execute-phase 5  # Integration
+@cod gate-check validation  # COD provides warnings only, does not block transitions
 ```
 
 ### 11.3 Example: Iterative Development (SIL 2)
 
 ```bash
 # Initial project setup
-/cod plan --sil 2 --project iterative_system
+@cod plan --sil 2 --project iterative_system
+@cod generate-system
 
 # Iteration planning
-/pm   # Plan iteration, coordinate team
-/cm   # Create iteration branch
+@pm execute-phase 1  # Plan iteration, coordinate team, establish baselines
 
 # Development cycle
-/req  # Refine requirements for iteration (user approval required)
-/cod gate-check requirements  # Semi-strict: requires justification if incomplete
-/des  # Design iteration features
-/cod gate-check design  # Semi-strict mode
-/imp  # Implement with MISRA C:2012
-/tst  # Unit test (100% branch coverage - mandatory SIL 2)
-/int  # Integration testing
-/ver  # Static analysis (mandatory SIL 2), code review
-/qua  # Quality gates check
-/cod gate-check implementation  # Semi-strict: checks MISRA C, coverage
+@pm execute-phase 2  # Refine requirements for iteration (user approval required)
+@cod gate-check requirements  # Semi-strict: requires justification if incomplete
+@pm execute-phase 3  # Design iteration features
+@cod gate-check design  # Semi-strict mode
+@pm execute-phase 4  # Implement with MISRA C:2012, unit test (100% branch - mandatory SIL 2)
+@pm execute-phase 5  # Integration testing
+@cod gate-check implementation  # Semi-strict: checks MISRA C, coverage
 
 # Iteration completion
-/cm   # Merge to main, tag baseline
-/pm   # Iteration review, plan next iteration
-/cod status  # Check overall progress and compliance
+@cod gate-check integration
+@pm execute-phase 8  # Merge to main, tag baseline
+@cod status  # Check overall progress and compliance
 ```
 
 ---
@@ -1478,7 +1426,7 @@ Templates available in:
 
 ### 16.1 Configuration Management Agent
 
-**Agent:** Configuration Manager (`/cm`) - EN 50128 Section 6.6, Table A.9
+**Agent:** Configuration Manager (CM) - EN 50128 Section 6.6, Table A.9
 
 **CRITICAL:** Configuration Management is **MANDATORY for ALL SIL levels (0, 1, 2, 3, 4)**
 
@@ -1526,10 +1474,10 @@ All changes SHALL go through formal change control:
 9. Change closed by Configuration Manager
 
 **Change Control Board (CCB):**
-- Led by Project Manager (`/pm`)
-- Configuration Manager (`/cm`) - secretary
+- Led by Project Manager (PM)
+- Configuration Manager (CM) - secretary
 - Technical representatives (DES, IMP, TST, VER)
-- Safety Engineer (`/saf`) - for safety-critical changes
+- Safety Engineer (SAF) - for safety-critical changes
 
 ### 16.5 Traceability Management
 
@@ -1541,16 +1489,14 @@ All changes SHALL go through formal change control:
 
 **Mandatory for SIL 3-4** (Table A.9, Technique 7 - Traceability)
 
-### 16.6 Configuration Management Tools
+### 16.6 Configuration Management Activities
 
-Use Configuration Manager agent for:
-```bash
-/cm  # Version control operations
-/cm  # Baseline creation and management
-/cm  # Change request processing
-/cm  # Traceability matrix updates
-/cm  # Configuration audits (PCA/FCA)
-```
+The Configuration Manager (CM) is responsible for:
+- Version control operations (Git)
+- Baseline creation and management
+- Change request processing
+- Traceability matrix updates
+- Configuration audits (PCA/FCA)
 
 ### 16.7 EN 50128 Techniques/Measures (Table A.9 - CM subset)
 
@@ -1615,11 +1561,10 @@ Use Configuration Manager agent for:
 
 ### 18.2 Related Documents
 - `AGENTS.md` - Role-based agents including COD
-- `.opencode/commands/cod.md` - Lifecycle Coordinator agent definition
+- `.opencode/agents/` - Agent definition files (cod.md, pm.md, req.md, des.md, imp.md, tst.md, int.md, ver.md, val.md, saf.md, qua.md, cm.md, vmgr.md)
 - `.opencode/skills/en50128-lifecycle-coordination/` - COD patterns and workflows
 - `.opencode/skills/` - Domain-specific skills for all lifecycle phases
-- `.opencode/commands/` - Agent command definitions (req, des, imp, tst, int, ver, val, saf, qua, cm, pm)
-- `docs/EN50128-Compliance-Guide.md` - Compliance checklist
+- `docs/USER-GUIDE.md` - Complete platform user guide
 
 ---
 
@@ -1635,3 +1580,386 @@ Use Configuration Manager agent for:
 **Document Status**: Approved  
 **Next Review**: [Date]  
 **Approval**: [Signature]
+
+---
+
+## 20. EN 50128 Deliverable Reference
+
+**Standard**: EN 50128:2011 Railway Software  
+**Purpose**: Complete mapping of lifecycle deliverables with exact names from EN 50128 Section 7
+
+### Important Note on Terminology
+
+EN 50128 uses **EXACT** document names in Section 7 output specifications. All platform phase definitions, agent commands, and QUA checkers MUST use these exact names.
+
+**Naming Convention**:
+- EN 50128 uses **singular or plural** based on the section definition
+- Example: "Software Interface Specification**s**" (plural - 7.3.3 item 3)
+- Example: "Software Architecture Specification" (singular - 7.3.3 item 1)
+
+### Section 7.2: Software Requirements
+
+**EN 50128 Reference**: Section 7.2.3 Output documents
+
+| # | Exact Document Name (EN 50128) | Clause | Written by | File Path |
+|---|--------------------------------|--------|------------|-----------|
+| 1 | **Software Requirements Specification** | 7.2.4.1 | Requirements Manager | `docs/SRS.md` |
+| 2 | **Overall Software Test Specification** | 7.2.4.16 | Tester | `docs/test/Overall-Software-Test-Specification.md` |
+| 3 | **Software Requirements Verification Report** | 7.2.4.27 | Verifier | `docs/reports/Software-Requirements-Verification-Report.md` |
+
+**Notes**:
+- Requirements Traceability Matrix (RTM) is implicit in SRS (not a separate deliverable per EN 50128)
+- Hazard Log is best practice (not in Section 7.2 outputs, but recommended)
+
+### Section 7.3: Architecture and Design
+
+**EN 50128 Reference**: Section 7.3.3 Output documents
+
+| # | Exact Document Name (EN 50128) | Clause | Written by | File Path |
+|---|--------------------------------|--------|------------|-----------|
+| 1 | **Software Architecture Specification** | 7.3.4.1 | Designer | `docs/Software-Architecture-Specification.md` |
+| 2 | **Software Design Specification** | 7.3.4.20 | Designer | `docs/Software-Design-Specification.md` |
+| 3 | **Software Interface Specifications** | 7.3.4.18 | Designer | `docs/Software-Interface-Specifications.md` |
+| 4 | **Software Integration Test Specification** | 7.3.4.25 | Integrator | `docs/test/Software-Integration-Test-Specification.md` |
+| 5 | **Software/Hardware Integration Test Specification** | 7.3.4.33 | Integrator | `docs/test/Software-Hardware-Integration-Test-Specification.md` |
+| 6 | **Software Architecture and Design Verification Report** | 7.3.4.40 | Verifier | `docs/reports/Software-Architecture-and-Design-Verification-Report.md` |
+
+**Key Points**:
+- Item 3 is **plural**: "Software Interface Specification**s**" (covers all interfaces)
+- Items 4 and 5: Test **Specifications** created in Phase 3, Test **Reports** created in Phase 6
+- Item 5: Use forward slash "/" not hyphen in "Software/Hardware"
+
+### Section 7.4: Component Design
+
+**EN 50128 Reference**: Section 7.4.3 Output documents
+
+| # | Exact Document Name (EN 50128) | Clause | Written by | File Path |
+|---|--------------------------------|--------|------------|-----------|
+| 1 | **Software Component Design Specification** | 7.4.4.1 | Designer | `docs/Software-Component-Design-Specification.md` |
+| 2 | **Software Component Test Specification** | 7.4.4.7 | Tester | `docs/test/Software-Component-Test-Specification.md` |
+| 3 | **Software Component Design Verification Report** | 7.4.4.11 | Verifier | `docs/reports/Software-Component-Design-Verification-Report.md` |
+
+**Key Points**:
+- All names are **singular** (one specification per component set)
+- Item 2: Test **Specification** created in Phase 4, Test **Report** created in Phase 5
+
+### Section 7.5: Component Implementation and Testing
+
+**EN 50128 Reference**: Section 7.5.3 Output documents
+
+| # | Exact Document Name (EN 50128) | Clause | Written by | File Path |
+|---|--------------------------------|--------|------------|-----------|
+| 1 | **Software Source Code and supporting documentation** | 7.5.4.1 | Implementer | `src/` + supporting docs |
+| 2 | **Software Component Test Report** | 7.5.4.5 | Tester | `docs/reports/Software-Component-Test-Report.md` |
+| 3 | **Software Source Code Verification Report** | 7.5.4.8 | Verifier | `docs/reports/Software-Source-Code-Verification-Report.md` |
+
+**Key Points**:
+- Item 1: "Software Source Code" (not just "Source Code")
+- Item 1: Lowercase "and" and "supporting documentation"
+- Item 2: "Report" (execution results), not "Specification"
+
+### Section 7.6: Integration
+
+**EN 50128 Reference**: Section 7.6.3 Output documents
+
+| # | Exact Document Name (EN 50128) | Clause | Written by | File Path |
+|---|--------------------------------|--------|------------|-----------|
+| 1 | **Software Integration Test Report** | 7.6.4.3 | Tester | `docs/reports/Software-Integration-Test-Report.md` |
+| 2 | **Software/Hardware Integration Test Report** | 7.6.4.3 | Tester | `docs/reports/Software-Hardware-Integration-Test-Report.md` |
+| 3 | **Software Integration Verification Report** | 7.6.4.6 | Verifier | `docs/reports/Software-Integration-Verification-Report.md` |
+
+**Key Points**:
+- Items 1 and 2: Test **Reports** (execution results of specs from Phase 3)
+- Item 2: Use forward slash "/" not hyphen in "Software/Hardware"
+- V-Model: Specifications created in Phase 3, Reports created in Phase 6
+
+### Section 7.7: Overall Software Testing / Validation
+
+**EN 50128 Reference**: Section 7.7.3 Output documents
+
+| # | Exact Document Name (EN 50128) | Clause | Written by | File Path |
+|---|--------------------------------|--------|------------|-----------|
+| 1 | **Overall Software Test Report** | 7.7.4.1 | Tester | `docs/reports/Overall-Software-Test-Report.md` |
+| 2 | **Software Validation Report** | 7.7.4.6 | Validator | `docs/reports/Software-Validation-Report.md` |
+| 3 | **Release Note** | 7.7.4.15 | Project Manager | `docs/Release-Note.md` |
+
+**Key Points**:
+- Item 1: Test **Report** (execution of Overall Software Test Specification from Phase 2)
+- Item 3: "Release Note" (singular), not "Release Notes"
+- V-Model: Overall Test Specification created in Phase 2, Report created in Phase 7
+
+### Document Naming Conventions
+
+**File Naming Strategy**
+
+Use exact EN 50128 name with hyphens replacing spaces:
+- `Software-Architecture-Specification.md` (recommended)
+- `Software-Interface-Specifications.md` (plural — matches standard!)
+- `Software-Hardware-Integration-Test-Report.md` (use hyphen in filename for "/")
+- `SAS.md`, `SDS.md` — abbreviations NOT recommended
+
+**Document ID Convention**
+
+Format: `DOC-<TYPE>-YYYY-NNN`
+
+| EN 50128 Document Name | Abbreviation | Example ID |
+|------------------------|--------------|------------|
+| Software Requirements Specification | SRS | DOC-SRS-2026-001 |
+| Software Architecture Specification | SAS | DOC-SAS-2026-001 |
+| Software Design Specification | SDS | DOC-SDS-2026-001 |
+| Software Interface Specifications | INTERFACES | DOC-INTERFACES-2026-001 |
+| Software Integration Test Specification | INTTESTSPEC | DOC-INTTESTSPEC-2026-001 |
+| Software/Hardware Integration Test Specification | HWINTTESTSPEC | DOC-HWINTTESTSPEC-2026-001 |
+| Software Component Design Specification | COMPDESIGN | DOC-COMPDESIGN-2026-001 |
+| Software Component Test Specification | COMPTESTSPEC | DOC-COMPTESTSPEC-2026-001 |
+| Software Source Code and supporting documentation | SOURCECODE | DOC-SOURCECODE-2026-001 |
+| Software Component Test Report | COMPTESTRPT | DOC-COMPTESTRPT-2026-001 |
+| Software Integration Test Report | INTTESTRPT | DOC-INTTESTRPT-2026-001 |
+| Software/Hardware Integration Test Report | HWINTTESTRPT | DOC-HWINTTESTRPT-2026-001 |
+| Overall Software Test Report | OVERALLTESTRPT | DOC-OVERALLTESTRPT-2026-001 |
+| Software Validation Report | VALRPT | DOC-VALRPT-2026-001 |
+| Release Note | RELEASE | DOC-RELEASE-2026-001 |
+
+**Verification Report IDs**:
+
+| EN 50128 Verification Report | Abbreviation | Example ID |
+|------------------------------|--------------|------------|
+| Software Requirements Verification Report | REQVER | DOC-REQVER-2026-001 |
+| Software Architecture and Design Verification Report | ARCHDESIGNVER | DOC-ARCHDESIGNVER-2026-001 |
+| Software Component Design Verification Report | COMPDESIGNVER | DOC-COMPDESIGNVER-2026-001 |
+| Software Source Code Verification Report | SOURCECODEVER | DOC-SOURCECODEVER-2026-001 |
+| Software Integration Verification Report | INTVER | DOC-INTVER-2026-001 |
+
+### Document Type Mapping (for QUA checkers)
+
+| EN 50128 Document Name | doc_type (YAML) | QUA Checker File |
+|------------------------|-----------------|------------------|
+| Software Requirements Specification | `SRS` | `srs-checker.yaml` |
+| Overall Software Test Specification | `Overall-Test-Spec` | `overall-test-spec-checker.yaml` |
+| Software Architecture Specification | `SAS` | `sas-checker.yaml` |
+| Software Design Specification | `SDS` | `sds-checker.yaml` |
+| Software Interface Specifications | `Interface-Specs` | `interface-specs-checker.yaml` |
+| Software Integration Test Specification | `Integration-Test-Spec` | `integration-test-spec-checker.yaml` |
+| Software/Hardware Integration Test Specification | `HW-Integration-Test-Spec` | `hw-integration-test-spec-checker.yaml` |
+| Software Component Design Specification | `Component-Design-Spec` | `component-design-spec-checker.yaml` |
+| Software Component Test Specification | `Component-Test-Spec` | `component-test-spec-checker.yaml` |
+
+### Compliance Verification Checklist
+
+- [ ] All phase definitions use exact EN 50128 document names
+- [ ] All file paths match EN 50128 naming (with hyphens for spaces)
+- [ ] All QUA checkers match exact document names (with correct singular/plural)
+- [ ] All agent commands reference exact EN 50128 deliverables
+- [ ] Document IDs follow DOC-<TYPE>-YYYY-NNN convention
+- [ ] V-Model alignment: Test Specs in design phases, Test Reports in execution phases
+- [ ] Verification Reports follow EN 50128 naming conventions
+- [ ] "Software/Hardware" uses forward slash "/" not hyphen
+- [ ] "Software Interface Specifications" is **plural**
+- [ ] "Release Note" is **singular**
+
+---
+
+## 21. Phase-to-Document Complete Reference
+
+**Standard**: EN 50128:2011 Railway Software  
+**Purpose**: Complete reference of all lifecycle phases and their deliverable documents
+
+### Quick Reference Table
+
+| Phase | EN 50128 Section | Documents | Phase Definition File |
+|-------|-----------------|-----------|----------------------|
+| Phase 0: Initialization | Platform Extension | 1 document | N/A (COD internal) |
+| Phase 1: Planning | 5, 6.5, 6.6 | 4 documents | N/A (manual setup) |
+| Phase 2: Requirements | 7.2 | 3 documents | `phase-2-requirements.yaml` |
+| Phase 3: Architecture & Design | 7.3 | 6 documents | `phase-3-architecture-design.yaml` |
+| Phase 4: Component Design | 7.4 | 3 documents | `phase-4-component-design.yaml` |
+| Phase 5: Implementation & Testing | 7.5 | 3 documents | `phase-5-implementation-testing.yaml` |
+| Phase 6: Integration | 7.6 | 3 documents | `phase-6-integration.yaml` |
+| Phase 7: Validation | 7.7 | 3 documents | `phase-7-validation.yaml` |
+| Phase 8: Assessment | 6.4 | 1 document | Not yet created (SIL 3-4 only) |
+| Phase 9: Deployment | 9.1 | Variable | Not yet created |
+
+**Total Documents**: 27 mandatory documents (3 in Phase 1, 24 in Phases 2-7)
+
+### Phase 0: Initialization (Platform Extension)
+
+**Purpose**: Initialize lifecycle tracking and project structure  
+**Owner**: Lifecycle Coordinator (COD)  
+**Command**: `@cod plan --sil [0-4] --project [name]`
+
+| # | Document Name | File Path | Owner | Notes |
+|---|---------------|-----------|-------|-------|
+| 1 | **LIFECYCLE_STATE.md** | `LIFECYCLE_STATE.md` | COD | Tracks project state, phase progress, deliverables |
+
+### Phase 1: Planning (EN 50128 Sections 5, 6.5, 6.6)
+
+**Purpose**: Establish project organization, quality assurance, and configuration management  
+**Primary Agents**: PM, CM, QUA  
+**EN 50128 Reference**: Section 5.3.2.5 - "All activities during a phase SHALL be defined and planned"
+
+| # | Document Name | File Path | Owner | EN 50128 Ref |
+|---|---------------|-----------|-------|--------------|
+| 1 | **Software Quality Assurance Plan (SQAP)** | `docs/plans/SQAP.md` | QUA | 6.5.4.2 |
+| 2 | **Software Configuration Management Plan (SCMP)** | `docs/plans/SCMP.md` | CM | 6.6.4.1 |
+| 3 | **Software Verification Plan (SVP)** | `docs/plans/SVP.md` | VER | 6.2.4.2 |
+| 4 | **Software Validation Plan (SVaP)** | `docs/plans/SVaP.md` | VAL | 6.3.4.2 |
+
+**Phase Gate**: `@cod gate-check planning` (MANDATORY all SIL levels)
+
+### Phase 2: Requirements (EN 50128 Section 7.2)
+
+**Purpose**: Define complete, unambiguous software requirements  
+**Primary Agent**: REQ  
+**Supporting Agents**: SAF, QUA, VER
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Software Requirements Specification** | `docs/Software-Requirements-Specification.md` | REQ | 7.2.4.1 |
+| 2 | **Overall Software Test Specification** | `docs/test/Overall-Software-Test-Specification.md` | TST | 7.2.4.16 |
+| 3 | **Software Requirements Verification Report** | `docs/reports/Software-Requirements-Verification-Report.md` | VER | 7.2.4.27 |
+
+**Best Practice**: Hazard Log - `docs/Hazard-Log.md` - SAF (EN 50126 / EN 50129)
+
+**Phase Gate**: `@cod gate-check requirements` (MANDATORY all SIL levels)
+
+### Phase 3: Architecture & Design (EN 50128 Section 7.3)
+
+**Purpose**: Define software architecture, design, and interfaces  
+**Primary Agent**: DES  
+**Supporting Agents**: SAF, QUA, INT, VER
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Software Architecture Specification** | `docs/Software-Architecture-Specification.md` | DES | 7.3.4.1 |
+| 2 | **Software Design Specification** | `docs/Software-Design-Specification.md` | DES | 7.3.4.20 |
+| 3 | **Software Interface Specifications** | `docs/Software-Interface-Specifications.md` | DES | 7.3.4.18 |
+| 4 | **Software Integration Test Specification** | `docs/test/Software-Integration-Test-Specification.md` | INT | 7.3.4.25 |
+| 5 | **Software/Hardware Integration Test Specification** | `docs/test/Software-Hardware-Integration-Test-Specification.md` | INT | 7.3.4.33 |
+| 6 | **Software Architecture and Design Verification Report** | `docs/reports/Software-Architecture-and-Design-Verification-Report.md` | VER | 7.3.4.40 |
+
+**Important Naming Notes**:
+- #3: **PLURAL** - "Software Interface Specification**s**"
+- #5: Use forward slash **"/"** not hyphen - "Software/Hardware"
+- #4 and #5: Test **Specifications** created in Phase 3, Test **Reports** created in Phase 6 (V-Model)
+
+**Phase Gate**: `@cod gate-check architecture-design` (MANDATORY all SIL levels)
+
+### Phase 4: Component Design (EN 50128 Section 7.4)
+
+**Purpose**: Decompose design into components with detailed specifications  
+**Primary Agents**: DES, TST  
+**Supporting Agents**: QUA, VER
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Software Component Design Specification** | `docs/Software-Component-Design-Specification.md` | DES | 7.4.4.1 |
+| 2 | **Software Component Test Specification** | `docs/test/Software-Component-Test-Specification.md` | TST | 7.4.4.7 |
+| 3 | **Software Component Design Verification Report** | `docs/reports/Software-Component-Design-Verification-Report.md` | VER | 7.4.4.11 |
+
+**Phase Gate**: `@cod gate-check component-design` (MANDATORY all SIL levels)
+
+### Phase 5: Implementation & Testing (EN 50128 Section 7.5)
+
+**Purpose**: Implement source code and execute unit tests  
+**Primary Agents**: IMP, TST  
+**Supporting Agents**: QUA, VER
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Software Source Code and supporting documentation** | `src/` + docs | IMP | 7.5.4.1 |
+| 2 | **Software Component Test Report** | `docs/reports/Software-Component-Test-Report.md` | TST | 7.5.4.5 |
+| 3 | **Software Source Code Verification Report** | `docs/reports/Software-Source-Code-Verification-Report.md` | VER | 7.5.4.8 |
+
+**Key Requirements**:
+- MISRA C:2012 compliance (ZERO mandatory violations for SIL 2+)
+- Static allocation only (no `malloc`/`free` for SIL 2+)
+- Cyclomatic complexity ≤10 (SIL 3-4), ≤15 (SIL 2)
+- Coverage: 100% statement/branch/MC/DC (SIL 3-4)
+
+**Phase Gate**: `@cod gate-check implementation-testing` (MANDATORY all SIL levels)
+
+### Phase 6: Integration (EN 50128 Section 7.6)
+
+**Purpose**: Integrate components and test software-hardware integration  
+**Primary Agent**: INT  
+**Supporting Agents**: TST, QUA, VER
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Software Integration Test Report** | `docs/reports/Software-Integration-Test-Report.md` | INT | 7.6.4.3 |
+| 2 | **Software/Hardware Integration Test Report** | `docs/reports/Software-Hardware-Integration-Test-Report.md` | INT | 7.6.4.7 |
+| 3 | **Software Integration Verification Report** | `docs/reports/Software-Integration-Verification-Report.md` | VER | 7.6.4.11 |
+
+**V-Model Correspondence**:
+- Software Integration Test Specification (Phase 3) → Software Integration Test Report (Phase 6)
+- Software/Hardware Integration Test Specification (Phase 3) → Software/Hardware Integration Test Report (Phase 6)
+
+**Phase Gate**: `@cod gate-check integration` (MANDATORY all SIL levels)
+
+### Phase 7: Validation (EN 50128 Section 7.7)
+
+**Purpose**: Overall software testing and validation for fitness of use  
+**Primary Agents**: TST, VAL  
+**Supporting Agents**: QUA, VER
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Overall Software Test Report** | `docs/reports/Overall-Software-Test-Report.md` | TST | 7.7.4.1 |
+| 2 | **Software Validation Report** | `docs/reports/Software-Validation-Report.md` | VAL | 7.7.4.6 |
+| 3 | **Release Note** | `docs/Release-Note.md` | PM/VAL | 7.7.4.12 |
+
+**Critical Requirements (SIL 3-4)**:
+- Independent validator MANDATORY (does NOT report to Project Manager)
+- Performance Testing MANDATORY (Table A.7)
+- Functional/Black-box Testing MANDATORY (Table A.7)
+
+**Phase Gate**: `@cod gate-check validation` (MANDATORY all SIL levels)
+
+### Phase 8: Assessment (EN 50128 Section 6.4)
+
+**Purpose**: Independent safety assessment (SIL 3-4 ONLY)  
+**Primary Agent**: Assessor (independent)
+
+| # | Document Name | File Path | Owner | EN 50128 Clause |
+|---|---------------|-----------|-------|-----------------|
+| 1 | **Software Assessment Report** | `docs/reports/Software-Assessment-Report.md` | Assessor | 6.4.4.3 |
+
+**Phase Gate**: `@cod gate-check assessment` (MANDATORY SIL 3-4 only)
+
+### Phase 9: Deployment (EN 50128 Section 9.1)
+
+**Purpose**: Deploy software to operational environment  
+**Primary Agents**: PM, CM
+
+| # | Document Name | File Path | Owner | Notes |
+|---|---------------|-----------|-------|-------|
+| 1 | **Deployment Plan** | `docs/Deployment-Plan.md` | PM | Installation procedures |
+| 2 | **Installation Report** | `docs/reports/Installation-Report.md` | PM | Deployment verification |
+| 3 | **Software Baseline** | Configuration items | CM | Final release baseline |
+
+### Summary Statistics
+
+**Documents by Phase**
+
+| Phase | Mandatory Documents | Optional/Supporting | Total |
+|-------|---------------------|---------------------|-------|
+| Phase 0: Initialization | 1 | 0 | 1 |
+| Phase 1: Planning | 4 | 3+ | 7+ |
+| Phase 2: Requirements | 3 | 1 | 4 |
+| Phase 3: Architecture & Design | 6 | 0 | 6 |
+| Phase 4: Component Design | 3 | 0 | 3 |
+| Phase 5: Implementation & Testing | 3 | 0 | 3 |
+| Phase 6: Integration | 3 | 0 | 3 |
+| Phase 7: Validation | 3 | 0 | 3 |
+| Phase 8: Assessment (SIL 3-4) | 1 | 0 | 1 |
+| Phase 9: Deployment | 3 | Variable | 3+ |
+| **TOTAL** | **30** | **4+** | **34+** |
+
+**V-Model Specification → Report Correspondence**
+
+| Specification (Left side) | Phase | Report (Right side) | Phase |
+|---------------------------|-------|---------------------|-------|
+| Overall Software Test Specification | 2 | Overall Software Test Report | 7 |
+| Software Integration Test Specification | 3 | Software Integration Test Report | 6 |
+| Software/Hardware Integration Test Spec | 3 | Software/Hardware Integration Test Report | 6 |
+| Software Component Test Specification | 4 | Software Component Test Report | 5 |

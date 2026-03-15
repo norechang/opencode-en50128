@@ -1,67 +1,45 @@
 # Software Integration Test Report
 
-**Document ID**: DOC-INT-YYYY-NNN  
-**Project**: [Project Name]  
-**Software Component**: [Component Name]  
-**SIL Level**: [0/1/2/3/4]  
-**Version**: [X.Y]  
-**Date**: [YYYY-MM-DD]
+**TEMPLATE VERSION**: 2.0  
+**REFERENCE**: EN 50128:2011 Section [X.Y]
 
 ---
 
-## Document Control
+## STANDARD HEADER
+
+| Field | Value |
+|-------|-------|
+| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Version** | [X.Y] |
+| **Date** | [YYYY-MM-DD] |
+| **Project** | [Project Name] |
+| **SIL Level** | [0, 1, 2, 3, or 4] |
+| **Author** | [Name], [Role] |
+| **Reviewer** | [Name], [Role] |
+| **Approver** | [Name], [Role] |
+| **Status** | [Draft \| Review \| Approved \| Baseline] |
+
+## DOCUMENT CONTROL
 
 | Version | Date | Author | Changes | Approved By |
 |---------|------|--------|---------|-------------|
-| 0.1 | YYYY-MM-DD | [Author] | Initial draft | - |
-| 1.0 | YYYY-MM-DD | [Author] | First release | [Approver] |
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
 
----
+## APPROVALS
 
-## Approvals
+**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
+**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Integrator** (Author) | [Name] | | YYYY-MM-DD |
-| **Verifier** (Reviewer) | [Name] | | YYYY-MM-DD |
-| **Quality Assurance** (Review) | [Name] | | YYYY-MM-DD |
-| **Project Manager** (Approval) | [Name] | | YYYY-MM-DD |
-
-**SIL 3-4 Additional Requirements**:
-- Verifier SHALL be independent from Integrator and development team
-
----
-
-## EN 50128 References
-
-| Section | Title | Relevance |
-|---------|-------|-----------|
-| **7.6** | Software Integration | PRIMARY - Integration process |
-| **Table A.6** | Techniques and Measures for Software Integration | Integration techniques by SIL |
-| **Table A.14** | Functional and Black Box Testing | Integration testing results |
-| **Annex C** | Documentation Requirements | Deliverable requirements |
-
----
-
-## Executive Summary
-
-### Integration Test Outcome
-
-**Overall Integration Result**: [PASS / FAIL / CONDITIONAL PASS]
-
-**Integration Period**: [Start Date] to [End Date]
-
-**Software Version Integrated**: [Version X.Y, Git commit SHA]
-
-**Integration Strategy**: [Bottom-Up / Top-Down / Sandwich / Big-Bang]
-
-**Key Findings**:
-- [Summary of integration results]
-- [Critical issues found and resolved]
-- [Outstanding issues (if any)]
-- [Interface test coverage achieved]
-
-**Recommendation**: [Proceed to validation / Not ready for validation / Conditional with notes]
+| **Author** | [Name] | | YYYY-MM-DD |
+| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
+| **QA Manager** | [Name] | | YYYY-MM-DD |
+| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
+| **Project Manager** | [Name] | | YYYY-MM-DD |
+| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
 
 ---
 

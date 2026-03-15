@@ -23,6 +23,35 @@ Writing safety-critical system documentation requires deep understanding of:
 
 **Learning from a real, complete example is far more effective** than filling in generic placeholders like `[YOUR_SYSTEM_NAME]`.
 
+## Automated Document Generation
+
+Rather than manually copying and adapting the templates, use the **`@cod generate-system`** command to automatically generate all four documents for your project from the **Typical Systems Catalogue**:
+
+```bash
+# Step 1: Initialize your project
+@cod plan --sil 3 --project MyProject
+
+# Step 2: Generate system documents from the catalogue
+@cod generate-system
+# → Presents a menu of 4 typical railway systems to choose from
+# → Generates all 4 documents in <workspace>/docs/system/
+# → Updates LIFECYCLE_STATE.md with system document references
+```
+
+### Available Systems (`TYPICAL-SYSTEMS.md`)
+
+| # | System | SIL | Domain | Recommended For |
+|---|--------|-----|--------|----------------|
+| 1 | Train Door Control System | SIL 3 | Rolling Stock | First project, learning platform |
+| 2 | Level Crossing Protection System | SIL 4 | Infrastructure | Infrastructure projects, full V-Model |
+| 3 | ATP On-Board Unit | SIL 4 | Rolling Stock | Advanced ATP/ETCS projects |
+| 4 | Platform Screen Door System | SIL 2 | Infrastructure | Metro/LRT, SIL 2 certification |
+| 5 | LRT Interlocking System | SIL 4 | Infrastructure | LRT/tram interlocking and signalling |
+
+See **`TYPICAL-SYSTEMS.md`** in this directory for the full catalogue with hazards, functional requirements, safety functions, architecture, and interfaces for each system.
+
+---
+
 ## How to Use These Documents
 
 ### Step 1: Read and Understand
@@ -260,6 +289,7 @@ These documents are structured to comply with:
 ## Additional Resources
 
 ### Platform Documentation
+- `TYPICAL-SYSTEMS.md` - **Catalogue of 4 typical railway systems** for automated document generation (`@cod generate-system`)
 - `LIFECYCLE.md` - Complete EN 50128 V-Model lifecycle phases
 - `AGENTS.md` - Role-based agents for EN 50128 development
 - `.opencode/skills/` - Domain-specific skills for each lifecycle phase
@@ -280,16 +310,17 @@ These documents are structured to comply with:
 
 If you're unsure how to use these templates, consider:
 
-1. **Read the example project** first: `examples/train_door_control2/`
-2. **Use platform agents** to help:
+1. **Use `@cod generate-system`** to automatically generate all 4 documents for your project from the `TYPICAL-SYSTEMS.md` catalogue (fastest path)
+2. **Read the example project** first: `examples/train_door_control2/`
+3. **Use platform agents** to help:
    - `/req` can help extract requirements
    - `/des` can help design architecture
    - `/saf` can help with hazard analysis
-3. **Consult EN 50126/50129 standards** in `std/` directory
-4. **Ask for platform guidance**: Use `/cod` (Lifecycle Coordinator) for workflow questions
+4. **Consult EN 50126/50129 standards** in `std/` directory
+5. **Ask for platform guidance**: Use `/cod` (Lifecycle Coordinator) for workflow questions
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: 2026-02-23  
+**Document Version**: 1.1  
+**Last Updated**: 2026-03-15  
 **Maintained By**: EN50128 Platform Team

@@ -1,0 +1,409 @@
+# Application Preparation Plan
+# EN 50128 Deliverable #29 - Section 8.4.1
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-029-APP-PREP-PLAN"
+number: 29
+name: "Application Preparation Plan"
+abbreviation: "App Prep Plan"
+
+# ===== Lifecycle Context =====
+phase: "application"
+standard_section: "8.4.1"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "REQ"  # or DES per 8.4.1.1
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-application/templates/Application-Preparation-Plan-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: false
+    techniques: []
+    additional_requirements: []
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Data Preparation Techniques"
+        table_reference: "A.11"
+        technique_id: "A.11"
+        recommendation: "R"
+    additional_requirements:
+      - "Define application development process (activities, deliverables, roles)"
+      - "Define documentation structure for application preparation"
+      - "Specify procedures and application tools (with tool classification per 6.7)"
+      - "Include verification and validation activities"
+      - "Define tool class for hardware/software tools used"
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Data Preparation Techniques"
+        table_reference: "A.11"
+        technique_id: "A.11"
+        recommendation: "HR"
+    additional_requirements:
+      - "Define application development process (activities, deliverables, roles)"
+      - "Define documentation structure for application preparation"
+      - "Choose techniques from Table A.11 with justification per 4.8 and 4.9"
+      - "Specify procedures and application tools (with tool classification per 6.7)"
+      - "Include verification and validation activities for data/algorithms completeness"
+      - "Include verification and validation activities for tool/software compatibility"
+      - "Perform risk analysis covering application development process"
+      - "Specify independence requirements per 5.1"
+      - "Define tool class for hardware/software tools used"
+      - "Traceability requirements defined"
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Data Preparation Techniques"
+        table_reference: "A.11"
+        technique_id: "A.11"
+        recommendation: "HR"
+    additional_requirements:
+      - "Define application development process (activities, deliverables, roles) (MANDATORY)"
+      - "Define documentation structure for application preparation (MANDATORY)"
+      - "Choose techniques from Table A.11 with justification per 4.8 and 4.9 (MANDATORY)"
+      - "Specify procedures and application tools (with tool classification per 6.7) (MANDATORY)"
+      - "Include V&V activities for data/algorithms completeness, correctness, compatibility (MANDATORY)"
+      - "Include V&V activities for tool/software compatibility and application conditions (MANDATORY)"
+      - "Perform risk analysis covering application development process, tools, procedures (MANDATORY)"
+      - "Include risk analysis in plan (MANDATORY)"
+      - "Specify independence requirements per 5.1 (MANDATORY)"
+      - "Define tool class for hardware/software tools used (MANDATORY)"
+      - "Call for notations familiar to applications engineers (MANDATORY)"
+      - "Provide user documentation and training for new notations (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Internal consistency (MANDATORY)"
+      - "100% traceability (MANDATORY)"
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Data Preparation Techniques"
+        table_reference: "A.11"
+        technique_id: "A.11"
+        recommendation: "M"
+    additional_requirements:
+      - "Define application development process (activities, deliverables, roles) (MANDATORY)"
+      - "Define documentation structure for application preparation (MANDATORY)"
+      - "Choose techniques from Table A.11 with justification per 4.8 and 4.9 (MANDATORY)"
+      - "Specify procedures and application tools (with tool classification per 6.7) (MANDATORY)"
+      - "Include V&V activities for data/algorithms completeness, correctness, compatibility (MANDATORY)"
+      - "Include V&V activities for tool/software compatibility and application conditions (MANDATORY)"
+      - "Perform risk analysis covering application development process, tools, procedures (MANDATORY)"
+      - "Include risk analysis in plan (MANDATORY)"
+      - "Specify independence requirements per 5.1 (MANDATORY)"
+      - "Define tool class for hardware/software tools used (MANDATORY)"
+      - "Call for notations familiar to applications engineers (MANDATORY)"
+      - "Provide user documentation and training for new notations (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Internal consistency (MANDATORY)"
+      - "100% traceability (MANDATORY)"
+      - "Formal verification of plan highly recommended"
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "app-prep-plan-document"
+    description: "Complete Application Preparation Plan document per EN 50128 8.4.1"
+    mandatory_sil: 1
+    source: "REQ or DES agent"
+    format: "Markdown with YAML frontmatter"
+    storage_path: "docs/application/planning/Application-Preparation-Plan.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/req create-app-prep-plan or /des create-app-prep-plan"
+    verification_criteria:
+      - "Application development process defined (activities, deliverables, roles)"
+      - "Documentation structure defined"
+      - "Techniques from Table A.11 selected and justified"
+      - "Procedures and application tools specified with tool classification"
+      - "Verification and validation activities defined"
+      - "Risk analysis included"
+      - "Independence requirements specified"
+
+  - evidence_id: "app-tool-classification"
+    description: "Tool classification for application development tools per EN 50128 6.7"
+    mandatory_sil: 1
+    source: "REQ or DES agent"
+    format: "YAML or Markdown table"
+    storage_path: "docs/application/planning/application-tool-classification.yaml"
+    automation_level: "manual"
+    collect_on_agent_action: "/req classify-app-tools"
+    verification_criteria:
+      - "All application tools classified (T1/T2/T3)"
+      - "Tool classification per EN 50128 6.7"
+      - "Validation requirements specified for T2/T3 tools"
+
+  - evidence_id: "app-risk-analysis"
+    description: "Risk analysis covering application development process, tools, and procedures"
+    mandatory_sil: 2
+    source: "SAF agent"
+    format: "Risk analysis report (Markdown)"
+    storage_path: "docs/application/safety/application-risk-analysis.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/saf analyze-app-risks"
+    verification_criteria:
+      - "All application development risks identified"
+      - "Tool-related risks assessed"
+      - "Procedure-related risks assessed"
+      - "Risk mitigation measures defined"
+      - "Validation that plan meets required SIL"
+
+  - evidence_id: "app-technique-justification"
+    description: "Justification for selected techniques from Table A.11 per 4.8 and 4.9"
+    mandatory_sil: 2
+    source: "REQ or DES agent"
+    format: "Justification document (Markdown)"
+    storage_path: "docs/application/planning/technique-justification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/req justify-app-techniques"
+    verification_criteria:
+      - "Selected techniques satisfy EN 50128 4.8 requirements"
+      - "Selected techniques satisfy EN 50128 4.9 requirements"
+      - "Justification provided for technique combination"
+
+  - evidence_id: "app-vv-activities-definition"
+    description: "Definition of verification and validation activities for application data/algorithms"
+    mandatory_sil: 1
+    source: "VER and VAL agents"
+    format: "V&V activities specification (Markdown)"
+    storage_path: "docs/application/planning/vv-activities.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver define-app-vv-activities, /val define-app-vv-activities"
+    verification_criteria:
+      - "V&V activities ensure data/algorithms completeness"
+      - "V&V activities ensure data/algorithms correctness"
+      - "V&V activities ensure compatibility with generic application"
+      - "Evidence requirements defined for application conditions compliance"
+      - "Tool validation activities defined (or replacement V&V for tool outputs)"
+
+  - evidence_id: "app-independence-specification"
+    description: "Independence requirements for application preparation staff per EN 50128 5.1"
+    mandatory_sil: 2
+    source: "PM agent"
+    format: "Independence specification (Markdown)"
+    storage_path: "docs/application/planning/independence-requirements.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/pm define-app-independence"
+    verification_criteria:
+      - "Independence between verification and preparation staff specified"
+      - "Independence between validation and preparation staff specified"
+      - "Independence requirements meet EN 50128 5.1 for target SIL"
+
+  - evidence_id: "app-prep-plan-verification"
+    description: "Verification report for Application Preparation Plan per 8.4.1.13"
+    mandatory_sil: 2
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/application/verification/app-prep-plan-verification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-app-prep-plan"
+    verification_criteria:
+      - "Readability verified per 5.3.2.7-5.3.2.10"
+      - "Traceability verified per 6.5.4.14-6.5.4.17"
+      - "Requirements 8.4.1.2 to 8.4.1.11 verified"
+      - "Internal consistency verified"
+      - "Results recorded in Application Data/Algorithms Verification Report (DOC-035)"
+
+  - evidence_id: "app-notation-documentation"
+    description: "User documentation and training materials for application notations"
+    mandatory_sil: 1
+    source: "Documentation team"
+    format: "User manuals and training materials (Markdown/PDF)"
+    storage_path: "docs/application/training/"
+    automation_level: "manual"
+    collect_on_agent_action: "N/A (external)"
+    verification_criteria:
+      - "Notations familiar to application engineers used where possible"
+      - "User documentation provided for new notations"
+      - "Training materials available where appropriate"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-006-SRS"
+    reason: "Application Preparation Plan based on generic software requirements"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-009-SAS"
+    reason: "Application Preparation Plan based on generic software architecture"
+    dependency_type: "informational"
+  
+  - deliverable_id: "DOC-001-SQAP"
+    reason: "Quality assurance principles apply to application preparation"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-028-APP-REQ-SPEC"
+    reason: "Application requirements developed per Application Preparation Plan"
+  
+  - deliverable_id: "DOC-030-APP-TEST-SPEC"
+    reason: "Application testing per Application Preparation Plan"
+  
+  - deliverable_id: "DOC-031-APP-ARCH-DESIGN"
+    reason: "Application design per Application Preparation Plan"
+  
+  - deliverable_id: "DOC-032-APP-PREP-VER"
+    reason: "Verification of Application Preparation Plan implementation"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "Application development process defined (all activities, deliverables, roles)"
+    - "Documentation structure for application preparation defined"
+    - "Techniques from Table A.11 selected and justified per 4.8 and 4.9 (SIL 2+)"
+    - "Procedures and application tools specified with classification per 6.7"
+    - "V&V activities defined for data/algorithms and tool compatibility"
+    - "Risk analysis included (SIL 2+)"
+    - "Independence requirements specified per 5.1 (SIL 2+)"
+    - "Tool class defined for all hardware/software tools"
+    - "Notation strategy defined (familiar to application engineers where possible)"
+  
+  correctness:
+    - "Process appropriate for target SIL level"
+    - "Tool classifications correct per EN 50128 6.7"
+    - "Risk analysis addresses application development process, tools, procedures"
+    - "Independence requirements meet EN 50128 5.1 for SIL level"
+    - "Techniques satisfy EN 50128 4.8 and 4.9"
+  
+  consistency:
+    - "No conflicting process steps"
+    - "All cross-references valid"
+    - "Terminology consistent with generic software documentation"
+    - "Internal consistency verified per 8.4.1.13(b)"
+  
+  traceability:
+    - "Traceability to generic software requirements (SRS)"
+    - "Traceability to generic software architecture (SAS)"
+    - "Readability requirements per 5.3.2.7-5.3.2.10 met (SIL 3+)"
+    - "Traceability requirements per 6.5.4.14-6.5.4.17 met (SIL 3+)"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Application Preparation Plan Baseline"
+  baseline_trigger: "After VER and VAL approval"
+  change_control: "All changes via CCB, impact assessment on application development"
+  versioning: "Semantic versioning (MAJOR.MINOR.PATCH)"
+  storage_location: "config/baselines/application-preparation-plan/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "8.4.1"
+    title: "Application Development Process"
+    relevance: "Primary section defining Application Preparation Plan"
+  - section: "8.4.1.1"
+    title: "Application Preparation Plan - Responsibility"
+    relevance: "Written by Requirements Manager or Designer"
+  - section: "8.4.1.2"
+    title: "Application Preparation Plan - Purpose"
+    relevance: "Define and detail application development process (activities, deliverables, roles)"
+  - section: "8.4.1.3"
+    title: "Documentation structure"
+    relevance: "Define documentation structure for application preparation process"
+  - section: "8.4.1.4"
+    title: "Techniques from Table A.11"
+    relevance: "Choose techniques from Table A.11, justified per 4.8 and 4.9"
+  - section: "8.4.1.5"
+    title: "Procedures and application tools"
+    relevance: "Specify procedures and application tools with classification per 6.7"
+  - section: "8.4.1.6"
+    title: "V&V activities for data/algorithms"
+    relevance: "Include V&V to ensure completeness, correctness, compatibility"
+  - section: "8.4.1.7"
+    title: "V&V activities for tool compatibility"
+    relevance: "Include V&V to ensure tool and software compatibility"
+  - section: "8.4.1.8"
+    title: "Risk analysis"
+    relevance: "Risk analysis covering application development process, tools, procedures"
+  - section: "8.4.1.9"
+    title: "Independence requirements"
+    relevance: "Specify independence requirements per 5.1"
+  - section: "8.4.1.10"
+    title: "Tool classification"
+    relevance: "Define tool class for hardware/software tools"
+  - section: "8.4.1.11"
+    title: "Notation strategy"
+    relevance: "Use notations familiar to application engineers; provide documentation and training"
+  - section: "8.4.1.13"
+    title: "Application Preparation Plan verification"
+    relevance: "Verification of readability, traceability, requirements 8.4.1.2-8.4.1.11, internal consistency"
+  - section: "8.4.1.14"
+    title: "Implementation verification"
+    relevance: "Implementation of plan shall be verified and validated for each application"
+  - section: "Table A.11"
+    title: "Data Preparation Techniques"
+    relevance: "Source of techniques for application data preparation"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Application Preparation Plan is deliverable #29, written by REQ or DES, checked by VER and VAL"
+
+# ===== Notes =====
+notes: |
+  **Application Preparation Plan (Deliverable #29)**
+  
+  This deliverable defines the **application development process** for systems configured by application
+  data/algorithms (EN 50128 Section 8). It is NOT required for generic software-only systems.
+  
+  **Purpose**: Define and detail the process for developing application-specific data and algorithms that
+  configure generic software for a specific installation.
+  
+  **Key Content** (EN 50128 8.4.1.2-8.4.1.11):
+  1. Application development process (activities, deliverables, roles)
+  2. Documentation structure for application preparation
+  3. Selected techniques from Table A.11 with justification per 4.8 and 4.9
+  4. Procedures and application tools (with tool classification per 6.7: T1/T2/T3)
+  5. Verification and validation activities for data/algorithms (completeness, correctness, compatibility)
+  6. Verification and validation activities for tool/software compatibility
+  7. Risk analysis covering application development process, tools, procedures (SIL 2+)
+  8. Independence requirements per EN 50128 5.1 (SIL 2+)
+  9. Tool class definition for all hardware/software tools
+  10. Notation strategy (familiar to application engineers; documentation and training for new notations)
+  
+  **Scope**: Can be produced either for:
+  - Each specific application (e.g., specific railway station interlocking), OR
+  - A class of specific applications (e.g., all small station interlockings)
+  
+  **Tool Classification** (EN 50128 6.7):
+  - T1: No influence on executable code (e.g., text editors, version control)
+  - T2: Support/facilitate testing or verification (e.g., test harness, coverage tools)
+  - T3: Generate/translate executable code (e.g., compilers, code generators, configuration tools)
+  
+  Application tools (e.g., interlocking configuration tool, signalling data editor) are typically **T2 or T3**
+  and require validation per 6.7.
+  
+  **Verification Requirements** (EN 50128 8.4.1.13):
+  - Readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+  - Traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+  - Requirements 8.4.1.2 to 8.4.1.11 met
+  - Internal consistency (MANDATORY SIL 3+)
+  - Results recorded in Application Data/Algorithms Verification Report (DOC-035)
+  
+  **Implementation Verification** (EN 50128 8.4.1.14):
+  The implementation of the Application Preparation Plan shall be verified and validated for each specific
+  application (recorded in DOC-032: Application Preparation Verification Report).
+  
+  **REQ or DES Agent Responsibility**:
+  - Define application development process
+  - Select and justify techniques from Table A.11
+  - Specify procedures and classify application tools
+  - Define V&V activities
+  - Coordinate with SAF for risk analysis
+  - Specify independence requirements
+  
+  **VER Agent Responsibility**:
+  - Verify readability (SIL 3+)
+  - Verify traceability (SIL 3+)
+  - Verify all requirements 8.4.1.2-8.4.1.11 met
+  - Verify internal consistency (SIL 3+)
+  - Record results in DOC-035
+  
+  **VAL Agent Responsibility**:
+  - Validate application development process appropriate for target SIL
+  - Validate risk analysis adequacy
+  - Validate V&V activities sufficient for safety assurance

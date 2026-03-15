@@ -1,0 +1,328 @@
+# Tools Validation Report
+# EN 50128 Deliverable #27 - Section 6.7.4.4-6, Overall Software Testing Phase
+
+deliverable_id: "DOC-027-TOOLS-VALIDATION-REPORT"
+number: 27
+name: "Tools Validation Report"
+abbreviation: "Tools Val Report"
+phase: "validation"
+standard_section: "6.7.4.5"
+written_by: "VER"
+first_check: "VER"
+second_check: "NONE"
+template_path: ".opencode/skills/en50128-quality/templates/Tools-Validation-Report-template.md"
+template_exists: false
+
+sil_requirements:
+  sil_0:
+    mandatory: false
+    techniques:
+      - technique_id: "D.1"
+        technique_name: "Tool Validation"
+        recommendation: "R"
+        table_reference: "A.5"
+    additional_requirements:
+      - "Tool validation recommended for T3 tools"
+      - "T1 tools: No validation required"
+      - "T2 tools: Validation optional"
+      - "T3 tools: Validation recommended"
+
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_id: "D.1"
+        technique_name: "Tool Validation"
+        recommendation: "HR"
+        table_reference: "A.5"
+    additional_requirements:
+      - "Tool validation HIGHLY RECOMMENDED for T3 tools"
+      - "T1 tools: No validation required"
+      - "T2 tools: Validation recommended"
+      - "T3 tools: Validation HIGHLY RECOMMENDED (or alternative evidence)"
+      - "Tool manual/specification documented"
+
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_id: "D.1"
+        technique_name: "Tool Validation"
+        recommendation: "HR"
+        table_reference: "A.5"
+    additional_requirements:
+      - "Tool validation HIGHLY RECOMMENDED for T2 and T3 tools"
+      - "T1 tools: No validation required"
+      - "T2 tools: Validation highly recommended"
+      - "T3 tools: Validation HIGHLY RECOMMENDED (or alternative evidence per 6.7.4.4)"
+      - "Tool justification documented (6.7.4.2)"
+      - "Tool manual/specification documented (6.7.4.3)"
+
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_id: "D.1"
+        technique_name: "Tool Validation"
+        recommendation: "HR"
+        table_reference: "A.5"
+    additional_requirements:
+      - "Tool validation HIGHLY RECOMMENDED for T2 and T3 tools"
+      - "T1 tools: No validation required"
+      - "T2 tools: Validation highly recommended"
+      - "T3 tools: Evidence MANDATORY per 6.7.4.4 (validation or alternative)"
+      - "Tool justification documented (6.7.4.2) MANDATORY"
+      - "Tool manual/specification documented (6.7.4.3) MANDATORY"
+      - "Tool version control (6.7.4.10) MANDATORY"
+      - "Tool version justification (6.7.4.11) MANDATORY"
+
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_id: "D.1"
+        technique_name: "Tool Validation"
+        recommendation: "HR"
+        table_reference: "A.5"
+    additional_requirements:
+      - "All SIL 3 requirements apply"
+      - "Rigorous tool validation for T3 tools"
+
+evidence_requirements:
+  - evidence_id: "tools-validation-report"
+    description: "Complete tools validation report per EN 50128 Section 6.7.4.5"
+    mandatory_sil: 1
+    source: "VER agent tool validation"
+    format: "Markdown"
+    storage_path: "docs/validation/Tools-Validation-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "validate-tools"
+    verification_criteria:
+      - "All required sections present per 6.7.4.5"
+      - "All T2 and T3 tools validated (or alternative evidence)"
+      - "Validation activities recorded"
+      - "Tool versions documented"
+      - "Validation results documented"
+
+  - evidence_id: "tool-inventory"
+    description: "Inventory of all tools used in project with classification (T1/T2/T3)"
+    mandatory_sil: 0
+    source: "VER agent, CM agent"
+    format: "Structured table"
+    storage_path: "docs/validation/Tools-Validation-Report.md Section 2"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "inventory-tools"
+    verification_criteria:
+      - "All tools used in project listed"
+      - "Tool class assigned (T1/T2/T3)"
+      - "Tool version documented"
+      - "Tool purpose documented"
+      - "Tool vendor documented"
+
+  - evidence_id: "tool-classification-justification"
+    description: "Justification for T2 and T3 tool classification per EN 50128 Section 6.7.4.2"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Structured section per tool"
+    storage_path: "docs/validation/Tools-Validation-Report.md Section 3"
+    automation_level: "manual"
+    collect_on_agent_action: "classify-tools"
+    verification_criteria:
+      - "T2 and T3 tools justified (6.7.4.2)"
+      - "Potential failures identified"
+      - "Mitigation measures documented"
+      - "Classification rationale clear"
+
+  - evidence_id: "tool-validation-activities"
+    description: "Record of validation activities per tool (6.7.4.5a)"
+    mandatory_sil: 1
+    source: "VER agent validation activities"
+    format: "Structured section per tool"
+    storage_path: "docs/validation/Tools-Validation-Report.md Section 4"
+    automation_level: "manual"
+    collect_on_agent_action: "validate-tool"
+    verification_criteria:
+      - "Validation activities recorded for each T3 tool"
+      - "Tool manual version documented (6.7.4.5b)"
+      - "Tool functions validated documented (6.7.4.5c)"
+      - "Tools and equipment used documented (6.7.4.5d)"
+
+  - evidence_id: "tool-validation-results"
+    description: "Results of tool validation (6.7.4.5e)"
+    mandatory_sil: 1
+    source: "VER agent validation execution"
+    format: "Structured table with pass/fail per tool"
+    storage_path: "docs/validation/Tools-Validation-Report.md Section 5"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "validate-tool"
+    verification_criteria:
+      - "Pass/fail status for each validated tool"
+      - "Reasons for failure documented (if failed)"
+      - "Test cases and results documented (6.7.4.5f)"
+      - "Discrepancies documented (6.7.4.5g)"
+
+  - evidence_id: "tool-test-cases"
+    description: "Test cases for tool validation (6.7.4.5f)"
+    mandatory_sil: 1
+    source: "VER agent test design"
+    format: "Structured test cases per tool"
+    storage_path: "docs/validation/Tools-Validation-Report.md Section 6"
+    automation_level: "manual"
+    collect_on_agent_action: "design-tool-tests"
+    verification_criteria:
+      - "Test cases defined for each tool function"
+      - "Test inputs documented"
+      - "Expected outputs documented"
+      - "Actual results documented"
+      - "Test cases traceable to tool functions"
+
+  - evidence_id: "alternative-evidence-t3"
+    description: "Alternative evidence for T3 tools if validation not performed (6.7.4.4)"
+    mandatory_sil: 1
+    source: "VER agent evidence collection"
+    format: "Structured section per tool"
+    storage_path: "docs/validation/Tools-Validation-Report.md Section 7"
+    automation_level: "manual"
+    collect_on_agent_action: "collect-tool-evidence"
+    verification_criteria:
+      - "History of successful use documented (6.7.4.4a)"
+      - "OR tool validation performed (6.7.4.4b)"
+      - "OR diverse redundant code (6.7.4.4c)"
+      - "OR compliance with SIL (6.7.4.4d)"
+      - "OR other appropriate methods (6.7.4.4e)"
+      - "At least one evidence type for each T3 tool"
+
+  - evidence_id: "tool-version-control"
+    description: "Tool version control and justification (6.7.4.10-11)"
+    mandatory_sil: 2
+    source: "CM agent"
+    format: "Structured table with tool, version, justification"
+    storage_path: "docs/validation/Tools-Validation-Report.md Section 8"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "control-tool-versions"
+    verification_criteria:
+      - "Tool versions documented"
+      - "Only justified versions used (6.7.4.10)"
+      - "New versions justified (6.7.4.11)"
+      - "Version history maintained"
+
+depends_on:
+  - deliverable_id: "DOC-003-SCMP"
+    reason: "SCMP defines tool configuration management"
+    dependency_type: "informational"
+  - deliverable_id: "DOC-001-SQAP"
+    reason: "SQAP specifies tool quality requirements"
+    dependency_type: "informational"
+  - deliverable_id: "DOC-018-SOURCE-CODE"
+    reason: "Tools used to develop source code"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Validation Report references tool validation evidence"
+
+verification_criteria:
+  completeness:
+    - "All tools in project inventory"
+    - "All T2 and T3 tools classified and justified"
+    - "All T3 tools validated (or alternative evidence)"
+    - "All validation activities recorded"
+    - "All validation results documented"
+  correctness:
+    - "Tool classifications correct (T1/T2/T3)"
+    - "Validation activities appropriate for tool"
+    - "Validation results accurate"
+    - "Alternative evidence sufficient (if used)"
+  consistency:
+    - "Tool versions consistent across project"
+    - "Tool classifications consistent with EN 50128 definitions"
+    - "Validation approach consistent per tool class"
+  traceability:
+    - "All tools traced to project activities"
+    - "All validation activities traced to tools"
+    - "All test cases traced to tool functions"
+
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After all tools validated and before deployment"
+  change_control: "CCB approval for tool changes or new tool versions"
+  version_control: "Git repository under docs/validation/"
+  review_frequency: "At tool version updates or new tool additions"
+
+en50128_references:
+  - section: "6.7"
+    description: "Support Tools and Languages (primary section)"
+  - section: "6.7.4.4"
+    description: "T3 Tool Evidence Requirements"
+  - section: "6.7.4.5"
+    description: "Tool Validation Documentation Requirements"
+  - section: "6.7.4.2"
+    description: "T2 and T3 Tool Justification"
+  - section: "6.7.4.3"
+    description: "Tool Specification/Manual Requirements"
+  - section: "6.7.4.10"
+    description: "Tool Version Control"
+  - section: "6.7.4.11"
+    description: "New Tool Version Justification"
+  - section: "Annex C Table C.1"
+    description: "Deliverable #27 (numbering conflict - actually #26 in table)"
+
+notes: |
+  **Purpose**: Documents validation of software tools to ensure tool failures
+  do not adversely affect software safety. Tools are classified as T1, T2, or T3.
+
+  **Tool Classifications** (EN 50128 Section 3.1):
+  - **T1**: No influence on executable code (e.g., text editors, version control)
+    → No validation required
+  - **T2**: Facilitates testing and verification (e.g., test harness, coverage tools)
+    → Validation highly recommended, may use tool incorrectly
+  - **T3**: Generates/translates executable code (e.g., compilers, code generators)
+    → Evidence MANDATORY for SIL 3+ (validation or alternative per 6.7.4.4)
+
+  **Example Tool Classifications**:
+  - **T1**: git, vim, Doxygen (documentation generator)
+  - **T2**: gcov, lcov, cppcheck, valgrind, Unity (test framework)
+  - **T3**: gcc (compiler), linker, code generators
+
+  **Alternative Evidence for T3 Tools** (6.7.4.4):
+  Instead of tool validation, T3 tools may use:
+  a) History of successful use in similar environments
+  b) Tool validation (this deliverable)
+  c) Diverse redundant code to detect tool-introduced faults
+  d) Compliance with SIL requirements
+  e) Other appropriate methods
+
+  **Validation Activities** (6.7.4.5):
+  For each T3 tool validated, document:
+  a) Validation activities performed
+  b) Tool manual version
+  c) Tool functions validated
+  d) Tools/equipment used for validation
+  e) Validation results (pass/fail with reasons)
+  f) Test cases and results
+  g) Discrepancies between expected and actual results
+
+  **SIL-Specific Requirements**:
+  - **SIL 0**: Tool validation recommended for T3
+  - **SIL 1-2**: Tool validation HIGHLY RECOMMENDED for T3
+  - **SIL 3-4**: Evidence MANDATORY for T3 (validation or alternative per 6.7.4.4)
+
+  **Workflow**:
+  1. VER creates inventory of all tools used in project
+  2. VER classifies tools as T1/T2/T3
+  3. VER justifies T2/T3 classifications (6.7.4.2)
+  4. VER obtains tool manuals/specifications (6.7.4.3)
+  5. For each T3 tool: VER performs validation OR collects alternative evidence
+  6. VER documents validation activities (6.7.4.5)
+  7. VER documents validation results
+  8. CM ensures tool version control (6.7.4.10-11)
+  9. VER creates Tools Validation Report
+
+  **Common Tools in Railway Software**:
+  - **Compiler (T3)**: gcc - MANDATORY validation or alternative evidence (SIL 3+)
+  - **Coverage (T2)**: gcov/lcov - validation highly recommended
+  - **Static Analysis (T2)**: cppcheck, PC-lint - validation highly recommended
+  - **Test Framework (T2)**: Unity, CUnit - validation highly recommended
+  - **Version Control (T1)**: git - no validation required
+
+  **Compiler Validation Example** (6.7.4.6 Note 2):
+  For non-trusted compiler (T3), fitness for purpose justified by:
+  - High test coverage of object code
+  - Checks/analyses detect compiler-introduced errors
+  - No re-compilation after testing (or re-test if recompiled)

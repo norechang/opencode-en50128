@@ -1,0 +1,121 @@
+# EN 50128 Evidence Definition Schema
+# Schema for defining evidence requirements for EN 50128 deliverables
+
+$schema: "http://json-schema.org/draft-07/schema#"
+$id: "https://en50128.dev/schemas/evidence-v1.yaml"
+title: "EN 50128 Evidence Definition Schema"
+description: "Schema for defining evidence requirements for EN 50128 deliverables"
+version: "1.0.0"
+
+type: object
+required:
+  - evidence_id
+  - description
+  - mandatory_sil
+  - source
+
+properties:
+  evidence_id:
+    type: string
+    pattern: "^[a-z0-9-]+$"
+    description: "Unique evidence identifier (lowercase, hyphen-separated)"
+    examples:
+      - "req-traceability"
+      - "static-analysis-cppcheck"
+      - "test-coverage-gcov"
+      - "code-review-record"
+  
+  description:
+    type: string
+    minLength: 10
+    maxLength: 500
+    description: "Clear description of what evidence is required"
+    examples:
+      - "Traceability matrix from system requirements to software requirements"
+      - "Cppcheck static analysis report showing zero critical issues"
+      - "Unit test coverage report showing ≥100% statement coverage (SIL 3+)"
+  
+  mandatory_sil:
+    type: integer
+    minimum: 0
+    maximum: 4
+    description: "Minimum SIL level where this evidence is mandatory (0=all, 1=SIL1+, etc.)"
+    examples: [0, 1, 2, 3, 4]
+  
+  source:
+    type: string
+    description: "Where evidence comes from (agent, tool, manual process)"
+    examples:
+      - "REQ agent traceability analysis"
+      - "cppcheck static analysis tool"
+      - "gcov coverage tool"
+      - "QUA agent code review"
+      - "Manual hazard analysis (SAF agent)"
+  
+  tool:
+    type: string
+    description: "Tool name if evidence is tool-generated"
+    examples: ["cppcheck", "gcov", "lcov", "lizard", "valgrind", "clang"]
+  
+  tool_version:
+    type: string
+    description: "Minimum required tool version"
+    examples: ["2.13.0", "11.0", "1.15"]
+  
+  format:
+    type: string
+    description: "Expected evidence format/file type"
+    examples: ["CSV", "JSON", "XML", "Markdown", "PDF", "HTML", "LCOV"]
+  
+  storage_path:
+    type: string
+    pattern: "^evidence/.*"
+    description: "Relative path where evidence should be stored (under evidence/ directory)"
+    examples:
+      - "evidence/traceability/req_trace.csv"
+      - "evidence/static_analysis/cppcheck_report.xml"
+      - "evidence/coverage/lcov_report.html"
+      - "evidence/reviews/code_review_2026-03-09.md"
+  
+  verification_criteria:
+    type: array
+    description: "Criteria to verify this evidence is complete and correct"
+    items:
+      type: string
+    examples:
+      - "All requirements have traceability links"
+      - "No mandatory MISRA C violations"
+      - "Statement coverage >= 100% (SIL 3+)"
+      - "All review checklist items addressed"
+  
+  generation_command:
+    type: string
+    description: "Command to generate this evidence (if automated)"
+    examples:
+      - "cppcheck --enable=all --xml --xml-version=2 src/ 2> evidence/static_analysis/cppcheck_report.xml"
+      - "gcov src/*.c && lcov --capture --directory . --output-file evidence/coverage/coverage.info"
+      - "lizard src/ -l c --json > evidence/metrics/complexity.json"
+  
+  automation_level:
+    type: string
+    enum: ["automatic", "semi-automatic", "manual"]
+    description: "Level of automation for evidence generation"
+    default: "automatic"
+  
+  collect_on_agent_action:
+    type: string
+    enum: ["code-write", "test-run", "review-complete", "design-complete", "manual"]
+    description: "When should this evidence be automatically collected"
+    examples: ["code-write", "test-run", "review-complete"]
+  
+  linked_deliverables:
+    type: array
+    description: "Deliverables that require this evidence"
+    items:
+      type: string
+      pattern: "^DOC-\\d{3}-[A-Z0-9-]+$"
+    examples: ["DOC-006-SRS", "DOC-019-SOURCE-CODE-VER"]
+  
+  notes:
+    type: string
+    description: "Additional notes or guidance for collecting this evidence"

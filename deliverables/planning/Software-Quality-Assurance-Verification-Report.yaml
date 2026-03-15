@@ -1,0 +1,505 @@
+# Software Quality Assurance Verification Report
+# EN 50128 Deliverable #2 - Section 6.2.4.10-11, 6.5.4.7-8
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-002-QA-VER-REPORT"
+number: 2
+name: "Software Quality Assurance Verification Report"
+abbreviation: "QA Ver Report"
+
+# ===== Lifecycle Context =====
+phase: "planning"
+standard_section: "6.2.4.10"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "VER"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-quality/templates/QA-Verification-Report-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_name: "Plan-Based Verification"
+        table_reference: "A.5"
+        technique_id: "D.1"
+        recommendation: "HR"
+    additional_requirements:
+      - "SQAP completeness verification"
+      - "SQAP internal consistency verification"
+      - "Document readability and traceability verification"
+    evidence_thresholds:
+      sqap_completeness_check: true
+      sqap_consistency_check: true
+      readability_check: true
+      independent_verification: false
+
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Plan-Based Verification"
+        table_reference: "A.5"
+        technique_id: "D.1"
+        recommendation: "HR"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "HR"
+    additional_requirements:
+      - "SQAP completeness verification HIGHLY RECOMMENDED"
+      - "SQAP internal consistency verification HIGHLY RECOMMENDED"
+      - "Document readability and traceability verification HIGHLY RECOMMENDED"
+      - "All EN 50128 Section 6.5.4 requirements addressed"
+    evidence_thresholds:
+      sqap_completeness_check: true
+      sqap_consistency_check: true
+      readability_check: true
+      traceability_check: true
+      independent_verification: false
+
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Plan-Based Verification"
+        table_reference: "A.5"
+        technique_id: "D.1"
+        recommendation: "HR"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "HR"
+    additional_requirements:
+      - "SQAP completeness verification HIGHLY RECOMMENDED"
+      - "SQAP internal consistency verification HIGHLY RECOMMENDED"
+      - "Document readability and traceability verification HIGHLY RECOMMENDED"
+      - "All EN 50128 Section 6.5.4 requirements addressed"
+      - "QA activities coverage verification"
+    evidence_thresholds:
+      sqap_completeness_check: true
+      sqap_consistency_check: true
+      readability_check: true
+      traceability_check: true
+      qa_activities_coverage: true
+      independent_verification: false
+
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Plan-Based Verification"
+        table_reference: "A.5"
+        technique_id: "D.1"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "M"
+    additional_requirements:
+      - "SQAP completeness verification MANDATORY"
+      - "SQAP internal consistency verification MANDATORY"
+      - "Document readability and traceability verification MANDATORY"
+      - "All EN 50128 Section 6.5.4 requirements addressed MANDATORY"
+      - "QA activities coverage verification MANDATORY"
+      - "Independent verification (VER separate from SQAP author)"
+      - "All normative sub-clauses of EN 50128 covered by SQAP"
+    evidence_thresholds:
+      sqap_completeness_check: true
+      sqap_consistency_check: true
+      readability_check: true
+      traceability_check: true
+      qa_activities_coverage: true
+      independent_verification: true
+
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Plan-Based Verification"
+        table_reference: "A.5"
+        technique_id: "D.1"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "M"
+    additional_requirements:
+      - "All SIL 3 requirements apply"
+      - "Rigorous independent verification MANDATORY"
+      - "Formal review process for SQAP verification"
+
+# ===== Required Content Sections =====
+required_content:
+  - section: "1. Introduction"
+    description: "Purpose, scope, SQAP version verified"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+  - section: "2. SQAP Completeness Verification"
+    description: "Verification that SQAP addresses all EN 50128 Section 6.5.4.4-6 requirements"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+  - section: "3. SQAP Internal Consistency Verification"
+    description: "Verification that SQAP is internally consistent (no contradictions)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+  - section: "4. Readability and Traceability Verification"
+    description: "Verification per EN 50128 Section 5.3.2.7-10 and 6.5.4.14-17"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+  - section: "5. Specific Requirements Verification"
+    description: "Verification of specific SQAP requirements (6.5.4.4-6)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+  - section: "6. QA Activities Coverage"
+    description: "Verification that SQAP covers all required QA activities"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+  - section: "7. Non-Conformities and Issues"
+    description: "List of non-conformities, errors, deficiencies found"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+  - section: "8. Verification Summary"
+    description: "Summary of verification results, approval/rejection decision"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "sqap-verification-report"
+    description: "Complete SQAP verification report per EN 50128 Section 6.2.4.10-11, 6.5.4.7-8"
+    mandatory_sil: 0
+    source: "VER agent SQAP verification"
+    format: "Markdown"
+    storage_path: "docs/planning/Software-Quality-Assurance-Verification-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "verify-sqap"
+    verification_criteria:
+      - "All required sections present per EN 50128"
+      - "Completeness verification documented"
+      - "Internal consistency verification documented"
+      - "Readability and traceability verification documented"
+      - "All non-conformities identified"
+      - "Verification summary and decision provided"
+
+  - evidence_id: "sqap-completeness-checklist"
+    description: "Checklist verifying SQAP addresses all EN 50128 Section 6.5.4.4-6 requirements"
+    mandatory_sil: 0
+    source: "VER agent checklist"
+    format: "Structured table with requirement, SQAP section, status, notes"
+    storage_path: "docs/planning/Software-Quality-Assurance-Verification-Report.md Section 2"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "verify-sqap-completeness"
+    verification_criteria:
+      - "All EN 50128 6.5.4.4 requirements checked (Quality System)"
+      - "All EN 50128 6.5.4.5 requirements checked (QA activities per phase)"
+      - "All EN 50128 6.5.4.6 requirements checked (QA tailoring to project)"
+      - "Each requirement has SQAP section reference"
+      - "Missing requirements identified and justified"
+
+  - evidence_id: "sqap-consistency-analysis"
+    description: "Analysis of SQAP internal consistency (no contradictions, all cross-references valid)"
+    mandatory_sil: 0
+    source: "VER agent consistency check"
+    format: "Structured analysis with consistency checks and findings"
+    storage_path: "docs/planning/Software-Quality-Assurance-Verification-Report.md Section 3"
+    automation_level: "manual"
+    collect_on_agent_action: "verify-sqap-consistency"
+    verification_criteria:
+      - "No contradictions found between SQAP sections"
+      - "All cross-references within SQAP valid"
+      - "Terminology used consistently throughout"
+      - "Quality metrics defined consistently"
+      - "Any inconsistencies identified and resolved"
+
+  - evidence_id: "sqap-readability-traceability-check"
+    description: "Verification of SQAP readability and traceability per EN 50128 Section 5.3.2.7-10, 6.5.4.14-17"
+    mandatory_sil: 0
+    source: "VER agent document review"
+    format: "Checklist table with readability/traceability criteria"
+    storage_path: "docs/planning/Software-Quality-Assurance-Verification-Report.md Section 4"
+    automation_level: "manual"
+    collect_on_agent_action: "verify-sqap-readability"
+    verification_criteria:
+      - "Document structure clear and logical (5.3.2.7)"
+      - "Terminology defined and used consistently (5.3.2.8)"
+      - "Traceability to EN 50128 requirements (5.3.2.9)"
+      - "Document management information present (5.3.2.10)"
+      - "Readability requirements met (6.5.4.14-17)"
+
+  - evidence_id: "sqap-specific-requirements-verification"
+    description: "Verification of specific SQAP requirements per EN 50128 Section 6.5.4.4-6"
+    mandatory_sil: 0
+    source: "VER agent requirements verification"
+    format: "Structured section with requirement-by-requirement verification"
+    storage_path: "docs/planning/Software-Quality-Assurance-Verification-Report.md Section 5"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "verify-sqap-specific-requirements"
+    verification_criteria:
+      - "6.5.4.4: Quality System described"
+      - "6.5.4.5: QA activities per phase specified"
+      - "6.5.4.6: QA tailored to specific project"
+      - "All normative sub-clauses of EN 50128 referenced"
+      - "QA tools and techniques specified"
+
+  - evidence_id: "qa-activities-coverage-matrix"
+    description: "Matrix showing all lifecycle phases covered by QA activities in SQAP"
+    mandatory_sil: 1
+    source: "VER agent coverage analysis"
+    format: "Structured table with phase, QA activities, SQAP section, coverage status"
+    storage_path: "docs/planning/Software-Quality-Assurance-Verification-Report.md Section 6"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "verify-qa-coverage"
+    verification_criteria:
+      - "All lifecycle phases have QA activities defined"
+      - "Requirements phase QA covered"
+      - "Design phase QA covered"
+      - "Implementation phase QA covered"
+      - "Integration phase QA covered"
+      - "Validation phase QA covered"
+      - "Deployment phase QA covered (if applicable)"
+      - "Maintenance phase QA covered (if applicable)"
+
+  - evidence_id: "sqap-non-conformities-list"
+    description: "List of all non-conformities, errors, deficiencies found in SQAP"
+    mandatory_sil: 0
+    source: "VER agent verification findings"
+    format: "Structured table with finding ID, severity, description, SQAP section, recommendation"
+    storage_path: "docs/planning/Software-Quality-Assurance-Verification-Report.md Section 7"
+    automation_level: "manual"
+    collect_on_agent_action: "verify-sqap"
+    verification_criteria:
+      - "All non-conformities documented with severity"
+      - "Critical non-conformities MUST be resolved before SQAP approval"
+      - "High non-conformities SHOULD be resolved"
+      - "Each finding has recommended resolution"
+      - "SQAP author informed of all findings"
+
+  - evidence_id: "sqap-verification-summary"
+    description: "Summary of SQAP verification results with approval/rejection decision"
+    mandatory_sil: 0
+    source: "VER agent verification decision"
+    format: "Summary section with decision and rationale"
+    storage_path: "docs/planning/Software-Quality-Assurance-Verification-Report.md Section 8"
+    automation_level: "manual"
+    collect_on_agent_action: "verify-sqap"
+    verification_criteria:
+      - "Completeness verification result clear"
+      - "Consistency verification result clear"
+      - "Readability/traceability verification result clear"
+      - "Overall decision clear (APPROVE / CONDITIONAL APPROVE / REJECT)"
+      - "Rationale for decision provided"
+      - "Conditions documented (if conditional approval)"
+      - "Verifier signature and date"
+
+  - evidence_id: "independent-verification-statement"
+    description: "Statement from independent Verifier (SIL 3-4)"
+    mandatory_sil: 3
+    source: "VER agent (independent)"
+    format: "Signed statement in Approvals section"
+    storage_path: "docs/planning/Software-Quality-Assurance-Verification-Report.md Approvals section"
+    automation_level: "manual"
+    collect_on_agent_action: "verify-sqap"
+    verification_criteria:
+      - "Verifier is independent from SQAP author"
+      - "Verifier signature and date recorded"
+      - "Independence statement documented"
+      - "Any concerns or conditions documented"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-001-SQAP"
+    reason: "SQAP is the document being verified"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-004-SVP"
+    reason: "SQAP verification informs Software Verification Plan"
+
+  - deliverable_id: "DOC-005-SVAP"
+    reason: "SQAP verification informs Software Validation Plan"
+
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Validation Report checks that verification process was complete, including SQAP verification"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All EN 50128 Section 6.5.4.4-6 requirements verified"
+    - "All EN 50128 Section 5.3.2.7-10 requirements verified"
+    - "All EN 50128 Section 6.5.4.14-17 requirements verified"
+    - "All lifecycle phases covered by QA activities"
+    - "All non-conformities documented"
+    - "Verification summary provided"
+
+  correctness:
+    - "Completeness verification accurate"
+    - "Consistency verification accurate"
+    - "Readability/traceability verification accurate"
+    - "Non-conformity severity classification appropriate"
+    - "Verification decision justified"
+    - "Independent verification (SIL 3-4 MANDATORY)"
+
+  consistency:
+    - "Verification criteria consistent with EN 50128 requirements"
+    - "Non-conformities consistent with verification findings"
+    - "Verification summary consistent with detailed findings"
+    - "No contradictions in verification report"
+
+  traceability:
+    - "Every EN 50128 requirement traced to SQAP section (or gap identified)"
+    - "Every non-conformity traced to SQAP section"
+    - "Verification decision traced to evidence"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After SQAP verification complete and SQAP approved"
+  change_control: "CCB approval required for verification report changes after baseline"
+  version_control: "Git repository under docs/planning/"
+  review_frequency: "At SQAP update or major project change"
+
+  update_triggers:
+    - "SQAP updated or changed"
+    - "Re-verification after SQAP non-conformity resolution"
+    - "Project SIL level change"
+    - "EN 50128 interpretation clarification"
+
+  baseline_criteria:
+    - "SQAP completeness verified"
+    - "SQAP internal consistency verified"
+    - "Readability and traceability verified"
+    - "All critical non-conformities resolved"
+    - "Verifier approval obtained"
+    - "Independent verification complete (SIL 3-4)"
+
+  versioning:
+    - "Version number: X.Y (X = SQAP major version, Y = re-verification iteration)"
+    - "Each SQAP change triggers new verification report version"
+
+  archival:
+    - "Archive with corresponding SQAP version"
+    - "Retain for project lifetime + 10 years (railway requirement)"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "6.2.4.10"
+    title: "Software Quality Assurance Verification Report (Primary)"
+    description: "Verification report written by Verifier based on input documents"
+
+  - section: "6.2.4.11"
+    title: "SQAP Verification Requirements"
+    description: "Verification addresses SQAP completeness, consistency, readability, traceability"
+
+  - section: "6.5.4.7"
+    title: "Software Quality Assurance Verification Report (Secondary)"
+    description: "Verification report written by Verifier based on input documents"
+
+  - section: "6.5.4.8"
+    title: "SQAP Verification Requirements (Detailed)"
+    description: "Verification addresses SQAP requirements and internal consistency"
+
+  - section: "6.5.4.4"
+    title: "Quality System Requirements"
+    description: "SQAP shall describe Quality System"
+
+  - section: "6.5.4.5"
+    title: "QA Activities Per Phase"
+    description: "SQAP shall specify QA activities for each lifecycle phase"
+
+  - section: "6.5.4.6"
+    title: "QA Tailoring"
+    description: "SQAP shall be tailored to specific project"
+
+  - section: "5.3.2.7-10"
+    title: "General Document Requirements"
+    description: "Readability and traceability requirements for all documents"
+
+  - section: "6.5.4.14-17"
+    title: "SQAP-Specific Readability Requirements"
+    description: "Specific readability requirements for SQAP"
+
+  - section: "Table A.5"
+    title: "Verification and Testing Techniques"
+    description: "Verification techniques by SIL"
+
+  - section: "Annex C Table C.1"
+    title: "Document Control Summary"
+    description: "QA Verification Report is deliverable #2"
+
+# ===== Notes =====
+notes: |
+  **Purpose**: The Software Quality Assurance Verification Report verifies that the SQAP itself
+  is complete, internally consistent, readable, traceable, and meets all EN 50128 requirements.
+  This is a "verification of the verification plan" - ensuring the QA Plan is sound before it
+  is used to guide quality assurance activities throughout the project.
+
+  **Key Characteristics**:
+  1. **Plan Verification**: Verifies the SQAP document (not QA activities execution)
+  2. **Completeness Check**: All EN 50128 Section 6.5.4 requirements addressed by SQAP
+  3. **Consistency Check**: SQAP internally consistent (no contradictions)
+  4. **Readability Check**: SQAP meets document quality requirements (5.3.2.7-10)
+  5. **Traceability Check**: SQAP traceable to EN 50128 requirements
+  6. **Independent Review**: Independent Verifier for SIL 3-4
+
+  **What is Verified**:
+  - SQAP completeness (all EN 50128 requirements covered)
+  - SQAP internal consistency (no contradictions)
+  - SQAP readability (clear, understandable)
+  - SQAP traceability (EN 50128 requirements → SQAP sections)
+  - QA activities coverage (all lifecycle phases have QA activities)
+  - SQAP tailoring to project (SIL level, domain, project size)
+
+  **SIL-Specific Requirements**:
+  - **SIL 0-2**: Completeness, consistency, readability verification HIGHLY RECOMMENDED
+  - **SIL 3-4**: Completeness, consistency, readability verification MANDATORY,
+    Independent verification MANDATORY
+
+  **Workflow**:
+  1. SQAP author (QUA) creates SQAP
+  2. VER reviews SQAP for completeness (Section 6.5.4.4-6)
+  3. VER reviews SQAP for internal consistency
+  4. VER reviews SQAP for readability/traceability (Section 5.3.2.7-10, 6.5.4.14-17)
+  5. VER checks QA activities coverage for all lifecycle phases
+  6. VER identifies non-conformities and issues
+  7. VER creates SQAP Verification Report
+  8. VER informs SQAP author of non-conformities
+  9. SQAP author resolves critical non-conformities
+  10. VER re-verifies SQAP (if needed)
+  11. VER approves or rejects SQAP
+  12. VAL performs second check of verification report
+
+  **Pass Criteria** (SIL 3-4):
+  - Completeness: All EN 50128 requirements addressed (100%)
+  - Consistency: Zero contradictions found
+  - Readability: All document quality requirements met
+  - Traceability: All EN 50128 requirements traceable to SQAP sections
+  - QA Coverage: All lifecycle phases have QA activities
+  - Non-conformities: Zero critical non-conformities
+  - Independent verification: Complete with approval
+
+  **Critical Dependencies**:
+  - SQAP must exist before verification can begin
+  - SQAP Verification Report approval required before project proceeds to development
+  - If SQAP verification finds critical non-conformities, SQAP must be corrected and re-verified
+
+  **Key Difference from Other Verification Reports**:
+  - Most verification reports verify work products (SRS, SAS, Source Code)
+  - SQAP Verification Report verifies a PLAN document (the SQAP itself)
+  - Focus is on plan completeness and consistency, not execution of QA activities
+  - QA activities execution is verified later by QA reviews and audits
+
+  **Template Compliance**:
+  - Document ID format: DOC-002-QA-VER-REPORT-YYYY-NNN
+  - Approvals section MUST include VER signature
+  - All sections from EN 50128 6.2.4.11 / 6.5.4.8 MUST be present
+  - Completeness checklist MUST reference EN 50128 sections
+  - Non-conformities MUST be documented with severity
+
+  **Evidence Automation**:
+  - Completeness checklist: SEMI-AUTOMATIC (parse SQAP, manual verification)
+  - Consistency analysis: MANUAL (requires judgment)
+  - Readability check: MANUAL (subjective assessment)
+  - Traceability check: SEMI-AUTOMATIC (parse SQAP for EN 50128 references)
+  - Non-conformities: MANUAL (Verifier judgment)
+  - Verification decision: MANUAL (Verifier approval)

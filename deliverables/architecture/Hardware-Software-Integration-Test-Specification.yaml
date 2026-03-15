@@ -1,0 +1,294 @@
+# Hardware-Software Integration Test Specification
+# EN 50128 Deliverable #13 - Section 7.3.4.18, Architecture and Design Phase
+
+deliverable_id: "DOC-013-HW-SW-INT-TEST-SPEC"
+number: 13
+name: "Hardware-Software Integration Test Specification"
+abbreviation: "HW-SW Int Test Spec"
+phase: "architecture"
+standard_section: "7.3.4.18"
+written_by: "INT"
+first_check: "VER"
+second_check: "VAL"
+template_path: ".opencode/skills/en50128-integration/templates/Hardware-Software-Integration-Test-Specification-template.md"
+template_exists: true
+
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+    additional_requirements:
+      - "HW-SW integration strategy documented"
+      - "Hardware interface test cases defined"
+      - "Target hardware configuration specified"
+    evidence_thresholds:
+      min_hw_interface_coverage: 70
+    integration_requirements:
+      target_hardware_testing: true
+      interface_testing: true
+      performance_testing: false
+      independent_testing: false
+
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "-"
+        table_reference: "A.6"
+    additional_requirements:
+      - "HW-SW integration strategy justified"
+      - "All hardware interfaces tested"
+      - "Target hardware configuration fully specified"
+      - "Driver and BSP testing planned"
+    evidence_thresholds:
+      min_hw_interface_coverage: 90
+    integration_requirements:
+      target_hardware_testing: true
+      interface_testing: true
+      performance_testing: false
+      independent_testing: false
+
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "R"
+        table_reference: "A.6"
+    additional_requirements:
+      - "HW-SW integration strategy justified with risk analysis"
+      - "100% hardware interface coverage (MANDATORY)"
+      - "Target hardware configuration fully specified with versions"
+      - "Driver and BSP testing planned with coverage criteria"
+      - "Performance test cases on target hardware"
+      - "Hardware fault injection testing planned"
+    evidence_thresholds:
+      min_hw_interface_coverage: 100
+    integration_requirements:
+      target_hardware_testing: true
+      interface_testing: true
+      performance_testing: true
+      independent_testing: false
+
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+    additional_requirements:
+      - "HW-SW integration strategy justified with risk analysis (MANDATORY)"
+      - "100% hardware interface coverage (MANDATORY)"
+      - "Target hardware configuration fully specified (MANDATORY)"
+      - "Driver and BSP testing with 100% coverage (MANDATORY)"
+      - "Performance test cases on target hardware (highly recommended)"
+      - "Hardware fault injection testing (MANDATORY)"
+      - "Independent review of HW-SW integration test specification (MANDATORY)"
+      - "Timing and synchronization with hardware tested"
+      - "Hardware resource usage tested (memory, CPU, I/O)"
+    evidence_thresholds:
+      min_hw_interface_coverage: 100
+    integration_requirements:
+      target_hardware_testing: true
+      interface_testing: true
+      performance_testing: true
+      independent_testing: true
+
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_id: "A.14"
+        technique_name: "Functional and Black-Box Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+      - technique_id: "A.18"
+        technique_name: "Performance Testing"
+        recommendation: "HR"
+        table_reference: "A.6"
+    additional_requirements:
+      - "All SIL 3 requirements apply"
+      - "Formal test case review (MANDATORY)"
+      - "Diverse testing approaches for critical HW interfaces"
+
+evidence_requirements:
+  - evidence_id: "hw-sw-integration-strategy"
+    description: "HW-SW integration strategy with approach, phases, and hardware configuration"
+    mandatory_sil: 0
+    source: "INT agent"
+    format: "Markdown section"
+    storage_path: "docs/integration/Hardware-Software-Integration-Test-Specification.md Section 2"
+    automation_level: "manual"
+    collect_on_agent_action: "int-plan-hw-sw-integration"
+    verification_criteria:
+      - "Integration approach documented (incremental/all-at-once)"
+      - "Hardware platform fully specified"
+      - "Integration phases defined"
+      - "Risk analysis for HW-SW integration"
+
+  - evidence_id: "hardware-interface-test-cases"
+    description: "Test cases for all hardware interfaces (GPIO, UART, SPI, I2C, etc.)"
+    mandatory_sil: 0
+    source: "INT agent"
+    format: "Structured test case table"
+    storage_path: "docs/integration/Hardware-Software-Integration-Test-Specification.md Section 3"
+    automation_level: "manual"
+    collect_on_agent_action: "int-define-hw-test-cases"
+    verification_criteria:
+      - "All hardware interfaces have test cases"
+      - "100% hardware interface coverage (SIL 2+)"
+      - "Each test case has ID, description, inputs, expected outputs"
+      - "Traceability to architecture specification"
+
+  - evidence_id: "driver-bsp-test-cases"
+    description: "Test cases for device drivers and Board Support Package (BSP)"
+    mandatory_sil: 1
+    source: "INT agent"
+    format: "Structured test case table"
+    storage_path: "docs/integration/Hardware-Software-Integration-Test-Specification.md Section 4"
+    automation_level: "manual"
+    collect_on_agent_action: "int-define-driver-test-cases"
+    verification_criteria:
+      - "All drivers have test cases"
+      - "BSP functions tested"
+      - "Driver initialization and shutdown tested"
+      - "Error handling tested"
+
+  - evidence_id: "performance-test-cases-hw"
+    description: "Performance test cases on target hardware (timing, resource usage)"
+    mandatory_sil: 2
+    source: "INT agent"
+    format: "Structured test case table"
+    storage_path: "docs/integration/Hardware-Software-Integration-Test-Specification.md Section 5"
+    automation_level: "manual"
+    collect_on_agent_action: "int-define-hw-performance-tests"
+    verification_criteria:
+      - "Worst-case execution time (WCET) test cases"
+      - "Memory usage test cases"
+      - "CPU usage test cases"
+      - "I/O throughput test cases"
+      - "Performance Testing highly recommended (SIL 3+)"
+
+  - evidence_id: "hardware-fault-injection-tests"
+    description: "Hardware fault injection test cases (power glitches, signal errors, etc.)"
+    mandatory_sil: 2
+    source: "INT agent"
+    format: "Structured test case table"
+    storage_path: "docs/integration/Hardware-Software-Integration-Test-Specification.md Section 6"
+    automation_level: "manual"
+    collect_on_agent_action: "int-define-hw-fault-tests"
+    verification_criteria:
+      - "Hardware fault scenarios identified"
+      - "Fault injection test cases defined"
+      - "Software response to hardware faults tested"
+      - "Fault Injection MANDATORY (SIL 3+)"
+
+  - evidence_id: "hw-sw-traceability-matrix"
+    description: "Traceability from architecture specifications to HW-SW integration test cases"
+    mandatory_sil: 1
+    source: "INT agent, CM agent"
+    format: "CSV"
+    storage_path: "evidence/traceability/hw_sw_integration_tests.csv"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "int-trace-hw-sw-tests"
+    verification_criteria:
+      - "All hardware interfaces traced to test cases"
+      - "All architecture HW requirements traced to test cases"
+      - "Bi-directional traceability"
+
+depends_on:
+  - deliverable_id: "DOC-009-SAS"
+    reason: "Architecture specification defines hardware interfaces"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-011-SOFTWARE-INTERFACE-SPEC"
+    reason: "Interface specifications define HW-SW interfaces"
+    dependency_type: "blocking"
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Design specification includes driver/BSP design"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-014-HW-SW-INT-TEST-REPORT"
+    reason: "Test specification defines test cases executed in test report"
+
+verification_criteria:
+  completeness:
+    - "All hardware interfaces have test cases"
+    - "All drivers and BSP functions have test cases"
+    - "Integration strategy documented"
+    - "Target hardware configuration specified"
+    - "Performance test cases defined (SIL 2+)"
+    - "Hardware fault injection tests defined (SIL 2+)"
+  correctness:
+    - "Test cases correctly address hardware interfaces"
+    - "Integration strategy appropriate for hardware complexity"
+    - "Performance criteria realistic for target hardware"
+    - "Fault injection scenarios realistic"
+  consistency:
+    - "Test case IDs unique and consistent"
+    - "Hardware configuration consistent with architecture"
+    - "Performance criteria consistent across test cases"
+  traceability:
+    - "All hardware interfaces traced to test cases"
+    - "All test cases traced to architecture/interface specifications"
+
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After architecture phase complete, before HW-SW integration"
+  change_control: "CCB approval required for test specification changes"
+  version_control: "Git repository under docs/integration/"
+  review_frequency: "At architecture updates or hardware changes"
+
+en50128_references:
+  - section: "7.3.4.18"
+    description: "HW-SW Integration Test Specification - part of architecture phase"
+  - section: "7.6"
+    description: "Software Integration (includes HW-SW integration)"
+  - section: "Table A.6"
+    description: "Integration techniques by SIL"
+  - section: "Annex C Table C.1"
+    description: "Deliverable #13"
+
+notes: |
+  **Purpose**: Specifies test cases for integrating software with target hardware platform,
+  including device drivers, BSP, and hardware interfaces.
+
+  **Key Focus**:
+  - Hardware interface testing (GPIO, UART, SPI, I2C, CAN, etc.)
+  - Device driver testing
+  - Board Support Package (BSP) testing
+  - Performance on target hardware (timing, resource usage)
+  - Hardware fault injection (power glitches, signal errors)
+
+  **SIL-Specific Requirements**:
+  - **SIL 0-1**: Hardware interface testing, basic performance
+  - **SIL 2**: 100% hardware interface coverage, performance testing, fault injection
+  - **SIL 3-4**: All SIL 2 + independent review, rigorous fault injection, WCET testing
+
+  **Workflow**:
+  1. INT reviews architecture specification (hardware platform)
+  2. INT identifies all hardware interfaces
+  3. INT defines integration strategy (incremental recommended)
+  4. INT creates test cases for each hardware interface
+  5. INT defines driver/BSP test cases
+  6. INT defines performance test cases on target hardware
+  7. INT defines hardware fault injection test cases
+  8. VER reviews test specification for completeness
+  9. VAL approves test specification

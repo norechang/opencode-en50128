@@ -1,0 +1,418 @@
+# Software Change Records
+# EN 50128 Deliverable #42 - Section 9.2.4.9-9.2.4.10
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-042-CHANGE-RECORDS"
+number: 42
+name: "Software Change Records"
+abbreviation: "Change Records"
+
+# ===== Lifecycle Context =====
+phase: "maintenance"
+standard_section: "9.2.4.9"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "CM"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-maintenance/templates/Software-Change-Records-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques: []
+    additional_requirements:
+      - "Change record for each maintenance activity per 9.2.4.10"
+      - "Modification or change request per 9.2.4.10(a)"
+      - "Impact analysis per 9.2.4.10(b)"
+      - "Detailed specification of modification per 9.2.4.10(c)"
+      - "Revalidation, regression testing, re-assessment per 9.2.4.10(d)"
+    evidence_thresholds: {}
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.10"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "HR"
+    additional_requirements:
+      - "Change record for each maintenance activity per 9.2.4.10 (MANDATORY)"
+      - "Modification/change request, version, fault nature, required change, source per 9.2.4.10(a) (MANDATORY)"
+      - "Impact analysis on system (HW, SW, human, environment, interactions) per 9.2.4.10(b) (MANDATORY)"
+      - "Detailed specification of modification carried out per 9.2.4.10(c) (MANDATORY)"
+      - "Revalidation, regression testing, re-assessment per SIL per 9.2.4.10(d) (MANDATORY)"
+      - "Independence of revalidation same as validation per 9.2.4.10(d)"
+    evidence_thresholds: {}
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.10"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "HR"
+      - technique_name: "Traceability"
+        table_reference: "A.10"
+        technique_id: "D.58"
+        recommendation: "HR"
+    additional_requirements:
+      - "Change record for each maintenance activity per 9.2.4.10 (MANDATORY)"
+      - "Modification/change request, version, fault nature, required change, source per 9.2.4.10(a) (MANDATORY)"
+      - "Impact analysis on system (HW, SW, human, environment, interactions) per 9.2.4.10(b) (MANDATORY)"
+      - "Detailed specification of modification carried out per 9.2.4.10(c) (MANDATORY)"
+      - "Revalidation, regression testing, re-assessment per SIL per 9.2.4.10(d) (MANDATORY)"
+      - "Independence of revalidation same as validation per 9.2.4.10(d)"
+      - "Safety impact analysis per 9.2.4.19"
+      - "Traceability to affected components"
+    evidence_thresholds:
+      cyclomatic_complexity_max: 15
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.10"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.10"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Regression Testing"
+        table_reference: "A.10"
+        technique_id: "A.20"
+        recommendation: "HR"
+    additional_requirements:
+      - "Change record for each maintenance activity per 9.2.4.10 (MANDATORY)"
+      - "Modification/change request, version, fault nature, required change, source per 9.2.4.10(a) (MANDATORY)"
+      - "Impact analysis on system (HW, SW, human, environment, interactions) per 9.2.4.10(b) (MANDATORY)"
+      - "Detailed specification of modification carried out per 9.2.4.10(c) (MANDATORY)"
+      - "Revalidation, regression testing, re-assessment per SIL per 9.2.4.10(d) (MANDATORY)"
+      - "Independence of revalidation same as validation per 9.2.4.10(d) (MANDATORY)"
+      - "Safety impact analysis per 9.2.4.19 (MANDATORY)"
+      - "Traceability to affected components (MANDATORY)"
+      - "Regression test scope defined per impact"
+      - "Re-assessment by independent assessor (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Traceability requirements per 6.5.4.14-6.5.4.17 (MANDATORY)"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      cyclomatic_complexity_max: 10
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Configuration Management"
+        table_reference: "A.10"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Impact Analysis"
+        table_reference: "A.10"
+        technique_id: "D.32"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.10"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Regression Testing"
+        table_reference: "A.10"
+        technique_id: "A.20"
+        recommendation: "HR"
+    additional_requirements:
+      - "Change record for each maintenance activity per 9.2.4.10 (MANDATORY)"
+      - "Modification/change request, version, fault nature, required change, source per 9.2.4.10(a) (MANDATORY)"
+      - "Impact analysis on system (HW, SW, human, environment, interactions) per 9.2.4.10(b) (MANDATORY)"
+      - "Detailed specification of modification carried out per 9.2.4.10(c) (MANDATORY)"
+      - "Revalidation, regression testing, re-assessment per SIL per 9.2.4.10(d) (MANDATORY)"
+      - "Independence of revalidation same as validation per 9.2.4.10(d) (MANDATORY)"
+      - "Safety impact analysis per 9.2.4.19 (MANDATORY)"
+      - "Traceability to affected components (MANDATORY)"
+      - "Regression test scope defined per impact (MANDATORY)"
+      - "Re-assessment by independent assessor (MANDATORY)"
+      - "Readability requirements per 5.3.2.7-5.3.2.10 (MANDATORY)"
+      - "Traceability requirements per 6.5.4.14-6.5.4.17 (MANDATORY)"
+    evidence_thresholds:
+      test_coverage_statement: 100
+      test_coverage_branch: 100
+      test_coverage_condition: 100
+      test_coverage_mcdc: 100
+      cyclomatic_complexity_max: 10
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "change-request-details"
+    description: "Modification/change request details per 9.2.4.10(a)"
+    mandatory_sil: 0
+    source: "CM agent from requestor"
+    format: "Structured change record (YAML or Markdown)"
+    storage_path: "docs/maintenance/change-records/<change-id>.yaml"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/cm create-change-record"
+    verification_criteria:
+      - "Change request ID unique"
+      - "Version identification (before and after)"
+      - "Nature of fault (if bug fix)"
+      - "Required change description"
+      - "Source for change (requestor, rationale)"
+      - "Change priority and severity"
+
+  - evidence_id: "impact-analysis"
+    description: "Impact analysis on overall system per 9.2.4.10(b)"
+    mandatory_sil: 0
+    source: "SAF agent, DES agent, CM agent"
+    format: "Impact analysis report (Markdown)"
+    storage_path: "docs/maintenance/change-records/<change-id>-impact.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/saf analyze-change-impact"
+    verification_criteria:
+      - "Impact on hardware analyzed"
+      - "Impact on software components analyzed"
+      - "Impact on human interaction analyzed"
+      - "Impact on environment analyzed"
+      - "Possible interactions analyzed"
+      - "Safety impact analyzed per 9.2.4.19"
+      - "Affected components identified"
+
+  - evidence_id: "modification-specification"
+    description: "Detailed specification of modification carried out per 9.2.4.10(c)"
+    mandatory_sil: 0
+    source: "DES agent, IMP agent"
+    format: "Modification specification (Markdown)"
+    storage_path: "docs/maintenance/change-records/<change-id>-spec.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/des specify-modification"
+    verification_criteria:
+      - "Design changes specified"
+      - "Code changes specified"
+      - "Test changes specified"
+      - "Documentation changes specified"
+      - "Changes traceable to requirements"
+
+  - evidence_id: "revalidation-records"
+    description: "Revalidation records per 9.2.4.10(d)"
+    mandatory_sil: 0
+    source: "VAL agent"
+    format: "Revalidation report (Markdown)"
+    storage_path: "docs/maintenance/change-records/<change-id>-revalidation.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/val revalidate-change"
+    verification_criteria:
+      - "Revalidation scope defined per impact"
+      - "Changed components revalidated"
+      - "Identified affected components revalidated"
+      - "Complete system revalidated (if impact warrants)"
+      - "Independence same as validation per 9.2.4.10(d)"
+
+  - evidence_id: "regression-testing-records"
+    description: "Regression testing records per 9.2.4.10(d)"
+    mandatory_sil: 0
+    source: "TST agent"
+    format: "Regression test report (Markdown)"
+    storage_path: "docs/maintenance/change-records/<change-id>-regression.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/tst run-regression-tests"
+    verification_criteria:
+      - "Regression test scope defined per impact"
+      - "Regression tests selected"
+      - "Regression tests executed"
+      - "Regression test results documented"
+      - "All regression tests passed (or failures justified)"
+
+  - evidence_id: "re-assessment-records"
+    description: "Re-assessment records per 9.2.4.10(d)"
+    mandatory_sil: 3
+    source: "Assessor"
+    format: "Re-assessment report (Markdown)"
+    storage_path: "docs/maintenance/change-records/<change-id>-reassessment.md"
+    automation_level: "manual"
+    collect_on_agent_action: "External assessor"
+    verification_criteria:
+      - "Re-assessment scope defined per SIL"
+      - "Independent assessor conducts re-assessment (SIL 3+)"
+      - "Safety integrity preserved"
+      - "Assessment conclusion documented"
+
+  - evidence_id: "safety-impact-analysis"
+    description: "Safety impact analysis per 9.2.4.19"
+    mandatory_sil: 0
+    source: "SAF agent"
+    format: "Safety impact analysis (Markdown)"
+    storage_path: "docs/maintenance/change-records/<change-id>-safety-impact.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/saf analyze-safety-impact"
+    verification_criteria:
+      - "Safety impact identified (none, low, medium, high, critical)"
+      - "Safety hazards analyzed"
+      - "Safety requirements affected identified"
+      - "Mitigation actions defined (if needed)"
+      - "Safety approval obtained (SIL 2+)"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-041-SMP"
+    reason: "Change Records created per Software Maintenance Plan"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-043-MAINT-RECORDS"
+    reason: "Maintenance Records reference Change Records per 9.2.4.8(a)"
+  
+  - deliverable_id: "DOC-044-MAINT-VER"
+    reason: "Maintenance Verification Report verifies Change Records per 9.2.4.14"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "Change request details per 9.2.4.10(a) (MANDATORY)"
+    - "Impact analysis per 9.2.4.10(b) (MANDATORY)"
+    - "Modification specification per 9.2.4.10(c) (MANDATORY)"
+    - "Revalidation per 9.2.4.10(d) (MANDATORY)"
+    - "Regression testing per 9.2.4.10(d) (MANDATORY)"
+    - "Re-assessment per 9.2.4.10(d) (MANDATORY SIL 3+)"
+    - "Safety impact analysis per 9.2.4.19 (MANDATORY)"
+    - "All 9.2.4.10 requirements addressed"
+  
+  correctness:
+    - "Change request accurate"
+    - "Impact analysis accurate and thorough"
+    - "Modification specification accurate"
+    - "Revalidation adequate for change"
+    - "Regression testing adequate for change"
+    - "Safety impact analysis correct"
+  
+  consistency:
+    - "Internal consistency per 9.2.4.14(b) (MANDATORY SIL 3+)"
+    - "Consistent with Software Maintenance Plan"
+    - "No conflicting information"
+    - "All cross-references valid"
+  
+  traceability:
+    - "Traceability per 6.5.4.14-6.5.4.17 and 9.2.4.14(a) (MANDATORY SIL 3+)"
+    - "Traceability to change request"
+    - "Traceability to affected components"
+    - "Traceability to requirements"
+    - "Traceability to tests"
+  
+  readability:
+    - "Readability per 5.3.2.7-5.3.2.10 and 9.2.4.14(a) (MANDATORY SIL 3+)"
+    - "Clear and unambiguous language"
+    - "Consistent terminology"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Change Record Baseline"
+  baseline_trigger: "After change completion and approval"
+  change_control: "Change Records are IMMUTABLE after approval (audit trail)"
+  versioning: "Change records are individual snapshots per change (no versioning)"
+  storage_location: "config/baselines/change-records/<change-id>/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "9.2.4.9"
+    title: "Software Change Record"
+    relevance: "Software Change Record shall be written"
+  - section: "9.2.4.10"
+    title: "Software Change Record content"
+    relevance: "Change request, impact analysis, modification spec, revalidation/regression/re-assessment (ALL MANDATORY)"
+  - section: "9.2.4.10(a)"
+    title: "Change request details"
+    relevance: "Request, version, fault nature, required change, source (MANDATORY)"
+  - section: "9.2.4.10(b)"
+    title: "Impact analysis"
+    relevance: "Impact on HW, SW, human, environment, interactions (MANDATORY)"
+  - section: "9.2.4.10(c)"
+    title: "Modification specification"
+    relevance: "Detailed specification of modification carried out (MANDATORY)"
+  - section: "9.2.4.10(d)"
+    title: "Revalidation, regression testing, re-assessment"
+    relevance: "Per SIL level, independence same as validation (MANDATORY)"
+  - section: "9.2.4.14"
+    title: "Change Record verification"
+    relevance: "Verification of readability, traceability, 9.2.4.10 requirements, internal consistency"
+  - section: "9.2.4.19"
+    title: "Safety impact analysis"
+    relevance: "Safety impact analysis for each reported problem or enhancement (MANDATORY)"
+  - section: "5.3.2.7-5.3.2.10"
+    title: "Readability requirements"
+    relevance: "General requirements for readability per 9.2.4.14(a) (MANDATORY SIL 3+)"
+  - section: "6.5.4.14-6.5.4.17"
+    title: "Traceability requirements"
+    relevance: "General requirements for traceability per 9.2.4.14(a) (MANDATORY SIL 3+)"
+  - section: "Table A.10"
+    title: "Software Maintenance techniques"
+    relevance: "Configuration Management (M), Impact Analysis (HR/M), Traceability (HR/M), Regression Testing (HR)"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Software Change Records is deliverable #42, written by CM, checked by VER and VAL"
+
+# ===== Notes =====
+notes: |
+  **Software Change Records (Deliverable #42)**
+  
+  **Purpose**: Document each maintenance activity with complete traceability from change request
+  through impact analysis, modification, and revalidation per EN 50128 Section 9.2.4.9-9.2.4.10.
+  
+  **Key Content** (EN 50128 9.2.4.10 - ALL MANDATORY):
+  1. **Change request details** per 9.2.4.10(a):
+     - Modification or change request
+     - Version identification
+     - Nature of fault (if bug fix)
+     - Required change
+     - Source for change
+  
+  2. **Impact analysis** per 9.2.4.10(b):
+     - Impact on hardware
+     - Impact on software
+     - Impact on human interaction
+     - Impact on environment
+     - Possible interactions
+  
+  3. **Modification specification** per 9.2.4.10(c):
+     - Detailed specification of modification carried out
+  
+  4. **Revalidation/Regression/Re-assessment** per 9.2.4.10(d):
+     - Revalidation per SIL level
+     - Regression testing per SIL level
+     - Re-assessment per SIL level (SIL 3+)
+     - Independence same as validation
+  
+  **One Change Record Per Maintenance Activity**:
+  EN 50128 9.2.4.10 states "A Software Change Record shall be established for each maintenance activity."
+  This means one change record per change, not a single cumulative document.
+  
+  **Verification Requirements** (EN 50128 9.2.4.14):
+  - Readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+  - Traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+  - Requirements per 9.2.4.10 met (MANDATORY all SILs)
+  - Internal consistency (MANDATORY SIL 3+)
+  - Results recorded in DOC-044 (Maintenance Verification Report)
+  
+  **CM Agent Responsibility**:
+  - Create change record for each maintenance activity
+  - Record change request details per 9.2.4.10(a)
+  - Coordinate impact analysis per 9.2.4.10(b)
+  - Record modification specification per 9.2.4.10(c)
+  - Record revalidation/regression/re-assessment per 9.2.4.10(d)
+  
+  **Configuration Management**:
+  Change Records are IMMUTABLE after approval - they provide audit trail.
+  No changes permitted - any corrections require new change record.

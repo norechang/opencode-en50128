@@ -1,0 +1,441 @@
+# EN 50128 Deliverable Definition Schema
+# JSON Schema (expressed in YAML) for EN 50128 mandatory deliverables per Annex C Table C.1
+
+$schema: "http://json-schema.org/draft-07/schema#"
+$id: "https://en50128.dev/schemas/deliverable-v1.yaml"
+title: "EN 50128 Deliverable Definition Schema"
+description: "Schema for defining EN 50128 mandatory deliverables per Annex C Table C.1"
+version: "1.0.0"
+
+type: object
+required:
+  - deliverable_id
+  - number
+  - name
+  - phase
+  - standard_section
+  - written_by
+  - template_path
+  - sil_requirements
+
+properties:
+  # ===== Basic Identification =====
+  deliverable_id:
+    type: string
+    pattern: "^DOC-\\d{3}-[A-Z0-9-]+$"
+    description: "Unique deliverable ID (e.g., DOC-006-SRS)"
+    examples:
+      - "DOC-006-SRS"
+      - "DOC-009-SAS"
+      - "DOC-018-SOURCE-CODE"
+  
+  number:
+    type: integer
+    minimum: 1
+    maximum: 50
+    description: "Deliverable number from EN 50128 Annex C Table C.1"
+    examples: [6, 9, 18]
+  
+  name:
+    type: string
+    minLength: 5
+    maxLength: 200
+    description: "Full deliverable name from EN 50128 Annex C Table C.1"
+    examples:
+      - "Software Requirements Specification"
+      - "Software Architecture Specification"
+      - "Software Source Code and Supporting Documentation"
+  
+  abbreviation:
+    type: string
+    maxLength: 20
+    description: "Common abbreviation (e.g., SRS, SAS, SDS)"
+    examples: ["SRS", "SAS", "SDS", "SQAP", "SCMP"]
+  
+  # ===== Lifecycle Context =====
+  phase:
+    type: string
+    enum:
+      - "planning"
+      - "requirements"
+      - "architecture"
+      - "component-design"
+      - "implementation"
+      - "integration"
+      - "validation"
+      - "application"
+      - "deployment"
+      - "maintenance"
+      - "assessment"
+    description: "Lifecycle phase per EN 50128"
+  
+  standard_section:
+    type: string
+    pattern: "^\\d+(\\.\\d+)*$"
+    description: "EN 50128:2011 section reference (e.g., 7.2, 7.3, 7.4)"
+    examples: ["7.2", "7.3", "7.4", "6.2", "6.5"]
+  
+  # ===== Ownership (from Table C.1) =====
+  written_by:
+    type: string
+    enum: ["REQ", "DES", "IMP", "TST", "INT", "VER", "VAL", "QUA", "CM", "SAF", "PM", "ASR", "TBD"]
+    description: "Agent responsible for writing deliverable (per EN 50128 Table C.1)"
+  
+  first_check:
+    type: string
+    enum: ["VER", "VAL", "QUA", "NONE"]
+    description: "First checker per EN 50128 Table C.1 (usually VER)"
+  
+  second_check:
+    type: string
+    enum: ["VER", "VAL", "QUA", "NONE"]
+    description: "Second checker per EN 50128 Table C.1 (usually VAL)"
+  
+  # ===== Template and Structure =====
+  template_path:
+    type: string
+    pattern: "^\\..*\\.md$"
+    description: "Relative path to Markdown template file (starting with .)"
+    examples:
+      - ".opencode/skills/en50128-requirements/templates/Software-Requirements-Specification-template.md"
+      - ".opencode/skills/en50128-design/templates/Software-Architecture-Specification-template.md"
+  
+  template_exists:
+    type: boolean
+    description: "Whether template file currently exists"
+    default: false
+  
+  # ===== SIL Requirements =====
+  sil_requirements:
+    type: object
+    required: ["sil_0", "sil_1", "sil_2", "sil_3", "sil_4"]
+    description: "SIL-dependent requirements per deliverable"
+    properties:
+      sil_0:
+        $ref: "#/definitions/sil_level_requirements"
+      sil_1:
+        $ref: "#/definitions/sil_level_requirements"
+      sil_2:
+        $ref: "#/definitions/sil_level_requirements"
+      sil_3:
+        $ref: "#/definitions/sil_level_requirements"
+      sil_4:
+        $ref: "#/definitions/sil_level_requirements"
+  
+  # ===== Required Content Sections =====
+  required_sections:
+    type: array
+    description: "Sections that must be present in the deliverable"
+    items:
+      type: object
+      required: ["section_id", "title", "mandatory"]
+      properties:
+        section_id:
+          type: string
+          pattern: "^[a-z0-9-]+$"
+          description: "Unique section identifier"
+          examples: ["1-introduction", "2-functional-requirements", "3-traceability"]
+        
+        title:
+          type: string
+          description: "Section title"
+          examples: ["Introduction", "Functional Requirements", "Traceability Matrix"]
+        
+        mandatory:
+          type: boolean
+          description: "Whether section is mandatory for all SILs"
+          default: true
+        
+        sil_requirement:
+          type: integer
+          minimum: 0
+          maximum: 4
+          description: "Minimum SIL level where this section is mandatory (if not all SILs)"
+          examples: [0, 1, 2, 3, 4]
+        
+        content_requirements:
+          type: array
+          description: "What must be documented in this section"
+          items:
+            type: string
+          examples:
+            - "Each requirement with unique ID (REQ-XXX-NNN)"
+            - "Requirements use SHALL/SHOULD/MAY keywords"
+            - "Each requirement is testable"
+        
+        subsections:
+          type: array
+          description: "Nested subsections"
+          items:
+            type: object
+  
+  # ===== Evidence Requirements =====
+  evidence_requirements:
+    type: array
+    description: "Evidence artifacts required for this deliverable"
+    items:
+      type: object
+      required: ["evidence_id", "description", "mandatory_sil", "source"]
+      properties:
+        evidence_id:
+          type: string
+          pattern: "^[a-z0-9-]+$"
+          description: "Unique evidence identifier"
+          examples: ["req-traceability", "static-analysis", "test-coverage"]
+        
+        description:
+          type: string
+          description: "What evidence is required"
+          examples:
+            - "Traceability matrix from system requirements"
+            - "Static analysis report (cppcheck, clang)"
+            - "Unit test coverage report (gcov/lcov)"
+        
+        mandatory_sil:
+          type: integer
+          minimum: 0
+          maximum: 4
+          description: "Minimum SIL level where this evidence is mandatory"
+          examples: [0, 1, 2, 3, 4]
+        
+        source:
+          type: string
+          description: "Where evidence comes from (agent, tool, manual)"
+          examples:
+            - "REQ agent traceability analysis"
+            - "cppcheck static analysis"
+            - "gcov coverage analysis"
+            - "QUA agent code review"
+        
+        format:
+          type: string
+          description: "Expected evidence format"
+          examples: ["CSV", "JSON", "XML", "Markdown", "PDF", "HTML"]
+        
+        storage_path:
+          type: string
+          description: "Relative path where evidence is stored"
+          examples:
+            - "evidence/traceability/req_trace.csv"
+            - "evidence/static_analysis/cppcheck_report.xml"
+            - "evidence/coverage/lcov_report.html"
+        
+        tool:
+          type: string
+          description: "Tool name if generated by tool"
+          examples: ["cppcheck", "gcov", "lcov", "lizard", "valgrind"]
+        
+        verification_criteria:
+          type: array
+          description: "How to verify this evidence is complete/correct"
+          items:
+            type: string
+          examples:
+            - "All requirements have traceability links"
+            - "No mandatory MISRA C violations"
+            - "Statement coverage >= 100% (SIL 3+)"
+  
+  # ===== Verification Criteria =====
+  verification_criteria:
+    type: object
+    description: "Criteria for deliverable completeness and correctness"
+    properties:
+      completeness:
+        type: array
+        description: "Checks for completeness"
+        items:
+          type: string
+        examples:
+          - "All required sections present"
+          - "All requirements have unique IDs"
+          - "Traceability matrix complete"
+      
+      correctness:
+        type: array
+        description: "Checks for correctness"
+        items:
+          type: string
+        examples:
+          - "Requirements use SHALL/SHOULD/MAY correctly"
+          - "Each requirement is unambiguous"
+          - "No conflicting requirements"
+      
+      consistency:
+        type: array
+        description: "Checks for internal and external consistency"
+        items:
+          type: string
+        examples:
+          - "All referenced documents exist"
+          - "IDs are unique within document"
+          - "Terminology consistent with SQAP"
+  
+  # ===== Dependencies =====
+  depends_on:
+    type: array
+    description: "Deliverables that must exist before this one"
+    items:
+      type: object
+      required: ["deliverable_id", "reason"]
+      properties:
+        deliverable_id:
+          type: string
+          pattern: "^(DOC-\\d{3}-[A-Z0-9-]+|EXTERNAL-[A-Z0-9-]+|QUA-[A-Z0-9-]+)$"
+          description: "Deliverable ID this depends on (DOC-xxx for internal, EXTERNAL-xxx for external, QUA-xxx for quality artifacts)"
+        
+        reason:
+          type: string
+          description: "Why this dependency exists"
+          examples:
+            - "Quality standards defined"
+            - "Requirements must exist to design architecture"
+            - "Code must exist before integration"
+        
+        dependency_type:
+          type: string
+          enum: ["blocking", "informational"]
+          default: "blocking"
+          description: "Whether dependency is blocking or just informational"
+  
+  feeds_into:
+    type: array
+    description: "Deliverables that depend on this one (forward traceability)"
+    items:
+      type: object
+      required: ["deliverable_id", "reason"]
+      properties:
+        deliverable_id:
+          type: string
+          pattern: "^(DOC-\\d{3}-[A-Z0-9-]+|EXTERNAL-[A-Z0-9-]+|QUA-[A-Z0-9-]+)$"
+        reason:
+          type: string
+  
+  # ===== Configuration Management =====
+  baseline:
+    type: object
+    description: "Configuration management requirements"
+    properties:
+      create_baseline:
+        type: boolean
+        description: "Whether to create CM baseline after approval"
+        default: true
+      
+      baseline_name:
+        type: string
+        description: "Baseline name pattern"
+        examples: ["SRS-Baseline", "SAS-v1.0", "Code-Release-1.0"]
+      
+      cm_control:
+        type: string
+        enum: ["none", "light", "full"]
+        default: "full"
+        description: "Level of configuration control after baseline"
+  
+  # ===== Metadata =====
+  notes:
+    type: string
+    description: "Additional notes, caveats, or guidance"
+  
+  tags:
+    type: array
+    description: "Tags for categorization"
+    items:
+      type: string
+    examples: ["verification-report", "test-deliverable", "sil-3-mandatory"]
+
+# ===== Definitions (Reusable Schemas) =====
+definitions:
+  sil_level_requirements:
+    type: object
+    required: ["mandatory"]
+    properties:
+      mandatory:
+        type: boolean
+        description: "Whether deliverable is mandatory for this SIL level"
+      
+      techniques:
+        type: array
+        description: "EN 50128 techniques applicable (from Tables A.2-A.21)"
+        items:
+          type: object
+          required: ["technique_name", "table_reference", "recommendation"]
+          properties:
+            technique_name:
+              type: string
+              description: "Technique name from EN 50128 Annex D"
+              examples:
+                - "Structured Methodology"
+                - "Formal Methods"
+                - "Static Analysis"
+                - "Dynamic Analysis and Testing"
+            
+            table_reference:
+              type: string
+              pattern: "^A\\.\\d+$"
+              description: "EN 50128 Annex A table reference"
+              examples: ["A.2", "A.3", "A.5", "A.19", "A.21"]
+            
+            recommendation:
+              type: string
+              enum: ["M", "HR", "R", "-", "NR"]
+              description: "Recommendation level: M=Mandatory, HR=Highly Recommended, R=Recommended, -=No recommendation, NR=Not Recommended"
+            
+            technique_id:
+              type: string
+              pattern: "^(D\\.\\d+|A\\.\\d+)$"
+              description: "EN 50128 Annex D section reference or Annex A table reference"
+              examples: ["D.52", "D.28", "D.38", "A.17"]
+      
+      additional_requirements:
+        type: array
+        description: "SIL-specific additional requirements"
+        items:
+          type: string
+        examples:
+          - "Independent verification required"
+          - "100% requirement traceability mandatory"
+          - "Formal proof required for safety-critical functions"
+      
+      evidence_thresholds:
+        type: object
+        description: "SIL-specific evidence thresholds"
+        properties:
+          test_coverage_statement:
+            type: number
+            minimum: 0
+            maximum: 100
+            description: "Minimum statement coverage %"
+          
+          test_coverage_branch:
+            type: number
+            minimum: 0
+            maximum: 100
+            description: "Minimum branch coverage %"
+          
+          test_coverage_condition:
+            type: number
+            minimum: 0
+            maximum: 100
+            description: "Minimum condition coverage %"
+          
+          test_coverage_mcdc:
+            type: number
+            minimum: 0
+            maximum: 100
+            description: "Minimum MC/DC coverage %"
+          
+          cyclomatic_complexity_max:
+            type: integer
+            minimum: 1
+            maximum: 50
+            description: "Maximum cyclomatic complexity per function"
+          
+          misra_mandatory_violations:
+            type: integer
+            minimum: 0
+            description: "Maximum allowed MISRA C mandatory violations"
+          
+          misra_required_violations:
+            type: integer
+            minimum: 0
+            description: "Maximum allowed MISRA C required violations"

@@ -758,8 +758,9 @@ genhtml docs/reports/evidence/DOC-IMPVER-2026-001/coverage.info \
         --output-directory docs/reports/evidence/DOC-IMPVER-2026-001/coverage_html
 
 # Traceability
-python3 tools/traceability/trace_checker.py --source src/ --requirements docs/SRS.md \
-        --output docs/reports/evidence/DOC-IMPVER-2026-001/traceability_matrix.csv
+workspace.py trace validate --phase implementation --sil 4
+workspace.py trace report --from requirements --to implementation,tests \
+        --format csv --output docs/reports/evidence/DOC-IMPVER-2026-001/traceability_matrix.csv
 ```
 
 ---
@@ -1020,22 +1021,23 @@ See **Appendix B** for complete traceability matrix.
 
 **Tool Commands**:
 ```bash
-# Generate traceability matrix
-python3 tools/traceability/trace_checker.py \
-    --source src/ \
-    --requirements docs/SRS.md \
-    --design docs/SAS.md docs/SDS.md \
-    --tests tests/ \
+# Generate complete traceability matrix
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format csv \
     --output docs/reports/evidence/DOC-IMPVER-2026-001/traceability_matrix.csv
 
-# Check for gaps
-python3 tools/traceability/trace_checker.py \
-    --source src/ \
-    --requirements docs/SRS.md \
-    --design docs/SAS.md docs/SDS.md \
-    --tests tests/ \
-    --check-gaps \
-    --output docs/reports/evidence/DOC-IMPVER-2026-001/traceability_gaps.txt
+# Check for traceability gaps
+workspace.py trace check-gaps \
+    --phase implementation \
+    --sil 4 \
+    > docs/reports/evidence/DOC-IMPVER-2026-001/traceability_gaps.txt
+
+# Validate all traceability completeness
+workspace.py trace validate \
+    --phase implementation \
+    --sil 4
 ```
 
 ---
@@ -1172,8 +1174,9 @@ python3 tools/metrics/coverage_summary.py coverage.info
 # Defect metrics
 python3 tools/metrics/defect_density.py docs/reports/DOC-IMPVER-2026-001.md
 
-# Traceability metrics
-python3 tools/traceability/trace_metrics.py traceability_matrix.csv
+# Traceability metrics (using workspace trace commands)
+workspace.py trace report --from requirements --to implementation,tests --format json > traceability_summary.json
+# Count completeness from JSON output or CSV matrix
 ```
 
 ---
@@ -1946,23 +1949,26 @@ python3 tools/mcdc/mcdc_analyzer.py \
 
 echo "=== Phase 4: Traceability Verification ==="
 
-# Traceability checking
-echo "Checking traceability..."
-python3 tools/traceability/trace_checker.py \
-    --source ${SOURCE_DIR} \
-    --requirements docs/SRS.md \
-    --design docs/SAS.md docs/SDS.md \
-    --tests tests/ \
+# Traceability validation
+echo "Validating traceability completeness..."
+workspace.py trace validate \
+    --phase implementation \
+    --sil 4
+
+# Generate traceability matrix
+echo "Generating traceability matrix..."
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format csv \
     --output ${EVIDENCE_DIR}/traceability/traceability_matrix.csv
 
 # Check for gaps
-python3 tools/traceability/trace_checker.py \
-    --source ${SOURCE_DIR} \
-    --requirements docs/SRS.md \
-    --design docs/SAS.md docs/SDS.md \
-    --tests tests/ \
-    --check-gaps \
-    --output ${EVIDENCE_DIR}/traceability/traceability_gaps.txt
+echo "Checking for traceability gaps..."
+workspace.py trace check-gaps \
+    --phase implementation \
+    --sil 4 \
+    > ${EVIDENCE_DIR}/traceability/traceability_gaps.txt
 
 echo "=== Phase 5: Generate Summaries ==="
 
@@ -1979,9 +1985,12 @@ python3 tools/metrics/misra_compliance.py \
     ${EVIDENCE_DIR}/static-analysis/pclint_report.txt \
     > ${EVIDENCE_DIR}/static-analysis/misra_summary.txt
 
-python3 tools/traceability/trace_metrics.py \
-    ${EVIDENCE_DIR}/traceability/traceability_matrix.csv \
-    > ${EVIDENCE_DIR}/traceability/trace_metrics.json
+# Traceability metrics (using workspace trace)
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format json \
+    --output ${EVIDENCE_DIR}/traceability/trace_metrics.json
 
 echo "=== Verification Complete ==="
 echo "Evidence collected in: ${EVIDENCE_DIR}"

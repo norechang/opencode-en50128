@@ -1,0 +1,32 @@
+approvals: []
+approved_date: ''
+author_name: Mary Johnson
+author_role: des
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-03-13T22:50:50.449048'
+document_id: DOC-SDS-2026-002
+document_path: docs/Software-Design-Specification.md
+document_type: Software Design Specification
+modified_date: '2026-03-13T22:50:50.449048'
+phase: ''
+rejections:
+- document_id: DOC-SDS-2026-002
+  reason: 'Traceability incomplete: 3 requirements not traced, cyclomatic complexity
+    violation in module X'
+  reviewer_name: Bob Wilson
+  reviewer_role: qua
+  timestamp: '2026-03-13T22:50:58.067510'
+required_roles:
+- author
+- peer
+- qua
+- safety_mgr
+- ver
+- val
+- assessor
+- pm
+sil_level: 3
+state: draft
+version: '1.0'

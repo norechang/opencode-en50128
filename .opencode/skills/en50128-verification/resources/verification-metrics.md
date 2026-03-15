@@ -1042,18 +1042,25 @@ Forward Trace Coverage (Tests): (150/150) × 100 = 100.0%
 
 **Tool Command**:
 ```bash
-# Custom traceability checker (Python script)
-python3 tools/traceability/check_forward_trace.py \
-    --requirements requirements/SRS.md \
-    --design design/SAS.md design/SDS.md \
-    --code src/ \
-    --tests tests/
+# Validate forward traceability using workspace trace
+workspace.py trace validate \
+    --phase design,implementation,tests \
+    --sil 3
 
-# Output:
-# Forward Trace Coverage:
-#   Requirements → Design: 148/150 (98.7%)
-#   Requirements → Code:   147/150 (98.0%)
-#   Requirements → Tests:  150/150 (100.0%)
+# Check specific requirements coverage
+workspace.py trace query \
+    --source REQ-FUNC-001 \
+    --direction forward \
+    --matrix requirements_to_design,design_to_implementation,implementation_to_tests
+
+# Generate comprehensive traceability report
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format markdown \
+    --output reports/traceability/forward_trace_report.md
+
+# Output format: Forward trace coverage percentages per phase
 ```
 
 **Example Report**:
@@ -1579,8 +1586,13 @@ python3 tools/metrics/extract_defect_metrics.py \
 
 # 6. Traceability Metrics
 echo "  [6/8] Traceability verification..."
-python3 tools/traceability/check_all_traces.py \
-    --requirements requirements/SRS.md \
+workspace.py trace validate \
+    --phase design,implementation,tests \
+    --sil 3
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format json \
     --output ${OUTPUT_DIR}/traceability_${DATE}.json
 
 # 7. Code Quality Metrics

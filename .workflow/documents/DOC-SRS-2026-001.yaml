@@ -1,0 +1,47 @@
+approvals:
+- approved: true
+  comment: Peer review complete, no issues found
+  document_id: DOC-SRS-2026-001
+  reviewer_name: Alice Johnson
+  reviewer_role: peer
+  signature: ce6fd7bbf8598c12
+  timestamp: '2026-03-13T22:50:15.984446'
+- approved: true
+  comment: Quality assurance check passed
+  document_id: DOC-SRS-2026-001
+  reviewer_name: Bob Wilson
+  reviewer_role: qua
+  signature: 6b536daddb380df4
+  timestamp: '2026-03-13T22:50:23.678859'
+- approved: true
+  comment: Verification complete, traceability validated
+  document_id: DOC-SRS-2026-001
+  reviewer_name: John Smith
+  reviewer_role: ver
+  signature: 636667c9521b3ca7
+  timestamp: '2026-03-13T22:50:31.606963'
+approved_date: ''
+author_name: Jane Doe
+author_role: req
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-03-13T22:50:09.689302'
+document_id: DOC-SRS-2026-001
+document_path: docs/Software-Requirements-Specification.md
+document_type: Software Requirements Specification
+modified_date: '2026-03-13T22:50:09.689302'
+phase: ''
+rejections: []
+required_roles:
+- author
+- peer
+- qua
+- safety_mgr
+- ver
+- val
+- assessor
+- pm
+sil_level: 3
+state: review
+version: '1.0'

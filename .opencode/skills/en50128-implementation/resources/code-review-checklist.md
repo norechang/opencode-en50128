@@ -423,9 +423,12 @@ Cppcheck 2.13.0
 **Traceability Verification**:
 ```bash
 # Verify traceability completeness
-traceability-mgr verify-completeness --module <module>
+workspace.py trace check-gaps --phase implementation --sil 3
 
-# Expected output: 100% traceability coverage
+# Query traceability for specific module
+workspace.py trace query --source DOC-10:MOD-001 --direction forward
+
+# Expected output: 100% traceability coverage (SIL 3-4)
 ```
 
 **Review Notes**:
@@ -549,8 +552,8 @@ Final Approval:        [Date]
 - **Lizard Documentation**: https://github.com/terryyin/lizard
 - **gcov/lcov Manual**: https://gcc.gnu.org/onlinedocs/gcc/Gcov.html
 - **PC-lint Plus User Guide**: https://pclintplus.com/
-- **Workflow Manager CLI**: `tools/workflow-manager/README.md`
-- **Traceability Manager CLI**: `tools/traceability-manager/README.md`
+- **Workflow Manager CLI**: `tools/workflow_manager.py --help`
+- **Traceability Manager CLI**: `tools/README_TRACEABILITY.md`
 
 ---
 

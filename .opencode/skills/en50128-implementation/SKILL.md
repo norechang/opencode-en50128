@@ -232,7 +232,7 @@ Use this skill when:
 7. Run verification tools:
    ```bash
    # Traceability validation
-   python3 tools/traceability_manager.py validate --matrix requirements_to_code --sil 3
+   workspace.py trace validate --phase implementation --sil 3
    
    # Static analysis
    cppcheck --enable=all --xml --xml-version=2 src/ 2> cppcheck.xml

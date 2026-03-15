@@ -1,0 +1,622 @@
+# Overall Software Test Report
+# EN 50128 Deliverable #26 - Section 7.7, Table A.7
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-026-OVERALL-TEST-REPORT"
+number: 26
+name: "Overall Software Test Report"
+abbreviation: "Overall Test Report"
+
+# ===== Lifecycle Context =====
+phase: "validation"
+standard_section: "7.7"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "TST"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-testing/templates/Overall-Software-Test-Report-template.md"
+template_exists: true
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "HR"
+    additional_requirements:
+      - "System-level test execution documented"
+      - "Test results documented with pass/fail status"
+      - "Defects tracked and resolved"
+    evidence_thresholds:
+      min_test_pass_rate: 80
+      max_open_defects_critical: 0
+      max_open_defects_high: 5
+    test_requirements:
+      functional_testing: true
+      performance_testing: false
+      operational_scenarios: true
+      acceptance_testing: true
+      independent_testing: false
+
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "R"
+    additional_requirements:
+      - "System-level functional testing"
+      - "Operational scenario testing"
+      - "Performance testing recommended"
+      - "All software requirements validated"
+      - "Test pass rate ≥85%"
+    evidence_thresholds:
+      min_test_pass_rate: 85
+      max_open_defects_critical: 0
+      max_open_defects_high: 3
+    test_requirements:
+      functional_testing: true
+      performance_testing: true
+      operational_scenarios: true
+      acceptance_testing: true
+      independent_testing: false
+
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "HR"
+    additional_requirements:
+      - "Functional testing highly recommended"
+      - "Performance testing highly recommended"
+      - "Boundary value analysis"
+      - "Robustness testing"
+      - "All safety requirements validated"
+      - "Test pass rate ≥90%"
+      - "Zero open critical or high defects"
+    evidence_thresholds:
+      min_test_pass_rate: 90
+      max_open_defects_critical: 0
+      max_open_defects_high: 0
+    test_requirements:
+      functional_testing: true
+      performance_testing: true
+      operational_scenarios: true
+      acceptance_testing: true
+      boundary_testing: true
+      independent_testing: false
+
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "M"
+    additional_requirements:
+      - "Functional and Black-box Testing MANDATORY"
+      - "Performance Testing MANDATORY"
+      - "Independent testing team MANDATORY"
+      - "Boundary value analysis MANDATORY"
+      - "All requirements validated (100% coverage)"
+      - "Test pass rate ≥95%"
+      - "Zero open defects MANDATORY"
+      - "Operational scenarios tested in target environment"
+      - "Acceptance criteria fully met"
+    evidence_thresholds:
+      min_test_pass_rate: 95
+      max_open_defects_critical: 0
+      max_open_defects_high: 0
+      min_requirements_coverage: 100
+    test_requirements:
+      functional_testing: true
+      performance_testing: true
+      operational_scenarios: true
+      acceptance_testing: true
+      boundary_testing: true
+      independent_testing: true
+
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "M"
+      - technique_name: "Modelling"
+        table_reference: "A.7"
+        technique_id: "A.17"
+        recommendation: "R"
+    additional_requirements:
+      - "All SIL 3 requirements apply"
+      - "Modelling recommended for complex scenarios"
+      - "Diverse validation techniques"
+      - "Formal test case review MANDATORY"
+
+# ===== Required Content Sections =====
+required_content:
+  - section: "1. Introduction"
+    description: "Purpose, scope, definitions"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "2. Test Configuration"
+    description: "Software under test, test environment, test team"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "3. Test Execution Summary"
+    description: "Overall test statistics by category and priority"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "4. Detailed Test Results"
+    description: "Functional, performance, operational scenario, boundary, regression, acceptance test results"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "5. Coverage Analysis"
+    description: "Code coverage and requirements coverage"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "6. Defect Summary"
+    description: "Defects found, detailed defect list, open defects, defect metrics"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "7. Test Entry and Exit Criteria"
+    description: "Entry criteria verification and exit criteria verification"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "8. Test Environment Issues"
+    description: "Issues encountered during testing"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "9. Lessons Learned"
+    description: "What went well, what could be improved, recommendations"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "10. Conclusion and Recommendation"
+    description: "Test summary, validation decision, project manager recommendation"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "overall-test-report"
+    description: "Complete overall software test report documenting system-level validation"
+    mandatory_sil: 0
+    source: "TST agent system testing"
+    format: "Markdown"
+    storage_path: "docs/validation/Overall-Software-Test-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "system-testing-complete"
+    verification_criteria:
+      - "All required sections present per EN 50128 Section 7.7"
+      - "Test results for all test cases from Overall Software Test Specification"
+      - "Pass/fail status documented"
+      - "Coverage analysis included (SIL 1+)"
+      - "Validator approval obtained (SIL 3-4)"
+
+  - evidence_id: "functional-test-results"
+    description: "Results of all functional black-box tests at system level"
+    mandatory_sil: 0
+    source: "TST agent functional testing"
+    format: "Structured table in markdown with test case ID, requirement IDs, result, notes"
+    storage_path: "docs/validation/Overall-Software-Test-Report.md Section 4.1"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "functional-testing-complete"
+    verification_criteria:
+      - "All functional test cases executed"
+      - "Traceability to requirements maintained"
+      - "Pass/fail status for each test"
+      - "Critical functional tests PASS (MANDATORY)"
+
+  - evidence_id: "performance-test-results"
+    description: "Performance testing results including timing, resource usage, WCET"
+    mandatory_sil: 1
+    source: "TST agent performance testing"
+    format: "Structured table with test case, target, actual, result, notes"
+    storage_path: "docs/validation/Overall-Software-Test-Report.md Section 4.2"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "performance-testing-complete"
+    verification_criteria:
+      - "All performance requirements tested"
+      - "WCET analysis documented"
+      - "Memory usage measured"
+      - "Performance requirements met"
+      - "Performance Testing MANDATORY (SIL 3+)"
+
+  - evidence_id: "operational-scenario-results"
+    description: "Operational scenario test results in representative real-world conditions"
+    mandatory_sil: 0
+    source: "TST agent scenario testing"
+    format: "Structured table with scenario, description, result, notes"
+    storage_path: "docs/validation/Overall-Software-Test-Report.md Section 4.3"
+    automation_level: "manual"
+    collect_on_agent_action: "scenario-testing-complete"
+    verification_criteria:
+      - "All operational scenarios tested"
+      - "Normal operation validated"
+      - "Degraded mode validated"
+      - "Recovery scenarios validated"
+      - "Edge case conditions tested"
+
+  - evidence_id: "boundary-robustness-results"
+    description: "Boundary value and robustness test results"
+    mandatory_sil: 2
+    source: "TST agent boundary testing"
+    format: "Structured table with test case, requirement, description, result, notes"
+    storage_path: "docs/validation/Overall-Software-Test-Report.md Section 4.4"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "boundary-testing-complete"
+    verification_criteria:
+      - "Minimum and maximum valid inputs tested"
+      - "Invalid inputs tested (below min, above max)"
+      - "Boundary conditions validated"
+      - "Robustness to invalid inputs confirmed"
+      - "Boundary Value Analysis MANDATORY (SIL 3+)"
+
+  - evidence_id: "regression-test-results"
+    description: "Regression test results comparing against baseline version"
+    mandatory_sil: 1
+    source: "TST agent regression testing"
+    format: "Structured table with test case, baseline version, result, notes"
+    storage_path: "docs/validation/Overall-Software-Test-Report.md Section 4.5"
+    automation_level: "automatic"
+    collect_on_agent_action: "regression-testing-complete"
+    verification_criteria:
+      - "All regression tests executed"
+      - "Comparison with baseline documented"
+      - "No regressions introduced (or justified)"
+      - "Core functionality preserved"
+
+  - evidence_id: "acceptance-test-results"
+    description: "Acceptance test results with customer/validator approval"
+    mandatory_sil: 0
+    source: "VAL agent acceptance testing"
+    format: "Structured table with test case, acceptance criteria, result, notes"
+    storage_path: "docs/validation/Overall-Software-Test-Report.md Section 4.6"
+    automation_level: "manual"
+    collect_on_agent_action: "acceptance-testing-complete"
+    verification_criteria:
+      - "All acceptance criteria tested"
+      - "Customer acceptance granted (or conditional)"
+      - "Validator approval documented (SIL 3-4)"
+      - "Any conditions documented"
+
+  - evidence_id: "code-coverage-results"
+    description: "Code coverage metrics at system level (statement, branch, condition)"
+    mandatory_sil: 1
+    source: "gcov/lcov, Bullseye Coverage"
+    format: "HTML report + structured table in markdown"
+    storage_path: "tests/coverage/overall/index.html, docs/validation/Overall-Software-Test-Report.md Section 5.1"
+    automation_level: "automatic"
+    collect_on_agent_action: "system-testing-complete"
+    verification_criteria:
+      - "Coverage measured across entire software"
+      - "Coverage thresholds met per SIL (see Table A.21)"
+      - "SIL 2: Branch 100% MANDATORY"
+      - "SIL 3-4: Statement 100%, Branch 100%, Condition 100% MANDATORY"
+      - "Uncovered code justified"
+
+  - evidence_id: "requirements-coverage-matrix"
+    description: "Requirements traceability matrix showing all requirements validated by test cases"
+    mandatory_sil: 1
+    source: "CM agent traceability analysis"
+    format: "Structured table with requirement ID, test cases, coverage percentage"
+    storage_path: "evidence/traceability/requirements_system_test_coverage.csv"
+    automation_level: "automatic"
+    collect_on_agent_action: "system-testing-complete"
+    verification_criteria:
+      - "All requirements traced to test cases"
+      - "100% requirements coverage (SIL 3-4 MANDATORY)"
+      - "No untested requirements"
+      - "All safety requirements validated"
+
+  - evidence_id: "defect-summary"
+    description: "Complete defect log with severity, status, resolution"
+    mandatory_sil: 0
+    source: "TST agent defect tracking"
+    format: "Structured table with defect ID, severity, description, test case, status, resolution"
+    storage_path: "docs/validation/Overall-Software-Test-Report.md Section 6"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "system-testing-complete"
+    verification_criteria:
+      - "All defects logged with severity"
+      - "Critical and high defects resolved"
+      - "Defect density calculated"
+      - "Zero open critical/high defects (SIL 2+)"
+
+  - evidence_id: "test-entry-exit-criteria"
+    description: "Verification of entry and exit criteria for overall testing"
+    mandatory_sil: 0
+    source: "TST agent criteria checking"
+    format: "Checklist table with criterion, status, notes"
+    storage_path: "docs/validation/Overall-Software-Test-Report.md Section 7"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "system-testing-complete"
+    verification_criteria:
+      - "Entry criteria verified before testing"
+      - "Exit criteria verified after testing"
+      - "All mandatory criteria met"
+      - "Any exceptions justified"
+
+  - evidence_id: "validation-decision"
+    description: "Validator decision on software release approval"
+    mandatory_sil: 0
+    source: "VAL agent validation decision"
+    format: "Signed statement in Conclusion section"
+    storage_path: "docs/validation/Overall-Software-Test-Report.md Section 10.2"
+    automation_level: "manual"
+    collect_on_agent_action: "validation-decision"
+    verification_criteria:
+      - "Validator decision clear (APPROVE/DO NOT APPROVE/CONDITIONAL)"
+      - "Rationale provided"
+      - "Conditions documented (if conditional approval)"
+      - "Validator signature and date"
+      - "Independent validator (SIL 3-4 MANDATORY)"
+
+  - evidence_id: "test-artifacts"
+    description: "Complete test artifacts including logs, coverage reports, performance data"
+    mandatory_sil: 1
+    source: "TST agent test execution"
+    format: "Directory of files (logs, HTML reports, XML data, performance data)"
+    storage_path: "tests/artifacts/overall/"
+    automation_level: "automatic"
+    collect_on_agent_action: "system-testing-complete"
+    verification_criteria:
+      - "Test execution logs complete"
+      - "Coverage reports generated"
+      - "Performance measurement data available"
+      - "All appendices referenced"
+
+  - evidence_id: "independent-validation-statement"
+    description: "Statement from independent Validator that overall testing has been reviewed and approved (SIL 3-4)"
+    mandatory_sil: 3
+    source: "VAL agent (independent)"
+    format: "Signed statement in Approvals section"
+    storage_path: "docs/validation/Overall-Software-Test-Report.md Approvals section"
+    automation_level: "manual"
+    collect_on_agent_action: "validation-approval"
+    verification_criteria:
+      - "Validator is independent from TST, IMP, DES, VER (SIL 3-4)"
+      - "Validator signature and date recorded"
+      - "Validation approval statement clear"
+      - "Any concerns or conditions documented"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-007-OVERALL-TEST-SPEC"
+    reason: "Defines all system-level test cases that must be executed"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-006-SRS"
+    reason: "Requirements being validated by system tests"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-023-INT-TEST-REPORT"
+    reason: "Integration testing must be complete and passed before overall testing"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-005-SVAP"
+    reason: "Software Validation Plan defines overall testing approach"
+    dependency_type: "informational"
+
+  - deliverable_id: "DOC-009-SAS"
+    reason: "System architecture context for system-level testing"
+    dependency_type: "informational"
+
+  - deliverable_id: "DOC-010-SDS"
+    reason: "Design specifications context for validation"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Overall Software Test Report provides system test evidence for validation"
+
+  - deliverable_id: "DOC-027-ASSESSMENT-REPORT"
+    reason: "Assessment Report references overall test results (SIL 1-4)"
+
+  - deliverable_id: "DOC-030-RELEASE-NOTE"
+    reason: "Release decision based on overall test results"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All test cases from Overall Software Test Specification executed"
+    - "All requirements traced to test results"
+    - "All defects documented and resolved (or justified)"
+    - "Coverage analysis complete (SIL 1+)"
+    - "Performance testing complete (SIL 2+)"
+    - "Validation decision provided"
+    - "All required sections present"
+
+  correctness:
+    - "Test results accurately reflect actual execution"
+    - "Coverage metrics calculated correctly"
+    - "Performance measurements accurate"
+    - "Defect severity classification appropriate"
+    - "Pass criteria applied correctly per SIL level"
+    - "Validator decision based on objective evidence"
+
+  consistency:
+    - "Test case IDs match Overall Software Test Specification"
+    - "Requirement IDs match Software Requirements Specification"
+    - "Coverage thresholds match SIL level requirements"
+    - "Defect list consistent with issue tracking"
+    - "No contradictions between test results and validation decision"
+
+  traceability:
+    - "Every test case traced to Overall Software Test Specification"
+    - "Every requirement traced to test results"
+    - "Every defect traced to test case"
+    - "Coverage gaps traced to justification"
+    - "Bi-directional traceability maintained"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After all system tests executed and exit criteria met"
+  change_control: "CCB approval required for report changes after validation approval"
+  version_control: "Git repository under docs/validation/"
+  review_frequency: "At validation phase completion"
+  
+  update_triggers:
+    - "System re-test after defect fixes"
+    - "Additional test cases executed"
+    - "Software version change requiring re-validation"
+    - "Validation decision change"
+
+  baseline_criteria:
+    - "All test cases executed successfully (or justified)"
+    - "Test pass rate meets SIL threshold (≥95% for SIL 3-4)"
+    - "Coverage thresholds met per SIL level"
+    - "Zero open critical or high defects (SIL 2+)"
+    - "Performance requirements met"
+    - "Validator approval obtained (SIL 3-4)"
+    - "QA approval obtained"
+
+  versioning:
+    - "Version number: X.Y (X = major test cycle, Y = re-test iteration)"
+    - "Each re-test cycle increments minor version"
+    - "Major version increments with new test specification"
+
+  archival:
+    - "Archive complete test artifacts (logs, coverage, performance data)"
+    - "Archive test environment configuration"
+    - "Retain for project lifetime + 10 years (railway requirement)"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "7.7"
+    title: "Overall Software Testing"
+    description: "Primary section for overall software testing and validation"
+
+  - section: "7.7.4.4"
+    title: "Overall Test Report Requirements"
+    description: "Overall Software Test Report documents system-level testing"
+
+  - section: "Table A.7"
+    title: "Overall Software Testing/Validation Techniques"
+    description: "Testing techniques by SIL for validation phase"
+
+  - section: "Table A.13"
+    title: "Dynamic Analysis and Testing"
+    description: "Dynamic testing techniques"
+
+  - section: "Table A.14"
+    title: "Functional and Black-Box Testing"
+    description: "Black-box testing MANDATORY for SIL 3-4"
+
+  - section: "Table A.18"
+    title: "Performance Testing"
+    description: "Performance testing MANDATORY for SIL 3-4"
+
+  - section: "Table A.21"
+    title: "Test Coverage for Code"
+    description: "Coverage requirements by SIL level"
+
+  - section: "6.3.4.8"
+    title: "Validation Results Documentation"
+    description: "Validation results documented in reports"
+
+  - section: "Annex C Table C.1"
+    title: "Document Control Summary"
+    description: "Overall Software Test Report is deliverable #26"
+
+# ===== Notes =====
+notes: |
+  **Purpose**: The Overall Software Test Report documents the execution and results of system-level
+  validation testing as defined in the Overall Software Test Specification. It provides evidence that
+  the complete integrated software meets all requirements and is fit for its intended application.
+
+  **Key Characteristics**:
+  1. **System-Level Focus**: Tests complete software system (not individual components)
+  2. **Black-Box Testing**: Validates requirements without internal structure knowledge (MANDATORY SIL 3+)
+  3. **Performance Validation**: Timing, resource usage, throughput (MANDATORY SIL 3+)
+  4. **Operational Scenarios**: Real-world usage scenarios in target or simulated environment
+  5. **Acceptance Testing**: Customer/validator acceptance criteria validation
+  6. **Release Decision**: Provides evidence for software release approval
+
+  **SIL-Specific Requirements**:
+  - **SIL 0-1**: Functional testing, operational scenarios, ≥80-85% test pass rate
+  - **SIL 2**: Functional + performance testing, boundary testing, 100% branch coverage, ≥90% pass rate
+  - **SIL 3-4**: Functional (M), Performance (M), Independent Validator (M), 100% requirements coverage,
+    100% statement/branch/condition coverage, ≥95% pass rate, zero open defects
+
+  **Workflow**:
+  1. TST executes all test cases from Overall Software Test Specification
+  2. TST measures system-level coverage
+  3. TST performs performance testing (timing, memory, throughput)
+  4. TST tests operational scenarios in target environment
+  5. TST logs all defects with severity classification
+  6. IMP fixes defects, TST re-tests
+  7. TST creates Overall Software Test Report
+  8. QUA reviews report for template compliance (1 pass, SIL 3-4)
+  9. VER performs independent verification (SIL 3-4)
+  10. VAL reviews test results and makes release decision (SIL 3-4: independent)
+  11. VAL signs validation approval (or rejection)
+
+  **Pass Criteria** (SIL 3-4):
+  - All test cases executed: 100%
+  - Test pass rate: ≥95%
+  - Coverage: Statement 100%, Branch 100%, Condition 100%
+  - Requirements coverage: 100%
+  - Open defects: 0 critical, 0 high
+  - Performance requirements: All met
+  - Independent validation: Complete with approval
+
+  **Critical Dependencies**:
+  - Overall Software Test Specification defines WHAT to test at system level
+  - Overall Software Test Report documents RESULTS of system-level testing
+  - Integration Test Report must show PASS before overall testing begins
+  - If overall test results FAIL, software SHALL NOT be released
+  - Report feeds into Software Validation Report as primary validation evidence
+
+  **Validation Decision**:
+  - Validator (independent for SIL 3-4) reviews test report
+  - Validator makes APPROVE / DO NOT APPROVE / CONDITIONAL APPROVAL decision
+  - Decision based on objective evidence (test results, coverage, defects, performance)
+  - Software only released after validator authorization (EN 50128 Section 6.3.4.16)
+
+  **Template Compliance**:
+  - Document ID format: DOC-026-OVERALL-TEST-REPORT-YYYY-NNN
+  - Approvals section MUST include VAL signature (all SILs), independent for SIL 3-4
+  - All sections from template MUST be present
+  - Coverage tables MUST be populated with actual system-level values
+  - Performance data MUST be included (SIL 2+)
+  - Validation decision MUST be documented
+
+  **Evidence Automation**:
+  - Test execution results: SEMI-AUTOMATIC (system tests often manual or semi-automated)
+  - Coverage metrics: AUTOMATIC (gcov/lcov at system level)
+  - Performance measurements: SEMI-AUTOMATIC (profiling tools + manual analysis)
+  - Defect tracking: SEMI-AUTOMATIC (TST logs, tool tracks)
+  - Requirements traceability: AUTOMATIC (CM tool parsing)
+  - Validation decision: MANUAL (Validator judgment based on evidence)
+
+  **Key Difference from Component Test Report**:
+  - Component Test Report: Unit-level testing (white-box, individual modules)
+  - Overall Software Test Report: System-level validation (black-box, complete software)
+  - Component testing focuses on CODE correctness
+  - Overall testing focuses on REQUIREMENTS validation and system fitness

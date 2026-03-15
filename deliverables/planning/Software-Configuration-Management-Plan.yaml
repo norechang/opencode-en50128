@@ -1,0 +1,329 @@
+# Software Configuration Management Plan (SCMP)
+# EN 50128 Deliverable #3 - Section 6.6
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-003-SCMP"
+number: 3
+name: "Software Configuration Management Plan"
+abbreviation: "SCMP"
+
+# ===== Lifecycle Context =====
+phase: "planning"
+standard_section: "6.6"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "CM"
+first_check: "QUA"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-documentation/templates/Software-Configuration-Management-Plan-template.md"
+template_exists: true
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true  # Configuration Management is MANDATORY for ALL SIL levels
+    techniques:
+      - technique_name: "Software Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+    additional_requirements:
+      - "Version control system required"
+      - "Configuration item identification"
+      - "Change control process defined"
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Software Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "HR"
+    additional_requirements:
+      - "Baseline management"
+      - "Change Control Board (CCB) established"
+      - "Configuration status accounting"
+      - "Configuration audits planned"
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Software Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "HR"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "HR"
+    additional_requirements:
+      - "Formal CCB with documented procedures"
+      - "Impact analysis for all changes"
+      - "Physical Configuration Audit (PCA) planned"
+      - "Functional Configuration Audit (FCA) planned"
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Software Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "M"
+    additional_requirements:
+      - "Formal CCB with independent QA representation"
+      - "Impact analysis MANDATORY for all changes"
+      - "Cumulative impact analysis for multiple changes"
+      - "Tool configuration management (development environment)"
+      - "PCA and FCA MANDATORY"
+      - "Automated traceability tools"
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Software Configuration Management"
+        table_reference: "A.9"
+        technique_id: "D.48"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.9"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Data Recording and Analysis"
+        table_reference: "A.9"
+        technique_id: "D.12"
+        recommendation: "M"
+      - technique_name: "Tool Assessment and Certification"
+        table_reference: "A.9"
+        technique_id: "D.57"
+        recommendation: "HR"
+    additional_requirements:
+      - "Formal CCB with independent assessor participation"
+      - "Impact analysis MANDATORY (safety impact assessment)"
+      - "Cumulative impact analysis with safety justification"
+      - "Tool configuration management (qualified tools only)"
+      - "PCA and FCA MANDATORY with independent auditor"
+      - "Automated traceability with qualified tools"
+      - "Configuration item authentication (digital signatures)"
+
+# ===== Required Content Sections =====
+required_content:
+  - section: "1. Introduction"
+    description: "Purpose, scope, SIL classification, definitions"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "2. Configuration Management Organization"
+    description: "Roles, responsibilities, CCB composition"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "3. Configuration Identification"
+    description: "CI naming scheme, versioning, document IDs, baseline strategy"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "4. Change Control"
+    description: "Change request process, CCB procedures, impact analysis, approval workflow"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "5. Configuration Status Accounting"
+    description: "Tracking CI status, change history, baseline records"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "6. Configuration Audits"
+    description: "PCA and FCA procedures, schedules, checklists"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "7. Version Control System"
+    description: "VCS tool (Git), branching strategy, merge procedures, access control"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "8. Traceability Management"
+    description: "Traceability approach, tools, verification (SIL 1+ HR, SIL 3+ M)"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "9. Tool Configuration Management"
+    description: "Development environment CIs, tool versions, qualification status"
+    mandatory_for: ["SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "10. Data Recording and Analysis"
+    description: "Metrics, data collection, analysis procedures (SIL 2+ HR, SIL 3+ M)"
+    mandatory_for: ["SIL_2", "SIL_3", "SIL_4"]
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "scmp-document"
+    description: "Complete SCMP document conforming to EN 50128 Section 6.6 requirements"
+    mandatory_sil: 0
+    source: "CM agent document creation"
+    format: "Markdown"
+    storage_path: "docs/plans/SCMP.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "plan-complete"
+    verification_criteria:
+      - "All required sections present (Section 6.6.4.1)"
+      - "Change management process defined"
+      - "CCB composition and procedures documented"
+      - "Configuration identification scheme defined"
+  
+  - evidence_id: "version-control-system"
+    description: "Version control system configured with access controls and branching strategy"
+    mandatory_sil: 0
+    source: "CM agent VCS configuration"
+    format: "Git repository"
+    storage_path: ".git/config, docs/cm/git-workflow.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "vcs-setup"
+    verification_criteria:
+      - "Git repository initialized"
+      - "Branching strategy documented and enforced"
+      - "Access controls configured"
+      - "Commit hooks configured (SIL 2+)"
+  
+  - evidence_id: "ccb-procedures"
+    description: "Change Control Board procedures, meeting schedule, and approval workflow"
+    mandatory_sil: 1
+    source: "CM agent CCB documentation"
+    format: "Markdown"
+    storage_path: "docs/plans/SCMP.md (Section 4), docs/cm/ccb-procedures.md"
+    automation_level: "manual"
+    collect_on_agent_action: "plan-complete"
+    verification_criteria:
+      - "CCB composition defined (roles, members)"
+      - "Meeting schedule established"
+      - "Approval workflow documented"
+      - "Independent QA representation (SIL 3+)"
+  
+  - evidence_id: "configuration-audit-plan"
+    description: "Configuration audit plan (PCA and FCA) with schedules and checklists"
+    mandatory_sil: 1
+    source: "CM agent audit planning"
+    format: "Markdown"
+    storage_path: "docs/plans/SCMP.md (Section 6), docs/cm/audit-checklists.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "plan-complete"
+    verification_criteria:
+      - "PCA procedures defined"
+      - "FCA procedures defined"
+      - "Audit schedule established"
+      - "Independent auditor assigned (SIL 3+)"
+  
+  - evidence_id: "traceability-tools-config"
+    description: "Traceability tools configured and integrated with VCS (SIL 3+ MANDATORY)"
+    mandatory_sil: 3
+    source: "CM agent tool configuration"
+    format: "Configuration files"
+    storage_path: "tools/traceability/config.yaml"
+    automation_level: "automatic"
+    collect_on_agent_action: "tool-setup"
+    verification_criteria:
+      - "Automated traceability tool configured"
+      - "Integration with Git/issue tracker verified"
+      - "Tool qualification evidence available (SIL 3+)"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-001-SQAP"
+    reason: "SQAP defines overall quality framework and may reference SCMP per EN 50128 Section 6.5.4.5"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-006-SRS"
+    reason: "SRS development follows SCMP version control and change control procedures"
+  
+  - deliverable_id: "DOC-009-SAS"
+    reason: "SAS follows SCMP configuration management procedures"
+  
+  - deliverable_id: "DOC-010-SDS"
+    reason: "SDS follows SCMP baseline and change control"
+  
+  - deliverable_id: "DOC-018-SOURCE-CODE"
+    reason: "Source code managed under SCMP version control"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All sections required by EN 50128 Section 6.6.4.1 present"
+    - "Change management process defined (a-i)"
+    - "CCB composition and procedures documented"
+    - "Configuration identification scheme complete"
+    - "Audit procedures defined (SIL 1+)"
+  
+  correctness:
+    - "Change control process aligns with EN 50128 lifecycle"
+    - "Impact analysis procedures include safety assessment"
+    - "Baseline strategy appropriate for project size and SIL"
+    - "Tool configuration management addresses qualified tools (SIL 3+)"
+  
+  consistency:
+    - "Roles consistent with SQAP organization"
+    - "Document ID scheme consistent across deliverables"
+    - "Baseline timing consistent with lifecycle phases"
+    - "Change workflow consistent with quality gates"
+  
+  traceability:
+    - "All EN 50128 Section 6.6.4.1 requirements addressed"
+    - "Traceability approach consistent with SQAP (SIL 1+ HR, SIL 3+ M)"
+    - "Configuration items traceable to lifecycle phases"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_required: true
+  baseline_timing: "Before commencement of Phase 2 (Requirements)"
+  change_control: "CCB approval required for all changes"
+  version_control: "Git repository under docs/plans/"
+  review_frequency: "Quarterly or at phase transitions"
+  
+  update_triggers:
+    - "Change to version control system or tools"
+    - "CCB composition change"
+    - "Configuration identification scheme change"
+    - "Audit procedures change"
+    - "Tool qualification status change (SIL 3+)"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "6.6"
+    title: "Modification and Change Control"
+    description: "Primary section defining configuration management requirements"
+  
+  - section: "6.6.4.1"
+    title: "Change Management Process Requirements"
+    description: "Mandatory aspects of change management (a-i)"
+  
+  - section: "6.6.4.2"
+    title: "Lifecycle Return Requirements"
+    description: "Changes initiate return to appropriate lifecycle phase"
+  
+  - section: "Table A.9"
+    title: "Software Quality Assurance Techniques and Measures"
+    description: "Configuration Management is MANDATORY for ALL SIL levels"
+  
+  - section: "Annex C Table C.1"
+    title: "Document Control Summary"
+    description: "SCMP is deliverable #3"
+
+# ===== Notes =====
+notes: |
+  Configuration Management is MANDATORY for ALL SIL levels (0, 1, 2, 3, 4) - EN 50128 Table A.9.
+  SCMP may be referenced from SQAP or be a separate document (EN 50128 Section 6.5.4.5).
+  Traceability is HIGHLY RECOMMENDED (SIL 1-2) and MANDATORY (SIL 3-4) per Table A.9.
+  Data Recording and Analysis is MANDATORY (SIL 3-4) per Table A.9.
+  Tool configuration management required for reproducibility (Section 6.5.4.12).
+  Changes initiate return to appropriate lifecycle phase (Section 6.6.4.2).
+  Cumulative impact analysis required for multiple changes (Section 6.6.4.1h).

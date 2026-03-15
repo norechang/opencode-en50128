@@ -1,49 +1,45 @@
 # Overall Software Test Specification
 
-**Document ID**: DOC-TST-YYYY-NNN  
-**Project**: [Project Name]  
-**Software Component**: [Component Name]  
-**SIL Level**: [0/1/2/3/4]  
-**Version**: [X.Y]  
-**Date**: [YYYY-MM-DD]
+**TEMPLATE VERSION**: 2.0  
+**REFERENCE**: EN 50128:2011 Section [X.Y]
 
 ---
 
-## Document Control
+## STANDARD HEADER
+
+| Field | Value |
+|-------|-------|
+| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Version** | [X.Y] |
+| **Date** | [YYYY-MM-DD] |
+| **Project** | [Project Name] |
+| **SIL Level** | [0, 1, 2, 3, or 4] |
+| **Author** | [Name], [Role] |
+| **Reviewer** | [Name], [Role] |
+| **Approver** | [Name], [Role] |
+| **Status** | [Draft \| Review \| Approved \| Baseline] |
+
+## DOCUMENT CONTROL
 
 | Version | Date | Author | Changes | Approved By |
 |---------|------|--------|---------|-------------|
-| 0.1 | YYYY-MM-DD | [Author] | Initial draft | - |
-| 1.0 | YYYY-MM-DD | [Author] | First release | [Approver] |
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
 
----
+## APPROVALS
 
-## Approvals
+**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
+**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Tester** (Author) | [Name] | | YYYY-MM-DD |
-| **Validator** (Reviewer) | [Name] | | YYYY-MM-DD |
-| **Quality Assurance** (Template Check) | [Name] | | YYYY-MM-DD |
-| **Project Manager** (Approval) | [Name] | | YYYY-MM-DD |
-
-**SIL 3-4 Additional Requirements**:
-- Validator SHALL be independent from Tester and development team
-- Validator SHALL NOT report to Project Manager
-
----
-
-## EN 50128 References
-
-| Section | Title | Relevance |
-|---------|-------|-----------|
-| **7.7** | Overall Software Testing | PRIMARY - Overall testing process |
-| **Table A.7** | Techniques and Measures for Overall Software Testing | Test techniques by SIL |
-| **Table A.13** | Dynamic Analysis and Testing | Dynamic testing techniques |
-| **Table A.14** | Functional and Black Box Testing | Black-box test design |
-| **Table A.18** | Performance Testing | Performance test requirements |
-| **Table A.21** | Test Coverage for Code | Coverage requirements by SIL |
-| **Annex C** | Documentation Requirements | Deliverable requirements |
+| **Author** | [Name] | | YYYY-MM-DD |
+| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
+| **QA Manager** | [Name] | | YYYY-MM-DD |
+| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
+| **Project Manager** | [Name] | | YYYY-MM-DD |
+| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
 
 ---
 

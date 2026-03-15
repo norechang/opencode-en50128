@@ -106,8 +106,9 @@ lizard -CCN 10 -w src/
 
 # 3. Verify traceability
 # Read: workflows/traceability-verification.md
-python3 tools/traceability/check_forward_trace.py --requirements SRS.md --code src/ --tests tests/
-python3 tools/traceability/check_backward_trace.py --code src/ --requirements SRS.md
+workspace.py trace validate --phase implementation --sil 3
+workspace.py trace check-gaps --phase implementation --sil 3
+workspace.py trace report --from requirements --to implementation,tests --format markdown
 
 # 4. Collect metrics
 # Read: resources/verification-metrics.md

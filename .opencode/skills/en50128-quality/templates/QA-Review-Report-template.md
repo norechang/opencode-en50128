@@ -1,54 +1,45 @@
 # Quality Assurance Review Report
 
-**Document ID:** DOC-QAR-YYYY-NNN  
-**Project:** [Project Name]  
-**System/Subsystem:** [System Name]  
-**SIL Level:** [0 | 1 | 2 | 3 | 4]
+**TEMPLATE VERSION**: 2.0  
+**REFERENCE**: EN 50128:2011 Section [X.Y]
 
 ---
 
-## Document Control
+## STANDARD HEADER
 
-| Version | Date | Author | Change Description | Status |
-|---------|------|--------|-------------------|--------|
-| 0.1 | YYYY-MM-DD | [Name] | Initial draft | Draft |
+| Field | Value |
+|-------|-------|
+| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Version** | [X.Y] |
+| **Date** | [YYYY-MM-DD] |
+| **Project** | [Project Name] |
+| **SIL Level** | [0, 1, 2, 3, or 4] |
+| **Author** | [Name], [Role] |
+| **Reviewer** | [Name], [Role] |
+| **Approver** | [Name], [Role] |
+| **Status** | [Draft \| Review \| Approved \| Baseline] |
 
----
+## DOCUMENT CONTROL
 
-## Approvals (SIL-Dependent)
+| Version | Date | Author | Changes | Approved By |
+|---------|------|--------|---------|-------------|
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
 
-| Role | Name | Signature | Date | SIL Requirement |
-|------|------|-----------|------|----------------|
-| **Quality Assurance** | [Name] | [Signature] | YYYY-MM-DD | All SILs |
-| **Project Manager** | [Name] | [Signature] | YYYY-MM-DD | All SILs |
-| **Independent Verifier** | [Name] | [Signature] | YYYY-MM-DD | SIL 3-4 |
+## APPROVALS
 
-**Independence Note (SIL 3-4):**
-- Verifier SHALL NOT be Requirements Manager, Designer, Implementer, Integrator, or Tester
-- QA review MUST be independent of development activities
+**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
+**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
 
----
-
-## Executive Summary
-
-**Review Type:** [Code Review | Document Review | Design Review | Process Audit | Template Compliance | Phase Gate Review]
-
-**Review Date:** YYYY-MM-DD  
-**Phase/Deliverable:** [Requirements | Design | Implementation | Integration | Validation | etc.]
-
-**Overall Result:** [Pass | Pass with Minor Issues | Fail - Rework Required]
-
-**Key Findings:**
-- [Summary finding 1]
-- [Summary finding 2]
-- [Summary finding 3]
-
-**Critical Defects:** [Number]  
-**Major Defects:** [Number]  
-**Minor Defects:** [Number]  
-**Observations:** [Number]
-
-**Recommendation:** [Approve | Approve with Conditions | Reject - Require Rework]
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| **Author** | [Name] | | YYYY-MM-DD |
+| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
+| **QA Manager** | [Name] | | YYYY-MM-DD |
+| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
+| **Project Manager** | [Name] | | YYYY-MM-DD |
+| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
 
 ---
 

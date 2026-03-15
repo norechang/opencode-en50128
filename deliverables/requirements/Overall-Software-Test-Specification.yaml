@@ -1,0 +1,476 @@
+# Overall Software Test Specification - Deliverable Metadata
+# EN 50128:2011 Section 7.2.4.16-19, Section 7.7, Table A.7, Table C.1
+# This file defines the metadata, requirements, evidence, and verification criteria
+# for the Overall Software Test Specification deliverable.
+
+deliverable_id: "DOC-007-OVERALL-TEST-SPEC"
+number: 7
+name: "Overall Software Test Specification"
+abbreviation: "Overall Test Spec"
+phase: "requirements"
+standard_section: "7.2.4.16"
+written_by: "TST"
+first_check: "VER"
+second_check: "VAL"
+template_path: ".opencode/skills/en50128-testing/templates/Overall-Software-Test-Specification-template.md"
+template_exists: true
+
+# =============================================================================
+# SIL-DEPENDENT REQUIREMENTS
+# =============================================================================
+# Requirements scale by SIL level per EN 50128 Table A.7
+# Overall Test Specification defines system-level validation tests
+
+sil_requirements:
+  sil_0:
+    mandatory: false  # Overall Test Specification recommended but not mandatory
+    techniques:
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "R"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "R"
+    additional_requirements:
+      - "Basic test specification recommended"
+      - "No specific test techniques mandatory"
+      - "Traceability to requirements recommended"
+    evidence_thresholds:
+      min_test_cases: "N/A"
+      requirements_coverage: "N/A"
+      black_box_testing_required: false
+      performance_testing_required: false
+
+  sil_1:
+    mandatory: true  # HR (Highly Recommended) - treat as mandatory
+    techniques:
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "HR"
+      - technique_name: "Boundary Value Analysis"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Equivalence Classes and Input Partition Testing"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "HR"
+    additional_requirements:
+      - "Overall Software Test Specification HIGHLY RECOMMENDED (HR)"
+      - "Functional and black-box testing HIGHLY RECOMMENDED"
+      - "Performance testing HIGHLY RECOMMENDED"
+      - "Boundary value analysis HIGHLY RECOMMENDED"
+      - "Traceability to SRS requirements HIGHLY RECOMMENDED"
+      - "Test cases for all functional requirements HIGHLY RECOMMENDED"
+    evidence_thresholds:
+      min_test_cases: "10"  # HR
+      requirements_coverage: "90%"  # HR
+      black_box_testing_required: true  # HR
+      performance_testing_required: true  # HR
+
+  sil_2:
+    mandatory: true  # HR for Overall Test Specification
+    techniques:
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "HR"
+      - technique_name: "Boundary Value Analysis"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Equivalence Classes and Input Partition Testing"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "HR"
+    additional_requirements:
+      - "Overall Software Test Specification HIGHLY RECOMMENDED (HR)"
+      - "Functional and black-box testing HIGHLY RECOMMENDED"
+      - "Performance testing HIGHLY RECOMMENDED"
+      - "Boundary value analysis HIGHLY RECOMMENDED"
+      - "Traceability to SRS requirements HIGHLY RECOMMENDED"
+      - "Test cases for all functional requirements HIGHLY RECOMMENDED"
+      - "Test cases for all safety requirements HIGHLY RECOMMENDED"
+    evidence_thresholds:
+      min_test_cases: "20"  # HR
+      requirements_coverage: "95%"  # HR
+      black_box_testing_required: true  # HR
+      performance_testing_required: true  # HR
+
+  sil_3:
+    mandatory: true  # HR for Overall Test Specification
+    techniques:
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "M"
+      - technique_name: "Boundary Value Analysis"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Equivalence Classes and Input Partition Testing"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Process Simulation"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "HR"
+    additional_requirements:
+      - "Overall Software Test Specification HIGHLY RECOMMENDED (HR)"
+      - "Functional and black-box testing MANDATORY"
+      - "Performance testing MANDATORY"
+      - "Boundary value analysis MANDATORY"
+      - "Equivalence class testing MANDATORY"
+      - "Traceability to SRS requirements MANDATORY"
+      - "Test cases for ALL functional requirements MANDATORY (100% coverage)"
+      - "Test cases for ALL safety requirements MANDATORY"
+      - "Independent test review MANDATORY"
+    evidence_thresholds:
+      min_test_cases: "50"  # MANDATORY
+      requirements_coverage: "100%"  # MANDATORY
+      black_box_testing_required: true  # MANDATORY
+      performance_testing_required: true  # MANDATORY
+
+  sil_4:
+    mandatory: true  # HR for Overall Test Specification
+    techniques:
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "M"
+      - technique_name: "Boundary Value Analysis"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Equivalence Classes and Input Partition Testing"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Process Simulation"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Error Guessing"
+        table_reference: "A.14"
+        technique_id: "A.14"
+        recommendation: "M"
+    additional_requirements:
+      - "Overall Software Test Specification HIGHLY RECOMMENDED (HR)"
+      - "Functional and black-box testing MANDATORY"
+      - "Performance testing MANDATORY (exhaustive)"
+      - "Boundary value analysis MANDATORY"
+      - "Equivalence class testing MANDATORY"
+      - "Error guessing MANDATORY"
+      - "Traceability to SRS requirements MANDATORY"
+      - "Test cases for ALL functional requirements MANDATORY (100% coverage)"
+      - "Test cases for ALL safety requirements MANDATORY"
+      - "Test cases for ALL failure modes MANDATORY"
+      - "Independent test review MANDATORY"
+    evidence_thresholds:
+      min_test_cases: "100"  # MANDATORY
+      requirements_coverage: "100%"  # MANDATORY
+      black_box_testing_required: true  # MANDATORY
+      performance_testing_required: true  # MANDATORY
+
+# =============================================================================
+# EVIDENCE REQUIREMENTS
+# =============================================================================
+# Evidence required to demonstrate Overall Test Specification completeness
+
+evidence_requirements:
+  - evidence_id: "overall-test-spec-test-cases"
+    description: "Documented test cases per 7.2.4.17 (tests against SRS)"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "TST"
+    format: "Section in Overall Test Specification document with test case table"
+    storage_path: "docs/test/Overall-Test-Spec.md"
+    automation_level: "manual"
+    collect_on_agent_action: "tst-create-overall-test-spec"
+    verification_criteria:
+      - "Each test case has unique ID (TC-XXX)"
+      - "Each test case traces to SRS requirement(s)"
+      - "Each test case includes: purpose, preconditions, steps, expected results, acceptance criteria"
+      - "Test cases cover all functional requirements from SRS"
+      - "Test cases cover all safety requirements from SRS"
+      - "Test cases use black-box approach (no internal implementation knowledge)"
+      - "Minimum number of test cases meets SIL threshold"
+
+  - evidence_id: "overall-test-spec-techniques"
+    description: "Documented test techniques per 7.2.4.18 (Table A.7)"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "TST"
+    format: "Section in Overall Test Specification document"
+    storage_path: "docs/test/Overall-Test-Spec.md"
+    automation_level: "manual"
+    collect_on_agent_action: "tst-create-overall-test-spec"
+    verification_criteria:
+      - "All mandatory techniques listed for target SIL level"
+      - "Functional and black-box testing techniques defined (MANDATORY SIL 3-4)"
+      - "Performance testing techniques defined (MANDATORY SIL 3-4)"
+      - "Boundary value analysis applied (MANDATORY SIL 3-4)"
+      - "Equivalence class testing applied (MANDATORY SIL 3-4)"
+      - "Techniques from Table A.14 and A.18 referenced"
+
+  - evidence_id: "overall-test-spec-traceability"
+    description: "Traceability matrix per 7.2.4.19 (requirements → test cases)"
+    mandatory_sil: 3  # MANDATORY for SIL 3-4, HR for SIL 1-2
+    source: "TST"
+    format: "Traceability matrix table in Overall Test Specification"
+    storage_path: "docs/test/Overall-Test-Spec.md"
+    automation_level: "manual"
+    collect_on_agent_action: "tst-create-overall-test-spec"
+    verification_criteria:
+      - "Forward traceability: SRS requirement → test cases"
+      - "Backward traceability: test case → SRS requirement(s)"
+      - "All SRS requirements have at least one test case"
+      - "All safety requirements have multiple test cases (redundancy)"
+      - "100% requirements coverage (SIL 3-4)"
+      - "Orphan test cases identified (test cases without requirement)"
+
+  - evidence_id: "overall-test-spec-performance-tests"
+    description: "Performance test specifications (MANDATORY SIL 3-4)"
+    mandatory_sil: 3  # MANDATORY for SIL 3-4
+    source: "TST"
+    format: "Section in Overall Test Specification with performance test table"
+    storage_path: "docs/test/Overall-Test-Spec.md"
+    automation_level: "manual"
+    collect_on_agent_action: "tst-create-overall-test-spec"
+    verification_criteria:
+      - "Timing performance tests defined (execution time, response time)"
+      - "Throughput performance tests defined (data rate, message rate)"
+      - "Resource performance tests defined (memory usage, CPU usage)"
+      - "Load tests defined (peak load, sustained load)"
+      - "Stress tests defined (overload conditions)"
+      - "Performance acceptance criteria quantifiable"
+      - "Performance tests trace to performance requirements in SRS"
+
+  - evidence_id: "overall-test-spec-baseline"
+    description: "Baselined Overall Test Specification approved by VER and VAL"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "CM"
+    format: "Baselined markdown file with approvals"
+    storage_path: "docs/test/Overall-Test-Spec.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "cm-baseline-deliverable"
+    verification_criteria:
+      - "Document has version 1.0 or higher"
+      - "Document status is 'Approved' or 'Baseline'"
+      - "Approvals section complete (TST author, VER first check, VAL second check, QA, PM)"
+      - "Independent Validator approval present (SIL 3-4)"
+      - "Document under configuration control"
+      - "Baseline recorded in SCMP baseline register"
+
+# =============================================================================
+# DEPENDENCIES
+# =============================================================================
+
+depends_on:
+  - deliverable_id: "DOC-006-SRS"
+    reason: "SRS defines requirements; Overall Test Specification defines tests to validate those requirements"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-005-SVAP"
+    reason: "SVaP defines validation approach; Overall Test Specification implements validation test cases"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-001-SQAP"
+    reason: "SQAP defines quality framework for test documentation"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-026-OVERALL-TEST-REPORT"
+    reason: "Overall Test Specification defines test cases; Overall Test Report documents execution results"
+
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Overall Test Specification provides test evidence for Validation Report"
+
+# =============================================================================
+# VERIFICATION CRITERIA
+# =============================================================================
+
+verification_criteria:
+  completeness:
+    - "All sections of Overall Test Specification template completed per 7.2.4.16-19"
+    - "All SRS requirements have corresponding test cases per 7.2.4.19"
+    - "All EN 50128 Table A.7 mandatory techniques addressed for target SIL"
+    - "All test cases have: ID, purpose, preconditions, steps, expected results, acceptance criteria"
+    - "Traceability matrix complete (requirements → test cases)"
+    - "Performance test cases complete for all performance requirements (SIL 3-4)"
+    - "Test environment specification complete"
+    - "Test execution approach defined"
+
+  correctness:
+    - "Test cases correctly test SRS requirements per 7.2.4.17"
+    - "Test techniques appropriate for target SIL level per Table A.7"
+    - "Black-box approach correct (no internal implementation knowledge)"
+    - "Boundary value analysis correct (MANDATORY SIL 3-4)"
+    - "Equivalence class analysis correct (MANDATORY SIL 3-4)"
+    - "Performance test criteria quantifiable and measurable"
+    - "Acceptance criteria align with SRS acceptance criteria"
+
+  consistency:
+    - "Test cases consistent with SVaP validation approach"
+    - "Test techniques consistent with Table A.7, A.14, A.18"
+    - "Traceability matrix consistent with SRS requirements"
+    - "Performance tests consistent with SRS performance requirements"
+    - "Acceptance criteria consistent across all test cases"
+
+  traceability:
+    - "Forward traceability: SRS requirements → test cases (100% for SIL 3-4)"
+    - "Backward traceability: test cases → SRS requirements"
+    - "Forward traceability: Overall Test Specification → Overall Test Report"
+    - "References to SRS requirements in each test case"
+    - "References to EN 50128 Table A.7, A.14, A.18 present"
+
+# =============================================================================
+# CONFIGURATION MANAGEMENT
+# =============================================================================
+
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After Phase 2 (Requirements) completion, before Phase 7 (Validation) begins"
+  change_control: "All changes to baselined Overall Test Specification require CCB approval"
+  version_control: "docs/test/Overall-Test-Spec.md under Git control, baseline tagged as baseline-overall-test-spec-v1.0"
+  review_frequency: "Review when SRS requirements change or new test cases identified"
+  update_triggers:
+    - "Addition of new SRS requirements"
+    - "Modification of existing SRS requirements"
+    - "Change in SIL level"
+    - "Identification of missing test coverage"
+    - "Lessons learned from test execution"
+    - "Customer feedback on test approach"
+    - "EN 50128 standard updates"
+
+# =============================================================================
+# EN 50128 REFERENCES
+# =============================================================================
+
+en50128_references:
+  - "Section 7.2.4.16: Overall Software Test Specification written by Tester based on SRS"
+  - "Section 7.2.4.17: Overall Test Specification is description of tests against SRS"
+  - "Section 7.2.4.18: Overall Test Specification chooses techniques from Table A.7"
+  - "Section 7.2.4.19: Overall Test Specification identifies test cases for each function"
+  - "Section 7.7: Validation and Testing (overall software testing)"
+  - "Section 7.7.4.1: Overall Software Test Report based on Overall Test Specification"
+  - "Section 7.7.4.5: Software exercised by connection to real hardware"
+  - "Section 6.3.4.10: Adequacy of Overall Test Specification verified"
+  - "Table A.7: Techniques and Measures for Overall Software Testing"
+  - "Table A.14: Functional and Black-Box Testing techniques"
+  - "Table A.18: Performance Testing techniques"
+  - "Table C.1 (Annex C): Document control summary (Overall Test Spec mandatory HR for all SIL)"
+
+# =============================================================================
+# NOTES
+# =============================================================================
+
+notes: |
+  CRITICAL INFORMATION:
+  
+  1. **Overall Test Specification vs. Component Test Specification**:
+     - Overall Test Specification: System-level validation tests against SRS (this deliverable)
+     - Component Test Specification: Unit-level tests against SDS (separate deliverable DOC-020)
+     - Overall tests are black-box (no internal knowledge)
+     - Component tests are white-box (internal structure knowledge)
+  
+  2. **SIL Requirements**:
+     - SIL 0: Overall Test Specification recommended (R)
+     - SIL 1-2: Overall Test Specification HIGHLY RECOMMENDED (HR)
+     - SIL 3-4: Overall Test Specification HIGHLY RECOMMENDED (HR)
+     - Functional and black-box testing MANDATORY for SIL 3-4
+     - Performance testing MANDATORY for SIL 3-4
+     - 100% requirements coverage MANDATORY for SIL 3-4
+  
+  3. **EN 50128 Table A.7 Validation Techniques** (for test design):
+     - Functional and Black-Box Testing (Table A.14): SIL 3-4 MANDATORY
+     - Performance Testing (Table A.18): SIL 3-4 MANDATORY
+     - Modelling (Table A.17): SIL 1-4 RECOMMENDED
+  
+  4. **Black-Box Testing Techniques** (Table A.14):
+     - Boundary Value Analysis: MANDATORY SIL 3-4
+     - Equivalence Classes and Input Partition Testing: MANDATORY SIL 3-4
+     - Process Simulation: HR SIL 3-4
+     - Error Guessing: MANDATORY SIL 4
+     - Test cases focus on inputs/outputs, not internal implementation
+  
+  5. **Performance Testing** (Table A.18):
+     - Timing analysis (execution time, response time)
+     - Throughput analysis (data rate, message rate)
+     - Resource usage (memory, CPU, I/O)
+     - Load testing (peak load, sustained load)
+     - Stress testing (overload, failure conditions)
+  
+  6. **Test Case Structure** (per 7.2.4.19):
+     - Test Case ID (TC-XXX)
+     - Purpose (what is being tested)
+     - Traced SRS requirement(s) (REQ-XXX)
+     - Preconditions (initial state)
+     - Test steps (inputs, actions)
+     - Expected results (outputs, behavior)
+     - Acceptance criteria (pass/fail thresholds)
+  
+  7. **Traceability Requirements** (per 7.2.4.19):
+     - Each SRS requirement SHALL have at least one test case
+     - Safety requirements SHOULD have multiple test cases (redundancy)
+     - 100% requirements coverage MANDATORY for SIL 3-4
+     - Traceability matrix format: SRS-REQ-XXX → TC-YYY (one-to-many)
+  
+  8. **Requirements Coverage**:
+     - SIL 0: No mandatory coverage
+     - SIL 1: 90% coverage (HR)
+     - SIL 2: 95% coverage (HR)
+     - SIL 3-4: 100% coverage (MANDATORY)
+     - Coverage measured as: (tested requirements / total requirements) * 100%
+  
+  9. **Relationship to Other Deliverables**:
+     - SRS: Defines requirements, Overall Test Specification tests those requirements
+     - SVaP: Defines validation approach, Overall Test Specification implements test cases
+     - Overall Test Report: Executes tests from Overall Test Specification, records results
+     - Validation Report: Uses Overall Test Report results as validation evidence
+     - Component Test Specification: Unit-level tests (different scope)
+  
+  10. **Agent Workflow**:
+      - TST agent creates Overall Test Specification using /tst create-overall-test-spec command
+      - TST agent reads SRS requirements and creates test cases
+      - TST agent applies black-box techniques (boundary value, equivalence class)
+      - TST agent creates traceability matrix (requirements → test cases)
+      - VER agent reviews Overall Test Specification (first check)
+      - VAL agent reviews Overall Test Specification (second check)
+      - QA agent verifies template compliance
+      - CM agent baselines Overall Test Specification after approvals
+  
+  11. **Critical Success Factors**:
+      - Created during Requirements phase (after SRS complete)
+      - 100% requirements coverage for SIL 3-4
+      - Black-box approach (no implementation details)
+      - Traceability complete (every requirement tested)
+      - Performance tests quantifiable
+      - Independent review by VER and VAL (SIL 3-4)
+      - Baselined before Validation phase begins
+  
+  12. **Common Pitfalls**:
+      - Creating test cases before SRS is complete (dependency violation)
+      - Using white-box knowledge in system-level tests (wrong test level)
+      - Missing performance tests (MANDATORY SIL 3-4)
+      - Incomplete traceability matrix (missing requirements)
+      - Ambiguous acceptance criteria (not quantifiable)
+      - Not baselining before test execution begins

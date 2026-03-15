@@ -1,0 +1,433 @@
+# Application Preparation Verification Report
+# EN 50128 Deliverable #32 - Section 8.4.4.4, 8.4.5.1
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-032-APP-PREP-VER"
+number: 32
+name: "Application Preparation Verification Report"
+abbreviation: "App Prep Ver"
+
+# ===== Lifecycle Context =====
+phase: "application"
+standard_section: "8.4.4.4"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "VER"
+first_check: "NONE"
+second_check: "NONE"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-verification/templates/Application-Preparation-Verification-Report-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: false
+    techniques: []
+    additional_requirements: []
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Verification (general)"
+        table_reference: "A.5"
+        technique_id: "A.5"
+        recommendation: "HR"
+    additional_requirements:
+      - "Document every activity ensuring correctness of data/algorithms"
+      - "Document every activity ensuring completeness of data/algorithms"
+      - "Document coherency with application principles"
+      - "Document coherency with application architecture"
+      - "Evaluate compatibility with generic application"
+      - "Check completeness and correctness of tests on complete installation"
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Verification (general)"
+        table_reference: "A.5"
+        technique_id: "A.5"
+        recommendation: "HR"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "HR"
+    additional_requirements:
+      - "Document every activity ensuring correctness of data/algorithms"
+      - "Document every activity ensuring completeness of data/algorithms"
+      - "Document coherency with application principles"
+      - "Document coherency with application architecture"
+      - "Evaluate compatibility with generic application"
+      - "Check completeness and correctness of tests on complete installation"
+      - "Traceability to application requirements and architecture"
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Verification (general)"
+        table_reference: "A.5"
+        technique_id: "A.5"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Static Analysis"
+        table_reference: "A.19"
+        technique_id: "A.19"
+        recommendation: "M"
+    additional_requirements:
+      - "Document every activity ensuring correctness of data/algorithms (MANDATORY)"
+      - "Document every activity ensuring completeness of data/algorithms (MANDATORY)"
+      - "Document coherency with application principles (MANDATORY)"
+      - "Document coherency with application architecture (MANDATORY)"
+      - "Evaluate compatibility with generic application (MANDATORY)"
+      - "Check completeness and correctness of tests on complete installation (MANDATORY)"
+      - "100% traceability to application requirements and architecture (MANDATORY)"
+      - "Independent verification team (MANDATORY)"
+      - "All verification findings documented with resolution status"
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Verification (general)"
+        table_reference: "A.5"
+        technique_id: "A.5"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Static Analysis"
+        table_reference: "A.19"
+        technique_id: "A.19"
+        recommendation: "M"
+      - technique_name: "Formal Proof"
+        table_reference: "A.5"
+        technique_id: "D.29"
+        recommendation: "HR"
+    additional_requirements:
+      - "Document every activity ensuring correctness of data/algorithms (MANDATORY)"
+      - "Document every activity ensuring completeness of data/algorithms (MANDATORY)"
+      - "Document coherency with application principles (MANDATORY)"
+      - "Document coherency with application architecture (MANDATORY)"
+      - "Evaluate compatibility with generic application (MANDATORY)"
+      - "Check completeness and correctness of tests on complete installation (MANDATORY)"
+      - "100% traceability to application requirements and architecture (MANDATORY)"
+      - "Independent verification team (MANDATORY)"
+      - "All verification findings documented with resolution status"
+      - "Formal verification highly recommended"
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "app-prep-ver-report-document"
+    description: "Complete Application Preparation Verification Report per EN 50128 8.4.4.4"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Markdown with YAML frontmatter"
+    storage_path: "docs/application/verification/Application-Preparation-Verification-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver create-app-prep-ver-report"
+    verification_criteria:
+      - "Every verification activity documented"
+      - "Correctness verification documented"
+      - "Completeness verification documented"
+      - "Coherency with application principles documented"
+      - "Coherency with application architecture documented"
+      - "Compatibility with generic application evaluated"
+      - "Completeness and correctness of installation tests checked"
+
+  - evidence_id: "app-data-correctness-verification"
+    description: "Verification of application data correctness"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Verification checklist (Markdown)"
+    storage_path: "docs/application/verification/app-data-correctness.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver verify-app-data-correctness"
+    verification_criteria:
+      - "All application data elements verified"
+      - "Data types correct and compatible with generic software"
+      - "Data values correct for installation"
+      - "No data errors detected"
+
+  - evidence_id: "app-algorithms-correctness-verification"
+    description: "Verification of application algorithms correctness"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Verification checklist (Markdown)"
+    storage_path: "docs/application/verification/app-algorithms-correctness.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-app-algorithms-correctness"
+    verification_criteria:
+      - "All application algorithms verified"
+      - "Algorithm logic correct"
+      - "Algorithm interfaces correct and compatible with generic software"
+      - "No algorithm errors detected"
+
+  - evidence_id: "app-data-completeness-verification"
+    description: "Verification of application data completeness"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Verification checklist (Markdown)"
+    storage_path: "docs/application/verification/app-data-completeness.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver verify-app-data-completeness"
+    verification_criteria:
+      - "All required data elements present"
+      - "No missing data elements"
+      - "Coverage complete per application requirements"
+
+  - evidence_id: "app-algorithms-completeness-verification"
+    description: "Verification of application algorithms completeness"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Verification checklist (Markdown)"
+    storage_path: "docs/application/verification/app-algorithms-completeness.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-app-algorithms-completeness"
+    verification_criteria:
+      - "All required algorithms present"
+      - "No missing algorithms"
+      - "Coverage complete per application requirements"
+
+  - evidence_id: "app-principles-coherency-verification"
+    description: "Verification of data/algorithms coherency with application principles"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/application/verification/app-principles-coherency.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-app-principles-coherency"
+    verification_criteria:
+      - "Data/algorithms coherent with application principles (e.g., signalling principles)"
+      - "No violations of application principles detected"
+      - "All application principle requirements met"
+
+  - evidence_id: "app-architecture-coherency-verification"
+    description: "Verification of data/algorithms coherency with application architecture"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Verification report (Markdown)"
+    storage_path: "docs/application/verification/app-architecture-coherency.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-app-architecture-coherency"
+    verification_criteria:
+      - "Data/algorithms coherent with application architecture"
+      - "Data locations match architecture specification"
+      - "Algorithm locations match architecture specification"
+      - "Interfaces match architecture specification"
+
+  - evidence_id: "app-generic-compatibility-evaluation"
+    description: "Evaluation of data/algorithms compatibility with generic application"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Compatibility evaluation report (Markdown)"
+    storage_path: "docs/application/verification/generic-compatibility-evaluation.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver evaluate-generic-compatibility"
+    verification_criteria:
+      - "Data compatible with generic software interfaces"
+      - "Algorithms compatible with generic software"
+      - "Application conditions of generic software met"
+      - "No compatibility issues detected"
+
+  - evidence_id: "app-installation-tests-check"
+    description: "Check of completeness and correctness of tests on complete installation per 8.4.5.1"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Test verification report (Markdown)"
+    storage_path: "docs/application/verification/installation-tests-check.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver check-installation-tests"
+    verification_criteria:
+      - "All tests on complete installation executed"
+      - "All tests passed"
+      - "Test results complete"
+      - "Test results correct"
+      - "No outstanding test failures"
+
+  - evidence_id: "app-prep-traceability-verification"
+    description: "Traceability verification for application preparation"
+    mandatory_sil: 2
+    source: "VER agent"
+    format: "Traceability verification report (Markdown)"
+    storage_path: "docs/application/verification/app-prep-traceability.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver verify-app-prep-traceability"
+    verification_criteria:
+      - "Traceability to application requirements verified (SIL 2+)"
+      - "Traceability to application architecture verified (SIL 2+)"
+      - "100% traceability for SIL 3+ (MANDATORY)"
+
+  - evidence_id: "app-prep-verification-findings"
+    description: "All verification findings with resolution status"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Findings register (YAML or Markdown)"
+    storage_path: "docs/application/verification/verification-findings.yaml"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver track-findings"
+    verification_criteria:
+      - "All findings documented"
+      - "Severity assigned (critical/major/minor)"
+      - "Resolution status tracked"
+      - "All critical/major findings resolved before approval"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-028-APP-REQ-SPEC"
+    reason: "Verification checks application data/algorithms against application requirements"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-031-APP-ARCH-DESIGN"
+    reason: "Verification checks coherency with application architecture"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-034-APP-SOURCE-CODE"
+    reason: "Verification checks application source code correctness and completeness"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-033-APP-TEST-REPORT"
+    reason: "Verification checks completeness and correctness of installation tests"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-035-APP-DATA-VER"
+    reason: "Application Data/Algorithms Verification Report consolidates all application verification"
+  
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Validation uses verification results for final approval"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All verification activities documented"
+    - "Correctness verification complete for all data/algorithms"
+    - "Completeness verification complete for all data/algorithms"
+    - "Coherency with application principles verified"
+    - "Coherency with application architecture verified"
+    - "Compatibility with generic application evaluated"
+    - "Installation tests completeness and correctness checked"
+  
+  correctness:
+    - "Data correctness verified"
+    - "Algorithms correctness verified"
+    - "Application principles coherency verified"
+    - "Application architecture coherency verified"
+    - "Generic application compatibility verified"
+  
+  consistency:
+    - "All findings documented with consistent severity ratings"
+    - "Verification conclusions consistent with evidence"
+    - "No conflicting verification results"
+  
+  traceability:
+    - "Traceability to application requirements verified (SIL 2+)"
+    - "Traceability to application architecture verified (SIL 2+)"
+    - "100% traceability for SIL 3+ (MANDATORY)"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Application Preparation Verification Report Baseline"
+  baseline_trigger: "After VER approval (no external checks per Table C.1)"
+  change_control: "Updates only for new verification activities or finding resolutions"
+  versioning: "Semantic versioning (MAJOR.MINOR.PATCH)"
+  storage_location: "config/baselines/application-prep-verification/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "8.4.4.4"
+    title: "Application Preparation Verification Report - Content"
+    relevance: "Document activities ensuring correctness, completeness, coherency; evaluate compatibility"
+  - section: "8.4.5.1"
+    title: "Application Integration and Testing Acceptance"
+    relevance: "Check completeness and correctness of tests on complete installation"
+  - section: "Table A.5"
+    title: "Verification and Testing techniques"
+    relevance: "Applicable verification techniques (Traceability, Static Analysis, Formal Proof)"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Application Preparation Verification Report is deliverable #32, written by VER, no checks"
+
+# ===== Notes =====
+notes: |
+  **Application Preparation Verification Report (Deliverable #32)**
+  
+  This deliverable documents verification of **application data and algorithms** preparation for systems
+  configured by application data/algorithms (EN 50128 Section 8). It is NOT required for generic
+  software-only systems.
+  
+  **Purpose**: Document all verification activities ensuring correctness, completeness, and coherency of
+  application data/algorithms, and evaluate compatibility with generic application.
+  
+  **Key Content** (EN 50128 8.4.4.4):
+  1. **Document every activity** performed to ensure:
+     - **Correctness** of data/algorithms
+     - **Completeness** of data/algorithms
+     - **Coherency** with application principles (e.g., signalling principles for interlocking)
+     - **Coherency** with specific application architecture
+  2. **Evaluate compatibility** of data/algorithms with generic application
+  
+  **Additional Content** (EN 50128 8.4.5.1):
+  3. **Check completeness and correctness** of tests performed on complete installation
+  
+  **Difference from Other Verification Reports**:
+  - DOC-008 (Req Ver): Verifies generic software requirements specification
+  - DOC-012 (Arch Design Ver): Verifies generic software architecture/design
+  - DOC-019 (Source Code Ver): Verifies generic software source code
+  - DOC-032 (App Prep Ver): Verifies application data/algorithms preparation
+  - DOC-035 (App Data Ver): Consolidates all application data/algorithms verification
+  
+  **Application Principles**: Domain-specific rules that application must follow
+  Examples for interlocking: signalling principles, point management principles, route setting principles
+  
+  **Coherency Verification**:
+  - **With application principles**: Data/algorithms follow domain-specific rules
+  - **With application architecture**: Data/algorithms placed correctly in architecture
+  
+  **Compatibility Evaluation** (EN 50128 8.4.4.4b):
+  Verify that application data/algorithms are compatible with generic application:
+  - Data types match generic software interfaces
+  - Data formats compatible
+  - Algorithms compatible with generic software execution model
+  - Application conditions of generic software met
+  
+  **Installation Tests Check** (EN 50128 8.4.5.1):
+  After application installed on target system, verify:
+  - All integration tests executed on complete installation
+  - Tests complete (no missing tests)
+  - Tests correct (test results valid)
+  - All tests passed or failures resolved
+  
+  **Independence Requirements** (SIL 3-4):
+  - Verification team MUST be independent from application preparation team
+  - VER agent cannot also be REQ, DES, or TST for same application
+  
+  **VER Agent Responsibility**:
+  - Document all verification activities
+  - Verify correctness of application data and algorithms
+  - Verify completeness of application data and algorithms
+  - Verify coherency with application principles
+  - Verify coherency with application architecture
+  - Evaluate compatibility with generic application
+  - Check completeness and correctness of installation tests
+  - Verify traceability (SIL 2+, MANDATORY SIL 3+)
+  - Track all findings with resolution status
+  - NO external checks required (per Table C.1 - written by VER, no first/second check)
+  
+  **Verification Techniques** (Table A.5):
+  - Reviews and walkthroughs
+  - Static analysis (MANDATORY SIL 3+)
+  - Traceability analysis (MANDATORY SIL 3+)
+  - Compatibility checking
+  - Formal proof (highly recommended SIL 4)
+  
+  **Approval Criteria**:
+  - All correctness issues resolved
+  - All completeness issues resolved
+  - All coherency issues resolved
+  - All compatibility issues resolved
+  - All critical/major findings resolved
+  - Traceability complete (SIL 2+, MANDATORY SIL 3+)

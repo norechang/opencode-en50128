@@ -11,21 +11,114 @@ metadata:
 
 ## What I do
 
-I provide patterns, templates, and workflows for requirements engineering compliant with EN 50128 Section 7.2:
-- Define requirement quality attributes (unambiguous, testable, traceable)
-- Provide requirement templates with SIL classification
-- Enforce SHALL/SHOULD/MAY keyword usage
-- Maintain traceability matrices
-- Consider C language constraints (data types, memory, real-time)
+I provide comprehensive patterns, templates, workflows, and resources for requirements engineering compliant with EN 50128 Section 7.2:
+- **Workflows**: Step-by-step processes for requirements elicitation, analysis, specification, and traceability management
+- **Resources**: Guidelines for requirement quality, modal verb usage (SHALL/SHOULD/MAY), testability, and common patterns
+- **Templates**: Software Requirements Specification (SRS) and verification report templates
+- **Tools**: Validation scripts for requirement quality and traceability completeness
+- **Techniques**: EN 50128 Table A.2 techniques (Formal Methods, Modelling, Structured Methodology, Decision Tables)
+- **C Language**: Integration of C programming constraints (data types, memory allocation, timing)
 
 ## When to use me
 
 Use this skill when:
-- Starting requirements specification phase
-- Writing or reviewing software requirements
-- Establishing requirements traceability
-- Assigning SIL levels to requirements
-- Validating requirement quality
+- **Starting requirements phase**: Follow `workflows/requirements-elicitation.md` to gather requirements from stakeholders
+- **Analyzing requirements**: Use `workflows/requirements-analysis.md` to refine and decompose requirements
+- **Writing SRS document**: Follow `workflows/requirements-specification.md` to create formal Software Requirements Specification
+- **Managing traceability**: Use `workflows/traceability-management.md` to establish and maintain traceability matrices
+- **Reviewing requirements**: Apply `resources/requirement-quality-checklist.md` for quality verification
+- **Clarifying modal verbs**: Reference `resources/shall-should-may.md` for SHALL/SHOULD/MAY usage
+
+## How to use this skill
+
+### For Requirements Engineers (REQ)
+
+**Complete Requirements Phase Workflow:**
+
+```
+1. ELICITATION (workflows/requirements-elicitation.md)
+   ├─ Review input documents (System Requirements, Hazard Log, SQAP, SCMP)
+   ├─ Conduct stakeholder interviews
+   ├─ Analyze system requirements and decompose into software requirements
+   ├─ Identify safety requirements from Hazard Log
+   └─ Consider C language constraints (data types, memory, timing)
+
+2. ANALYSIS (workflows/requirements-analysis.md)
+   ├─ Classify requirements (Functional, Performance, Interface, Safety, Quality, Constraints)
+   ├─ Assign SIL levels (based on hazard analysis)
+   ├─ Decompose complex requirements (hierarchical, decision tables)
+   ├─ Refine requirement statements (apply quality attributes)
+   ├─ Apply modal verbs correctly (SHALL/SHOULD/MAY per RFC 2119)
+   └─ Verify consistency and completeness
+
+3. TRACEABILITY (workflows/traceability-management.md)
+   ├─ Establish backward traceability (software→system, safety→hazards)
+   ├─ Plan forward traceability (software→design, software→tests, software→code)
+   ├─ Create traceability matrices (CSV or Markdown)
+   └─ Verify 100% coverage (MANDATORY for SIL 3-4)
+
+4. SPECIFICATION (workflows/requirements-specification.md)
+   ├─ Use SRS template (templates/Software-Requirements-Specification-template.md)
+   ├─ Document all requirements with proper format
+   ├─ Include traceability matrices
+   ├─ Add supporting information (glossary, abbreviations, references)
+   └─ Submit for review (QUA → VER → VAL)
+
+5. REVIEW & APPROVAL
+   ├─ Self-review (use resources/requirement-quality-checklist.md)
+   ├─ QUA review (document template compliance)
+   ├─ VER review (independent verification, MANDATORY SIL 3-4)
+   ├─ VAL review (validation approval)
+   └─ Baseline (CM creates baseline: SRS-v1.0)
+```
+
+### For Quality Assurance (QUA)
+
+**Review Checklist:**
+1. Verify document template compliance (header, version control, approvals)
+2. Apply `resources/requirement-quality-checklist.md` to all requirements
+3. Verify modal verbs used correctly (`resources/shall-should-may.md`)
+4. Check traceability matrices present (MANDATORY for SIL 3-4)
+5. Verify all requirements have unique IDs, SIL assignments, verification methods
+
+### For Verifiers (VER)
+
+**Verification Checklist:**
+1. Verify all requirements are testable (objective acceptance criteria)
+2. Verify traceability is complete (100% for SIL 3-4)
+3. Verify SIL assignments are justified (trace to hazards)
+4. Verify EN 50128 techniques applied (Table A.2 per SIL level)
+5. Create Software Requirements Verification Report (DOC-008)
+
+### For Validators (VAL)
+
+**Validation Checklist:**
+1. Verify requirements meet stakeholder needs
+2. Verify requirements support safety case
+3. Provide validation approval (second check)
+
+## Skill Structure
+
+```
+en50128-requirements/
+├── SKILL.md                          (This file - comprehensive guide)
+├── templates/
+│   ├── Software-Requirements-Specification-template.md
+│   └── Software-Requirements-Verification-Report-template.md
+├── workflows/
+│   ├── requirements-elicitation.md   (Gather requirements from sources)
+│   ├── requirements-analysis.md      (Analyze, refine, decompose)
+│   ├── traceability-management.md    (Establish and maintain traceability)
+│   └── requirements-specification.md (Create formal SRS document)
+├── resources/
+│   ├── shall-should-may.md           (RFC 2119 modal verb usage)
+│   ├── requirement-quality-checklist.md (Quality verification)
+│   ├── requirement-patterns.md       (Common patterns - to be created)
+│   └── testability-guidelines.md     (Testability guide - to be created)
+└── tools/
+    ├── requirement-validator.py      (Validate format and quality - to be created)
+    └── traceability-validator.py     (Check traceability - to be created)
+```
 
 ## Requirements Techniques (EN 50128 Table A.2)
 

@@ -55,7 +55,7 @@
  * @compliance Static allocation ONLY (64 bytes fixed size)
  * @traceability DOC-COMPDES-2026-001 Section 3.2.8
  */
-typedef struct {
+typedef struct safety_monitor_s {
     /* Speed sensor readings (raw values, units: 0.1 km/h) */
     uint16_t primary_speed;               /**< Primary speed sensor (2 bytes) */
     uint16_t secondary_speed;             /**< Secondary speed sensor (2 bytes) */

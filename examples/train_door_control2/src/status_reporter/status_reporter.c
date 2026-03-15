@@ -15,12 +15,10 @@
 
 #include "status_reporter.h"
 #include "../sensor_hal/sensor_hal.h"  /* For can_message_t */
+#include "../door_control/door_fsm.h"  /* For door_fsm_t and accessor functions */
 #include <string.h>  /* For memcpy */
 
 /* Forward declarations for external functions */
-extern uint8_t door_fsm_get_position(door_side_t side);
-extern uint8_t door_fsm_get_state(door_side_t side);
-extern bool door_fsm_is_locked(door_side_t side);
 extern uint8_t fault_detection_get_active_faults(const void* fd, uint16_t* buffer, uint8_t buffer_size);
 extern error_t communication_hal_can_send(const can_message_t* msg);
 
@@ -47,17 +45,35 @@ extern void set_led(uint8_t led_id, uint8_t state);
 
 /**
  * @brief Initialize status reporter
- * @complexity 2 (1 base + 1 IF)
+ * @complexity 4 (1 base + 3 IF decisions)
  * @traceability DOC-COMPDES-2026-001 Section 3.5.2 (pseudocode lines 1984-2005)
+ * 
+ * @note FIX for DEF-INTEGRATION-002 (2026-02-26):
+ *       Added door FSM parameters for proper module integration.
+ *       FSM pointers are const - status_reporter only reads door state.
  */
-error_t status_reporter_init(status_reporter_t* sr)
+error_t status_reporter_init(status_reporter_t* sr, const door_fsm_t* left_fsm, const door_fsm_t* right_fsm)
 {
-    /* Step 1: NULL check */
+    /* Step 1: NULL check - status reporter structure */
     if (sr == NULL) {                                           /* +1 */
         return ERROR_NULL_POINTER;
     }
     
-    /* Step 2: Initialize all fields to zero/default */
+    /* Step 2: NULL check - left door FSM (defensive programming SIL 3) */
+    if (left_fsm == NULL) {                                     /* +1 */
+        return ERROR_NULL_POINTER;
+    }
+    
+    /* Step 3: NULL check - right door FSM (defensive programming SIL 3) */
+    if (right_fsm == NULL) {                                    /* +1 */
+        return ERROR_NULL_POINTER;
+    }
+    
+    /* Step 4: Store FSM pointers */
+    sr->left_door_fsm = left_fsm;
+    sr->right_door_fsm = right_fsm;
+    
+    /* Step 5: Initialize all fields to zero/default */
     sr->last_can_msg.door_left_position = 0U;
     sr->last_can_msg.door_right_position = 0U;
     sr->last_can_msg.door_left_state = 0U;
@@ -121,6 +137,9 @@ error_t status_reporter_update(status_reporter_t* sr)
  * @brief Collect status and send CAN message
  * @complexity 3 (1 base + 2 IF)
  * @traceability DOC-COMPDES-2026-001 Section 3.5.4 (pseudocode lines 2073-2116)
+ * 
+ * @note FIX for DEF-INTEGRATION-002 (2026-02-26):
+ *       Fixed door_fsm_get_* calls to use FSM pointers instead of door_side_t enum.
  */
 error_t status_reporter_send_can_status(status_reporter_t* sr)
 {
@@ -139,17 +158,17 @@ error_t status_reporter_send_can_status(status_reporter_t* sr)
         return ERROR_NULL_POINTER;
     }
     
-    /* Step 2: Collect door positions from Door FSM */
-    left_pos = door_fsm_get_position(DOOR_SIDE_LEFT);
-    right_pos = door_fsm_get_position(DOOR_SIDE_RIGHT);
+    /* Step 2: Collect door positions from Door FSM (using stored FSM pointers) */
+    left_pos = door_fsm_get_position(sr->left_door_fsm);
+    right_pos = door_fsm_get_position(sr->right_door_fsm);
     
     /* Step 3: Collect door states */
-    left_state = door_fsm_get_state(DOOR_SIDE_LEFT);
-    right_state = door_fsm_get_state(DOOR_SIDE_RIGHT);
+    left_state = door_fsm_get_state(sr->left_door_fsm);
+    right_state = door_fsm_get_state(sr->right_door_fsm);
     
     /* Step 4: Collect lock status */
-    left_locked = door_fsm_is_locked(DOOR_SIDE_LEFT);
-    right_locked = door_fsm_is_locked(DOOR_SIDE_RIGHT);
+    left_locked = door_fsm_is_locked(sr->left_door_fsm);
+    right_locked = door_fsm_is_locked(sr->right_door_fsm);
     
     /* Step 5: Collect active faults (stub - get first fault) */
     active_faults = 0U;  /* Simplified - replace with actual fault query */
@@ -181,6 +200,9 @@ error_t status_reporter_send_can_status(status_reporter_t* sr)
  * @brief Update driver display LEDs based on door status
  * @complexity 6 (1 base + 5 IF)
  * @traceability DOC-COMPDES-2026-001 Section 3.5.5 (pseudocode lines 2135-2183)
+ * 
+ * @note FIX for DEF-INTEGRATION-002 (2026-02-26):
+ *       Fixed door_fsm_get_state calls to use FSM pointers instead of door_side_t enum.
  */
 error_t status_reporter_update_display(const status_reporter_t* sr)
 {
@@ -193,9 +215,9 @@ error_t status_reporter_update_display(const status_reporter_t* sr)
         return ERROR_NULL_POINTER;
     }
     
-    /* Step 2: Read door states */
-    left_state = door_fsm_get_state(DOOR_SIDE_LEFT);
-    right_state = door_fsm_get_state(DOOR_SIDE_RIGHT);
+    /* Step 2: Read door states (using stored FSM pointers) */
+    left_state = door_fsm_get_state(sr->left_door_fsm);
+    right_state = door_fsm_get_state(sr->right_door_fsm);
     
     /* Step 3: LED_LEFT_OPEN (green): ON if left door OPEN */
     if (left_state == DOOR_STATE_OPEN) {                        /* +1 */

@@ -1,0 +1,467 @@
+# Software Validation Plan (SVaP) - Deliverable Metadata
+# EN 50128:2011 Section 6.3.4, Section 7.7, Table A.7, Table C.1
+# This file defines the metadata, requirements, evidence, and verification criteria
+# for the Software Validation Plan deliverable.
+
+deliverable_id: "DOC-005-SVAP"
+number: 5
+name: "Software Validation Plan"
+abbreviation: "SVaP"
+phase: "planning"
+standard_section: "6.3.4"
+written_by: "VAL"
+first_check: "VER"
+second_check: "NONE"
+template_path: ".opencode/skills/en50128-documentation/templates/Software-Validation-Plan-template.md"
+template_exists: true
+
+# =============================================================================
+# SIL-DEPENDENT REQUIREMENTS
+# =============================================================================
+# Requirements scale by SIL level per EN 50128 Table A.7
+# Validation confirms software fulfills its intended use in operational environment
+
+sil_requirements:
+  sil_0:
+    mandatory: false  # Validation recommended but not mandatory
+    techniques:
+      - technique_name: "Software Validation"
+        table_reference: "A.7"
+        technique_id: "A.7"
+        recommendation: "R"
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "R"
+    additional_requirements:
+      - "Basic validation activities recommended"
+      - "No specific techniques mandatory"
+      - "No independence requirement"
+      - "Operational testing recommended"
+    evidence_thresholds:
+      min_operational_scenarios: "N/A"
+      min_acceptance_tests: "N/A"
+      performance_testing_required: false
+      independent_validation: false
+
+  sil_1:
+    mandatory: true  # HR (Highly Recommended) - treat as mandatory
+    techniques:
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "HR"
+      - technique_name: "Modelling"
+        table_reference: "A.7"
+        technique_id: "A.17"
+        recommendation: "R"
+    additional_requirements:
+      - "Software Validation Plan HIGHLY RECOMMENDED (HR)"
+      - "Functional and black-box testing HIGHLY RECOMMENDED"
+      - "Performance testing HIGHLY RECOMMENDED"
+      - "Operational scenarios RECOMMENDED"
+      - "Customer acceptance RECOMMENDED"
+      - "No mandatory independence requirement"
+    evidence_thresholds:
+      min_operational_scenarios: "3"  # HR
+      min_acceptance_tests: "5"  # HR
+      performance_testing_required: true  # HR
+      independent_validation: false
+
+  sil_2:
+    mandatory: true  # HR for SVaP
+    techniques:
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "HR"
+      - technique_name: "Modelling"
+        table_reference: "A.7"
+        technique_id: "A.17"
+        recommendation: "R"
+    additional_requirements:
+      - "Software Validation Plan HIGHLY RECOMMENDED (HR)"
+      - "Functional and black-box testing HIGHLY RECOMMENDED"
+      - "Performance testing HIGHLY RECOMMENDED"
+      - "Operational scenarios HIGHLY RECOMMENDED"
+      - "Customer acceptance HIGHLY RECOMMENDED"
+      - "No mandatory independence requirement"
+    evidence_thresholds:
+      min_operational_scenarios: "5"  # HR
+      min_acceptance_tests: "10"  # HR
+      performance_testing_required: true  # HR
+      independent_validation: false
+
+  sil_3:
+    mandatory: true  # HR for SVaP
+    techniques:
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "M"
+      - technique_name: "Modelling"
+        table_reference: "A.7"
+        technique_id: "A.17"
+        recommendation: "R"
+    additional_requirements:
+      - "Software Validation Plan HIGHLY RECOMMENDED (HR)"
+      - "INDEPENDENT VALIDATION MANDATORY (VAL team separate from DEV and VER teams)"
+      - "Functional and black-box testing MANDATORY"
+      - "Performance testing MANDATORY"
+      - "Operational scenarios MANDATORY"
+      - "Customer acceptance MANDATORY"
+      - "Target environment testing MANDATORY"
+      - "Safety scenario validation MANDATORY"
+      - "Independent Validator MANDATORY"
+    evidence_thresholds:
+      min_operational_scenarios: "10"  # MANDATORY
+      min_acceptance_tests: "20"  # MANDATORY
+      performance_testing_required: true  # MANDATORY
+      independent_validation: true  # MANDATORY
+
+  sil_4:
+    mandatory: true  # HR for SVaP
+    techniques:
+      - technique_name: "Functional and Black-Box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "M"
+      - technique_name: "Modelling"
+        table_reference: "A.7"
+        technique_id: "A.17"
+        recommendation: "R"
+    additional_requirements:
+      - "Software Validation Plan HIGHLY RECOMMENDED (HR)"
+      - "INDEPENDENT VALIDATION MANDATORY (VAL team separate from DEV and VER teams)"
+      - "Functional and black-box testing MANDATORY"
+      - "Performance testing MANDATORY (timing, throughput, resource usage)"
+      - "Operational scenarios MANDATORY (all critical scenarios)"
+      - "Customer acceptance MANDATORY"
+      - "Target environment testing MANDATORY"
+      - "Safety scenario validation MANDATORY"
+      - "Independent Validator MANDATORY"
+      - "Exhaustive scenario testing HIGHLY RECOMMENDED"
+    evidence_thresholds:
+      min_operational_scenarios: "20"  # MANDATORY
+      min_acceptance_tests: "50"  # MANDATORY
+      performance_testing_required: true  # MANDATORY
+      independent_validation: true  # MANDATORY
+
+# =============================================================================
+# EVIDENCE REQUIREMENTS
+# =============================================================================
+# Evidence required to demonstrate SVaP completeness and compliance
+
+evidence_requirements:
+  - evidence_id: "svap-validation-strategy"
+    description: "Documented validation strategy per 6.3.4.4"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "VAL"
+    format: "Section in SVaP document (markdown)"
+    storage_path: "docs/plans/SVaP.md"
+    automation_level: "manual"
+    collect_on_agent_action: "val-create-svap"
+    verification_criteria:
+      - "Strategy justifies validation approach chosen"
+      - "Strategy addresses operational environment testing"
+      - "Strategy addresses acceptance testing with customer"
+      - "Strategy addresses safety scenario validation"
+      - "Strategy references EN 50128 Table A.7 techniques"
+
+  - evidence_id: "svap-validation-techniques"
+    description: "Documented validation techniques and methods per Table A.7"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "VAL"
+    format: "Section in SVaP document with technique mapping table"
+    storage_path: "docs/plans/SVaP.md"
+    automation_level: "manual"
+    collect_on_agent_action: "val-create-svap"
+    verification_criteria:
+      - "All mandatory techniques listed for target SIL level"
+      - "Functional and black-box testing defined (MANDATORY SIL 3-4)"
+      - "Performance testing defined (MANDATORY SIL 3-4)"
+      - "Operational scenario testing defined"
+      - "Acceptance testing approach defined"
+      - "Test environment specification defined (target hardware)"
+
+  - evidence_id: "svap-independence-plan"
+    description: "Independence plan for validation activities (SIL 3-4 MANDATORY)"
+    mandatory_sil: 3  # MANDATORY for SIL 3-4
+    source: "VAL"
+    format: "Section in SVaP document"
+    storage_path: "docs/plans/SVaP.md"
+    automation_level: "manual"
+    collect_on_agent_action: "val-create-svap"
+    verification_criteria:
+      - "Validator independence from Designer/Implementer/Tester/Verifier documented"
+      - "Organizational independence demonstrated (separate reporting line)"
+      - "Personnel independence demonstrated (different individuals)"
+      - "Validator SHALL NOT report to Project Manager (SIL 3-4)"
+
+  - evidence_id: "svap-operational-scenarios"
+    description: "Documented operational scenarios for validation testing"
+    mandatory_sil: 3  # MANDATORY for SIL 3-4
+    source: "VAL"
+    format: "Section in SVaP document with scenario descriptions"
+    storage_path: "docs/plans/SVaP.md"
+    automation_level: "manual"
+    collect_on_agent_action: "val-create-svap"
+    verification_criteria:
+      - "All normal operational scenarios documented"
+      - "All degraded operational scenarios documented (failures)"
+      - "All safety-critical scenarios documented"
+      - "Each scenario includes: preconditions, steps, expected results, acceptance criteria"
+      - "Scenarios cover all software requirements from SRS"
+      - "Minimum number of scenarios meets SIL threshold"
+
+  - evidence_id: "svap-acceptance-criteria"
+    description: "Documented acceptance criteria for validation per 6.3.4.6"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "VAL"
+    format: "Section in SVaP document"
+    storage_path: "docs/plans/SVaP.md"
+    automation_level: "manual"
+    collect_on_agent_action: "val-create-svap"
+    verification_criteria:
+      - "Acceptance criteria defined for each operational scenario"
+      - "Performance acceptance criteria defined (timing, throughput)"
+      - "Safety acceptance criteria defined (safety requirements from SRS)"
+      - "Customer approval process defined"
+      - "Acceptance criteria quantifiable and measurable"
+
+  - evidence_id: "svap-baseline"
+    description: "Baselined SVaP document approved by PM and customer"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "CM"
+    format: "Baselined markdown file with approvals"
+    storage_path: "docs/plans/SVaP.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "cm-baseline-deliverable"
+    verification_criteria:
+      - "Document has version 1.0 or higher"
+      - "Document status is 'Approved' or 'Baseline'"
+      - "Approvals section complete (VAL author, QA, PM)"
+      - "Approvals section includes VER (first check)"
+      - "Independent Validator approval present (SIL 3-4)"
+      - "Customer representative approval present"
+      - "Document under configuration control"
+      - "Baseline recorded in SCMP baseline register"
+
+# =============================================================================
+# DEPENDENCIES
+# =============================================================================
+
+depends_on:
+  - deliverable_id: "DOC-001-SQAP"
+    reason: "SQAP defines quality framework; SVaP implements validation quality processes"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-003-SCMP"
+    reason: "SCMP defines configuration management for validation artifacts"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-004-SVP"
+    reason: "SVP verification techniques inform SVaP validation techniques (coordinate V&V)"
+    dependency_type: "informational"
+
+  - deliverable_id: "DOC-006-SRS"
+    reason: "SRS defines requirements; SVaP validates software meets those requirements"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "SVaP defines validation approach; Validation Report implements and documents validation results"
+
+  - deliverable_id: "DOC-007-OVERALL-TEST-SPEC"
+    reason: "SVaP validation scenarios inform Overall Test Specification test cases"
+
+# =============================================================================
+# VERIFICATION CRITERIA
+# =============================================================================
+
+verification_criteria:
+  completeness:
+    - "All sections of SVaP template completed per 6.3.4.4-6.3.4.6"
+    - "Validation strategy justified per 6.3.4.4"
+    - "All EN 50128 Table A.7 mandatory techniques addressed for target SIL"
+    - "All operational scenarios defined with acceptance criteria"
+    - "All validation roles and responsibilities defined"
+    - "Independence plan complete (SIL 3-4)"
+    - "Customer involvement plan complete"
+    - "Target environment specification complete"
+
+  correctness:
+    - "Validation techniques appropriate for target SIL level"
+    - "Functional and black-box testing approach correct (MANDATORY SIL 3-4)"
+    - "Performance testing approach correct (MANDATORY SIL 3-4)"
+    - "Operational scenarios realistic and representative"
+    - "Acceptance criteria align with SRS requirements"
+    - "Independence requirements met per 5.3.7.11 (SIL 3-4)"
+    - "Customer acceptance process appropriate"
+
+  consistency:
+    - "Validation strategy consistent with SQAP quality processes"
+    - "Operational scenarios consistent with SRS requirements"
+    - "Acceptance criteria consistent with SRS acceptance criteria"
+    - "Validation techniques complement (not duplicate) verification techniques in SVP"
+    - "Target environment consistent with system requirements"
+
+  traceability:
+    - "Forward traceability: SRS requirements → Operational scenarios"
+    - "Forward traceability: Operational scenarios → Acceptance criteria"
+    - "Forward traceability: SVaP → Validation Report"
+    - "Backward traceability: Acceptance criteria → SRS requirements"
+    - "References to EN 50128 Table A.7, A.14, A.18 present"
+
+# =============================================================================
+# CONFIGURATION MANAGEMENT
+# =============================================================================
+
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After Phase 1 (Planning) completion, before Phase 7 (Validation) begins"
+  change_control: "All changes to baselined SVaP require CCB approval (Change Control Board)"
+  version_control: "docs/plans/SVaP.md under Git control, baseline tagged as baseline-svap-v1.0"
+  review_frequency: "Review annually or when validation testing fails acceptance criteria"
+  update_triggers:
+    - "Addition of new validation scenarios"
+    - "Change in SIL level"
+    - "Change in validation approach or techniques"
+    - "Customer feedback on acceptance criteria"
+    - "Identification of new operational scenarios"
+    - "EN 50128 standard updates"
+    - "Lessons learned from validation testing"
+
+# =============================================================================
+# EN 50128 REFERENCES
+# =============================================================================
+
+en50128_references:
+  - "Section 6.3: Software Validation"
+  - "Section 6.3.4: Validation Documentation (SVaP and Validation Report)"
+  - "Section 6.3.4.2: Validation documented with SVaP and Validation Report"
+  - "Section 6.3.4.3: SVaP written under responsibility of Validator"
+  - "Section 6.3.4.4: SVaP includes summary justifying validation strategy"
+  - "Section 6.3.4.5: SVaP identifies steps to demonstrate adequacy of techniques"
+  - "Section 6.3.4.6: SVaP identifies steps to demonstrate adequacy of software"
+  - "Section 6.3.4.13: Verification of SVaP (readability, traceability, consistency)"
+  - "Section 6.4.4.14: Assessor agrees scope and contents of SVaP (SIL 3-4)"
+  - "Section 7.7: Validation and Testing"
+  - "Section 7.7.1.1: Analyse and test integrated software/hardware to ensure compliance with SRS"
+  - "Section 7.7.4.3: Validator specifies and performs supplementary tests"
+  - "Section 7.7.4.5: Software exercised by connection to real hardware or actual systems"
+  - "Section 7.7.4.6: Validation Report written based on SVaP"
+  - "Section 7.7.4.8: Validation Report states whether SVaP objectives met"
+  - "Section 5.3.7: Validator role and responsibilities"
+  - "Section 5.3.7.11: Validator independence requirements (SIL 3-4)"
+  - "Section 5.3.7.11f: Validator SHALL NOT report to Project Manager (SIL 3-4)"
+  - "Table A.7: Overall Software Testing/Validation techniques by SIL"
+  - "Table A.14: Functional and Black-Box Testing techniques"
+  - "Table A.18: Performance Testing techniques"
+  - "Table C.1 (Annex C): Document control summary (SVaP mandatory HR for all SIL)"
+
+# =============================================================================
+# NOTES
+# =============================================================================
+
+notes: |
+  CRITICAL INFORMATION:
+  
+  1. **Verification vs. Validation**:
+     - Verification: "Are we building the product right?" (outputs match specifications)
+     - Validation: "Are we building the right product?" (meets user needs, fit for purpose)
+     - SVP covers verification; SVaP covers validation
+     - Validation performed AFTER verification completes
+  
+  2. **SIL Requirements**:
+     - SIL 0: Validation recommended (R), no mandatory techniques
+     - SIL 1-2: SVaP HIGHLY RECOMMENDED (HR), functional testing HR, performance testing HR
+     - SIL 3-4: SVaP HIGHLY RECOMMENDED (HR), functional testing MANDATORY, performance testing MANDATORY
+     - Independence MANDATORY for SIL 3-4 (Validator separate from DEV, VER, TST teams)
+  
+  3. **EN 50128 Table A.7 Validation Techniques** (minimum required):
+     - Functional and Black-Box Testing (Table A.14): SIL 3-4 MANDATORY
+     - Performance Testing (Table A.18): SIL 3-4 MANDATORY
+     - Modelling (Table A.17): SIL 1-4 RECOMMENDED
+  
+  4. **Operational Scenarios**:
+     - Define realistic use cases in target operational environment
+     - Include normal operation, degraded operation, failure scenarios
+     - Include all safety-critical scenarios from Hazard Log
+     - Each scenario: preconditions, steps, expected results, acceptance criteria
+     - Minimum number of scenarios scales with SIL level
+  
+  5. **Performance Testing** (MANDATORY SIL 3-4):
+     - Timing analysis (execution time, response time, real-time constraints)
+     - Throughput analysis (data processing rate, message handling)
+     - Resource usage (memory, CPU, I/O)
+     - Load testing (peak load, sustained load)
+     - Stress testing (overload conditions)
+  
+  6. **Independence Requirements** (Section 5.3.7.11):
+     - SIL 0-2: No mandatory independence
+     - SIL 3-4: Validator SHALL NOT be Requirements Manager, Designer, Implementer, Integrator, Tester, or Verifier
+     - SIL 3-4: Validator SHALL NOT report to Project Manager (reports to customer/safety authority)
+     - SIL 3-4: Organizational independence required (separate reporting line)
+  
+  7. **SVaP Contents** (Section 6.3.4.4-6.3.4.6):
+     - Validation organization (roles, responsibilities)
+     - Validation strategy justification
+     - Validation techniques and methods (Table A.7)
+     - Operational scenarios (test cases)
+     - Acceptance criteria per scenario
+     - Customer involvement plan
+     - Target environment specification
+     - Validation reporting format
+  
+  8. **Target Environment Testing** (Section 7.7.4.5):
+     - Software exercised by connection to real hardware or actual systems
+     - Testing in simulated environment acceptable if justified
+     - Target hardware must represent production environment
+     - All interfaces exercised (hardware, software, communication)
+  
+  9. **Customer Acceptance**:
+     - Customer defines acceptance criteria
+     - Customer witnesses validation tests
+     - Customer approves validation results
+     - Customer representative approval required in SVaP
+     - Customer approval required before software release (6.3.4.16)
+  
+  10. **Relationship to Other Plans**:
+      - SQAP: Defines quality framework, SVaP implements validation quality processes
+      - SCMP: Defines configuration management for validation artifacts
+      - SVP: Verification plan, SVaP complements (validation after verification)
+      - SRS: Requirements specification, SVaP validates software meets requirements
+      - Overall Test Specification: Detailed test cases, SVaP defines validation approach
+  
+  11. **Agent Workflow**:
+      - VAL agent creates SVaP using /val plan command
+      - SVaP baselined in Phase 1 (Planning)
+      - VAL agent executes validation testing per SVaP in Phase 7 (Validation)
+      - VAL agent creates Validation Report documenting results
+      - VAL agent provides acceptance recommendation to customer
+  
+  12. **Critical Success Factors**:
+      - Early establishment (Phase 1, before requirements complete)
+      - Customer involvement from planning through execution
+      - Independence preserved (SIL 3-4)
+      - Operational scenarios realistic and comprehensive
+      - Acceptance criteria quantifiable and measurable
+      - Target environment testing (real hardware)
+      - Safety scenario coverage complete

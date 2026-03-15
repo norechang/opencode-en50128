@@ -1,73 +1,45 @@
 # Software Integration Verification Report
 
-**Document ID**: DOC-VER-YYYY-NNN  
-**Project**: [Project Name]  
-**Software Component**: [Component Name]  
-**SIL Level**: [0/1/2/3/4]  
-**Version**: [X.Y]  
-**Date**: [YYYY-MM-DD]
+**TEMPLATE VERSION**: 2.0  
+**REFERENCE**: EN 50128:2011 Section [X.Y]
 
 ---
 
-## Document Control
+## STANDARD HEADER
+
+| Field | Value |
+|-------|-------|
+| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Version** | [X.Y] |
+| **Date** | [YYYY-MM-DD] |
+| **Project** | [Project Name] |
+| **SIL Level** | [0, 1, 2, 3, or 4] |
+| **Author** | [Name], [Role] |
+| **Reviewer** | [Name], [Role] |
+| **Approver** | [Name], [Role] |
+| **Status** | [Draft \| Review \| Approved \| Baseline] |
+
+## DOCUMENT CONTROL
 
 | Version | Date | Author | Changes | Approved By |
 |---------|------|--------|---------|-------------|
-| 0.1 | YYYY-MM-DD | [Author] | Initial draft | - |
-| 1.0 | YYYY-MM-DD | [Author] | First release | [Approver] |
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
 
----
+## APPROVALS
 
-## Approvals
+**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
+**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Verifier** (Author) | [Name] | | YYYY-MM-DD |
-| **Quality Assurance** (Review) | [Name] | | YYYY-MM-DD |
-| **V&V Manager** (Approval - SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Project Manager** (Approval) | [Name] | | YYYY-MM-DD |
-
-**SIL 3-4 Requirements**:
-- Verifier SHALL be independent from Integrator and development team
-- V&V Manager approval REQUIRED (independent from Project Manager)
-
----
-
-## EN 50128 References
-
-| Section | Title | Relevance |
-|---------|-------|-----------|
-| **6.2** | Software Verification | PRIMARY - Verification process |
-| **7.6** | Software Integration | Integration verification |
-| **Table A.5** | Verification and Testing techniques | Verification techniques by SIL |
-| **Table A.19** | Static Analysis | Static analysis techniques |
-| **Annex C** | Documentation Requirements | Deliverable requirements |
-
----
-
-## Executive Summary
-
-### Verification Outcome
-
-**Overall Verification Result**: [PASS / FAIL / CONDITIONAL PASS]
-
-**Verification Period**: [Start Date] to [End Date]
-
-**Software Version Verified**: [Version X.Y, Git commit SHA]
-
-**Verification Activities**:
-- Integration test review
-- Traceability verification
-- Interface coverage analysis
-- Static analysis (if applicable)
-- Document review
-
-**Key Findings**:
-- [Summary of verification results]
-- [Issues identified and resolution status]
-- [Compliance with EN 50128 requirements]
-
-**Verification Decision**: [APPROVE / DO NOT APPROVE / CONDITIONAL APPROVAL]
+| **Author** | [Name] | | YYYY-MM-DD |
+| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
+| **QA Manager** | [Name] | | YYYY-MM-DD |
+| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
+| **Project Manager** | [Name] | | YYYY-MM-DD |
+| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
 
 ---
 

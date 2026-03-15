@@ -1,0 +1,396 @@
+# Application Data/Algorithms Verification Report
+# EN 50128 Deliverable #35 - Section 8.4 (multiple subsections)
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-035-APP-DATA-VER"
+number: 35
+name: "Application Data/Algorithms Verification Report"
+abbreviation: "App Data Ver"
+
+# ===== Lifecycle Context =====
+phase: "application"
+standard_section: "8.4"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "VER"
+first_check: "NONE"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-verification/templates/Application-Data-Algorithms-Verification-Report-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: false
+    techniques: []
+    additional_requirements: []
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Verification (general)"
+        table_reference: "A.5"
+        technique_id: "A.5"
+        recommendation: "HR"
+    additional_requirements:
+      - "Verify Application Preparation Plan (readability, traceability, requirements, internal consistency)"
+      - "Verify Application Requirements Specification (readability, traceability, requirements, internal consistency)"
+      - "Verify Application Test Specification (readability, traceability, requirements, internal consistency)"
+      - "Verify Application Test Specification meets 8.4.5.3 requirements"
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Verification (general)"
+        table_reference: "A.5"
+        technique_id: "A.5"
+        recommendation: "HR"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "HR"
+    additional_requirements:
+      - "Verify Application Preparation Plan (readability, traceability, requirements, internal consistency)"
+      - "Verify Application Requirements Specification (readability, traceability, requirements, internal consistency)"
+      - "Verify Application Test Specification (readability, traceability, requirements, internal consistency)"
+      - "Verify Application Test Specification meets 8.4.5.3 requirements"
+      - "Traceability verification complete"
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Verification (general)"
+        table_reference: "A.5"
+        technique_id: "A.5"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Static Analysis"
+        table_reference: "A.19"
+        technique_id: "A.19"
+        recommendation: "M"
+    additional_requirements:
+      - "Verify Application Preparation Plan (readability, traceability, requirements, internal consistency) (MANDATORY)"
+      - "Verify Application Requirements Specification (readability, traceability, requirements, internal consistency) (MANDATORY)"
+      - "Verify Application Test Specification (readability, traceability, requirements, internal consistency) (MANDATORY)"
+      - "Verify Application Test Specification meets 8.4.5.3 requirements (MANDATORY)"
+      - "100% traceability verification (MANDATORY)"
+      - "Independent verification team (MANDATORY)"
+      - "All verification findings documented and resolved"
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Verification (general)"
+        table_reference: "A.5"
+        technique_id: "A.5"
+        recommendation: "M"
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Static Analysis"
+        table_reference: "A.19"
+        technique_id: "A.19"
+        recommendation: "M"
+      - technique_name: "Formal Proof"
+        table_reference: "A.5"
+        technique_id: "D.29"
+        recommendation: "HR"
+    additional_requirements:
+      - "Verify Application Preparation Plan (readability, traceability, requirements, internal consistency) (MANDATORY)"
+      - "Verify Application Requirements Specification (readability, traceability, requirements, internal consistency) (MANDATORY)"
+      - "Verify Application Test Specification (readability, traceability, requirements, internal consistency) (MANDATORY)"
+      - "Verify Application Test Specification meets 8.4.5.3 requirements (MANDATORY)"
+      - "100% traceability verification (MANDATORY)"
+      - "Independent verification team (MANDATORY)"
+      - "All verification findings documented and resolved"
+      - "Formal verification highly recommended"
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "app-data-ver-report-document"
+    description: "Complete Application Data/Algorithms Verification Report consolidating all application verification"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Markdown with YAML frontmatter"
+    storage_path: "docs/application/verification/Application-Data-Algorithms-Verification-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver create-app-data-ver-report"
+    verification_criteria:
+      - "All application deliverables verified"
+      - "All verification results consolidated"
+      - "Overall verification conclusion provided"
+      - "All findings tracked with resolution status"
+
+  - evidence_id: "app-prep-plan-verification-results"
+    description: "Verification results for Application Preparation Plan per 8.4.1.13"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Verification report section (Markdown)"
+    storage_path: "docs/application/verification/app-prep-plan-verification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-app-prep-plan"
+    verification_criteria:
+      - "Readability verified per 5.3.2.7-5.3.2.10 (SIL 3+)"
+      - "Traceability verified per 6.5.4.14-6.5.4.17 (SIL 3+)"
+      - "Requirements 8.4.1.2-8.4.1.11 verified"
+      - "Internal consistency verified"
+
+  - evidence_id: "app-req-spec-verification-results"
+    description: "Verification results for Application Requirements Specification per 8.4.2.5"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Verification report section (Markdown)"
+    storage_path: "docs/application/verification/app-req-spec-verification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-app-req-spec"
+    verification_criteria:
+      - "Readability verified per 5.3.2.7-5.3.2.10 (SIL 3+)"
+      - "Traceability verified per 6.5.4.14-6.5.4.17 (SIL 3+)"
+      - "Requirements 8.4.2.2-8.4.2.3 verified"
+      - "Internal consistency verified"
+
+  - evidence_id: "app-test-spec-verification-results"
+    description: "Verification results for Application Test Specification per 8.4.4.8"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Verification report section (Markdown)"
+    storage_path: "docs/application/verification/app-test-spec-verification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-app-test-spec"
+    verification_criteria:
+      - "Readability verified per 5.3.2.7-5.3.2.10 (SIL 3+)"
+      - "Traceability verified per 6.5.4.14-6.5.4.17 (SIL 3+)"
+      - "Requirements 8.4.4.6 verified (coherency and completeness tests)"
+      - "Internal consistency verified"
+
+  - evidence_id: "app-integration-test-spec-verification-results"
+    description: "Verification results for Application Test Specification (integration) per 8.4.5.5"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Verification report section (Markdown)"
+    storage_path: "docs/application/verification/app-integration-test-spec-verification.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver verify-app-integration-test-spec"
+    verification_criteria:
+      - "Requirements 8.4.5.3 verified (integration and installation tests)"
+
+  - evidence_id: "app-traceability-verification-consolidated"
+    description: "Consolidated traceability verification for all application deliverables"
+    mandatory_sil: 2
+    source: "VER agent"
+    format: "Traceability verification report (Markdown)"
+    storage_path: "docs/application/verification/traceability-verification-consolidated.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver consolidate-app-traceability"
+    verification_criteria:
+      - "End-to-end traceability verified (requirements → architecture → source code → tests)"
+      - "100% traceability for SIL 3+ (MANDATORY)"
+      - "Bidirectional traceability verified"
+
+  - evidence_id: "app-verification-findings-consolidated"
+    description: "Consolidated list of all application verification findings"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Findings register (YAML or Markdown)"
+    storage_path: "docs/application/verification/verification-findings-consolidated.yaml"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "/ver consolidate-findings"
+    verification_criteria:
+      - "All findings from all application verification activities"
+      - "Severity assigned (critical/major/minor)"
+      - "Resolution status tracked"
+      - "All critical/major findings resolved before approval"
+
+  - evidence_id: "app-overall-verification-conclusion"
+    description: "Overall verification conclusion for application data/algorithms"
+    mandatory_sil: 1
+    source: "VER agent"
+    format: "Conclusion statement (Markdown)"
+    storage_path: "docs/application/verification/overall-verification-conclusion.md"
+    automation_level: "manual"
+    collect_on_agent_action: "/ver conclude-app-verification"
+    verification_criteria:
+      - "Clear verification conclusion (pass/fail/conditional)"
+      - "Rationale provided"
+      - "Outstanding issues listed (if any)"
+      - "Approval recommendation"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-029-APP-PREP-PLAN"
+    reason: "Verification of Application Preparation Plan recorded in this report"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-028-APP-REQ-SPEC"
+    reason: "Verification of Application Requirements Specification recorded in this report"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-030-APP-TEST-SPEC"
+    reason: "Verification of Application Test Specification recorded in this report"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-032-APP-PREP-VER"
+    reason: "Application Preparation Verification Report results included"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Validation uses verification results for final acceptance"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All application deliverables verified"
+    - "Application Preparation Plan verification complete"
+    - "Application Requirements Specification verification complete"
+    - "Application Test Specification verification complete"
+    - "Application Test Specification (integration) verification complete"
+    - "Application Preparation Verification Report reviewed"
+    - "Traceability verification complete (SIL 2+, MANDATORY SIL 3+)"
+    - "All findings documented"
+  
+  correctness:
+    - "Verification activities correct and thorough"
+    - "Verification conclusions correct"
+    - "Findings correctly identified and classified"
+  
+  consistency:
+    - "Verification approach consistent across deliverables"
+    - "Findings severity consistent"
+    - "Verification conclusions consistent with evidence"
+  
+  traceability:
+    - "End-to-end traceability verified (SIL 2+)"
+    - "100% traceability for SIL 3+ (MANDATORY)"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_name: "Application Data/Algorithms Verification Report Baseline"
+  baseline_trigger: "After VAL approval"
+  change_control: "Updates only for additional verification activities or finding resolutions"
+  versioning: "Semantic versioning (MAJOR.MINOR.PATCH)"
+  storage_location: "config/baselines/application-verification/"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "8.4.1.12-8.4.1.13"
+    title: "Application Preparation Plan verification"
+    relevance: "Verification of readability, traceability, requirements 8.4.1.2-8.4.1.11, internal consistency"
+  - section: "8.4.2.4-8.4.2.5"
+    title: "Application Requirements Specification verification"
+    relevance: "Verification of readability, traceability, requirements 8.4.2.2-8.4.2.3, internal consistency"
+  - section: "8.4.4.7-8.4.4.8"
+    title: "Application Test Specification verification"
+    relevance: "Verification of readability, traceability, requirements 8.4.4.6, internal consistency"
+  - section: "8.4.5.4-8.4.5.5"
+    title: "Application Test Specification (integration) verification"
+    relevance: "Verification that Application Test Specification meets requirements 8.4.5.3"
+  - section: "5.3.2.7-5.3.2.10"
+    title: "Readability requirements"
+    relevance: "General requirements for readability applicable to application deliverables"
+  - section: "6.5.4.14-6.5.4.17"
+    title: "Traceability requirements"
+    relevance: "General requirements for traceability applicable to application deliverables"
+  - section: "Table A.5"
+    title: "Verification and Testing techniques"
+    relevance: "Applicable verification techniques (Traceability, Static Analysis, Formal Proof)"
+  - section: "Table C.1"
+    title: "Document control summary"
+    relevance: "Application Data/Algorithms Verification Report is deliverable #35, written by VER, checked by VAL"
+
+# ===== Notes =====
+notes: |
+  **Application Data/Algorithms Verification Report (Deliverable #35)**
+  
+  This deliverable **consolidates ALL verification results** for application data and algorithms in systems
+  configured by application data/algorithms (EN 50128 Section 8). It is NOT required for generic
+  software-only systems.
+  
+  **Purpose**: Consolidate verification results from all application development activities and provide
+  overall verification conclusion for application data/algorithms.
+  
+  **Key Content** (EN 50128 Section 8.4 - multiple references):
+  This report records verification results for:
+  
+  1. **Application Preparation Plan** (8.4.1.13):
+     - Readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+     - Traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+     - Requirements 8.4.1.2-8.4.1.11 met
+     - Internal consistency
+  
+  2. **Application Requirements Specification** (8.4.2.5):
+     - Readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+     - Traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+     - Requirements 8.4.2.2-8.4.2.3 met
+     - Internal consistency
+  
+  3. **Application Test Specification** (8.4.4.8):
+     - Readability per 5.3.2.7-5.3.2.10 (MANDATORY SIL 3+)
+     - Traceability per 6.5.4.14-6.5.4.17 (MANDATORY SIL 3+)
+     - Requirements 8.4.4.6 met (coherency and completeness tests)
+     - Internal consistency
+  
+  4. **Application Test Specification (integration)** (8.4.5.5):
+     - Requirements 8.4.5.3 met (integration and installation tests)
+  
+  5. **Application Preparation Verification** (from DOC-032):
+     - Results from DOC-032 Application Preparation Verification Report
+  
+  **Consolidation Role**:
+  This report is a **meta-verification report** that consolidates individual verification results from:
+  - Application Preparation Plan verification (recorded here per 8.4.1.13)
+  - Application Requirements Specification verification (recorded here per 8.4.2.5)
+  - Application Test Specification verification (recorded here per 8.4.4.8)
+  - Application Test Specification (integration) verification (recorded here per 8.4.5.5)
+  - Application Preparation Verification Report (DOC-032) results
+  
+  **Difference from Other Verification Reports**:
+  - DOC-008 (Req Ver): Verifies generic software requirements specification
+  - DOC-012 (Arch Design Ver): Verifies generic software architecture/design
+  - DOC-019 (Source Code Ver): Verifies generic software source code
+  - DOC-032 (App Prep Ver): Verifies application data/algorithms preparation activities
+  - DOC-035 (App Data Ver): **Consolidates ALL application verification** (meta-report)
+  
+  **Overall Verification Conclusion**:
+  This report must provide an overall verification conclusion for application data/algorithms:
+  - **PASS**: All verification activities complete, all findings resolved, application approved
+  - **FAIL**: Critical issues outstanding, application not approved
+  - **CONDITIONAL**: Minor issues outstanding, conditional approval with mitigation plan
+  
+  **Independence Requirements** (SIL 3-4):
+  - Verification team MUST be independent from application development team
+  - VER agent cannot also be REQ, DES, or TST for same application
+  - VAL provides final check (second check per Table C.1)
+  
+  **VER Agent Responsibility**:
+  - Verify Application Preparation Plan (per 8.4.1.13)
+  - Verify Application Requirements Specification (per 8.4.2.5)
+  - Verify Application Test Specification (per 8.4.4.8)
+  - Verify Application Test Specification integration (per 8.4.5.5)
+  - Review DOC-032 (Application Preparation Verification Report)
+  - Consolidate all verification findings
+  - Verify end-to-end traceability (SIL 2+, MANDATORY SIL 3+)
+  - Provide overall verification conclusion
+  - NO first check required (per Table C.1 - written by VER, no first check, VAL second check)
+  
+  **VAL Agent Responsibility** (second check per Table C.1):
+  - Review overall verification conclusion
+  - Validate verification activities adequate for safety assurance
+  - Validate all critical findings resolved
+  - Provide final acceptance
+  - Approve for deployment
+  
+  **Approval Criteria**:
+  - All application deliverables verified
+  - All readability requirements met (SIL 3+)
+  - All traceability requirements met (SIL 2+, 100% for SIL 3+)
+  - All internal consistency checks passed
+  - All critical/major findings resolved
+  - Overall verification conclusion: PASS or CONDITIONAL (with mitigation)
+  - VAL approval obtained

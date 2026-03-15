@@ -1,0 +1,4 @@
+source_id,source_type,target_id,target_type,link_type,rationale,verified,verified_by,verified_date,confidence,source_document
+SW-REQ-001,software_requirement,ARCH-COMP-001,architecture_component,allocated_to,Test requirement traceability,false,,,high,Test Document
+SW-REQ-002,software_requirement,ARCH-COMP-001,architecture_component,allocated_to,Another test link,false,,,high,Test Document
+SW-REQ-003,software_requirement,ARCH-COMP-002,architecture_component,allocated_to,Third test link,true,VER,2026-03-13,high,Test Document

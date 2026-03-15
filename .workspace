@@ -1,10 +1,19 @@
 {
-  "active_workspace": "train_door_control2",
+  "active_workspace": "test_eval_project",
   "workspaces": {
     "train_door_control2": {
       "path": "examples/train_door_control2",
       "created": "2026-02-22T00:00:00.000000",
       "last_accessed": "2026-02-24T14:45:00.000000"
+    },
+    "test_eval_project": {
+      "path": "examples/test_eval_project",
+      "sil": 3,
+      "current_phase": "Planning (Phase 1)",
+      "completion": 0,
+      "created": "2026-03-08T11:31:22.000000",
+      "last_accessed": "2026-03-08T11:31:22.000000",
+      "status": "active"
     }
   }
 }

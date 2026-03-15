@@ -1,30 +1,45 @@
 # Code Review Checklist
 
-**Document ID:** DOC-CRC-YYYY-NNN  
-**Project:** [Project Name]  
-**System/Subsystem:** [System Name]  
-**SIL Level:** [0 | 1 | 2 | 3 | 4]
+**TEMPLATE VERSION**: 2.0  
+**REFERENCE**: EN 50128:2011 Section [X.Y]
 
 ---
 
-## Document Control
+## STANDARD HEADER
 
-| Version | Date | Author | Change Description | Status |
-|---------|------|--------|-------------------|--------|
-| 0.1 | YYYY-MM-DD | [Name] | Initial draft | Draft |
+| Field | Value |
+|-------|-------|
+| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Version** | [X.Y] |
+| **Date** | [YYYY-MM-DD] |
+| **Project** | [Project Name] |
+| **SIL Level** | [0, 1, 2, 3, or 4] |
+| **Author** | [Name], [Role] |
+| **Reviewer** | [Name], [Role] |
+| **Approver** | [Name], [Role] |
+| **Status** | [Draft \| Review \| Approved \| Baseline] |
 
----
+## DOCUMENT CONTROL
 
-## Review Information
+| Version | Date | Author | Changes | Approved By |
+|---------|------|--------|---------|-------------|
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
 
-**Review Date:** YYYY-MM-DD  
-**Reviewer:** [Name, Role]  
-**Author:** [Name, Role]  
-**Code Module:** [Module name or filename]  
-**File Path:** [Path/to/file.c or file.h]  
-**Version:** [Git commit hash or version]
+## APPROVALS
 
-**Review Type:** [Formal Inspection | Walkthrough | Desk Check | Pair Programming Review]
+**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
+**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
+
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| **Author** | [Name] | | YYYY-MM-DD |
+| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
+| **QA Manager** | [Name] | | YYYY-MM-DD |
+| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
+| **Project Manager** | [Name] | | YYYY-MM-DD |
+| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
 
 ---
 

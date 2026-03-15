@@ -1,0 +1,356 @@
+# Software Validation Report
+# EN 50128 Deliverable #25 - Section 6.3.4.7-6.3.4.11, 7.7
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-025-VALIDATION-REPORT"
+number: 25
+name: "Software Validation Report"
+abbreviation: "VALIDATION-REPORT"
+
+# ===== Lifecycle Context =====
+phase: "validation"
+standard_section: "6.3.4.7"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "VAL"
+first_check: "VER"
+second_check: "QUA"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-validation/templates/Software-Validation-Report-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "HR"
+    additional_requirements:
+      - "System testing in target or simulated environment"
+      - "Validation demonstrates fitness for application"
+      - "Validator authorization required for release"
+  
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "R"
+    additional_requirements:
+      - "System testing on target environment"
+      - "Operational scenarios validated"
+      - "All software requirements validated"
+      - "Independent validator recommended"
+  
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "HR"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "HR"
+    additional_requirements:
+      - "System testing on target environment MANDATORY"
+      - "Performance requirements validated"
+      - "All safety requirements validated"
+      - "Independent validator recommended"
+  
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "M"
+    additional_requirements:
+      - "Functional and Black-box Testing MANDATORY"
+      - "Performance Testing MANDATORY"
+      - "Independent validator MANDATORY"
+      - "Verification process completeness checked"
+      - "Validator authorization MANDATORY for release"
+  
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Functional and Black-box Testing"
+        table_reference: "A.7"
+        technique_id: "A.14"
+        recommendation: "M"
+      - technique_name: "Performance Testing"
+        table_reference: "A.7"
+        technique_id: "A.18"
+        recommendation: "M"
+      - technique_name: "Modelling"
+        table_reference: "A.7"
+        technique_id: "A.17"
+        recommendation: "R"
+    additional_requirements:
+      - "All SIL 3 requirements apply"
+      - "Modelling recommended for complex scenarios"
+      - "Diverse validation techniques"
+
+# ===== Required Content Sections =====
+required_content:
+  - section: "1. Validation Summary"
+    description: "Overall validation status, pass/fail, release recommendation"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "2. Software Baseline"
+    description: "Complete software baseline validated (Section 6.3.4.10)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "3. Validation Results"
+    description: "Results of validation activities (Section 6.3.4.8)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "4. Requirements Validation"
+    description: "All software requirements validated against system requirements"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "5. System Testing Results"
+    description: "Overall Software Test Report results, operational scenarios"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "6. Performance Validation"
+    description: "Performance requirements validated (timing, throughput, resource usage)"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "7. Safety Validation"
+    description: "Safety requirements validated, hazard mitigation verified"
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "8. Verification Process Completeness"
+    description: "Check that verification process is complete (Section 6.3.4.9)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "9. Known Deficiencies"
+    description: "Known deficiencies and impact on software use (Section 6.3.4.11)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+  
+  - section: "10. Release Authorization"
+    description: "Validator authorization for software release (Section 6.3.4.16)"
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "validation-report"
+    description: "Complete validation report conforming to EN 50128 Section 6.3.4.7-6.3.4.11 and 7.7"
+    mandatory_sil: 0
+    source: "VAL agent validation analysis"
+    format: "Markdown"
+    storage_path: "docs/validation/Software-Validation-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "validation-complete"
+    verification_criteria:
+      - "All required sections present"
+      - "Software baseline fully stated (Section 6.3.4.10)"
+      - "Validation results documented (Section 6.3.4.8)"
+      - "Known deficiencies identified (Section 6.3.4.11)"
+      - "Validator authorization provided (Section 6.3.4.16)"
+  
+  - evidence_id: "system-test-results"
+    description: "Overall Software Test Report with system test results"
+    mandatory_sil: 0
+    source: "TST agent system testing"
+    format: "Markdown + test logs"
+    storage_path: "docs/testing/Overall-Software-Test-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "system-testing-complete"
+    verification_criteria:
+      - "All system tests executed"
+      - "Test results documented per Section 6.1.4.5"
+      - "Pass/fail status for each test"
+      - "Defects tracked and resolved"
+  
+  - evidence_id: "requirements-validation-matrix"
+    description: "Validation matrix showing all requirements validated"
+    mandatory_sil: 1
+    source: "VAL agent traceability analysis"
+    format: "CSV"
+    storage_path: "evidence/traceability/requirements_validation.csv"
+    automation_level: "automatic"
+    collect_on_agent_action: "validation-complete"
+    verification_criteria:
+      - "All software requirements have validation tests"
+      - "All safety requirements validated"
+      - "100% requirement validation coverage"
+  
+  - evidence_id: "operational-scenarios-validation"
+    description: "Operational scenario test results in target or simulated environment"
+    mandatory_sil: 1
+    source: "VAL agent scenario testing"
+    format: "Markdown + test logs"
+    storage_path: "docs/validation/Operational-Scenarios-Report.md"
+    automation_level: "manual"
+    collect_on_agent_action: "validation-complete"
+    verification_criteria:
+      - "All operational scenarios tested"
+      - "Real or simulated environment used (Section 6.3.4.4d)"
+      - "Software fit for intended application demonstrated"
+  
+  - evidence_id: "performance-validation-results"
+    description: "Performance validation results (timing, throughput, resource usage)"
+    mandatory_sil: 2
+    source: "VAL agent performance testing"
+    format: "Markdown + performance logs"
+    storage_path: "docs/validation/Performance-Validation-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "validation-complete"
+    verification_criteria:
+      - "All performance requirements validated"
+      - "Timing requirements met"
+      - "Resource usage within limits"
+      - "Performance Testing MANDATORY (SIL 3+)"
+  
+  - evidence_id: "verification-completeness-check"
+    description: "Validator check that verification process is complete (Section 6.3.4.9)"
+    mandatory_sil: 0
+    source: "VAL agent verification audit"
+    format: "Markdown checklist"
+    storage_path: "docs/validation/Verification-Completeness-Check.md"
+    automation_level: "manual"
+    collect_on_agent_action: "validation-complete"
+    verification_criteria:
+      - "All verification activities completed"
+      - "All verification reports approved"
+      - "All verification findings resolved"
+      - "Verification process conforms to SVP"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-006-SRS"
+    reason: "Validation validates software against SRS (Section 6.3.1.2)"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-005-SVAP"
+    reason: "Software Validation Plan guides validation activities"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-024-OVERALL-TEST-REPORT"
+    reason: "Overall Software Test Report provides system test results"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-019-SOURCE-CODE-VER"
+    reason: "Source code verification must be complete before validation"
+    dependency_type: "blocking"
+  
+  - deliverable_id: "DOC-023-INTEGRATION-TEST-REPORT"
+    reason: "Integration testing must be complete before validation"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-027-ASSESSMENT-REPORT"
+    reason: "Assessment Report references validation results (SIL 1-4)"
+  
+  - deliverable_id: "DOC-030-RELEASE-NOTE"
+    reason: "Release Note references validation authorization"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "All sections required by EN 50128 Section 6.3.4.8-6.3.4.11 present"
+    - "All software requirements validated"
+    - "All safety requirements validated"
+    - "All test results documented"
+  
+  correctness:
+    - "Independent validator (SIL 3-4 MANDATORY)"
+    - "Functional and Black-box Testing applied (MANDATORY SIL 3+)"
+    - "Performance Testing applied (MANDATORY SIL 3+)"
+    - "Validation demonstrates fitness for application (Section 6.3.1.1)"
+  
+  consistency:
+    - "Validation results consistent with test reports"
+    - "Known deficiencies consistent with issue tracking"
+    - "Software baseline consistent with configuration records"
+  
+  traceability:
+    - "All requirements traceable to validation tests"
+    - "All validation activities traceable to validation plan"
+    - "All deficiencies traceable to impact analysis"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After validation complete and release authorized"
+  change_control: "CCB approval required for validation report changes"
+  version_control: "Git repository under docs/validation/"
+  review_frequency: "At software release or major change"
+  
+  update_triggers:
+    - "Software re-validation after significant change"
+    - "New deficiency discovered post-release"
+    - "Validation plan change"
+    - "Additional validation activities performed"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "6.3"
+    title: "Software Validation"
+    description: "Primary section for validation requirements"
+  
+  - section: "6.3.4.7-6.3.4.11"
+    title: "Software Validation Report Requirements"
+    description: "Specific requirements for validation report"
+  
+  - section: "6.3.4.8"
+    title: "Validation Results Documentation"
+    description: "Results documented in validation report"
+  
+  - section: "6.3.4.9"
+    title: "Verification Completeness Check"
+    description: "Validator checks verification process complete"
+  
+  - section: "6.3.4.10"
+    title: "Software Baseline Statement"
+    description: "Report shall fully state validated baseline"
+  
+  - section: "6.3.4.11"
+    title: "Known Deficiencies"
+    description: "Report shall identify deficiencies and impact"
+  
+  - section: "6.3.4.16"
+    title: "Validator Authorization"
+    description: "Software only released after validator authorization"
+  
+  - section: "7.7"
+    title: "Overall Software Testing"
+    description: "System testing requirements"
+  
+  - section: "Table A.7"
+    title: "Overall Software Testing/Validation Techniques"
+    description: "Validation techniques by SIL"
+  
+  - section: "Annex C Table C.1"
+    title: "Document Control Summary"
+    description: "Validation Report is deliverable #25"
+
+# ===== Notes =====
+notes: |
+  Software Validation Report is MANDATORY for all SIL levels (EN 50128 Section 6.3.4.2).
+  Independent validator MANDATORY for SIL 3-4 (Section 6.3.4.1).
+  Functional and Black-box Testing MANDATORY for SIL 3+ (Table A.7).
+  Performance Testing MANDATORY for SIL 3+ (Table A.7).
+  Validator must check verification process completeness (Section 6.3.4.9).
+  Software baseline must be fully stated (Section 6.3.4.10).
+  Known deficiencies and impact must be identified (Section 6.3.4.11).
+  Software only released after validator authorization (Section 6.3.4.16).
+  Validator empowered to require additional reviews, analyses, tests (Section 6.3.4.15).
+  Validation demonstrates software is of defined SIL and fit for application (Section 6.3.1.1).

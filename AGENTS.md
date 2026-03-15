@@ -2,11 +2,28 @@
 
 This document defines role-based agents for EN 50128 railway software development. Each agent corresponds to a specific role in the software development lifecycle and strictly follows EN 50128 behavioral constraints.
 
+## Agent Invocation Syntax
+
+User-facing agents are invoked using the `@agent` syntax in OpenCode:
+
+```
+@cod plan --sil 3 --project MyProject
+@cod generate-system
+@pm execute-phase 2
+@cod gate-check phase-2
+```
+
+**Normal workflow**: You invoke only `@cod` and `@pm`. They orchestrate all other agents internally.  
+**Internal agents** (REQ, DES, IMP, TST, VER, VAL, INT, SAF, QUA, CM, VMGR) are invoked by COD and PM — not directly by the user.
+
+See `docs/USER-GUIDE.md` for complete usage instructions and the V-Model example.
+
 **Related Documents**:
-- **`LIFECYCLE.md`** - Complete EN 50128 V-Model software development lifecycle (START HERE)
+- **`docs/USER-GUIDE.md`** - Complete usage guide with agent commands and V-Model example (START HERE)
+- **`LIFECYCLE.md`** - Complete EN 50128 V-Model software development lifecycle
 - **`TOOLS.md`** - Comprehensive tool catalog with usage information for agents (CRITICAL)
-- **`.opencode/skills/`** - Domain-specific skills for each lifecycle phase
-- **`.opencode/commands/`** - Agent command definitions
+- **`.opencode/agents/`** - Agent definition files (one per role)
+- **`.opencode/skills/`** - Domain-specific skills loaded internally by agents
 - **`std/EN50128-2011.md`** - Full EN 50128 standard (LLM-friendly Markdown)
 - **`std/EN 50126-1-2017.md`** - RAMS standard Part 1
 - **`std/EN 50126-2-2017.md`** - RAMS standard Part 2
@@ -172,17 +189,17 @@ The following tables define mandatory, highly recommended, and recommended techn
 
 | Table | Section | Purpose | Key Agents |
 |-------|---------|---------|------------|
-| **Table A.2** | 7.2 | Software Requirements Specification techniques | `/req` |
-| **Table A.3** | 7.3 | Software Architecture techniques | `/des` |
-| **Table A.4** | 7.4 | Software Design and Implementation techniques | `/des`, `/imp` |
-| **Table A.5** | 6.2, 7.3 | Verification and Testing techniques | `/ver`, `/tst` |
-| **Table A.6** | 7.6 | Integration techniques | `/int` |
-| **Table A.7** | 7.7 | Overall Software Testing/Validation techniques | `/val` |
-| **Table A.8** | 6.3 | Software Analysis techniques | `/saf` |
-| **Table A.9** | 6.5 | Software Quality Assurance techniques | `/qua`, `/cm` |
-| **Table A.13** | - | Dynamic Analysis and Testing | `/tst`, `/ver` |
-| **Table A.19** | - | Static Analysis techniques | `/ver` |
-| **Table A.21** | - | Test Coverage for Code | `/tst` |
+| **Table A.2** | 7.2 | Software Requirements Specification techniques | REQ |
+| **Table A.3** | 7.3 | Software Architecture techniques | DES |
+| **Table A.4** | 7.4 | Software Design and Implementation techniques | DES, IMP |
+| **Table A.5** | 6.2, 7.3 | Verification and Testing techniques | VER, TST |
+| **Table A.6** | 7.6 | Integration techniques | INT |
+| **Table A.7** | 7.7 | Overall Software Testing/Validation techniques | VAL |
+| **Table A.8** | 6.3 | Software Analysis techniques | SAF |
+| **Table A.9** | 6.5 | Software Quality Assurance techniques | QUA, CM |
+| **Table A.13** | - | Dynamic Analysis and Testing | TST, VER |
+| **Table A.19** | - | Static Analysis techniques | VER |
+| **Table A.21** | - | Test Coverage for Code | TST |
 
 **Key to Recommendations:**
 - **M** = Mandatory - Must be used
@@ -241,7 +258,7 @@ EN 50128:2011 defines the following organizational roles:
 
 ## Agent Roles
 
-### 1. Requirements Engineer (`/req`)
+### 1. Requirements Engineer (REQ)
 
 **Role**: Software Requirements Specification per EN 50128 Section 7.2
 
@@ -265,13 +282,12 @@ EN 50128:2011 defines the following organizational roles:
 | Structured Methodology | R | R | HR | D.52 |
 | Decision Tables | R | R | HR | D.13 |
 
-**Command File**: `.opencode/commands/req.md`  
-**Skills**: `skills/en50128-requirements/`  
+**Skill**: `en50128-requirements`  
 **Standard**: `std/EN50128-2011.md` Section 7.2
 
 ---
 
-### 2. Designer (`/des`)
+### 2. Designer (DES)
 
 **Role**: Software Architecture and Design per EN 50128 Section 7.3
 
@@ -309,13 +325,12 @@ EN 50128:2011 defines the following organizational roles:
 - Option A: 1,7,19,22 + one from 4,5,12,21
 - Option B: 1,4,19,22 + one from 2,5,12,15,21
 
-**Command File**: `.opencode/commands/des.md`
-**Skills**: `skills/en50128-design/`
+**Skill**: `en50128-design`  
 **Standard**: `std/EN50128-2011.md` Section 7.3, Table A.3
 
 ---
 
-### 3. Implementer (`/imp`)
+### 3. Implementer (IMP)
 
 **Role**: Software Implementation per EN 50128 Section 7.4
 
@@ -364,13 +379,12 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 **Approved Combinations (SIL 3-4):** 4,5,6,8 + one from 1 or 2
 
-**Command File**: `.opencode/commands/imp.md`
-**Skills**: `skills/en50128-implementation/`
+**Skill**: `en50128-implementation`  
 **Standard**: `std/EN50128-2011.md` Section 7.4, Table A.4
 
 ---
 
-### 4. Tester (`/tst`)
+### 4. Tester (TST)
 
 **Role**: Software Testing per EN 50128 Sections 7.4, 7.5, 7.7
 
@@ -401,13 +415,12 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 | Performance Testing | - | HR | **M** | Table A.18 |
 | Interface Testing | HR | HR | HR | D.34 |
 
-**Command File**: `.opencode/commands/tst.md`
-**Skills**: `skills/en50128-testing/`
+**Skill**: `en50128-testing`  
 **Standard**: `std/EN50128-2011.md` Sections 7.4, 7.5, 7.7, Table A.5
 
 ---
 
-### 5. Safety Engineer (`/saf`)
+### 5. Safety Engineer (SAF)
 
 **Role**: Safety Analysis per EN 50128 Section 7.1, EN 50126
 
@@ -432,12 +445,12 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 - Redundancy and voting
 - Watchdog implementation
 
-**Command File**: `.opencode/commands/saf.md`
-**Skills**: `skills/en50128-safety.skill`
+**Skill**: `en50128-safety`  
+**Standard**: `std/EN50128-2011.md` Section 7.1, EN 50126
 
 ---
 
-### 6. Verifier (`/ver`)
+### 6. Verifier (VER)
 
 **Role**: Software Verification per EN 50128 Section 6.2
 
@@ -474,13 +487,12 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 **Approved Combination (SIL 3-4):** 3,5,7,8 + one from 1,2,6
 
-**Command File**: `.opencode/commands/ver.md`
-**Skills**: `skills/en50128-verification/`
+**Skill**: `en50128-verification`  
 **Standard**: `std/EN50128-2011.md` Section 6.2, Table A.5
 
 ---
 
-### 7. Validator (`/val`)
+### 7. Validator (VAL)
 
 **Role**: Software Validation per EN 50128 Section 7.7
 
@@ -503,13 +515,12 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 | Functional and Black-box Testing | HR | HR | **M** | Table A.14 |
 | Modelling | - | R | R | Table A.17 |
 
-**Command File**: `.opencode/commands/val.md`
-**Skills**: `skills/en50128-validation/`
+**Skill**: `en50128-validation`  
 **Standard**: `std/EN50128-2011.md` Section 7.7, Table A.7
 
 ---
 
-### 8. Quality Assurance (`/qua`)
+### 8. Quality Assurance (QUA)
 
 **Role**: Quality Assurance per EN 50128 Section 6.5
 
@@ -527,13 +538,12 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 - Complexity checks
 - Quality gates enforcement
 
-**Command File**: `.opencode/commands/qua.md`
-**Skills**: `skills/en50128-quality/`
+**Skill**: `en50128-quality`  
 **Standard**: `std/EN50128-2011.md` Section 6.5
 
 ---
 
-### 9. Integrator (`/int`)
+### 9. Integrator (INT)
 
 **Role**: Software Integration per EN 50128 Section 7.6
 
@@ -557,13 +567,12 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 | Functional and Black-box Testing | HR | HR | HR | Table A.14 |
 | Performance Testing | - | R | HR | Table A.18 |
 
-**Command File**: `.opencode/commands/int.md`
-**Skills**: `skills/en50128-integration/`
+**Skill**: `en50128-integration`
 **Standard**: `std/EN50128-2011.md` Section 7.6, Table A.6
 
 ---
 
-### 10. Project Manager (`/pm`)
+### 10. Project Manager (PM)
 
 **Role**: Project Management per EN 50128 Section 5, Table B.9
 
@@ -581,19 +590,24 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 - Approve baselines and releases
 - Manage project risks and issues
 - Report to senior management
+- Monitor project status via LIFECYCLE_STATE.md
+
+**Key Commands**:
+- `@pm status` - Overall project status report (reads LIFECYCLE_STATE.md)
+- `@pm status <phase-id>` - Specific phase execution status
+- `@pm execute-phase <phase-id>` - Automated phase orchestration with QUA flow
+- `@pm resolve-defects <phase-id>` - Coordinate defect resolution after VER/VAL rejection
 
 **Independence Constraints**:
 - **SIL 3-4:** Validator SHALL NOT report to Project Manager
 - **SIL 3-4:** PM has NO influence on Validator's decisions
-- **SIL 3-4:** Verifier independence required (separate from development)
 
-**Command File**: `.opencode/commands/pm.md`
-**Skills**: `skills/en50128-project-management/`
+**Skill**: `en50128-project-management`
 **Standard**: `std/EN50128-2011.md` Section 5, Table B.9
 
 ---
 
-### 11. Configuration Manager (`/cm`)
+### 11. Configuration Manager (CM)
 
 **Role**: Configuration Management per EN 50128 Section 6.6
 
@@ -622,13 +636,12 @@ if (err != SUCCESS) handle_error(err);  // REQUIRED
 
 **Critical:** Configuration Management is **MANDATORY for ALL SIL levels** (0, 1, 2, 3, 4)
 
-**Command File**: `.opencode/commands/cm.md`
-**Skills**: `skills/en50128-configuration/`
+**Skill**: `en50128-configuration`
 **Standard**: `std/EN50128-2011.md` Section 6.6, Table A.9
 
 ---
 
-### 12. V&V Manager (`/vmgr`)
+### 12. V&V Manager (VMGR)
 
 **Role**: Verification and Validation Management (Platform Extension Role for SIL 3-4)
 
@@ -695,20 +708,20 @@ EN 50128 requires independent Verifier and Validator roles for SIL 3-4 (Section 
 - Combines Validator responsibilities with Verifier team management
 - Simplifies coordination with COD while preserving independence
 
-**VMGR Commands**:
-1. `/vmgr status` - Report V&V status for all phases
-2. `/vmgr review-verification <phase>` - Review VER report and approve/reject
-3. `/vmgr review-validation <phase>` - Review VAL activities for phase
-4. `/vmgr approve-gate <phase>` - Provide V&V approval/rejection to COD
-5. `/vmgr independence-check` - Verify independence requirements met
+**VMGR is an internal agent** invoked by COD for SIL 3-4 V&V activities. It is not directly invoked by users.
 
-**Command File**: `.opencode/commands/vmgr.md`  
-**Skills**: `skills/en50128-vv-management/`  
+**V&V Activities** (executed internally by COD/VMGR):
+1. Review VER report and approve/reject — triggered after each verification phase
+2. Review VAL activities for phase — triggered before gate-check
+3. Provide V&V approval/rejection to COD — required for strict gate enforcement (SIL 3-4)
+4. Independence check — verify independence requirements met throughout lifecycle
+
+**Skill**: `en50128-vv-management` (planned)
 **Standard**: `std/EN50128-2011.md` Section 5.1.2.10
 
 ---
 
-### 13. Lifecycle Coordinator (`/cod`)
+### 13. Lifecycle Coordinator (`@cod`)
 
 **Role**: Lifecycle Orchestration (Platform Extension Role)
 
@@ -757,10 +770,11 @@ EN 50128 requires independent Verifier and Validator roles for SIL 3-4 (Section 
 ```
 
 **COD Commands**:
-1. `/cod plan --sil [0-4] --project [name]` - Initialize lifecycle tracking, create LIFECYCLE_STATE.md
-2. `/cod gate-check <phase>` - Verify phase completion, authorize transition (or block for SIL 3-4)
-3. `/cod status` - Report current lifecycle state, phase progress, deliverable status
-4. `/cod approve-requirement` - Approve requirement establishment/modification activity
+1. `@cod plan --sil [0-4] --project [name]` - Initialize lifecycle tracking, create LIFECYCLE_STATE.md
+2. `@cod generate-system` - Generate 4 system-level documents from typical systems catalogue
+3. `@cod gate-check <phase>` - Verify phase completion, authorize transition (or block for SIL 3-4)
+4. `@cod status` - Report current lifecycle state, phase progress, deliverable status
+5. `@cod approve-requirement` - Approve requirement establishment/modification activity
 
 **Lifecycle Phases Managed**:
 - Phase 0: Initialization (COD-specific)
@@ -796,8 +810,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 - Provides lifecycle authority above PM (who focuses on team/resource management)
 - Prevents lifecycle violations that could introduce safety risks
 
-**Command File**: `.opencode/commands/cod.md`  
-**Skills**: `skills/en50128-lifecycle-coordination/`  
+**Skill**: `en50128-lifecycle-coordination`  
 **Standard**: `std/EN50128-2011.md` Section 5.3, Annex C
 
 **Related Documents**:
@@ -827,7 +840,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 │         │ - Generate traceability
 └────┬────┘
      │ (Software Requirements Specification, Traceability)
-     │ COD Gate Check: /cod gate-check requirements
+     │ COD Gate Check: @cod gate-check phase-2
      ▼
 ┌─────────┐
 │   DES   │ Design
@@ -836,7 +849,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 │         │ - Interface design
 └────┬────┘
      │ (Software Architecture Specification, Software Design Specification)
-     │ COD Gate Check: /cod gate-check design
+     │ COD Gate Check: @cod gate-check phase-3
      ▼
 ┌─────────┐
 │   IMP   │ Implementation (C)
@@ -845,7 +858,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 │         │ - MISRA C compliance
 └────┬────┘
      │ (Source code, Unit tests)
-     │ COD Gate Check: /cod gate-check implementation
+     │ COD Gate Check: @cod gate-check phase-4
      ▼
 ┌─────────┐
 │   TST   │ Testing
@@ -862,7 +875,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 │         │ - Interface testing
 └────┬────┘
      │ (Integration report)
-     │ COD Gate Check: /cod gate-check integration
+     │ COD Gate Check: @cod gate-check phase-5
      ▼
 ┌─────────┐
 │   VER   │ Verification
@@ -879,7 +892,7 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 │         │ - Customer approval
 └────┬────┘
      │ (Validation report)
-     │ COD Gate Check: /cod gate-check validation
+     │ COD Gate Check: @cod gate-check phase-6
      ▼
 ┌─────────┐
 │  DONE   │ Ready for Deployment
@@ -917,99 +930,43 @@ EN 50128 defines lifecycle requirements (Section 5.3) but does not explicitly de
 ### Example Workflow
 
 ```bash
-# 1. REQ: Define requirements
-/req
-# Create requirements specification
-# Assign SIL levels
-# Generate traceability matrix
+# ── USER INVOKES ONLY TWO COMMANDS ────────────────────────────────────────────
 
-# 2. SAF: Safety analysis
-/saf
-# Identify hazards
-# Perform FMEA on C code
-# Define safety requirements
-# Design fault detection
+# Initialize lifecycle (COD creates LIFECYCLE_STATE.md)
+@cod plan --sil 3 --project MyProject
 
-# 3. QUA: Document template compliance (MANDATORY SIL 3-4, BEFORE VER)
-/qua
-# Verify Document ID format (DOC-XXX-YYYY-NNN)
-# Verify Document Control table
-# Verify Approvals table with SIL-specific roles
-# Generate QA Template Compliance Report
+# Generate system-level documents from typical systems catalogue
+@cod generate-system
 
-# 4. DES: Design architecture
-/des
-# Create architecture (C modules, interfaces)
-# Design for static allocation
-# Ensure complexity limits
-# Design review
+# Execute each phase (PM orchestrates all agents internally)
+@pm execute-phase 1    # Planning: SQAP, SCMP, SVP, SVaP
+@cod gate-check phase-1
 
-# 5. QUA: Design document template compliance (MANDATORY SIL 3-4, BEFORE VER)
-/qua
-# Verify design documents follow template
-# Design review - complexity, defensive programming
-# Generate QA Design Review Report
+@pm execute-phase 2    # Requirements: SRS, Hazard Log
+@cod gate-check phase-2
 
-# 6. IMP: Implement in C
-/imp
-# Write C code (MISRA C compliant)
-# Static allocation only
-# Defensive programming
-# Unit tests
+@pm execute-phase 3    # Design: SAS, SDS, SIS, FMEA
+@cod gate-check phase-3
 
-# 7. TST: Test
-/tst
-# Execute unit tests
-# Execute integration tests
-# Measure coverage (100% for SIL 3+)
-# Fault injection
+@pm execute-phase 4    # Implementation + Unit Testing
+# PM internally coordinates: implementation, unit testing, code review, coverage
+# COD independently coordinates: verification (VMGR reviews and approves for SIL 3-4)
+@cod gate-check phase-4
 
-# 8. QUA: Code review (MANDATORY all SILs, BEFORE VER)
-/qua
-# Review C code
-# Check MISRA C compliance (zero mandatory violations SIL 2+)
-# Verify complexity (≤10 SIL 3-4, ≤15 SIL 2)
-# Check defensive programming
-# Generate QA Code Review Report
+@pm execute-phase 5    # Integration
+# PM internally coordinates: integration planning, integration testing, QA review
+# COD independently coordinates: verification of integration phase
+@cod gate-check phase-5
 
-# 9. VER: Verify
-/ver
-# Run static analysis (PC-lint, Cppcheck)
-# Check coverage
-# Verify complexity
-# Verify QA reviews performed
-# Collect evidence
+# Phase 6: Validation — COD coordinates VAL directly (independence requirement)
+@cod gate-check phase-6
 
-# 10. INT: Integration
-/int
-# Integrate components
-# Integration testing
-# Interface testing
-# Performance testing
+# Phase 7: Assessment (SIL 3-4 only)
+@cod gate-check phase-7
 
-# 11. QUA: Integration test review (MANDATORY SIL 3-4)
-/qua
-# Verify integration test documentation follows template
-# Review integration test results
-# Generate QA Integration Test Review Report
+@pm execute-phase 8    # Deployment: release package, final baseline
 
-# 12. VAL: Validate
-/val
-# System testing on target
-# Operational scenarios
-# Acceptance testing
-# Customer approval
-
-# 13. QUA: Validation review (MANDATORY SIL 3-4)
-/qua
-# Verify validation documentation follows template
-# Review validation test results
-# Generate QA Validation Review Report
-
-# Throughout: COD, CM, PM
-/cod # Lifecycle coordination, phase gates, compliance enforcement
-/cm  # Configuration management, change control, baselines
-/pm  # Project coordination, CCB, risk management (reports to COD)
+@cod finish            # Final compliance check, project archived
 ```
 
 ## C Language Compliance Summary
@@ -1045,25 +1002,32 @@ Python scripts may be used for:
 - Any code deployed to target system
 - Any code subject to SIL requirements
 
-## Agent Configuration
+## Agent-to-Skill Mapping
 
-All agent behavior specifications are in `.opencode/commands/`:
-- `req.md` - Requirements Engineer
-- `des.md` - Designer
-- `imp.md` - Implementer
-- `tst.md` - Tester
-- `saf.md` - Safety Engineer
-- `ver.md` - Verifier
-- `val.md` - Validator
-- `qua.md` - Quality Assurance
+Each agent **internally loads its skill** when invoked. Users do not load skills directly — agents load them automatically as their first step.
 
-Each agent file defines:
-1. Role and responsibilities
-2. EN 50128 behavioral constraints
-3. C language specific requirements
-4. Output artifacts
-5. Interaction with other agents
-6. Reference skills
+### Core Development Skills
+
+| Agent | Role | Skill Loaded Internally | EN 50128 Section |
+|-------|------|------------------------|------------------|
+| REQ | Requirements Engineer | `en50128-requirements` | Section 7.2 |
+| DES | Designer | `en50128-design` | Section 7.3 |
+| IMP | Implementer | `en50128-implementation` | Section 7.4 |
+| TST | Tester | `en50128-testing` | Sections 7.4, 7.5, 7.7 |
+| VER | Verifier | `en50128-verification` | Section 6.2 |
+| VAL | Validator | `en50128-validation` | Section 7.7 |
+| INT | Integrator | `en50128-integration` | Section 7.6 |
+| SAF | Safety Engineer | `en50128-safety` | Sections 7.1, 6.3 |
+
+### Management and Support Skills
+
+| Agent | Role | Skill Loaded Internally | EN 50128 Section |
+|-------|------|------------------------|------------------|
+| QUA | Quality Assurance | `en50128-quality` | Section 6.5 |
+| CM | Configuration Manager | `en50128-configuration` | Section 6.6 |
+| COD | Lifecycle Coordinator | `en50128-lifecycle-coordination` | Section 5.3 |
+| PM | Project Manager | `en50128-project-management` | Section 5, Table B.9 |
+| VMGR | V&V Manager | (planned: `en50128-vv-management`) | Section 5.1.2.10e |
 
 ## Standard References
 
@@ -1071,3 +1035,151 @@ Each agent file defines:
 - EN 50126:2017 - RAMS
 - MISRA C:2012 - C Coding Standard
 - IEC 61508 - Functional Safety
+
+---
+
+## EN 50128 Role Independence Reference
+
+This section provides a quick reference for EN 50128:2011 Section 5 and Annex B organizational role independence requirements.
+
+### Role Independence Matrix
+
+| Role | SIL 0-1 | SIL 2 | SIL 3-4 |
+|------|---------|-------|---------|
+| Project Manager | No | No | No |
+| Software Manager | No | No | No |
+| Configuration Manager | No | No | No |
+| Designer | No | No | No |
+| Implementer | No | No | No |
+| Tester | No | HR | HR |
+| Verifier | No | HR | **M** |
+| Integrator | No | No | No |
+| Validator | No | HR | **M** |
+| Assessor | N/A | N/A | **M** |
+
+**Legend**: **M** = Mandatory, **HR** = Highly Recommended, **No** = Not required
+
+### Role Combination Rules
+
+**Allowed Combinations** (when independence is not required):
+
+- Software Manager + Designer
+- Designer + Implementer
+- Implementer + Tester (SIL 0-2 only)
+- Integrator + Tester
+
+**Prohibited Combinations** (for SIL 3-4):
+
+- Designer/Implementer + Verifier
+- Any development role + Validator
+- Any role + Assessor
+- Implementer + Tester (own code)
+
+**Best Practice for SIL 3-4 Projects**:
+- Separate teams for Development and Verification/Validation
+- Independent Assessor (often external to the organization)
+- Clear organizational separation with independent reporting lines
+
+### Role Definitions (EN 50128 Section 5, Annex B)
+
+#### Project Manager (Section 5, Table B.9)
+
+**Responsibility**: Overall project responsibility and coordination
+
+**Key Activities**: Overall project planning, coordinate between all roles, resource allocation, schedule management, risk management, stakeholder communication, ensure standards compliance, project-level decision making.
+
+**Independence**: Not required. Oversees the entire project including hardware, system, and software aspects.
+
+#### Software Manager (Section 5.3.1, Table B.1)
+
+**Responsibility**: Overall responsibility for software development activities
+
+**Key Activities**: Establish software development plans, allocate resources, monitor progress, ensure quality assurance, coordinate with other roles, report to management.
+
+**Independence**: Not required. Focuses specifically on software development. In software-only projects, may be the same person as Project Manager.
+
+#### Designer (Section 5.3.2, Table B.2)
+
+**Responsibility**: Software architecture and design
+
+**Key Activities**: Create Software Architecture Specification, create Software Design Specification, define interfaces, apply design techniques per Table A.4, participate in design reviews.
+
+**Independence**: Not required (but designer should not assess their own design). **Agent**: `@des`
+
+#### Implementer (Section 5.3.3, Table B.3)
+
+**Responsibility**: Software implementation (coding)
+
+**Key Activities**: Implement software in C (MISRA C:2012 for SIL 2+), follow coding standards, implement defensive programming, participate in code reviews, create unit tests.
+
+**Independence**: Not required (but implementer should not test their own code alone). **Agent**: `@imp`
+
+#### Tester (Section 5.3.4, Table B.4)
+
+**Responsibility**: Software testing
+
+**Key Activities**: Develop test specifications, execute tests, record test results, perform coverage analysis, report defects.
+
+**Independence**: Not required for SIL 0-2; Highly recommended for SIL 3-4. **Agent**: `@tst`
+
+#### Verifier (Section 5.3.5, Table B.5)
+
+**Responsibility**: Software verification
+
+**Key Activities**: Plan verification activities, perform static analysis, conduct reviews, verify traceability, check compliance with standards, collect evidence.
+
+**Independence**: Not required for SIL 0-1; Highly recommended for SIL 2; **MANDATORY for SIL 3-4**. For SIL 3-4, verifier MUST NOT be designer or implementer. **Agent**: `@ver`
+
+#### Integrator (Section 5.3.6, Table B.6)
+
+**Responsibility**: Software integration
+
+**Key Activities**: Plan integration strategy, integrate software modules, resolve integration issues, perform integration testing, document integration results.
+
+**Independence**: Not required. **Agent**: `@int`
+
+#### Validator (Section 5.3.7, Table B.7)
+
+**Responsibility**: Software validation
+
+**Key Activities**: Plan validation activities, perform system testing, conduct acceptance testing, validate operational scenarios, obtain customer acceptance.
+
+**Independence**: Not required for SIL 0-1; Highly recommended for SIL 2; **MANDATORY for SIL 3-4**. For SIL 3-4, validator MUST NOT be involved in development and MUST NOT report to Project Manager. **Agent**: `@val`
+
+#### Assessor (Section 5.3.8, Table B.8)
+
+**Responsibility**: Independent safety assessment
+
+**Key Activities**: Review all lifecycle artifacts, assess compliance with EN 50128, review safety case, verify independence of verification/validation, issue assessment report, approve for deployment.
+
+**Independence**: **MANDATORY for SIL 3-4**. Assessor MUST be completely independent of development, often external to the organization. Required for final approval before deployment.
+
+#### Configuration Manager (Section 5, Table B.10)
+
+**Responsibility**: Configuration and change management
+
+**Key Activities**: Establish and maintain configuration management system, control configuration items, manage baselines, control changes, maintain version control, manage release process, track configuration status, conduct configuration audits.
+
+**Independence**: Not required. **Agent**: `@cm`
+
+### Agent Mapping to EN 50128 Roles
+
+| EN 50128 Role | Agent | Independence Notes |
+|---------------|-------|--------------------|
+| Project Manager | PM | Not required |
+| Software Manager | PM | Not required (combined with PM in this platform) |
+| Configuration Manager | CM | Not required |
+| Designer | DES | Not required |
+| Implementer | IMP | Not required |
+| Tester | TST | Highly recommended for SIL 3-4 |
+| Verifier | VER | **Mandatory for SIL 3-4** |
+| Integrator | INT | Not required |
+| Validator | VAL | **Mandatory for SIL 3-4** |
+| Assessor | (external) | **Mandatory for SIL 3-4** |
+
+**Additional Agents** (platform extensions):
+- Safety Engineer (SAF) — Supports safety analysis per Section 7.1
+- Requirements Engineer (REQ) — Supports requirements phase per Section 7.2
+- Quality Assurance (QUA) — Supports QA per Section 6.5
+- V&V Manager (VMGR) — Independent V&V authority for SIL 3-4 (Section 5.1.2.10e)
+- Lifecycle Coordinator (COD) — End-to-end lifecycle orchestration (Section 5.3)

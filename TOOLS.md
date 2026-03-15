@@ -4,7 +4,7 @@
 
 **Target Audience**: Development agents (REQ, DES, IMP, TST, VER, VAL, INT, SAF, QUA, CM, COD, PM)
 
-**Last Updated**: 2026-02-25
+**Last Updated**: 2026-03-15
 
 ---
 
@@ -376,7 +376,104 @@ valgrind --xml=yes --xml-file=valgrind_report.xml ./test
 
 ---
 
-### 10. PC-lint Plus (MISRA C Checker)
+### 10. QEMU (ARM Emulator)
+
+**Category**: Hardware Emulation (T1/T2)  
+**Status**: ✅ Installed  
+**Version**: 8.2.2 (Debian 1:8.2.2+ds-0ubuntu1.12)  
+**EN 50128 Reference**: Table A.6 (Integration Testing - HR SIL 3-4), Section 7.6 (Software/Hardware Integration)  
+**Mandatory For**: Highly Recommended SIL 3-4 (when physical hardware unavailable)  
+**Installation**: `sudo apt-get install qemu-system-arm`  
+**License**: GPL v2+ (Open Source, no licensing fees)  
+**URL**: https://www.qemu.org/
+
+**Supported Boards**:
+- `netduinoplus2` - Netduino Plus 2 Machine (Cortex-M4)
+- `olimex-stm32-h405` - Olimex STM32-H405 (Cortex-M4)
+- `netduino2` - Netduino 2 Machine (Cortex-M3)
+- `stm32vldiscovery` - ST STM32VLDISCOVERY (Cortex-M3)
+
+**Supported CPUs**:
+- `cortex-m0`, `cortex-m3`, `cortex-m4`, `cortex-m7`, `cortex-m33`, `cortex-m55`
+
+**Usage**:
+```bash
+# Check version
+qemu-system-arm --version
+
+# List available boards
+qemu-system-arm -M help | grep stm32
+
+# List available CPUs
+qemu-system-arm -cpu help | grep cortex
+
+# Run firmware on Cortex-M4 (STM32F407VG emulation)
+qemu-system-arm -M netduinoplus2 -cpu cortex-m4 \
+    -kernel build/train_door_control.elf \
+    -nographic -serial stdio
+
+# Run with Olimex STM32-H405 board (Cortex-M4)
+qemu-system-arm -M olimex-stm32-h405 -cpu cortex-m4 \
+    -kernel build/train_door_control.elf \
+    -nographic -monitor none -serial stdio
+```
+
+**Agent Usage**:
+- **TST**: Execute HW/SW integration tests in simulation environment
+- **INT**: Software/Hardware integration testing when physical hardware unavailable
+- **VAL**: System-level validation in simulation environment
+- **VER**: Verify simulation test results and limitations documentation
+
+**TCL Classification**: 
+- **T1** for functional testing (interface behavior, state machines) - No qualification
+- **T2** for performance testing (timing, WCET estimates) - Validation required
+
+**Qualification Requirements (T2 usage)**:
+- Document QEMU version and configuration
+- Document known limitations (timing accuracy, peripheral support)
+- Cross-check critical timing results with static analysis (worst-case path)
+- Validate simulation results against physical hardware when available
+- Document in: `docs/test/QEMU-Simulation-Limitations.md`
+
+**Known Limitations** (MUST be documented in test reports):
+1. ⚠️ **Timing accuracy**: WCET values are ESTIMATES, not measurements on real hardware
+2. ⚠️ **Peripheral emulation**: GPIO, ADC, PWM, CAN behavior approximated (not hardware-exact)
+3. ⚠️ **Interrupt timing**: May differ from actual STM32F407VG hardware
+4. ⚠️ **Fault behavior**: Cannot emulate hardware faults (stuck pins, ADC failures, EMI)
+5. ⚠️ **Power-on reset**: Simplified reset behavior
+6. ⚠️ **Watchdog timer**: Emulated, may not match hardware behavior
+
+**EN 50128 Justification for Simulation**:
+Per EN 50128 Section 7.6.4.9, Software/Hardware Integration Test Report shall document:
+- Identity and configuration of all items involved
+- **Simulation environment disclosure**: When physical hardware unavailable
+- **Limitations acknowledged**: Timing estimates vs. measurements
+- **Residual risk**: Physical hardware validation required before operational deployment
+
+**Recommended Usage Pattern**:
+1. ✅ Use QEMU for **functional testing** (interface behavior, state machines, protocol logic)
+2. ⚠️ Use QEMU for **performance estimates** (with "estimate" disclaimer, not "measurement")
+3. ❌ Do NOT rely solely on QEMU for **safety validation** (physical hardware required)
+4. 🔄 Plan **physical hardware validation** in deployment phase (SIL 3-4 mandatory)
+
+**Tool Confidence Level by Task**:
+| Task | TCL | Qualification | Rationale |
+|------|-----|---------------|-----------|
+| Functional interface testing | T1 | None | Output verified by test assertions |
+| State machine behavior | T1 | None | Logic verified independent of timing |
+| Timing estimation | T2 | Validation required | Estimates may be inaccurate |
+| WCET measurement | T2 | Validation required | Must cross-check with static analysis |
+| Peripheral timing | T2 | Validation required | Approximated, not hardware-exact |
+
+**Best Practice**:
+- Document simulation approach in `docs/test/QEMU-Simulation-Limitations.md`
+- Include simulation disclaimer in Software/Hardware Integration Test Report
+- Update project risk register (e.g., RISK-003: Partial HW/SW validation)
+- Add acceptance criterion: "Physical hardware validation required before deployment"
+
+---
+
+### 11. PC-lint Plus (MISRA C Checker)
 
 **Category**: MISRA C Compliance (T2)  
 **Status**: ⚠️ Commercial (not installed by default)  
@@ -408,7 +505,7 @@ pclint64 -i config/pclint-config.lnt -html > misra_report.html src/*.c
 
 ## RECOMMENDED Tools
 
-### 11. Splint (Static Checker)
+### 12. Splint (Static Checker)
 
 **Category**: Static Analysis (T1)  
 **Status**: ⚠️ Optional  
@@ -434,7 +531,7 @@ splint +checks src/*.c
 
 ---
 
-### 12. Doxygen (Documentation Generator)
+### 13. Doxygen (Documentation Generator)
 
 **Category**: Documentation (T1)  
 **Status**: ⚠️ Optional  
@@ -463,7 +560,7 @@ xdg-open docs/html/index.html
 
 ## CUSTOM EN 50128 Tools (Python)
 
-### 13. MC/DC Analyzer (mcdc_analyzer.py)
+### 14. MC/DC Analyzer (mcdc_analyzer.py)
 
 **Category**: Coverage Analysis (T1)  
 **Status**: ✅ Available  
@@ -506,7 +603,7 @@ python3 tools/mcdc/mcdc_analyzer.py report \
 
 ---
 
-### 14. Workspace Manager (workspace.py)
+### 15. Workspace Manager (workspace.py)
 
 **Category**: Project Management (T1)  
 **Status**: ✅ Available  
@@ -538,7 +635,7 @@ python3 tools/workspace.py status
 
 ---
 
-### 15. EN50128 Help System (enhelp.py)
+### 16. EN50128 Help System (enhelp.py)
 
 **Category**: Documentation (T1)  
 **Status**: ✅ Available  
@@ -566,7 +663,7 @@ python3 tools/enhelp.py --search "static analysis"
 
 ---
 
-### 16. MISRA C Checker Wrapper (check_misra.py)
+### 17. MISRA C Checker Wrapper (check_misra.py)
 
 **Category**: Static Analysis (T2)  
 **Status**: ✅ Available  
@@ -586,6 +683,44 @@ python3 tools/static-analysis/check_misra.py --src src/ --project train_door_con
 - **QUA**: MISRA compliance reporting
 
 **TCL Classification**: T2 (Wraps Cppcheck - validation required)
+
+---
+
+### 18. Workflow Manager (workflow_manager.py)
+
+**Category**: Project Management / Lifecycle Enforcement (T1)  
+**Status**: ✅ Available  
+**Version**: 1.0  
+**EN 50128 Reference**: Section 5.3 (Lifecycle), Annex C Table C.1  
+**Location**: `tools/workflow_manager.py`
+
+**Purpose**: Enforces EN 50128 V-Model phase gate transitions with SIL-dependent strictness. Tracks phase approval chains, validates gate criteria, and prevents out-of-sequence lifecycle activities.
+
+**Key Capabilities**:
+- `PHASE_APPROVAL_CHAINS` — defines required approvals per phase per SIL level
+- `GateChecker` class — validates all gate criteria before authorizing transition
+- 5 enforcement rules: deliverables complete, quality criteria met, traceability complete, reviews obtained, baselines established
+- SIL-dependent strictness: Advisory (SIL 0-1), Semi-strict (SIL 2), Strict/blocking (SIL 3-4)
+
+**Usage**:
+```bash
+# Gate check before phase transition
+python3 tools/workflow_manager.py gate-check phase-2 --sil 3 --project-dir .
+
+# Query current phase state
+python3 tools/workflow_manager.py status --project-dir .
+
+# List required approvals for a phase
+python3 tools/workflow_manager.py approvals phase-4 --sil 3
+```
+
+**Agent Usage**:
+- **COD**: Gate enforcement — calls before authorizing any phase transition
+- **PM**: Phase state queries — checks readiness before `execute-phase`
+- **VER**: Pre-verification state check — confirms phase is in correct state
+- **All agents**: Query current lifecycle state
+
+**TCL Classification**: T1 (direct Python implementation, inspectable output)
 
 ---
 

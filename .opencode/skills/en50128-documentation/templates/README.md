@@ -1,10 +1,47 @@
 # EN 50128 Document Templates
 
-This directory contains standardized templates for all EN 50128 mandatory deliverables.
+**DOCUMENT ID**: DOC-[TYPE]-[YYYY]-[NNN]  
+**VERSION**: 1.0  
+**DATE**: YYYY-MM-DD  
+**STATUS**: Draft  
+**CLASSIFICATION**: Internal / Confidential / Public  
+**TEMPLATE VERSION**: 2.0  
+**REFERENCE**: EN 50128:2011 Section [X.Y]
 
-**Template Version:** 1.0  
-**Last Updated:** 2026-02-18  
-**Standard:** EN 50128:2011  
+## STANDARD HEADER
+
+| Field | Value |
+|-------|-------|
+| **Project** | [Project Name] |
+| **Prepared by** | [Author Name / Role] |
+| **Reviewed by** | [Reviewer Name / Role] |
+| **Approved by** | [Approver Name / Role] |
+| **SIL Level** | [0 / 1 / 2 / 3 / 4] |
+
+## DOCUMENT CONTROL
+
+| Version | Date | Author | Reviewer | Changes |
+|---------|------|--------|----------|---------|
+| 1.0 | YYYY-MM-DD | [Name] | [Name] | Initial version |
+
+## APPROVALS
+
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| Author | [Name] | | |
+| Reviewer | [Name] | | |
+| Approver | [Name] | | |
+
+**SIL-Specific Requirements**:
+- **SIL 0-1**: Author, Reviewer recommended
+- **SIL 2**: Author, Reviewer (mandatory), Approver (recommended)
+- **SIL 3-4**: Author, Reviewer (mandatory, independent), Approver (mandatory), Verifier (VER) SHALL be independent, Validator (VAL) SHALL be independent
+
+---
+
+## Table of Contents
+
+[To be added based on document structure]
 
 ---
 
@@ -14,18 +51,17 @@ This directory contains standardized templates for all EN 50128 mandatory delive
 - **`DOCUMENT-HEADER-TEMPLATE.md`** - Mandatory header structure for ALL documents
 
 ### Planning Phase Templates
-- **`SQAP-template.md`** - Software Quality Assurance Plan
-- **`SCMP-template.md`** - Software Configuration Management Plan
-- **`SVP-template.md`** - Software Verification Plan
-- **`SVaP-template.md`** - Software Validation Plan
+- **`Software-Quality-Assurance-Plan-template.md`** - Software Quality Assurance Plan
+- **`Software-Configuration-Management-Plan-template.md`** - Software Configuration Management Plan
+- **`Software-Verification-Plan-template.md`** - Software Verification Plan
+- **`Software-Validation-Plan-template.md`** - Software Validation Plan
 
-### Requirements Phase Templates
-- **`SRS-template.md`** - Software Requirements Specification
-- **`RTM-template.md`** - Requirements Traceability Matrix
-
-### Design Phase Templates
-- **`SAS-template.md`** - Software Architecture Specification
-- **`SDS-template.md`** - Software Design Specification
+### Specification Templates (Moved to Domain-Specific Skills)
+**Note**: The following templates have been moved to their appropriate skill directories for better organization:
+- **SRS** → `en50128-requirements/templates/Software-Requirements-Specification-template.md`
+- **SAS** → `en50128-design/templates/Software-Architecture-Specification-template.md`
+- **SDS** → `en50128-design/templates/Software-Design-Specification-template.md`
+- **RTM** - Requirements Traceability Matrix (embedded in SRS)
 
 ### Implementation Phase Templates
 - **`Code-Review-Checklist.md`** - Code review checklist
@@ -64,7 +100,7 @@ Choose the appropriate template for your document type.
 ### Step 2: Copy Template
 Copy the template to your project directory:
 ```bash
-cp .opencode/skills/en50128-documentation/templates/SQAP-template.md \\
+cp .opencode/skills/en50128-documentation/templates/Software-Quality-Assurance-Plan-template.md \\
    docs/plans/SQAP.md
 ```
 

@@ -1,0 +1,443 @@
+# Software Requirements Verification Report - Deliverable Metadata
+# EN 50128:2011 Section 7.2.4.20-22, Section 6.2.4.12-13, Table C.1
+# This file defines the metadata, requirements, evidence, and verification criteria
+# for the Software Requirements Verification Report deliverable.
+
+deliverable_id: "DOC-008-REQ-VER"
+number: 8
+name: "Software Requirements Verification Report"
+abbreviation: "Req Ver Report"
+phase: "requirements"
+standard_section: "7.2.4.20"
+written_by: "VER"
+first_check: "NONE"
+second_check: "VAL"
+template_path: ".opencode/skills/en50128-requirements/templates/Software-Requirements-Verification-Report-template.md"
+template_exists: true
+
+# =============================================================================
+# SIL-DEPENDENT REQUIREMENTS
+# =============================================================================
+# Requirements scale by SIL level per EN 50128 Table A.5
+# Requirements Verification Report documents verification of SRS
+
+sil_requirements:
+  sil_0:
+    mandatory: false  # Verification report recommended but not mandatory
+    techniques:
+      - technique_name: "Verification Report"
+        table_reference: "A.5"
+        technique_id: "D.1"
+        recommendation: "R"
+    additional_requirements:
+      - "Basic verification review recommended"
+      - "No specific verification techniques mandatory"
+      - "Requirements review recommended"
+    evidence_thresholds:
+      requirements_completeness_check: false
+      requirements_quality_check: false
+      traceability_verification: false
+      independent_verification: false
+
+  sil_1:
+    mandatory: true  # HR (Highly Recommended) - treat as mandatory
+    techniques:
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "HR"
+      - technique_name: "Requirements Review"
+        table_reference: "A.2"
+        technique_id: "A.2"
+        recommendation: "HR"
+    additional_requirements:
+      - "Software Requirements Verification Report HIGHLY RECOMMENDED (HR)"
+      - "Requirements completeness verification HIGHLY RECOMMENDED"
+      - "Requirements quality verification HIGHLY RECOMMENDED"
+      - "Traceability verification HIGHLY RECOMMENDED"
+      - "Requirements review by Verifier HIGHLY RECOMMENDED"
+      - "No mandatory independence requirement"
+    evidence_thresholds:
+      requirements_completeness_check: true  # HR
+      requirements_quality_check: true  # HR
+      traceability_verification: true  # HR
+      independent_verification: false
+
+  sil_2:
+    mandatory: true  # HR for Requirements Verification Report
+    techniques:
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "HR"
+      - technique_name: "Requirements Review"
+        table_reference: "A.2"
+        technique_id: "A.2"
+        recommendation: "HR"
+      - technique_name: "Formal Methods"
+        table_reference: "A.2"
+        technique_id: "D.28"
+        recommendation: "HR"
+    additional_requirements:
+      - "Software Requirements Verification Report HIGHLY RECOMMENDED (HR)"
+      - "Requirements completeness verification HIGHLY RECOMMENDED"
+      - "Requirements quality verification HIGHLY RECOMMENDED"
+      - "Traceability verification HIGHLY RECOMMENDED"
+      - "Requirements review by Verifier HIGHLY RECOMMENDED"
+      - "Formal methods consideration HIGHLY RECOMMENDED"
+      - "No mandatory independence requirement"
+    evidence_thresholds:
+      requirements_completeness_check: true  # HR
+      requirements_quality_check: true  # HR
+      traceability_verification: true  # HR
+      independent_verification: false
+
+  sil_3:
+    mandatory: true  # HR for Requirements Verification Report
+    techniques:
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Requirements Review"
+        table_reference: "A.2"
+        technique_id: "A.2"
+        recommendation: "HR"
+      - technique_name: "Formal Methods"
+        table_reference: "A.2"
+        technique_id: "D.28"
+        recommendation: "HR"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.2"
+        technique_id: "D.52"
+        recommendation: "HR"
+    additional_requirements:
+      - "Software Requirements Verification Report HIGHLY RECOMMENDED (HR)"
+      - "INDEPENDENT VERIFICATION MANDATORY (VER team separate from REQ team)"
+      - "Requirements completeness verification MANDATORY"
+      - "Requirements quality verification MANDATORY"
+      - "Traceability verification MANDATORY (system requirements → software requirements)"
+      - "Requirements review by Verifier MANDATORY"
+      - "Formal methods consideration HIGHLY RECOMMENDED"
+      - "Independent Verifier MANDATORY"
+      - "All requirements unambiguous and testable MANDATORY"
+    evidence_thresholds:
+      requirements_completeness_check: true  # MANDATORY
+      requirements_quality_check: true  # MANDATORY
+      traceability_verification: true  # MANDATORY
+      independent_verification: true  # MANDATORY
+
+  sil_4:
+    mandatory: true  # HR for Requirements Verification Report
+    techniques:
+      - technique_name: "Traceability"
+        table_reference: "A.5"
+        technique_id: "D.58"
+        recommendation: "M"
+      - technique_name: "Requirements Review"
+        table_reference: "A.2"
+        technique_id: "A.2"
+        recommendation: "HR"
+      - technique_name: "Formal Methods"
+        table_reference: "A.2"
+        technique_id: "D.28"
+        recommendation: "HR"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.2"
+        technique_id: "D.52"
+        recommendation: "HR"
+    additional_requirements:
+      - "Software Requirements Verification Report HIGHLY RECOMMENDED (HR)"
+      - "INDEPENDENT VERIFICATION MANDATORY (VER team separate from REQ team)"
+      - "Requirements completeness verification MANDATORY"
+      - "Requirements quality verification MANDATORY (rigorous)"
+      - "Traceability verification MANDATORY (system requirements → software requirements)"
+      - "Requirements review by Verifier MANDATORY"
+      - "Formal methods consideration HIGHLY RECOMMENDED"
+      - "Independent Verifier MANDATORY"
+      - "All requirements unambiguous, testable, and verifiable MANDATORY"
+      - "Formal proof of requirements consistency HIGHLY RECOMMENDED"
+    evidence_thresholds:
+      requirements_completeness_check: true  # MANDATORY
+      requirements_quality_check: true  # MANDATORY
+      traceability_verification: true  # MANDATORY
+      independent_verification: true  # MANDATORY
+
+# =============================================================================
+# EVIDENCE REQUIREMENTS
+# =============================================================================
+# Evidence required to demonstrate Requirements Verification Report completeness
+
+evidence_requirements:
+  - evidence_id: "req-ver-completeness-check"
+    description: "Requirements completeness verification per 7.2.4.22"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "VER"
+    format: "Section in Requirements Verification Report"
+    storage_path: "docs/reports/Requirements-Verification-Report.md"
+    automation_level: "manual"
+    collect_on_agent_action: "ver-verify-requirements"
+    verification_criteria:
+      - "All functional requirements from system requirements addressed"
+      - "All performance requirements from system requirements addressed"
+      - "All safety requirements from system requirements addressed"
+      - "All interface requirements from system requirements addressed"
+      - "All constraints from system requirements addressed"
+      - "Missing requirements identified and justified"
+
+  - evidence_id: "req-ver-quality-check"
+    description: "Requirements quality verification per 7.2.4.22 (unambiguous, testable, traceable)"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "VER"
+    format: "Section in Requirements Verification Report with quality assessment table"
+    storage_path: "docs/reports/Requirements-Verification-Report.md"
+    automation_level: "manual"
+    collect_on_agent_action: "ver-verify-requirements"
+    verification_criteria:
+      - "Each requirement unambiguous (single interpretation)"
+      - "Each requirement testable (measurable acceptance criteria)"
+      - "Each requirement traceable (unique ID, traced to system requirement)"
+      - "Each requirement atomic (single concern)"
+      - "Each requirement uses SHALL/SHOULD/MAY keywords correctly"
+      - "Each requirement has SIL level assigned"
+      - "Requirements use consistent terminology"
+
+  - evidence_id: "req-ver-traceability-check"
+    description: "Traceability verification per 7.2.4.22 (MANDATORY SIL 3-4)"
+    mandatory_sil: 3  # MANDATORY for SIL 3-4, HR for SIL 1-2
+    source: "VER"
+    format: "Section in Requirements Verification Report with traceability analysis"
+    storage_path: "docs/reports/Requirements-Verification-Report.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "ver-verify-requirements"
+    verification_criteria:
+      - "Forward traceability complete (system requirements → software requirements)"
+      - "Backward traceability complete (software requirements → system requirements)"
+      - "All software requirements trace to at least one system requirement"
+      - "All system requirements trace to at least one software requirement"
+      - "Orphan requirements identified (no parent system requirement)"
+      - "Traceability matrix reviewed and approved"
+
+  - evidence_id: "req-ver-techniques-check"
+    description: "EN 50128 requirements techniques verification per Table A.2"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "VER"
+    format: "Section in Requirements Verification Report"
+    storage_path: "docs/reports/Requirements-Verification-Report.md"
+    automation_level: "manual"
+    collect_on_agent_action: "ver-verify-requirements"
+    verification_criteria:
+      - "All mandatory techniques applied for target SIL level"
+      - "Structured methodology applied (MANDATORY SIL 3-4)"
+      - "Formal methods considered (HR SIL 3-4)"
+      - "Modelling applied if used (R/HR SIL 1-4)"
+      - "Decision tables used where appropriate (R/HR SIL 1-4)"
+      - "Techniques documented in SRS"
+
+  - evidence_id: "req-ver-report-approval"
+    description: "Requirements Verification Report approved by VAL and VMGR (SIL 3-4)"
+    mandatory_sil: 1  # HR for SIL 1+
+    source: "VER"
+    format: "Approvals section in Requirements Verification Report"
+    storage_path: "docs/reports/Requirements-Verification-Report.md"
+    automation_level: "manual"
+    collect_on_agent_action: "ver-verify-requirements"
+    verification_criteria:
+      - "Document has version 1.0 or higher"
+      - "Approvals section complete (VER author, QA, VAL second check, PM)"
+      - "Independent Verifier approval present (SIL 3-4)"
+      - "V&V Manager approval present (SIL 3-4)"
+      - "Verification result clearly stated (PASS/FAIL/CONDITIONAL)"
+      - "All findings documented and addressed"
+
+# =============================================================================
+# DEPENDENCIES
+# =============================================================================
+
+depends_on:
+  - deliverable_id: "DOC-006-SRS"
+    reason: "SRS is the subject of verification; Requirements Verification Report verifies SRS"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-004-SVP"
+    reason: "SVP defines verification approach; Requirements Verification Report implements it"
+    dependency_type: "blocking"
+
+  - deliverable_id: "EXTERNAL-SYSTEM-REQUIREMENTS"
+    reason: "System requirements are parent; Requirements Verification Report verifies traceability"
+    dependency_type: "informational"
+
+feeds_into:
+  - deliverable_id: "DOC-009-SAS"
+    reason: "Requirements verification must pass before architecture design begins"
+
+  - deliverable_id: "DOC-025-VALIDATION-REPORT"
+    reason: "Requirements Verification Report provides requirements verification evidence"
+
+# =============================================================================
+# VERIFICATION CRITERIA
+# =============================================================================
+
+verification_criteria:
+  completeness:
+    - "All sections of Requirements Verification Report template completed per 7.2.4.21"
+    - "All SRS requirements reviewed for completeness per 7.2.4.22"
+    - "All SRS requirements reviewed for quality per 7.2.4.22"
+    - "Traceability verification complete (system requirements → SRS)"
+    - "All EN 50128 Table A.2 techniques verified"
+    - "All findings documented with severity and status"
+    - "Verification decision stated (PASS/FAIL/CONDITIONAL)"
+
+  correctness:
+    - "Verification activities correct per SVP verification plan"
+    - "Requirements quality criteria correct (unambiguous, testable, traceable)"
+    - "Traceability analysis correct (all requirements traced)"
+    - "EN 50128 Table A.2 technique assessment correct"
+    - "Independent verification performed (SIL 3-4)"
+    - "Findings accurately reflect SRS issues"
+
+  consistency:
+    - "Verification approach consistent with SVP"
+    - "Quality criteria consistent across all requirements"
+    - "Traceability format consistent with SCMP"
+    - "Findings classification consistent (critical/major/minor)"
+    - "Verification result consistent with findings"
+
+  traceability:
+    - "Forward traceability: SVP verification criteria → Verification Report activities"
+    - "Forward traceability: Verification Report findings → SRS updates"
+    - "Backward traceability: Verification Report → SVP verification plan"
+    - "References to SRS sections in findings"
+    - "References to EN 50128 Table A.2 techniques present"
+
+# =============================================================================
+# CONFIGURATION MANAGEMENT
+# =============================================================================
+
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After Phase 2 (Requirements) gate check, before Phase 3 (Architecture) begins"
+  change_control: "All changes to baselined Requirements Verification Report require CCB approval"
+  version_control: "docs/reports/Requirements-Verification-Report.md under Git control"
+  review_frequency: "Review when SRS is updated or new requirements added"
+  update_triggers:
+    - "SRS updated with new requirements"
+    - "SRS updated to address verification findings"
+    - "Change in SIL level"
+    - "Re-verification requested by PM or COD"
+    - "EN 50128 standard updates"
+
+# =============================================================================
+# EN 50128 REFERENCES
+# =============================================================================
+
+en50128_references:
+  - "Section 6.2.4.12: Verification Reports written by Verifier"
+  - "Section 6.2.4.13: Verification Report documents phase, activities, results, deviations, conclusion"
+  - "Section 7.2.4.20: Software Requirements Verification Report written by Verifier"
+  - "Section 7.2.4.21: Requirements Verification Report per generic requirements 6.2.4.13"
+  - "Section 7.2.4.22: Requirements verification addresses completeness, quality, traceability"
+  - "Section 7.2.4.22a: Completeness of SRS against system requirements"
+  - "Section 7.2.4.22b: Unambiguous and testable requirements"
+  - "Section 7.2.4.22c: Adequacy of Overall Test Specification against SRS"
+  - "Section 7.2.4.22d: Adequacy of requirements techniques (Table A.2)"
+  - "Section 7.2.4.22e: Traceability between system and software requirements"
+  - "Section 5.3.5: Verifier role and responsibilities"
+  - "Section 5.3.5.10: Verifier independence requirements (SIL 3-4)"
+  - "Table A.2: Software Requirements Specification techniques by SIL"
+  - "Table A.5: Verification and Testing techniques"
+  - "Table C.1 (Annex C): Document control summary (Req Ver Report mandatory HR for all SIL)"
+
+# =============================================================================
+# NOTES
+# =============================================================================
+
+notes: |
+  CRITICAL INFORMATION:
+  
+  1. **Purpose of Requirements Verification Report**:
+     - Verify SRS completeness against system requirements
+     - Verify SRS requirements quality (unambiguous, testable, traceable)
+     - Verify traceability (system requirements → software requirements)
+     - Verify EN 50128 requirements techniques applied (Table A.2)
+     - Provide independent verification evidence (SIL 3-4)
+  
+  2. **SIL Requirements**:
+     - SIL 0: Requirements verification recommended (R)
+     - SIL 1-2: Requirements Verification Report HIGHLY RECOMMENDED (HR)
+     - SIL 3-4: Requirements Verification Report HIGHLY RECOMMENDED (HR)
+     - Independent verification MANDATORY for SIL 3-4
+     - Traceability verification MANDATORY for SIL 3-4
+  
+  3. **Verification Activities** (per 7.2.4.22):
+     a) Completeness: All system requirements addressed in SRS
+     b) Quality: Requirements unambiguous, testable, traceable
+     c) Traceability: System requirements → software requirements
+     d) Techniques: EN 50128 Table A.2 techniques applied
+     e) Overall Test Specification adequacy (covered in separate verification)
+  
+  4. **Requirements Quality Criteria**:
+     - Unambiguous: Single interpretation only
+     - Testable: Measurable acceptance criteria
+     - Traceable: Unique ID, traced to system requirement
+     - Atomic: Single concern per requirement
+     - Consistent: Uses SHALL/SHOULD/MAY correctly
+     - SIL-assigned: Each requirement has SIL level
+  
+  5. **Independence Requirements** (SIL 3-4):
+     - Verifier SHALL NOT be Requirements Engineer (Section 5.3.5.10)
+     - Organizational independence required (separate reporting line)
+     - Personnel independence required (different individuals)
+     - V&V Manager approval required (platform extension role)
+  
+  6. **Verification Result**:
+     - PASS: All criteria met, no critical findings
+     - FAIL: Critical findings prevent architecture phase
+     - CONDITIONAL: Minor findings, can proceed with action plan
+  
+  7. **Findings Classification**:
+     - Critical: Blocks phase transition (missing requirements, ambiguous safety requirements)
+     - Major: Should be fixed before transition (quality issues, traceability gaps)
+     - Minor: Should be fixed eventually (style issues, documentation issues)
+  
+  8. **Traceability Verification**:
+     - Forward: System requirements → software requirements (all system requirements covered)
+     - Backward: Software requirements → system requirements (no orphans)
+     - Traceability matrix reviewed line by line
+     - 100% traceability MANDATORY for SIL 3-4
+  
+  9. **Relationship to Other Deliverables**:
+     - SRS: Subject of verification
+     - SVP: Defines verification approach
+     - Overall Test Specification: Verified in same report (adequacy against SRS)
+     - Validation Report: Uses Requirements Verification Report as evidence
+     - Architecture Specification: Cannot begin until requirements verification passes
+  
+  10. **Agent Workflow**:
+      - REQ agent creates SRS
+      - REQ agent submits SRS to VER for verification
+      - VER agent reads SVP to understand verification criteria
+      - VER agent performs verification activities per 7.2.4.22
+      - VER agent creates Requirements Verification Report
+      - VER agent submits report to QA for template compliance check
+      - QA agent reviews report (one pass only)
+      - VER agent submits report to VAL for second check (SIL 3-4)
+      - VAL/VMGR approves or rejects report
+      - If PASS: COD authorizes transition to Phase 3 (Architecture)
+      - If FAIL: REQ agent fixes SRS, VER re-verifies
+  
+  11. **Critical Success Factors**:
+      - Independence preserved (SIL 3-4)
+      - All SRS requirements reviewed individually
+      - Traceability 100% complete (SIL 3-4)
+      - Verification decision clear (PASS/FAIL/CONDITIONAL)
+      - Findings actionable with clear remediation
+      - Report approved before architecture begins
+  
+  12. **Common Pitfalls**:
+      - Not checking traceability completeness (missing requirements)
+      - Not verifying testability (requirements without acceptance criteria)
+      - Incomplete independence (same person as Requirements Engineer for SIL 3-4)
+      - Ambiguous verification decision (unclear PASS/FAIL)
+      - Not documenting findings (issues not captured)
+      - Allowing architecture to begin before requirements verification passes

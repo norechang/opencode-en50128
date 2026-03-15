@@ -85,15 +85,15 @@ error_t actuator_hal_init(void)
     gpio_init_output(GPIO_LOCK_LEFT);
     gpio_init_output(GPIO_LOCK_RIGHT);
     
-    /* Step 4: Release locks initially (fail-safe: unlocked on init) */
-    gpio_set_low(GPIO_LOCK_LEFT);
-    gpio_set_low(GPIO_LOCK_RIGHT);
+    /* Step 4: Engage locks initially (fail-safe: locked on init, SIL 3 requirement) */
+    gpio_set_high(GPIO_LOCK_LEFT);
+    gpio_set_high(GPIO_LOCK_RIGHT);
     
     /* Step 5: Update internal state */
     g_actuator_hal.left_door_pwm = 0;
     g_actuator_hal.right_door_pwm = 0;
-    g_actuator_hal.left_door_locked = false;
-    g_actuator_hal.right_door_locked = false;
+    g_actuator_hal.left_door_locked = true;
+    g_actuator_hal.right_door_locked = true;
     g_actuator_hal.initialized = true;
     
     return ERROR_SUCCESS;

@@ -12,23 +12,26 @@ metadata:
 
 ## What I do
 
-I provide testing methodologies and coverage requirements for EN 50128 Sections 7.4 and 7.5:
-- Define coverage requirements by SIL (statement, branch, condition, MC/DC)
+I provide comprehensive testing methodologies and coverage analysis for EN 50128 Sections 7.4, 7.5, 7.6:
+- Define coverage requirements by SIL (statement, branch, condition, MC/DC) per Table A.21
 - Provide unit test patterns for C using Unity framework
-- Apply black-box and white-box testing techniques
-- Implement fault injection testing
-- Generate coverage reports with gcov/lcov
-- Ensure test traceability to requirements
+- Guide integration testing strategies (bottom-up, top-down, sandwich)
+- Apply black-box and white-box testing techniques (boundary value, equivalence class)
+- Implement fault injection testing (HR SIL 3-4)
+- Generate coverage reports with gcov/lcov and validate against SIL targets
+- Ensure test traceability to requirements using `workspace.py trace`
+- Automate coverage validation with `tools/check_coverage.py`
 
 ## When to use me
 
 Use this skill when:
-- Writing unit tests for C code
-- Performing integration testing
-- Analyzing code coverage
-- Implementing fault injection tests
-- Verifying test completeness
-- Generating test reports
+- **Writing unit tests** for C code modules (Section 7.4.4.8)
+- **Performing integration testing** of software components (Section 7.6)
+- **Analyzing code coverage** and validating against SIL requirements (Table A.21)
+- **Implementing fault injection tests** (HR SIL 3-4)
+- **Verifying test completeness** and traceability
+- **Generating test reports** (Component Test Report, Integration Test Report)
+- **Validating coverage targets** (100% statement/branch/condition for SIL 3-4)
 
 ## Testing Techniques (EN 50128 Table A.5)
 
@@ -408,8 +411,275 @@ class TestHarness:
 - [ ] Test results documented
 - [ ] Traceability maintained
 
+## Comprehensive Workflows
+
+This skill provides **3 comprehensive workflows** covering the complete testing lifecycle:
+
+### 1. Unit Testing Workflow (`workflows/unit-testing-workflow.md`)
+
+**EN 50128 Reference**: Section 7.4.4.8, Table A.5, Table A.21  
+**Coverage**: Unit test development, execution, and validation
+
+**Key Topics**:
+- Unit test structure (Unity framework)
+- Test types: Normal, boundary value, error handling, fault injection, robustness
+- Coverage measurement (statement, branch, condition)
+- Mock object creation for hardware abstraction
+- Defect management and regression testing
+- Automated test execution with CI/CD integration
+
+**Example Usage**:
+```bash
+# Build unit tests with coverage
+cd tests/unit
+make coverage
+
+# Run tests
+./test_brake_controller
+
+# Generate coverage report
+gcov ../../src/brake_controller.c
+lcov --capture --directory . --output-file coverage.info
+genhtml coverage.info --output-directory ../coverage
+
+# Validate coverage against SIL requirements
+python3 ../../tools/check_coverage.py --sil 3 --coverage coverage.json
+
+# Update traceability
+workspace.py trace create --from tests --to requirements \
+    --source-id TC-BRAKE-APPLY-001 --target-id REQ-FUNC-010
+
+workspace.py trace validate --phase testing --sil 3
+```
+
+---
+
+### 2. Integration Testing Workflow (`workflows/integration-testing-workflow.md`)
+
+**EN 50128 Reference**: Section 7.6, Table A.6  
+**Coverage**: Component integration, HW/SW integration, interface testing
+
+**Key Topics**:
+- Integration strategies: Bottom-up, top-down, sandwich
+- Interface testing (function calls, data structures, IPC)
+- Data flow and control flow testing
+- Resource sharing and concurrent access testing
+- Timing and performance testing (HR SIL 3-4)
+- Fault propagation testing
+- Hardware-in-the-loop (HIL) testing
+
+**Example Usage**:
+```bash
+# Build integration tests
+cd tests/integration
+make run
+
+# Execute integration tests
+./test_brake_speed_integration
+
+# Generate integration coverage
+make coverage
+
+# Combine unit + integration coverage
+lcov --add-tracefile ../unit/coverage.info \
+     --add-tracefile ./coverage.info \
+     --output-file ../combined_coverage.info
+
+# Analyze performance
+python3 ../../tools/analyze_performance.py \
+    --results test_results.log \
+    --output ../reports/performance_analysis.md
+```
+
+---
+
+### 3. Coverage Analysis Workflow (`workflows/coverage-analysis-workflow.md`)
+
+**EN 50128 Reference**: Table A.21 (Test Coverage for Code)  
+**Coverage**: Statement, branch, condition, MC/DC coverage analysis
+
+**Key Topics**:
+- Coverage types: Statement, branch, condition, MC/DC, data flow, path
+- Coverage measurement with gcov, lcov, gcovr
+- SIL-specific validation (100% coverage for SIL 3-4)
+- Uncovered code identification and justification
+- MC/DC analysis (HR SIL 3-4)
+- Automated coverage validation
+
+**Example Usage**:
+```bash
+# Compile with coverage instrumentation
+gcc -fprofile-arcs -ftest-coverage -g -O0 -o test_executable src/module.c test/test_module.c
+
+# Run tests
+./test_executable
+
+# Generate HTML coverage report
+lcov --capture --directory . --output-file coverage.info
+genhtml coverage.info --output-directory coverage_html
+
+# Validate coverage against SIL 3 requirements
+python3 tools/check_coverage.py \
+    --sil 3 \
+    --coverage coverage.json \
+    --threshold statement:100,branch:100,condition:100
+
+# Perform MC/DC analysis (SIL 3-4)
+python3 tools/mcdc/mcdc_analyzer.py \
+    --source src/module.c \
+    --coverage coverage.info \
+    --output evidence/mcdc/module_mcdc.json
+```
+
+---
+
+## Coverage Requirements by SIL (Table A.21)
+
+**EN 50128 Table A.21** defines mandatory coverage levels:
+
+| Coverage Type | SIL 0 | SIL 1-2 | SIL 3-4 | Tool Support |
+|---------------|-------|---------|---------|--------------|
+| **Statement Coverage** | HR | HR | **M** (100%) | gcov, lcov, gcovr |
+| **Branch Coverage** | HR | **M** (100%) | **M** (100%) | gcov --branch-probabilities |
+| **Condition Coverage** | - | R | **M** (100%) | gcov + custom analysis |
+| **Data Flow Coverage** | - | R | HR | Manual analysis |
+| **MC/DC Coverage** | - | - | HR (100%) | tools/mcdc/mcdc_analyzer.py, Bullseye |
+| **Path Coverage** | - | - | R | Manual analysis |
+
+**Key Points**:
+- **SIL 0-1**: Statement (HR), Branch (HR) - Target 80%+
+- **SIL 2**: Branch (**MANDATORY** 100%), Statement (HR 95%+)
+- **SIL 3-4**: Statement + Branch + Condition (**ALL MANDATORY** 100%)
+- **MC/DC**: HIGHLY RECOMMENDED for SIL 3-4 (100% target)
+- **Uncovered code**: Requires documented justification for SIL 2+
+
+**Standard Reference**: `std/EN50128-2011.md` Annex A, Table A.21
+
+---
+
+## Tool Integration
+
+### Coverage Tools (Working Implementations)
+
+**gcov** (Statement + Branch):
+```bash
+# Compile with coverage flags
+gcc -fprofile-arcs -ftest-coverage -g -O0 -o test src/module.c test/test_module.c
+
+# Run tests
+./test
+
+# Generate text coverage report
+gcov src/module.c
+
+# Output: module.c.gcov (line-by-line execution counts)
+```
+
+**lcov** (HTML Reports):
+```bash
+# Capture coverage data
+lcov --capture --directory . --output-file coverage.info
+
+# Filter system headers
+lcov --remove coverage.info '/usr/*' 'tests/*' --output-file coverage_filtered.info
+
+# Generate HTML report
+genhtml coverage_filtered.info --output-directory coverage_html
+
+# View in browser
+firefox coverage_html/index.html &
+```
+
+**gcovr** (JSON/XML Reports):
+```bash
+# Generate machine-readable JSON report
+gcovr --json --output coverage.json
+
+# Generate Cobertura XML (for CI/CD)
+gcovr --xml --output coverage.xml
+```
+
+**Custom Validation** (SIL Requirements):
+```bash
+# Validate coverage against SIL 3 requirements
+python3 tools/check_coverage.py \
+    --sil 3 \
+    --coverage coverage.json \
+    --report evidence/coverage/validation_report.json
+
+# Output:
+# Statement Coverage: 100.0% [PASS]
+# Branch Coverage:    100.0% [PASS]
+# Condition Coverage: 100.0% [PASS]
+# Result: PASS - All coverage targets met
+```
+
+---
+
+### Traceability Integration (Working Implementation)
+
+**Link Tests to Requirements**:
+```bash
+# Create traceability link
+workspace.py trace create \
+    --from tests \
+    --to requirements \
+    --source-id TC-BRAKE-APPLY-001 \
+    --target-id REQ-FUNC-010 \
+    --rationale "Unit test verifies normal brake application"
+
+# Validate traceability completeness
+workspace.py trace validate --phase testing --sil 3
+
+# Generate traceability report
+workspace.py trace report \
+    --from requirements \
+    --to tests \
+    --format markdown \
+    --output evidence/traceability/requirements_to_tests.md
+```
+
+---
+
+## Test Templates
+
+The skill includes **4 comprehensive test templates** (already present):
+
+1. **Component Test Specification** (`templates/Component-Test-Specification-template.md`)
+   - Purpose: Define unit test cases before testing
+   - Content: Test cases, procedures, expected results, coverage targets
+   - Sections: Test organization, test cases, coverage analysis, traceability
+
+2. **Component Test Report** (`templates/Component-Test-Report-template.md`)
+   - Purpose: Document unit test execution results
+   - Content: Test results, coverage metrics, defects, evidence
+   - Approval: TST, QA, Verifier (SIL 3-4)
+
+3. **Overall Software Test Specification** (`templates/Overall-Software-Test-Specification-template.md`)
+   - Purpose: Define system-level test cases
+   - Content: System test procedures, validation test cases
+
+4. **Overall Software Test Report** (`templates/Overall-Software-Test-Report-template.md`)
+   - Purpose: Document system test execution
+   - Content: System test results, validation evidence
+
+---
+
 ## References
-- EN 50128:2011 Section 7.4 (Component Testing)
-- EN 50128:2011 Section 7.5 (Integration Testing)
-- EN 50128:2011 Table A.5 (Testing Techniques)
-- Unity Test Framework Documentation
+- **EN 50128:2011**
+  - Section 7.4.4.8 - Component Testing
+  - Section 7.5 - Integration (Component and Hardware/Software Integration)
+  - Section 7.6 - Software Integration
+  - Table A.5 - Verification and Testing Techniques
+  - Table A.6 - Integration Techniques
+  - Table A.13 - Dynamic Analysis and Testing
+  - Table A.14 - Functional and Black-Box Testing
+  - Table A.18 - Performance Testing
+  - Table A.21 - Test Coverage for Code
+- **Standard Location**: `std/EN50128-2011.md`
+- **TOOLS.md**: Tool catalog (gcov, lcov, gcovr, Bullseye, Unity)
+- **Unity Test Framework**: https://github.com/ThrowTheSwitch/Unity
+- **Related Skills**: 
+  - `en50128-implementation` (code under test)
+  - `en50128-verification` (independent verification of test results)
+  - `en50128-integration` (integration activities)

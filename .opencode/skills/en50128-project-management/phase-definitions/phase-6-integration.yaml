@@ -3,29 +3,75 @@ phase:
   number: 6
   name: "Integration"
   
-  # Agent activities (EN 50128 Section 7.6 - 3 documents)
+  # Agent activities (EN 50128 Section 7.6 - 7 documents)
+  # WORKFLOW: INT coordinates → TST executes tests → INT documents results
+  # EN 50128 5.1.2.10c: "Integrator and Tester can be same person"
+  # For SIL 3-4: Separate roles RECOMMENDED for independence
+  
   activities:
-    # Activity 0: INT executes Software Integration Test Report (Annex C #21)
+    # Activity 0: Software Integration Testing (INT → TST → INT workflow)
+    # Sub-activity 0a: INT reviews specifications and coordinates test execution
     - agent: "int"
-      task_description: "Execute Software Integration Tests and create Software Integration Test Report demonstrating progressive integration of components and correct interface behavior"
+      task_description: "Review Software Integration Test Specification and coordinate integration test execution with TST. If INT and TST are separate roles (SIL 3-4 recommended), hand off specifications to TST for test execution."
+      owner: "int"
+      deliverables: []  # No deliverable - coordination activity
+      parallel_group: 1
+    
+    # Sub-activity 0b: TST executes Software Integration Tests
+    - agent: "tst"
+      task_description: "Create integration test code/harness based on Software Integration Test Specification. Execute all integration test cases (73 tests). Record results in machine-readable format (XML/JSON preferred per EN 50128 7.6.4.5b). Collect coverage data. Provide test results to INT."
+      owner: "tst"
+      deliverables:
+        - path: "test/integration/software_integration_results.xml"
+          doc_id: "N/A"
+          doc_type: "Test-Execution-Results"
+          qua_required: false
+      dependencies: [0]  # TST depends on INT coordination (activity 0)
+      parallel_group: 1
+    
+    # Sub-activity 0c: INT documents Software Integration Test Report based on TST results
+    - agent: "int"
+      task_description: "Create Software Integration Test Report based on actual test results from TST execution. Document all test case results, component configurations, Table A.6 technique usage. CRITICAL: All results SHALL be from actual TST execution (not fabricated)."
       owner: "int"
       deliverables:
         - path: "docs/test/Software-Integration-Test-Report.md"
           doc_id: "DOC-INTTESTRPT-2026-001"
           doc_type: "Software-Integration-Test-Report"
           qua_required: true
+      dependencies: [1]  # INT report depends on TST results (activity 1)
       parallel_group: 1
     
-    # Activity 1: INT executes Software/Hardware Integration Test Report (Annex C #22)
+    # Activity 1: Software/Hardware Integration Testing (INT → TST → INT workflow)
+    # Sub-activity 1a: INT coordinates HW/SW integration test execution
     - agent: "int"
-      task_description: "Execute Software/Hardware Integration Tests and create Software/Hardware Integration Test Report demonstrating correct software-hardware interaction on target platform"
+      task_description: "Review Software/Hardware Integration Test Specification and coordinate HW/SW integration test execution with TST. Check hardware availability. If hardware not available, document limitation."
+      owner: "int"
+      deliverables: []  # No deliverable - coordination activity
+      parallel_group: 2
+    
+    # Sub-activity 1b: TST executes Software/Hardware Integration Tests (or documents limitation)
+    - agent: "tst"
+      task_description: "Create HW/SW integration test code based on Software/Hardware Integration Test Specification. Execute tests if hardware available. If hardware NOT available, document limitation clearly. WCET estimates (not measurements) if using simulation. Record results in machine-readable format. Provide results to INT."
+      owner: "tst"
+      deliverables:
+        - path: "test/integration/hw_sw_integration_results.xml"
+          doc_id: "N/A"
+          doc_type: "Test-Execution-Results"
+          qua_required: false
+      dependencies: [3]  # TST depends on INT coordination (activity 3)
+      parallel_group: 2
+    
+    # Sub-activity 1c: INT documents Software/Hardware Integration Test Report based on TST results
+    - agent: "int"
+      task_description: "Create Software/Hardware Integration Test Report based on actual test results from TST execution. Document hardware limitations if applicable. Distinguish measurements (real HW) from estimates (simulation). CRITICAL: All results SHALL be from actual TST execution (not fabricated)."
       owner: "int"
       deliverables:
         - path: "docs/test/Software-Hardware-Integration-Test-Report.md"
           doc_id: "DOC-HWINTTESTRPT-2026-001"
           doc_type: "Software-Hardware-Integration-Test-Report"
           qua_required: true
-      parallel_group: 1
+      dependencies: [4]  # INT report depends on TST results (activity 4)
+      parallel_group: 2
     
     # Activity 2: VER creates Software Integration Verification Report (Annex C #23)
     - agent: "ver"
@@ -36,7 +82,7 @@ phase:
           doc_id: "DOC-INTVER-2026-001"
           doc_type: "Software-Integration-Verification-Report"
           qua_required: true        # VER reports require QUA template review
-      dependencies: [0, 1]        # Verification depends on both integration test reports
+      dependencies: [2, 5]        # Verification depends on both integration test reports (activities 2, 5)
     
     # Activity 3: QUA reviews Verification Report for template compliance (MANDATORY SIL 3-4)
     - agent: "qua"
@@ -47,7 +93,7 @@ phase:
           doc_id: "DOC-QAREV-2026-009"
           doc_type: "QA-Template-Compliance-Review"
           qua_required: false      # QUA self-review not required
-      dependencies: [2]            # QUA depends on VER report (index 2)
+      dependencies: [6]            # QUA depends on VER report (activity 6)
       sil_requirements:
         sil_0: "optional"
         sil_1: "recommended"
@@ -65,7 +111,7 @@ phase:
           doc_id: "DOC-INTVAL-2026-001"
           doc_type: "Software-Integration-Validation-Report"
           qua_required: true        # VAL reports require QUA template review
-      dependencies: [0, 1, 2, 3]  # Validation depends on integration reports, verification report, and QUA review
+      dependencies: [2, 5, 6, 7]  # Validation depends on integration reports (2, 5), verification report (6), and QUA review (7)
     
     # Activity 5: QUA reviews Validation Report for template compliance (MANDATORY SIL 3-4)
     - agent: "qua"
@@ -76,7 +122,7 @@ phase:
           doc_id: "DOC-QAREV-2026-010"
           doc_type: "QA-Template-Compliance-Review"
           qua_required: false      # QUA self-review not required
-      dependencies: [4]            # QUA depends on VAL report (index 4)
+      dependencies: [8]            # QUA depends on VAL report (activity 8)
       sil_requirements:
         sil_0: "optional"
         sil_1: "recommended"
@@ -92,19 +138,22 @@ phase:
       architecture_to_integration: 100   # 100% architectural interfaces tested
       components_to_integration: 100     # 100% component integrations tested
     custom_checks:
-      - "All 7 EN 50128 documents delivered (Software Integration Test Report, Software/Hardware Integration Test Report, Software Integration Verification Report per Annex C #23, QA Template Review of Verification Report, Software Integration Validation Report, QA Template Review of Validation Report)"
+      - "All 9 EN 50128 documents/artifacts delivered (Software Integration Test Results from TST, Software Integration Test Report from INT, Software/Hardware Integration Test Results from TST, Software/Hardware Integration Test Report from INT, Software Integration Verification Report, QA Template Review of Verification Report, Software Integration Validation Report, QA Template Review of Validation Report)"
+      - "TST executed all integration tests (actual execution, not fabricated results)"
+      - "INT documented actual TST test results in reports"
       - "Progressive integration strategy documented (bottom-up, top-down, or sandwich)"
       - "All component interfaces tested"
-      - "All software-hardware interfaces tested on target platform"
+      - "All software-hardware interfaces tested on target platform (or limitation documented)"
       - "All integration test cases executed and passed (100% pass rate)"
       - "Test cases repeatable and preferably automated"
-      - "All test results recorded in machine-readable form"
+      - "All test results recorded in machine-readable form (XML/JSON preferred)"
       - "Identity and configuration of all items documented"
       - "Correct use of techniques from Table A.6 demonstrated"
       - "Impact analysis performed for any changes during integration"
       - "All failures recorded with circumstances"
       - "Performance testing performed (HR for SIL 3-4)"
       - "Interface testing performed (HR for all SILs)"
+      - "Hardware limitations documented if applicable (no fabricated HW measurements)"
       - "QUA template compliance reviews approved (SIL 3-4 MANDATORY)"
       - "VMGR V&V approval obtained (SIL 3-4 MANDATORY)"
   

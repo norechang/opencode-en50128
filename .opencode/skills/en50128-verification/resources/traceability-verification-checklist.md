@@ -530,35 +530,49 @@ uint32_t calculate_speed(sensor_t* sensor, uint32_t time_ms);
 
 ### Traceability Extraction Tool
 
-**Script**: `tools/traceability/trace_checker.py`
+**Tool**: Traceability Manager (`workspace.py trace`)
 
 **Usage**:
 
 ```bash
-# Extract all @trace tags from source code, requirements, design docs
-python3 tools/traceability/trace_checker.py \
-    --source src/ \
-    --requirements docs/SRS.md \
-    --design docs/SAS.md docs/SDS.md \
-    --tests tests/ \
-    --output docs/traceability/traceability_matrix.csv
+# Extract @trace tags from documents and source code
+workspace.py trace extract \
+    --document docs/SRS.md \
+    --type requirements_to_design \
+    --merge
+
+workspace.py trace extract \
+    --document docs/SAS.md \
+    --type architecture_to_design \
+    --merge
+
+workspace.py trace extract \
+    --document src/*.c \
+    --type implementation_to_tests \
+    --merge
+
+# Validate traceability completeness
+workspace.py trace validate \
+    --phase design,implementation,tests \
+    --sil 3
 
 # Check for gaps (missing traces)
-python3 tools/traceability/trace_checker.py \
-    --source src/ \
-    --requirements docs/SRS.md \
-    --design docs/SAS.md docs/SDS.md \
-    --tests tests/ \
-    --check-gaps \
-    --output docs/traceability/traceability_gaps.txt
+workspace.py trace check-gaps \
+    --phase design,implementation,tests \
+    --sil 3
 
-# Generate HTML report
-python3 tools/traceability/trace_checker.py \
-    --source src/ \
-    --requirements docs/SRS.md \
-    --design docs/SAS.md docs/SDS.md \
-    --tests tests/ \
-    --html docs/traceability/traceability_report.html
+# Generate reports
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format csv \
+    --output docs/traceability/traceability_matrix.csv
+
+workspace.py trace report \
+    --from requirements \
+    --to design,implementation,tests \
+    --format html \
+    --output docs/traceability/traceability_report.html
 ```
 
 ### Traceability Gap Report Format
@@ -596,17 +610,24 @@ Add to `.gitlab-ci.yml`:
 traceability-check:
   stage: verification
   script:
-    - python3 tools/traceability/trace_checker.py \
-        --source src/ \
-        --requirements docs/SRS.md \
-        --design docs/SAS.md docs/SDS.md \
-        --tests tests/ \
-        --check-gaps \
-        --output traceability_gaps.txt
-    - python3 tools/ci/fail_if_gaps.py traceability_gaps.txt
+    # Extract traceability from all sources
+    - workspace.py trace extract --document docs/SRS.md --type requirements_to_design --merge
+    - workspace.py trace extract --document docs/SAS.md --type architecture_to_design --merge
+    - workspace.py trace extract --document src/*.c --type implementation_to_tests --merge
+    - workspace.py trace extract --document tests/*.c --type tests_to_requirements --merge
+    
+    # Validate traceability completeness
+    - workspace.py trace validate --phase design,implementation,tests --sil 3
+    
+    # Check for gaps (fails build if gaps found)
+    - workspace.py trace check-gaps --phase design,implementation,tests --sil 3 > traceability_gaps.txt
+    
+    # Generate reports
+    - workspace.py trace report --from requirements --to design,implementation,tests --format html --output traceability_report.html
   artifacts:
     paths:
       - traceability_gaps.txt
+      - traceability_report.html
     expire_in: 1 month
   allow_failure: false  # MUST pass for SIL 3-4
 ```
