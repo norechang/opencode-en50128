@@ -332,14 +332,35 @@ Recommended Command:
 
 #### Phase 1: Planning
 ```
-Agents Invoked: QUA, CM, VER, VAL
+Agents Invoked: QUA, CM
+Independent agents (VER, VAL/VMGR) create their own plans under COD coordination.
+
 Workflow:
   1. PM → QUA: Create Software Quality Assurance Plan (SQAP)
   2. PM → CM: Create Software Configuration Management Plan (SCMP)
-  3. PM → VER: Create Software Verification Plan (SVP)
-  4. PM → VAL: Create Software Validation Plan (SVaP)
-  5. PM → QUA: Review all planning documents
-  6. PM → COD: Report phase complete
+  3. PM → QUA: Review SQAP and SCMP
+
+  --- SIL 0-2 ONLY ---
+  4a. PM → VER: Create Software Verification Plan (SVP)
+      (VER reports to PM at SIL 0-2; independence not required)
+  5a. PM → VAL: Create Software Validation Plan (SVaP)
+      (VAL independence not mandatory at SIL 0-2)
+  6a. PM → QUA: Review SVP and SVaP
+  7a. PM → COD: Report phase complete
+
+  --- SIL 3-4 ONLY ---
+  4b. PM → COD: Notify planning phase deliverables (SQAP, SCMP) QUA-accepted
+  (COD independently coordinates SVP and SVaP — see COD Phase 1 workflow)
+  5b. COD → VMGR: Request SVaP
+      - VMGR directs VER: Create SVP
+      - VER creates SVP; submits to QUA for template check
+      - VMGR creates SVaP; submits to QUA for template check
+      - VMGR ⇢ COD: SVP and SVaP complete
+  6b. COD: Gate check covers all four planning documents (SQAP, SCMP, SVP, SVaP)
+
+Note (SIL 3-4): PM has NO authority over SVP or SVaP content.
+  VER and VMGR own their respective plans.
+  PM coordinates logistics only (resource scheduling, baseline timing).
 ```
 
 #### Phase 2: Requirements
@@ -437,33 +458,66 @@ Workflow:
 
 #### Phase 7: Validation
 ```
-Agents Invoked: VAL, TST, QUA, VER, CM
-Workflow:
+Agents Invoked: VAL (SIL 0-2) / VMGR (SIL 3-4), TST, QUA, CM
+
+  --- SIL 0-2 ONLY ---
+  PM orchestrates validation:
   1. PM → VAL: Plan system validation tests
      - VAL internally invokes skill: en50128-validation
      - VAL creates validation test specifications
   2. PM → TST: Create system test harness
-     - TST creates system-level test code
   3. PM → TST: Execute system tests on target environment
-     - TST runs validation tests
   4. PM → VAL: Document validation results
-     - VAL reviews test results and creates validation report
   5. PM → QUA: Review validation documentation
   6. PM → VER: Verify validation completeness
   7. PM → CM: Baseline validated software
   8. PM → COD: Report phase complete
+
+  --- SIL 3-4 ONLY ---
+  PM has NO orchestration role in Phase 7. Validation is COD/VMGR-led.
+  1. PM → CM: Prepare release baseline (logistics only)
+  2. PM → COD: Notify that integrated software is baselined and ready for validation
+  3. COD → VMGR: Request validation of integrated software
+     (VMGR performs validation activities — see VMGR Phase 7 workflow)
+  4. VMGR ⇢ COD: Validation report complete (APPROVE or REJECT)
+  5. COD: Gate check phase-7
+
+  Note: PM SHALL NOT direct VAL or VMGR in SIL 3-4. Any resource/scheduling
+  coordination with VMGR is informational only (EN 50128 5.1.2.10.f).
 ```
 
 #### Phase 8: Assessment (SIL 3-4 Only)
 ```
-Agents Invoked: ASR (independent assessor)
+Note: The Independent Safety Assessor (ISA/ASR) is ALWAYS externally employed
+(typically appointed by the Safety Authority or customer). This platform does NOT
+provide an ASR agent — assessment is performed by an external party.
+
+Phase 8 goal: Deliver the complete project artifact package to the ASR.
+Reaching Phase 8 gate = the platform's "first project finish point".
+
 Workflow:
-  1. PM → ASR: Provide all project artifacts for assessment
-     - ASR is INDEPENDENT (PM has NO authority)
-     - ASR performs independent safety assessment
-  2. ASR → PM: Report assessment results (informational only)
-  3. PM → COD: Report assessment complete (if ASR approves)
-Note: PM coordinates logistics only, has NO influence on ASR decisions
+  1. PM → CM: Compile complete artifact package for ASR:
+     - All lifecycle deliverables (SRS, SAS, SDS, component designs, source code,
+       test specifications, test reports, integration report, validation report)
+     - All verification reports (per phase)
+     - Configuration management records (baselines, change log)
+     - Traceability matrix (end-to-end)
+     - Safety case (Hazard Log, FMEA/FTA, residual risk register)
+     - V&V independence evidence
+     - Quality assurance records (SQAP, code reviews, metrics)
+  2. PM → COD: Notify artifact package is ready for external assessment
+  3. COD: Phase 8 gate check — verifies completeness of artifact package
+     PASS → "Assessment-Ready Baseline" created by CM; project formally handed to ASR
+     FAIL → COD lists missing items; PM coordinates resolution
+
+After Phase 8 gate PASS:
+  - The project is at the platform's first project finish point.
+  - All subsequent ASR interactions are EXTERNAL to this platform.
+  - ASR findings and responses are tracked manually in phase-8-assessment/.
+  - When ASR grants approval, PM updates LIFECYCLE_STATE.md and proceeds to Phase 9.
+
+Note: PM coordinates logistics for ASR access to artifacts (informational only).
+ASR has NO reporting relationship to PM, COD, or any development role.
 ```
 
 #### Phase 9: Deployment
@@ -638,10 +692,12 @@ Reporting to COD for re-verification...
 4. CCB members vote (PM chairs, CM coordinates)
 5. PM makes final decision: APPROVED or REJECTED
 6. If APPROVED:
-   - CM tracks implementation
+   - CM creates baseline branch for change implementation
    - Affected agents implement changes
    - CM verifies completion
-   - VER reverifies affected areas
+   - **PM notifies COD of approved CR and completed implementation**
+   - **COD determines which lifecycle phases must be re-entered and re-gated** (EN 50128 §5.5)
+   - COD coordinates re-verification via /cod re-enter-phases --cr <cr-id>
 7. Update Change Request status in LIFECYCLE_STATE.md
 
 **CCB Members** (SIL-dependent):
@@ -687,12 +743,12 @@ Decision: APPROVED
 Approval Authority: PM + SAF (SIL 3 safety-related change)
 
 Next Steps:
-  1. CM creates baseline branch
-  2. IMP implements fix
-  3. TST updates tests
-  4. VER reverifies
-  5. CM updates baseline
-  6. COD notified of change
+   1. CM creates baseline branch
+   2. IMP implements fix
+   3. TST updates tests
+   4. CM updates baseline
+   5. PM → COD: notify CR implemented (COD determines phase re-entry scope)
+   6. COD: /cod re-enter-phases --cr CR-2026-001 (re-gates affected phases)
 
 Change Request Status: APPROVED - Implementation in progress
 ```

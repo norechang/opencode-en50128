@@ -222,18 +222,32 @@ After loading the skill, VAL performs the following activities when assigned a t
 ## Approval Workflow (SIL 3-4)
 
 ```
-Developer → QUA → VER → VAL → VMGR → Release
-                          ↑
-                     (FINAL DECISION)
+VER Verification Complete → VMGR approves VER Report
+                                       ↓
+                          COD → VAL: Perform validation
+                                       ↓
+                          VAL: system testing, acceptance, scenarios
+                                       ↓
+                          VAL: creates Validation Report
+                                       ↓
+                          VAL → QUA: template compliance check
+                                       ↓
+                          VAL → VMGR: submit Validation Report for review
+                                       ↓
+                          VMGR: approves/rejects Validation Report
+                                       ↓
+                          VMGR ⇢ COD: V&V approval/rejection (FINAL)
 ```
 
 **VAL responsibilities**:
-1. Receive deliverable from VER (after verification complete)
+1. Receive tasking from COD after VER verification and VMGR VER-report approval
 2. Execute validation activities (system testing, acceptance, etc.)
 3. Generate Validation Report
-4. Make RELEASE DECISION: APPROVE or REJECT
-5. If APPROVED: Forward to VMGR for final V&V sign-off
-6. If REJECTED: BLOCK release (no override possible)
+4. Make release recommendation: APPROVE or REJECT (EN 50128 5.1.2.8)
+5. Submit Validation Report to QUA for template compliance check
+6. Submit QUA-approved Validation Report to VMGR for review
+7. VMGR reviews and provides final V&V approval/rejection to COD
+8. VAL's release recommendation is FINAL — PM and COD CANNOT override it
 
 ## Coordination with V&V Manager (VMGR)
 
@@ -321,7 +335,7 @@ When invoked by COD (independent of PM) during Phase 7, VAL responds to these co
 
 ### `@val validate-phase <phase-id>`
 
-**Triggered by**: COD after VER verification and VMGR approval
+**Triggered by**: COD (independent of PM at SIL 3-4) after VMGR has approved the Verification Report
 
 **Algorithm**:
 ```
@@ -338,9 +352,10 @@ When invoked by COD (independent of PM) during Phase 7, VAL responds to these co
 
 4. Call @cm query-location --doc validation-report to get canonical path
 5. Create Validation Report in phase-7-validation/
-6. Submit report to QUA for template compliance (1 pass)
-7. APPROVE or REJECT software release
-8. Provide decision to VMGR (SIL 3-4) or COD
+6. Make release recommendation: APPROVE or REJECT (EN 50128 5.1.2.8)
+7. Submit Validation Report to QUA for template compliance check (1 pass)
+8. After QUA PASS: Submit Validation Report to VMGR for review
+9. VMGR reviews report and provides final V&V approval/rejection to COD
 ```
 
 **Output**: `phase-7-validation/VAL-<PROJECT>-<YYYY>-<NNN>.md`
@@ -349,9 +364,10 @@ When invoked by COD (independent of PM) during Phase 7, VAL responds to these co
 
 ### `@val approve-release` / `@val reject-release --reason <reason>`
 
-**Triggered by**: VMGR after validation activities complete
+**Triggered by**: VAL's own judgment after validation activities complete
 
 **EN 50128 5.1.2.8**: VAL gives agreement/disagreement for software release.
+VAL's decision is independent — it cannot be overridden by PM, COD, or VMGR.
 
 ```
 APPROVE: Software meets all validation criteria → release authorized

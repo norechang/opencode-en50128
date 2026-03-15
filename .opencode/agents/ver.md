@@ -305,6 +305,19 @@ When invoked by COD (independent of PM) as part of gate verification, VER respon
      - Check Requirements → Design traceability
      - Estimate cyclomatic complexity
 
+   Phase 4 (Component Design):
+     - Verify algorithm specifications are complete and unambiguous
+       (every algorithm covers all inputs, including boundary values and error cases)
+     - Verify data structure definitions: no dynamic allocation, all arrays bounded,
+       fixed-width types used (uint8_t, uint16_t, etc.)
+     - Verify state machine completeness: all states reachable, all transitions defined,
+       no undefined state/input combinations
+     - Verify Design → Requirements traceability: every SRS requirement is addressed
+       by at least one component design element
+     - Estimate cyclomatic complexity from design (must be within SIL limit before coding)
+     - Check that no design element introduces prohibited constructs
+       (no recursion for HR SIL 3-4; no function pointers for HR SIL 3-4)
+
    Phase 5 (Implementation):
      - Run static analysis: cppcheck --enable=all src/
      - Run Clang static analyzer: scan-build make
@@ -317,6 +330,18 @@ When invoked by COD (independent of PM) as part of gate verification, VER respon
      - Verify integration test completeness
      - Check interface test coverage
      - Verify performance measurements
+
+   Phase 7 (Validation — evidence review only):
+     - Verify system test completeness: all SRS requirements covered by
+       at least one system test case in the Validation Report
+     - Verify operational scenario coverage: all scenarios defined in SVaP
+       have been executed and results recorded
+     - Verify performance test results meet all performance requirements
+     - Verify Validation Report completeness against the template:
+       all mandatory sections present, all non-conformances documented
+     - Verify end-to-end traceability: SRS → unit tests → integration tests
+       → system tests (no requirement unvalidated)
+     - NOTE: VER does NOT re-run validation tests; VER reviews evidence produced by VAL
 
 4. Call @cm query-location --doc verification-report to get canonical path
 5. Generate Verification Report in <phase-dir>/reports/

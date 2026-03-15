@@ -108,11 +108,13 @@ After loading the skill, COD can perform:
 
 5. **Re-run Phase After Defect Resolution** — Re-execute phase verification after PM resolves VER/VAL-rejected defects; invoke VER/VAL/VMGR re-approval and repeat gate check.
 
-6. **Notify User** — Send structured notifications for critical lifecycle events (gate blocks, approval requests, phase transitions).
+6. **Re-enter Phases After Approved Change** — After a CCB-approved Change Request, determine which lifecycle phases are affected, mark them for re-entry, coordinate PM-led fixes and COD-led re-verification, and re-run all affected phase gates (EN 50128 §5.5).
 
-7. **Finish Phase** — Mark current phase complete in `LIFECYCLE_STATE.md` and prepare for next phase transition.
+7. **Notify User** — Send structured notifications for critical lifecycle events (gate blocks, approval requests, phase transitions).
 
-8. **Sync README** — Synchronize `README.md` with `LIFECYCLE_STATE.md`, updating the "Current Status" section and phase progress checklist.
+8. **Finish Phase** — Mark current phase complete in `LIFECYCLE_STATE.md` and prepare for next phase transition.
+
+9. **Sync README** — Synchronize `README.md` with `LIFECYCLE_STATE.md`, updating the "Current Status" section and phase progress checklist.
 
 ---
 
@@ -491,7 +493,96 @@ Recommended Command:
 
 ---
 
-### 6. Notify User
+### 6. Re-enter Phases After Approved Change
+
+**Purpose**: After a CCB-approved Change Request (CR), determine the earliest affected lifecycle phase, re-execute PM-led activities for all affected phases, and repeat all affected phase gate checks. Required by EN 50128 §5.5 (lifecycle iteration).
+
+**Trigger**: PM notifies COD that a CR has been approved by CCB and implementation is complete.
+
+**Algorithm**:
+```
+1. Load skill: en50128-lifecycle-coordination
+2. Read active workspace and LIFECYCLE_STATE.md
+3. Read approved CR from changes/CR-<YYYY>-<NNN>.md
+4. Determine affected phases:
+   - Inspect CR impact analysis (produced during CCB meeting)
+   - Identify the EARLIEST phase whose deliverables are affected
+     (e.g., a requirements change affects Phase 2 onward;
+      a code-only fix may only affect Phase 5 onward)
+   - Record the set of affected phases: [phase_start ... current_phase]
+5. Mark affected phases in LIFECYCLE_STATE.md:
+   - Status: "re-entry-required" for each affected phase
+   - Reference: CR-<YYYY>-<NNN>
+6. For each affected phase (in forward order from phase_start):
+   a. COD → PM: "Re-execute phase <phase-id> activities for CR <cr-id>"
+   b. PM executes /pm execute-phase <phase-id> (fixes + QUA-accepted deliverables)
+   c. PM → COD: "Phase <phase-id> activities re-complete"
+   d. COD coordinates independent re-verification:
+      - Invoke VER: /ver re-verify-phase <phase-id>
+      - For Phase 7 (SIL 3-4): COD → VAL → VMGR (full re-validation flow)
+   e. COD: /cod gate-check <phase-id>
+   f. If gate PASS: Mark phase re-entry complete in LIFECYCLE_STATE.md
+   g. If gate FAIL: Apply SIL-dependent enforcement (block or warn)
+7. Once all affected phase gates re-pass:
+   - Update CR status in LIFECYCLE_STATE.md to "implemented-verified"
+   - Resume normal lifecycle from current (highest) phase
+8. CM: create updated baseline incorporating CR changes
+```
+
+**Phase Impact Classification**:
+```
+Requirements change (SRS) → Affects Phase 2 onward
+Design change (SAS/SDS)   → Affects Phase 3 onward
+Component design change   → Affects Phase 4 onward
+Code/unit test change     → Affects Phase 5 onward
+Integration change        → Affects Phase 6 onward
+```
+
+**Output Format**:
+```
+═══════════════════════════════════════════════════════
+COD: Re-entering Phases After Approved CR-2026-001
+═══════════════════════════════════════════════════════
+
+Active Workspace: MyProject (SIL 3)
+   CR: CR-2026-001 - Fix sensor boundary check
+   CR Type: code-change
+   Earliest Affected Phase: Phase 5 (Implementation)
+
+Phases requiring re-entry: [Phase 5, Phase 6]
+   Phase 5 (Implementation): marked for re-entry
+   Phase 6 (Integration):    marked for re-entry
+
+Re-entering Phase 5 (Implementation):
+   PM re-executing phase activities...
+   ✅ Activities complete (QUA-accepted)
+   VER re-verifying Phase 5...
+   ✅ VER re-verification PASSED
+   COD gate-check Phase 5: PASSED
+
+Re-entering Phase 6 (Integration):
+   PM re-executing phase activities...
+   ✅ Activities complete (QUA-accepted)
+   VER re-verifying Phase 6...
+   ✅ VER re-verification PASSED
+   COD gate-check Phase 6: PASSED
+
+═══════════════════════════════════════════════════════
+CR-2026-001 RE-ENTRY COMPLETE ✅
+═══════════════════════════════════════════════════════
+
+CM: Updated baseline created (post-CR-2026-001)
+Next: Resume Phase 7 (Validation) or proceed to next phase gate.
+```
+
+**EN 50128 References**:
+- **Section 5.5**: Software modification (lifecycle iteration rules)
+- **Section 6.6**: Configuration management (change tracking)
+- **Section 5.3.2.13**: Phase modification authority (COD authorizes re-entry)
+
+---
+
+### 7. Notify User
 
 **Purpose**: Notify user of critical lifecycle events
 
@@ -532,7 +623,7 @@ Action Required:
 
 ---
 
-### 7. Finish Phase
+### 8. Finish Phase
 
 **Purpose**: Complete current phase and prepare for next phase
 
@@ -581,8 +672,11 @@ Recommended Command:
 
 ### Document Approval Chain (SIL 3-4)
 ```
-PM (complete) → QUA (template check) → VER (verify) → 
-QUA (final check) → VMGR (approve) → VAL (validate) → APPROVED
+PM (complete) → QUA (template check) → VER (verify) →
+QUA (VER report template check) → VMGR (approve VER report) →
+VAL (validate, independent from VMGR) →
+QUA (VAL report template check) → VMGR (approve VAL report) →
+VMGR ⇢ COD (final V&V gate decision) → APPROVED
 ```
 
 ### Verification and Validation Reports (ALL SIL Levels)
@@ -594,7 +688,7 @@ QUA (final check) → VMGR (approve) → VAL (validate) → APPROVED
 ### Independence Requirements (SIL 3-4)
 - **VER** independent from PM and document authors
 - **VAL** SHALL NOT report to PM (EN 50128 5.1.2.10f)
-- **VMGR** manages VER team, performs VAL activities
+- **VMGR** manages VER team, reviews and approves VER and VAL reports; does NOT perform validation activities
 - **ASR** independent from supplier and project
 
 ### User Approval Required
@@ -604,15 +698,74 @@ QUA (final check) → VMGR (approve) → VAL (validate) → APPROVED
 
 ## Lifecycle Phases (V-Model)
 
-1. **Phase 1: Planning** - SQAP, SCMP, SVP, SVaP
+1. **Phase 1: Planning** - SQAP, SCMP (PM-led); SVP (VMGR→VER-led, SIL 3-4) / VER-led (SIL 0-2); SVaP (VMGR-led, SIL 3-4) / VAL-led (SIL 0-2)
 2. **Phase 2: Requirements** - Software Requirements Specification, traceability
 3. **Phase 3: Architecture & Design** - SAS, SDS, interface specs
 4. **Phase 4: Component Design** - Detailed component design, algorithms
 5. **Phase 5: Implementation & Testing** - C code (MISRA C), unit tests, coverage
 6. **Phase 6: Integration** - Component integration, integration testing
-7. **Phase 7: Validation** - System testing, operational validation
-8. **Phase 8: Assessment** - Independent assessment (SIL 3-4 only)
+7. **Phase 7: Validation** - System testing, operational validation (COD→VMGR-led, SIL 3-4; PM→VAL-led, SIL 0-2)
+8. **Phase 8: Assessment** - External ISA/ASR review (SIL 3-4 only); this is the platform's first project finish point
 9. **Phase 9: Deployment** - Release package, deployment, maintenance
+
+## SIL 3-4 Phase 1: COD Coordinates SVP and SVaP
+
+At SIL 3-4, SVP and SVaP MUST be created by independent roles, NOT under PM direction.
+COD coordinates this **in parallel** with PM's SQAP/SCMP activities:
+
+```
+COD → VMGR: "Planning phase started. Create SVaP and coordinate SVP with VER."
+  VMGR → VER: "Create Software Verification Plan (SVP)"
+    VER: creates SVP, calls @cm query-location --doc SVP
+    VER → QUA: submit SVP for template compliance check
+    QUA → VER: PASS/FAIL
+    VER ⇢ VMGR: SVP complete
+  VMGR: creates SVaP, calls @cm query-location --doc SVaP
+  VMGR → QUA: submit SVaP for template compliance check
+  QUA → VMGR: PASS/FAIL
+  VMGR ⇢ COD: SVP and SVaP complete
+
+COD: gate-check phase-1 verifies all four: SQAP, SCMP, SVP, SVaP
+```
+
+**Independence preserved**: PM has no authority over SVP (owned by VER) or SVaP (owned by VMGR).
+
+## SIL 3-4 Phase 7: COD Coordinates Validation via VMGR
+
+At SIL 3-4, PM has NO role in Phase 7 Validation. COD coordinates independently:
+
+```
+PM → COD: "Phase 6 (Integration) complete. Integrated software baselined."
+COD: verifies VMGR has approved Phase 6 Verification Report
+COD → VAL: "Perform validation on integrated software baseline." (independent from PM)
+  VAL: performs validation activities (system testing, acceptance, operational scenarios)
+  VAL: creates Validation Report
+  VAL → QUA: submit Validation Report for template compliance check
+  QUA → VAL: PASS/FAIL
+  VAL → VMGR: submit Validation Report for review
+  VMGR: reviews Validation Report, approves or rejects
+  VMGR ⇢ COD: Validation APPROVED or REJECTED
+
+COD: gate-check phase-7 based on VMGR decision (CANNOT override)
+If REJECTED: COD → PM: coordinate defect resolution
+             PM → development agents: fix defects
+             COD → VAL: re-validate after fixes
+```
+
+**Independence preserved**:
+- PM has NO involvement in validation activities (EN 50128 5.1.2.10.f)
+- VAL is invoked by COD directly, NOT by PM
+- VMGR reviews VAL's report but does NOT control VAL's release decision (EN 50128 5.1.2.8)
+
+## Phase 8: Assessment-Ready as First Project Finish Point
+
+Phase 8 represents the platform's **first project finish point** for SIL 3-4:
+- All platform-managed lifecycle activities complete (Phases 1-7)
+- COD gate-check phase-8 verifies completeness of the artifact package for external ASR
+- On PASS: CM creates "Assessment-Ready Baseline" — project formally ready for external ISA/ASR
+- The ISA/ASR is ALWAYS external (appointed by Safety Authority/customer) — no platform agent exists for this role
+- External ASR activities are tracked manually in `phase-8-assessment/`
+- COD monitors for ASR completion signal (manual entry in LIFECYCLE_STATE.md) to authorize Phase 9
 
 ## EN 50128 Standard References
 
