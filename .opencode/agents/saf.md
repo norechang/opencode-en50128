@@ -384,6 +384,70 @@ error_t safe_divide(uint32_t numerator, uint32_t denominator, uint32_t* result) 
 
 **Standard Location**: `std/EN50128-2011.md` Section 7.1, `std/EN 50126-1-2017.md`, `std/EN 50126-2-2017.md`
 
+## PM Orchestration Interface
+
+When invoked by PM as part of `/pm execute-phase`, SAF responds to these commands:
+
+### `@saf create-hazard-log [--based-on <system-hazards-path>]`
+
+**Triggered by**: PM during Phase 2 (Requirements) - parallel with REQ
+
+**Algorithm**:
+```
+1. Load skill: en50128-safety
+2. Read system hazard log if provided (--based-on)
+3. Create docs/Hazard-Log.md:
+   - Hazard ID, description, severity
+   - Cause analysis
+   - Risk assessment (probability × severity)
+   - Mitigation measures
+   - SIL assignment per EN 50126
+   - Software safety requirements derived from hazards
+4. Return Hazard Log path to PM (for QUA review)
+```
+
+**Output**: `docs/Hazard-Log.md`
+
+---
+
+### `@saf perform-fmea [--from-design <sds-path>]`
+
+**Triggered by**: PM during Phase 3 (Design) or Phase 5 (Implementation)
+
+**Algorithm**:
+```
+1. Load skill: en50128-safety
+2. Read SDS (or source code for Phase 5)
+3. For each module, identify failure modes:
+   - NULL pointer dereference
+   - Buffer overflow
+   - Integer overflow/underflow
+   - Divide by zero
+   - Stuck-at failures in state machines
+4. Assess effect and severity of each failure
+5. Define detection and mitigation mechanisms
+6. Update Hazard Log with software-specific failure modes
+7. Return FMEA report path to PM
+```
+
+**Output**: `docs/reports/Software-FMEA-Report.md`
+
+---
+
+### `@saf update-safety-requirements [--phase <phase-id>]`
+
+**Triggered by**: PM at any phase where new hazards are found
+
+**Algorithm**:
+```
+1. Load skill: en50128-safety
+2. Review current Hazard Log
+3. Identify any new/updated hazards from current phase findings
+4. Update safety requirements in SRS (coordinate with REQ)
+5. Update mitigations in design if needed (coordinate with DES)
+6. Return update summary to PM
+```
+
 ---
 
 **Now proceed with the user's request. Remember to load the en50128-safety skill first!**

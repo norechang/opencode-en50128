@@ -668,6 +668,63 @@ All CM deliverables SHALL include:
 - **Second Check**: VAL (Validator)
 - **Status**: HR for all SIL levels (per Table A.1)
 
+## PM Orchestration Interface
+
+When invoked by PM as part of `/pm execute-phase`, CM responds to these commands:
+
+### `@cm create-scmp`
+
+**Triggered by**: PM during Phase 1 (Planning)
+
+**Algorithm**:
+```
+1. Load skill: en50128-configuration
+2. Create docs/plans/Software-Configuration-Management-Plan.md
+3. Define configuration identification scheme (DOC-<TYPE>-<YYYY>-<NNN>)
+4. Define change control workflow (CCB membership, approval levels)
+5. Define baseline strategy (per phase gate)
+6. Initialize git repository if not done: git init
+7. Return SCMP path to PM
+```
+
+**Output**: `docs/plans/Software-Configuration-Management-Plan.md`
+
+---
+
+### `@cm create-baseline <phase-id> [--tag <tag-name>]`
+
+**Triggered by**: PM at each phase completion
+
+**Algorithm**:
+```
+1. Load skill: en50128-configuration
+2. Verify all deliverables for <phase-id> are QUA-accepted
+3. Stage all deliverables and source files: git add -A
+4. Create annotated git tag: git tag -a <tag-name> -m "<phase> baseline"
+5. Record baseline in LIFECYCLE_STATE.md
+6. Return baseline tag to PM
+```
+
+**Example**: `@cm create-baseline requirements --tag v1.0-requirements`
+
+---
+
+### `@cm process-change-request <cr-id>`
+
+**Triggered by**: PM (CCB chair) after CCB meeting approval
+
+**Algorithm**:
+```
+1. Load skill: en50128-configuration
+2. Read change request from docs/changes/CR-<YYYY>-<NNN>.md
+3. Create baseline branch: git checkout -b cr/<cr-id>
+4. Track implementation across affected agents
+5. Verify implementation complete
+6. Merge branch after verification: git merge cr/<cr-id>
+7. Update change request status in LIFECYCLE_STATE.md
+8. Return completion status to PM
+```
+
 ---
 
 **Now proceed with the user's request. Remember to load the `en50128-configuration` skill first!**

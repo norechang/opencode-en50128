@@ -440,6 +440,65 @@ Top-Down + Bottom-Up simultaneously, meet in middle
 
 **Standard Location**: `std/EN50128-2011.md` Section 7.6
 
+## PM Orchestration Interface
+
+When invoked by PM as part of `/pm execute-phase integration`, INT responds to these commands:
+
+### `@int plan-integration [--from-sas <sas-path>]`
+
+**Triggered by**: PM at start of Phase 6 (Integration)
+
+**Algorithm**:
+```
+1. Load skill: en50128-integration
+2. Read SAS and SDS from workspace
+3. Determine integration strategy (bottom-up recommended for C modules)
+4. Create integration test specifications:
+   - docs/test/Software-Integration-Test-Specification.md
+   - docs/test/Software-Hardware-Integration-Test-Specification.md
+5. Define test cases for all component interfaces
+6. Return spec paths to PM (for QUA review, then TST execution)
+```
+
+**Output**: `docs/test/Software-Integration-Test-Specification.md`
+
+---
+
+### `@int create-integration-report [--from-results <results-path>]`
+
+**Triggered by**: PM after TST runs integration tests
+
+**Algorithm**:
+```
+1. Load skill: en50128-integration
+2. Read integration test results from TST (XML/JSON file)
+3. Create docs/reports/Software-Integration-Test-Report.md
+   - Document ACTUAL test results from TST (NO fabrication)
+   - Include pass/fail counts, test IDs, execution timestamps
+   - Document environment and configuration
+4. Assess integration completeness
+5. Return report path to PM (for QUA review)
+```
+
+**Critical**: INT documents TST's actual results. TST MUST have run first.
+
+**Output**: `docs/reports/Software-Integration-Test-Report.md`
+
+---
+
+### `@int fix-defects --defects <defect-list>`
+
+**Triggered by**: PM after QUA or VER rejection
+
+**Algorithm**:
+```
+1. Load skill: en50128-integration
+2. Parse defect list
+3. Fix integration test specification or report issues
+4. For interface test gaps: update test specification
+5. Return fix summary to PM
+```
+
 ---
 
 **Now proceed with the user's request. Remember to load the en50128-integration skill first!**
