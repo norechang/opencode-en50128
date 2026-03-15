@@ -1,15 +1,28 @@
 # Phase 3: Tool Implementation and Testing
 
-**Status**: Planning  
-**Start Date**: 2026-03-14 (estimated)  
+**Status**: In Progress  
+**Start Date**: 2026-03-15  
 **Duration**: 2-3 weeks (estimated)  
 **Prerequisites**: ✅ Phase 2 Complete (all 13 skills enhanced)
 
 ---
 
+## ⚠️ SCOPE CHANGE (2026-03-15)
+
+**Decision**: Train Door Control sample project **DEPRECATED** and moved to **Phase 4 (Future Work)**
+
+**Rationale**: Focus Phase 3 on core tool implementation and skill workflow testing WITHOUT large sample project. Sample projects will be created AFTER transformation is complete.
+
+**New Phase 3 Scope**:
+1. ✅ Implement 10 missing tools (~1,550 lines)
+2. ✅ Test all 13 skill workflows end-to-end (using opencode_session_debugger if needed)
+3. ❌ ~~Create Train Door Control sample project~~ → **MOVED TO PHASE 4**
+
+---
+
 ## Executive Summary
 
-**Phase 3 Goal**: Implement missing tools, test all workflows with a real EN 50128 SIL 3 project, verify all tool integration points work correctly, and create a comprehensive sample project demonstrating the complete V-Model lifecycle.
+**Phase 3 Goal**: Implement missing tools and test all skill workflows end-to-end to verify tool integration points work correctly.
 
 **Phase 2 Achievements**:
 - ✅ 13 of 13 skills complete (100%)
@@ -20,10 +33,10 @@
 - ✅ Zero placeholder tools in workflows - all tool references are working implementations
 
 **Phase 3 Challenges**:
-- Some documented tools are NOT YET IMPLEMENTED (e.g., mcdc_analyzer.py, validate_test_doc_template.py)
-- Workflows have not been tested end-to-end with real EN 50128 project
+- 10 documented tools are NOT YET IMPLEMENTED (e.g., validate_test_doc_template.py)
+- Workflows have not been tested end-to-end
 - Tool integration points need verification
-- Sample project needed to demonstrate complete lifecycle
+- Skill invocation evidence tracking may require opencode_session_debugger (OPENCODE_DEBUG_ENABLED=true)
 
 ---
 
@@ -35,8 +48,7 @@ Implement all missing tools documented in Phase 2 workflows:
 
 | Tool | Purpose | Skill | Lines (est.) | Priority | Status |
 |------|---------|-------|--------------|----------|--------|
-| `tools/mcdc/mcdc_analyzer.py` | MC/DC coverage analysis (SIL 3-4) | Testing | ~200 | **CRITICAL** | ⏳ TODO |
-| `tools/scripts/validate_test_doc_template.py` | Test doc template validation | Documentation | ~200 | **HIGH** | ⏳ TODO |
+| `tools/scripts/validate_test_doc_template.py` | Test doc template validation | Documentation | ~200 | **CRITICAL** | ⏳ TODO |
 | `tools/tool-validation/run-all-validations.sh` | Automated T2 tool validation | Tools | ~150 | **HIGH** | ⏳ TODO |
 | `tools/tool-validation/check-tool-versions.sh` | Tool version checker | Tools | ~100 | **MEDIUM** | ⏳ TODO |
 | `tools/scripts/validate_srs_template.py` | SRS template validation | Documentation | ~200 | **MEDIUM** | ⏳ TODO |
@@ -48,26 +60,58 @@ Implement all missing tools documented in Phase 2 workflows:
 
 **Total Estimated Effort**: ~1,550 lines of Python/Bash code
 
+**NOTE**: `tools/mcdc/mcdc_analyzer.py` **ALREADY EXISTS** (11K lines) - removed from implementation list
+
 **Tool Implementation Strategy**:
-1. **Week 1**: Implement CRITICAL and HIGH priority tools (mcdc_analyzer.py, validate_test_doc_template.py, run-all-validations.sh, check-tool-versions.sh)
+1. **Week 1**: Implement CRITICAL and HIGH priority tools (validate_test_doc_template.py, run-all-validations.sh, check-tool-versions.sh)
 2. **Week 2**: Implement MEDIUM priority tools (template validation scripts, test report generation)
 3. **Week 3**: Implement LOW priority tools (CI/CD workflows)
 
-### 2. Sample Project Creation (Priority: CRITICAL)
+### 2. Skill Workflow Testing (Priority: CRITICAL)
 
-Create a complete EN 50128 SIL 3 sample project to test all workflows:
+Test all 13 skill workflows end-to-end to verify tool integration:
 
-**Project**: **Train Door Control System (SIL 3)**
+**Testing Strategy**:
+- Load each skill using `skill` tool
+- Execute primary workflows documented in skill
+- Verify all tool invocations work correctly
+- Use `opencode_session_debugger` if needed (set OPENCODE_DEBUG_ENABLED=true)
+- Document any issues or missing integrations
 
-**Scope**:
+**Skills to Test** (13 total):
+1. en50128-requirements - Requirements elicitation, SIL assignment, traceability
+2. en50128-design - Architecture design, defensive programming
+3. en50128-implementation - C coding, MISRA C compliance
+4. en50128-verification - Static analysis, verification reports
+5. en50128-testing - Unit/integration testing, coverage
+6. en50128-integration - Progressive integration, HW/SW integration
+7. en50128-validation - System validation, acceptance testing
+8. en50128-quality - SQAP, code reviews, quality gates
+9. en50128-safety - Hazard analysis, FMEA, FTA
+10. en50128-lifecycle-coordination - V-Model orchestration, phase gates
+11. en50128-configuration - Version control, change control
+12. en50128-documentation - Document workflows, automation
+13. en50128-tools - Tool qualification, validation
+
+### 3. ~~Sample Project Creation~~ (DEPRECATED - MOVED TO PHASE 4)
+
+**⚠️ STATUS**: This objective has been **DEPRECATED** and moved to **Phase 4 (Future Work)**.
+
+**Rationale**: Focus Phase 3 on core tool implementation and skill workflow testing. Sample projects will be created AFTER architecture transformation is complete to avoid premature scope expansion.
+
+**Original Plan** (for reference):
+
+~~**Project**: **Train Door Control System (SIL 3)**~~
+
+~~**Scope**:
 - Safety-critical software for railway train door control
 - SIL 3 (per EN 50128, EN 50126)
 - C programming language (MISRA C:2012 compliant)
 - ~2,000 lines of production code
 - ~3,000 lines of test code
-- Complete V-Model lifecycle documentation
+- Complete V-Model lifecycle documentation~~
 
-**System Requirements** (10-15 requirements):
+~~**System Requirements** (10-15 requirements):
 1. System shall open doors only when train is stopped (hazard: door opens while moving)
 2. System shall close doors before train departure (hazard: train moves with doors open)
 3. System shall detect obstacles in door path (hazard: door closes on passenger)
@@ -77,18 +121,18 @@ Create a complete EN 50128 SIL 3 sample project to test all workflows:
 7. System shall respond to door open command within 500ms (performance)
 8. System shall respond to door close command within 500ms (performance)
 9. System shall log all door events for audit (traceability)
-10. System shall support manual override (operational)
+10. System shall support manual override (operational)~~
 
-**Architecture** (5-7 modules):
+~~**Architecture** (5-7 modules):
 1. `door_controller.c` - Main door control state machine
 2. `sensor_interface.c` - Door sensor reading and fault detection
 3. `motor_control.c` - Door motor control with position feedback
 4. `safety_monitor.c` - Safety checks and fault handling
 5. `event_logger.c` - Event logging for audit trail
 6. `system_config.c` - Configuration and initialization
-7. `diagnostics.c` - Self-test and diagnostics
+7. `diagnostics.c` - Self-test and diagnostics~~
 
-**Lifecycle Phases to Test**:
+~~**Lifecycle Phases to Test**:
 - **Phase 0**: Initialization (COD plan)
 - **Phase 1**: Planning (SQAP, SCMP, SVP, SVaP)
 - **Phase 2**: Requirements (SRS, Hazard Log, Traceability)
@@ -97,9 +141,9 @@ Create a complete EN 50128 SIL 3 sample project to test all workflows:
 - **Phase 5**: Integration (Integration tests)
 - **Phase 6**: Validation (System tests, Validation Report)
 - **Phase 7**: Assessment (Assessment Report - simulated)
-- **Phase 8**: Deployment (Release Package)
+- **Phase 8**: Deployment (Release Package)~~
 
-**Deliverables** (per EN 50128 Annex C):
+~~**Deliverables** (per EN 50128 Annex C):
 - Software Requirements Specification (SRS)
 - Software Architecture Specification (SAS)
 - Software Design Specification (SDS)
@@ -119,45 +163,20 @@ Create a complete EN 50128 SIL 3 sample project to test all workflows:
 - Hazard Log
 - Traceability Matrix (System Req → SW Req → Arch → Design → Code → Tests → Validation)
 - Tool Qualification Reports (GCC, Unity)
-- Tool Validation Reports (Cppcheck, Clang, gcov, lcov, Lizard)
+- Tool Validation Reports (Cppcheck, Clang, gcov, lcov, Lizard)~~
 
-**Quality Metrics** (SIL 3 targets):
+~~**Quality Metrics** (SIL 3 targets):
 - Statement Coverage: 100% (MANDATORY)
 - Branch Coverage: 100% (MANDATORY)
 - Condition Coverage: 100% (MANDATORY)
 - MC/DC Coverage: 100% (Highly Recommended)
 - Cyclomatic Complexity: ≤10 per function (MANDATORY)
 - MISRA C Compliance: Zero mandatory violations (MANDATORY)
-- Traceability: 100% coverage (MANDATORY)
+- Traceability: 100% coverage (MANDATORY)~~
 
-### 3. End-to-End Testing (Priority: CRITICAL)
+**(Full project details preserved for Phase 4 reference - see original phase3-plan.md in git history)**
 
-Test each workflow with the sample project:
-
-| Skill | Workflows to Test | Test Scenarios | Expected Outcomes |
-|-------|-------------------|----------------|-------------------|
-| **Requirements** | Requirements Elicitation, SIL Assignment, Traceability | Create SRS with 15 SW requirements, assign SIL 3, link to 10 system requirements | SRS complete, traceability 100%, workspace.py trace validates |
-| **Design** | Architecture Design, Detailed Design | Create SAS with 7 modules, SDS with detailed design, link to SRS | SAS/SDS complete, complexity ≤10, traceability updated |
-| **Implementation** | C Coding, Unit Testing, MISRA C | Implement 7 modules (~2,000 lines), write unit tests (~1,500 lines), check MISRA C | Code compiles, unit tests pass, zero MISRA mandatory violations |
-| **Testing** | Unit Testing, Integration Testing, Coverage | Execute all tests, measure coverage (statement/branch/condition/MC/DC) | All tests pass, 100% coverage achieved |
-| **Verification** | Static Analysis, Complexity, Coverage | Run Cppcheck, Clang, Lizard, gcov/lcov, generate Verification Report | All checks pass, Verification Report complete |
-| **Integration** | Component Integration, HW/SW Integration | Integrate 7 modules, test interfaces, test with HIL (simulated) | Integration successful, interface tests pass |
-| **Validation** | System Validation, Acceptance | Execute system tests, operational scenarios, acceptance criteria | All system tests pass, customer acceptance (simulated) |
-| **Safety** | Hazard Analysis, FMEA, FTA | Create Hazard Log (5 hazards), FMEA (6 failure modes), FTA (2 fault trees) | Safety analysis complete, all hazards mitigated |
-| **Quality** | Document Review, Code Review, Audits | Review all documents (template compliance), code review, pre-release audit | All reviews pass, zero NCRs remaining |
-| **Lifecycle** | Phase Gates, V-Model, Traceability, Iteration | Execute all 8 phase gates, maintain traceability, test one iteration | All gates pass, traceability 100%, iteration successful |
-| **Configuration** | Version Control, Change Control, Baselines | Git workflow, 1 Change Request, baseline at Gate 4 | All CIs under CM, CR processed, baseline established |
-| **Documentation** | SRS, SAS/SDS, Test/Verification Docs | Create all mandatory documents per Annex C | All documents complete, template compliant |
-| **Tools** | Tool Qualification, Tool Validation | Qualify GCC (T3), validate Cppcheck/Clang/gcov (T2) | All tools qualified/validated, reports complete |
-
-**Testing Approach**:
-1. **Sequential Phase Execution**: Execute phases 0-8 in order, enforcing phase gates
-2. **Tool Integration Verification**: Verify workspace.py trace and workspace.py wf work correctly at each phase
-3. **Traceability Validation**: Verify end-to-end traceability at each phase (System Req → Validation Results)
-4. **Quality Gate Enforcement**: Verify QUA reviews and approvals work correctly
-5. **Iteration Testing**: Introduce one requirements defect in Phase 6, test iteration workflow (return to Phase 2, update SRS, re-verify, re-validate)
-6. **Automation Verification**: Verify all Python automation scripts work correctly
-7. **Deliverable Completeness**: Verify all EN 50128 Annex C deliverables are created and complete
+---
 
 ### 4. Tool Integration Verification (Priority: HIGH)
 
@@ -185,97 +204,90 @@ Create comprehensive Phase 3 documentation:
 | Document | Purpose | Pages (est.) | Status |
 |----------|---------|--------------|--------|
 | **Phase 3 Test Plan** | Overall testing strategy and approach | ~20 | ⏳ TODO |
-| **Sample Project Documentation** | Complete Train Door Control System docs | ~200 | ⏳ TODO |
+| ~~**Sample Project Documentation**~~ | ~~Complete Train Door Control System docs~~ | ~~200~~ | **DEPRECATED** |
 | **Tool Implementation Reports** | Documentation for each implemented tool | ~50 | ⏳ TODO |
-| **Integration Test Report** | Results of tool integration verification | ~30 | ⏳ TODO |
-| **End-to-End Test Report** | Results of workflow testing | ~50 | ⏳ TODO |
+| **Tool Integration Test Report** | Results of tool integration verification | ~30 | ⏳ TODO |
+| **Skill Workflow Test Report** | Results of end-to-end skill testing | ~50 | ⏳ TODO |
 | **Phase 3 Completion Report** | Summary of Phase 3 achievements | ~30 | ⏳ TODO |
 | **Phase 3 Lessons Learned** | Issues discovered and resolved | ~20 | ⏳ TODO |
 
-**Total Estimated Documentation**: ~400 pages
+**Total Estimated Documentation**: ~200 pages (reduced from ~400 due to sample project removal)
 
 ---
 
-## Phase 3 Schedule
+## Phase 3 Schedule (UPDATED 2026-03-15)
 
-### Week 1: Critical Tool Implementation + Project Setup (40 hours)
+### Week 1: Critical and High Priority Tool Implementation (40 hours)
 
-**Days 1-2 (16 hours)**: Tool Implementation - CRITICAL
-- Implement `tools/mcdc/mcdc_analyzer.py` (~200 lines)
+**Days 1-2 (16 hours)**: Tool Implementation - CRITICAL/HIGH
 - Implement `tools/scripts/validate_test_doc_template.py` (~200 lines)
+- Implement `tools/tool-validation/run-all-validations.sh` (~150 lines)
 - Test both tools with sample data
 - Document usage in tool README
 
-**Days 3-4 (16 hours)**: Tool Implementation - HIGH
-- Implement `tools/tool-validation/run-all-validations.sh` (~150 lines)
+**Days 3-4 (16 hours)**: Tool Implementation - MEDIUM Priority (Part 1)
 - Implement `tools/tool-validation/check-tool-versions.sh` (~100 lines)
+- Implement `tools/scripts/validate_srs_template.py` (~200 lines)
 - Test automation scripts
 - Document in TOOLS.md
 
-**Day 5 (8 hours)**: Sample Project Setup
-- Create project structure (`sample-projects/train-door-control-sil3/`)
-- Initialize Git repository
-- Create initial LIFECYCLE_STATE.md
-- Execute Phase 0 (COD plan)
+**Day 5 (8 hours)**: Tool Implementation - MEDIUM Priority (Part 2)
+- Implement `tools/scripts/validate_sas_sds_template.py` (~250 lines)
+- Test template validation tools
+- Document usage patterns
 
-**Deliverables**: 4 tools implemented (~650 lines), sample project structure created
+**Deliverables**: 5 tools implemented (~900 lines)
 
-### Week 2: Sample Project Development + Testing (40 hours)
+### Week 2: Remaining Tools + Skill Workflow Testing (Part 1) (40 hours)
 
-**Days 1-2 (16 hours)**: Planning and Requirements (Phases 1-2)
-- Execute Phase 1: Create SQAP, SCMP, SVP, SVaP
-- Execute Phase 2: Create SRS (15 requirements), Hazard Log (5 hazards), Traceability
-- Verify workspace.py trace works correctly
-- Pass Gate 2
+**Days 1-2 (16 hours)**: Tool Implementation - MEDIUM Priority (Part 3)
+- Implement `tools/scripts/generate_test_report.py` (~200 lines)
+- Implement `tools/scripts/parse_coverage_report.py` (~150 lines)
+- Test report generation tools
 
-**Days 3-4 (16 hours)**: Design and Implementation (Phases 3-4)
-- Execute Phase 3: Create SAS (7 modules), SDS (detailed design)
-- Execute Phase 4: Implement code (~2,000 lines C), unit tests (~1,500 lines)
-- Verify GCC compilation, Cppcheck/Clang analysis, MISRA C compliance
-- Pass Gates 3 and 4
+**Days 3-4 (16 hours)**: Skill Workflow Testing - Core Development
+- Test en50128-requirements skill workflow
+- Test en50128-design skill workflow
+- Test en50128-implementation skill workflow
+- Test en50128-verification skill workflow
+- Document any issues found
 
-**Day 5 (8 hours)**: Integration and Testing (Phase 5)
-- Execute Phase 5: Integration tests (~1,000 lines)
-- Measure coverage (gcov/lcov)
-- Run mcdc_analyzer.py
-- Pass Gate 5
+**Day 5 (8 hours)**: Skill Workflow Testing - Testing & Integration
+- Test en50128-testing skill workflow
+- Test en50128-integration skill workflow
+- Test en50128-validation skill workflow
+- Document issues and tool integration points
 
-**Deliverables**: Phases 1-5 complete, Train Door Control System code (~3,500 lines) implemented
+**Deliverables**: 2 tools implemented (~350 lines), 7 skills tested
 
-### Week 3: Validation, Quality, and Completion (40 hours)
+### Week 3: Skill Workflow Testing (Part 2) + Documentation (40 hours)
 
-**Days 1-2 (16 hours)**: Validation and Verification (Phase 6)
-- Execute Phase 6: System tests (~500 lines), Validation Report
-- Create 11 Verification Reports
-- Verify QUA document reviews work correctly
-- Pass Gate 6
+**Days 1-2 (16 hours)**: Skill Workflow Testing - Management & Support
+- Test en50128-quality skill workflow
+- Test en50128-safety skill workflow
+- Test en50128-lifecycle-coordination skill workflow
+- Test en50128-configuration skill workflow
+- Document issues and integration points
 
-**Days 3 (8 hours)**: Assessment and Deployment (Phases 7-8)
-- Execute Phase 7: Assessment Report (simulated independent assessment)
-- Execute Phase 8: Release Package preparation
-- Pass Gates 7 and 8
-- Complete all EN 50128 Annex C deliverables
+**Days 3-4 (16 hours)**: Skill Workflow Testing - Documentation & Tools
+- Test en50128-documentation skill workflow
+- Test en50128-tools skill workflow
+- Fix any critical issues found
+- Verify all tool integrations work
 
-**Day 4 (8 hours)**: Iteration Testing
-- Introduce requirements defect in Validation
-- Execute iteration workflow (return to Phase 2)
-- Update SRS, re-verify, re-validate
-- Verify iteration workflow works correctly
+**Day 5 (8 hours)**: LOW Priority Tools (Optional)
+- Implement `.github/workflows/tool-validation.yml` (~50 lines)
+- Implement `.github/workflows/tool-version-check.yml` (~50 lines)
+- Test CI/CD workflows
 
-**Day 5 (8 hours)**: Documentation and Reporting
-- Create Phase 3 Completion Report
-- Create Integration Test Report
-- Create End-to-End Test Report
-- Update SUMMARY.md with Phase 3 status
+**Deliverables**: All 13 skills tested, 2 CI/CD workflows implemented (optional), test reports created
 
-**Deliverables**: Complete Train Door Control System (all phases 0-8), Phase 3 reports
+### Week 4 (Optional): Issue Resolution and Finalization (20 hours)
 
-### Week 4 (Optional): Tool Enhancement and Merge (20 hours)
-
-**Days 1-2 (16 hours)**: Remaining Tool Implementation
-- Implement MEDIUM priority tools (template validators, test report generators)
-- Implement LOW priority tools (CI/CD workflows)
-- Test all tools
+**Days 1-2 (16 hours)**: Bug Fixes and Enhancements
+- Fix any issues discovered during skill testing
+- Enhance tool integration based on findings
+- Update documentation
 
 **Day 3 (4 hours)**: Branch Merge Preparation
 - Review all changes in `architecture-transforming` branch
@@ -291,83 +303,78 @@ Create comprehensive Phase 3 documentation:
 
 ---
 
-## Success Criteria
+## Success Criteria (UPDATED 2026-03-15)
 
 Phase 3 will be considered successful if:
 
 ### 1. Tool Implementation (MANDATORY)
-- ✅ All CRITICAL and HIGH priority tools implemented and tested
-- ✅ mcdc_analyzer.py provides accurate MC/DC coverage (validated against manual analysis)
+- ✅ All 9 documented tools implemented and tested
 - ✅ validate_test_doc_template.py validates all test document templates
 - ✅ Tool automation scripts work correctly (run-all-validations.sh, check-tool-versions.sh)
+- ✅ Template validation tools (SRS, SAS/SDS) work correctly
+- ✅ Report generation tools work correctly
 
-### 2. Sample Project (MANDATORY)
-- ✅ Train Door Control System SIL 3 project complete (all 8 phases executed)
-- ✅ All EN 50128 Annex C deliverables created and complete
-- ✅ Code quality: 100% coverage, CCN ≤10, zero MISRA mandatory violations
-- ✅ Traceability: 100% end-to-end coverage (System Req → Validation Results)
-- ✅ All phase gates passed (COD gate-check successful)
+### 2. ~~Sample Project~~ (DEPRECATED - MOVED TO PHASE 4)
+- ~~✅ Train Door Control System SIL 3 project complete~~
+- ~~✅ All EN 50128 Annex C deliverables created~~
+- **STATUS**: Removed from Phase 3 scope
 
-### 3. Workflow Testing (MANDATORY)
-- ✅ All 13 skill workflows tested end-to-end with sample project
-- ✅ All tool integration points verified (workspace.py trace/wf, GCC, Cppcheck, etc.)
-- ✅ Iteration workflow tested (requirements defect introduced, iteration successful)
-- ✅ QUA review workflows tested (document review, code review, audits)
+### 3. Skill Workflow Testing (MANDATORY)
+- ✅ All 13 skill workflows tested end-to-end
+- ✅ All tool integration points verified (workspace.py, traceability_manager.py, workflow_manager.py)
+- ✅ Document any issues or missing integrations
+- ✅ Verify skill loading and workflow execution
 
 ### 4. Documentation (MANDATORY)
 - ✅ Phase 3 Completion Report created
-- ✅ Sample Project Documentation complete (~200 pages)
-- ✅ Integration Test Report and End-to-End Test Report created
+- ✅ Tool Implementation Reports created
+- ✅ Skill Workflow Test Report created
 - ✅ SUMMARY.md updated with Phase 3 status
 
 ### 5. Quality (MANDATORY)
-- ✅ All tests pass (unit, integration, system)
-- ✅ All static analysis checks pass (Cppcheck, Clang)
-- ✅ All coverage targets met (100% statement/branch/condition, SIL 3)
-- ✅ All documents template-compliant (validated by scripts)
+- ✅ All tool tests pass
+- ✅ All tools properly documented with usage examples
+- ✅ All skill workflows execute without errors
+- ✅ Tool integration verified
 
 ### 6. Optional Enhancements (NICE TO HAVE)
-- ⏳ All MEDIUM and LOW priority tools implemented
 - ⏳ CI/CD workflows created and tested
 - ⏳ Branch merged to main
 - ⏳ Git tag v2.0.0-phase3-complete created
 
 ---
 
-## Risk Management
+## Risk Management (UPDATED 2026-03-15)
 
 ### Identified Risks
 
 | Risk | Probability | Impact | Mitigation |
 |------|-------------|--------|------------|
-| **mcdc_analyzer.py implementation complex** | HIGH | HIGH | Start with simple MC/DC algorithm, validate against manual analysis, use existing gcov branch coverage data |
-| **Sample project too large** | MEDIUM | MEDIUM | Reduce scope to 5 modules if needed, focus on quality over quantity |
-| **Tool integration issues** | MEDIUM | HIGH | Test each tool individually before integration, create test harnesses |
-| **Workflow testing time-consuming** | HIGH | MEDIUM | Prioritize critical workflows (requirements, design, implementation, verification), defer less critical |
-| **Documentation takes longer than expected** | MEDIUM | LOW | Use templates extensively, automate where possible, focus on completeness over polish |
+| **Tool integration issues** | MEDIUM | HIGH | Test each tool individually before integration, create test harnesses, use opencode_session_debugger |
+| **Skill workflow testing time-consuming** | HIGH | MEDIUM | Prioritize critical workflows (requirements, design, implementation, verification), defer less critical |
+| **Skills don't auto-load or execute properly** | MEDIUM | HIGH | Use opencode_session_debugger (OPENCODE_DEBUG_ENABLED=true) to trace skill invocation |
+| **Documentation takes longer than expected** | MEDIUM | LOW | Use templates extensively, focus on completeness over polish |
 | **Phase 3 schedule too aggressive** | MEDIUM | MEDIUM | Extend to 4 weeks if needed, prioritize MANDATORY success criteria |
+| **Missing tool functionality discovered** | MEDIUM | MEDIUM | Document gaps, implement in Phase 4 if non-critical |
 
 ### Risk Response Plan
-
-**If mcdc_analyzer.py too complex**:
-1. Use simplified MC/DC algorithm (basic condition coverage + branch coverage)
-2. Document limitations clearly
-3. Validate with 2-3 simple test cases manually
-
-**If sample project scope too large**:
-1. Reduce to 5 modules (~1,500 lines code)
-2. Simplify requirements (10 instead of 15)
-3. Focus on one iteration scenario
 
 **If tool integration fails**:
 1. Debug each tool individually
 2. Use verbose logging for troubleshooting
-3. Document workarounds in Phase 3 report
+3. Use opencode_session_debugger to trace execution
+4. Document workarounds in Phase 3 report
 
-**If testing time-consuming**:
-1. Prioritize 6 critical skills: Requirements, Design, Implementation, Verification, Testing, Lifecycle
+**If skill testing time-consuming**:
+1. Prioritize 7 critical skills: Requirements, Design, Implementation, Verification, Testing, Lifecycle, Quality
 2. Defer less critical skills to Phase 4
 3. Document limitations in Phase 3 report
+
+**If skills don't load properly**:
+1. Enable OPENCODE_DEBUG_ENABLED=true
+2. Use opencode_session_debugger to trace skill invocation
+3. Verify skill SKILL.md syntax
+4. Check for skill loading errors in debug output
 
 ---
 
@@ -391,95 +398,59 @@ Phase 3 will be considered successful if:
 
 ---
 
-## Deliverables Summary
+## Deliverables Summary (UPDATED 2026-03-15)
 
 ### Code
-- 4 Python tools (CRITICAL/HIGH): ~650 lines
-- 6 Python tools (MEDIUM): ~1,000 lines
-- 2 CI/CD workflows (LOW): ~100 lines
-- Sample project code: ~3,500 lines (production + tests)
-- **Total**: ~5,250 lines of code
+- 9 Python tools/scripts: ~1,550 lines
+- 2 CI/CD workflows (optional): ~100 lines
+- ~~Sample project code~~: ~~3,500 lines~~ **DEPRECATED**
+- **Total**: ~1,650 lines of code
 
 ### Documentation
-- Sample project documentation: ~200 pages (all EN 50128 Annex C deliverables)
-- Phase 3 reports: ~130 pages (test plan, tool reports, integration report, end-to-end report, completion report, lessons learned)
-- **Total**: ~330 pages of documentation
+- ~~Sample project documentation~~: ~~200 pages~~ **DEPRECATED**
+- Phase 3 reports: ~200 pages (test plan, tool reports, skill test report, completion report, lessons learned)
+- **Total**: ~200 pages of documentation
 
 ### Artifacts
-- Complete Train Door Control System SIL 3 project (all phases 0-8)
-- Tool Qualification Reports (2 reports: GCC, Unity)
-- Tool Validation Reports (5 reports: Cppcheck, Clang, gcov, lcov, Lizard)
-- Traceability Matrix (100+ links)
-- Coverage Reports (statement/branch/condition/MC/DC, 100%)
-- Verification Reports (11 reports per verification skill)
-- Validation Report
-- All EN 50128 Annex C deliverables
+- ~~Complete Train Door Control System SIL 3 project~~ **DEPRECATED**
+- 9 working tools with documentation and test harnesses
+- Skill workflow test reports (13 skills tested)
+- Tool integration verification reports
+- Phase 3 completion report with lessons learned
 
 ---
 
-## Post-Phase 3 Actions
+## Post-Phase 3 Actions (UPDATED 2026-03-15)
 
-### Immediate Actions (Week 4)
-1. Review Phase 3 Completion Report with stakeholders
-2. Identify any gaps or issues discovered during testing
+### Immediate Actions (After Phase 3 Completion)
+1. Review Phase 3 Completion Report
+2. Identify any gaps or issues discovered during skill testing
 3. Prioritize fixes or enhancements for Phase 4
 4. Update project roadmap based on lessons learned
+5. **Decision point**: Merge to main or continue with Phase 4 work on branch
 
 ### Phase 4 Planning (Future)
 **Phase 4 Goals** (tentative):
-- Implement remaining MEDIUM/LOW priority tools
-- Create additional sample projects (SIL 0, SIL 2, SIL 4)
-- Enhance tool automation (CI/CD integration)
+- **Create sample projects** (Train Door Control System SIL 3, Simple Calculator SIL 0, Signal Controller SIL 4)
+- Implement any remaining tools or enhancements
 - Create user documentation and tutorials
-- Conduct user acceptance testing with external users
+- Conduct user acceptance testing
 - Prepare for production release
 
 ### Long-Term Actions
 1. Merge `architecture-transforming` to `main`
-2. Create Git tag `v2.0.0-phase3-complete`
+2. Create Git tag `v2.0.0-transformation-complete`
 3. Publish Phase 3 Completion Report
-4. Update project website with sample project
-5. Prepare conference paper or technical report on EN 50128 automation
+4. Update project documentation
+5. Consider conference paper on EN 50128 skill-based automation
 
 ---
 
-## Appendix A: Tool Implementation Details
+## Appendix A: Tool Implementation Details (UPDATED 2026-03-15)
 
-### A.1: mcdc_analyzer.py
+**NOTE**: `tools/mcdc/mcdc_analyzer.py` **ALREADY EXISTS** (331 lines, implemented 2024-02-24). This appendix now focuses on the 9 tools to be implemented.
 
-**Purpose**: Analyze C code for Modified Condition/Decision Coverage (MC/DC) compliance per EN 50128 Table A.21 (MANDATORY SIL 3-4).
-
-**Algorithm**:
-1. Parse source code to identify decision points (if/while/for with compound conditions)
-2. Identify atomic conditions within each decision (A, B, C, etc.)
-3. For each atomic condition, identify test cases where:
-   - Condition independently affects decision outcome
-   - Other conditions remain constant
-4. Calculate MC/DC coverage: (Conditions with MC/DC coverage) / (Total conditions) * 100%
-5. Generate report: Uncovered conditions, required test cases
-
-**Input**: 
-- Source code files (*.c, *.h)
-- gcov coverage data (*.gcov, *.gcda)
-- Test case metadata (optional)
-
-**Output**:
-- MC/DC coverage report (Markdown, HTML)
-- Uncovered conditions list
-- Recommended test cases
-
-**Implementation Notes**:
-- Use `pycparser` for C parsing
-- Use gcov branch coverage data as starting point
-- Implement simplified MC/DC algorithm (may not be 100% accurate for complex conditions)
-- Document limitations clearly
-
-**Testing**:
-- Validate with 3 simple test cases (2 conditions, 3 conditions, 4 conditions)
-- Compare results with manual analysis
-- Test with Train Door Control System code
-
-### A.2: validate_test_doc_template.py
+### A.1: validate_test_doc_template.py
 
 **Purpose**: Validate test documentation (Component/Integration/Overall Test Specifications and Reports) against EN 50128 templates.
 
@@ -509,9 +480,9 @@ Phase 3 will be considered successful if:
 **Testing**:
 - Test with valid test document (should pass)
 - Test with invalid documents (missing sections, wrong format, etc.)
-- Test with Train Door Control System test documents
+- ~~Test with Train Door Control System test documents~~ **Use synthetic test documents**
 
-### A.3: run-all-validations.sh
+### A.2: run-all-validations.sh
 
 **Purpose**: Automate T2 tool validation for all tools (Cppcheck, Clang, gcov, lcov, Lizard).
 
