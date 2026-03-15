@@ -347,7 +347,10 @@ When invoked by COD (independent of PM) as part of gate verification, VER respon
 5. Generate Verification Report in <phase-dir>/reports/
 6. APPROVE or REJECT phase deliverables
 7. Submit report to QUA for template compliance (1 pass)
-8. After QUA PASS: Submit to VMGR for V&V approval (SIL 3-4)
+8. After QUA PASS: Record VER approval in workflow tool, then submit to VMGR for V&V approval (SIL 3-4):
+   ```bash
+   python3 tools/workflow_manager.py review <DOC-ID> --role VER --name "<VER name>" --approve --comment "Verification complete"
+   ```
 9. Return verification status to COD
 ```
 

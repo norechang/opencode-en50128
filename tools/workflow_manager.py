@@ -27,8 +27,8 @@ EN 50128 Compliance:
     - Configuration management and baseline control
     - Traceability of approvals and changes
 
-Version: 1.0
-Date: 2026-03-13
+Version: 1.1
+Date: 2026-03-15
 """
 
 import argparse
@@ -44,6 +44,652 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import List, Dict, Optional, Set, Tuple
+
+# ============================================================================
+# Phase Approval Chains — EN 50128 deterministic gate enforcement
+# ============================================================================
+#
+# Encodes the corrected SIL-conditional, phase-specific approval chains derived
+# from the gap analysis of agent interaction flows against EN 50128:2011.
+#
+# Structure per entry:
+#   "chain": ordered list of role steps that MUST appear in the document
+#            approval records (roles are lowercase, matching ReviewRole.value).
+#            The list is ordered; each role must approve AFTER the previous one.
+#   "independence_forbidden": for SIL 3-4 only — pairs of roles that MUST NOT
+#            be performed by the same person within a phase gate.
+#   "blocked_from_chain": roles that are explicitly forbidden from the approval
+#            chain for a given (phase, sil_group) combination.
+#   "notes": human-readable rationale (EN 50128 reference).
+#
+# SIL grouping:
+#   sil_low  = SIL 0-2  (PM-led flat chain; independence not mandatory)
+#   sil_high = SIL 3-4  (independence mandatory; COD/VMGR/VAL coordination)
+#
+# Phase numbering follows LIFECYCLE.md:
+#   1 = Planning          (SQAP, SCMP, SVP, SVaP)
+#   2 = Requirements      (SRS, Hazard Log)
+#   3 = Architecture &    (SAS, SDS, SIS, FMEA)
+#         Design
+#   4 = Implementation    (Source code, Unit Tests)
+#         & Unit Testing
+#   5 = Integration       (Integration Tests)
+#   6 = Validation        (System Tests, Validation Report)
+#   7 = Assessment        (SIL 3-4 only: Assessment-Ready gate)
+#   8 = Deployment        (Release Package)
+#
+# NOTE: Phase 7 in the prior gap analysis mapped to "Validation/System Testing"
+# and Phase 8 to "Assessment-Ready delivery".  The mapping here follows
+# LIFECYCLE.md numbering exactly; Phase 7 = Assessment-Ready, Phase 8 =
+# Deployment.
+
+PHASE_APPROVAL_CHAINS: Dict = {
+
+    # ------------------------------------------------------------------
+    # Phase 1: Planning  (SQAP, SCMP — PM-authored; SVP, SVaP — VMGR/VER)
+    # ------------------------------------------------------------------
+    1: {
+        "sil_low": {
+            # SIL 0-2: PM orchestrates all planning documents
+            "chain": ["author", "qua", "pm"],
+            "blocked_from_chain": [],
+            "independence_forbidden": [],
+            "notes": (
+                "SIL 0-2: PM-led flat approval chain for all planning documents. "
+                "EN 50128 Section 5.3: lifecycle planning mandatory for all SILs."
+            ),
+        },
+        "sil_high": {
+            # SIL 3-4: SQAP and SCMP follow normal QUA→PM chain.
+            # SVP: COD instructs VMGR; VMGR directs VER to author SVP;
+            #      VER submits → QUA (template check) → VMGR (approve).
+            # SVaP: VMGR authors → QUA (template check) → VMGR self-approves
+            #       (as plan author) → COD (gate).
+            # PM has NO authority over SVP or SVaP at SIL 3-4.
+            "chain": ["author", "qua", "vmgr", "cod"],
+            "blocked_from_chain": ["pm"],   # PM blocked from SVP/SVaP chain
+            "independence_forbidden": [
+                # VER must not be the same person as the document author
+                # for any planning doc they verify (EN 50128 §5.1.2.10i)
+                ("ver", "author"),
+                # VAL must not report to PM (EN 50128 §5.1.2.10f)
+                ("val", "pm"),
+            ],
+            "notes": (
+                "SIL 3-4: COD initiates; VMGR manages VER for SVP authoring; "
+                "PM is BLOCKED from SVP/SVaP chain. "
+                "EN 50128 §5.1.2.10e (VER reports to VMGR), "
+                "§5.1.2.10f (VAL independent of PM)."
+            ),
+        },
+    },
+
+    # ------------------------------------------------------------------
+    # Phase 2: Requirements  (SRS, Hazard Log)
+    # ------------------------------------------------------------------
+    2: {
+        "sil_low": {
+            "chain": ["author", "qua", "pm"],
+            "blocked_from_chain": [],
+            "independence_forbidden": [],
+            "notes": (
+                "SIL 0-2: PM-led flat approval chain. "
+                "EN 50128 §7.2: Software Requirements Specification mandatory."
+            ),
+        },
+        "sil_high": {
+            # Standard dev-phase SIL 3-4 chain:
+            # owner → QUA (template) → VER (verify) → QUA (VER report template)
+            # → VMGR (approve VER report) → COD (gate)
+            "chain": ["author", "qua", "ver", "vmgr", "cod"],
+            "blocked_from_chain": [],
+            "independence_forbidden": [
+                ("ver", "author"),   # VER ≠ requirements author (§5.1.2.10i)
+                ("ver", "val"),      # VER ≠ VAL (§5.1.2.10j)
+                ("val", "pm"),       # VAL not under PM (§5.1.2.10f)
+            ],
+            "notes": (
+                "SIL 3-4 standard dev-phase chain. "
+                "EN 50128 §5.1.2.10: independent VER mandatory; "
+                "VMGR approves VER report; COD holds gate."
+            ),
+        },
+    },
+
+    # ------------------------------------------------------------------
+    # Phase 3: Architecture & Design  (SAS, SDS, SIS, FMEA)
+    # ------------------------------------------------------------------
+    3: {
+        "sil_low": {
+            "chain": ["author", "qua", "pm"],
+            "blocked_from_chain": [],
+            "independence_forbidden": [],
+            "notes": "SIL 0-2: PM-led flat approval chain. EN 50128 §7.3.",
+        },
+        "sil_high": {
+            "chain": ["author", "qua", "ver", "vmgr", "cod"],
+            "blocked_from_chain": [],
+            "independence_forbidden": [
+                ("ver", "author"),
+                ("ver", "val"),
+                ("val", "pm"),
+            ],
+            "notes": (
+                "SIL 3-4: independent VER mandatory; VMGR approves; COD gates. "
+                "EN 50128 §7.3 + §5.1.2.10."
+            ),
+        },
+    },
+
+    # ------------------------------------------------------------------
+    # Phase 4: Implementation & Unit Testing  (Source, Unit Tests)
+    # ------------------------------------------------------------------
+    4: {
+        "sil_low": {
+            "chain": ["author", "qua", "pm"],
+            "blocked_from_chain": [],
+            "independence_forbidden": [],
+            "notes": "SIL 0-2: PM-led flat approval chain. EN 50128 §7.4.",
+        },
+        "sil_high": {
+            "chain": ["author", "qua", "ver", "vmgr", "cod"],
+            "blocked_from_chain": [],
+            "independence_forbidden": [
+                ("ver", "author"),   # VER ≠ implementer (§5.1.2.10i)
+                ("ver", "val"),
+                ("val", "pm"),
+            ],
+            "notes": (
+                "SIL 3-4: VER must be independent from implementer. "
+                "EN 50128 §7.4 + §5.1.2.10i."
+            ),
+        },
+    },
+
+    # ------------------------------------------------------------------
+    # Phase 5: Integration  (Integration Tests, Integration Report)
+    # ------------------------------------------------------------------
+    5: {
+        "sil_low": {
+            "chain": ["author", "qua", "pm"],
+            "blocked_from_chain": [],
+            "independence_forbidden": [],
+            "notes": "SIL 0-2: PM-led flat approval chain. EN 50128 §7.6.",
+        },
+        "sil_high": {
+            "chain": ["author", "qua", "ver", "vmgr", "cod"],
+            "blocked_from_chain": [],
+            "independence_forbidden": [
+                ("ver", "author"),
+                ("ver", "val"),
+                ("val", "pm"),
+            ],
+            "notes": (
+                "SIL 3-4: VER verifies integration evidence; VMGR approves; "
+                "COD gates. EN 50128 §7.6 + §5.1.2.10."
+            ),
+        },
+    },
+
+    # ------------------------------------------------------------------
+    # Phase 6: Validation  (System Tests, Validation Report)
+    # ------------------------------------------------------------------
+    6: {
+        "sil_low": {
+            "chain": ["author", "qua", "pm"],
+            "blocked_from_chain": [],
+            "independence_forbidden": [],
+            "notes": "SIL 0-2: PM-led flat approval chain. EN 50128 §7.7.",
+        },
+        "sil_high": {
+            # COD invokes VAL directly (independence from PM).
+            # VAL performs system testing → QUA (template) → VMGR (reviews
+            # VAL report) → COD (gate; CANNOT override VMGR decision).
+            # VER report must already be VMGR-approved before VAL begins.
+            "chain": ["val", "qua", "vmgr", "cod"],
+            "blocked_from_chain": ["pm"],   # PM cannot direct VAL (§5.1.2.10f)
+            "independence_forbidden": [
+                ("val", "ver"),     # VAL ≠ VER (§5.1.2.10j)
+                ("val", "author"),  # VAL ≠ dev team member
+                ("val", "pm"),      # VAL not under PM (§5.1.2.10f)
+            ],
+            "notes": (
+                "SIL 3-4: COD invokes VAL independently; PM BLOCKED. "
+                "VAL decision is FINAL (§5.1.2.8); VMGR reviews but cannot "
+                "override VAL release decision. EN 50128 §7.7 + §5.1.2.10f/j."
+            ),
+        },
+    },
+
+    # ------------------------------------------------------------------
+    # Phase 7: Assessment-Ready  (compile artifact package for ASR)
+    # ------------------------------------------------------------------
+    7: {
+        "sil_low": {
+            # For SIL 0-2 there is no mandatory external ASR.
+            # PM notifies COD; COD checks completeness.
+            "chain": ["pm", "cod"],
+            "blocked_from_chain": [],
+            "independence_forbidden": [],
+            "notes": (
+                "SIL 0-2: PM notifies COD of assessment readiness; "
+                "COD verifies completeness. No external ASR mandatory."
+            ),
+        },
+        "sil_high": {
+            # PM → CM: compile artifact package.
+            # PM → COD: notify ready.
+            # COD: gate-check completeness (no ASR agent; ASR is external).
+            # PASS → CM creates Assessment-Ready Baseline.
+            "chain": ["pm", "cm", "cod"],
+            "blocked_from_chain": [],
+            "independence_forbidden": [
+                ("val", "pm"),
+            ],
+            "notes": (
+                "SIL 3-4: PM+CM compile package; COD checks completeness; "
+                "ASR is EXTERNAL (no platform agent). "
+                "PASS → CM creates Assessment-Ready Baseline. "
+                "EN 50128 §5.3: all lifecycle artifacts must be complete."
+            ),
+        },
+    },
+
+    # ------------------------------------------------------------------
+    # Phase 8: Deployment  (Release Package)
+    # ------------------------------------------------------------------
+    8: {
+        "sil_low": {
+            "chain": ["pm", "cm", "cod"],
+            "blocked_from_chain": [],
+            "independence_forbidden": [],
+            "notes": "SIL 0-2: PM authorizes; CM baselines; COD closes lifecycle.",
+        },
+        "sil_high": {
+            # CM → VAL (final sign-off) → QUA (final quality gate)
+            # → COD (authorizes release).
+            "chain": ["cm", "val", "qua", "cod"],
+            "blocked_from_chain": ["pm"],   # PM cannot authorize final release
+            "independence_forbidden": [
+                ("val", "pm"),
+                ("val", "ver"),
+            ],
+            "notes": (
+                "SIL 3-4: CM compiles; VAL provides final sign-off (§5.1.2.8); "
+                "QUA final quality gate; COD authorizes deployment. "
+                "PM is BLOCKED from final release chain."
+            ),
+        },
+    },
+}
+
+# ============================================================================
+# Gate Checker — deterministic EN 50128 gate enforcement
+# ============================================================================
+
+
+@dataclass
+class GateViolation:
+    """A single gate rule violation."""
+
+    rule_id: str           # Short identifier, e.g. "CHAIN-ORDER-001"
+    severity: str          # "BLOCK" | "WARN"
+    description: str       # Human-readable description
+    en50128_ref: str       # e.g. "§5.1.2.10i"
+    actual: str = ""       # What was found
+    expected: str = ""     # What was required
+
+
+@dataclass
+class GateResult:
+    """Result of a gate-check invocation."""
+
+    phase: int
+    sil: int
+    passed: bool
+    violations: List[GateViolation] = field(default_factory=list)
+    warnings: List[GateViolation] = field(default_factory=list)
+    checked_documents: List[str] = field(default_factory=list)
+
+    def to_text(self) -> str:
+        """Render as human-readable text."""
+        lines: List[str] = []
+        status = "PASS" if self.passed else "FAIL"
+        lines.append(f"\n{'='*70}")
+        lines.append(
+            f"Gate Check: Phase {self.phase} | SIL {self.sil} | {status}"
+        )
+        lines.append(f"{'='*70}")
+
+        if self.checked_documents:
+            lines.append(f"\nDocuments checked ({len(self.checked_documents)}):")
+            for doc in self.checked_documents:
+                lines.append(f"  - {doc}")
+
+        if self.violations:
+            lines.append(f"\nBLOCKING violations ({len(self.violations)}):")
+            for v in self.violations:
+                lines.append(f"  [{v.rule_id}] {v.description}")
+                if v.actual:
+                    lines.append(f"    Actual:   {v.actual}")
+                if v.expected:
+                    lines.append(f"    Expected: {v.expected}")
+                lines.append(f"    Ref:      {v.en50128_ref}")
+
+        if self.warnings:
+            lines.append(f"\nWarnings ({len(self.warnings)}):")
+            for w in self.warnings:
+                lines.append(f"  [{w.rule_id}] {w.description}")
+                lines.append(f"    Ref:      {w.en50128_ref}")
+
+        if self.passed:
+            lines.append(
+                f"\nGate PASSED: Phase {self.phase} transition authorized."
+            )
+        else:
+            lines.append(
+                f"\nGate FAILED: Phase {self.phase} transition BLOCKED. "
+                "Resolve all violations before proceeding."
+            )
+
+        lines.append(f"{'='*70}\n")
+        return "\n".join(lines)
+
+    def to_json(self) -> str:
+        """Render as JSON."""
+        from dataclasses import asdict as _asdict
+        return json.dumps(_asdict(self), indent=2)
+
+
+class GateChecker:
+    """
+    Deterministic EN 50128 gate-check engine.
+
+    Validates that approval chains recorded in .workflow/documents/*.yaml
+    conform to PHASE_APPROVAL_CHAINS for the given (phase, SIL) combination.
+
+    Rules evaluated
+    ---------------
+    1. CHAIN-ROLES    : all required roles must have approved at least one
+                        document in scope for the phase.
+    2. CHAIN-ORDER    : approvals must appear in the correct order within
+                        each document (role at position N approved before
+                        role at position N+1).
+    3. BLOCKED-ROLES  : roles listed in blocked_from_chain must NOT appear
+                        as approvers on any phase document.
+    4. INDEPENDENCE   : for SIL 3-4, forbidden role-pairs must not map to
+                        the same person name across a phase's documents.
+    5. STATE-COMPLETE : all documents for the phase must be in state
+                        "approved" or "baseline" before the gate passes.
+    """
+
+    def __init__(self, workflow_manager: "WorkflowManager"):
+        self.mgr = workflow_manager
+
+    def check(self, phase: int, sil: int) -> GateResult:
+        """
+        Perform gate check for the given phase and SIL level.
+
+        Args:
+            phase: Phase number (1–8)
+            sil:   SIL level (0–4)
+
+        Returns:
+            GateResult with passed/failed status and list of violations.
+        """
+        self._sil = sil  # store for use in sub-checkers
+        result = GateResult(phase=phase, sil=sil, passed=True)
+
+        # Resolve chain spec
+        if phase not in PHASE_APPROVAL_CHAINS:
+            result.passed = False
+            result.violations.append(GateViolation(
+                rule_id="PHASE-UNKNOWN",
+                severity="BLOCK",
+                description=f"Phase {phase} has no defined approval chain.",
+                en50128_ref="LIFECYCLE.md",
+            ))
+            return result
+
+        sil_group = "sil_high" if sil >= 3 else "sil_low"
+        chain_spec = PHASE_APPROVAL_CHAINS[phase][sil_group]
+        required_chain: List[str] = chain_spec["chain"]
+        blocked_roles: List[str] = chain_spec["blocked_from_chain"]
+        independence_pairs: List[Tuple[str, str]] = chain_spec["independence_forbidden"]
+
+        # Gather all documents registered for this phase
+        phase_docs = self._get_phase_documents(phase)
+        result.checked_documents = [d.document_id for d in phase_docs]
+
+        if not phase_docs:
+            result.violations.append(GateViolation(
+                rule_id="DOCS-MISSING",
+                severity="BLOCK",
+                description=(
+                    f"No workflow documents found for Phase {phase}. "
+                    "Submit documents before running gate-check."
+                ),
+                en50128_ref="LIFECYCLE.md",
+            ))
+            result.passed = False
+            return result
+
+        # --- Rule 5: STATE-COMPLETE ---
+        self._check_state_complete(phase_docs, result)
+
+        # --- Rule 3: BLOCKED-ROLES ---
+        self._check_blocked_roles(phase_docs, blocked_roles, result)
+
+        # For each document evaluate chain rules
+        for doc in phase_docs:
+            # --- Rule 1: CHAIN-ROLES ---
+            self._check_chain_roles(doc, required_chain, result)
+
+            # --- Rule 2: CHAIN-ORDER ---
+            self._check_chain_order(doc, required_chain, result)
+
+        # --- Rule 4: INDEPENDENCE (SIL 3-4 only) ---
+        if sil >= 3:
+            self._check_independence(phase_docs, independence_pairs, result)
+
+        # Determine overall pass/fail
+        result.passed = len(result.violations) == 0
+
+        return result
+
+    # ------------------------------------------------------------------
+    # Internal rule checkers
+    # ------------------------------------------------------------------
+
+    def _get_phase_documents(self, phase: int) -> List["DocumentWorkflow"]:
+        """Return all documents whose .phase matches the given phase number."""
+        all_docs = self.mgr._list_workflows()
+        phase_str = str(phase)
+        return [
+            d for d in all_docs
+            if str(d.phase).strip() == phase_str or str(d.phase).strip() == f"phase-{phase_str}"
+        ]
+
+    def _check_state_complete(
+        self,
+        docs: List["DocumentWorkflow"],
+        result: GateResult,
+    ) -> None:
+        """Rule 5: all phase documents must be approved or baselined."""
+        terminal_states = {WorkflowState.APPROVED.value, WorkflowState.BASELINE.value}
+        for doc in docs:
+            if doc.state not in terminal_states:
+                result.violations.append(GateViolation(
+                    rule_id="STATE-COMPLETE",
+                    severity="BLOCK",
+                    description=(
+                        f"Document {doc.document_id} is not yet approved. "
+                        "All phase documents must be in 'approved' or 'baseline' state."
+                    ),
+                    en50128_ref="EN 50128 §6.1 (phase completion criteria)",
+                    actual=doc.state,
+                    expected="approved | baseline",
+                ))
+
+    def _check_blocked_roles(
+        self,
+        docs: List["DocumentWorkflow"],
+        blocked_roles: List[str],
+        result: GateResult,
+    ) -> None:
+        """Rule 3: blocked roles must not appear as approvers."""
+        for doc in docs:
+            for approval in doc.approvals:
+                if approval.reviewer_role.lower() in blocked_roles:
+                    result.violations.append(GateViolation(
+                        rule_id="BLOCKED-ROLE",
+                        severity="BLOCK",
+                        description=(
+                            f"Role '{approval.reviewer_role.upper()}' is BLOCKED "
+                            f"from the approval chain for this phase/SIL combination "
+                            f"but appears as approver on {doc.document_id}."
+                        ),
+                        en50128_ref=(
+                            "EN 50128 §5.1.2.10f (VAL independent of PM); "
+                            "§5.1.2.10e (VER reports to VMGR)"
+                        ),
+                        actual=f"{approval.reviewer_role.upper()} approved {doc.document_id}",
+                        expected=f"No {approval.reviewer_role.upper()} approval on this phase",
+                    ))
+
+    def _check_chain_roles(
+        self,
+        doc: "DocumentWorkflow",
+        required_chain: List[str],
+        result: GateResult,
+    ) -> None:
+        """Rule 1: all required chain roles must have approved the document."""
+        approved_roles = {a.reviewer_role.lower() for a in doc.approvals}
+        for required_role in required_chain:
+            # "author" is the document author role, not a separate approval step
+            if required_role == "author":
+                continue
+            if required_role not in approved_roles:
+                result.violations.append(GateViolation(
+                    rule_id="CHAIN-ROLES",
+                    severity="BLOCK",
+                    description=(
+                        f"Required role '{required_role.upper()}' has not approved "
+                        f"document {doc.document_id}."
+                    ),
+                    en50128_ref="PHASE_APPROVAL_CHAINS (EN 50128 §5.3)",
+                    actual=f"Approved by: {', '.join(r.upper() for r in approved_roles) or 'none'}",
+                    expected=f"Approval from: {required_role.upper()}",
+                ))
+
+    def _check_chain_order(
+        self,
+        doc: "DocumentWorkflow",
+        required_chain: List[str],
+        result: GateResult,
+    ) -> None:
+        """
+        Rule 2: approvals must occur in the correct order.
+
+        Checks that the timestamp of role[i] is strictly before role[i+1]
+        for every consecutive pair in required_chain (excluding "author").
+        """
+        # Build role→earliest timestamp map
+        role_ts: Dict[str, str] = {}
+        for approval in doc.approvals:
+            role = approval.reviewer_role.lower()
+            ts = approval.timestamp
+            if role not in role_ts or ts < role_ts[role]:
+                role_ts[role] = ts
+
+        # Walk required chain (skip "author" placeholder)
+        chain_roles = [r for r in required_chain if r != "author"]
+        for i in range(len(chain_roles) - 1):
+            role_a = chain_roles[i]
+            role_b = chain_roles[i + 1]
+
+            ts_a = role_ts.get(role_a)
+            ts_b = role_ts.get(role_b)
+
+            if ts_a is None or ts_b is None:
+                # Missing role already caught by CHAIN-ROLES; skip ordering
+                continue
+
+            if ts_a >= ts_b:
+                result.violations.append(GateViolation(
+                    rule_id="CHAIN-ORDER",
+                    severity="BLOCK",
+                    description=(
+                        f"Approval order violated on {doc.document_id}: "
+                        f"{role_a.upper()} must approve BEFORE {role_b.upper()}."
+                    ),
+                    en50128_ref="PHASE_APPROVAL_CHAINS (EN 50128 §5.3)",
+                    actual=(
+                        f"{role_a.upper()} approved at {ts_a}; "
+                        f"{role_b.upper()} approved at {ts_b}"
+                    ),
+                    expected=f"{role_a.upper()} timestamp < {role_b.upper()} timestamp",
+                ))
+
+    def _check_independence(
+        self,
+        docs: List["DocumentWorkflow"],
+        independence_pairs: List[Tuple[str, str]],
+        result: GateResult,
+    ) -> None:
+        """
+        Rule 4 (SIL 3-4 only): forbidden role-pairs must not map to the same
+        person across a phase's documents.
+
+        For each (role_a, role_b) pair in independence_pairs, collect all
+        person names that performed role_a across the phase docs and all names
+        that performed role_b.  If any name appears in both sets → violation.
+        """
+        if not independence_pairs:
+            return
+
+        # Build role→{person_names} map across the entire phase.
+        # The sentinel key "author" always maps to the document author's name
+        # so that independence_pairs can use "author" to mean "whoever wrote
+        # this document" regardless of their actual role (req/des/imp/…).
+        role_persons: Dict[str, Set[str]] = {}
+
+        for doc in docs:
+            # Include author under their actual role AND under the sentinel "author"
+            if doc.author_role and doc.author_name:
+                role_persons.setdefault(doc.author_role.lower(), set()).add(doc.author_name)
+                role_persons.setdefault("author", set()).add(doc.author_name)
+
+            for approval in doc.approvals:
+                role = approval.reviewer_role.lower()
+                role_persons.setdefault(role, set()).add(approval.reviewer_name)
+
+        for (role_a, role_b) in independence_pairs:
+            persons_a = role_persons.get(role_a, set())
+            persons_b = role_persons.get(role_b, set())
+
+            overlap = persons_a & persons_b
+            if overlap:
+                result.violations.append(GateViolation(
+                    rule_id="INDEPENDENCE",
+                    severity="BLOCK",
+                    description=(
+                        f"Independence violation: the same person(s) performed "
+                        f"both '{role_a.upper()}' and '{role_b.upper()}' roles, "
+                        f"which is FORBIDDEN for SIL {self._sil} "
+                        f"per EN 50128 §5.1.2.10."
+                    ),
+                    en50128_ref="EN 50128 §5.1.2.10i/j",
+                    actual=(
+                        f"Person(s) in both roles: "
+                        f"{', '.join(sorted(overlap))}"
+                    ),
+                    expected=(
+                        f"'{role_a.upper()}' and '{role_b.upper()}' performed "
+                        "by different, organizationally independent persons."
+                    ),
+                ))
+
 
 # ============================================================================
 # Data Models
@@ -814,6 +1460,10 @@ Examples:
     
     # View history
     %(prog)s history DOC-SRS-2026-001
+    
+    # Gate check (validates EN 50128 approval chains before phase transition)
+    %(prog)s gate-check --phase 2 --sil 3
+    %(prog)s gate-check --phase 4 --sil 3 --format json
         """
     )
     
@@ -863,7 +1513,28 @@ Examples:
     history_parser = subparsers.add_parser('history', help='Show document workflow history')
     history_parser.add_argument('document_id', help='Document identifier')
     history_parser.add_argument('--format', choices=['text', 'json', 'timeline'], default='text', help='Output format')
-    
+
+    # gate-check command
+    gate_parser = subparsers.add_parser(
+        'gate-check',
+        help='Validate EN 50128 phase gate prerequisites',
+    )
+    gate_parser.add_argument(
+        '--phase', type=int, required=True,
+        help='Phase number to check (1-8)',
+        choices=list(range(1, 9)),
+    )
+    gate_parser.add_argument(
+        '--sil', type=int,
+        help='SIL level override (default: from LIFECYCLE_STATE.md)',
+        choices=[0, 1, 2, 3, 4],
+    )
+    gate_parser.add_argument(
+        '--format', dest='gate_format',
+        choices=['text', 'json'], default='text',
+        help='Output format (default: text)',
+    )
+
     args = parser.parse_args()
     
     if not args.command:
@@ -894,6 +1565,18 @@ Examples:
         elif args.command == 'history':
             result = mgr.history(args.document_id, args.format)
             print(result)
+
+        elif args.command == 'gate-check':
+            sil = args.sil if args.sil is not None else mgr.sil_level
+            checker = GateChecker(mgr)
+            gate_result = checker.check(phase=args.phase, sil=sil)
+            if args.gate_format == 'json':
+                print(gate_result.to_json())
+            else:
+                print(gate_result.to_text())
+            # Exit code 1 on gate failure so CI pipelines can block progression
+            if not gate_result.passed:
+                return 1
         
         return 0
     

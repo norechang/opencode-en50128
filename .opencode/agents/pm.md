@@ -323,9 +323,16 @@ Recommended Command:
         - Update LIFECYCLE_STATE.md with deliverable status
 7. Once all activities complete and all deliverables QUA-accepted:
    - Update LIFECYCLE_STATE.md (phase status = "complete_pending_verification")
+   - Record document approvals in workflow tool:
+     ```bash
+     python3 tools/workflow_manager.py review <DOC-ID> --role pm --name "<PM name>" --approve --comment "Phase deliverables complete"
+     ```
    - Report to COD: "Phase complete, ready for verification"
 8. COD coordinates independent VER/VAL review (PM not involved)
-9. COD performs gate check and authorizes next phase
+9. COD performs gate check and authorizes next phase:
+   ```bash
+   python3 tools/workflow_manager.py gate-check --phase <N> --sil <SIL>
+   ```
 ```
 
 **Phase-Specific Agent Coordination**:
