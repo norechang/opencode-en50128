@@ -75,10 +75,17 @@ As Tester, you are responsible for:
 ```
 
 **File Path Resolution**:
-- All paths are relative to: `examples/<active_workspace>/`
-- Test specifications → `examples/<active_workspace>/docs/test/`
-- Test results → `examples/<active_workspace>/test/results/`
-- Coverage reports → `examples/<active_workspace>/test/coverage/`
+- All document paths are relative to active workspace root
+- Test results (unit) → `phase-5-testing/results/`
+- Coverage reports → `phase-5-testing/coverage/`
+- Test results (integration) → `phase-6-integration/results/`
+- LIFECYCLE_STATE.md → `LIFECYCLE_STATE.md`
+
+**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST call:
+```
+@cm query-location --doc <document-type-key>
+```
+to get the canonical path. Never write to a path not returned by CM.
 
 **Workspace Commands**: If user requests workspace operations:
 - `/workspace list` or `/ws list` - List all workspaces
@@ -317,28 +324,28 @@ Verify [what is being tested]
 ## Output Artifacts
 
 1. **Test Results** (machine-readable format preferred)
-   - Files: `test/results/*.xml`, `test/results/*.json`
+   - Files: `phase-5-testing/results/*.xml`, `phase-5-testing/results/*.json`
    - Content: Test case results (pass/fail, actual vs expected)
 
 2. **Coverage Reports**
-   - Files: `test/coverage/*.html`, `test/coverage/coverage.info`
+   - Files: `phase-5-testing/coverage/*.html`, `phase-5-testing/coverage/coverage.info`
    - Content: Statement, branch, condition coverage data
 
 3. **Performance Test Results**
-   - Files: `test/performance/*.txt`, `test/performance/*.csv`
+   - Files: `phase-5-testing/performance/*.txt`, `phase-5-testing/performance/*.csv`
    - Content: Execution time measurements, timing analysis
 
 4. **Software Component Test Report** (EN 50128 7.5.4.5)
    - Created by IMP agent based on TST results
-   - File: `reports/Software-Component-Test-Report.md`
+   - File: `phase-5-testing/reports/Software-Component-Test-Report.md`
 
 5. **Software Integration Test Report** (EN 50128 7.6.4.3)
    - Created by INT agent based on TST results
-   - File: `reports/Software-Integration-Test-Report.md`
+   - File: `phase-6-integration/reports/Software-Integration-Test-Report.md`
 
 6. **Overall Software Test Report** (EN 50128 7.7.4.7)
    - Created by VAL agent based on TST results
-   - File: `reports/Overall-Software-Test-Report.md`
+   - File: `phase-7-validation/Overall-Software-Test-Report.md`
 
 ---
 
@@ -423,18 +430,19 @@ When invoked by PM as part of `/pm execute-phase`, TST responds to these command
 1. Load skill: en50128-testing
 2. Read active workspace and SDS (for module interfaces)
 3. For each module in SDS:
-   a. Create test/unit/test_<module_name>.c using Unity framework
-   b. Generate test cases covering:
+   a. Call @cm query-location --doc unit-tests to get canonical path
+   b. Create phase-5-testing/unit/test_<module_name>.c using Unity framework
+   c. Generate test cases covering:
       - Normal operation (happy path)
       - Boundary values (SIL 3-4: MANDATORY)
       - Error conditions (NULL inputs, invalid ranges)
       - Safety-critical paths
-   c. Achieve target coverage: 100% statement, branch, condition (SIL 3-4)
-4. Create test/unit/Makefile with gcov flags
+   d. Achieve target coverage: 100% statement, branch, condition (SIL 3-4)
+4. Create phase-5-testing/unit/Makefile with gcov flags
 5. Return list of created test files to PM
 ```
 
-**Output**: `test/unit/test_*.c`, `test/unit/Makefile`
+**Output**: `phase-5-testing/unit/test_*.c`, `phase-5-testing/unit/Makefile`
 
 ---
 
@@ -444,7 +452,7 @@ When invoked by PM as part of `/pm execute-phase`, TST responds to these command
 
 **Algorithm**:
 ```
-1. Build and run unit tests: make -C test/unit
+1. Build and run unit tests: make -C phase-5-testing/unit
 2. Capture test results (Unity XML output)
 3. Generate coverage report: lcov + genhtml
 4. Parse coverage: statement, branch, condition percentages
@@ -453,7 +461,7 @@ When invoked by PM as part of `/pm execute-phase`, TST responds to these command
 6. Return pass/fail status, coverage percentages, and test result file
 ```
 
-**Output**: `test/results/unit-test-results.xml`, `test/coverage/`
+**Output**: `phase-5-testing/results/unit-test-results.xml`, `phase-5-testing/coverage/`
 
 ---
 
@@ -465,12 +473,13 @@ When invoked by PM as part of `/pm execute-phase`, TST responds to these command
 ```
 1. Load skill: en50128-testing
 2. Read integration test specification from INT agent
-3. Create test/integration/test_*.c for each integration test case
-4. Create test harness that connects real components
-5. Return test file list to PM
+3. Call @cm query-location --doc integration-tests to get canonical path
+4. Create phase-6-integration/integration/test_*.c for each integration test case
+5. Create test harness that connects real components
+6. Return test file list to PM
 ```
 
-**Output**: `test/integration/test_*.c`
+**Output**: `phase-6-integration/integration/test_*.c`
 
 ---
 
@@ -480,14 +489,14 @@ When invoked by PM as part of `/pm execute-phase`, TST responds to these command
 
 **Algorithm**:
 ```
-1. Build integration tests: make -C test/integration
+1. Build integration tests: make -C phase-6-integration/integration
 2. Execute all integration tests
 3. Record results in machine-readable format (XML/JSON)
    - Per EN 50128 Section 7.6.4.5b: machine-readable results MANDATORY
 4. Return results to PM (PM provides to INT for report writing)
 ```
 
-**Output**: `test/results/integration-test-results.xml`
+**Output**: `phase-6-integration/results/integration-test-results.xml`
 
 ---
 
@@ -503,7 +512,7 @@ When invoked by PM as part of `/pm execute-phase`, TST responds to these command
 4. Return results to PM (PM provides to VAL for report writing)
 ```
 
-**Output**: `test/results/system-test-results.xml`
+**Output**: `phase-7-validation/results/system-test-results.xml`
 
 ---
 

@@ -58,11 +58,17 @@ As Designer, you are responsible for:
 ```
 
 **File Path Resolution**:
-- All paths are relative to: `examples/<active_workspace>/`
-- Software Architecture Specification → `examples/<active_workspace>/docs/Software-Architecture-Specification.md`
-- Software Design Specification → `examples/<active_workspace>/docs/Software-Design-Specification.md`
-- Software Interface Specifications → `examples/<active_workspace>/docs/Software-Interface-Specifications.md`
-- LIFECYCLE_STATE.md → `examples/<active_workspace>/LIFECYCLE_STATE.md`
+- All document paths are relative to active workspace root
+- Software Architecture Specification → `phase-3-design/Software-Architecture-Specification.md`
+- Software Design Specification → `phase-3-design/Software-Design-Specification.md`
+- Software Interface Specifications → `phase-3-design/Software-Interface-Specifications.md`
+- LIFECYCLE_STATE.md → `LIFECYCLE_STATE.md`
+
+**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST call:
+```
+@cm query-location --doc <document-type-key>
+```
+to get the canonical path. Never write to a path not returned by CM.
 
 **Workspace Commands**: If user requests workspace operations:
 - `/workspace list` or `/ws list` - List all workspaces
@@ -290,15 +296,15 @@ error_t read_with_cross_check(redundant_sensor_t* sensor);
 ## Output Artifacts (EN 50128 Section 7.3.3)
 
 1. **Software Architecture Specification** (EN 50128 7.3.4.1)
-   - File: `docs/Software-Architecture-Specification.md`
+   - File: `phase-3-design/Software-Architecture-Specification.md`
    - Content: Architecture overview, component diagram, safety architecture, traceability
 
 2. **Software Design Specification** (EN 50128 7.3.4.20)
-   - File: `docs/Software-Design-Specification.md`
+   - File: `phase-3-design/Software-Design-Specification.md`
    - Content: Module specifications, data structures, algorithms, error handling, design decisions
 
 3. **Software Interface Specifications** (EN 50128 7.3.4.18 - PLURAL)
-   - File: `docs/Software-Interface-Specifications.md`
+   - File: `phase-3-design/Software-Interface-Specifications.md`
    - Content: Internal interfaces (component-to-component), external interfaces (software boundary), pre/post conditions, boundary values, time constraints, memory allocation, synchronization
 
 4. **Software Integration Test Specification** (EN 50128 7.3.4.25)
@@ -467,16 +473,17 @@ When invoked by PM as part of `/pm execute-phase`, DES responds to these command
 1. Load skill: en50128-design
 2. Read active workspace and LIFECYCLE_STATE.md
 3. Read SRS from workspace (mandatory input)
-4. Create docs/Software-Architecture-Specification.md using skill template
-5. Define high-level components allocating requirements to components
-6. Specify component interfaces (uses Software Interface Specifications)
-7. Apply safety architecture (fault detection, safe states, defensive design)
-8. Add traceability: Requirements → Architecture components (SIL 3-4: MANDATORY)
-9. Verify cyclomatic complexity estimates within SIL limits
-10. Return deliverable path to PM
+4. Call @cm query-location --doc sas to get canonical path
+5. Create phase-3-design/Software-Architecture-Specification.md using skill template
+6. Define high-level components allocating requirements to components
+7. Specify component interfaces (uses Software Interface Specifications)
+8. Apply safety architecture (fault detection, safe states, defensive design)
+9. Add traceability: Requirements → Architecture components (SIL 3-4: MANDATORY)
+10. Verify cyclomatic complexity estimates within SIL limits
+11. Return deliverable path to PM
 ```
 
-**Output**: `docs/Software-Architecture-Specification.md` (DRAFT v0.1)
+**Output**: `phase-3-design/Software-Architecture-Specification.md` (DRAFT v0.1)
 
 ---
 
@@ -488,18 +495,19 @@ When invoked by PM as part of `/pm execute-phase`, DES responds to these command
 ```
 1. Load skill: en50128-design
 2. Read SAS from workspace
-3. Create docs/Software-Design-Specification.md using skill template
-4. For each architecture component: create detailed module design
+3. Call @cm query-location --doc sds to get canonical path
+4. Create phase-3-design/Software-Design-Specification.md using skill template
+5. For each architecture component: create detailed module design
    - Data structures (static allocation only, SIL 2+)
    - Algorithms with pseudo-code
    - Error handling (return error_t pattern)
    - State machines where applicable
-5. Add traceability: Requirements → Design modules (SIL 3-4: MANDATORY)
-6. Verify MISRA C compliance in design patterns
-7. Return deliverable path to PM
+6. Add traceability: Requirements → Design modules (SIL 3-4: MANDATORY)
+7. Verify MISRA C compliance in design patterns
+8. Return deliverable path to PM
 ```
 
-**Output**: `docs/Software-Design-Specification.md` (DRAFT v0.1)
+**Output**: `phase-3-design/Software-Design-Specification.md` (DRAFT v0.1)
 
 ---
 
@@ -511,14 +519,15 @@ When invoked by PM as part of `/pm execute-phase`, DES responds to these command
 ```
 1. Load skill: en50128-design
 2. Read SAS from workspace
-3. Create docs/Software-Interface-Specifications.md using skill template
-4. Define all internal interfaces (component-to-component)
-5. Define all external interfaces (software boundary with HW/OS)
-6. Specify pre/post conditions, boundary values, timing constraints
-7. Return deliverable path to PM
+3. Call @cm query-location --doc sis to get canonical path
+4. Create phase-3-design/Software-Interface-Specifications.md using skill template
+5. Define all internal interfaces (component-to-component)
+6. Define all external interfaces (software boundary with HW/OS)
+7. Specify pre/post conditions, boundary values, timing constraints
+8. Return deliverable path to PM
 ```
 
-**Output**: `docs/Software-Interface-Specifications.md` (DRAFT v0.1)
+**Output**: `phase-3-design/Software-Interface-Specifications.md` (DRAFT v0.1)
 
 ---
 

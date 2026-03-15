@@ -60,10 +60,18 @@ As Safety Engineer, you are responsible for:
 ```
 
 **File Path Resolution**:
-- All paths are relative to: `examples/<active_workspace>/`
-- Hazard Log → `examples/<active_workspace>/docs/Hazard-Log.md`
-- Safety analysis → `examples/<active_workspace>/docs/safety/`
-- FMEA/FTA reports → `examples/<active_workspace>/docs/safety/analysis/`
+- All document paths are relative to active workspace root
+- Hazard Log → `phase-2-requirements/Hazard-Log.md`
+- Safety analysis reports (requirements phase) → `phase-2-requirements/reports/`
+- Safety analysis reports (design phase) → `phase-3-design/reports/`
+- Safety Case → `phase-8-assessment/Safety-Case.md`
+- LIFECYCLE_STATE.md → `LIFECYCLE_STATE.md`
+
+**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST call:
+```
+@cm query-location --doc <document-type-key>
+```
+to get the canonical path. Never write to a path not returned by CM.
 
 **Workspace Commands**: If user requests workspace operations:
 - `/workspace list` or `/ws list` - List all workspaces
@@ -300,27 +308,27 @@ error_t safe_divide(uint32_t numerator, uint32_t denominator, uint32_t* result) 
 ## Output Artifacts
 
 1. **Hazard Log** (EN 50128 7.2.4.5)
-   - File: `docs/Hazard-Log.md`
+   - File: `phase-2-requirements/Hazard-Log.md`
    - Content: All identified hazards, risk assessments, SIL assignments
 
 2. **Safety Requirements Specification**
    - Typically embedded in Software Requirements Specification (REQ-SAFE-XXX)
-   - File: `docs/Software-Requirements-Specification.md`
+   - File: `phase-2-requirements/Software-Requirements-Specification.md`
 
 3. **FMEA Reports**
-   - Files: `docs/safety/analysis/FMEA_*.md`
+   - Files: `phase-2-requirements/reports/FMEA_*.md`
    - Content: Software FMEA for critical modules
 
 4. **FTA Reports**
-   - Files: `docs/safety/analysis/FTA_*.md`
+   - Files: `phase-2-requirements/reports/FTA_*.md`
    - Content: Fault trees for critical failures
 
 5. **Safety Case**
-   - File: `docs/Safety-Case.md`
+   - File: `phase-8-assessment/Safety-Case.md`
    - Content: Overall safety argument, evidence, assurance
 
 6. **Software Error Effect Analysis (SEEA) Report**
-   - File: `docs/safety/analysis/SEEA_Report.md`
+   - File: `phase-2-requirements/reports/SEEA_Report.md`
    - Content: Software-level error analysis
 
 ---
@@ -396,17 +404,18 @@ When invoked by PM as part of `/pm execute-phase`, SAF responds to these command
 ```
 1. Load skill: en50128-safety
 2. Read system hazard log if provided (--based-on)
-3. Create docs/Hazard-Log.md:
+3. Call @cm query-location --doc hazard-log to get canonical path
+4. Create phase-2-requirements/Hazard-Log.md:
    - Hazard ID, description, severity
    - Cause analysis
    - Risk assessment (probability × severity)
    - Mitigation measures
    - SIL assignment per EN 50126
    - Software safety requirements derived from hazards
-4. Return Hazard Log path to PM (for QUA review)
+5. Return Hazard Log path to PM (for QUA review)
 ```
 
-**Output**: `docs/Hazard-Log.md`
+**Output**: `phase-2-requirements/Hazard-Log.md`
 
 ---
 
@@ -427,10 +436,11 @@ When invoked by PM as part of `/pm execute-phase`, SAF responds to these command
 4. Assess effect and severity of each failure
 5. Define detection and mitigation mechanisms
 6. Update Hazard Log with software-specific failure modes
-7. Return FMEA report path to PM
+7. Call @cm query-location --doc fmea to get canonical path
+8. Return FMEA report path to PM
 ```
 
-**Output**: `docs/reports/Software-FMEA-Report.md`
+**Output**: `phase-2-requirements/reports/Software-FMEA-Report.md`
 
 ---
 

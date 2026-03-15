@@ -89,7 +89,7 @@ This skill provides:
 workspace_root = read_json(".workspace")["path"]
 
 # Resolve document path
-doc_path = f"{workspace_root}/docs/Software-Requirements-Specification.md"
+doc_path = f"{workspace_root}/phase-2-requirements/Software-Requirements-Specification.md"
 
 # Read document
 read(doc_path)
@@ -103,11 +103,18 @@ read("docs/Software-Requirements-Specification.md")  # WRONG - path not resolved
 
 ### Deliverable Location Conventions
 
-Documents are typically in:
-- `{workspace_root}/docs/` - Main deliverables
-- `{workspace_root}/docs/reports/` - Verification/Validation reports
-- `{workspace_root}/docs/reports/qua/` - QUA review reports
-- `{workspace_root}/docs/quality/` - Quality artifacts (SQAP, metrics, audits)
+Documents are located in phase-based directories:
+- `{workspace_root}/phase-1-planning/` - Planning deliverables (SQAP, SCMP, SVP, SVaP)
+- `{workspace_root}/phase-1-planning/reports/` - QA reports (SQAP, code review, metrics, traceability)
+- `{workspace_root}/phase-2-requirements/` - Requirements deliverables
+- `{workspace_root}/phase-3-design/` - Design deliverables
+- `{workspace_root}/<phase-dir>/reports/` - QUA review reports go in the phase directory of the reviewed document
+
+**DOCUMENT LOCATION RULE**: Before writing ANY document, QUA MUST call:
+```
+@cm query-location --doc <document-type-key>
+```
+to get the canonical path. Never write to a path not returned by CM.
 
 ---
 
@@ -148,16 +155,16 @@ Documents are typically in:
 **Examples**:
 ```bash
 # Review Software Requirements Specification
-/qua review-document docs/Software-Requirements-Specification.md --owner req --doc-type Software-Requirements-Specification
+/qua review-document phase-2-requirements/Software-Requirements-Specification.md --owner req --doc-type Software-Requirements-Specification
 
 # Review Hazard Log (auto-detect type)
-/qua review-document docs/Hazard-Log.md --owner saf
+/qua review-document phase-2-requirements/Hazard-Log.md --owner saf
 
 # Review Software Architecture Specification
-/qua review-document docs/Software-Architecture-Specification.md --owner des
+/qua review-document phase-3-design/Software-Architecture-Specification.md --owner des
 ```
 
-**Output**: QUA Review Report saved to `docs/reports/qua/QUA-Review-<doc-id>-<timestamp>.md`
+**Output**: QUA Review Report saved to `<phase-dir>/reports/QUA-Review-<doc-id>-<timestamp>.md`
 
 ---
 
@@ -182,13 +189,13 @@ Documents are typically in:
 **Examples**:
 ```bash
 # Review Verification Report
-/qua review-report-template --report docs/reports/Software-Architecture-Design-Verification-Report.md --type verification
+/qua review-report-template --report phase-3-design/reports/Software-Architecture-Design-Verification-Report.md --type verification
 
 # Review Validation Report
-/qua review-report-template --report docs/reports/Software-Architecture-Design-Validation-Report.md --type validation
+/qua review-report-template --report phase-3-design/reports/Software-Architecture-Design-Validation-Report.md --type validation
 ```
 
-**Output**: QA Template Compliance Review Report saved to `docs/quality/reports/QA-Template-Compliance-<ReportID>.md`
+**Output**: QA Template Compliance Review Report saved to `phase-1-planning/reports/QA-Template-Compliance-<ReportID>.md`
 
 **Decision**: ✅ **APPROVED** or ❌ **REJECTED**
 
@@ -250,7 +257,7 @@ Documents are typically in:
 /qua code-review src/modules/tdc/ --sil 3
 ```
 
-**Output**: Code Review Report saved to `docs/quality/reports/Code-Review-<module>-<timestamp>.md`
+**Output**: Code Review Report saved to `phase-1-planning/reports/Code-Review-<module>-<timestamp>.md`
 
 ---
 
@@ -293,7 +300,7 @@ Documents are typically in:
 /qua audit-traceability --phase implementation
 ```
 
-**Output**: Traceability Audit Report saved to `docs/quality/reports/Traceability-Audit-<phase>-<timestamp>.md`
+**Output**: Traceability Audit Report saved to `phase-1-planning/reports/Traceability-Audit-<phase>-<timestamp>.md`
 
 ---
 
@@ -339,7 +346,7 @@ Documents are typically in:
 /qua metrics-report --phase implementation
 ```
 
-**Output**: Quality Metrics Report saved to `docs/quality/reports/Quality-Metrics-<phase>-<timestamp>.md`
+**Output**: Quality Metrics Report saved to `phase-1-planning/reports/Quality-Metrics-<phase>-<timestamp>.md`
 
 ---
 
@@ -520,14 +527,14 @@ When PM executes phase via `/pm execute-phase <phase-id>`:
 
 ### Primary Deliverables
 
-1. **Software Quality Assurance Plan (SQAP)** - `docs/SQAP.md`
+1. **Software Quality Assurance Plan (SQAP)** - `phase-1-planning/Software-Quality-Assurance-Plan.md`
    - Quality objectives
    - Review processes
    - Audit procedures
    - Metrics collection
    - Non-conformance management
 
-2. **QUA Review Reports** - `docs/reports/qua/QUA-Review-<doc-id>-<timestamp>.md`
+2. **QUA Review Reports** - `<phase-dir>/reports/QUA-Review-<doc-id>-<timestamp>.md`
    - Document being reviewed
    - Template compliance check results
    - Quality standards check results
@@ -535,13 +542,13 @@ When PM executes phase via `/pm execute-phase <phase-id>`:
    - Defect list with severity and corrective actions
    - QUA decision: PASS or FAIL
 
-3. **QA Template Compliance Review Reports** - `docs/quality/reports/QA-Template-Compliance-<ReportID>.md`
+3. **QA Template Compliance Review Reports** - `phase-1-planning/reports/QA-Template-Compliance-<ReportID>.md`
    - Verification/Validation report being reviewed
    - Template compliance check results (Document ID, tables, sections)
    - QUA decision: APPROVED or REJECTED
    - Defect list (if rejected)
 
-4. **Code Review Reports** - `docs/quality/reports/Code-Review-<module>-<timestamp>.md`
+4. **Code Review Reports** - `phase-1-planning/reports/Code-Review-<module>-<timestamp>.md`
    - Module being reviewed
    - MISRA C compliance results
    - Defensive programming check results
@@ -549,13 +556,13 @@ When PM executes phase via `/pm execute-phase <phase-id>`:
    - Defect list with severity and location
    - Recommendation: Approved, Approved with minor fixes, Rework required
 
-5. **Quality Metrics Reports** - `docs/quality/reports/Quality-Metrics-<phase>-<timestamp>.md`
+5. **Quality Metrics Reports** - `phase-1-planning/reports/Quality-Metrics-<phase>-<timestamp>.md`
    - Phase being reported
    - Metrics collected (defect density, coverage, complexity, SLOC, etc.)
    - Trends and analysis
    - Quality assessment
 
-6. **Traceability Audit Reports** - `docs/quality/reports/Traceability-Audit-<phase>-<timestamp>.md`
+6. **Traceability Audit Reports** - `phase-1-planning/reports/Traceability-Audit-<phase>-<timestamp>.md`
    - Phase being audited
    - Traceability completeness (%)
    - Missing traceability links
@@ -739,13 +746,13 @@ When invoked by PM as part of `/pm execute-phase`, QUA responds to these command
 **Algorithm**:
 ```
 1. Load skill: en50128-quality
-2. Create docs/plans/Software-Quality-Assurance-Plan.md
+2. Create phase-1-planning/Software-Quality-Assurance-Plan.md
 3. Define quality activities for each phase
 4. Define quality gates and metrics
 5. Return SQAP path to PM
 ```
 
-**Output**: `docs/plans/Software-Quality-Assurance-Plan.md`
+**Output**: `phase-1-planning/Software-Quality-Assurance-Plan.md`
 
 ---
 

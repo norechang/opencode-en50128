@@ -169,9 +169,13 @@ read("LIFECYCLE_STATE.md")  # WRONG - path not resolved
 
 Project management artifacts are typically in:
 - `{workspace_root}/LIFECYCLE_STATE.md` - Lifecycle state tracking (shared with COD)
-- `{workspace_root}/docs/plans/` - Project plans (not yet used, planning phase creates SQAP/SCMP/SVP/SVaP in docs/)
-- `{workspace_root}/docs/changes/` - Change requests
-- `{workspace_root}/docs/project/` - Project documents (meetings, status reports, risk register)
+- `{workspace_root}/changes/` - Change requests (CR-<YYYY>-<NNN>.md)
+- `{workspace_root}/project/` - Project documents (meetings, status reports, risk register)
+
+**DOCUMENT LOCATION RULE**: Before directing any agent to write ANY document, PM MUST instruct
+that agent to call `@cm query-location --doc <document-type-key>` to get the canonical path.
+Documents are organized in phase-based directories (e.g., `phase-1-planning/`, `phase-2-requirements/`).
+Never instruct agents to write to paths not returned by CM.
 
 ---
 
@@ -487,18 +491,19 @@ PM invokes agents using the `@agent` syntax internally:
    @req create-srs --based-on assets/sample_system/System-Requirements-Specification.md
    
    - REQ agent loads skill: en50128-requirements
-   - REQ creates docs/Software-Requirements-Specification.md
+   - REQ calls @cm query-location --doc srs to get canonical path
+   - REQ creates phase-2-requirements/Software-Requirements-Specification.md
    - REQ returns deliverable path to PM
 
 2. Submit to QUA:
-   @qua review-document docs/Software-Requirements-Specification.md --type srs --sil 3
+   @qua review-document phase-2-requirements/Software-Requirements-Specification.md --type srs --sil 3
    
    - QUA agent loads skill: en50128-quality
    - QUA runs validation tool: tools/scripts/validate_srs_template.py
    - QUA returns PASS/FAIL with defect list
 
 3. If FAIL, invoke REQ to fix:
-   @req fix-defects --document docs/Software-Requirements-Specification.md --defects <defect-list>
+   @req fix-defects --document phase-2-requirements/Software-Requirements-Specification.md --defects <defect-list>
    
    - REQ fixes defects
    - REQ resubmits to QUA
@@ -620,7 +625,7 @@ Reporting to COD for re-verification...
 - `--change-request <cr-id>`: Change Request ID (e.g., `CR-2026-001`)
 
 **CCB Workflow**:
-1. Read Change Request from `docs/changes/CR-<YYYY>-<NNN>.md`
+1. Read Change Request from `changes/CR-<YYYY>-<NNN>.md`
 2. Coordinate impact analysis with all agents:
    - REQ: Requirements impact
    - SAF: Safety impact (MANDATORY if safety-related)
@@ -872,7 +877,7 @@ Saving role assignments to LIFECYCLE_STATE.md...
    - Active risks and issues
    - Next steps and recommendations
 
-2. **CCB Meeting Minutes** - `docs/project/ccb/CCB-Meeting-<cr-id>-<timestamp>.md`
+2. **CCB Meeting Minutes** - `project/ccb/CCB-Meeting-<cr-id>-<timestamp>.md`
    - Change request summary
    - Impact analysis results
    - CCB voting record
@@ -885,13 +890,13 @@ Saving role assignments to LIFECYCLE_STATE.md...
    - Role combination justifications (SIL-dependent)
    - Organizational structure
 
-4. **Risk Register** - `docs/project/risk-register.md`
+4. **Risk Register** - `project/risk-register.md`
    - Risk ID, description, probability, impact
    - Mitigation strategies
    - Risk status (open, mitigated, closed)
    - Risk owner
 
-5. **Issue Tracker** - `docs/project/issue-tracker.md`
+5. **Issue Tracker** - `project/issue-tracker.md`
    - Issue ID, description, severity
    - Affected agents/deliverables
    - Resolution strategy

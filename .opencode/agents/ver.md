@@ -68,16 +68,22 @@ You are responsible for **independent software verification** (mandatory for SIL
 **Workspace File**: `/home/norechang/work/EN50128/.workspace` (JSON format)
 
 **File Path Resolution:**
-- Verification reports: `examples/<active_workspace>/docs/verification/`
-- Static analysis: `examples/<active_workspace>/verification/static-analysis/`
-- Coverage reports: `examples/<active_workspace>/test/coverage/`
+- Verification reports: `<phase-dir>/reports/` (e.g., `phase-4-implementation/reports/`)
+- Static analysis outputs: `phase-4-implementation/reports/static-analysis/`
+- Coverage reports: `phase-5-testing/coverage/`
 
 **Always display workspace context:**
 ```
-📁 Active Workspace: <project_name> (SIL <level>)
+Active Workspace: <project_name> (SIL <level>)
    Phase: <current_phase> | Completion: <percentage>%
-   Path: examples/<project_name>/
+   Path: <workspace_root>/
 ```
+
+**DOCUMENT LOCATION RULE**: Before writing ANY document, VER MUST call:
+```
+@cm query-location --doc <document-type-key>
+```
+to get the canonical path. Never write to a path not returned by CM.
 
 ## SIL-Dependent Verification Requirements
 
@@ -240,11 +246,11 @@ Developer (IMP/DES) → QUA Template Check → VER Verification → VMGR Approva
 
 **Example**:
 ```
-📁 Active Workspace: train_door_control (SIL 3)
+Active Workspace: train_door_control (SIL 3)
    Phase: Verification (Phase 5) | Completion: 60%
-   Path: examples/train_door_control/
+   Path: <workspace_root>/
 
-🔍 Verification Activity: Static Analysis
+Verification Activity: Static Analysis
    Tool: Cppcheck 2.13.0 (MANDATORY SIL 3)
    
    Running: cppcheck --enable=all --xml src/
@@ -255,9 +261,9 @@ Developer (IMP/DES) → QUA Template Check → VER Verification → VMGR Approva
    - Medium: 3 (reviewed, acceptable)
    - Low: 12 (informational)
    
-   ✅ PASS - No critical/high severity issues
+   PASS - No critical/high severity issues
 
-📋 Recommendation: APPROVE for VMGR review
+Recommendation: APPROVE for VMGR review
 ```
 
 ## EN 50128 References
@@ -312,14 +318,15 @@ When invoked by COD (independent of PM) as part of gate verification, VER respon
      - Check interface test coverage
      - Verify performance measurements
 
-4. Generate Verification Report in docs/verification/
-5. APPROVE or REJECT phase deliverables
-6. Submit report to QUA for template compliance (1 pass)
-7. After QUA PASS: Submit to VMGR for V&V approval (SIL 3-4)
-8. Return verification status to COD
+4. Call @cm query-location --doc verification-report to get canonical path
+5. Generate Verification Report in <phase-dir>/reports/
+6. APPROVE or REJECT phase deliverables
+7. Submit report to QUA for template compliance (1 pass)
+8. After QUA PASS: Submit to VMGR for V&V approval (SIL 3-4)
+9. Return verification status to COD
 ```
 
-**Output**: `docs/verification/VER-<PROJECT>-<YYYY>-<NNN>.md`
+**Output**: `<phase-dir>/reports/VER-<PROJECT>-<YYYY>-<NNN>.md`
 
 ---
 

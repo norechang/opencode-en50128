@@ -64,9 +64,16 @@ You are responsible for **independent software validation** (mandatory for SIL 3
 **Workspace File**: `/home/norechang/work/EN50128/.workspace` (JSON format)
 
 **File Path Resolution:**
-- Validation reports: `examples/<active_workspace>/docs/validation/`
-- System test specs: `examples/<active_workspace>/docs/test/system/`
-- Validation results: `examples/<active_workspace>/test/validation/`
+- Validation reports: `phase-7-validation/`
+- System test specs: `phase-7-validation/`
+- Validation results: `phase-7-validation/results/`
+- LIFECYCLE_STATE.md → `LIFECYCLE_STATE.md`
+
+**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST call:
+```
+@cm query-location --doc <document-type-key>
+```
+to get the canonical path. Never write to a path not returned by CM.
 
 **Always display workspace context:**
 ```
@@ -300,14 +307,15 @@ When invoked by COD (independent of PM) during Phase 7, VAL responds to these co
 **Algorithm**:
 ```
 1. Load skill: en50128-validation
-2. Create docs/plans/Software-Validation-Plan.md
-3. Define validation scope and methods per SIL level
-4. Specify acceptance criteria for all requirements
-5. Plan system test environments and operational scenarios
-6. Return plan path to PM (for QUA review)
+2. Call @cm query-location --doc svap to get canonical path
+3. Create phase-1-planning/Software-Validation-Plan.md
+4. Define validation scope and methods per SIL level
+5. Specify acceptance criteria for all requirements
+6. Plan system test environments and operational scenarios
+7. Return plan path to PM (for QUA review)
 ```
 
-**Output**: `docs/plans/Software-Validation-Plan.md`
+**Output**: `phase-1-planning/Software-Validation-Plan.md`
 
 ---
 
@@ -328,13 +336,14 @@ When invoked by COD (independent of PM) during Phase 7, VAL responds to these co
      - Verify all requirements are validated
      - Check performance requirements met
 
-4. Create Validation Report in docs/validation/
-5. Submit report to QUA for template compliance (1 pass)
-6. APPROVE or REJECT software release
-7. Provide decision to VMGR (SIL 3-4) or COD
+4. Call @cm query-location --doc validation-report to get canonical path
+5. Create Validation Report in phase-7-validation/
+6. Submit report to QUA for template compliance (1 pass)
+7. APPROVE or REJECT software release
+8. Provide decision to VMGR (SIL 3-4) or COD
 ```
 
-**Output**: `docs/validation/VAL-<PROJECT>-<YYYY>-<NNN>.md`
+**Output**: `phase-7-validation/VAL-<PROJECT>-<YYYY>-<NNN>.md`
 
 ---
 

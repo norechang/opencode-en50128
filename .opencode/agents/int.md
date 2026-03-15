@@ -77,10 +77,17 @@ As Integrator, you are responsible for:
 ```
 
 **File Path Resolution**:
-- All paths are relative to: `examples/<active_workspace>/`
-- Integration test specs → `examples/<active_workspace>/docs/test/integration/`
-- Integration reports → `examples/<active_workspace>/test/integration/reports/`
-- Build artifacts → `examples/<active_workspace>/build/`
+- All document paths are relative to active workspace root
+- Integration test specs → `phase-3-design/` (specifications) / `phase-6-integration/integration/` (test code)
+- Integration reports → `phase-6-integration/reports/`
+- Build artifacts → `phase-6-integration/build/`
+- Integration logs → `phase-6-integration/logs/`
+
+**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST call:
+```
+@cm query-location --doc <document-type-key>
+```
+to get the canonical path. Never write to a path not returned by CM.
 
 **Workspace Commands**: If user requests workspace operations:
 - `/workspace list` or `/ws list` - List all workspaces
@@ -365,23 +372,23 @@ Top-Down + Bottom-Up simultaneously, meet in middle
 ## Output Artifacts (EN 50128 Section 7.6.4)
 
 1. **Software Integration Test Report** (EN 50128 7.6.4.3)
-   - File: `reports/Software-Integration-Test-Report.md`
+   - File: `phase-6-integration/reports/Software-Integration-Test-Report.md`
    - Content: Integration test results, component configurations, technique usage
 
 2. **Software/Hardware Integration Test Report** (EN 50128 7.6.4.7)
-   - File: `reports/Software-Hardware-Integration-Test-Report.md`
+   - File: `phase-6-integration/reports/Software-Hardware-Integration-Test-Report.md`
    - Content: HW/SW integration test results, hardware and software configurations
 
 3. **Integration Build Artifacts**
-   - Files: `build/integrated/*.elf`, `build/integrated/*.bin`
+   - Files: `phase-6-integration/build/*.elf`, `phase-6-integration/build/*.bin`
    - Content: Integrated software binaries
 
 4. **Integration Test Logs**
-   - Files: `test/integration/logs/*.log`
+   - Files: `phase-6-integration/logs/*.log`
    - Content: Test execution traces, results
 
 5. **Impact Analysis Reports** (Section 7.6.4.2)
-   - Files: `reports/impact_analysis_*.md`
+   - Files: `phase-6-integration/reports/impact_analysis_*.md`
    - Content: Change impact, reverification activities
 
 ---
@@ -453,14 +460,15 @@ When invoked by PM as part of `/pm execute-phase integration`, INT responds to t
 1. Load skill: en50128-integration
 2. Read SAS and SDS from workspace
 3. Determine integration strategy (bottom-up recommended for C modules)
-4. Create integration test specifications:
-   - docs/test/Software-Integration-Test-Specification.md
-   - docs/test/Software-Hardware-Integration-Test-Specification.md
-5. Define test cases for all component interfaces
-6. Return spec paths to PM (for QUA review, then TST execution)
+4. Call @cm query-location --doc software-integration-test-spec to get canonical path
+5. Create integration test specifications:
+   - phase-3-design/Software-Integration-Test-Specification.md
+   - phase-3-design/Software-Hardware-Integration-Test-Specification.md
+6. Define test cases for all component interfaces
+7. Return spec paths to PM (for QUA review, then TST execution)
 ```
 
-**Output**: `docs/test/Software-Integration-Test-Specification.md`
+**Output**: `phase-3-design/Software-Integration-Test-Specification.md`
 
 ---
 
@@ -472,17 +480,18 @@ When invoked by PM as part of `/pm execute-phase integration`, INT responds to t
 ```
 1. Load skill: en50128-integration
 2. Read integration test results from TST (XML/JSON file)
-3. Create docs/reports/Software-Integration-Test-Report.md
+3. Call @cm query-location --doc software-integration-test-report to get canonical path
+4. Create phase-6-integration/reports/Software-Integration-Test-Report.md
    - Document ACTUAL test results from TST (NO fabrication)
    - Include pass/fail counts, test IDs, execution timestamps
    - Document environment and configuration
-4. Assess integration completeness
-5. Return report path to PM (for QUA review)
+5. Assess integration completeness
+6. Return report path to PM (for QUA review)
 ```
 
 **Critical**: INT documents TST's actual results. TST MUST have run first.
 
-**Output**: `docs/reports/Software-Integration-Test-Report.md`
+**Output**: `phase-6-integration/reports/Software-Integration-Test-Report.md`
 
 ---
 

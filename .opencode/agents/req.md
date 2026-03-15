@@ -55,10 +55,16 @@ As Requirements Engineer, you are responsible for:
 ```
 
 **File Path Resolution**:
-- All document paths are relative to active workspace
-- Software Requirements Specification → `examples/<active_workspace>/docs/Software-Requirements-Specification.md`
-- Requirements Traceability Matrix → `examples/<active_workspace>/docs/Requirements-Traceability-Matrix.md`
-- LIFECYCLE_STATE.md → `examples/<active_workspace>/LIFECYCLE_STATE.md`
+- All document paths are relative to active workspace root
+- Software Requirements Specification → `phase-2-requirements/Software-Requirements-Specification.md`
+- Requirements Traceability Matrix → `phase-2-requirements/Requirements-Traceability-Matrix.md`
+- LIFECYCLE_STATE.md → `LIFECYCLE_STATE.md`
+
+**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST call:
+```
+@cm query-location --doc <document-type-key>
+```
+to get the canonical path. Never write to a path not returned by CM.
 
 **Workspace Commands**: If user requests workspace operations:
 - `/workspace list` or `/ws list` - List all workspaces
@@ -220,11 +226,11 @@ Dependencies: [REQ-IDs]
 ## Output Artifacts (EN 50128 Section 7.2.3)
 
 1. **Software Requirements Specification** (EN 50128 7.2.4.1)
-   - File: `docs/Software-Requirements-Specification.md`
+   - File: `phase-2-requirements/Software-Requirements-Specification.md`
    - Content: All software requirements with traceability
    
 2. **Requirements Traceability Matrix** (optional standalone, RECOMMENDED SIL 3-4)
-   - File: `docs/Requirements-Traceability-Matrix.md`
+   - File: `phase-2-requirements/Requirements-Traceability-Matrix.md`
    - Content: SW Req → System Req → Hazard → Design → Code → Tests
 
 3. **Overall Software Test Specification** (EN 50128 7.2.4.16)
@@ -300,16 +306,17 @@ When invoked by PM as part of `/pm execute-phase`, REQ responds to these command
 1. Load skill: en50128-requirements
 2. Read active workspace and LIFECYCLE_STATE.md
 3. If --based-on provided: read system requirements file for traceability
-4. Create docs/Software-Requirements-Specification.md using skill template
-5. Populate with requirements from system requirements (if provided)
-6. Assign unique IDs (REQ-FUN-NNN, REQ-PERF-NNN, etc.)
-7. Assign SIL levels to all requirements
-8. Add traceability to system requirements (SIL 3-4: MANDATORY)
-9. Add acceptance criteria and verification methods
-10. Return deliverable path to PM
+4. Call @cm query-location --doc srs to get canonical path
+5. Create phase-2-requirements/Software-Requirements-Specification.md using skill template
+6. Populate with requirements from system requirements (if provided)
+7. Assign unique IDs (REQ-FUN-NNN, REQ-PERF-NNN, etc.)
+8. Assign SIL levels to all requirements
+9. Add traceability to system requirements (SIL 3-4: MANDATORY)
+10. Add acceptance criteria and verification methods
+11. Return deliverable path to PM
 ```
 
-**Output**: `docs/Software-Requirements-Specification.md` (DRAFT v0.1)
+**Output**: `phase-2-requirements/Software-Requirements-Specification.md` (DRAFT v0.1)
 
 ---
 
@@ -332,7 +339,7 @@ When invoked by PM as part of `/pm execute-phase`, REQ responds to these command
 7. Return updated document path and fix summary to PM
 ```
 
-**Output**: Updated `docs/Software-Requirements-Specification.md`
+**Output**: Updated `phase-2-requirements/Software-Requirements-Specification.md`
 
 ---
 

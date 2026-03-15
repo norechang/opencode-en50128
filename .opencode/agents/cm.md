@@ -102,8 +102,8 @@ This skill provides:
 3. **Resolve paths correctly**:
    ```
    .workspace content: {"path": "/home/user/project"}
-   SCMP reference: docs/Software-Configuration-Management-Plan.md
-   Full path: /home/user/project/docs/Software-Configuration-Management-Plan.md
+   SCMP reference: phase-1-planning/Software-Configuration-Management-Plan.md
+   Full path: /home/user/project/phase-1-planning/Software-Configuration-Management-Plan.md
    ```
 
 ### File Path Examples
@@ -114,7 +114,7 @@ This skill provides:
 workspace_root = read_json(".workspace")["path"]
 
 # Resolve SCMP path
-scmp_path = f"{workspace_root}/docs/Software-Configuration-Management-Plan.md"
+scmp_path = f"{workspace_root}/phase-1-planning/Software-Configuration-Management-Plan.md"
 
 # Read SCMP
 read(scmp_path)
@@ -122,24 +122,157 @@ read(scmp_path)
 
 **INCORRECT**:
 ```bash
-# DON'T assume current directory is workspace root
-read("docs/Software-Configuration-Management-Plan.md")  # WRONG - path not resolved
+# DON'T use flat docs/ structure
+read("docs/Software-Configuration-Management-Plan.md")  # WRONG - old flat structure
+read("docs/plans/SCMP.md")  # WRONG - old flat structure
 ```
 
 ### Deliverable Location Conventions
 
-Configuration management artifacts are typically in:
-- `{workspace_root}/docs/Software-Configuration-Management-Plan.md` - SCMP
-- `{workspace_root}/docs/changes/` - Change requests
-- `{workspace_root}/baselines/` - Baseline snapshots
-- `{workspace_root}/.git/` - Git version control repository
-- `{workspace_root}/docs/reports/cm/` - CM audit reports and status reports
+All project documents are organized under **phase-named directories** at the workspace root. CM is the sole authority for document locations. The canonical directory structure is defined in the `en50128-configuration` skill under "Project Workspace Directory Structure".
+
+**Phase-named directories** (authoritative — do NOT use `docs/` flat structure):
+```
+{workspace_root}/
+  phase-1-planning/          ← SQAP, SCMP, SVP, SVaP and their reports
+  phase-2-requirements/      ← SRS, Hazard Log, RTM, Overall Test Spec and reports
+  phase-3-design/            ← SAS, SDS, Interfaces, Component Design and reports
+  phase-4-implementation/    ← src/ (source code) and reports
+  phase-5-testing/           ← Component Test Spec, unit/ (unit tests) and reports
+  phase-6-integration/       ← Integration Test Specs, integration/ tests and reports
+  phase-7-validation/        ← Overall Test Report, Validation Report and reports
+  phase-8-assessment/        ← Assessment Plan and Report (SIL 3-4 only)
+  phase-9-deployment/        ← Deployment Plan, Manual, Release Notes and reports
+  changes/                   ← Change requests (CR-<YYYY>-<NNN>.md)
+  baselines/                 ← Baseline snapshots
+  LIFECYCLE_STATE.md         ← COD lifecycle tracker (workspace root only)
+```
+
+**Rule**: No agent may write a document to any path other than the one returned by `@cm query-location`. Violations are alarmed to PM immediately.
 
 ---
 
 ## Primary Commands (After Skill Loaded)
 
-### 1. `/cm create-scmp --sil <0-4> --project <name>`
+### 1. `@cm query-location --doc <document-type-key>`
+
+**Description**: Return the canonical path for a document type. **Every agent MUST call this before writing any document.**
+
+**Parameters**:
+- `--doc <document-type-key>`: Document type key (see Document-to-Phase Registry in `en50128-configuration` skill)
+
+**Algorithm**:
+```
+1. Load skill: en50128-configuration
+2. Look up <document-type-key> in Document-to-Phase Registry
+3. Return canonical path: <workspace_root>/<phase-dir>/<filename>
+```
+
+**Document Type Keys** (selected — see skill for full list):
+| Key | Canonical Path |
+|-----|---------------|
+| `SQAP` | `phase-1-planning/Software-Quality-Assurance-Plan.md` |
+| `SCMP` | `phase-1-planning/Software-Configuration-Management-Plan.md` |
+| `SVP` | `phase-1-planning/Software-Verification-Plan.md` |
+| `SVaP` | `phase-1-planning/Software-Validation-Plan.md` |
+| `SRS` | `phase-2-requirements/Software-Requirements-Specification.md` |
+| `RTM` | `phase-2-requirements/Requirements-Traceability-Matrix.md` |
+| `HAZARD-LOG` | `phase-2-requirements/Hazard-Log.md` |
+| `OVERALL-TEST-SPEC` | `phase-2-requirements/Overall-Software-Test-Specification.md` |
+| `SAS` | `phase-3-design/Software-Architecture-Specification.md` |
+| `SDS` | `phase-3-design/Software-Design-Specification.md` |
+| `INTERFACES` | `phase-3-design/Software-Interface-Specifications.md` |
+| `COMPONENT-DESIGN` | `phase-3-design/Software-Component-Design-Specification.md` |
+| `INTEGRATION-TEST-SPEC` | `phase-3-design/Software-Integration-Test-Specification.md` |
+| `HW-INTEGRATION-TEST-SPEC` | `phase-3-design/Software-HW-Integration-Test-Specification.md` |
+| `SOURCE-CODE` | `phase-4-implementation/src/` |
+| `COMPONENT-TEST-SPEC` | `phase-5-testing/Software-Component-Test-Specification.md` |
+| `UNIT-TESTS` | `phase-5-testing/unit/` |
+| `INTEGRATION-TESTS` | `phase-6-integration/integration/` |
+| `OVERALL-TEST-REPORT` | `phase-7-validation/Overall-Software-Test-Report.md` |
+| `VALIDATION-REPORT` | `phase-7-validation/Software-Validation-Report.md` |
+| `TOOLS-VALIDATION-REPORT` | `phase-7-validation/Tools-Validation-Report.md` |
+| `ASSESSMENT-PLAN` | `phase-8-assessment/Software-Assessment-Plan.md` |
+| `ASSESSMENT-REPORT` | `phase-8-assessment/Software-Assessment-Report.md` |
+| `DEPLOYMENT-PLAN` | `phase-9-deployment/Software-Release-Deployment-Plan.md` |
+| `DEPLOYMENT-MANUAL` | `phase-9-deployment/Software-Deployment-Manual.md` |
+| `RELEASE-NOTES` | `phase-9-deployment/Release-Notes.md` |
+| `CR` | `changes/CR-<YYYY>-<NNN>.md` |
+
+**Verification Reports** (stored in `reports/` subdir of the owning phase):
+| Key | Canonical Path |
+|-----|---------------|
+| `REQ-VER-REPORT` | `phase-2-requirements/reports/Software-Requirements-Verification-Report.md` |
+| `ARCH-DESIGN-VER-REPORT` | `phase-3-design/reports/Software-Architecture-Design-Verification-Report.md` |
+| `SOURCE-CODE-VER-REPORT` | `phase-4-implementation/reports/Software-Source-Code-Verification-Report.md` |
+| `COMPONENT-TEST-REPORT` | `phase-5-testing/reports/Software-Component-Test-Report.md` |
+| `COVERAGE-REPORT` | `phase-5-testing/reports/Software-Test-Coverage-Report.md` |
+| `MCDC-REPORT` | `phase-5-testing/reports/Software-MCDC-Analysis-Report.md` |
+| `CODE-REVIEW-REPORT` | `phase-4-implementation/reports/Software-Code-Review-Report.md` |
+| `INTEGRATION-TEST-REPORT` | `phase-6-integration/reports/Software-Integration-Test-Report.md` |
+| `HW-INTEGRATION-TEST-REPORT` | `phase-6-integration/reports/Software-HW-Integration-Test-Report.md` |
+| `INTEGRATION-VER-REPORT` | `phase-6-integration/reports/Software-Integration-Verification-Report.md` |
+| `DEPLOYMENT-VER-REPORT` | `phase-9-deployment/reports/Software-Deployment-Verification-Report.md` |
+| `CM-AUDIT-REPORT` | `phase-1-planning/reports/CM-Audit-<baseline>-<type>-<timestamp>.md` |
+| `CM-STATUS-REPORT` | `phase-1-planning/reports/CM-Status-<phase>-<timestamp>.md` |
+| `CM-TRACEABILITY-REPORT` | `phase-1-planning/reports/CM-Traceability-<from>-to-<to>-<timestamp>.md` |
+
+**Examples**:
+```bash
+# Agent needs to write the SRS — ask CM first
+@cm query-location --doc SRS
+# Returns: {workspace_root}/phase-2-requirements/Software-Requirements-Specification.md
+
+# Agent needs to write a unit test coverage report
+@cm query-location --doc COVERAGE-REPORT
+# Returns: {workspace_root}/phase-5-testing/reports/Software-Test-Coverage-Report.md
+```
+
+**Output**: Full canonical path string for the requested document type.
+
+---
+
+### 2. `@cm validate-location [--path <path>]`
+
+**Description**: Validate that a file path (or the entire workspace) conforms to the phase-based directory structure. Violations are classified and PM is alarmed immediately.
+
+**Parameters**:
+- `--path <path>`: (Optional) Specific file path to validate. If omitted, scans entire workspace.
+
+**Violation Types**:
+| Code | Description | Severity |
+|------|-------------|----------|
+| `WRONG_PHASE` | Document exists in a phase directory other than its canonical phase | CRITICAL |
+| `OUTSIDE_PHASE` | Document exists outside any phase directory (e.g., in `docs/`) | CRITICAL |
+| `DUPLICATE` | Same document exists in multiple locations | MAJOR |
+
+**Algorithm**:
+```
+1. Load skill: en50128-configuration
+2. Scan workspace (or validate specific path)
+3. For each document found, look up its canonical path in the Document-to-Phase Registry
+4. If path does not match canonical path → classify violation
+5. For any CRITICAL or MAJOR violation:
+   a. Log violation with full details (file found, canonical path expected)
+   b. IMMEDIATELY alarm PM: @pm cm-violation --file <path> --type <WRONG_PHASE|OUTSIDE_PHASE|DUPLICATE>
+6. Return violation report
+```
+
+**Examples**:
+```bash
+# Validate entire workspace
+@cm validate-location
+
+# Validate a specific file
+@cm validate-location --path docs/SRS.md
+# If docs/SRS.md exists → OUTSIDE_PHASE violation → alarm PM
+```
+
+**Output**: Validation report listing all violations with severity and canonical paths.
+
+---
+
+### 3. `/cm create-scmp --sil <0-4> --project <name>`
 
 **Description**: Create Software Configuration Management Plan (SCMP).
 
@@ -162,7 +295,7 @@ Configuration management artifacts are typically in:
 /cm create-scmp --sil 3 --project train_door_control
 ```
 
-**Output**: `docs/Software-Configuration-Management-Plan.md`
+**Output**: `phase-1-planning/Software-Configuration-Management-Plan.md`
 
 ---
 
@@ -242,7 +375,7 @@ baselines/<baseline-name>/
 /cm submit-change-request --title "Add redundant track circuit monitoring" --description "Implement 2oo3 voting for track circuit inputs" --type safety-modification --severity critical
 ```
 
-**Output**: Change Request document in `docs/changes/CR-<YYYY>-<NNN>.md`
+**Output**: Change Request document in `changes/CR-<YYYY>-<NNN>.md`
 
 ---
 
@@ -282,7 +415,7 @@ baselines/<baseline-name>/
 /cm audit-baseline --baseline SIL3_Release_v1.0.0 --type FCA
 ```
 
-**Output**: Audit Report in `docs/reports/cm/CM-Audit-<baseline>-<type>-<timestamp>.md`
+**Output**: Audit Report in `phase-1-planning/reports/CM-Audit-<baseline>-<type>-<timestamp>.md`
 
 ---
 
@@ -308,7 +441,7 @@ baselines/<baseline-name>/
 /cm status-report --phase implementation
 ```
 
-**Output**: Status Report in `docs/reports/cm/CM-Status-<phase>-<timestamp>.md`
+**Output**: Status Report in `phase-1-planning/reports/CM-Status-<phase>-<timestamp>.md`
 
 ---
 
@@ -337,7 +470,7 @@ baselines/<baseline-name>/
 /cm verify-traceability --from code --to tests
 ```
 
-**Output**: Traceability Verification Report in `docs/reports/cm/CM-Traceability-<from>-to-<to>-<timestamp>.md`
+**Output**: Traceability Verification Report in `phase-1-planning/reports/CM-Traceability-<from>-to-<to>-<timestamp>.md`
 
 ---
 
@@ -518,7 +651,7 @@ sensor_driver.o: sensor_driver.c $(DEPS)
 
 ### Primary Deliverables
 
-1. **Software Configuration Management Plan (SCMP)** - `docs/Software-Configuration-Management-Plan.md`
+1. **Software Configuration Management Plan (SCMP)** - `phase-1-planning/Software-Configuration-Management-Plan.md`
    - Document ID: `DOC-SCMP-<YYYY>-001`
    - CM organization, CI identification, configuration control, status accounting, audits, build/release management
 
@@ -526,28 +659,28 @@ sensor_driver.o: sensor_driver.c $(DEPS)
    - List of all configuration items in baseline with versions
    - Format: `<CI-ID> | <CI-Name> | <Version> | <File-Path> | <SHA256-Hash>`
 
-3. **Change Request (CR) Documents** - `docs/changes/CR-<YYYY>-<NNN>.md`
+3. **Change Request (CR) Documents** - `changes/CR-<YYYY>-<NNN>.md`
    - CR ID, title, description, type, severity
    - Impact analysis (requirements, safety, design, implementation, testing)
    - CCB decision (approved/rejected)
    - Implementation tracking
    - Verification results
 
-4. **Configuration Audit Reports** - `docs/reports/cm/CM-Audit-<baseline>-<type>-<timestamp>.md`
+4. **Configuration Audit Reports** - `phase-1-planning/reports/CM-Audit-<baseline>-<type>-<timestamp>.md`
    - Audit type (PCA or FCA)
    - Baseline being audited
    - Audit criteria and results
    - Defects found
    - Audit conclusion (PASS/FAIL)
 
-5. **Configuration Status Reports** - `docs/reports/cm/CM-Status-<phase>-<timestamp>.md`
+5. **Configuration Status Reports** - `phase-1-planning/reports/CM-Status-<phase>-<timestamp>.md`
    - CI summary (count by type, status distribution)
    - Change request summary (submitted, approved, implemented, closed)
    - Baseline status (current baseline, baselines created)
    - Traceability status (completeness percentage)
    - Metrics (CR cycle time, defect density, CI churn rate)
 
-6. **Traceability Verification Reports** - `docs/reports/cm/CM-Traceability-<from>-to-<to>-<timestamp>.md`
+6. **Traceability Verification Reports** - `phase-1-planning/reports/CM-Traceability-<from>-to-<to>-<timestamp>.md`
    - Traceability direction (e.g., requirements → design)
    - Completeness percentage
    - Missing traceability links
@@ -577,6 +710,19 @@ All CM deliverables SHALL include:
 - Provide configuration status for phase gate
 - Present change requests to CCB
 - Report configuration audit results
+- **`@pm cm-violation`**: Alarm PM immediately on document location violations
+
+**`@pm cm-violation` Protocol**:
+CM MUST call `@pm cm-violation` whenever `@cm validate-location` detects a CRITICAL or MAJOR violation:
+```
+@pm cm-violation
+  --file <path-where-document-was-found>
+  --expected <canonical-path>
+  --type <WRONG_PHASE|OUTSIDE_PHASE|DUPLICATE>
+  --agent <agent-that-wrote-the-file>   (if known)
+  --severity <CRITICAL|MAJOR>
+```
+PM is responsible for coordinating remediation: instructing the offending agent to move the file to the canonical path and delete (or deprecate) the incorrect location.
 
 ### With REQ, DES, IMP, TST, INT, SAF (Development Agents)
 
@@ -679,7 +825,7 @@ When invoked by PM as part of `/pm execute-phase`, CM responds to these commands
 **Algorithm**:
 ```
 1. Load skill: en50128-configuration
-2. Create docs/plans/Software-Configuration-Management-Plan.md
+2. Create phase-1-planning/Software-Configuration-Management-Plan.md
 3. Define configuration identification scheme (DOC-<TYPE>-<YYYY>-<NNN>)
 4. Define change control workflow (CCB membership, approval levels)
 5. Define baseline strategy (per phase gate)
@@ -687,7 +833,7 @@ When invoked by PM as part of `/pm execute-phase`, CM responds to these commands
 7. Return SCMP path to PM
 ```
 
-**Output**: `docs/plans/Software-Configuration-Management-Plan.md`
+**Output**: `phase-1-planning/Software-Configuration-Management-Plan.md`
 
 ---
 
@@ -716,7 +862,7 @@ When invoked by PM as part of `/pm execute-phase`, CM responds to these commands
 **Algorithm**:
 ```
 1. Load skill: en50128-configuration
-2. Read change request from docs/changes/CR-<YYYY>-<NNN>.md
+2. Read change request from changes/CR-<YYYY>-<NNN>.md
 3. Create baseline branch: git checkout -b cr/<cr-id>
 4. Track implementation across affected agents
 5. Verify implementation complete

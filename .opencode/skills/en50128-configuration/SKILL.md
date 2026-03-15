@@ -56,6 +56,208 @@ Use this skill when:
 
 **Standard Reference:** `std/EN50128-2011.md` Section 6.6, Table A.9, Reference D.48
 
+## Project Workspace Directory Structure
+
+All generated documents SHALL be organized under phase-named directories. The CM agent is the **sole authority** for document location rules. Every agent that produces a document MUST call `@cm query-location` to obtain the canonical path before writing the file.
+
+### Canonical Phase Directory Layout
+
+```
+{workspace_root}/
+├── phase-1-planning/
+│   ├── Software-Quality-Assurance-Plan.md          (SQAP)
+│   ├── Software-Configuration-Management-Plan.md   (SCMP)
+│   ├── Software-Verification-Plan.md               (SVP)
+│   ├── Software-Validation-Plan.md                 (SVaP)
+│   └── reports/
+│       └── SQAP-Verification-Report.md
+│
+├── phase-2-requirements/
+│   ├── Software-Requirements-Specification.md      (SRS)
+│   ├── Hazard-Log.md
+│   ├── Requirements-Traceability-Matrix.md         (RTM)
+│   ├── Overall-Software-Test-Specification.md
+│   └── reports/
+│       └── Requirements-Verification-Report.md
+│
+├── phase-3-design/
+│   ├── Software-Architecture-Specification.md      (SAS)
+│   ├── Software-Design-Specification.md            (SDS)
+│   ├── Software-Interface-Specifications.md
+│   ├── Software-Component-Design-Specification.md
+│   └── reports/
+│       ├── Architecture-Design-Verification-Report.md
+│       └── Architecture-Design-Validation-Report.md
+│
+├── phase-4-implementation/
+│   ├── src/                                        (source code)
+│   │   └── <module>/
+│   │       ├── <module>.c
+│   │       └── <module>.h
+│   └── reports/
+│       ├── Software-Source-Code-Verification-Report.md
+│       ├── Software-Source-Code-Validation-Report.md
+│       ├── Static-Analysis-Report.md
+│       └── Code-Review-Report.md
+│
+├── phase-5-testing/
+│   ├── Software-Component-Test-Specification.md
+│   ├── unit/                                       (unit test source)
+│   │   └── test_<module>.c
+│   └── reports/
+│       ├── Software-Component-Test-Report.md
+│       ├── Component-Test-Verification-Report.md
+│       ├── Coverage-Analysis-Report.md
+│       └── MC-DC-Analysis-Report.md
+│
+├── phase-6-integration/
+│   ├── Software-Integration-Test-Specification.md
+│   ├── Software-Hardware-Integration-Test-Specification.md
+│   ├── integration/                                (integration test source)
+│   │   └── test_integration_<scenario>.c
+│   └── reports/
+│       ├── Software-Integration-Test-Report.md
+│       ├── Software-Hardware-Integration-Test-Report.md
+│       └── Integration-Verification-Report.md
+│
+├── phase-7-validation/
+│   ├── Overall-Software-Test-Report.md
+│   ├── Software-Validation-Report.md
+│   └── reports/
+│       └── Tools-Validation-Report.md
+│
+├── phase-8-assessment/                             (SIL 3-4 only)
+│   ├── Software-Assessment-Plan.md
+│   └── Software-Assessment-Report.md
+│
+├── phase-9-deployment/
+│   ├── Software-Release-Deployment-Plan.md
+│   ├── Software-Deployment-Manual.md
+│   ├── Release-Notes.md
+│   ├── Deployment-Records.md
+│   └── reports/
+│       └── Deployment-Verification-Report.md
+│
+├── changes/                                        (change requests, all phases)
+│   └── CR-<YYYY>-<NNN>.md
+│
+├── baselines/                                      (baseline snapshots)
+│   └── <baseline-name>/
+│
+└── LIFECYCLE_STATE.md                              (COD lifecycle tracker)
+```
+
+### Phase-to-Directory Mapping (Authoritative)
+
+| Phase | Directory | Phase Name |
+|-------|-----------|------------|
+| Phase 1 | `phase-1-planning/` | Software Planning |
+| Phase 2 | `phase-2-requirements/` | Software Requirements |
+| Phase 3 | `phase-3-design/` | Software Architecture & Design |
+| Phase 4 | `phase-4-implementation/` | Software Implementation |
+| Phase 5 | `phase-5-testing/` | Software Component Testing |
+| Phase 6 | `phase-6-integration/` | Software Integration |
+| Phase 7 | `phase-7-validation/` | Software Validation |
+| Phase 8 | `phase-8-assessment/` | Software Assessment (SIL 3-4) |
+| Phase 9 | `phase-9-deployment/` | Software Deployment |
+
+### Document-to-Phase Registry (Authoritative)
+
+CM maintains this registry. `@cm query-location` looks up a document type and returns the canonical path.
+
+| Document Type Key | Canonical Path | Owning Phase |
+|-------------------|---------------|--------------|
+| `sqap` | `phase-1-planning/Software-Quality-Assurance-Plan.md` | Phase 1 |
+| `scmp` | `phase-1-planning/Software-Configuration-Management-Plan.md` | Phase 1 |
+| `svp` | `phase-1-planning/Software-Verification-Plan.md` | Phase 1 |
+| `svap` | `phase-1-planning/Software-Validation-Plan.md` | Phase 1 |
+| `sqap-verification` | `phase-1-planning/reports/SQAP-Verification-Report.md` | Phase 1 |
+| `srs` | `phase-2-requirements/Software-Requirements-Specification.md` | Phase 2 |
+| `hazard-log` | `phase-2-requirements/Hazard-Log.md` | Phase 2 |
+| `rtm` | `phase-2-requirements/Requirements-Traceability-Matrix.md` | Phase 2 |
+| `overall-test-spec` | `phase-2-requirements/Overall-Software-Test-Specification.md` | Phase 2 |
+| `requirements-verification` | `phase-2-requirements/reports/Requirements-Verification-Report.md` | Phase 2 |
+| `sas` | `phase-3-design/Software-Architecture-Specification.md` | Phase 3 |
+| `sds` | `phase-3-design/Software-Design-Specification.md` | Phase 3 |
+| `interfaces` | `phase-3-design/Software-Interface-Specifications.md` | Phase 3 |
+| `component-design` | `phase-3-design/Software-Component-Design-Specification.md` | Phase 3 |
+| `architecture-verification` | `phase-3-design/reports/Architecture-Design-Verification-Report.md` | Phase 3 |
+| `architecture-validation` | `phase-3-design/reports/Architecture-Design-Validation-Report.md` | Phase 3 |
+| `source-code` | `phase-4-implementation/src/` | Phase 4 |
+| `source-verification` | `phase-4-implementation/reports/Software-Source-Code-Verification-Report.md` | Phase 4 |
+| `source-validation` | `phase-4-implementation/reports/Software-Source-Code-Validation-Report.md` | Phase 4 |
+| `static-analysis` | `phase-4-implementation/reports/Static-Analysis-Report.md` | Phase 4 |
+| `code-review` | `phase-4-implementation/reports/Code-Review-Report.md` | Phase 4 |
+| `component-test-spec` | `phase-5-testing/Software-Component-Test-Specification.md` | Phase 5 |
+| `unit-tests` | `phase-5-testing/unit/` | Phase 5 |
+| `component-test-report` | `phase-5-testing/reports/Software-Component-Test-Report.md` | Phase 5 |
+| `component-test-verification` | `phase-5-testing/reports/Component-Test-Verification-Report.md` | Phase 5 |
+| `coverage-report` | `phase-5-testing/reports/Coverage-Analysis-Report.md` | Phase 5 |
+| `mcdc-report` | `phase-5-testing/reports/MC-DC-Analysis-Report.md` | Phase 5 |
+| `integration-test-spec` | `phase-6-integration/Software-Integration-Test-Specification.md` | Phase 6 |
+| `hw-integration-test-spec` | `phase-6-integration/Software-Hardware-Integration-Test-Specification.md` | Phase 6 |
+| `integration-tests` | `phase-6-integration/integration/` | Phase 6 |
+| `integration-test-report` | `phase-6-integration/reports/Software-Integration-Test-Report.md` | Phase 6 |
+| `hw-integration-test-report` | `phase-6-integration/reports/Software-Hardware-Integration-Test-Report.md` | Phase 6 |
+| `integration-verification` | `phase-6-integration/reports/Integration-Verification-Report.md` | Phase 6 |
+| `overall-test-report` | `phase-7-validation/Overall-Software-Test-Report.md` | Phase 7 |
+| `validation-report` | `phase-7-validation/Software-Validation-Report.md` | Phase 7 |
+| `tools-validation` | `phase-7-validation/reports/Tools-Validation-Report.md` | Phase 7 |
+| `assessment-plan` | `phase-8-assessment/Software-Assessment-Plan.md` | Phase 8 |
+| `assessment-report` | `phase-8-assessment/Software-Assessment-Report.md` | Phase 8 |
+| `deployment-plan` | `phase-9-deployment/Software-Release-Deployment-Plan.md` | Phase 9 |
+| `deployment-manual` | `phase-9-deployment/Software-Deployment-Manual.md` | Phase 9 |
+| `release-notes` | `phase-9-deployment/Release-Notes.md` | Phase 9 |
+| `deployment-records` | `phase-9-deployment/Deployment-Records.md` | Phase 9 |
+| `deployment-verification` | `phase-9-deployment/reports/Deployment-Verification-Report.md` | Phase 9 |
+
+### Location Rules
+
+1. **Every document has exactly one canonical location** — defined in the registry above
+2. **No document SHALL be placed outside its phase directory** without a CM-approved change request
+3. **Source code** lives in `phase-4-implementation/src/<module>/`
+4. **Test source** lives in `phase-5-testing/unit/` (unit) or `phase-6-integration/integration/` (integration)
+5. **Reports/outputs** from a phase go into that phase's `reports/` subdirectory
+6. **Change requests** (all phases) go in `changes/`
+7. **Baselines** go in `baselines/`
+8. **LIFECYCLE_STATE.md** lives at workspace root (managed by COD, not inside a phase dir)
+
+### CM Query Protocol (for Agent Use)
+
+**Before writing any document, every agent MUST:**
+
+```
+1. Call: @cm query-location --doc <document-type-key>
+2. CM returns: { "path": "phase-N-name/Document-Name.md", "phase": "Phase N", "exists": true/false }
+3. Agent writes to the returned path (resolved against workspace root)
+4. Agent MUST NOT invent or assume a path independently
+```
+
+**Example exchange:**
+```
+REQ agent → @cm query-location --doc srs
+CM returns → { "path": "phase-2-requirements/Software-Requirements-Specification.md", "phase": "Phase 2" }
+REQ agent writes to: {workspace_root}/phase-2-requirements/Software-Requirements-Specification.md
+```
+
+### CM Validation Protocol (Ongoing)
+
+CM SHALL periodically scan the workspace and validate all documents are in their correct phase directories. Any document found outside its canonical location is a **CM violation**:
+
+```
+CM violation types:
+  WRONG_PHASE   — document in wrong phase-N directory
+  OUTSIDE_PHASE — document directly in workspace root or unrecognized directory
+  DUPLICATE     — same document type exists in multiple locations
+```
+
+On violation detection, CM SHALL:
+1. Log the violation with path, expected path, and severity
+2. **Immediately alarm PM** via `@pm cm-violation` with violation details
+3. PM must initiate a change request or direct the responsible agent to relocate the file
+
+---
+
 ## Configuration Management Components
 
 ### 1. Configuration Identification (D.48)

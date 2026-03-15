@@ -58,10 +58,16 @@ As Implementer, you are responsible for:
 ```
 
 **File Path Resolution**:
-- All paths are relative to: `examples/<active_workspace>/`
-- Source code → `examples/<active_workspace>/src/`
-- Unit tests → `examples/<active_workspace>/test/unit/`
-- LIFECYCLE_STATE.md → `examples/<active_workspace>/LIFECYCLE_STATE.md`
+- All document paths are relative to active workspace root
+- Source code → `phase-4-implementation/src/`
+- Unit tests → `phase-5-testing/unit/`
+- LIFECYCLE_STATE.md → `LIFECYCLE_STATE.md`
+
+**DOCUMENT LOCATION RULE**: Before writing ANY document or source file, you MUST call:
+```
+@cm query-location --doc <document-type-key>
+```
+to get the canonical path. Never write to a path not returned by CM.
 
 **Workspace Commands**: If user requests workspace operations:
 - `/workspace list` or `/ws list` - List all workspaces
@@ -574,17 +580,17 @@ VER agent will verify:
 ## Output Artifacts (EN 50128 Section 7.5.3)
 
 1. **Software Source Code and supporting documentation** (EN 50128 7.5.4.1)
-   - Files: `src/*.c`, `src/*.h`
+   - Files: `phase-4-implementation/src/*.c`, `phase-4-implementation/src/*.h`
 
 2. **Software Component Test Report** (EN 50128 7.5.4.5)
-   - File: `reports/Software-Component-Test-Report.md`
+   - File: `phase-5-testing/reports/Software-Component-Test-Report.md`
 
 3. **Software Source Code Verification Report** (EN 50128 7.5.4.8)
    - Created by VER agent
-   - File: `reports/Source-Code-Verification.md`
+   - File: `phase-4-implementation/reports/Source-Code-Verification.md`
 
 4. **Unit Test Code**
-   - Files: `test/unit/*.c`
+   - Files: `phase-5-testing/unit/*.c`
 
 5. **Static Analysis Reports**
    - MISRA C compliance, complexity, etc.
@@ -683,22 +689,23 @@ When invoked by PM as part of `/pm execute-phase`, IMP responds to these command
 1. Load skill: en50128-implementation
 2. Read active workspace, LIFECYCLE_STATE.md, and SDS
 3. For each module in SDS:
-   a. Create src/<module_name>.h (header with interface only)
-   b. Create src/<module_name>.c (implementation)
-   c. Apply MISRA C:2012 constraints:
+   a. Call @cm query-location --doc source-code to get canonical src path
+   b. Create phase-4-implementation/src/<module_name>.h (header with interface only)
+   c. Create phase-4-implementation/src/<module_name>.c (implementation)
+   d. Apply MISRA C:2012 constraints:
       - Fixed-width types (uint8_t, uint16_t, uint32_t)
       - Static allocation only (SIL 2+) - NO malloc/free
       - No recursion (SIL 3-4)
       - All pointers validated before use
       - All return values checked
       - Defensive programming (pre-condition checks)
-   d. Embed traceability comment: /* Implements: REQ-XXX-NNN */
-   e. Verify cyclomatic complexity within SIL limits
-4. Create src/Makefile if not present
+   e. Embed traceability comment: /* Implements: REQ-XXX-NNN */
+   f. Verify cyclomatic complexity within SIL limits
+4. Create phase-4-implementation/src/Makefile if not present
 5. Return list of created files to PM
 ```
 
-**Output**: `src/*.h`, `src/*.c`, `src/Makefile`
+**Output**: `phase-4-implementation/src/*.h`, `phase-4-implementation/src/*.c`, `phase-4-implementation/src/Makefile`
 
 ---
 
