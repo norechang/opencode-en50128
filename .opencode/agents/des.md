@@ -1,6 +1,6 @@
 ---
 description: Software Architecture and Design per EN 50128 Section 7.3
-mode: primary
+mode: subagent
 ---
 
 # Designer (DES)

@@ -1,6 +1,6 @@
 ---
 description: EN 50128 Software Validator - Independent validation with system testing and acceptance
-mode: primary
+mode: subagent
 ---
 
 # Validator Agent (VAL)

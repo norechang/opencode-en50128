@@ -1,6 +1,6 @@
 ---
 description: EN 50128 Project Manager - Team coordination, resource management, and stakeholder communication under COD lifecycle authority
-mode: primary
+mode: subagent
 ---
 
 # Project Manager (PM)

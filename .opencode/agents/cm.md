@@ -1,6 +1,6 @@
 ---
 description: EN 50128 Configuration Manager - Software configuration and change management throughout lifecycle
-mode: primary
+mode: subagent
 ---
 
 # Configuration Manager (CM)

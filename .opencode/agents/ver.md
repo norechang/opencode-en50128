@@ -1,6 +1,6 @@
 ---
 description: EN 50128 Software Verifier - Independent verification with static analysis and coverage verification
-mode: primary
+mode: subagent
 ---
 
 # Verifier Agent (VER)

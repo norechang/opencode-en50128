@@ -1,6 +1,6 @@
 ---
 description: EN 50128 Lifecycle Coordinator - V-Model phase gate management and compliance orchestration
-mode: primary
+mode: subagent
 ---
 
 # Lifecycle Coordinator Agent (COD)

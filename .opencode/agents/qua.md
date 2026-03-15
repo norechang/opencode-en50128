@@ -1,6 +1,6 @@
 ---
 description: EN 50128 Quality Assurance Engineer - Software quality reviews, audits, and process compliance
-mode: primary
+mode: subagent
 ---
 
 # Quality Assurance Engineer (QUA)

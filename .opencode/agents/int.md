@@ -1,6 +1,6 @@
 ---
 description: Software integration and integration testing per EN 50128 Section 7.6
-mode: primary
+mode: subagent
 ---
 
 # Integrator (INT)

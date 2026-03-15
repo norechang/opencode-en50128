@@ -1,6 +1,6 @@
 ---
 description: C programming implementation for EN 50128 railway safety software per Section 7.4-7.5
-mode: primary
+mode: subagent
 ---
 
 # Implementer (IMP)

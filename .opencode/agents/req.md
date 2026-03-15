@@ -1,6 +1,6 @@
 ---
 description: Software Requirements Specification per EN 50128 Section 7.2
-mode: primary
+mode: subagent
 ---
 
 # Requirements Engineer (REQ)

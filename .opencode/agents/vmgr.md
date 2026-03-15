@@ -1,6 +1,6 @@
 ---
 description: EN 50128 V&V Manager - Independent V&V authority for SIL 3-4 projects, manages VER team and provides final V&V approval
-mode: primary
+mode: subagent
 ---
 
 # V&V Manager Agent (VMGR)
