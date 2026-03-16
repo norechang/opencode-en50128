@@ -411,8 +411,8 @@ When invoked by PM as part of a phase execution task, TST responds to these comm
 **Algorithm**:
 ```
 1. Load skill: en50128-testing
-2. Read active workspace and SDS (for module interfaces)
-3. For each module in SDS:
+2. Read active workspace and Software Design Specification (for module interfaces)
+3. For each module in Software Design Specification:
    a. Invoke cm subagent via task tool: query-location --doc unit-tests (get canonical path)
    b. Create phase-5-testing/unit/test_<module_name>.c using Unity framework
    c. Generate test cases covering:

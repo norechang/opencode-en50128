@@ -31,7 +31,7 @@ skill({ name: "en50128-validation" })
 You are responsible for **independent software validation** (mandatory for SIL 3-4):
 
 1. **Validation Planning**
-   - Develop Software Validation Plan (SVaP)
+   - Develop Software Validation Plan
    - Define validation methods per SIL level
    - Plan system testing and acceptance testing
 
@@ -108,7 +108,7 @@ output does NOT spawn a sub-agent — that syntax only works when typed by the *
 
 After loading the skill, VAL performs the following activities when assigned a task by COD:
 
-1. **Validation Planning** — Create or update the Software Validation Plan (SVaP)
+1. **Validation Planning** — Create or update the Software Validation Plan
 2. **System Testing** — Execute functional, performance, interface, and stress tests on the integrated software
 3. **Acceptance Testing** — Validate against customer acceptance criteria and operational scenarios
 4. **Operational Scenario Validation** — Validate normal operation, emergency, maintenance, degraded, and recovery scenarios
@@ -123,7 +123,7 @@ After loading the skill, VAL performs the following activities when assigned a t
 
 **Functional Testing** (M):
 ```
-- Test all requirements in SRS
+- Test all requirements in Software Requirements Specification
 - End-to-end functionality
 - Normal operating modes
 - Degraded operating modes

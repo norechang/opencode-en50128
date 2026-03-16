@@ -176,10 +176,10 @@ COD: Lifecycle Initialization Complete
 Current Phase: Phase 1 (Planning)
   Status: Ready to begin
   Required Deliverables:
-    - Software Quality Assurance Plan (SQAP)
-    - Software Configuration Management Plan (SCMP)
-    - Software Verification Plan (SVP)
-    - Software Validation Plan (SVaP)
+    - Software Quality Assurance Plan
+    - Software Configuration Management Plan
+    - Software Verification Plan
+    - Software Validation Plan
 
 Independence Requirements (SIL 3):
   - Validator SHALL NOT report to Project Manager
@@ -246,7 +246,7 @@ COD: Starting Phase 2 (Requirements)
 
 Entry Criteria:
   ✅ Phase 1 (Planning) gate PASSED
-  ✅ SQAP, SCMP, SVP, SVaP approved
+  ✅ Software Quality Assurance Plan, Software Configuration Management Plan, Software Verification Plan, Software Validation Plan approved
   ✅ Tools configured and operational
   ✅ Roles assigned with independence verified
 
@@ -259,7 +259,7 @@ Phase 2 Activities:
   - CM: Baseline requirements documents
 
 Expected Deliverables:
-  ⏳ Software Requirements Specification (SRS)
+  ⏳ Software Requirements Specification
   ⏳ Overall Software Test Specification
   ⏳ Hazard Log (if applicable)
   ⏳ Requirements Traceability Matrix (RTM)
@@ -347,7 +347,7 @@ COD: Phase 2 Gate Check - PASSED
 Gate Criteria: 15/15 PASSED ✅
 
 Deliverables:
-  ✅ Software Requirements Specification (SRS) - Approved
+  ✅ Software Requirements Specification - Approved
   ✅ Overall Software Test Specification - Approved
   ✅ Hazard Log - Approved
   ✅ Requirements Traceability Matrix - 100% complete
@@ -379,8 +379,8 @@ Phase 3 (Architecture & Design) AUTHORIZED to begin.
 
 Next Steps:
   1. PM coordinates Phase 3 activities
-  2. Create Software Architecture Specification (SAS)
-  3. Create Software Design Specification (SDS)
+  2. Create Software Architecture Specification
+  3. Create Software Design Specification
 
 Recommended Command:
   /cod start-phase architecture-design
@@ -399,7 +399,7 @@ COD: Phase 2 Gate Check - FAILED ❌
 Gate Criteria: 12/15 PASSED (3 FAILURES) ❌
 
 Deliverables:
-  ✅ Software Requirements Specification (SRS) - Approved
+  ✅ Software Requirements Specification - Approved
   ❌ Overall Software Test Specification - Missing
   ✅ Hazard Log - Approved
   ❌ Requirements Traceability Matrix - Incomplete (45/50)
@@ -561,7 +561,7 @@ Recommended Command:
 
 **Phase Impact Classification**:
 ```
-Requirements change (SRS) → Affects Phase 2 onward
+Requirements change (Software Requirements Specification) → Affects Phase 2 onward
 Design change (SAS/SDS)   → Affects Phase 3 onward
 Component design change   → Affects Phase 4 onward
 Code/unit test change     → Affects Phase 5 onward
@@ -908,9 +908,9 @@ VMGR ⇢ COD (final V&V gate decision) → APPROVED
 
 ## Lifecycle Phases (V-Model)
 
-1. **Phase 1: Planning** - SQAP, SCMP (PM-led); SVP (VMGR→VER-led, SIL 3-4) / VER-led (SIL 0-2); SVaP (VMGR-led, SIL 3-4) / VAL-led (SIL 0-2)
+1. **Phase 1: Planning** - Software Quality Assurance Plan, Software Configuration Management Plan (PM-led); Software Verification Plan (VMGR→VER-led, SIL 3-4) / VER-led (SIL 0-2); Software Validation Plan (VMGR-led, SIL 3-4) / VAL-led (SIL 0-2)
 2. **Phase 2: Requirements** - Software Requirements Specification, traceability
-3. **Phase 3: Architecture & Design** - SAS, SDS, interface specs
+3. **Phase 3: Architecture & Design** - Software Architecture Specification, Software Design Specification, interface specs
 4. **Phase 4: Component Design** - Detailed component design, algorithms
 5. **Phase 5: Implementation & Testing** - C code (MISRA C), unit tests, coverage
 6. **Phase 6: Integration** - Component integration, integration testing
@@ -918,27 +918,27 @@ VMGR ⇢ COD (final V&V gate decision) → APPROVED
 8. **Phase 8: Assessment** - External ISA/ASR review (SIL 3-4 only); this is the platform's first project finish point
 9. **Phase 9: Deployment** - Release package, deployment, maintenance
 
-## SIL 3-4 Phase 1: COD Coordinates SVP and SVaP
+## SIL 3-4 Phase 1: COD Coordinates Software Verification Plan and Software Validation Plan
 
-At SIL 3-4, SVP and SVaP MUST be created by independent roles, NOT under PM direction.
+At SIL 3-4, Software Verification Plan and Software Validation Plan MUST be created by independent roles, NOT under PM direction.
 COD coordinates this **in parallel** with PM's SQAP/SCMP activities:
 
 ```
-COD → VMGR: "Planning phase started. Create SVaP and coordinate SVP with VER."
-  VMGR → VER: "Create Software Verification Plan (SVP)"
+COD → VMGR: "Planning phase started. Create Software Validation Plan and coordinate Software Verification Plan with VER."
+  VMGR → VER: "Create Software Verification Plan"
     VER: creates SVP, invokes cm subagent (task tool): query-location --doc SVP
-    VER → QUA: submit SVP for template compliance check
+    VER → QUA: submit Software Verification Plan for template compliance check
     QUA → VER: PASS/FAIL
-    VER ⇢ VMGR: SVP complete
+    VER ⇢ VMGR: Software Verification Plan complete
   VMGR: creates SVaP, invokes cm subagent (task tool): query-location --doc SVaP
-  VMGR → QUA: submit SVaP for template compliance check
+  VMGR → QUA: submit Software Validation Plan for template compliance check
   QUA → VMGR: PASS/FAIL
-  VMGR ⇢ COD: SVP and SVaP complete
+  VMGR ⇢ COD: Software Verification Plan and Software Validation Plan complete
 
-COD: gate-check phase-1 verifies all four: SQAP, SCMP, SVP, SVaP
+COD: gate-check phase-1 verifies all four: Software Quality Assurance Plan, Software Configuration Management Plan, Software Verification Plan, Software Validation Plan
 ```
 
-**Independence preserved**: PM has no authority over SVP (owned by VER) or SVaP (owned by VMGR).
+**Independence preserved**: PM has no authority over Software Verification Plan (owned by VER) or Software Validation Plan (owned by VMGR).
 
 ## SIL 3-4 Phase 7: COD Coordinates Validation via VMGR
 

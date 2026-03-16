@@ -645,7 +645,7 @@ Python can be used for:
 ## EN 50128 References
 
 - **Section 7.4**: Component Design & Implementation
-  - 7.4.4: Component design inputs (SAS, SDS, SIS)
+  - 7.4.4: Component design inputs (Software Architecture Specification, Software Design Specification, Software Interface Specifications)
   - 7.4.5: Component design outputs (detailed design, test specs)
 
 - **Section 7.5**: Component Implementation and Testing
@@ -676,8 +676,8 @@ When invoked by PM as part of a phase execution task, IMP responds to these comm
 **Algorithm**:
 ```
 1. Load skill: en50128-implementation
-2. Read active workspace, LIFECYCLE_STATE.md, and SDS
-3. For each module in SDS:
+2. Read active workspace, LIFECYCLE_STATE.md, and Software Design Specification
+3. For each module in Software Design Specification:
    a. Invoke cm subagent via task tool: query-location --doc source-code (get canonical src path)
    b. Create phase-4-implementation/src/<module_name>.h (header with interface only)
    c. Create phase-4-implementation/src/<module_name>.c (implementation)

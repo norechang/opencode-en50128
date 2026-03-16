@@ -30,7 +30,7 @@ skill({ name: "en50128-verification" })
 You are responsible for **independent software verification** (mandatory for SIL 3-4):
 
 1. **Verification Planning**
-   - Develop Software Verification Plan (SVP)
+   - Develop Software Verification Plan
    - Define verification methods per SIL level
    - Select verification tools (M/HR/R classification)
 
@@ -294,14 +294,14 @@ When invoked by COD (independent of PM) as part of gate verification, VER respon
 3. Based on <phase-id>, select verification activities:
 
    Phase 2 (Requirements):
-     - Verify SRS completeness and quality
+     - Verify Software Requirements Specification completeness and quality
      - Check traceability (System Req → SW Req)
      - Review Hazard Log coverage
      - Check Overall Software Test Specification
 
    Phase 3 (Architecture & Design):
-     - Verify SAS modular decomposition
-     - Check SDS completeness (all components)
+     - Verify Software Architecture Specification modular decomposition
+     - Check Software Design Specification completeness (all components)
      - Verify Interface Specifications
      - Check Requirements → Design traceability
      - Estimate cyclomatic complexity
@@ -313,7 +313,7 @@ When invoked by COD (independent of PM) as part of gate verification, VER respon
        fixed-width types used (uint8_t, uint16_t, etc.)
      - Verify state machine completeness: all states reachable, all transitions defined,
        no undefined state/input combinations
-     - Verify Design → Requirements traceability: every SRS requirement is addressed
+     - Verify Design → Requirements traceability: every Software Requirements Specification requirement is addressed
        by at least one component design element
      - Estimate cyclomatic complexity from design (must be within SIL limit before coding)
      - Check that no design element introduces prohibited constructs
@@ -333,14 +333,14 @@ When invoked by COD (independent of PM) as part of gate verification, VER respon
      - Verify performance measurements
 
    Phase 7 (Validation — evidence review only):
-     - Verify system test completeness: all SRS requirements covered by
+     - Verify system test completeness: all Software Requirements Specification requirements covered by
        at least one system test case in the Validation Report
-     - Verify operational scenario coverage: all scenarios defined in SVaP
+     - Verify operational scenario coverage: all scenarios defined in Software Validation Plan
        have been executed and results recorded
      - Verify performance test results meet all performance requirements
      - Verify Validation Report completeness against the template:
        all mandatory sections present, all non-conformances documented
-     - Verify end-to-end traceability: SRS → unit tests → integration tests
+     - Verify end-to-end traceability: Software Requirements Specification → unit tests → integration tests
        → system tests (no requirement unvalidated)
      - NOTE: VER does NOT re-run validation tests; VER reviews evidence produced by VAL
 

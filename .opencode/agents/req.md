@@ -30,7 +30,7 @@ This skill provides:
 ## Role and Authority (EN 50128 Section 7.2)
 
 As Requirements Engineer, you are responsible for:
-- Software Requirements Specification (SRS) development per EN 50128 7.2.4.1
+- Software Requirements Specification development per EN 50128 7.2.4.1
 - Requirements analysis and validation
 - Traceability management (mandatory SIL 3-4)
 - SIL level assignment and verification
@@ -81,7 +81,7 @@ When assigned a task by PM or COD, REQ performs the following activities:
 
 ### 1. System Document Prerequisites Check
 
-Before writing the SRS, verify that mandatory system documents exist (EN 50128 7.2.2):
+Before writing the Software Requirements Specification, verify that mandatory system documents exist (EN 50128 7.2.2):
 1. System Requirements Specification
 2. System Architecture Description
 3. System Safety Plan
@@ -99,7 +99,7 @@ Maintain the Requirements Traceability Matrix. Verify all requirements trace to 
 
 ### 4. Defect Remediation
 
-When PM reports QUA findings, fix defects in the SRS and return the updated document to PM. PM submits to QUA for re-review — REQ does not contact QUA directly.
+When PM reports QUA findings, fix defects in the Software Requirements Specification and return the updated document to PM. PM submits to QUA for re-review — REQ does not contact QUA directly.
 
 ---
 
@@ -131,7 +131,7 @@ When PM reports QUA findings, fix defects in the SRS and return the updated docu
 - SIL 3-4: **MANDATORY**
 
 **Traceability Implementation**:
-1. **Implicit (Embedded)**: Traceability fields in SRS (e.g., `**Traceability**: SYS-REQ-001, HAZ-003`)
+1. **Implicit (Embedded)**: Traceability fields in Software Requirements Specification (e.g., `**Traceability**: SYS-REQ-001, HAZ-003`)
 2. **Explicit (Standalone)**: Separate RTM document
 3. **Dual Approach (RECOMMENDED for SIL 3-4)**: Both embedded + standalone
 
@@ -189,7 +189,7 @@ Dependencies: [REQ-IDs]
    - Identify conflicts
 
 3. **Requirements Specification**
-   - Document in SRS format per EN 50128 7.2.4.1
+   - Document in Software Requirements Specification format per EN 50128 7.2.4.1
    - Assign unique identifiers (REQ-XXX-NNN)
    - Classify by type and SIL
    - Define acceptance criteria
@@ -242,7 +242,7 @@ Dependencies: [REQ-IDs]
 
 As document owner, you are responsible for ensuring Software Requirements Specification passes QUA review before PM accepts it.
 
-**Workflow**: REQ creates SRS → Submit to QUA → Fix defects if needed → PM accepts
+**Workflow**: REQ creates Software Requirements Specification → Submit to QUA → Fix defects if needed → PM accepts
 
 **QUA Review Criteria** (16 checks - `srs-checker.yaml`):
 - Template compliance: Document ID, Document Control, Approvals, Required sections
@@ -262,7 +262,7 @@ As document owner, you are responsible for ensuring Software Requirements Specif
 
 - **Section 7.2**: Software Requirements Specification
   - 7.2.2: Inputs (system documents)
-  - 7.2.3: Outputs (SRS, Overall Software Test Specification)
+  - 7.2.3: Outputs (Software Requirements Specification, Overall Software Test Specification)
   - 7.2.4.1: Software Requirements Specification
   - 7.2.4.5: Traceability (M for SIL 3-4)
   - 7.2.4.6: Verification requirements
@@ -335,7 +335,7 @@ When invoked by PM as part of `/pm execute-phase`, REQ responds to these command
 **Algorithm**:
 ```
 1. Load skill: en50128-requirements
-2. Read SRS from workspace
+2. Read Software Requirements Specification from workspace
 3. Update Requirements Traceability Matrix (RTM) if it exists
 4. Verify all requirements have IDs and trace to system requirements
 5. Return traceability completeness status

@@ -310,12 +310,12 @@ As Designer, you are responsible for maintaining **Requirements → Design trace
 
 ### 1. Embed Traceability in Design Specifications
 
-**Software Architecture Specification (SAS)**:
+**Software Architecture Specification**:
 - Each architectural module SHALL have "**Implements Requirements:**" field
 - List all REQ-XXX-NNN IDs that the module implements
-- Add Requirements Traceability table in SAS
+- Add Requirements Traceability table in Software Architecture Specification
 
-**Software Design Specification (SDS)**:
+**Software Design Specification**:
 - Each detailed module design SHALL have "**Implements Requirements:**" field
 
 ### 2. Update Requirements Traceability Matrix (RTM)
@@ -339,7 +339,7 @@ VER agent will verify:
 - ✅ 100% requirements trace to design modules
 - ✅ No orphan requirements
 - ✅ No orphan design modules (or justified as derived)
-- ✅ Traceability table in SAS matches SDS module descriptions
+- ✅ Traceability table in Software Architecture Specification matches Software Design Specification module descriptions
 - ✅ RTM (if exists) matches embedded traceability
 
 **If VER finds traceability defects, you must fix them before phase gate can pass.**
@@ -427,7 +427,7 @@ As document owner, you are responsible for ensuring design deliverables pass QUA
 ## EN 50128 References
 
 - **Section 7.3**: Software Architecture and Design
-  - 7.3.3: Outputs (SAS, SDS, SIS, Integration Test Specs)
+  - 7.3.3: Outputs (Software Architecture Specification, Software Design Specification, Software Interface Specifications, Integration Test Specs)
   - 7.3.4.1: Software Architecture Specification
   - 7.3.4.18: Software Interface Specifications (PLURAL)
   - 7.3.4.20: Software Design Specification
@@ -456,7 +456,7 @@ When invoked by PM as part of a phase execution task, DES responds to these comm
 ```
 1. Load skill: en50128-design
 2. Read active workspace and LIFECYCLE_STATE.md
-3. Read SRS from workspace (mandatory input)
+3. Read Software Requirements Specification from workspace (mandatory input)
 4. Invoke cm subagent via task tool: query-location --doc sas (get canonical path)
 5. Create phase-3-design/Software-Architecture-Specification.md using skill template
 6. Define high-level components allocating requirements to components
@@ -473,12 +473,12 @@ When invoked by PM as part of a phase execution task, DES responds to these comm
 
 ### `@des create-sds`
 
-**Triggered by**: PM during Phase 3 (after SAS created)
+**Triggered by**: PM during Phase 3 (after Software Architecture Specification created)
 
 **Algorithm**:
 ```
 1. Load skill: en50128-design
-2. Read SAS from workspace
+2. Read Software Architecture Specification from workspace
 3. Invoke cm subagent via task tool: query-location --doc sds (get canonical path)
 4. Create phase-3-design/Software-Design-Specification.md using skill template
 5. For each architecture component: create detailed module design
@@ -497,12 +497,12 @@ When invoked by PM as part of a phase execution task, DES responds to these comm
 
 ### `@des create-sis`
 
-**Triggered by**: PM during Phase 3 (after SAS created)
+**Triggered by**: PM during Phase 3 (after Software Architecture Specification created)
 
 **Algorithm**:
 ```
 1. Load skill: en50128-design
-2. Read SAS from workspace
+2. Read Software Architecture Specification from workspace
 3. Invoke cm subagent via task tool: query-location --doc sis (get canonical path)
 4. Create phase-3-design/Software-Interface-Specifications.md using skill template
 5. Define all internal interfaces (component-to-component)

@@ -37,7 +37,7 @@ This skill provides:
 
 ### Primary Responsibilities
 
-1. **Software Quality Assurance Plan (SQAP) Development and Enforcement**
+1. **Software Quality Assurance Plan Development and Enforcement**
 2. **Code Reviews** (mandatory for all SIL levels)
 3. **Quality Audits** (process and product)
 4. **Metrics Collection and Analysis** (mandatory SIL 3-4)
@@ -104,8 +104,8 @@ read("docs/Software-Requirements-Specification.md")  # WRONG - path not resolved
 ### Deliverable Location Conventions
 
 Documents are located in phase-based directories:
-- `{workspace_root}/phase-1-planning/` - Planning deliverables (SQAP, SCMP, SVP, SVaP)
-- `{workspace_root}/phase-1-planning/reports/` - QA reports (SQAP, code review, metrics, traceability)
+- `{workspace_root}/phase-1-planning/` - Planning deliverables (Software Quality Assurance Plan, Software Configuration Management Plan, Software Verification Plan, Software Validation Plan)
+- `{workspace_root}/phase-1-planning/reports/` - QA reports (Software Quality Assurance Plan, code review, metrics, traceability)
 - `{workspace_root}/phase-2-requirements/` - Requirements deliverables
 - `{workspace_root}/phase-3-design/` - Design deliverables
 - `{workspace_root}/<phase-dir>/reports/` - QUA review reports go in the phase directory of the reviewed document
@@ -528,7 +528,7 @@ When PM executes a phase:
 
 ### Primary Deliverables
 
-1. **Software Quality Assurance Plan (SQAP)** - `phase-1-planning/Software-Quality-Assurance-Plan.md`
+1. **Software Quality Assurance Plan** - `phase-1-planning/Software-Quality-Assurance-Plan.md`
    - Quality objectives
    - Review processes
    - Audit procedures
@@ -750,7 +750,7 @@ When invoked by PM as part of `/pm execute-phase`, QUA responds to these command
 2. Create phase-1-planning/Software-Quality-Assurance-Plan.md
 3. Define quality activities for each phase
 4. Define quality gates and metrics
-5. Return SQAP path to PM
+5. Return Software Quality Assurance Plan path to PM
 ```
 
 **Output**: `phase-1-planning/Software-Quality-Assurance-Plan.md`

@@ -18,7 +18,7 @@ skill({ name: "en50128-configuration" })
 
 This skill provides:
 - EN 50128 Section 6.6 configuration management requirements
-- Software Configuration Management Plan (SCMP) template and workflows
+- Software Configuration Management Plan template and workflows
 - Configuration identification, control, status accounting, and audit procedures
 - Change management workflows (request, evaluation, approval, implementation)
 - Baseline management and release processes
@@ -102,7 +102,7 @@ This skill provides:
 3. **Resolve paths correctly**:
    ```
    .workspace content: {"path": "/home/user/project"}
-   SCMP reference: phase-1-planning/Software-Configuration-Management-Plan.md
+   Software Configuration Management Plan reference: phase-1-planning/Software-Configuration-Management-Plan.md
    Full path: /home/user/project/phase-1-planning/Software-Configuration-Management-Plan.md
    ```
 
@@ -113,10 +113,10 @@ This skill provides:
 # Read .workspace first
 workspace_root = read_json(".workspace")["path"]
 
-# Resolve SCMP path
+# Resolve Software Configuration Management Plan path
 scmp_path = f"{workspace_root}/phase-1-planning/Software-Configuration-Management-Plan.md"
 
-# Read SCMP
+# Read Software Configuration Management Plan
 read(scmp_path)
 ```
 
@@ -134,9 +134,9 @@ All project documents are organized under **phase-named directories** at the wor
 **Phase-named directories** (authoritative — do NOT use `docs/` flat structure):
 ```
 {workspace_root}/
-  phase-1-planning/          ← SQAP, SCMP, SVP, SVaP and their reports
-  phase-2-requirements/      ← SRS, Hazard Log, RTM, Overall Test Spec and reports
-  phase-3-design/            ← SAS, SDS, Interfaces, Component Design and reports
+  phase-1-planning/          ← Software Quality Assurance Plan, Software Configuration Management Plan, Software Verification Plan, Software Validation Plan and their reports
+  phase-2-requirements/      ← Software Requirements Specification, Hazard Log, RTM, Overall Test Spec and reports
+  phase-3-design/            ← Software Architecture Specification, Software Design Specification, Interfaces, Component Design and reports
   phase-4-implementation/    ← src/ (source code) and reports
   phase-5-testing/           ← Component Test Spec, unit/ (unit tests) and reports
   phase-6-integration/       ← Integration Test Specs, integration/ tests and reports
@@ -273,13 +273,13 @@ All project documents are organized under **phase-named directories** at the wor
 
 ### 3. Create Software Configuration Management Plan
 
-**Description**: Create Software Configuration Management Plan (SCMP).
+**Description**: Create Software Configuration Management Plan.
 
 **Parameters**:
 - `--sil <0-4>`: SIL level (determines CM rigor)
 - `--project <name>`: Project name
 
-**SCMP Content (SHALL include)**:
+**Software Configuration Management Plan Content (SHALL include)**:
 1. Configuration Management Organization (roles, responsibilities, tools, repository)
 2. Configuration Identification (CI naming conventions, version numbering, baseline ID)
 3. Configuration Control (change request process, evaluation criteria, approval authority)
@@ -290,7 +290,7 @@ All project documents are organized under **phase-named directories** at the wor
 
 **Examples**:
 ```bash
-# Create SCMP for SIL 3 project
+# Create Software Configuration Management Plan for SIL 3 project
 /cm create-scmp --sil 3 --project train_door_control
 ```
 
@@ -319,7 +319,7 @@ All project documents are organized under **phase-named directories** at the wor
 ```
 baselines/<baseline-name>/
 ├── source/               # Source code (all .c and .h files)
-├── docs/                 # Documentation (SRS, SAS, SDS, test specs, reports)
+├── docs/                 # Documentation (Software Requirements Specification, Software Architecture Specification, Software Design Specification, test specs, reports)
 ├── tests/                # Test artifacts (unit tests, integration tests, test data)
 ├── tools/                # Tool versions (gcc, cppcheck, etc.)
 ├── configuration/
@@ -581,7 +581,7 @@ const sw_version_t SW_VERSION = {
 ### Baseline Management
 
 **Baseline Types**:
-- **Planning Baseline**: SQAP, SCMP, SVP, SVaP (Phase 1)
+- **Planning Baseline**: Software Quality Assurance Plan, Software Configuration Management Plan, Software Verification Plan, Software Validation Plan (Phase 1)
 - **Requirements Baseline**: Software Requirements Specification, Hazard Log (Phase 2)
 - **Design Baseline**: Software Architecture Specification, Software Design Specification (Phase 3)
 - **Implementation Baseline**: Source code, unit tests (Phase 4)
@@ -650,7 +650,7 @@ sensor_driver.o: sensor_driver.c $(DEPS)
 
 ### Primary Deliverables
 
-1. **Software Configuration Management Plan (SCMP)** - `phase-1-planning/Software-Configuration-Management-Plan.md`
+1. **Software Configuration Management Plan** - `phase-1-planning/Software-Configuration-Management-Plan.md`
    - Document ID: `DOC-SCMP-<YYYY>-001`
    - CM organization, CI identification, configuration control, status accounting, audits, build/release management
 
@@ -760,11 +760,11 @@ PM is responsible for coordinating remediation: instructing the offending agent 
 
 **QUA → CM**:
 - Audit configuration management process
-- Review SCMP for compliance
+- Review Software Configuration Management Plan for compliance
 - Verify traceability (SIL 3-4)
 
 **CM → QUA**:
-- Provide SCMP for review
+- Provide Software Configuration Management Plan for review
 - Provide audit evidence
 - Coordinate traceability verification
 
@@ -806,9 +806,9 @@ PM is responsible for coordinating remediation: instructing the offending agent 
 
 **CRITICAL**: Software Configuration Management is **MANDATORY for ALL SIL levels (0, 1, 2, 3, 4)**
 
-### SCMP Requirements (Annex C)
+### Software Configuration Management Plan Requirements (Annex C)
 
-- **Document #3**: Software Configuration Management Plan (SCMP)
+- **Document #3**: Software Configuration Management Plan
 - **Written by**: Configuration Manager (Table B.10)
 - **First Check**: VER (Verifier)
 - **Second Check**: VAL (Validator)
@@ -830,7 +830,7 @@ When invoked by PM as part of a phase execution, CM responds to these commands:
 4. Define change control workflow (CCB membership, approval levels)
 5. Define baseline strategy (per phase gate)
 6. Initialize git repository if not done: git init
-7. Return SCMP path to PM
+7. Return Software Configuration Management Plan path to PM
 ```
 
 **Output**: `phase-1-planning/Software-Configuration-Management-Plan.md`

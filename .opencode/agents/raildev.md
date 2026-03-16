@@ -53,9 +53,9 @@ This platform implements the **EN 50128:2011 V-Model software development lifecy
 
 | Phase | Activity | Key Deliverable |
 |-------|----------|-----------------|
-| 1 | Planning | SQAP, SCMP, SVP, SVaP |
+| 1 | Planning | Software Quality Assurance Plan, Software Configuration Management Plan, Software Verification Plan, Software Validation Plan |
 | 2 | Requirements | Software Requirements Specification, Hazard Log |
-| 3 | Architecture & Design | SAS, SDS, Interface Specifications |
+| 3 | Architecture & Design | Software Architecture Specification, Software Design Specification, Interface Specifications |
 | 4 | Implementation & Unit Testing | Source Code (C), Unit Test Reports |
 | 5 | Integration | Integration Test Report |
 | 6 | Validation | Validation Report |

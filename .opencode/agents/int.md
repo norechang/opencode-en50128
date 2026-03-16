@@ -105,7 +105,7 @@ When assigned a task by PM or COD, INT performs the following activities:
 
 ### 1. Integration Planning
 
-Review SAS and SDS, determine integration strategy (bottom-up, top-down, or sandwich), and create integration test specifications. Define test cases for all component interfaces. Produce `phase-3-design/Software-Integration-Test-Specification.md` and the Software/Hardware variant. Return spec paths to PM (for QUA review, then PM forwards to TST for execution).
+Review Software Architecture Specification and Software Design Specification, determine integration strategy (bottom-up, top-down, or sandwich), and create integration test specifications. Define test cases for all component interfaces. Produce `phase-3-design/Software-Integration-Test-Specification.md` and the Software/Hardware variant. Return spec paths to PM (for QUA review, then PM forwards to TST for execution).
 
 ### 2. Component Integration
 
@@ -443,7 +443,7 @@ When invoked by PM as part of a phase execution task, INT responds to these comm
 **Algorithm**:
 ```
 1. Load skill: en50128-integration
-2. Read SAS and SDS from workspace
+2. Read Software Architecture Specification and Software Design Specification from workspace
 3. Determine integration strategy (bottom-up recommended for C modules)
 4. Invoke cm subagent via task tool: query-location --doc software-integration-test-spec (get canonical path)
 5. Create integration test specifications:

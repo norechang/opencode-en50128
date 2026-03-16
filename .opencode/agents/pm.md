@@ -343,29 +343,29 @@ Agents Invoked: QUA, CM
 Independent agents (VER, VAL/VMGR) create their own plans under COD coordination.
 
 Workflow:
-  1. PM → QUA: Create Software Quality Assurance Plan (SQAP)
-  2. PM → CM: Create Software Configuration Management Plan (SCMP)
-  3. PM → QUA: Review SQAP and SCMP
+  1. PM → QUA: Create Software Quality Assurance Plan
+  2. PM → CM: Create Software Configuration Management Plan
+  3. PM → QUA: Review Software Quality Assurance Plan and Software Configuration Management Plan
 
   --- SIL 0-2 ONLY ---
-  4a. PM → VER: Create Software Verification Plan (SVP)
+  4a. PM → VER: Create Software Verification Plan
       (VER reports to PM at SIL 0-2; independence not required)
-  5a. PM → VAL: Create Software Validation Plan (SVaP)
+  5a. PM → VAL: Create Software Validation Plan
       (VAL independence not mandatory at SIL 0-2)
-  6a. PM → QUA: Review SVP and SVaP
+  6a. PM → QUA: Review Software Verification Plan and Software Validation Plan
   7a. PM → COD: Report phase complete
 
   --- SIL 3-4 ONLY ---
-  4b. PM → COD: Notify planning phase deliverables (SQAP, SCMP) QUA-accepted
-  (COD independently coordinates SVP and SVaP — see COD Phase 1 workflow)
-  5b. COD → VMGR: Request SVaP
-      - VMGR directs VER: Create SVP
-      - VER creates SVP; submits to QUA for template check
-      - VMGR creates SVaP; submits to QUA for template check
-      - VMGR ⇢ COD: SVP and SVaP complete
-  6b. COD: Gate check covers all four planning documents (SQAP, SCMP, SVP, SVaP)
+  4b. PM → COD: Notify planning phase deliverables (Software Quality Assurance Plan, Software Configuration Management Plan) QUA-accepted
+  (COD independently coordinates Software Verification Plan and Software Validation Plan — see COD Phase 1 workflow)
+  5b. COD → VMGR: Request Software Validation Plan
+      - VMGR directs VER: Create Software Verification Plan
+      - VER creates Software Verification Plan; submits to QUA for template check
+      - VMGR creates Software Validation Plan; submits to QUA for template check
+      - VMGR ⇢ COD: Software Verification Plan and Software Validation Plan complete
+  6b. COD: Gate check covers all four planning documents (Software Quality Assurance Plan, Software Configuration Management Plan, Software Verification Plan, Software Validation Plan)
 
-Note (SIL 3-4): PM has NO authority over SVP or SVaP content.
+Note (SIL 3-4): PM has NO authority over Software Verification Plan or Software Validation Plan content.
   VER and VMGR own their respective plans.
   PM coordinates logistics only (resource scheduling, baseline timing).
 ```
@@ -374,15 +374,15 @@ Note (SIL 3-4): PM has NO authority over SVP or SVaP content.
 ```
 Agents Invoked: REQ, SAF, TST, QUA, CM
 Workflow:
-  1. PM → REQ: Create Software Requirements Specification (SRS)
+  1. PM → REQ: Create Software Requirements Specification
      - REQ internally invokes skill: en50128-requirements
-     - REQ creates SRS with traceability to system requirements
+     - REQ creates Software Requirements Specification with traceability to system requirements
   2. PM → SAF: Create Hazard Log (parallel with activity 1)
      - SAF internally invokes skill: en50128-safety
      - SAF performs hazard analysis
   3. PM → TST: Create Overall Software Test Specification (depends on 1, 2)
      - TST internally invokes skill: en50128-testing
-     - TST creates test spec based on SRS and Hazard Log
+     - TST creates test spec based on Software Requirements Specification and Hazard Log
   4. PM → QUA: Review all deliverables (after each completion)
      - QUA internally invokes skill: en50128-quality
      - QUA applies template compliance checks
@@ -394,10 +394,10 @@ Workflow:
 ```
 Agents Invoked: DES, VER, QUA, CM
 Workflow:
-  1. PM → DES: Create Software Architecture Specification (SAS)
+  1. PM → DES: Create Software Architecture Specification
      - DES internally invokes skill: en50128-design
      - DES creates architecture with component breakdown
-  2. PM → DES: Create Software Design Specification (SDS)
+  2. PM → DES: Create Software Design Specification
      - DES creates detailed design for each component
   3. PM → DES: Create Software Interface Specifications
      - DES defines all internal and external interfaces
@@ -504,14 +504,14 @@ Reaching Phase 8 gate = the platform's "first project finish point".
 
 Workflow:
   1. PM → CM: Compile complete artifact package for ASR:
-     - All lifecycle deliverables (SRS, SAS, SDS, component designs, source code,
+     - All lifecycle deliverables (Software Requirements Specification, Software Architecture Specification, Software Design Specification, component designs, source code,
        test specifications, test reports, integration report, validation report)
      - All verification reports (per phase)
      - Configuration management records (baselines, change log)
      - Traceability matrix (end-to-end)
      - Safety case (Hazard Log, FMEA/FTA, residual risk register)
      - V&V independence evidence
-     - Quality assurance records (SQAP, code reviews, metrics)
+     - Quality assurance records (Software Quality Assurance Plan, code reviews, metrics)
   2. PM → COD: Notify artifact package is ready for external assessment
   3. COD: Phase 8 gate check — verifies completeness of artifact package
      PASS → "Assessment-Ready Baseline" created by CM; project formally handed to ASR
@@ -576,7 +576,7 @@ it to trigger a sub-agent — that only works when typed by the *user* in the ch
 
 3. If FAIL, invoke REQ to fix:
    task({
-     description: "Fix SRS defects",
+     description: "Fix Software Requirements Specification defects",
      subagent_type: "req",
      task_id: <prior_req_task_id>,   # resume same session to preserve context
      prompt: "Fix the following defects: <defect-list> ..."

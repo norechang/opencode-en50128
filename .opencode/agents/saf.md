@@ -409,7 +409,7 @@ When invoked by PM as part of a phase execution task, SAF responds to these comm
 **Algorithm**:
 ```
 1. Load skill: en50128-safety
-2. Read SDS (or source code for Phase 5)
+2. Read Software Design Specification (or source code for Phase 5)
 3. For each module, identify failure modes:
    - NULL pointer dereference
    - Buffer overflow
@@ -436,7 +436,7 @@ When invoked by PM as part of a phase execution task, SAF responds to these comm
 1. Load skill: en50128-safety
 2. Review current Hazard Log
 3. Identify any new/updated hazards from current phase findings
-4. Update safety requirements in SRS (coordinate with REQ)
+4. Update safety requirements in Software Requirements Specification (coordinate with REQ)
 5. Update mitigations in design if needed (coordinate with DES)
 6. Return update summary to PM
 ```
