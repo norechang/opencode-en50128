@@ -148,15 +148,15 @@ All project documents are organized under **phase-named directories** at the wor
   LIFECYCLE_STATE.md         ← COD lifecycle tracker (workspace root only)
 ```
 
-**Rule**: No agent may write a document to any path other than the one returned by `@cm query-location`. Violations are alarmed to PM immediately.
+**Rule**: No agent may write a document to any path other than the one returned by the `cm` subagent's `query-location` capability. Violations are alarmed to PM immediately.
 
 ---
 
 ## Capabilities (After Skill Loaded)
 
-### 1. `@cm query-location --doc <document-type-key>`
+### 1. `query-location --doc <document-type-key>`
 
-**Description**: Return the canonical path for a document type. **Every agent MUST call this before writing any document.**
+**Description**: Return the canonical path for a document type. **Every agent MUST invoke this capability (via the `task` tool) before writing any document.**
 
 **Parameters**:
 - `--doc <document-type-key>`: Document type key (see Document-to-Phase Registry in `en50128-configuration` skill)
@@ -217,14 +217,13 @@ All project documents are organized under **phase-named directories** at the wor
 | `CM-STATUS-REPORT` | `phase-1-planning/reports/CM-Status-<phase>-<timestamp>.md` |
 | `CM-TRACEABILITY-REPORT` | `phase-1-planning/reports/CM-Traceability-<from>-to-<to>-<timestamp>.md` |
 
-**Examples**:
-```bash
-# Agent needs to write the SRS — ask CM first
-@cm query-location --doc SRS
+**Examples** (conceptual — other agents invoke these via the `task` tool):
+```
+# Agent needs to write the SRS — invoke cm subagent: query-location --doc SRS
 # Returns: {workspace_root}/phase-2-requirements/Software-Requirements-Specification.md
 
 # Agent needs to write a unit test coverage report
-@cm query-location --doc COVERAGE-REPORT
+# invoke cm subagent: query-location --doc COVERAGE-REPORT
 # Returns: {workspace_root}/phase-5-testing/reports/Software-Test-Coverage-Report.md
 ```
 
@@ -232,7 +231,7 @@ All project documents are organized under **phase-named directories** at the wor
 
 ---
 
-### 2. `@cm validate-location [--path <path>]`
+### 2. `validate-location [--path <path>]`
 
 **Description**: Validate that a file path (or the entire workspace) conforms to the phase-based directory structure. Violations are classified and PM is alarmed immediately.
 
@@ -254,17 +253,17 @@ All project documents are organized under **phase-named directories** at the wor
 4. If path does not match canonical path → classify violation
 5. For any CRITICAL or MAJOR violation:
    a. Log violation with full details (file found, canonical path expected)
-   b. IMMEDIATELY alarm PM: @pm cm-violation --file <path> --type <WRONG_PHASE|OUTSIDE_PHASE|DUPLICATE>
+   b. IMMEDIATELY invoke pm subagent via task tool: cm-violation --file <path> --type <WRONG_PHASE|OUTSIDE_PHASE|DUPLICATE>
 6. Return violation report
 ```
 
-**Examples**:
-```bash
+**Examples** (conceptual — other agents invoke these via the `task` tool):
+```
 # Validate entire workspace
-@cm validate-location
+# invoke cm subagent: validate-location
 
 # Validate a specific file
-@cm validate-location --path docs/SRS.md
+# invoke cm subagent: validate-location --path docs/SRS.md
 # If docs/SRS.md exists → OUTSIDE_PHASE violation → alarm PM
 ```
 
@@ -710,18 +709,19 @@ All CM deliverables SHALL include:
 - Provide configuration status for phase gate
 - Present change requests to CCB
 - Report configuration audit results
-- **`@pm cm-violation`**: Alarm PM immediately on document location violations
+- **`pm cm-violation` (task tool)**: Alarm PM immediately on document location violations
 
-**`@pm cm-violation` Protocol**:
-CM MUST call `@pm cm-violation` whenever `@cm validate-location` detects a CRITICAL or MAJOR violation:
+**`pm cm-violation` Protocol**:
+CM MUST invoke the `pm` subagent via the `task` tool with `cm-violation` whenever `validate-location` detects a CRITICAL or MAJOR violation:
 ```
-@pm cm-violation
+task(subagent_type="pm", prompt="""
+cm-violation
   --file <path-where-document-was-found>
   --expected <canonical-path>
   --type <WRONG_PHASE|OUTSIDE_PHASE|DUPLICATE>
   --agent <agent-that-wrote-the-file>   (if known)
   --severity <CRITICAL|MAJOR>
-```
+""")
 PM is responsible for coordinating remediation: instructing the offending agent to move the file to the canonical path and delete (or deprecate) the incorrect location.
 
 ### With REQ, DES, IMP, TST, INT, SAF (Development Agents)
@@ -851,7 +851,7 @@ When invoked by PM as part of a phase execution, CM responds to these commands:
 6. Return baseline tag to PM
 ```
 
-**Example**: `@cm create-baseline requirements --tag v1.0-requirements`
+**Example**: invoke cm subagent via task tool: `create-baseline requirements --tag v1.0-requirements`
 
 ---
 

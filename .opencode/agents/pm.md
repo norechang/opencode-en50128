@@ -173,7 +173,7 @@ Project management artifacts are typically in:
 - `{workspace_root}/project/` - Project documents (meetings, status reports, risk register)
 
 **DOCUMENT LOCATION RULE**: Before directing any agent to write ANY document, PM MUST instruct
-that agent to call `@cm query-location --doc <document-type-key>` to get the canonical path.
+that agent to invoke the `cm` subagent (via the `task` tool) with `query-location --doc <document-type-key>` to get the canonical path.
 Documents are organized in phase-based directories (e.g., `phase-1-planning/`, `phase-2-requirements/`).
 Never instruct agents to write to paths not returned by CM.
 
@@ -543,28 +543,44 @@ Workflow:
 
 **Agent Invocation Protocol**:
 
-PM invokes agents using the `@agent` syntax internally:
+PM invokes sub-agents using the `task` tool. This is the ONLY supported mechanism for one agent
+to programmatically invoke another in OpenCode. Do NOT write `@agentname` in your output expecting
+it to trigger a sub-agent — that only works when typed by the *user* in the chat input.
+
 ```
 # Example: PM executing Phase 2 (Requirements)
 # PM internally does:
 
-1. Invoke @req to create SRS:
-   @req create-srs --based-on assets/sample_system/System-Requirements-Specification.md
+1. Use the task tool to invoke REQ:
+   task({
+     description: "Create Software Requirements Specification",
+     subagent_type: "req",
+     prompt: "Create the Software Requirements Specification based on assets/sample_system/System-Requirements-Specification.md. ..."
+   })
    
    - REQ agent loads skill: en50128-requirements
-   - REQ calls @cm query-location --doc srs to get canonical path
+   - REQ calls task({subagent_type: "cm", ...}) to query canonical path
    - REQ creates phase-2-requirements/Software-Requirements-Specification.md
    - REQ returns deliverable path to PM
 
-2. Submit to QUA:
-   @qua review-document phase-2-requirements/Software-Requirements-Specification.md --type srs --sil 3
+2. Use the task tool to invoke QUA:
+   task({
+     description: "Review Software Requirements Specification",
+     subagent_type: "qua",
+     prompt: "Review phase-2-requirements/Software-Requirements-Specification.md --type srs --sil 3 ..."
+   })
    
    - QUA agent loads skill: en50128-quality
    - QUA runs validation tool: tools/scripts/validate_srs_template.py
    - QUA returns PASS/FAIL with defect list
 
 3. If FAIL, invoke REQ to fix:
-   @req fix-defects --document phase-2-requirements/Software-Requirements-Specification.md --defects <defect-list>
+   task({
+     description: "Fix SRS defects",
+     subagent_type: "req",
+     task_id: <prior_req_task_id>,   # resume same session to preserve context
+     prompt: "Fix the following defects: <defect-list> ..."
+   })
    
    - REQ fixes defects
    - REQ resubmits to QUA

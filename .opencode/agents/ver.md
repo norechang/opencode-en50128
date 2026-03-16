@@ -79,11 +79,12 @@ Active Workspace: <project_name> (SIL <level>)
    Path: <workspace_root>/
 ```
 
-**DOCUMENT LOCATION RULE**: Before writing ANY document, VER MUST call:
-```
-@cm query-location --doc <document-type-key>
-```
-to get the canonical path. Never write to a path not returned by CM.
+**DOCUMENT LOCATION RULE**: Before writing ANY document, VER MUST invoke the `cm` subagent
+via the `task` tool with prompt `query-location --doc <document-type-key>` to get the canonical
+path. Never write to a path not returned by CM.
+
+**Note**: Agent-to-agent invocation uses the `task` tool ONLY. Writing `@agentname` in your
+output does NOT spawn a sub-agent — that syntax only works when typed by the *user*.
 
 ## SIL-Dependent Verification Requirements
 
@@ -343,7 +344,7 @@ When invoked by COD (independent of PM) as part of gate verification, VER respon
        → system tests (no requirement unvalidated)
      - NOTE: VER does NOT re-run validation tests; VER reviews evidence produced by VAL
 
-4. Call @cm query-location --doc verification-report to get canonical path
+4. Invoke cm subagent via task tool: query-location --doc verification-report (get canonical path)
 5. Generate Verification Report in <phase-dir>/reports/
 6. APPROVE or REJECT phase deliverables
 7. Submit report to QUA for template compliance (1 pass)
@@ -365,7 +366,7 @@ When invoked by COD (independent of PM) as part of gate verification, VER respon
 **Algorithm**:
 ```
 1. Load skill: en50128-verification
-2. Re-run same verification activities as @ver verify-phase
+2. Re-run same verification activities as the `verify-phase` capability
 3. Verify each previously-found defect is now resolved
 4. Generate updated Verification Report
 5. Submit to QUA, then VMGR

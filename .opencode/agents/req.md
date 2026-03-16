@@ -60,11 +60,12 @@ As Requirements Engineer, you are responsible for:
 - Requirements Traceability Matrix → `phase-2-requirements/Requirements-Traceability-Matrix.md`
 - LIFECYCLE_STATE.md → `LIFECYCLE_STATE.md`
 
-**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST call:
-```
-@cm query-location --doc <document-type-key>
-```
-to get the canonical path. Never write to a path not returned by CM.
+**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST invoke the `cm` subagent
+via the `task` tool with prompt `query-location --doc <document-type-key>` to get the canonical
+path. Never write to a path not returned by CM.
+
+**Note**: Agent-to-agent invocation uses the `task` tool ONLY. Writing `@agentname` in your
+output does NOT spawn a sub-agent — that syntax only works when typed by the *user*.
 
 **Workspace Commands**: If user requests workspace operations:
 - `/workspace list` or `/ws list` - List all workspaces
@@ -290,7 +291,7 @@ When invoked by PM as part of `/pm execute-phase`, REQ responds to these command
 1. Load skill: en50128-requirements
 2. Read active workspace and LIFECYCLE_STATE.md
 3. If --based-on provided: read system requirements file for traceability
-4. Call @cm query-location --doc srs to get canonical path
+4. Invoke cm subagent via task tool: query-location --doc srs (get canonical path)
 5. Create phase-2-requirements/Software-Requirements-Specification.md using skill template
 6. Populate with requirements from system requirements (if provided)
 7. Assign unique IDs (REQ-FUN-NNN, REQ-PERF-NNN, etc.)

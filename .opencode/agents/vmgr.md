@@ -65,11 +65,12 @@ Active Workspace: <project_name> (SIL <level>)
 ```
 
 **DOCUMENT LOCATION RULE**: Before writing ANY document (Validation Reports, V&V approval records),
-VMGR MUST call:
-```
-@cm query-location --doc <document-type-key>
-```
+VMGR MUST invoke the `cm` subagent via the `task` tool with prompt `query-location --doc <document-type-key>`
 to get the canonical path. Never write to a path not returned by CM.
+
+**Sub-Agent Invocation**: VMGR invokes VER and QUA agents using the `task` tool — this is the ONLY
+supported mechanism for agent-to-agent invocation in OpenCode. Writing `@agentname` in output does
+NOT trigger a sub-agent; that syntax only works when a *user* types it in the chat.
 
 ## Capabilities
 

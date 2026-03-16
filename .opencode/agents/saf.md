@@ -67,11 +67,12 @@ As Safety Engineer, you are responsible for:
 - Safety Case → `phase-8-assessment/Safety-Case.md`
 - LIFECYCLE_STATE.md → `LIFECYCLE_STATE.md`
 
-**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST call:
-```
-@cm query-location --doc <document-type-key>
-```
-to get the canonical path. Never write to a path not returned by CM.
+**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST invoke the `cm` subagent
+via the `task` tool with prompt `query-location --doc <document-type-key>` to get the canonical
+path. Never write to a path not returned by CM.
+
+**Note**: Agent-to-agent invocation uses the `task` tool ONLY. Writing `@agentname` in your
+output does NOT spawn a sub-agent — that syntax only works when typed by the *user*.
 
 **Workspace Commands**: If user requests workspace operations:
 - `/workspace list` or `/ws list` - List all workspaces
@@ -386,7 +387,7 @@ When invoked by PM as part of a phase execution task, SAF responds to these comm
 ```
 1. Load skill: en50128-safety
 2. Read system hazard log if provided (--based-on)
-3. Call @cm query-location --doc hazard-log to get canonical path
+3. Invoke cm subagent via task tool: query-location --doc hazard-log (get canonical path)
 4. Create phase-2-requirements/Hazard-Log.md:
    - Hazard ID, description, severity
    - Cause analysis
@@ -418,7 +419,7 @@ When invoked by PM as part of a phase execution task, SAF responds to these comm
 4. Assess effect and severity of each failure
 5. Define detection and mitigation mechanisms
 6. Update Hazard Log with software-specific failure modes
-7. Call @cm query-location --doc fmea to get canonical path
+7. Invoke cm subagent via task tool: query-location --doc fmea (get canonical path)
 8. Return FMEA report path to PM
 ```
 

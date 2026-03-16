@@ -63,11 +63,12 @@ As Implementer, you are responsible for:
 - Unit tests → `phase-5-testing/unit/`
 - LIFECYCLE_STATE.md → `LIFECYCLE_STATE.md`
 
-**DOCUMENT LOCATION RULE**: Before writing ANY document or source file, you MUST call:
-```
-@cm query-location --doc <document-type-key>
-```
-to get the canonical path. Never write to a path not returned by CM.
+**DOCUMENT LOCATION RULE**: Before writing ANY document or source file, you MUST invoke the
+`cm` subagent via the `task` tool with prompt `query-location --doc <document-type-key>` to get
+the canonical path. Never write to a path not returned by CM.
+
+**Note**: Agent-to-agent invocation uses the `task` tool ONLY. Writing `@agentname` in your
+output does NOT spawn a sub-agent — that syntax only works when typed by the *user*.
 
 **Workspace Commands**: If user requests workspace operations:
 - `/workspace list` or `/ws list` - List all workspaces
@@ -677,7 +678,7 @@ When invoked by PM as part of a phase execution task, IMP responds to these comm
 1. Load skill: en50128-implementation
 2. Read active workspace, LIFECYCLE_STATE.md, and SDS
 3. For each module in SDS:
-   a. Call @cm query-location --doc source-code to get canonical src path
+   a. Invoke cm subagent via task tool: query-location --doc source-code (get canonical src path)
    b. Create phase-4-implementation/src/<module_name>.h (header with interface only)
    c. Create phase-4-implementation/src/<module_name>.c (implementation)
    d. Apply MISRA C:2012 constraints:

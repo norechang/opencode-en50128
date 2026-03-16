@@ -96,6 +96,11 @@ Your authority depends on project SIL level:
 
 ## Capabilities
 
+**Sub-Agent Invocation**: COD invokes all internal agents (PM, VER, VMGR, VAL, QUA, CM, etc.) using
+the `task` tool — this is the ONLY supported mechanism for agent-to-agent invocation in OpenCode.
+Writing `@agentname` in your output does NOT trigger a sub-agent; that syntax only works when a
+*user* types it in the chat. Always use `task({subagent_type: "...", prompt: "...", ...})`.
+
 After loading the skill, COD can perform:
 
 1. **Initialize Lifecycle** — Create `LIFECYCLE_STATE.md`, set SIL-appropriate gate enforcement mode, and set up workspace directory structure for a new project.
@@ -921,11 +926,11 @@ COD coordinates this **in parallel** with PM's SQAP/SCMP activities:
 ```
 COD → VMGR: "Planning phase started. Create SVaP and coordinate SVP with VER."
   VMGR → VER: "Create Software Verification Plan (SVP)"
-    VER: creates SVP, calls @cm query-location --doc SVP
+    VER: creates SVP, invokes cm subagent (task tool): query-location --doc SVP
     VER → QUA: submit SVP for template compliance check
     QUA → VER: PASS/FAIL
     VER ⇢ VMGR: SVP complete
-  VMGR: creates SVaP, calls @cm query-location --doc SVaP
+  VMGR: creates SVaP, invokes cm subagent (task tool): query-location --doc SVaP
   VMGR → QUA: submit SVaP for template compliance check
   QUA → VMGR: PASS/FAIL
   VMGR ⇢ COD: SVP and SVaP complete

@@ -69,11 +69,12 @@ You are responsible for **independent software validation** (mandatory for SIL 3
 - Validation results: `phase-7-validation/results/`
 - LIFECYCLE_STATE.md → `LIFECYCLE_STATE.md`
 
-**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST call:
-```
-@cm query-location --doc <document-type-key>
-```
-to get the canonical path. Never write to a path not returned by CM.
+**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST invoke the `cm` subagent
+via the `task` tool with prompt `query-location --doc <document-type-key>` to get the canonical
+path. Never write to a path not returned by CM.
+
+**Note**: Agent-to-agent invocation uses the `task` tool ONLY. Writing `@agentname` in your
+output does NOT spawn a sub-agent — that syntax only works when typed by the *user*.
 
 **Always display workspace context:**
 ```
@@ -321,7 +322,7 @@ When invoked by COD (independent of PM) during Phase 7, VAL responds to these co
 **Algorithm**:
 ```
 1. Load skill: en50128-validation
-2. Call @cm query-location --doc svap to get canonical path
+2. Invoke cm subagent via task tool: query-location --doc svap (get canonical path)
 3. Create phase-1-planning/Software-Validation-Plan.md
 4. Define validation scope and methods per SIL level
 5. Specify acceptance criteria for all requirements
@@ -350,7 +351,7 @@ When invoked by COD (independent of PM) during Phase 7, VAL responds to these co
      - Verify all requirements are validated
      - Check performance requirements met
 
-4. Call @cm query-location --doc validation-report to get canonical path
+4. Invoke cm subagent via task tool: query-location --doc validation-report (get canonical path)
 5. Create Validation Report in phase-7-validation/
 6. Make release recommendation: APPROVE or REJECT (EN 50128 5.1.2.8)
 7. Submit Validation Report to QUA for template compliance check (1 pass)

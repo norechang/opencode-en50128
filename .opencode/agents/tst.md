@@ -81,11 +81,12 @@ As Tester, you are responsible for:
 - Test results (integration) → `phase-6-integration/results/`
 - LIFECYCLE_STATE.md → `LIFECYCLE_STATE.md`
 
-**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST call:
-```
-@cm query-location --doc <document-type-key>
-```
-to get the canonical path. Never write to a path not returned by CM.
+**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST invoke the `cm` subagent
+via the `task` tool with prompt `query-location --doc <document-type-key>` to get the canonical
+path. Never write to a path not returned by CM.
+
+**Note**: Agent-to-agent invocation uses the `task` tool ONLY. Writing `@agentname` in your
+output does NOT spawn a sub-agent — that syntax only works when typed by the *user*.
 
 **Workspace Commands**: If user requests workspace operations:
 - `/workspace list` or `/ws list` - List all workspaces
@@ -412,7 +413,7 @@ When invoked by PM as part of a phase execution task, TST responds to these comm
 1. Load skill: en50128-testing
 2. Read active workspace and SDS (for module interfaces)
 3. For each module in SDS:
-   a. Call @cm query-location --doc unit-tests to get canonical path
+   a. Invoke cm subagent via task tool: query-location --doc unit-tests (get canonical path)
    b. Create phase-5-testing/unit/test_<module_name>.c using Unity framework
    c. Generate test cases covering:
       - Normal operation (happy path)
@@ -455,7 +456,7 @@ When invoked by PM as part of a phase execution task, TST responds to these comm
 ```
 1. Load skill: en50128-testing
 2. Read integration test specification from INT agent
-3. Call @cm query-location --doc integration-tests to get canonical path
+3. Invoke cm subagent via task tool: query-location --doc integration-tests (get canonical path)
 4. Create phase-6-integration/integration/test_*.c for each integration test case
 5. Create test harness that connects real components
 6. Return test file list to PM

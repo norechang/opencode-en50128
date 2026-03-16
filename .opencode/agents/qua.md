@@ -110,11 +110,12 @@ Documents are located in phase-based directories:
 - `{workspace_root}/phase-3-design/` - Design deliverables
 - `{workspace_root}/<phase-dir>/reports/` - QUA review reports go in the phase directory of the reviewed document
 
-**DOCUMENT LOCATION RULE**: Before writing ANY document, QUA MUST call:
-```
-@cm query-location --doc <document-type-key>
-```
-to get the canonical path. Never write to a path not returned by CM.
+**DOCUMENT LOCATION RULE**: Before writing ANY document, QUA MUST invoke the `cm` subagent
+via the `task` tool with prompt `query-location --doc <document-type-key>` to get the canonical
+path. Never write to a path not returned by CM.
+
+**Note**: Agent-to-agent invocation uses the `task` tool ONLY. Writing `@agentname` in your
+output does NOT spawn a sub-agent — that syntax only works when typed by the *user*.
 
 ---
 

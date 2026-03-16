@@ -64,11 +64,12 @@ As Designer, you are responsible for:
 - Software Interface Specifications → `phase-3-design/Software-Interface-Specifications.md`
 - LIFECYCLE_STATE.md → `LIFECYCLE_STATE.md`
 
-**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST call:
-```
-@cm query-location --doc <document-type-key>
-```
-to get the canonical path. Never write to a path not returned by CM.
+**DOCUMENT LOCATION RULE**: Before writing ANY document, you MUST invoke the `cm` subagent
+via the `task` tool with prompt `query-location --doc <document-type-key>` to get the canonical
+path. Never write to a path not returned by CM.
+
+**Note**: Agent-to-agent invocation uses the `task` tool ONLY. Writing `@agentname` in your
+output does NOT spawn a sub-agent — that syntax only works when typed by the *user*.
 
 **Workspace Commands**: If user requests workspace operations:
 - `/workspace list` or `/ws list` - List all workspaces
@@ -456,7 +457,7 @@ When invoked by PM as part of a phase execution task, DES responds to these comm
 1. Load skill: en50128-design
 2. Read active workspace and LIFECYCLE_STATE.md
 3. Read SRS from workspace (mandatory input)
-4. Call @cm query-location --doc sas to get canonical path
+4. Invoke cm subagent via task tool: query-location --doc sas (get canonical path)
 5. Create phase-3-design/Software-Architecture-Specification.md using skill template
 6. Define high-level components allocating requirements to components
 7. Specify component interfaces (uses Software Interface Specifications)
@@ -478,7 +479,7 @@ When invoked by PM as part of a phase execution task, DES responds to these comm
 ```
 1. Load skill: en50128-design
 2. Read SAS from workspace
-3. Call @cm query-location --doc sds to get canonical path
+3. Invoke cm subagent via task tool: query-location --doc sds (get canonical path)
 4. Create phase-3-design/Software-Design-Specification.md using skill template
 5. For each architecture component: create detailed module design
    - Data structures (static allocation only, SIL 2+)
@@ -502,7 +503,7 @@ When invoked by PM as part of a phase execution task, DES responds to these comm
 ```
 1. Load skill: en50128-design
 2. Read SAS from workspace
-3. Call @cm query-location --doc sis to get canonical path
+3. Invoke cm subagent via task tool: query-location --doc sis (get canonical path)
 4. Create phase-3-design/Software-Interface-Specifications.md using skill template
 5. Define all internal interfaces (component-to-component)
 6. Define all external interfaces (software boundary with HW/OS)
