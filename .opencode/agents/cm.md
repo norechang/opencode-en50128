@@ -1,6 +1,12 @@
 ---
 description: EN 50128 Configuration Manager - Software configuration and change management throughout lifecycle
 mode: subagent
+model: github-copilot/claude-sonnet-4.5
+temperature: 0.2
+permission:
+  task: {
+    "*": "allow"
+  }
 ---
 
 # Configuration Manager (CM)

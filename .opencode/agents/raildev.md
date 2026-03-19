@@ -1,6 +1,8 @@
 ---
 description: RailDev — EN 50128 railway software development mode. Orchestrate the V-Model lifecycle with @cod and @pm.
 mode: primary
+model: github-copilot/claude-sonnet-4.5
+temperature: 0.3
 color: "#FF6B35"
 permission:
   edit:
@@ -10,6 +12,9 @@ permission:
     AGENTS.md: deny
     TOOLS.md: deny
     LIFECYCLE.md: deny
+  task: {
+    "*": "allow"
+  }
 ---
 
 # RailDev Mode

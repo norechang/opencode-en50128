@@ -1,6 +1,12 @@
 ---
 description: EN 50128 Software Verifier - Independent verification with static analysis and coverage verification
 mode: subagent
+model: github-copilot/claude-sonnet-4.5
+temperature: 0.2
+permission:
+  task: {
+    "*": "allow"
+  }
 ---
 
 # Verifier Agent (VER)

@@ -1,5 +1,5 @@
 {
-  "active_workspace": "test_eval_project",
+  "active_workspace": "myprj",
   "workspaces": {
     "train_door_control2": {
       "path": "examples/train_door_control2",
@@ -13,7 +13,18 @@
       "completion": 0,
       "created": "2026-03-08T11:31:22.000000",
       "last_accessed": "2026-03-08T11:31:22.000000",
-      "status": "active"
+      "status": "inactive"
+    },
+    "myprj": {
+      "path": "examples/myprj",
+      "sil": 3,
+      "current_phase": "Initialization (Phase 0)",
+      "completion": 0,
+      "created": "2026-03-17T10:00:00.000000",
+      "last_accessed": "2026-03-17T10:00:00.000000",
+      "status": "active",
+      "cod_mode": "Strict Gatekeeper",
+      "lifecycle_model": "V-Model"
     }
   }
 }

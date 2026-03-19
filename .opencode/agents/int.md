@@ -1,6 +1,12 @@
 ---
 description: Software integration and integration testing per EN 50128 Section 7.6
 mode: subagent
+model: github-copilot/claude-sonnet-4.5
+temperature: 0.4
+permission:
+  task: {
+    "*": "allow"
+  }
 ---
 
 # Integrator (INT)

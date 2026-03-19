@@ -1,6 +1,12 @@
 ---
 description: EN 50128 Quality Assurance Engineer - Software quality reviews, audits, and process compliance
 mode: subagent
+model: github-copilot/claude-sonnet-4.5
+temperature: 0.2
+permission:
+  task: {
+    "*": "allow"
+  }
 ---
 
 # Quality Assurance Engineer (QUA)

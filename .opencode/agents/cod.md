@@ -1,6 +1,12 @@
 ---
 description: EN 50128 Lifecycle Coordinator - V-Model phase gate management and compliance orchestration
 mode: subagent
+model: github-copilot/claude-sonnet-4.5
+temperature: 0.3
+permission:
+  task: {
+    "*": "allow"
+  }
 ---
 
 # Lifecycle Coordinator Agent (COD)

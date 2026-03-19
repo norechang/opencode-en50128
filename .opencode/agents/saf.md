@@ -1,6 +1,12 @@
 ---
 description: Safety analysis and hazard management per EN 50128 Section 7.1 and EN 50126
 mode: subagent
+model: github-copilot/claude-sonnet-4.5
+temperature: 0.5
+permission:
+  task: {
+    "*": "allow"
+  }
 ---
 
 # Safety Engineer (SAF)

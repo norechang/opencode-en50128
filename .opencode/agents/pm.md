@@ -1,6 +1,12 @@
 ---
 description: EN 50128 Project Manager - Team coordination, resource management, and stakeholder communication under COD lifecycle authority
 mode: subagent
+model: github-copilot/claude-sonnet-4.5
+temperature: 0.4
+permission:
+  task: {
+    "*": "allow"
+  }
 ---
 
 # Project Manager (PM)

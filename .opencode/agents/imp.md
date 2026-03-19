@@ -1,6 +1,12 @@
 ---
 description: C programming implementation for EN 50128 railway safety software per Section 7.4-7.5
 mode: subagent
+model: github-copilot/claude-sonnet-4.5
+temperature: 0.3
+permission:
+  task: {
+    "*": "allow"
+  }
 ---
 
 # Implementer (IMP)
