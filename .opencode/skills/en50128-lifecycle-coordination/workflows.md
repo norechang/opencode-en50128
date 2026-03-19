@@ -22,7 +22,7 @@ mkdir train_door_control
 cd train_door_control
 
 # Initialize COD for SIL 3 project
-/cod plan --sil 3 --project train_door_control
+@cod plan --sil 3 --project train_door_control
 ```
 
 **COD Response**:
@@ -47,7 +47,7 @@ Lifecycle Phases:
 Next Steps:
   1. Review lifecycle plan in LIFECYCLE_STATE.md
   2. Begin Phase 1 (Planning)
-  3. When planning complete: /cod gate-check planning
+  3. When planning complete: @cod gate-check planning
 
 Current Phase: Planning
 ```
@@ -60,7 +60,7 @@ Current Phase: Planning
 # COD automatically monitors - Planning phase active
 
 # PM coordinates planning activities
-/pm    # Project planning
+@pm    # Project planning
 
 # PM works with agents to create planning documents
 # Coordinate with QUA for SQAP
@@ -73,16 +73,16 @@ Current Phase: Planning
 
 ```bash
 # Report SQAP completion
-/cod pm-update-deliverables --phase planning --deliverable SQAP --file docs/plans/SQAP.md --status complete
+@cod pm-update-deliverables --phase planning --deliverable SQAP --file docs/plans/SQAP.md --status complete
 
 # Report SCMP completion
-/cod pm-update-deliverables --phase planning --deliverable SCMP --file docs/plans/SCMP.md --status complete
+@cod pm-update-deliverables --phase planning --deliverable SCMP --file docs/plans/SCMP.md --status complete
 
 # Report SVP completion
-/cod pm-update-deliverables --phase planning --deliverable SVP --file docs/plans/SVP.md --status complete
+@cod pm-update-deliverables --phase planning --deliverable SVP --file docs/plans/SVP.md --status complete
 
 # Report SVaP completion
-/cod pm-update-deliverables --phase planning --deliverable SVaP --file docs/plans/SVaP.md --status complete
+@cod pm-update-deliverables --phase planning --deliverable SVaP --file docs/plans/SVaP.md --status complete
 ```
 
 **COD tracks** these deliverables in LIFECYCLE_STATE.md and provides feedback on progress.
@@ -90,7 +90,7 @@ Current Phase: Planning
 When all planning documents complete, PM reports planning phase completion:
 
 ```bash
-/cod pm-report-planning-complete --project train_door_control
+@cod pm-report-planning-complete --project train_door_control
 ```
 
 **COD Response** (if complete):
@@ -185,14 +185,14 @@ Proceeding with Requirements Engineer (REQ)...
 
 Parallel activities:
 ```bash
-/saf   # Safety Engineer - hazard analysis
-/tst   # Tester - Overall test specification
+@saf   # Safety Engineer - hazard analysis
+@tst   # Tester - Overall test specification
 ```
 
 When requirements complete:
 
 ```bash
-/cod gate-check requirements
+@cod gate-check requirements
 ```
 
 **COD verifies** all criteria, authorizes transition to Design phase.
@@ -202,8 +202,8 @@ When requirements complete:
 #### Step 4: Phase 3 - Architecture & Design
 
 ```bash
-/des   # Designer - create architecture and design
-/int   # Integrator - integration test specs
+@des   # Designer - create architecture and design
+@int   # Integrator - integration test specs
 ```
 
 **COD monitors**, no user approval needed (only for requirements)
@@ -211,7 +211,7 @@ When requirements complete:
 When design complete:
 
 ```bash
-/cod gate-check design
+@cod gate-check design
 ```
 
 **COD checks**:
@@ -228,10 +228,10 @@ If passed → authorize transition to Implementation
 #### Step 5: Phase 4 - Implementation & Testing
 
 ```bash
-/imp   # Implementer - write C code
-/tst   # Tester - unit tests
-/ver   # Verifier - static analysis
-/qua   # Quality - code review
+@imp   # Implementer - write C code
+@tst   # Tester - unit tests
+@ver   # Verifier - static analysis
+@qua   # Quality - code review
 ```
 
 **COD monitors**:
@@ -242,7 +242,7 @@ If passed → authorize transition to Implementation
 When implementation complete:
 
 ```bash
-/cod gate-check implementation
+@cod gate-check implementation-testing
 ```
 
 **COD Response** (example - gap detected):
@@ -275,13 +275,13 @@ Required Actions:
   2. Add tests to cover missing branches (5% gap)
   3. Add tests to cover missing conditions (8% gap)
 
-Once complete, re-run: /cod gate-check implementation
+Once complete, re-run: @cod gate-check implementation-testing
 ```
 
 User fixes issues, then:
 
 ```bash
-/cod gate-check implementation
+@cod gate-check implementation-testing
 ```
 
 **COD**: ✓ PASSED → Authorize transition to Integration
@@ -295,20 +295,20 @@ Similar pattern continues:
 ```bash
 # Integration
 /int
-/cod gate-check integration
+@cod gate-check integration
 
 # Validation (independent validator for SIL 3)
 /val
-/cod gate-check validation
+@cod gate-check validation
 
 # Assessment (mandatory for SIL 3, independent assessor)
 # (Assessor role not in current agent set - external)
-/cod gate-check assessment
+@cod gate-check assessment
 
 # Deployment
 /pm
 /cm
-/cod gate-check deployment
+@cod gate-check deployment
 ```
 
 ---
@@ -441,17 +441,17 @@ Proceeding with Requirements Engineer (REQ)...
 # COD coordinates cascade
 
 # Phase 3: Update design
-/des   # Update design for new requirement
+@des   # Update design for new requirement
 
 # Phase 4: Update implementation
-/imp   # Implement changes
+@imp   # Implement changes
 
 # Update tests
-/tst   # Update unit tests, integration tests, system tests
+@tst   # Update unit tests, integration tests, system tests
 
 # Verification
-/ver   # Verify changes
-/qua   # Review changes
+@ver   # Verify changes
+@qua   # Review changes
 ```
 
 **COD tracks** all affected artifacts, ensures traceability maintained.
@@ -463,7 +463,7 @@ Proceeding with Requirements Engineer (REQ)...
 ```bash
 # COD enforces regression testing before gate check
 
-/tst   # Execute regression test suite
+@tst   # Execute regression test suite
 ```
 
 **COD verifies**:
@@ -477,7 +477,7 @@ Proceeding with Requirements Engineer (REQ)...
 #### Step 5: Return to Implementation Gate
 
 ```bash
-/cod gate-check implementation
+@cod gate-check implementation-testing
 ```
 
 **COD verifies**:
@@ -499,7 +499,7 @@ Current phase: Requirements (Phase 2)
 
 User attempts:
 ```bash
-/imp   # Try to implement code before design
+@imp   # Try to implement code before design
 ```
 
 **COD BLOCKS**:
@@ -513,9 +513,9 @@ IMP Agent Allowed In: Implementation & Testing (Phase 4)
 
 Implementation cannot begin until:
   1. Requirements phase complete
-  2. Requirements gate passed (/cod gate-check requirements)
+  2. Requirements gate passed (@cod gate-check requirements)
   3. Architecture & Design phase complete
-  4. Design gate passed (/cod gate-check design)
+  4. Design gate passed (@cod gate-check design)
 
 SIL 3 project: Strict enforcement mode
 Lifecycle violations are BLOCKED.
@@ -533,7 +533,7 @@ Current phase: Requirements (Phase 2)
 
 User attempts:
 ```bash
-/imp   # Try to implement code before design
+@imp   # Try to implement code before design
 ```
 
 **COD WARNS**:
@@ -577,7 +577,7 @@ Note: Remember to complete Requirements and Design phases for final system.
 Design phase gate check fails due to high complexity
 
 ```bash
-/cod gate-check design
+@cod gate-check design
 ```
 
 **COD Response**:
@@ -620,11 +620,11 @@ Required Actions:
      - Simplify error handling paths
 
 Recommended approach:
-  /des   # Refactor design to reduce complexity
-  /ver   # Verify refactored design
-  /qua   # Review refactored design
+  @des   # Refactor design to reduce complexity
+  @ver   # Verify refactored design
+  @qua   # Review refactored design
 
-Once refactored, re-run: /cod gate-check design
+Once refactored, re-run: @cod gate-check design
 
 Current Phase: Architecture & Design (BLOCKED)
 ```
@@ -647,7 +647,7 @@ Current Phase: Architecture & Design (BLOCKED)
 # QA reviews changes
 
 # Step 4: Re-check gate
-/cod gate-check design
+@cod gate-check design
 ```
 
 **COD Response** (if fixed):
@@ -683,7 +683,7 @@ Current Phase: Implementation & Testing
 ### Check Current Status
 
 ```bash
-/cod status
+@cod status
 ```
 
 **COD Response**:
@@ -735,7 +735,7 @@ Next Steps:
   2. Achieve 100% coverage (TST)
   3. Perform static analysis (VER)
   4. Code review (QUA)
-  5. When complete: /cod gate-check implementation
+  5. When complete: @cod gate-check implementation-testing
 ```
 
 ---
@@ -747,7 +747,7 @@ Design phase with multiple agents working in parallel
 
 ```bash
 # Primary agent
-/des   # Designer creates architecture and design
+@des   # Designer creates architecture and design
 
 # COD monitors, allows parallel agents
 ```
@@ -755,8 +755,8 @@ Design phase with multiple agents working in parallel
 User invokes supporting agents in parallel:
 
 ```bash
-/int   # Integrator creates integration test specs (allowed)
-/saf   # Safety Engineer reviews design for safety (allowed)
+@int   # Integrator creates integration test specs (allowed)
+@saf   # Safety Engineer reviews design for safety (allowed)
 ```
 
 **COD coordinates**:
@@ -768,7 +768,7 @@ User invokes supporting agents in parallel:
 When all agents complete:
 
 ```bash
-/cod gate-check design
+@cod gate-check design
 ```
 
 **COD verifies** deliverables from ALL agents (DES, INT, SAF, VER, QUA).
@@ -797,6 +797,6 @@ These workflows demonstrate:
 ---
 
 **Related Documents**:
-- `.opencode/commands/cod.md` - COD agent definition
+- `.opencode/agents/cod.md` - COD agent definition
 - `.opencode/skills/en50128-lifecycle-coordination/SKILL.md` - Phase management patterns
 - `LIFECYCLE.md` - Complete lifecycle reference

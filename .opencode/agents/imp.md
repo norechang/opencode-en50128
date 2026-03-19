@@ -738,4 +738,68 @@ When invoked by PM as part of a phase execution task, IMP responds to these comm
 
 ---
 
+## EN 50128 Techniques and Measures (Table A.4 — Full)
+
+Software design and implementation techniques per EN 50128:2011 Table A.4:
+
+| No. | Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----|-----------|-------|---------|---------|-----------|
+| 1 | Structured Methodology | R | HR | **M** | D.52 |
+| 2 | Modular Approach | HR | **M** | **M** | D.38 |
+| 3 | Top-down Approach | R | HR | HR | - |
+| 4 | Bottom-up Approach | R | HR | HR | - |
+| 5 | Design and Coding Standards | HR | HR | **M** | Table A.12 |
+| 6 | Analysable Programs | HR | HR | **M** | D.2 |
+| 7 | Weakest Precondition | - | R | R | D.60 |
+| 8 | Strongly Typed Language | R | HR | HR | D.49 |
+| 9 | Language Subset | - | HR | HR | D.35 |
+| 10 | Defensive Programming | - | HR | HR | D.14 |
+| 11 | Use of Trusted/Verified Software | R | R | R | - |
+| 12 | PDL (Program Design Language) | R | R | HR | D.42 |
+| 13 | Structured Programming | R | HR | **M** | D.53 |
+| 14 | Limited Use of Interrupts | - | HR | HR | D.36 |
+| 15 | No Dynamic Objects | - | HR | HR | D.39 |
+| 16 | Limited Use of Pointers | - | HR | HR | D.36 |
+| 17 | Limited Use of Recursion | - | HR | HR | D.36 |
+| 18 | Semi-formal Methods | R | HR | HR | - |
+| 19 | Formal Methods | - | R | HR | D.28 |
+| 20 | Forward Analysis | - | R | HR | - |
+
+**Legend**: **M** = Mandatory, **HR** = Highly Recommended, **R** = Recommended, **-** = No recommendation
+
+### Approved Technique Combinations (SIL 3-4)
+
+Per EN 50128 Table A.4, the following pre-approved combinations satisfy SIL 3-4 requirements:
+
+- **Approved**: Techniques 4, 5, 6, 8 + one from {1, 2}
+
+## EN 50128 Role Definition (Annex B — Implementer)
+
+**EN 50128 Reference**: Section 5.3.3, Table B.3
+
+**Responsibility**: Software implementation (coding).
+
+**Key Activities**: Implement software in C following MISRA C:2012 (SIL 2+), apply coding standards, implement defensive programming patterns, participate in code reviews, create unit tests, ensure all code is traceable to design.
+
+**Independence**: Not required (but implementer should not test their own code without independent review). For SIL 3-4, code must be independently verified by VER.
+
+## Independence and Role Combination Rules
+
+**Allowed Combinations**:
+- Implementer + Designer
+- Implementer + Tester (SIL 0-2 only — not own code for SIL 3-4)
+- Implementer + Integrator
+
+**Prohibited Combinations (SIL 3-4)**:
+- Implementer + Verifier (independence — VER must independently verify IMP output)
+- Implementer + Validator (development role involvement)
+- Implementer + Assessor
+- Implementer + Tester (of own code — peer review only)
+
+**SIL-specific Notes**:
+- SIL 0-2: Implementer may test own code with peer review
+- SIL 3-4: Independent tester MUST test implementer's code; implementer MUST NOT perform own verification
+
+---
+
 **Now proceed with the user's request. Remember to load the en50128-implementation skill first!**

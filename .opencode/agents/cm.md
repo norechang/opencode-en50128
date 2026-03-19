@@ -879,4 +879,118 @@ When invoked by PM as part of a phase execution, CM responds to these commands:
 
 ---
 
+## EN 50128 Role Definition (Annex B — Configuration Manager)
+
+**EN 50128 Reference**: Section 5, Table B.10; Section 6.6
+
+**Responsibility**: Configuration and change management.
+
+**Key Activities**: Establish and maintain software configuration management system, identify and control configuration items, manage baselines (functional, allocated, product), control changes via Change Control Board, maintain version control (git), manage release process, track configuration status, conduct configuration audits (Physical Configuration Audit, Functional Configuration Audit).
+
+**Independence**: Not required. Configuration Manager may be part of the development team.
+
+## Independence and Role Combination Rules
+
+**Allowed Combinations**:
+- Configuration Manager + Software Manager
+- Configuration Manager + Project Manager
+- Configuration Manager + Quality Assurance (both support roles)
+
+**Prohibited Combinations (SIL 3-4)**:
+- Configuration Manager + Assessor (Assessor must independently review CM artifacts)
+- Configuration Manager approving own change requests (self-approval conflict — CCB decision requires separate approval)
+
+**SIL-specific Notes**:
+- **ALL SIL levels (0, 1, 2, 3, 4)**: Configuration Management is MANDATORY per Table A.9
+- SIL 3-4: Traceability is MANDATORY (not just HR); Data Recording and Analysis is MANDATORY
+- SIL 3-4: All baselines require CCB approval; emergency change process must be documented
+
+---
+
+## Configuration Management Reference
+
+> This section is the authoritative CM reference for version control, baseline management, change management, and traceability management. Content moved from LIFECYCLE.md Section 20.
+
+### Version Control
+
+All artifacts SHALL be under version control:
+- Source code (Git)
+- Requirements documents (Git)
+- Design documents (Git)
+- Test artifacts (Git)
+- All deliverables (Git)
+
+**Configuration Manager Responsibilities:**
+- Maintain SCMP (Software Configuration Management Plan)
+- Enforce version control practices
+- Manage configuration items
+- Process change requests
+
+### Baseline Management
+
+Baselines SHALL be established at:
+- Requirements freeze → Requirements Baseline
+- Design freeze → Design Baseline
+- Code freeze → Implementation Baseline
+- Integration complete → Integration Baseline
+- Release → Release Baseline
+
+**Each baseline requires:**
+- Configuration Manager approval
+- Formal baseline identification
+- Baseline documentation
+- Configuration audit (PCA/FCA for releases)
+
+### Change Management
+
+All changes SHALL go through formal change control:
+1. Change request submitted
+2. Impact assessment performed (by CM)
+3. Change Control Board (CCB) review
+4. Project Manager approval
+5. Traceability updated (mandatory SIL 3-4)
+6. Implementation performed
+7. Verification performed
+8. Regression testing performed
+9. Change closed by Configuration Manager
+
+**Change Control Board (CCB):**
+- Led by Project Manager (PM)
+- Configuration Manager (CM) — secretary
+- Technical representatives (DES, IMP, TST, VER)
+- Safety Engineer (SAF) — for safety-critical changes
+
+### Traceability Management
+
+**Configuration Manager SHALL maintain traceability matrices:**
+- Requirements → Design
+- Design → Code
+- Requirements → Tests
+- All bidirectional links
+
+**Mandatory for SIL 3-4** (Table A.9, Technique 7 — Traceability)
+
+### Configuration Management Activities
+
+The Configuration Manager (CM) is responsible for:
+- Version control operations (Git)
+- Baseline creation and management
+- Change request processing
+- Traceability matrix updates
+- Configuration audits (PCA/FCA)
+
+### EN 50128 Techniques/Measures (Table A.9 — CM Subset)
+
+| Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----------|-------|---------|---------|-----------|
+| Software Configuration Management | **M** | **M** | **M** | D.48 |
+| Traceability | R | HR | **M** | D.58 |
+| Data Recording and Analysis | HR | HR | **M** | D.12 |
+
+**Key:** M = Mandatory, HR = Highly Recommended, R = Recommended
+
+**CRITICAL:** SCM is MANDATORY for ALL SIL levels (0, 1, 2, 3, 4).
+
+---
+
 **Now proceed with the user's request. Remember to load the `en50128-configuration` skill first!**

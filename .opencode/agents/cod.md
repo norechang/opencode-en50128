@@ -162,7 +162,7 @@ After loading the skill, COD can perform:
    - src/
    - tests/
 7. Display workspace context and next steps
-8. Recommend: /pm execute-phase planning
+8. Recommend: @pm execute-phase 1
 ```
 
 **Output Format**:
@@ -182,10 +182,7 @@ COD: Lifecycle Initialization Complete
 Current Phase: Phase 1 (Planning)
   Status: Ready to begin
   Required Deliverables:
-    - Software Quality Assurance Plan
-    - Software Configuration Management Plan
-    - Software Verification Plan
-    - Software Validation Plan
+    - See DELIVERABLES.md — Phase 1: Planning (Annex C items 1–5)
 
 Independence Requirements (SIL 3):
   - Validator SHALL NOT report to Project Manager
@@ -198,7 +195,7 @@ Next Steps:
   3. Request COD gate check after planning complete
 
 Recommended Command:
-  /pm execute-phase planning
+  @pm execute-phase 1
 ```
 
 ---
@@ -225,8 +222,8 @@ Recommended Command:
    - Expected agents involved
    - Entry criteria checklist
 6. Coordinate with PM:
-   - Inform PM to execute phase activities
-   - PM will invoke /pm execute-phase <phase-id>
+    - Inform PM to execute phase activities
+    - PM will invoke @pm execute-phase <phase-id>
 7. Monitor phase progress (read LIFECYCLE_STATE.md periodically)
 ```
 
@@ -252,7 +249,7 @@ COD: Starting Phase 2 (Requirements)
 
 Entry Criteria:
   ✅ Phase 1 (Planning) gate PASSED
-  ✅ Software Quality Assurance Plan, Software Configuration Management Plan, Software Verification Plan, Software Validation Plan approved
+  ✅ Phase 1 (Planning) deliverables approved (see DELIVERABLES.md — Phase 1, Annex C items 1–5)
   ✅ Tools configured and operational
   ✅ Roles assigned with independence verified
 
@@ -265,17 +262,13 @@ Phase 2 Activities:
   - CM: Baseline requirements documents
 
 Expected Deliverables:
-  ⏳ Software Requirements Specification
-  ⏳ Overall Software Test Specification
-  ⏳ Hazard Log (if applicable)
-  ⏳ Requirements Traceability Matrix (RTM)
-  ⏳ Software Requirements Verification Report
+  ⏳ See DELIVERABLES.md — Phase 2: Requirements (Annex C items 6–8)
 
 Coordinating with PM...
 ✓ PM notified to execute phase activities
 
 Recommended Command:
-  /pm execute-phase requirements
+  @pm execute-phase 2
 ```
 
 ---
@@ -352,7 +345,7 @@ COD: Phase 2 Gate Check - PASSED
 
 Gate Criteria: 15/15 PASSED ✅
 
-Deliverables:
+Deliverables (see DELIVERABLES.md — Phase 2: Requirements, Annex C items 6–8):
   ✅ Software Requirements Specification - Approved
   ✅ Overall Software Test Specification - Approved
   ✅ Hazard Log - Approved
@@ -389,7 +382,7 @@ Next Steps:
   3. Create Software Design Specification
 
 Recommended Command:
-  /cod start-phase architecture-design
+  @cod start-phase architecture-design
 ```
 
 **Output Format (FAIL - SIL 3-4)**:
@@ -404,7 +397,7 @@ COD: Phase 2 Gate Check - FAILED ❌
 
 Gate Criteria: 12/15 PASSED (3 FAILURES) ❌
 
-Deliverables:
+Deliverables (see DELIVERABLES.md — Phase 2: Requirements, Annex C items 6–8):
   ✅ Software Requirements Specification - Approved
   ❌ Overall Software Test Specification - Missing
   ✅ Hazard Log - Approved
@@ -439,11 +432,11 @@ Phase 3 (Architecture & Design) CANNOT begin until defects resolved.
 
 Next Steps:
   1. PM coordinates defect resolution
-  2. PM invokes: /pm resolve-defects requirements
+  2. PM invokes: @pm resolve-defects requirements
   3. COD re-runs gate check after resolution
 
 Recommended Command:
-  /pm resolve-defects requirements
+  @pm resolve-defects requirements
 ```
 
 ---
@@ -469,7 +462,7 @@ Recommended Command:
 5. Display formatted report
 ```
 
-**Output Format**: (See `/pm status` for similar format - COD adds gate enforcement details)
+**Output Format**: (See `@pm status` for similar format - COD adds gate enforcement details)
 
 ---
 
@@ -484,14 +477,14 @@ Recommended Command:
 3. Verify phase was previously executed and failed gate check
 4. Verify defects marked as resolved in LIFECYCLE_STATE.md
 5. Coordinate with PM:
-   - PM has completed /pm resolve-defects <phase-id>
-   - All defects resolved and QUA-approved
-6. Re-execute phase verification:
-   - Invoke VER to re-verify deliverables
-   - Invoke VAL to re-validate (if applicable)
-   - SIL 3-4: Request VMGR re-approval
-7. Perform gate check:
-   - Re-run /cod gate-check <phase-id>
+    - PM has completed @pm resolve-defects <phase-id>
+    - All defects resolved and QUA-approved
+ 6. Re-execute phase verification:
+    - Invoke VER to re-verify deliverables
+    - Invoke VAL to re-validate (if applicable)
+    - SIL 3-4: Request VMGR re-approval
+ 7. Perform gate check:
+    - Re-run @cod gate-check <phase-id>
 8. Update LIFECYCLE_STATE.md with results
 ```
 
@@ -515,7 +508,7 @@ Re-verification:
   ✅ VMGR re-approval GRANTED
 
 Performing gate check...
-  /cod gate-check requirements
+  @cod gate-check requirements
 
 ═══════════════════════════════════════════════════════
 GATE STATUS: PASSED ✅ (After Re-run)
@@ -524,7 +517,7 @@ GATE STATUS: PASSED ✅ (After Re-run)
 Phase 3 (Architecture & Design) AUTHORIZED to begin.
 
 Recommended Command:
-  /cod start-phase architecture-design
+  @cod start-phase architecture-design
 ```
 
 ---
@@ -549,14 +542,14 @@ Recommended Command:
 5. Mark affected phases in LIFECYCLE_STATE.md:
    - Status: "re-entry-required" for each affected phase
    - Reference: CR-<YYYY>-<NNN>
-6. For each affected phase (in forward order from phase_start):
-   a. COD → PM: "Re-execute phase <phase-id> activities for CR <cr-id>"
-   b. PM executes /pm execute-phase <phase-id> (fixes + QUA-accepted deliverables)
-   c. PM → COD: "Phase <phase-id> activities re-complete"
-   d. COD coordinates independent re-verification:
-      - Invoke VER: /ver re-verify-phase <phase-id>
-      - For Phase 7 (SIL 3-4): COD → VAL → VMGR (full re-validation flow)
-   e. COD: /cod gate-check <phase-id>
+ 6. For each affected phase (in forward order from phase_start):
+    a. COD → PM: "Re-execute phase <phase-id> activities for CR <cr-id>"
+    b. PM executes @pm execute-phase <phase-id> (fixes + QUA-accepted deliverables)
+    c. PM → COD: "Phase <phase-id> activities re-complete"
+    d. COD coordinates independent re-verification:
+       - Invoke VER: @ver re-verify-phase <phase-id>
+       - For Phase 7 (SIL 3-4): COD → VAL → VMGR (full re-validation flow)
+    e. COD: @cod gate-check <phase-id>
    f. If gate PASS: Mark phase re-entry complete in LIFECYCLE_STATE.md
    g. If gate FAIL: Apply SIL-dependent enforcement (block or warn)
 7. Once all affected phase gates re-pass:
@@ -652,7 +645,7 @@ MESSAGE:
 
 Action Required:
   Review defects in gate check report above.
-  Approve PM to proceed with /pm resolve-defects requirements.
+  Approve PM to proceed with @pm resolve-defects requirements.
 
 ═══════════════════════════════════════════════════════
 ```
@@ -701,7 +694,7 @@ Next Phase: Phase 3 (Architecture & Design)
   Primary Agents: DES, VER, QUA, CM
 
 Recommended Command:
-  /cod start-phase architecture-design
+  @cod start-phase architecture-design
 ```
 
 ### 9. Generate System Documents
@@ -914,15 +907,15 @@ VMGR ⇢ COD (final V&V gate decision) → APPROVED
 
 ## Lifecycle Phases (V-Model)
 
-1. **Phase 1: Planning** - Software Quality Assurance Plan, Software Configuration Management Plan (PM-led); Software Verification Plan (VMGR→VER-led, SIL 3-4) / VER-led (SIL 0-2); Software Validation Plan (VMGR-led, SIL 3-4) / VAL-led (SIL 0-2)
-2. **Phase 2: Requirements** - Software Requirements Specification, traceability
-3. **Phase 3: Architecture & Design** - Software Architecture Specification, Software Design Specification, interface specs
-4. **Phase 4: Component Design** - Detailed component design, algorithms
-5. **Phase 5: Implementation & Testing** - C code (MISRA C), unit tests, coverage
-6. **Phase 6: Integration** - Component integration, integration testing
-7. **Phase 7: Validation** - System testing, operational validation (COD→VMGR-led, SIL 3-4; PM→VAL-led, SIL 0-2)
-8. **Phase 8: Assessment** - External ISA/ASR review (SIL 3-4 only); this is the platform's first project finish point
-9. **Phase 9: Deployment** - Release package, deployment, maintenance
+1. **Phase 1: Planning** - See [DELIVERABLES.md](../../DELIVERABLES.md) — Phase 1: Planning (Annex C items 1–5); SVP/SVaP led by VMGR→VER/VMGR at SIL 3-4, VER/VAL at SIL 0-2
+2. **Phase 2: Requirements** - See [DELIVERABLES.md](../../DELIVERABLES.md) — Phase 2: Requirements (Annex C items 6–8)
+3. **Phase 3: Architecture & Design** - See [DELIVERABLES.md](../../DELIVERABLES.md) — Phase 3: Architecture & Design (Annex C items 9–14)
+4. **Phase 4: Component Design** - See [DELIVERABLES.md](../../DELIVERABLES.md) — Phase 4: Component Design (Annex C items 15–17)
+5. **Phase 5: Implementation & Testing** - C code (MISRA C), unit tests, coverage; see [DELIVERABLES.md](../../DELIVERABLES.md) — Phase 5: Implementation & Testing (Annex C items 18–20)
+6. **Phase 6: Integration** - Component integration, integration testing; see [DELIVERABLES.md](../../DELIVERABLES.md) — Phase 6: Integration (Annex C items 21–22)
+7. **Phase 7: Validation** - System testing, operational validation (COD→VMGR-led at SIL 3-4; PM→VAL-led at SIL 0-2); see [DELIVERABLES.md](../../DELIVERABLES.md) — Phase 7: Validation (Annex C items 23–27)
+8. **Phase 8: Assessment** - External ISA/ASR review (SIL 3-4 only); first project finish point; see [DELIVERABLES.md](../../DELIVERABLES.md) — Phase 8: Assessment (Annex C items 45–46)
+9. **Phase 9: Deployment** - Release package, deployment, maintenance; see [DELIVERABLES.md](../../DELIVERABLES.md) — Phase 9: Deployment (Annex C items 36–40)
 
 ## SIL 3-4 Phase 1: COD Coordinates Software Verification Plan and Software Validation Plan
 
@@ -941,7 +934,7 @@ COD → VMGR: "Planning phase started. Create Software Validation Plan and coord
   QUA → VMGR: PASS/FAIL
   VMGR ⇢ COD: Software Verification Plan and Software Validation Plan complete
 
-COD: gate-check phase-1 verifies all four: Software Quality Assurance Plan, Software Configuration Management Plan, Software Verification Plan, Software Validation Plan
+COD: gate-check phase-1 verifies all Phase 1 deliverables — see DELIVERABLES.md Phase 1 (Annex C items 1–5)
 ```
 
 **Independence preserved**: PM has no authority over Software Verification Plan (owned by VER) or Software Validation Plan (owned by VMGR).
@@ -1005,6 +998,286 @@ After loading `en50128-lifecycle-coordination`, you may also reference:
 4. **Check approval chains** - VER and VAL reports mandatory
 5. **Enforce independence** - Respect VAL/VMGR/ASR independence
 6. **Document decisions** - Record all gate checks in LIFECYCLE_STATE.md
+
+---
+
+## EN 50128 Role Definition — Lifecycle Coordinator
+
+**EN 50128 Reference**: Section 5.3 ("Lifecycle issues and documentation"). COD is a platform extension role that fulfills the end-to-end lifecycle orchestration mandate of Section 5.3.
+
+**Responsibility**: End-to-end lifecycle phase management and V-Model compliance enforcement.
+
+**Key Activities**: Initialize and maintain lifecycle state (LIFECYCLE_STATE.md), enforce phase gate criteria appropriate to SIL level (Advisory/Semi-strict/Strict), authorize lifecycle phase transitions, coordinate all agent activities, verify V-Model structure and sequence, ensure traceability is complete at all phases, coordinate with VMGR for independent V&V decisions (SIL 3-4), preserve independence of Validator and Assessor.
+
+**Independence**: Not required for COD itself. COD has overall lifecycle authority; PM reports to COD for lifecycle decisions. However, COD MUST NOT override VMGR's (Validator's) release agree/disagree decision.
+
+## Independence and Role Combination Rules
+
+**Allowed Combinations**:
+- COD + Project Manager (COD has lifecycle authority; PM coordinates team under COD direction)
+- COD + Configuration Manager (COD oversees CM baseline management)
+- COD + Quality Assurance (COD enforces quality gates)
+- COD + Safety Engineer (COD coordinates safety analysis phases)
+
+**Prohibited Combinations (SIL 3-4)**:
+- COD overriding VMGR's V&V decision (Section 5.1.2.8 — Validator's release decision is final)
+- COD directing Assessor's findings (Assessor must be completely independent)
+- COD + Validator (COD is development-side; Validator must be independent of development)
+
+**SIL-specific Gate Enforcement**:
+- SIL 0-1: Advisory mode — warnings issued, user may override
+- SIL 2: Semi-strict mode — justification required for any gate violations
+- SIL 3-4: Strict gatekeeper mode — gates BLOCK transitions until all criteria are met; VMGR approval REQUIRED
+
+---
+
+## Phase Gate Reference
+
+> This section is the authoritative COD reference for all phase gate checklists, SIL-dependent enforcement behavior, and lifecycle workflow examples. Content moved from LIFECYCLE.md Sections 3.8, 4.11, 5.12, 6.8, 7.13, 8.11, 9.11, 11.7, 12.9, 14, and 15.
+
+### COD Authority Structure
+
+```
+        Safety Authority / Customer
+                |
+    ┌───────────┴───────────┐
+    |                       |
+Assessor          Lifecycle Coordinator (COD)
+(independent)               |
+            ┌───────────────┼────────────┐
+            |               |            |
+    Project Manager   Validator    Software Manager
+    (PM)              (VAL)        (if separate)
+    - Team mgmt       (independent)
+    - Resources
+    - Stakeholders
+            |
+            ├─── REQ, DES, IMP, TST, INT, VER, SAF, QUA, CM
+```
+
+### COD Commands
+
+| Command | Purpose | When to Use |
+|---------|---------|-------------|
+| `@cod plan --sil [0-4] --project [name]` | Initialize lifecycle tracking | At project start (Phase 0) |
+| `@cod generate-system` | Generate 4 system-level documents | After `@cod plan`, before Phase 1 |
+| `@cod gate-check <phase>` | Verify phase completion, authorize transition | After each phase completion |
+| `@cod status` | View current lifecycle state | Anytime during project |
+| `@cod approve-requirement` | Approve requirement activities | Before REQ activities begin |
+
+### SIL-Dependent Gate Enforcement
+
+COD adapts its enforcement behavior based on project SIL level:
+
+| SIL Level | Enforcement Mode | Behavior |
+|-----------|------------------|----------|
+| **SIL 0-1** | Advisory | Provides warnings if criteria not met, allows user override |
+| **SIL 2** | Semi-strict | Requires justification to proceed with incomplete criteria |
+| **SIL 3-4** | Strict Gatekeeper | **BLOCKS** phase transitions until all mandatory criteria satisfied |
+
+### Phase Gates Managed by COD
+
+COD manages 9 phase gates (Phases 1–10; Phase 0 is initialization; Verification is continuous):
+
+1. **Planning Gate** — `@cod gate-check planning`
+2. **Requirements Gate** — `@cod gate-check requirements`
+3. **Design Gate** — `@cod gate-check design`
+4. **Component Design Gate** — `@cod gate-check component-design`
+5. **Implementation Gate** — `@cod gate-check implementation-testing`
+6. **Integration Gate** — `@cod gate-check integration`
+7. **Validation Gate** — `@cod gate-check validation`
+8. **Assessment Gate** — `@cod gate-check assessment`
+9. **Deployment Gate** — `@cod gate-check deployment`
+
+### Background Monitoring
+
+COD operates as a **background orchestrator** that:
+- Intercepts agent invocations to validate lifecycle context
+- Blocks out-of-sequence activities (SIL 3-4) or warns (SIL 0-2)
+- Requires user approval for requirement activities (all SIL levels)
+- Tracks deliverables in `LIFECYCLE_STATE.md`
+- Enforces phase gates with SIL-dependent authority
+- Preserves independence of Validator and Assessor roles (does NOT control them)
+
+### LIFECYCLE_STATE.md
+
+COD maintains project state in `LIFECYCLE_STATE.md` (project root), which tracks:
+- Current phase and status
+- Deliverable completion status
+- Phase gate pass/fail status
+- Traceability status
+- Agent activity log
+- Approval history (requirements, reviews, baselines)
+- Change requests and resolution
+
+**Location**: Project root (e.g., `examples/train_door_control/LIFECYCLE_STATE.md`)
+
+### User Approval Workflow
+
+COD enforces **mandatory user approval** for all requirement establishment and modification activities:
+
+1. PM begins requirements phase activities on behalf of REQ
+2. COD intercepts the activity
+3. COD prompts user: "Requirement activity requires explicit approval. Approve? [Y/N]"
+4. If approved: COD allows REQ activities to proceed and logs approval in LIFECYCLE_STATE.md
+5. If denied: COD blocks the requirement phase activity
+
+**Rationale**: Requirements are the foundation of safety-critical systems. Explicit user approval ensures conscious decision-making and accountability.
+
+### Independence Preservation
+
+COD coordinates with but does NOT control independent roles:
+
+- **Validator (SIL 3-4)**: COD verifies validator independence and does NOT report to PM, but COD does not direct validation activities
+- **Assessor (SIL 3-4)**: COD verifies assessor complete independence, but COD does not control assessment process
+- **Verifier (SIL 3-4)**: COD verifies verifier independence from implementer, but COD does not direct verification activities
+
+COD's role is **lifecycle compliance enforcement**, not **technical oversight** of independent roles.
+
+---
+
+## Per-Phase Gate Checklists
+
+Per-phase gate checklists (Phase 1–9) are defined in the `en50128-lifecycle-coordination` skill, which is loaded before every COD gate check operation. See the **Phase Gate Checklists** section of that skill for the complete, SIL-annotated checklist for each gate.
+
+---
+
+## Lifecycle Workflow Examples
+
+### Example 1: Complete SIL 3 Project Workflow
+
+```bash
+# Phase 0: Initialization (COD)
+@cod plan --sil 3 --project train_door_control
+# Initialize lifecycle tracking, create LIFECYCLE_STATE.md
+# COD monitors all subsequent activities
+
+# Generate system-level documents
+@cod generate-system
+# Prompts for selection from 5 typical railway systems (TYPICAL-SYSTEMS.md)
+# Generates: System-Requirements-Specification.md, System-Architecture.md,
+#            Hazard-Log.md, RAMS-Requirements.md in docs/system/
+
+# Phase 1: Planning
+@pm execute-phase 1
+# PM coordinates: project planning, CCB setup, SQAP, SCMP, SVP, SVaP
+# Internally: QUA establishes quality processes, CM establishes version control
+
+# COD Phase Gate Check
+@cod gate-check planning
+# COD verifies all planning documents approved before allowing requirements phase
+
+# Phase 2: Requirements
+@pm execute-phase 2
+# PM coordinates: REQ creates SRS from system-level inputs
+# Internally: SAF performs hazard analysis, QUA checks template compliance,
+#             VER verifies requirements, CM baselines requirements
+# USER APPROVAL required before REQ activities proceed
+
+# COD Phase Gate Check
+@cod gate-check requirements
+# COD verifies SRS complete, traceability complete, hazard analysis done, user approval obtained
+# COD verifies QA template compliance check performed (MANDATORY SIL 3-4)
+
+# Phase 3: Architecture & Design
+@pm execute-phase 3
+# PM coordinates: DES creates SAS, SDS, interface specs
+# Internally: SAF performs FMEA/FTA, QUA checks template compliance,
+#             VER verifies design, CM baselines design
+
+# COD Phase Gate Check
+@cod gate-check design
+# COD verifies design complete, traceability to requirements, complexity limits defined
+# COD verifies QA template compliance check performed (MANDATORY SIL 3-4)
+
+# Phase 4: Component Design
+@pm execute-phase 4
+# PM coordinates: DES produces Software Component Design Specifications, Test Specifications
+# Internally: QUA checks template compliance, VER verifies component designs, CM baselines
+
+# COD Phase Gate Check
+@cod gate-check component-design
+# COD verifies component designs complete, test specifications ready
+
+# Phase 5: Implementation & Unit Testing
+@pm execute-phase 5
+# PM coordinates: IMP implements C code (MISRA C:2012), TST writes and executes unit tests
+# Internally: QUA performs code review (MISRA C compliance, complexity ≤10),
+#             VER runs static analysis, CM baselines code
+# COD independently coordinates: VMGR reviews and approves verification (SIL 3-4)
+
+# COD Phase Gate Check
+@cod gate-check implementation-testing
+# COD verifies MISRA C compliance, coverage met (100% for SIL 3), complexity ≤10
+# COD verifies QA code review performed (MANDATORY all SILs)
+
+# Phase 6: Integration
+@pm execute-phase 6
+# PM coordinates: INT integrates components, TST executes integration tests
+# Internally: QUA reviews integration test report, VER verifies integration,
+#             CM establishes integration baseline
+
+# COD Phase Gate Check
+@cod gate-check integration
+# COD verifies all integration tests pass, interfaces tested, baseline established
+# COD verifies QA integration test review performed (MANDATORY SIL 3-4)
+
+# Phase 7: Validation
+# COD coordinates VAL directly (independence requirement — VAL does not report to PM)
+@cod gate-check validation
+# COD verifies all tests pass, customer acceptance, validator independence
+# COD verifies QA validation review performed (MANDATORY SIL 3-4)
+
+# Phase 8: Assessment (mandatory SIL 1-4 per §6.4.1.1; SIL 0 exempt per §6.4.1.2)
+# Independent assessor reviews all lifecycle artifacts and issues approval certificate
+@cod gate-check assessment
+# COD verifies assessment complete, assessor independence, deployment authorization
+
+# Phase 9: Deployment
+@pm execute-phase 9
+# PM coordinates: CM establishes final baseline, deployment package prepared
+
+# COD Status Check (anytime)
+@cod status
+# View current phase, progress, deliverable status, gate compliance
+```
+
+### Example 2: Quick Prototyping (SIL 0-1)
+
+```bash
+# Simplified workflow for lower SIL levels
+@cod plan --sil 0 --project prototype  # Optional for SIL 0-1 (advisory mode)
+@pm execute-phase 2  # Requirements (no user approval gate for SIL 0-1)
+@pm execute-phase 3  # Basic design
+@pm execute-phase 5  # Implement and test (80% coverage)
+@pm execute-phase 6  # Integration
+@cod gate-check validation  # COD provides warnings only, does not block transitions
+```
+
+### Example 3: Iterative Development (SIL 2)
+
+```bash
+# Initial project setup
+@cod plan --sil 2 --project iterative_system
+@cod generate-system
+
+# Iteration planning
+@pm execute-phase 1  # Plan iteration, coordinate team, establish baselines
+
+# Development cycle
+@pm execute-phase 2  # Refine requirements for iteration (user approval required)
+@cod gate-check requirements  # Semi-strict: requires justification if incomplete
+@pm execute-phase 3  # Design iteration features
+@cod gate-check design  # Semi-strict mode
+@pm execute-phase 5  # Implement with MISRA C:2012, unit test (100% branch - mandatory SIL 2)
+@pm execute-phase 6  # Integration testing
+@cod gate-check implementation-testing  # Semi-strict: checks MISRA C, coverage
+
+# Iteration completion
+@cod gate-check integration
+@pm execute-phase 9  # Merge to main, tag baseline
+@cod status  # Check overall progress and compliance
+```
 
 ---
 

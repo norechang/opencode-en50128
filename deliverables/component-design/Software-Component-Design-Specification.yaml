@@ -1,0 +1,422 @@
+# Software Component Design Specification (SCDS)
+# EN 50128 Deliverable #15 - Section 7.4.4.1–7.4.4.6
+
+# ===== Basic Identification =====
+deliverable_id: "DOC-015-SCDS"
+number: 15
+name: "Software Component Design Specification"
+abbreviation: "SCDS"
+
+# ===== Lifecycle Context =====
+phase: "component-design"
+standard_section: "7.4.4.1"
+
+# ===== Ownership (EN 50128 Table C.1) =====
+written_by: "DES"
+first_check: "VER"
+second_check: "VAL"
+
+# ===== Template =====
+template_path: ".opencode/skills/en50128-design/templates/Software-Component-Design-Specification-template.md"
+template_exists: false
+
+# ===== SIL Requirements =====
+sil_requirements:
+  sil_0:
+    mandatory: true
+    techniques:
+      - technique_name: "Modular Approach"
+        table_reference: "A.4"
+        technique_id: "D.38"
+        recommendation: "HR"
+      - technique_name: "Design and Coding Standards"
+        table_reference: "A.4"
+        technique_id: "A.20"
+        recommendation: "HR"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.4"
+        technique_id: "D.52"
+        recommendation: "R"
+    additional_requirements:
+      - "Component identified and traced to Software Design Specification (§7.4.4.3a)"
+      - "Interfaces, inputs and outputs specified (§7.4.4.3b)"
+      - "SIL level stated (§7.4.4.3c)"
+      - "Algorithms and data structures defined (§7.4.4.3d)"
+      - "Size and complexity balanced (§7.4.4.5)"
+
+  sil_1:
+    mandatory: true
+    techniques:
+      - technique_name: "Modular Approach"
+        table_reference: "A.4"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Design and Coding Standards"
+        table_reference: "A.4"
+        technique_id: "A.20"
+        recommendation: "HR"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.4"
+        technique_id: "D.52"
+        recommendation: "HR"
+      - technique_name: "Structured Programming"
+        table_reference: "A.4"
+        technique_id: "D.53"
+        recommendation: "HR"
+    additional_requirements:
+      - "All §7.4.4.3 content required"
+      - "Readable, understandable and testable (§7.4.4.4)"
+      - "Technique combination justified per §4.8 and §4.9 (§7.4.4.6)"
+      - "Cyclomatic complexity ≤ 20"
+
+  sil_2:
+    mandatory: true
+    techniques:
+      - technique_name: "Modular Approach"
+        table_reference: "A.4"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Design and Coding Standards"
+        table_reference: "A.4"
+        technique_id: "A.20"
+        recommendation: "HR"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.4"
+        technique_id: "D.52"
+        recommendation: "HR"
+      - technique_name: "Structured Programming"
+        table_reference: "A.4"
+        technique_id: "D.53"
+        recommendation: "HR"
+      - technique_name: "Analysable Programs"
+        table_reference: "A.4"
+        technique_id: "D.2"
+        recommendation: "HR"
+      - technique_name: "Defensive Programming"
+        table_reference: "A.4"
+        technique_id: "D.14"
+        recommendation: "HR"
+    additional_requirements:
+      - "Modular Approach MANDATORY"
+      - "MISRA C:2012 compliance MANDATORY"
+      - "Static allocation only (no malloc/free)"
+      - "Cyclomatic complexity ≤ 15"
+      - "Technique combination justified per §4.8 and §4.9 (§7.4.4.6)"
+
+  sil_3:
+    mandatory: true
+    techniques:
+      - technique_name: "Modular Approach"
+        table_reference: "A.4"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Design and Coding Standards"
+        table_reference: "A.4"
+        technique_id: "A.20"
+        recommendation: "M"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.4"
+        technique_id: "D.52"
+        recommendation: "HR"
+      - technique_name: "Structured Programming"
+        table_reference: "A.4"
+        technique_id: "D.53"
+        recommendation: "M"
+      - technique_name: "Analysable Programs"
+        table_reference: "A.4"
+        technique_id: "D.2"
+        recommendation: "M"
+      - technique_name: "Defensive Programming"
+        table_reference: "A.4"
+        technique_id: "D.14"
+        recommendation: "HR"
+      - technique_name: "Formal Methods"
+        table_reference: "A.4"
+        technique_id: "D.28"
+        recommendation: "HR"
+    additional_requirements:
+      - "Design and Coding Standards MANDATORY"
+      - "MISRA C:2012 MANDATORY (zero mandatory violations)"
+      - "Cyclomatic complexity ≤ 10"
+      - "Static allocation MANDATORY"
+      - "No recursion (HR)"
+      - "Defensive programming MANDATORY"
+      - "Technique combination justified per §4.8 and §4.9 (§7.4.4.6)"
+
+  sil_4:
+    mandatory: true
+    techniques:
+      - technique_name: "Modular Approach"
+        table_reference: "A.4"
+        technique_id: "D.38"
+        recommendation: "M"
+      - technique_name: "Design and Coding Standards"
+        table_reference: "A.4"
+        technique_id: "A.20"
+        recommendation: "M"
+      - technique_name: "Structured Methodology"
+        table_reference: "A.4"
+        technique_id: "D.52"
+        recommendation: "HR"
+      - technique_name: "Structured Programming"
+        table_reference: "A.4"
+        technique_id: "D.53"
+        recommendation: "M"
+      - technique_name: "Analysable Programs"
+        table_reference: "A.4"
+        technique_id: "D.2"
+        recommendation: "M"
+      - technique_name: "Defensive Programming"
+        table_reference: "A.4"
+        technique_id: "D.14"
+        recommendation: "HR"
+      - technique_name: "Formal Methods"
+        table_reference: "A.4"
+        technique_id: "D.28"
+        recommendation: "HR"
+      - technique_name: "Strongly Typed Programming Languages"
+        table_reference: "A.4"
+        technique_id: "D.49"
+        recommendation: "HR"
+    additional_requirements:
+      - "All SIL 3 requirements apply"
+      - "Strongly typed language HIGHLY RECOMMENDED (C with fixed-width types)"
+      - "Formal methods HIGHLY RECOMMENDED for critical functions"
+      - "Technique combination justified per §4.8 and §4.9 (§7.4.4.6)"
+
+# ===== Required Content Sections =====
+# Per EN 50128 §7.4.4.2–7.4.4.6: one SCDS document per component.
+required_content:
+  - section: "1. Document Header"
+    description: |
+      Author, configuration history (version, date, author, description of changes from previous
+      version), and short description of the component. Required by §7.4.4.2.
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+    standard_clause: "7.4.4.2"
+
+  - section: "2. Component Identification"
+    description: |
+      Unique identifier and name of the component. Traceability to the parent entry in the
+      Software Design Specification (§7.4.4.3a). SIL level of the component with no further
+      apportionment within the component (§7.4.4.3c).
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+    standard_clause: "7.4.4.3a, 7.4.4.3c"
+
+  - section: "3. Software Units"
+    description: |
+      Identification of all lowest software units (subroutines, functions, procedures) that make up
+      the component, each traced back to the component and to upper-level design (§7.4.4.3a).
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+    standard_clause: "7.4.4.3a"
+
+  - section: "4. Interfaces"
+    description: |
+      Detailed interfaces of each software unit with its environment and with other components:
+      all inputs and outputs with types, ranges, units and direction (§7.4.4.3b).
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+    standard_clause: "7.4.4.3b"
+
+  - section: "5. Data Structures"
+    description: |
+      Detailed data structures used within the component: type definitions, memory layout,
+      fixed-width types (MISRA C SIL 2+), absence of dynamic allocation (SIL 2+) (§7.4.4.3d).
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+    standard_clause: "7.4.4.3d"
+
+  - section: "6. Algorithms"
+    description: |
+      Detailed algorithms for each software unit: control flow, sequencing, timing constraints,
+      boundary conditions. Design shall be self-consistent and allow transforming into code
+      (§7.4.4.3d, §7.4.4.3 last paragraph).
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+    standard_clause: "7.4.4.3d"
+
+  - section: "7. Size and Complexity"
+    description: |
+      Statement that size and complexity of the component are balanced (§7.4.4.5). Include
+      target cyclomatic complexity limits per SIL: ≤10 (SIL 3-4), ≤15 (SIL 2), ≤20 (SIL 0-1).
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+    standard_clause: "7.4.4.5"
+
+  - section: "8. Techniques and Measures"
+    description: |
+      Selection of techniques and measures from Table A.4. The selected combination shall be
+      justified as a set satisfying §4.8 and §4.9 (§7.4.4.6).
+    mandatory_for: ["SIL_0", "SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+    standard_clause: "7.4.4.6"
+
+  - section: "9. Traceability Matrix"
+    description: |
+      Traceability from this component to: (a) Software Design Specification entry,
+      (b) Software Requirements Specification requirements, (c) software units within.
+      Supports readability and traceability per §5.3.2.7–5.3.2.10 and §6.5.4.14–6.5.4.17.
+    mandatory_for: ["SIL_1", "SIL_2", "SIL_3", "SIL_4"]
+    standard_clause: "5.3.2.7, 6.5.4.14, 7.4.4.13b"
+
+# ===== Evidence Requirements =====
+evidence_requirements:
+  - evidence_id: "scds-document"
+    description: "Complete SCDS document per EN 50128 §7.4.4.1–7.4.4.6; one instance per component"
+    mandatory_sil: 0
+    source: "DES agent component design"
+    format: "Markdown"
+    storage_path: "docs/component-design/<component-name>/SCDS-<component-name>.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "component-design-complete"
+    verification_criteria:
+      - "All sections required by §7.4.4.2–7.4.4.6 present"
+      - "Document is readable, understandable and testable (§7.4.4.4)"
+      - "Technique combination justified per §4.8 and §4.9"
+
+  - evidence_id: "component-traceability"
+    description: "Traceability from component to Software Design Specification and to SRS"
+    mandatory_sil: 1
+    source: "DES agent traceability analysis"
+    format: "CSV"
+    storage_path: "evidence/traceability/design_to_component.csv"
+    automation_level: "automatic"
+    collect_on_agent_action: "component-design-complete"
+    verification_criteria:
+      - "Each component traces to at least one SDS entry"
+      - "Each component traces to at least one SRS requirement"
+      - "SIL level consistent with parent SDS entry"
+
+  - evidence_id: "complexity-targets"
+    description: "Statement of cyclomatic complexity targets per SIL level for the component"
+    mandatory_sil: 0
+    source: "DES agent design"
+    format: "Embedded in SCDS Section 7"
+    storage_path: "docs/component-design/<component-name>/SCDS-<component-name>.md"
+    automation_level: "semi-automatic"
+    collect_on_agent_action: "component-design-complete"
+    verification_criteria:
+      - "Complexity target ≤ 10 for SIL 3-4, ≤ 15 for SIL 2, ≤ 20 for SIL 0-1"
+
+# ===== Dependencies =====
+depends_on:
+  - deliverable_id: "DOC-010-SDS"
+    reason: "SCDS is written on the basis of the Software Design Specification (§7.4.4.1)"
+    dependency_type: "blocking"
+
+  - deliverable_id: "DOC-001-SQAP"
+    reason: "SQAP references coding standards applicable to the component design"
+    dependency_type: "blocking"
+
+feeds_into:
+  - deliverable_id: "DOC-016-SCTS"
+    reason: "Software Component Test Specification is written on the basis of the SCDS (§7.4.4.7)"
+
+  - deliverable_id: "DOC-017-SCDVR"
+    reason: "Software Component Design Verification Report verifies the SCDS (§7.4.4.11)"
+
+  - deliverable_id: "DOC-018-SOURCE-CODE"
+    reason: "Source code implements the component algorithms and data structures from SCDS"
+
+# ===== Verification Criteria =====
+verification_criteria:
+  completeness:
+    - "Author, configuration history and short description present (§7.4.4.2)"
+    - "All lowest software units identified and traced to upper level (§7.4.4.3a)"
+    - "Detailed interfaces with environment and other components specified (§7.4.4.3b)"
+    - "SIL level stated with no further apportionment (§7.4.4.3c)"
+    - "Detailed algorithms and data structures present (§7.4.4.3d)"
+    - "Size and complexity balance addressed (§7.4.4.5)"
+    - "Table A.4 technique selection and justification present (§7.4.4.6)"
+
+  correctness:
+    - "SCDS is self-consistent and sufficient to transform into code (§7.4.4.3 last paragraph)"
+    - "Document is readable, understandable and testable (§7.4.4.4)"
+    - "SIL level consistent with parent Software Design Specification entry"
+    - "Complexity limits achievable at stated SIL"
+
+  consistency:
+    - "Component consistent with Software Design Specification (§7.4.4.13a)"
+    - "Interfaces consistent with Software Interface Specifications"
+    - "Data structures consistent with SRS data requirements"
+
+  traceability:
+    - "Component traced to Software Design Specification entry (§7.4.4.3a)"
+    - "Software units within component traced to component (§7.4.4.3a)"
+    - "Traceability to SRS requirements present (SIL 1+)"
+
+# ===== Configuration Management =====
+configuration_management:
+  baseline_required: true
+  baseline_timing: "After Component Design Verification (Phase 4 exit, Baseline 3)"
+  change_control: "CCB approval required for all changes (impacts implementation)"
+  version_control: "Git repository under docs/component-design/"
+  review_frequency: "At implementation phase transitions or significant design changes"
+
+  update_triggers:
+    - "Software Design Specification change impacting component"
+    - "Interface change affecting the component"
+    - "SIL level change for the component"
+    - "Coding standards change"
+    - "Algorithm or data structure correction during implementation"
+
+# ===== EN 50128 References =====
+en50128_references:
+  - section: "7.4.1"
+    title: "Component Design Objectives"
+    description: "Develop component design achieving SDS requirements to the extent required by SIL"
+
+  - section: "7.4.2"
+    title: "Input Documents"
+    description: "Software Design Specification is the sole input document for component design"
+
+  - section: "7.4.3"
+    title: "Output Documents"
+    description: "SCDS, Software Component Test Specification, Software Component Design Verification Report"
+
+  - section: "7.4.4.1"
+    title: "Designer Responsibility"
+    description: "SCDS written by Designer on the basis of the Software Design Specification"
+
+  - section: "7.4.4.2"
+    title: "Mandatory Header Information"
+    description: "Author, configuration history (version/date/author/changes), short description"
+
+  - section: "7.4.4.3"
+    title: "Mandatory Content (a–d)"
+    description: |
+      a) Identification of all lowest software units traced to upper level;
+      b) Detailed interfaces with environment and other components, inputs and outputs;
+      c) SIL level with no further apportionment within the component;
+      d) Detailed algorithms and data structures.
+      Document shall be self-consistent and allow transforming into code.
+
+  - section: "7.4.4.4"
+    title: "Readability and Testability"
+    description: "SCDS shall be readable, understandable and testable"
+
+  - section: "7.4.4.5"
+    title: "Size and Complexity"
+    description: "Size and complexity of each component shall be balanced"
+
+  - section: "7.4.4.6"
+    title: "Techniques and Measures"
+    description: "Choose from Table A.4; combination justified as a set satisfying §4.8 and §4.9"
+
+  - section: "Table A.4"
+    title: "Software Design and Implementation Techniques"
+    description: "Mandatory/Highly Recommended techniques by SIL level"
+
+  - section: "Annex C Table C.1"
+    title: "Document Control Summary"
+    description: "SCDS is deliverable #15"
+
+# ===== Notes =====
+notes: |
+  SCDS is MANDATORY for all SIL levels (§7.4.4.1): one document per component.
+  Written by the Designer on the basis of the Software Design Specification (§7.4.4.1).
+  Content requirements §7.4.4.3(a–d) apply at all SIL levels.
+  Document must be self-consistent and sufficient to transform into code (§7.4.4.3 last para).
+  Must be readable, understandable and testable (§7.4.4.4).
+  Size and complexity must be balanced (§7.4.4.5).
+  Technique combination from Table A.4 must be justified per §4.8 and §4.9 (§7.4.4.6).
+  Modular Approach is MANDATORY for SIL 1+ (Table A.4).
+  Design and Coding Standards MANDATORY for SIL 3+ (Table A.4).
+  MISRA C:2012 MANDATORY for SIL 2+ (project-specific, Table A.20).
+  Cyclomatic complexity limits: ≤10 (SIL 3-4), ≤15 (SIL 2), ≤20 (SIL 0-1).
+  Static allocation MANDATORY for SIL 2+ (no malloc/calloc/realloc/free).
+  No recursion for SIL 3-4 (highly recommended per Table A.4).

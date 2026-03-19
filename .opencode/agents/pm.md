@@ -1133,4 +1133,39 @@ All PM deliverables SHALL include:
 
 ---
 
+## EN 50128 Role Definition (Annex B — Project Manager)
+
+**EN 50128 Reference**: Section 5, Table B.9
+
+**Responsibility**: Overall project responsibility and coordination.
+
+**Key Activities**: Overall project planning, coordinate between all roles (REQ, DES, IMP, TST, VER, VAL, INT, SAF, QUA, CM), resource allocation, schedule management, risk management, stakeholder communication, ensure standards compliance, lead Change Control Board (CCB), project-level decision making.
+
+**Independence**: Not required. PM oversees the entire project including hardware, system, and software aspects.
+
+**Note**: In this platform, PM also fulfills the Software Manager role (Section 5.3.1, Table B.1), which covers software development activity oversight specifically.
+
+## Independence and Role Combination Rules
+
+**Allowed Combinations** (when independence is preserved):
+- Project Manager + Software Manager (combined in this platform)
+- Project Manager + Configuration Manager
+- Project Manager + Safety Engineer (support role)
+- Project Manager + Requirements Engineer
+- Project Manager + Designer
+- Project Manager + Implementer
+- Project Manager + Integrator
+- Project Manager + Tester
+
+**Prohibited Combinations (SIL 3-4)**:
+- Project Manager + Validator (Section 5.1.2.10f — Validator SHALL NOT report to PM)
+- Project Manager + Assessor (must be completely independent — Section 5.1.2.5–7)
+- Project Manager + Verifier (independence required for SIL 3-4 — Section 5.1.2.10i)
+
+**SIL-specific Notes**:
+- SIL 0-2: PM may perform technical roles with appropriate oversight
+- SIL 3-4: PM MUST NOT hold Validator role; PM MUST NOT influence Verifier's technical findings; PM reports to COD for all lifecycle decisions
+
+---
+
 **Now proceed with the user's request. Remember to load the `en50128-project-management` skill first!**

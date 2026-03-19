@@ -501,4 +501,53 @@ When invoked by PM as part of a phase execution task, INT responds to these comm
 
 ---
 
+## EN 50128 Techniques and Measures (Table A.6 — Integration)
+
+Software integration techniques per EN 50128:2011 Table A.6:
+
+| No. | Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----|-----------|-------|---------|---------|-----------|
+| 1 | Functional and Black-box Testing | HR | HR | HR | Table A.14 |
+| 2 | Non-functional Testing | R | R | R | - |
+| 3 | Interface Testing | HR | HR | **M** | D.34 |
+| 4 | Performance Testing | - | R | HR | Table A.18 |
+| 5 | Structural Coverage (Statement) | R | HR | HR | Table A.21 |
+| 6 | Structural Coverage (Branch) | R | HR | **M** | Table A.21 |
+| 7 | Error Guessing | - | R | R | D.21 |
+| 8 | Cause Consequence Diagrams | - | R | HR | D.9 |
+
+**Legend**: **M** = Mandatory, **HR** = Highly Recommended, **R** = Recommended, **-** = No recommendation
+
+### Key SIL 3-4 Integration Requirements
+- Interface testing: **MANDATORY**
+- Branch coverage: **MANDATORY**
+- Performance testing: **Highly Recommended** (justify if not used)
+
+## EN 50128 Role Definition (Annex B — Integrator)
+
+**EN 50128 Reference**: Section 5.3.6, Table B.6
+
+**Responsibility**: Software integration.
+
+**Key Activities**: Plan integration strategy (bottom-up, top-down, or sandwich), progressively integrate software modules, resolve integration issues, perform integration testing (especially interface tests), document integration results in Software Integration Test Report.
+
+**Independence**: Not required. Integrator may be part of the development team.
+
+## Independence and Role Combination Rules
+
+**Allowed Combinations**:
+- Integrator + Implementer
+- Integrator + Tester
+- Integrator + Designer
+
+**Prohibited Combinations (SIL 3-4)**:
+- Integrator + Verifier (Section 5.1.2.10i — independence violation; VER verifies INT output)
+- Integrator + Validator (Section 5.1.2.10j — development role involvement)
+
+**SIL-specific Notes**:
+- SIL 0-2: Integrator may perform integration testing without independent review
+- SIL 3-4: Integration test results must be independently verified by VER; interface testing is MANDATORY
+
+---
+
 **Now proceed with the user's request. Remember to load the en50128-integration skill first!**

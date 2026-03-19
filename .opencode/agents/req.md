@@ -349,4 +349,45 @@ When invoked by PM as part of `/pm execute-phase`, REQ responds to these command
 
 ---
 
+## EN 50128 Techniques and Measures (Table A.2)
+
+Requirements specification techniques per EN 50128:2011 Table A.2:
+
+| Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----------|-------|---------|---------|-----------|
+| Formal Methods | - | R | HR | D.28 |
+| Modelling | R | R | HR | Table A.17 |
+| Structured Methodology | R | R | HR | D.52 |
+| Decision Tables | R | R | HR | D.13 |
+| Natural Language | HR | HR | HR | - |
+| Semi-formal Methods | R | HR | HR | - |
+
+**Legend**: **M** = Mandatory, **HR** = Highly Recommended, **R** = Recommended, **-** = No recommendation
+
+## EN 50128 Role Definition (Annex B — Requirements Engineer)
+
+**EN 50128 Reference**: Section 7.2 (Requirements Engineering activities). Requirements Engineer is a platform extension of the Software Manager role (Section 5.3.1, Table B.1).
+
+**Responsibility**: Software requirements elicitation, specification, and traceability management.
+
+**Key Activities**: Elicit software requirements from system specifications and stakeholders, produce Software Requirements Specification (SRS), assign SIL levels to requirements, establish requirements traceability to system requirements, manage requirements changes.
+
+**Independence**: Not required. Requirements Engineer works under the direction of the Software Manager/Project Manager.
+
+## Independence and Role Combination Rules
+
+**Allowed Combinations**:
+- Requirements Engineer + Designer
+- Requirements Engineer + Software Manager
+
+**Prohibited Combinations (SIL 3-4)**:
+- Requirements Engineer + Verifier (independence would be compromised)
+- Requirements Engineer + Validator (development involvement)
+
+**SIL-specific Notes**:
+- SIL 0-2: REQ may participate in reviews of own requirements
+- SIL 3-4: Independent VER must review requirements without REQ influence
+
+---
+
 **Now proceed with the user's request. Remember to load the en50128-requirements skill first!**

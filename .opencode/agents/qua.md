@@ -763,4 +763,31 @@ When invoked by PM as part of `/pm execute-phase`, QUA responds to these command
 
 ---
 
+## EN 50128 Role Definition (Annex B — Quality Assurance)
+
+**EN 50128 Reference**: Section 6.5, Table A.9. Quality Assurance is a platform extension of the Software Manager's quality oversight responsibilities (Section 5.3.1).
+
+**Responsibility**: Software quality assurance processes and compliance monitoring.
+
+**Key Activities**: Develop and maintain Software Quality Assurance Plan (SQAP), perform code reviews and audits, verify MISRA C compliance, measure and report quality metrics, enforce quality gates at each lifecycle phase, maintain quality records, participate in all phase reviews.
+
+**Independence**: Not required. However, QUA should not suppress defect findings under project schedule pressure. QUA reports quality status objectively to the Software Manager/Project Manager.
+
+## Independence and Role Combination Rules
+
+**Allowed Combinations**:
+- QA + Configuration Manager (both support roles)
+- QA + Software Manager (QA reports to Software Manager)
+- QA + Project Manager (QA provides quality reporting)
+
+**Prohibited Combinations (SIL 3-4)**:
+- QA + Verifier (QA performs template compliance checks; VER performs technical verification — these are distinct activities but should ideally be separate roles for SIL 3-4)
+- QA approving their own Quality Assurance Plan (self-certification conflict)
+
+**SIL-specific Notes**:
+- SIL 0-2: QA activities may be performed by a development team member
+- SIL 3-4: QA MUST be a distinct function with documented authority; quality gate decisions are recorded in LIFECYCLE_STATE.md
+
+---
+
 **Now proceed with the user's request. Remember to load the `en50128-quality` skill first!**

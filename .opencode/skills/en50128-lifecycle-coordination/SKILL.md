@@ -38,7 +38,7 @@ metadata:
 
 ### V-Model Structure
 
-The EN 50128 V-Model is MANDATORY for SIL 2-4 projects:
+The EN 50128 V-Model is highly recommended per §5.3, Figures 3–4; alternative lifecycle models are permissible per §5.3.2.14 with appropriate justification:
 
 ```
 System Requirements ────────────────────► System Validation
@@ -76,12 +76,13 @@ Implementation ─────────────────────�
 | 0. Initialization | Project creation | Planning | - |
 | 1. Planning | Initialization | Requirements | CM, QUA setup |
 | 2. Requirements | Planning | Design | SAF (hazards), VER, QUA |
-| 3. Design | Requirements | Implementation | VER, QUA, SAF (design review) |
-| 4. Implementation | Design | Integration | VER (static), QUA (code review), TST (unit) |
-| 5. Integration | Implementation | Validation | VER, QUA, TST (integration) |
-| 6. Validation | Integration | Assessment/Deployment | VER, QUA, TST (system) |
-| 7. Assessment | Validation (SIL 3-4) | Deployment | ASR (independent) |
-| 8. Deployment | Validation or Assessment | Maintenance | CM, VER |
+| 3. Design | Requirements | Component Design | VER, QUA, SAF (design review) |
+| 4. Component Design | Design | Implementation | VER, QUA |
+| 5. Implementation | Component Design | Integration | VER (static), QUA (code review), TST (unit) |
+| 6. Integration | Implementation | Validation | VER, QUA, TST (integration) |
+| 7. Validation | Integration | Assessment/Deployment | VER, QUA, TST (system) |
+| 8. Assessment | Validation (SIL 1-4) | Deployment | ASR (independent) |
+| 9. Deployment | Validation or Assessment | Maintenance | CM, VER |
 
 ### Parallel Activities (All Phases)
 
@@ -145,12 +146,7 @@ Each phase gate has:
 
 **Purpose**: Verify project foundation established
 
-**Deliverables (Annex C Table C.1)**:
-- [ ] Software Quality Assurance Plan (SQAP)
-- [ ] Software Quality Assurance Verification Report
-- [ ] Software Configuration Management Plan (SCMP)
-- [ ] Software Verification Plan (SVP)
-- [ ] Software Validation Plan (SVaP)
+**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 1: Planning (Annex C items 1–5).
 
 **Quality Criteria**:
 - [ ] All planning documents approved
@@ -181,12 +177,7 @@ Each phase gate has:
 
 **Purpose**: Verify requirements complete, unambiguous, testable, traceable
 
-**Deliverables (Annex C Table C.1)**:
-- [ ] Software Requirements Specification (SRS)
-- [ ] Overall Software Test Specification
-- [ ] Software Requirements Verification Report
-- [ ] Requirements Traceability Matrix (RTM)
-- [ ] Hazard Log (if applicable)
+**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 2: Requirements (Annex C items 6–8).
 
 **Requirements Quality**:
 - [ ] All requirements unambiguous (no undefined terms, clear meaning)
@@ -226,15 +217,9 @@ Each phase gate has:
 
 **Purpose**: Verify architecture and design complete, modular, traceable
 
-**Deliverables (Annex C Table C.1)**:
-- [ ] Software Architecture Specification (SAS)
-- [ ] Software Design Specification (SDS)
-- [ ] Software Interface Specifications
-- [ ] Software Integration Test Specification
-- [ ] Software/Hardware Integration Test Specification
-- [ ] Software Architecture and Design Verification Report
-- [ ] Software Component Design Specification
-- [ ] Software Component Test Specification
+**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 3: Architecture & Design (Annex C items 9–14) and Phase 4: Component Design (Annex C items 15–17).
+
+> Note: Component Design Specification and Component Test Specification (items 15–16) are Phase 4 deliverables listed here for gate awareness; they are formally required by the Phase 4 gate.
 
 **Architecture Quality**:
 - [ ] Modular design (MANDATORY for SIL 2+)
@@ -280,15 +265,29 @@ Each phase gate has:
 
 ---
 
-### Phase 4 Gate: Implementation & Testing Complete
+### Phase 4 Gate: Component Design Complete
+
+**Purpose**: Verify detailed component designs and component test specifications are complete and approved
+
+**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 4: Component Design (Annex C items 15–17).
+
+**Design Quality**:
+- [ ] Component design traceable to Software Design Specification
+- [ ] Component test strategies defined (test cases traceable to component requirements)
+- [ ] Complexity limits respected per SIL (≤10 SIL 3-4, ≤15 SIL 2, ≤20 SIL 0-1)
+
+**SIL-Specific**:
+- **SIL 0-1**: Component designs recommended
+- **SIL 2**: Component designs highly recommended; VER review highly recommended
+- **SIL 3-4**: Component designs, test specs, and VER report MANDATORY
+
+---
+
+### Phase 5 Gate: Implementation & Testing Complete
 
 **Purpose**: Verify code complete, MISRA C compliant, tested, coverage adequate
 
-**Deliverables (Annex C Table C.1)**:
-- [ ] Software Source Code and Supporting Documentation
-- [ ] Software Source Code Verification Report
-- [ ] Software Component Test Report
-- [ ] Software Component Design Verification Report
+**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 5: Implementation & Testing (Annex C items 18–20).
 
 **Code Quality (C-Specific)**:
 - [ ] MISRA C:2012 compliance (MANDATORY for SIL 2+):
@@ -351,14 +350,11 @@ Each phase gate has:
 
 ---
 
-### Phase 5 Gate: Integration Complete
+### Phase 6 Gate: Integration Complete
 
 **Purpose**: Verify components integrated, interfaces tested, performance adequate
 
-**Deliverables (Annex C Table C.1)**:
-- [ ] Software Integration Test Report
-- [ ] Software/Hardware Integration Test Report
-- [ ] Software Integration Verification Report
+**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 6: Integration (Annex C items 21–22).
 
 **Integration Activities**:
 - [ ] Integration strategy executed (bottom-up, top-down, or sandwich)
@@ -399,14 +395,11 @@ Each phase gate has:
 
 ---
 
-### Phase 6 Gate: Validation Complete
+### Phase 7 Gate: Validation Complete
 
 **Purpose**: Verify software meets requirements, customer acceptance obtained
 
-**Deliverables (Annex C Table C.1)**:
-- [ ] Overall Software Test Report
-- [ ] Software Validation Report
-- [ ] Tools Validation Report (if applicable)
+**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 7: Validation (Annex C items 23–27).
 
 **Validation Testing**:
 - [ ] Overall Software Test Specification executed completely
@@ -446,15 +439,13 @@ Each phase gate has:
 
 ---
 
-### Phase 7 Gate: Assessment Complete (SIL 3-4 Only)
+### Phase 8 Gate: Assessment Complete (SIL 1-4)
 
 **Purpose**: Independent assessment by Assessor, safety case approved
 
-**Deliverables (Annex C Table C.1)**:
-- [ ] Software Assessment Plan
-- [ ] Software Assessment Report
+**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 8: Assessment (Annex C items 45–46).
 
-**Independence (SIL 3-4)**:
+**Independence (SIL 1-4)**:
 - [ ] Assessment performed by independent Assessor
 - [ ] Assessor independent from supplier (or Safety Authority discretion)
 - [ ] Assessor independent from project
@@ -479,22 +470,17 @@ Each phase gate has:
 - [ ] All Safety Authority comments addressed
 
 **SIL-Specific**:
-- **SIL 0-2**: Assessment optional
+- **SIL 0**: Assessment exempt per §6.4.1.2
+- **SIL 1-2**: Assessment MANDATORY per §6.4.1.1 and §5.1.2.4
 - **SIL 3-4**: Assessment MANDATORY, independent Assessor MANDATORY
 
 ---
 
-### Phase 8 Gate: Deployment Complete
+### Phase 9 Gate: Deployment Complete
 
 **Purpose**: Software deployed, maintenance established
 
-**Deliverables (Annex C Table C.1)**:
-- [ ] Software Release and Deployment Plan
-- [ ] Software Deployment Manual
-- [ ] Release Notes
-- [ ] Deployment Records
-- [ ] Deployment Verification Report
-- [ ] Software Maintenance Plan
+**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 9: Deployment (Annex C items 36–40) and Phase 10: Maintenance (Annex C items 41–44).
 
 **Release Package**:
 - [ ] Release package complete (executable, libraries, configuration, documentation)
@@ -516,7 +502,7 @@ Each phase gate has:
 
 **Configuration Management**:
 - [ ] Final release baselined (version tagged in repository)
-- [ ] Baseline 7 established
+- [ ] Baseline 8 established
 - [ ] Traceability complete from requirements to deployed code
 - [ ] All artifacts archived for future reference
 
@@ -555,19 +541,19 @@ System Req → Software Req → Architecture → Design → Code → Unit Test �
 - [ ] Backward: All design modules → architecture → requirements
 - [ ] No orphan design modules
 
-**Phase 4 (Implementation)**:
+**Phase 5 (Implementation)**:
 - [ ] Forward: All design modules → source files
 - [ ] Forward: All source files → unit tests
 - [ ] Backward: All source files → design
 - [ ] Backward: All unit tests → requirements
 - [ ] No untested source files
 
-**Phase 5 (Integration)**:
+**Phase 6 (Integration)**:
 - [ ] Forward: All components → integration tests
 - [ ] Backward: All integration tests → requirements
 - [ ] Interface coverage complete
 
-**Phase 6 (Validation)**:
+**Phase 7 (Validation)**:
 - [ ] Forward: All requirements → system tests
 - [ ] Backward: All system tests → requirements
 - [ ] Forward: All system tests → validation results
@@ -589,18 +575,7 @@ COD SHALL detect and report:
 
 ### Annex C Document Control Summary
 
-EN 50128 Annex C Table C.1 defines document control by phase:
-
-| Phase | Documents | Written By | 1st Check | 2nd Check |
-|-------|-----------|------------|-----------|-----------|
-| **Planning** | SQAP, SCMP, SVP, SVaP | Various | VER | VAL |
-| **Requirements** | SRS, Test Spec | REQ, TST | VER | VAL |
-| **Design** | SAS, SDS, Interfaces | DES | VER | VAL |
-| **Implementation** | Source Code, Reports | IMP, VER | VER | VAL |
-| **Integration** | Integration Reports | INT | VER | VAL |
-| **Validation** | Validation Report | VAL | VER | - |
-| **Assessment** | Assessment Report | ASR | VER | - |
-| **Deployment** | Deployment Docs | Various | VER | VAL |
+See [`DELIVERABLES.md`](../../../DELIVERABLES.md) for the complete Annex C Table C.1 document control summary (all phases, document names, author roles, and check columns).
 
 ### Document Approval Workflow
 
@@ -617,11 +592,12 @@ EN 50128 Annex C Table C.1 defines document control by phase:
 | **Baseline 0** | Planning | SQAP, SCMP, SVP, SVaP | Planning gate passed |
 | **Baseline 1** | Requirements | SRS, RTM, Test Specs | Requirements gate passed |
 | **Baseline 2** | Design | SAS, SDS, Interfaces | Design gate passed |
-| **Baseline 3** | Implementation | Source Code, Unit Tests | Implementation gate passed |
-| **Baseline 4** | Integration | Integration Tests, Reports | Integration gate passed |
-| **Baseline 5** | Validation | Validation Report | Validation gate passed |
-| **Baseline 6** | Assessment | Assessment Report | Assessment gate passed (SIL 3-4) |
-| **Baseline 7** | Deployment | Release Package | Deployment complete |
+| **Baseline 3** | Component Design | Component Design Specs, Component Test Specs | Component Design gate passed |
+| **Baseline 4** | Implementation | Source Code, Unit Tests | Implementation gate passed |
+| **Baseline 5** | Integration | Integration Tests, Reports | Integration gate passed |
+| **Baseline 6** | Validation | Validation Report | Validation gate passed |
+| **Baseline 7** | Assessment | Assessment Report | Assessment gate passed (SIL 1-4) |
+| **Baseline 8** | Deployment | Release Package | Deployment complete |
 
 ---
 
@@ -699,11 +675,12 @@ After iteration:
 | **1. Planning** | PM | QUA, CM, VER, VAL, SAF | CM, QUA |
 | **2. Requirements** | REQ | SAF, TST | VER, VAL, QUA, CM |
 | **3. Design** | DES | INT, SAF | VER, VAL, QUA, CM |
-| **4. Implementation** | IMP | TST, SAF | VER, QUA, CM |
-| **5. Integration** | INT | TST | VER, VAL, QUA, CM |
-| **6. Validation** | VAL | TST | VER, QUA, CM |
-| **7. Assessment** | ASR (external) | VER | CM |
-| **8. Deployment** | PM | CM | VER, VAL, CM |
+| **4. Component Design** | DES | TST | VER, QUA, CM |
+| **5. Implementation** | IMP | TST, SAF | VER, QUA, CM |
+| **6. Integration** | INT | TST | VER, VAL, QUA, CM |
+| **7. Validation** | VAL | TST | VER, QUA, CM |
+| **8. Assessment** | ASR (external) | VER | CM |
+| **9. Deployment** | PM | CM | VER, VAL, CM |
 
 ### Agent Handoff Protocol
 
@@ -764,11 +741,12 @@ Each project SHALL have `LIFECYCLE_STATE.md` in project root:
 | 1. Planning | Complete | 2026-02-10 | 2026-02-10 | 2026-02-10 | All plans approved |
 | 2. Requirements | Complete | 2026-02-10 | 2026-02-15 | 2026-02-15 | 42 requirements |
 | 3. Design | In Progress | 2026-02-15 | - | - | 8/8 deliverables |
-| 4. Implementation | Not Started | - | - | - | - |
-| 5. Integration | Not Started | - | - | - | - |
-| 6. Validation | Not Started | - | - | - | - |
-| 7. Assessment | Not Started | - | - | - | Required for SIL 3 |
-| 8. Deployment | Not Started | - | - | - | - |
+| 4. Component Design | Not Started | - | - | - | - |
+| 5. Implementation | Not Started | - | - | - | - |
+| 6. Integration | Not Started | - | - | - | - |
+| 7. Validation | Not Started | - | - | - | - |
+| 8. Assessment | Not Started | - | - | - | Required for SIL 3 |
+| 9. Deployment | Not Started | - | - | - | - |
 
 ## Deliverable Status
 
@@ -829,7 +807,7 @@ Each project SHALL have `LIFECYCLE_STATE.md` in project root:
 2. Finalize Integration Test Specification (INT)
 3. Perform design verification (VER)
 4. Generate Architecture and Design Verification Report (VER)
-5. Run /cod gate-check design
+5. Run @cod gate-check design
 ```
 
 ---
@@ -846,7 +824,7 @@ This skill includes **4 comprehensive workflows** (~300 pages, ~12,000 lines) in
 
 **Content**:
 - **Gate Structure**: Entry criteria, exit criteria, deliverables, quality metrics, traceability, verification, gate decision
-- **8 Complete Phase Gates**: Planning (0/1), Requirements (2), Design (3), Implementation (4), Integration (5), Validation (6), Assessment (7, SIL 3-4), Deployment (8)
+- **8 Complete Phase Gates**: Planning (1), Requirements (2), Design (3), Component Design (4), Implementation (5), Integration (6), Validation (7), Assessment (8, SIL 1-4), Deployment (9)
 - **SIL-Dependent Enforcement**: Advisory (SIL 0-1), Semi-strict (SIL 2), Strict (SIL 3-4)
 - **Python Gate Checker**: Complete gate validation script (~400 lines) with automated criteria checking
 - **Tool Integration**: `workspace.py trace`, `workspace.py wf` examples for each gate
@@ -862,7 +840,7 @@ This skill includes **4 comprehensive workflows** (~300 pages, ~12,000 lines) in
 **Usage**:
 ```bash
 # Check if phase is ready for gate
-/cod gate-check requirements
+@cod gate-check requirements
 
 # COD validates:
 # ✓ Software Requirements Specification (SRS) complete
@@ -899,7 +877,7 @@ This skill includes **4 comprehensive workflows** (~300 pages, ~12,000 lines) in
 - **Complete Example**: Full SIL 3 project lifecycle from initialization through deployment
 
 **Key Features**:
-- **8 Phase Definitions**: Planning, Requirements, Design, Implementation, Integration, Validation, Assessment (SIL 3-4), Deployment
+- **9 Phase Definitions**: Planning, Requirements, Design, Component Design, Implementation, Integration, Validation, Assessment (SIL 1-4), Deployment
 - **Agent Orchestration**: COD coordinates 12 agents (REQ, DES, IMP, TST, INT, VER, VAL, SAF, QUA, CM, PM, ASR)
 - **Parallel Activities**: CM (version control), QUA (reviews), VER (verification), SAF (hazard analysis) run throughout
 - **State Management**: LIFECYCLE_STATE.md tracks current phase, deliverables, metrics, agent status, gate history
@@ -908,7 +886,7 @@ This skill includes **4 comprehensive workflows** (~300 pages, ~12,000 lines) in
 **Usage**:
 ```bash
 # Initialize phase
-/cod init-phase design --sil 3
+@cod init-phase design --sil 3
 
 # COD checks:
 # ✓ Previous phase (requirements) complete
@@ -920,7 +898,7 @@ This skill includes **4 comprehensive workflows** (~300 pages, ~12,000 lines) in
 # Status: IN_PROGRESS
 
 # Execute phase with progress tracking
-/cod execute-phase design
+@cod execute-phase design
 
 # COD orchestrates:
 # - DES creates Software Architecture Specification (SAS)
@@ -933,7 +911,7 @@ This skill includes **4 comprehensive workflows** (~300 pages, ~12,000 lines) in
 # Progress: 75% (3/4 deliverables complete)
 
 # Transition to next phase
-/cod transition-phase --from design --to implementation
+@cod transition-phase --from design --to implementation
 
 # COD validates:
 # ✓ Design phase complete (100%)
@@ -1150,7 +1128,7 @@ workspace.py trace validate --sil 3
 **Usage** (SIL 3 requirements iteration):
 ```bash
 # STEP 1: VAL detects missing requirement
-/val validate-system
+@val validate-system
 # Output: ❌ System Test Failed: TEST-SYS-025 (missing requirement for audible alert)
 
 # STEP 2: VAL creates change request
@@ -1173,7 +1151,7 @@ python3 tools/cr_impact_analyzer.py \
 # Safety Approval: APPROVED (SAF)
 
 # STEP 5: COD authorizes iteration
-/cod start-iteration \
+@cod start-iteration \
   --cr-id CR-DOOR-0001 \
   --trigger-phase validation \
   --target-phase requirements \
@@ -1202,14 +1180,14 @@ python3 tools/regression_test_selector.py --sil 3 --rtm-file rtm.md --output tes
 # Result: 25/25 PASS
 
 # STEP 11: VER verifies, VAL validates
-/ver verify-iteration --iteration-id ITER-001
+@ver verify-iteration --iteration-id ITER-001
 # Result: APPROVED (traceability 100%, coverage 100%)
 
-/val validate-iteration --iteration-id ITER-001
+@val validate-iteration --iteration-id ITER-001
 # Result: APPROVED (TEST-SYS-025 now PASS)
 
 # STEP 12: COD completes iteration
-/cod complete-iteration --iteration-id ITER-001
+@cod complete-iteration --iteration-id ITER-001
 
 # COD updates LIFECYCLE_STATE.md:
 # iterations:
@@ -1420,7 +1398,7 @@ workspace.py wf request-gate-check \
   --requestor "REQ Agent"
 
 # COD performs gate check
-/cod gate-check requirements
+@cod gate-check requirements
 
 # Record gate decision
 workspace.py wf record-gate-decision \
@@ -1524,7 +1502,7 @@ This skill provides complete coverage of EN 50128 lifecycle management requireme
 | 10 | Traceability | R | HR | **M** | **RTM Management Workflow** |
 
 **Key Requirements Covered**:
-- **V-Model Structure** (Section 5.3): MANDATORY SIL 2-4, implemented in V-Model Orchestration Workflow
+- **V-Model Structure** (Section 5.3): Highly recommended per §5.3, Figures 3–4; alternative models permissible per §5.3.2.14; implemented in V-Model Orchestration Workflow
 - **Iterations** (Section 5.3.2.2): "The lifecycle model shall take into account the possibility of iterations in and between phases" - implemented in Iteration and Change Management Workflow
 - **Phase Planning** (Section 5.3.2.5): "All activities to be performed during a phase shall be defined and planned prior to commencement" - implemented in V-Model Orchestration Workflow (phase initialization)
 - **Traceability** (Section 5.3.2.7): "For each document, traceability shall be provided" - implemented in RTM Management Workflow (bidirectional traceability with 100% coverage SIL 3-4)
@@ -1548,16 +1526,11 @@ This skill provides complete coverage of EN 50128 lifecycle management requireme
 3. Traceability and RTM: 1,481 lines (~59 pages)
 4. Iteration and Change Management: 1,543 lines (~62 pages)
 
-**Before/After Comparison**:
-- **Before Phase 2**: 849 lines (basic SKILL.md with phase gate checklists)
-- **After Phase 2**: ~1,300 lines SKILL.md + 6,850 lines workflows = **8,150 lines total** (~13,750 lines with Python scripts)
-- **Growth**: 860% increase in skill content
-
 ---
 
 ## References
 
-- **EN 50128:2011 Section 5.3** - Software Lifecycle (V-Model MANDATORY SIL 2-4)
+- **EN 50128:2011 Section 5.3** - Software Lifecycle (V-Model highly recommended per §5.3, Figures 3–4; alternative models permissible per §5.3.2.14)
 - **EN 50128:2011 Section 5.3.2.2** - Iterations ("shall take into account the possibility of iterations")
 - **EN 50128:2011 Section 5.3.2.5** - Phase Planning ("activities shall be defined and planned prior to commencement")
 - **EN 50128:2011 Section 5.3.2.7** - Traceability ("traceability shall be provided")

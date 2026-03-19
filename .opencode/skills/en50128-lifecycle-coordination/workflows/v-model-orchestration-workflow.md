@@ -27,7 +27,7 @@
 
 ### EN 50128 V-Model Overview
 
-The EN 50128 V-Model is **MANDATORY** for SIL 2-4 projects (Section 5.3.2.1).
+The EN 50128 V-Model is **highly recommended** for SIL 2-4 projects (Section 5.3, Figures 3–4); alternative lifecycle models are permissible per §5.3.2.14 with appropriate justification.
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
@@ -106,7 +106,7 @@ Phase 0 (Initialization)
   └─ SAF (Safety) - Phases 2-6
 ```
 
-**Critical**: Phases MUST execute in sequence (no skipping) for SIL 2-4. SIL 0-1 may use advisory mode.
+**Note**: Phases MUST execute in sequence (no skipping) when following the V-Model. SIL 0-1 may use advisory mode; alternative lifecycle models require documented justification per §5.3.2.14.
 
 ---
 
@@ -149,7 +149,7 @@ Before initializing phase, COD verifies:
 
 ```bash
 # User runs gate check
-/cod gate-check requirements
+@cod gate-check requirements
 
 # COD response:
 # ✓ PASSED
@@ -223,9 +223,9 @@ def initialize_design_phase(project):
       - Component Test Specification
     
     Next Steps:
-      1. /des - Begin architecture and design
-      2. /int - Create integration test specifications
-      3. When complete: /cod gate-check design
+      1. @des - Begin architecture and design
+      2. @int - Create integration test specifications
+      3. When complete: @cod gate-check design
     """)
     
     # 7. Begin monitoring phase activities
@@ -381,7 +381,7 @@ COD provides periodic progress updates:
 
 ```bash
 # User checks status
-/cod status
+@cod status
 
 # COD response (example - Design phase in progress)
 ═══════════════════════════════════════════════════════
@@ -430,7 +430,7 @@ Next Steps:
   2. Finalize Integration Test Specification (INT)
   3. Perform design verification (VER)
   4. Generate Architecture and Design Verification Report (VER)
-  5. When complete: /cod gate-check design
+  5. When complete: @cod gate-check design
 ```
 
 ---
@@ -447,7 +447,7 @@ Authorize transition from one phase to the next after successful gate check.
 ┌────────────────────────────────────────────────────┐
 │ PHASE TRANSITION WORKFLOW                          │
 ├────────────────────────────────────────────────────┤
-│ 1. Gate check executed (/cod gate-check <phase>)   │
+│ 1. Gate check executed (@cod gate-check <phase>)   │
 │ 2. COD verifies exit criteria                      │
 │ 3. If PASSED:                                      │
 │    a. Establish baseline (if applicable)           │
@@ -538,9 +538,9 @@ Required Actions:
   2. Refactor handle_emergency() to reduce complexity ≤ 10
 
 Recommended approach:
-  /des              # Refactor design
-  /ver              # Verify refactored design
-  /cod gate-check design
+  @des              # Refactor design
+  @ver              # Verify refactored design
+  @cod gate-check design
 
 Current Phase: Architecture & Design (BLOCKED)
 ```
@@ -576,10 +576,10 @@ Artifacts Available:
   - docs/test/Overall-Test-Spec.md (Overall Test Specification)
 
 Next Steps:
-  1. /des - Create Software Architecture Specification (SAS)
-  2. /des - Create Software Design Specification (SDS)
-  3. /int - Create Integration Test Specifications
-  4. When complete: /cod gate-check design
+  1. @des - Create Software Architecture Specification (SAS)
+  2. @des - Create Software Design Specification (SDS)
+  3. @int - Create Integration Test Specifications
+  4. When complete: @cod gate-check design
 ```
 
 ---
@@ -745,7 +745,7 @@ COD synchronizes agents at key points:
 2. Finalize Integration Test Specification (INT)
 3. Perform design verification (VER)
 4. Generate Architecture and Design Verification Report (VER)
-5. Run /cod gate-check design
+5. Run @cod gate-check design
 ```
 
 ### LIFECYCLE_STATE.md Update Triggers
@@ -1328,7 +1328,7 @@ if __name__ == '__main__':
 #### Initialization
 
 ```bash
-$ /cod plan --sil 3 --project train_door_control
+$ @cod plan --sil 3 --project train_door_control
 ```
 
 **COD Output**:
@@ -1352,7 +1352,7 @@ Lifecycle Phases:
 
 Next Steps:
   1. Begin Phase 1 (Planning)
-  2. When planning complete: /cod gate-check planning
+  2. When planning complete: @cod gate-check planning
 
 Current Phase: Planning
 ```
@@ -1361,12 +1361,12 @@ Current Phase: Planning
 
 ```bash
 # PM coordinates planning
-$ /pm
+$ @pm execute-phase 1
 
 # (PM creates SQAP, SCMP, SVP, SVaP with QUA, CM, VER, VAL)
 
 # Gate check
-$ /cod gate-check planning
+$ @cod gate-check planning
 ```
 
 **COD Output**:
@@ -1418,7 +1418,7 @@ Approve requirements activity? [Y/n]
 # TST creates Overall Test Spec
 
 # Check status
-$ /cod status
+$ @cod status
 ```
 
 **COD Output**:
@@ -1436,7 +1436,7 @@ Deliverables:
 
 ```bash
 # Gate check
-$ /cod gate-check requirements
+$ @cod gate-check requirements
 ```
 
 **COD Output**:
@@ -1501,7 +1501,7 @@ This workflow provides:
 
 **EN 50128 References**:
 - Section 5.3: Software Lifecycle
-- Section 5.3.2: Lifecycle Model (V-Model MANDATORY SIL 2-4)
+- Section 5.3.2: Lifecycle Model (V-Model highly recommended SIL 2-4; alternatives permissible per §5.3.2.14)
 - Section 5.3.2.1: V-Model structure
 - Section 5.3.2.2: Lifecycle iterations
 - Annex C Table C.1: Document Control Summary

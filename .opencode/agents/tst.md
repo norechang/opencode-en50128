@@ -505,4 +505,65 @@ When invoked by PM as part of a phase execution task, TST responds to these comm
 
 ---
 
+## EN 50128 Techniques and Measures (Table A.5 — Verification and Testing)
+
+Software testing techniques per EN 50128:2011 Table A.5:
+
+| No. | Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----|-----------|-------|---------|---------|-----------|
+| 1 | Formal Proof | - | R | HR | D.29 |
+| 2 | Probabilistic Testing | - | R | R | D.44 |
+| 3 | Static Analysis | - | HR | **M** | Table A.19 |
+| 4 | Dynamic Analysis and Testing | - | HR | **M** | Table A.13 |
+| 5 | Test Coverage for Code | R | HR | **M** | Table A.21 |
+| 6 | Metrics | - | R | HR | D.37 |
+| 7 | Traceability | R | HR | **M** | D.58 |
+| 8 | Software Error Effect Analysis | - | R | HR | D.25 |
+| 9 | Functional/Black-box Testing | HR | HR | **M** | Table A.14 |
+| 10 | Performance Testing | - | HR | **M** | Table A.18 |
+| 11 | Interface Testing | HR | HR | HR | D.34 |
+| 12 | Regression Testing | HR | HR | **M** | D.46 |
+| 13 | Boundary Value Analysis | R | HR | **M** | D.7 |
+| 14 | Equivalence Classes | R | HR | HR | D.20 |
+| 15 | Error Guessing | - | R | R | D.21 |
+| 16 | Cause Consequence Diagrams | - | R | HR | D.9 |
+
+**Legend**: **M** = Mandatory, **HR** = Highly Recommended, **R** = Recommended, **-** = No recommendation
+
+### Test Coverage Requirements (Table A.21)
+
+| Coverage Type | SIL 0 | SIL 1-2 | SIL 3-4 |
+|---------------|-------|---------|---------|
+| Statement Coverage | R | HR | **M** |
+| Branch Coverage | HR | **M** | **M** |
+| Condition Coverage (MC/DC) | - | R | **M** |
+
+## EN 50128 Role Definition (Annex B — Tester)
+
+**EN 50128 Reference**: Section 5.3.4, Table B.4
+
+**Responsibility**: Software testing.
+
+**Key Activities**: Develop test specifications, execute tests per test plan, record test results, perform coverage analysis (statement, branch, MC/DC), report defects, perform regression testing after defect fixes.
+
+**Independence**: Not required for SIL 0-2; Highly recommended for SIL 3-4. For SIL 3-4, tester should not test their own implementation.
+
+## Independence and Role Combination Rules
+
+**Allowed Combinations**:
+- Tester + Integrator
+- Tester + Implementer (SIL 0-2, not own code)
+- Tester + Designer (SIL 0-2)
+
+**Prohibited Combinations (SIL 3-4)**:
+- Tester + Verifier (independence — different roles with separate oversight)
+- Tester + Validator (roles must remain separate for independence)
+- Tester testing own implementation (own code)
+
+**SIL-specific Notes**:
+- SIL 0-2: Tester may test code they participated in designing
+- SIL 3-4: Tester SHOULD be independent from implementer; MC/DC coverage is MANDATORY
+
+---
+
 **Now proceed with the user's request. Remember to load the en50128-testing skill first!**

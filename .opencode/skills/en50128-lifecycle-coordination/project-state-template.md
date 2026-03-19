@@ -82,11 +82,12 @@
 | 1. Planning | [Not Started / In Progress / Complete] | - | - | - | - |
 | 2. Requirements | [Not Started / In Progress / Complete] | - | - | - | - |
 | 3. Architecture & Design | [Not Started / In Progress / Complete] | - | - | - | - |
-| 4. Implementation & Testing | [Not Started / In Progress / Complete] | - | - | - | - |
-| 5. Integration | [Not Started / In Progress / Complete] | - | - | - | - |
-| 6. Validation | [Not Started / In Progress / Complete] | - | - | - | - |
-| 7. Assessment | [Not Started / In Progress / Complete / Not Required] | - | - | - | Required for SIL 3-4 |
-| 8. Deployment | [Not Started / In Progress / Complete] | - | - | - | - |
+| 4. Component Design | [Not Started / In Progress / Complete] | - | - | - | - |
+| 5. Implementation & Testing | [Not Started / In Progress / Complete] | - | - | - | - |
+| 6. Integration | [Not Started / In Progress / Complete] | - | - | - | - |
+| 7. Validation | [Not Started / In Progress / Complete] | - | - | - | - |
+| 8. Assessment | [Not Started / In Progress / Complete / Not Required] | - | - | - | Mandatory for SIL 1-4; SIL 0 exempt |
+| 9. Deployment | [Not Started / In Progress / Complete] | - | - | - | - |
 
 ---
 
@@ -228,7 +229,24 @@
 
 ---
 
-### Phase 4: Implementation & Testing
+### Phase 4: Component Design
+
+**Documents** (per Annex C Table C.1):
+- [ ] Software Component Design Specification - phase-4-component-design/Software-Component-Design-Specification.md
+  - Status: [not_started / draft / complete / verified / validated / approved / rejected]
+  - PM: [date or -] VER: [date or -] VAL: [date or -] COD: [date or -]
+
+**Component Design Activities**:
+- [ ] Detailed component interfaces defined
+- [ ] Data flow between components documented
+- [ ] Component state machines defined (where applicable)
+- [ ] Component design reviewed and verified
+
+**Phase Status**: [Not Started / In Progress / Complete]
+
+---
+
+### Phase 5: Implementation & Testing
 
 **Documents** (per Annex C Table C.1):
 - [ ] Software Source Code and Supporting Documentation - phase-4-implementation/src/
@@ -282,7 +300,7 @@
 
 ---
 
-### Phase 5: Integration
+### Phase 6: Integration
 
 **Documents** (per Annex C Table C.1):
 - [ ] Software Integration Test Report - phase-6-integration/reports/Software-Integration-Test-Report.md
@@ -312,7 +330,7 @@
 
 ---
 
-### Phase 6: Validation
+### Phase 7: Validation
 
 **Documents** (per Annex C Table C.1):
 - [ ] Overall Software Test Report - phase-7-validation/Overall-Software-Test-Report.md
@@ -352,7 +370,7 @@
 
 ---
 
-### Phase 7: Assessment (SIL 3-4 Only)
+### Phase 8: Assessment (Mandatory SIL 1-4; SIL 0 Exempt)
 
 **Documents** (per Annex C Table C.1):
 - [ ] Software Assessment Plan - phase-8-assessment/Software-Assessment-Plan.md
@@ -363,7 +381,7 @@
   - Assessor: [date or -] Safety Authority: [date or -] COD: [date or -]
   - Note: Independent Assessor approval required (not PM/VER/VAL)
 
-**Independence (SIL 3-4)**:
+**Independence (SIL 1-4)**:
 - [ ] Independent Assessor assigned
 - [ ] Assessor independent from supplier
 - [ ] Assessor independent from project
@@ -390,7 +408,7 @@
 
 ---
 
-### Phase 8: Deployment
+### Phase 9: Deployment
 
 **Documents** (per Annex C Table C.1):
 - [ ] Software Release and Deployment Plan - phase-9-deployment/Software-Release-Deployment-Plan.md
@@ -569,12 +587,13 @@ This section tracks all status transitions for deliverables through the approval
 |----------|------------------|-------|---------|-----|----------|
 | Baseline 0 | - | Planning | - | - | Planning documents |
 | Baseline 1 | - | Requirements | - | - | SRS, RTM, Test Specs |
-| Baseline 2 | - | Design | - | - | SAS, SDS, Interfaces |
-| Baseline 3 | - | Implementation | - | - | Source Code, Unit Tests |
-| Baseline 4 | - | Integration | - | - | Integration Tests |
-| Baseline 5 | - | Validation | - | - | Validation Report |
-| Baseline 6 | - | Assessment | - | - | Assessment Report |
-| Baseline 7 | - | Deployment | - | - | Release Package |
+| Baseline 2 | - | Architecture & Design | - | - | SAS, SDS, Interfaces |
+| Baseline 3 | - | Component Design | - | - | Component Design Specification |
+| Baseline 4 | - | Implementation | - | - | Source Code, Unit Tests |
+| Baseline 5 | - | Integration | - | - | Integration Tests |
+| Baseline 6 | - | Validation | - | - | Validation Report |
+| Baseline 7 | - | Assessment | - | - | Assessment Report |
+| Baseline 8 | - | Deployment | - | - | Release Package |
 
 ---
 
@@ -615,7 +634,7 @@ This section tracks all status transitions for deliverables through the approval
 ### Ready for Gate Check?
 **Status**: [Yes / No / Pending]  
 **Gate**: [Phase name]  
-**Command**: `/cod gate-check [phase]`
+**Command**: `@cod gate-check [phase]`
 
 ---
 

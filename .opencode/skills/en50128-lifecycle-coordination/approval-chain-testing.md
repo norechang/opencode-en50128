@@ -26,7 +26,7 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
 
 **Command**:
 ```bash
-/cod pm-update-deliverables SQAP=complete
+@cod pm-update-deliverables SQAP=complete
 ```
 
 **Expected Behavior**:
@@ -40,14 +40,14 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
   ✓ SQAP marked as 'complete' by PM
   
   Next step: Independent Verifier (VER) must verify this deliverable.
-  Command: /cod ver-update-deliverables SQAP=verified
+  Command: @cod ver-update-deliverables SQAP=verified
   ```
 
 ### Step 2: VER verifies SQAP
 
 **Command**:
 ```bash
-/cod ver-update-deliverables SQAP=verified
+@cod ver-update-deliverables SQAP=verified
 ```
 
 **Expected Behavior**:
@@ -62,14 +62,14 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
   ✓ SQAP marked as 'verified' by VER
   
   Next step: Independent Validator (VAL) must validate this deliverable (SIL 3 requirement).
-  Command: /cod val-update-deliverables SQAP=validated
+  Command: @cod val-update-deliverables SQAP=validated
   ```
 
 ### Step 3: VAL validates SQAP
 
 **Command**:
 ```bash
-/cod val-update-deliverables SQAP=validated
+@cod val-update-deliverables SQAP=validated
 ```
 
 **Expected Behavior**:
@@ -85,14 +85,14 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
   
   Deliverable ready for COD final approval.
   When all Planning phase deliverables are validated, PM can request gate check:
-  Command: /cod pm-report-planning-complete
+  Command: @cod pm-report-planning-complete
   ```
 
 ### Step 4: PM reports planning complete (triggers gate check)
 
 **Command**:
 ```bash
-/cod pm-report-planning-complete
+@cod pm-report-planning-complete
 ```
 
 **Expected Behavior**:
@@ -133,7 +133,7 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
 
 **Command**:
 ```bash
-/cod pm-update-deliverables SCMP=verified
+@cod pm-update-deliverables SCMP=verified
 ```
 
 **Expected Behavior**:
@@ -153,7 +153,7 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
   - complete (ready for verification)
   
   To verify SCMP, the independent Verifier must use:
-  Command: /cod ver-update-deliverables SCMP=verified
+  Command: @cod ver-update-deliverables SCMP=verified
   ```
 
 ---
@@ -164,7 +164,7 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
 
 **Command**:
 ```bash
-/cod pm-update-deliverables SVP=validated
+@cod pm-update-deliverables SVP=validated
 ```
 
 **Expected Behavior**:
@@ -183,7 +183,7 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
   - complete (ready for verification)
   
   To validate SVP, the independent Validator must use:
-  Command: /cod val-update-deliverables SVP=validated
+  Command: @cod val-update-deliverables SVP=validated
   ```
 
 ---
@@ -194,7 +194,7 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
 
 **Command**:
 ```bash
-/cod ver-update-deliverables SVaP=verified
+@cod ver-update-deliverables SVaP=verified
 ```
 
 **Expected Behavior**:
@@ -209,8 +209,8 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
   Verification requires deliverable to be marked as 'complete' by PM first.
   
   Required workflow:
-  1. PM marks as complete: /cod pm-update-deliverables SVaP=complete
-  2. VER verifies: /cod ver-update-deliverables SVaP=verified
+  1. PM marks as complete: @cod pm-update-deliverables SVaP=complete
+  2. VER verifies: @cod ver-update-deliverables SVaP=verified
   
   Current status: draft
   Required status: complete
@@ -224,7 +224,7 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
 
 **Command**:
 ```bash
-/cod val-update-deliverables SQAP=validated
+@cod val-update-deliverables SQAP=validated
 ```
 
 **Expected Behavior**:
@@ -239,9 +239,9 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
   For SIL 3-4 projects, validation requires deliverable to be 'verified' by independent VER first.
   
   Required workflow:
-  1. PM marks as complete: /cod pm-update-deliverables SQAP=complete ✓ (done)
-  2. VER verifies: /cod ver-update-deliverables SQAP=verified (required next)
-  3. VAL validates: /cod val-update-deliverables SQAP=validated
+  1. PM marks as complete: @cod pm-update-deliverables SQAP=complete ✓ (done)
+  2. VER verifies: @cod ver-update-deliverables SQAP=verified (required next)
+  3. VAL validates: @cod val-update-deliverables SQAP=validated
   
   Current status: complete
   Required status: verified
@@ -255,7 +255,7 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
 
 **Command**:
 ```bash
-/cod ver-update-deliverables SCMP=rejected --reason "Section 3.2 missing baseline procedures, Section 4.1 has incomplete tool list"
+@cod ver-update-deliverables SCMP=rejected --reason "Section 3.2 missing baseline procedures, Section 4.1 has incomplete tool list"
 ```
 
 **Expected Behavior**:
@@ -280,8 +280,8 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
   Next steps:
   1. PM coordinates with CM to address VER findings
   2. CM updates SCMP to resolve issues
-  3. PM marks as complete again: /cod pm-update-deliverables SCMP=complete
-  4. VER re-verifies: /cod ver-update-deliverables SCMP=verified
+  3. PM marks as complete again: @cod pm-update-deliverables SCMP=complete
+  4. VER re-verifies: @cod ver-update-deliverables SCMP=verified
   
   Issue ISS-001 created and assigned to PM.
   ```
@@ -294,7 +294,7 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
 
 **Command**:
 ```bash
-/cod val-update-deliverables SVP=rejected --reason "Test coverage requirements unclear for SIL 3, static analysis tool qualification not addressed"
+@cod val-update-deliverables SVP=rejected --reason "Test coverage requirements unclear for SIL 3, static analysis tool qualification not addressed"
 ```
 
 **Expected Behavior**:
@@ -322,9 +322,9 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
   Next steps:
   1. PM coordinates with VER to address VAL findings
   2. VER updates SVP to resolve issues
-  3. PM marks as complete: /cod pm-update-deliverables SVP=complete
-  4. VER re-verifies: /cod ver-update-deliverables SVP=verified
-  5. VAL re-validates: /cod val-update-deliverables SVP=validated
+  3. PM marks as complete: @cod pm-update-deliverables SVP=complete
+  4. VER re-verifies: @cod ver-update-deliverables SVP=verified
+  5. VAL re-validates: @cod val-update-deliverables SVP=validated
   
   Issue ISS-002 created and assigned to PM for coordination.
   ```
@@ -344,7 +344,7 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
 
 **Command**:
 ```bash
-/cod pm-report-planning-complete
+@cod pm-report-planning-complete
 ```
 
 **Expected Behavior**:
@@ -367,22 +367,22 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
   Required Actions:
   
   1. SCMP:
-     - VER must verify: /cod ver-update-deliverables SCMP=verified
-     - Then VAL must validate: /cod val-update-deliverables SCMP=validated
+     - VER must verify: @cod ver-update-deliverables SCMP=verified
+     - Then VAL must validate: @cod val-update-deliverables SCMP=validated
   
   2. SVP:
-     - VAL must validate: /cod val-update-deliverables SVP=validated
+     - VAL must validate: @cod val-update-deliverables SVP=validated
   
   3. SVaP:
-     - PM must mark complete: /cod pm-update-deliverables SVaP=complete
-     - Then VER must verify: /cod ver-update-deliverables SVaP=verified
-     - Then VAL must validate: /cod val-update-deliverables SVaP=validated
+     - PM must mark complete: @cod pm-update-deliverables SVaP=complete
+     - Then VER must verify: @cod ver-update-deliverables SVaP=verified
+     - Then VAL must validate: @cod val-update-deliverables SVaP=validated
   
   4. SQAP-Verification:
      - Document must be created
-     - PM must mark complete: /cod pm-update-deliverables SQAP-Verification=complete
-     - Then VER must verify: /cod ver-update-deliverables SQAP-Verification=verified
-     - Then VAL must validate: /cod val-update-deliverables SQAP-Verification=validated
+     - PM must mark complete: @cod pm-update-deliverables SQAP-Verification=complete
+     - Then VER must verify: @cod ver-update-deliverables SQAP-Verification=verified
+     - Then VAL must validate: @cod val-update-deliverables SQAP-Verification=validated
   
   Phase transition BLOCKED until all approval chains complete.
   Criteria met: 1 / 5
@@ -402,7 +402,7 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
 
 **Command**:
 ```bash
-/cod gate-check planning
+@cod gate-check planning
 ```
 
 **Expected Behavior**:
@@ -427,8 +427,8 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
   - Independent validation (VAL) recommended for SIL 1 (Table A.7)
   
   Recommendations:
-  1. Consider adding VER verification: /cod ver-update-deliverables <deliverable>=verified
-  2. Consider adding VAL validation: /cod val-update-deliverables <deliverable>=validated
+  1. Consider adding VER verification: @cod ver-update-deliverables <deliverable>=verified
+  2. Consider adding VAL validation: @cod val-update-deliverables <deliverable>=validated
   
   Phase transition ALLOWED (advisory mode).
   Criteria met: 4 / 4 (mandatory)
@@ -445,7 +445,7 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
 
 **Command**:
 ```bash
-/cod pm-update-deliverables SQAP=complete SCMP=complete SVP=complete SVaP=complete
+@cod pm-update-deliverables SQAP=complete SCMP=complete SVP=complete SVaP=complete
 ```
 
 **Expected Behavior**:
@@ -463,7 +463,7 @@ The approval chain enforces independence requirements (EN 50128 Section 5.1.2) b
   Next step: Independent Verifier (VER) must verify all deliverables.
   
   Commands:
-  /cod ver-update-deliverables SQAP=verified SCMP=verified SVP=verified SVaP=verified
+  @cod ver-update-deliverables SQAP=verified SCMP=verified SVP=verified SVaP=verified
   
   Or verify individually as reviews complete.
   ```
@@ -556,10 +556,10 @@ For each deliverable in current phase:
 
 ## Related Files
 
-- `.opencode/commands/cod.md` - COD command definitions
-- `.opencode/commands/pm.md` - PM command definitions and authority restrictions
-- `.opencode/commands/ver.md` - VER command definitions and independence requirements
-- `.opencode/commands/val.md` - VAL command definitions and independence requirements
+- `.opencode/agents/cod.md` - COD agent definitions
+- `.opencode/agents/pm.md` - PM agent definitions and authority restrictions
+- `.opencode/agents/ver.md` - VER agent definitions and independence requirements
+- `.opencode/agents/val.md` - VAL agent definitions and independence requirements
 - `.opencode/skills/en50128-lifecycle-coordination/project-state-template.md` - LIFECYCLE_STATE.md template
 - `examples/train_door_control2/LIFECYCLE_STATE.md` - Live project state (test target)
 

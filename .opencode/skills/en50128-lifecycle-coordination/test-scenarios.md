@@ -33,7 +33,7 @@ This document defines comprehensive test scenarios for the **Lifecycle Coordinat
 cd examples/test_project_sil3/
 
 # 2. Initialize COD
-/cod plan --sil 3 --project test_project_sil3
+@cod plan --sil 3 --project test_project_sil3
 ```
 
 **Expected Results**:
@@ -68,7 +68,7 @@ cd examples/test_project_sil3/
 **Test Steps** (for each SIL):
 ```bash
 cd examples/test_sil{0..4}/
-/cod plan --sil {0..4} --project test_sil{0..4}
+@cod plan --sil {0..4} --project test_sil{0..4}
 # Verify LIFECYCLE_STATE.md enforcement mode
 ```
 
@@ -86,12 +86,12 @@ cd examples/test_sil{0..4}/
 **Test Steps**:
 ```bash
 cd examples/test_project_sil3/
-/cod plan --sil 3 --project test_project_sil3
+@cod plan --sil 3 --project test_project_sil3
 ```
 
 **Expected Results**:
 - ❌ COD responds: "ERROR: LIFECYCLE_STATE.md already exists for test_project_sil3. Project already initialized."
-- ❌ COD suggests: "Use `/cod status` to view current state or delete LIFECYCLE_STATE.md to re-initialize."
+- ❌ COD suggests: "Use `@cod status` to view current state or delete LIFECYCLE_STATE.md to re-initialize."
 - ✅ Existing LIFECYCLE_STATE.md NOT modified
 
 **Pass Criteria**: COD blocks re-initialization and preserves existing state.
@@ -111,7 +111,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Initialize project
-/cod plan --sil 3 --project test_gate_sil3
+@cod plan --sil 3 --project test_gate_sil3
 
 # 2. Attempt to invoke requirements WITHOUT completing planning
 /req
@@ -129,7 +129,7 @@ cd examples/test_project_sil3/
   ❌ SVaP not approved
   ```
 - ❌ `/req` NOT executed
-- ✅ COD suggests: "Complete planning deliverables and run `/cod gate-check planning` before proceeding."
+- ✅ COD suggests: "Complete planning deliverables and run `@cod gate-check planning` before proceeding."
 
 **Pass Criteria**: COD blocks out-of-sequence activity for SIL 3.
 
@@ -146,7 +146,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Initialize project
-/cod plan --sil 1 --project test_gate_sil1
+@cod plan --sil 1 --project test_gate_sil1
 
 # 2. Attempt to invoke requirements WITHOUT completing planning
 /req
@@ -174,7 +174,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Initialize project
-/cod plan --sil 2 --project test_gate_sil2
+@cod plan --sil 2 --project test_gate_sil2
 
 # 2. Attempt to invoke requirements WITHOUT completing planning
 /req
@@ -208,7 +208,7 @@ cd examples/test_project_sil3/
 # 2. Update LIFECYCLE_STATE.md to mark deliverables complete
 
 # 3. Request gate check
-/cod gate-check planning
+@cod gate-check planning
 ```
 
 **Expected Results**:
@@ -236,7 +236,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Request requirements gate check without user approval
-/cod gate-check requirements
+@cod gate-check requirements
 ```
 
 **Expected Results**:
@@ -272,7 +272,7 @@ cd examples/test_project_sil3/
 # (Code has 5 mandatory violations)
 
 # 2. Request gate check
-/cod gate-check implementation
+@cod gate-check implementation-testing
 ```
 
 **Expected Results**:
@@ -298,7 +298,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Request gate check with incomplete coverage
-/cod gate-check implementation
+@cod gate-check implementation-testing
 ```
 
 **Expected Results**:
@@ -329,7 +329,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Request validation gate check
-/cod gate-check validation
+@cod gate-check validation
 ```
 
 **Expected Results**:
@@ -356,7 +356,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Request assessment gate check
-/cod gate-check assessment
+@cod gate-check assessment
 ```
 
 **Expected Results**:
@@ -473,7 +473,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. COD performs validation gate independence check
-/cod gate-check validation
+@cod gate-check validation
 ```
 
 **Expected Results**:
@@ -498,7 +498,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Request assessment gate check
-/cod gate-check assessment
+@cod gate-check assessment
 ```
 
 **Expected Results**:
@@ -524,7 +524,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Request implementation gate check
-/cod gate-check implementation
+@cod gate-check implementation-testing
 ```
 
 **Expected Results**:
@@ -554,7 +554,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Request requirements gate check
-/cod gate-check requirements
+@cod gate-check requirements
 ```
 
 **Expected Results**:
@@ -593,7 +593,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Request design gate check
-/cod gate-check design
+@cod gate-check design
 ```
 
 **Expected Results**:
@@ -627,7 +627,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Request assessment gate check
-/cod gate-check assessment
+@cod gate-check assessment
 ```
 
 **Expected Results**:
@@ -648,7 +648,7 @@ cd examples/test_project_sil3/
 
 ### Test 6.1: Status Check - Early Phase
 
-**Objective**: Verify `/cod status` displays accurate project state early in lifecycle.
+**Objective**: Verify `@cod status` displays accurate project state early in lifecycle.
 
 **Preconditions**:
 - Project initialized: SIL 3, Phase 2 (Requirements)
@@ -658,7 +658,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Request status
-/cod status
+@cod status
 ```
 
 **Expected Results**:
@@ -704,7 +704,7 @@ cd examples/test_project_sil3/
 
 **Test Steps**:
 ```bash
-/cod status
+@cod status
 ```
 
 **Expected Results**:
@@ -728,7 +728,7 @@ cd examples/test_project_sil3/
 
 **Test Steps**:
 ```bash
-/cod status
+@cod status
 ```
 
 **Expected Results**:
@@ -786,7 +786,7 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # 1. Attempt design gate check without updating traceability
-/cod gate-check design
+@cod gate-check design
 ```
 
 **Expected Results**:
@@ -812,7 +812,7 @@ cd examples/test_project_sil3/
 
 **Test Steps**:
 ```bash
-/cod plan --sil 5 --project test_invalid
+@cod plan --sil 5 --project test_invalid
 ```
 
 **Expected Results**:
@@ -829,11 +829,11 @@ cd examples/test_project_sil3/
 
 **Test Steps**:
 ```bash
-/cod gate-check coding
+@cod gate-check coding
 ```
 
 **Expected Results**:
-- ❌ COD responds: "ERROR: Invalid phase 'coding'. Valid phases: planning, requirements, design, implementation, integration, validation, assessment"
+- ❌ COD responds: "ERROR: Invalid phase 'coding'. Valid phases: planning, requirements, design, component-design, implementation-testing, integration, validation, assessment, deployment"
 
 **Pass Criteria**: COD validates phase names.
 
@@ -848,11 +848,11 @@ cd examples/test_project_sil3/
 
 **Test Steps**:
 ```bash
-/cod gate-check planning
+@cod gate-check planning
 ```
 
 **Expected Results**:
-- ❌ COD responds: "ERROR: No lifecycle state found. Initialize project first with `/cod plan --sil [0-4] --project [name]`"
+- ❌ COD responds: "ERROR: No lifecycle state found. Initialize project first with `@cod plan --sil [0-4] --project [name]`"
 
 **Pass Criteria**: COD requires initialization before operations.
 
@@ -868,7 +868,7 @@ cd examples/test_project_sil3/
 
 **Test Steps**:
 ```bash
-/cod gate-check design
+@cod gate-check design
 ```
 
 **Expected Results**:
@@ -889,53 +889,53 @@ cd examples/test_project_sil3/
 **Test Steps**:
 ```bash
 # Phase 0: Initialization
-/cod plan --sil 3 --project complete_test
+@cod plan --sil 3 --project complete_test
 
 # Phase 1: Planning
-/pm   # Project setup
-/cm   # Config management
-/qua  # Quality assurance
-/cod gate-check planning
+@pm   # Project setup
+@cm   # Config management
+@qua  # Quality assurance
+@cod gate-check planning
 # Expected: ✅ PASSED
 
 # Phase 2: Requirements
-/req  # User approval: Y
+@req  # User approval: Y
 # Complete SRS, RTM, Hazard Log
-/cod gate-check requirements
+@cod gate-check requirements
 # Expected: ✅ PASSED
 
 # Phase 3: Design
 /des
 # Complete SAS, SDS, ICD
-/cod gate-check design
+@cod gate-check design
 # Expected: ✅ PASSED
 
 # Phase 4: Implementation
 /imp
 # Complete code, unit tests (100% coverage)
-/cod gate-check implementation
+@cod gate-check implementation-testing
 # Expected: ✅ PASSED
 
 # Phase 5: Integration
 /int
 # Complete integration tests
-/cod gate-check integration
+@cod gate-check integration
 # Expected: ✅ PASSED
 
 # Phase 6: Validation
-/val  # Independent validator
+@val  # Independent validator
 # Complete validation tests, UAT
-/cod gate-check validation
+@cod gate-check validation
 # Expected: ✅ PASSED (with independence check)
 
 # Phase 7: Assessment
-/qua  # Assessment
+@qua  # Assessment
 # Independent assessor review
-/cod gate-check assessment
+@cod gate-check assessment
 # Expected: ✅ PASSED (deployment authorized)
 
 # Status Check
-/cod status
+@cod status
 # Expected: All gates PASSED, 100% complete
 ```
 
@@ -975,19 +975,19 @@ cd examples/test_project_sil3/
 ```bash
 # Project 1: SIL 3
 cd examples/project1_sil3/
-/cod plan --sil 3 --project project1_sil3
-/cod status
+@cod plan --sil 3 --project project1_sil3
+@cod status
 # Expected: project1_sil3 state
 
 # Project 2: SIL 2
 cd examples/project2_sil2/
-/cod plan --sil 2 --project project2_sil2
-/cod status
+@cod plan --sil 2 --project project2_sil2
+@cod status
 # Expected: project2_sil2 state (different from project1)
 
 # Return to Project 1
 cd examples/project1_sil3/
-/cod status
+@cod status
 # Expected: project1_sil3 state (unchanged)
 ```
 

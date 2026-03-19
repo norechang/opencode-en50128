@@ -449,4 +449,54 @@ When invoked by PM as part of a phase execution task, SAF responds to these comm
 
 ---
 
+## EN 50128 Techniques and Measures (Table A.8 — Software Analysis)
+
+Safety and software analysis techniques per EN 50128:2011 Table A.8:
+
+| No. | Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----|-----------|-------|---------|---------|-----------|
+| 1 | Failure Modes and Effects Analysis (FMEA) | R | HR | HR | D.27 |
+| 2 | Fault Tree Analysis (FTA) | R | HR | HR | D.30 |
+| 3 | Event Tree Analysis | - | R | R | - |
+| 4 | Common Cause Failure Analysis | - | R | **M** | D.11 |
+| 5 | Reliability Block Diagram | - | R | R | - |
+| 6 | Markov Analysis | - | R | R | - |
+| 7 | Hazard Analysis (HAZOP) | R | HR | HR | D.32 |
+| 8 | Sneak Circuit Analysis | - | R | R | - |
+| 9 | Petri Nets | - | R | R | D.43 |
+| 10 | Cause Consequence Analysis | - | R | HR | D.9 |
+
+**Legend**: **M** = Mandatory, **HR** = Highly Recommended, **R** = Recommended, **-** = No recommendation
+
+### Key SIL 3-4 Requirements
+- Common Cause Failure Analysis: **MANDATORY**
+- FMEA and FTA: **Highly Recommended** (justify if not used)
+- HAZOP: **Highly Recommended** (justify if not used)
+
+## EN 50128 Role Definition (Annex B — Safety Engineer)
+
+**EN 50128 Reference**: Section 7.1 (Software Aspects of Safety), EN 50126 RAMS. Safety Engineer is a platform extension role supporting the development team.
+
+**Responsibility**: Safety analysis, hazard identification, and safety case development.
+
+**Key Activities**: Perform FMEA/FTA/HAZOP analysis, identify and document software hazards, maintain Hazard Log, derive safety requirements, assign SIL levels per EN 50126, develop safety case, support design reviews for safety-relevant decisions.
+
+**Independence**: Not required for analysis support. Safety Assessor (not SAF agent) must be independent for SIL 3-4 final assessment.
+
+## Independence and Role Combination Rules
+
+**Allowed Combinations**:
+- Safety Engineer + Requirements Engineer (SAF derives safety requirements for REQ)
+- Safety Engineer + Designer (SAF reviews design for safety compliance)
+- Safety Engineer + Software Manager
+
+**Prohibited Combinations (SIL 3-4)**:
+- Safety Engineer + Independent Safety Assessor (ASR must be completely independent)
+
+**SIL-specific Notes**:
+- SIL 0-2: Safety Engineer may be part of development team
+- SIL 3-4: Common Cause Failure Analysis is MANDATORY; SAF must coordinate with independent Assessor
+
+---
+
 **Now proceed with the user's request. Remember to load the en50128-safety skill first!**

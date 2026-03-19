@@ -383,4 +383,57 @@ REJECT: Issues found → return defect list, block release
 
 ---
 
+## EN 50128 Techniques and Measures (Table A.7 — Overall Software Testing/Validation)
+
+Validation techniques per EN 50128:2011 Table A.7:
+
+| No. | Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----|-----------|-------|---------|---------|-----------|
+| 1 | Functional and Black-box Testing | HR | HR | **M** | Table A.14 |
+| 2 | Performance Testing | - | HR | **M** | Table A.18 |
+| 3 | Modelling | - | R | R | Table A.17 |
+| 4 | Regression Testing | HR | HR | **M** | D.46 |
+| 5 | User Interface Testing | HR | HR | HR | - |
+| 6 | Boundary Value Analysis | R | HR | **M** | D.7 |
+| 7 | Equivalence Classes | R | HR | HR | D.20 |
+
+**Legend**: **M** = Mandatory, **HR** = Highly Recommended, **R** = Recommended, **-** = No recommendation
+
+### Key SIL 3-4 Validation Requirements
+- System testing in target environment: **MANDATORY**
+- Functional/Black-box testing: **MANDATORY**
+- Performance testing: **MANDATORY**
+- Regression testing: **MANDATORY**
+- Boundary value analysis: **MANDATORY**
+
+## EN 50128 Role Definition (Annex B — Validator)
+
+**EN 50128 Reference**: Section 5.3.7, Table B.7
+
+**Responsibility**: Software validation.
+
+**Key Activities**: Plan validation activities (Software Validation Plan), perform system testing in target environment, conduct acceptance testing, validate operational scenarios, obtain customer/safety authority acceptance, issue Software Validation Report with agree/disagree recommendation for release.
+
+**Independence**: Not required for SIL 0-1; Highly recommended for SIL 2; **MANDATORY for SIL 3-4**. For SIL 3-4, validator MUST NOT be involved in development activities AND MUST NOT report to Project Manager.
+
+## Independence and Role Combination Rules
+
+**Allowed Combinations**:
+- Validator + Verifier (Section 5.1.2.10e — Verifier may report to Validator; VMGR role)
+
+**Prohibited Combinations (SIL 3-4)**:
+- Validator + Project Manager (Section 5.1.2.10f — reporting independence violated)
+- Validator + Designer (Section 5.1.2.10j — development role involvement)
+- Validator + Implementer (Section 5.1.2.10j — development role involvement)
+- Validator + Integrator (Section 5.1.2.10j — development role involvement)
+- Validator + Tester (Section 5.1.2.10j — development role involvement)
+- Validator + Requirements Manager (Section 5.1.2.10j — development role involvement)
+
+**SIL-specific Notes**:
+- SIL 0-1: Validator may be part of the development organization
+- SIL 2: Independent validation is highly recommended
+- SIL 3-4: Validator MUST be organizationally independent; Validator's decision (agree/disagree for release) CANNOT be overridden by PM or COD (Section 5.1.2.8)
+
+---
+
 **Now proceed with the user's request. Remember to load the en50128-validation skill first!**

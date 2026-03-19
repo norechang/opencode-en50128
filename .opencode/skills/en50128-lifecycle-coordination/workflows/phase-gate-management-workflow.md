@@ -68,7 +68,7 @@ Each gate has standardized structure:
 ### Gate Check Command
 
 ```bash
-/cod gate-check <phase>
+@cod gate-check <phase>
 ```
 
 **Phases**:
@@ -437,9 +437,9 @@ Required Actions:
        Update RTM: SYS-025 → SWR-043
 
 Recommended approach:
-  /req              # Add missing requirement SWR-043
+  @req              # Add missing requirement SWR-043
   workspace.py trace validate --phase requirements
-  /cod gate-check requirements
+  @cod gate-check requirements
 
 Current Phase: Requirements (BLOCKED)
 ```
@@ -1002,10 +1002,10 @@ Required Actions:
   3. Execute new tests and re-measure coverage
 
 Recommended approach:
-  /tst              # Add missing unit tests
+  @tst              # Add missing unit tests
   make test-coverage
-  /ver              # Verify coverage now 100%
-  /cod gate-check implementation
+  @ver              # Verify coverage now 100%
+  @cod gate-check implementation
 
 Current Phase: Implementation & Testing (BLOCKED)
 ```
@@ -1410,7 +1410,7 @@ Next Phase: Assessment (Phase 7)
 
 Independent assessment by Assessor confirms EN 50128 process compliance and safety case adequacy.
 
-**Note**: Assessment is **MANDATORY** for SIL 3-4, **Optional** for SIL 0-2.
+**Note**: Assessment is **MANDATORY** for SIL 1-4, **exempt** for SIL 0 (per §6.4.1.1 and §6.4.1.2).
 
 ### Entry Criteria
 
@@ -1418,7 +1418,7 @@ Independent assessment by Assessor confirms EN 50128 process compliance and safe
 - All lifecycle documents complete
 - Safety case complete
 
-### Exit Criteria (SIL 3-4 MANDATORY)
+### Exit Criteria (SIL 1-4 MANDATORY)
 
 1. **Assessment Documents Complete**:
    - [ ] Software Assessment Plan
@@ -2126,7 +2126,7 @@ workspace.py trace validate --phase validation --check-coverage 100
 #### Phase 0: Initialization
 
 ```bash
-/cod plan --sil 3 --project train_door_control
+@cod plan --sil 3 --project train_door_control
 # LIFECYCLE_STATE.md created
 # Current Phase: Planning
 ```
@@ -2135,7 +2135,7 @@ workspace.py trace validate --phase validation --check-coverage 100
 
 ```bash
 # PM coordinates planning
-/pm
+@pm execute-phase 1
 
 # Create planning documents
 # - SQAP (QUA)
@@ -2144,7 +2144,7 @@ workspace.py trace validate --phase validation --check-coverage 100
 # - SVaP (VAL)
 
 # Gate check
-/cod gate-check planning
+@cod gate-check planning
 # Result: ✓ PASSED
 # Baseline 0 established
 # Transition to Requirements
@@ -2163,14 +2163,14 @@ workspace.py trace validate --phase validation --check-coverage 100
 # TST creates Overall Test Spec
 
 # Gate check
-/cod gate-check requirements
+@cod gate-check requirements
 # Result: ✗ BLOCKED (1 system requirement not covered)
 
 # Fix: Add SWR-043
-/req  # Add missing requirement
+@req  # Add missing requirement
 
 # Gate check retry
-/cod gate-check requirements
+@cod gate-check requirements
 # Result: ✓ PASSED
 # Baseline 1 established
 # Transition to Design
@@ -2183,14 +2183,14 @@ workspace.py trace validate --phase validation --check-coverage 100
 /des
 
 # Gate check
-/cod gate-check design
+@cod gate-check design
 # Result: ✗ BLOCKED (Complexity violation: process_command = 15, limit: 10)
 
 # Fix: Refactor design
-/des  # Reduce complexity
+@des  # Reduce complexity
 
 # Gate check retry
-/cod gate-check design
+@cod gate-check design
 # Result: ✓ PASSED (Max CCN: 9)
 # Baseline 2 established
 # Transition to Implementation
@@ -2212,14 +2212,14 @@ workspace.py trace validate --phase validation --check-coverage 100
 /ver
 
 # Gate check
-/cod gate-check implementation
+@cod gate-check implementation
 # Result: ✗ BLOCKED (Coverage: branch 95%, condition 90%, need 100%)
 
 # Fix: Add tests
-/tst  # Add missing tests
+@tst  # Add missing tests
 
 # Gate check retry
-/cod gate-check implementation
+@cod gate-check implementation
 # Result: ✓ PASSED (Coverage: 100%/100%/100%)
 # Baseline 3 established
 # Transition to Integration
@@ -2235,7 +2235,7 @@ workspace.py trace validate --phase validation --check-coverage 100
 /tst
 
 # Gate check
-/cod gate-check integration
+@cod gate-check integration
 # Result: ✓ PASSED
 # Baseline 4 established
 # Transition to Validation
@@ -2248,7 +2248,7 @@ workspace.py trace validate --phase validation --check-coverage 100
 /val
 
 # Gate check
-/cod gate-check validation
+@cod gate-check validation
 # Result: ✓ PASSED (100% requirements validated)
 # Baseline 5 established
 # Transition to Assessment (SIL 3 required)
@@ -2263,7 +2263,7 @@ workspace.py trace validate --phase validation --check-coverage 100
 # Assessor creates Assessment Report
 
 # Gate check
-/cod gate-check assessment
+@cod gate-check assessment
 # Result: ✓ PASSED
 # Baseline 6 established
 # Transition to Deployment
@@ -2273,13 +2273,13 @@ workspace.py trace validate --phase validation --check-coverage 100
 
 ```bash
 # PM deploys software
-/pm
+@pm execute-phase 8
 
 # CM establishes baseline 7
-/cm
+@cm baseline deployment
 
 # Gate check
-/cod gate-check deployment
+@cod gate-check deployment
 # Result: ✓ PASSED
 # Baseline 7 established
 # PROJECT COMPLETE

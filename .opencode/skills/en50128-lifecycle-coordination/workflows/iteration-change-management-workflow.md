@@ -201,6 +201,7 @@ def calculate_iteration_scope(target_phase, current_phase):
         'planning',
         'requirements',
         'design',
+        'component-design',
         'implementation',
         'integration',
         'validation',
@@ -534,7 +535,7 @@ python3 tools/cr_impact_analyzer.py \
 
 ```bash
 # COD detects feedback condition
-/cod authorize-iteration --phase validation \
+@cod authorize-iteration --phase validation \
   --target-phase requirements \
   --cr-id CR-PROJ-0001 \
   --reason "System testing revealed missing requirement REQ-PROJ-025"
@@ -655,7 +656,7 @@ workspace.py wf submit-document \
 
 ```bash
 # VER re-verifies all updated artifacts
-/ver verify-iteration --cr-id CR-PROJ-0001
+@ver verify-iteration --cr-id CR-PROJ-0001
 
 # VER checks:
 # - Requirements traceability complete
@@ -665,7 +666,7 @@ workspace.py wf submit-document \
 # - RTM gaps (none)
 
 # VAL re-validates system
-/val validate-iteration --cr-id CR-PROJ-0001
+@val validate-iteration --cr-id CR-PROJ-0001
 
 # VAL checks:
 # - All system tests pass
@@ -677,7 +678,7 @@ workspace.py wf submit-document \
 
 ```bash
 # COD verifies iteration complete
-/cod complete-iteration --cr-id CR-PROJ-0001
+@cod complete-iteration --cr-id CR-PROJ-0001
 
 # COD checks:
 # - All iteration scope phases re-completed
@@ -1050,7 +1051,7 @@ iterations:
 **1. Start Iteration**:
 
 ```bash
-/cod start-iteration \
+@cod start-iteration \
   --cr-id CR-PROJ-0001 \
   --trigger-phase validation \
   --target-phase requirements \
@@ -1066,7 +1067,7 @@ iterations:
 **2. Update Iteration Progress**:
 
 ```bash
-/cod update-iteration \
+@cod update-iteration \
   --iteration-id ITER-001 \
   --artifact-updated REQ-PROJ-025 \
   --action added
@@ -1079,7 +1080,7 @@ iterations:
 **3. Complete Iteration**:
 
 ```bash
-/cod complete-iteration \
+@cod complete-iteration \
   --iteration-id ITER-001 \
   --regression-tests-passed 25 \
   --traceability-validated true
@@ -1560,7 +1561,7 @@ if __name__ == '__main__':
 # ============================================
 # STEP 1: VAL detects missing requirement
 # ============================================
-/val validate-system
+@val validate-system
 
 # VAL output:
 # ❌ System Test Failed: TEST-SYS-025
@@ -1626,7 +1627,7 @@ python3 tools/cr_impact_analyzer.py \
 # ============================================
 # STEP 5: COD authorizes iteration
 # ============================================
-/cod start-iteration \
+@cod start-iteration \
   --cr-id CR-DOOR-0001 \
   --trigger-phase validation \
   --target-phase requirements \
@@ -1645,7 +1646,7 @@ python3 tools/cr_impact_analyzer.py \
 # ============================================
 # STEP 6: REQ adds new requirement
 # ============================================
-/req add-requirement
+@req add-requirement
 
 # REQ creates REQ-DOOR-025:
 # ID: REQ-DOOR-025
@@ -1672,7 +1673,7 @@ workspace.py trace link \
 # ============================================
 # STEP 7: DES designs implementation
 # ============================================
-/des design-requirement --req-id REQ-DOOR-025
+@des design-requirement --req-id REQ-DOOR-025
 
 # DES creates DES-DOOR-030:
 # Design Element: Alert Controller
@@ -1691,7 +1692,7 @@ workspace.py trace link \
 # ============================================
 # STEP 8: IMP implements code
 # ============================================
-/imp implement-design --design-id DES-DOOR-030
+@imp implement-design --design-id DES-DOOR-030
 
 # IMP creates alert_controller.c:
 # - trigger_alert() function
@@ -1720,7 +1721,7 @@ workspace.py trace link \
 # ============================================
 # STEP 9: TST executes unit tests
 # ============================================
-/tst run-unit-tests
+@tst run-unit-tests
 
 # TST output:
 # ✓ TEST-DOOR-080: test_trigger_alert_timeout() - PASS
@@ -1731,7 +1732,7 @@ workspace.py trace link \
 # ============================================
 # STEP 10: INT executes integration tests
 # ============================================
-/int run-integration-tests
+@int run-integration-tests
 
 # INT creates integration test:
 # - TEST-INT-050: Door timeout with alert integration test
@@ -1763,7 +1764,7 @@ python3 tools/regression_test_selector.py \
 # ============================================
 # STEP 12: QUA reviews iteration artifacts
 # ============================================
-/qua review-iteration --iteration-id ITER-001
+@qua review-iteration --iteration-id ITER-001
 
 # QUA reviews:
 # - SRS v1.1 (REQ-DOOR-025 added)
@@ -1777,7 +1778,7 @@ python3 tools/regression_test_selector.py \
 # ============================================
 # STEP 13: VER verifies iteration
 # ============================================
-/ver verify-iteration --iteration-id ITER-001
+@ver verify-iteration --iteration-id ITER-001
 
 # VER checks:
 # - Traceability: 100% complete
@@ -1791,7 +1792,7 @@ python3 tools/regression_test_selector.py \
 # ============================================
 # STEP 14: VAL re-validates system
 # ============================================
-/val validate-iteration --iteration-id ITER-001
+@val validate-iteration --iteration-id ITER-001
 
 # VAL re-executes system tests:
 # ✓ TEST-SYS-025: Door timeout with audible alert - PASS (WAS FAIL)
@@ -1802,7 +1803,7 @@ python3 tools/regression_test_selector.py \
 # ============================================
 # STEP 15: COD completes iteration
 # ============================================
-/cod complete-iteration --iteration-id ITER-001
+@cod complete-iteration --iteration-id ITER-001
 
 # COD checks:
 # ✓ All iteration scope phases complete
@@ -1848,7 +1849,7 @@ python3 tools/regression_test_selector.py \
 # ============================================
 # STEP 1: IMP detects interface mismatch
 # ============================================
-/imp implement-design --design-id DES-SIGNAL-015
+@imp implement-design --design-id DES-SIGNAL-015
 
 # IMP output:
 # ❌ Implementation Error: Interface mismatch
@@ -1892,7 +1893,7 @@ python3 tools/cr_impact_analyzer.py \
 # ============================================
 # STEP 5: COD authorizes iteration
 # ============================================
-/cod start-iteration \
+@cod start-iteration \
   --cr-id CR-SIGNAL-0005 \
   --trigger-phase implementation \
   --target-phase design \
@@ -1903,7 +1904,7 @@ python3 tools/cr_impact_analyzer.py \
 # ============================================
 # STEP 6: DES updates design
 # ============================================
-/des update-design --design-id DES-SIGNAL-015
+@des update-design --design-id DES-SIGNAL-015
 
 # DES modifies DES-SIGNAL-015:
 # - signal_state_t enum: 3 states → 5 states
@@ -1915,7 +1916,7 @@ python3 tools/cr_impact_analyzer.py \
 # ============================================
 # STEP 7: IMP updates code
 # ============================================
-/imp implement-design --design-id DES-SIGNAL-015
+@imp implement-design --design-id DES-SIGNAL-015
 
 # IMP modifies src/signal_interface.c:
 # - Update signal_state_t enum (5 states)
@@ -1940,8 +1941,8 @@ python3 tools/regression_test_selector.py \
 # ============================================
 # STEP 9: VER verifies, COD completes
 # ============================================
-/ver verify-iteration --iteration-id ITER-005
-/cod complete-iteration --iteration-id ITER-005
+@ver verify-iteration --iteration-id ITER-005
+@cod complete-iteration --iteration-id ITER-005
 
 # Iteration complete (duration: 2 days, effort: 20 hours)
 ```

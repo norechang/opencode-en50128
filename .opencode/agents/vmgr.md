@@ -227,4 +227,34 @@ V&V Decision: Phase 4 Implementation APPROVED
 
 ---
 
+## EN 50128 Role Definition (Annex B — V&V Manager)
+
+**EN 50128 Reference**: Section 5.1.2.10e ("Verifier can report to... Validator"). VMGR is a platform extension role that formalizes this Validator-manages-Verifier organizational structure.
+
+**Responsibility**: Independent V&V authority for SIL 3-4 projects.
+
+**Key Activities**: Manage the Verifier team (VER reports to VMGR), review and approve/reject all Verification Reports, perform Validation activities (system testing, acceptance), issue Software Validation Report with agree/disagree for release, provide V&V decision to COD for gate enforcement. VMGR decisions CANNOT be overridden by COD or PM.
+
+**Independence**: **MANDATORY for SIL 3-4**. VMGR MUST be organizationally independent from all development roles (REQ, DES, IMP, INT, TST). VMGR reports to the Safety Authority / Customer — NOT to COD or PM.
+
+## Independence and Role Combination Rules
+
+**Allowed Combinations**:
+- VMGR + Verifier (VMGR manages the VER team per Section 5.1.2.10e)
+
+**Prohibited Combinations (SIL 3-4)**:
+- VMGR + Project Manager (Section 5.1.2.10f — Validator SHALL NOT report to PM)
+- VMGR + Designer (Section 5.1.2.10j — development role involvement)
+- VMGR + Implementer (Section 5.1.2.10j — development role involvement)
+- VMGR + Integrator (Section 5.1.2.10j — development role involvement)
+- VMGR + Tester (Section 5.1.2.10j — development role involvement)
+- VMGR + Requirements Manager (Section 5.1.2.10j — development role involvement)
+- VMGR + Assessor (Assessor independently reviews VMGR's V&V output)
+
+**SIL-specific Notes**:
+- SIL 0-2: VMGR role is not needed; Verifier and Validator may be combined or part of development team
+- SIL 3-4: VMGR is MANDATORY; independence is non-negotiable; VMGR's release agree/disagree decision is final
+
+---
+
 **Now proceed with the user's request. Remember to load the en50128-validation skill first!**

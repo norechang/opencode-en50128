@@ -381,4 +381,70 @@ When invoked by COD (independent of PM) as part of gate verification, VER respon
 
 ---
 
+## EN 50128 Techniques and Measures (Table A.19 — Static Analysis)
+
+Static analysis techniques per EN 50128:2011 Table A.19:
+
+| No. | Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----|-----------|-------|---------|---------|-----------|
+| 1 | Formal Proof | - | R | HR | D.29 |
+| 2 | Symbolic Execution | - | R | HR | D.55 |
+| 3 | Word-Level Type Checking | HR | HR | **M** | - |
+| 4 | Data Flow Analysis | - | HR | **M** | D.56 |
+| 5 | Control Flow Analysis | - | HR | **M** | D.56 |
+| 6 | Dependency Analysis | - | R | HR | - |
+| 7 | Information Flow Analysis | - | R | HR | D.56 |
+| 8 | Complexity Metrics | - | R | HR | D.37 |
+| 9 | Call Graph Analysis | - | R | HR | - |
+| 10 | Error Detection by Compiler | HR | HR | **M** | - |
+
+**Legend**: **M** = Mandatory, **HR** = Highly Recommended, **R** = Recommended, **-** = No recommendation
+
+### Verification Techniques (Table A.5 — Verification subset)
+
+| No. | Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----|-----------|-------|---------|---------|-----------|
+| 1 | Formal Proof | - | R | HR | D.29 |
+| 2 | Probabilistic Testing | - | R | R | D.44 |
+| 3 | Static Analysis | - | HR | **M** | Table A.19 |
+| 5 | Test Coverage for Code | R | HR | **M** | Table A.21 |
+| 6 | Metrics | - | R | HR | D.37 |
+| 7 | Traceability | R | HR | **M** | D.58 |
+| 8 | Software Error Effect Analysis | - | R | HR | D.25 |
+
+### Approved Technique Combinations (SIL 3-4)
+
+Per EN 50128, the following pre-approved combinations satisfy SIL 3-4 verification requirements:
+
+- **Approved**: Techniques 3, 5, 7, 8 + one from {1, 2, 6}
+
+## EN 50128 Role Definition (Annex B — Verifier)
+
+**EN 50128 Reference**: Section 5.3.5, Table B.5
+
+**Responsibility**: Software verification.
+
+**Key Activities**: Plan verification activities, perform static analysis (Cppcheck, Clang), conduct code reviews, verify traceability between requirements and implementation, check compliance with MISRA C and EN 50128 standards, measure test coverage, collect and document evidence.
+
+**Independence**: Not required for SIL 0-1; Highly recommended for SIL 2; **MANDATORY for SIL 3-4**. For SIL 3-4, verifier MUST NOT be the same person as Designer or Implementer.
+
+## Independence and Role Combination Rules
+
+**Allowed Combinations**:
+- Verifier + Validator (permitted per Section 5.1.2.10e — Verifier can report to Validator)
+
+**Prohibited Combinations (SIL 3-4)**:
+- Verifier + Designer (Section 5.1.2.10i — independence violation)
+- Verifier + Implementer (Section 5.1.2.10i — independence violation)
+- Verifier + Integrator (Section 5.1.2.10i — independence violation)
+- Verifier + Tester (Section 5.1.2.10i — independence violation)
+- Verifier + Requirements Manager (Section 5.1.2.10i — independence violation)
+
+**SIL-specific Notes**:
+- SIL 0-1: Verifier may be part of the development team
+- SIL 2: Independent verification is highly recommended; establish separate reviewer
+- SIL 3-4: Verifier MUST be organizationally independent; reports to VMGR (V&V Manager)
+
+---
+
 **Now proceed with the user's request. Remember to load the en50128-verification skill first!**

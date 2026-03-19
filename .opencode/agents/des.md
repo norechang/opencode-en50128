@@ -541,4 +541,71 @@ When invoked by PM as part of a phase execution task, DES responds to these comm
 
 ---
 
+## EN 50128 Techniques and Measures (Table A.3 — Full)
+
+Software architecture and design techniques per EN 50128:2011 Table A.3:
+
+| No. | Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Reference |
+|-----|-----------|-------|---------|---------|-----------|
+| 1 | Defensive Programming | - | HR | HR | D.14 |
+| 2 | Fault Detection and Diagnosis | - | R | HR | D.26 |
+| 3 | Error Detecting and Correcting Codes | - | R | R | D.22 |
+| 4 | Failure Assertion Programming | - | R | HR | D.26 |
+| 5 | Diverse Programming | - | R | HR | D.16 |
+| 6 | Backwards Recovery | - | R | R | - |
+| 7 | Forward Recovery | - | R | R | - |
+| 8 | Retry Fault Recovery Mechanisms | - | R | R | - |
+| 9 | Memorising Executed Cases | - | R | R | - |
+| 10 | Artificial Intelligence — Fault Correction | NR | NR | NR | - |
+| 11 | Dynamic Reconfiguration | NR | NR | NR | - |
+| 12 | Graceful Degradation | - | R | HR | - |
+| 13 | Structured Methodology | R | HR | **M** | D.52 |
+| 14 | Modular Approach | HR | **M** | **M** | D.38 |
+| 15 | Fully Defined Interface | HR | HR | HR | D.38 |
+| 16 | Information Encapsulation/Abstraction | R | HR | HR | D.33 |
+| 17 | Use of Trusted/Verified Software | R | R | R | - |
+| 18 | Software Error Effect Analysis | - | R | HR | D.25 |
+| 19 | Strongly Typed Language | R | HR | HR | D.49 |
+| 20 | PDL (Program Design Language) | R | R | HR | D.42 |
+| 21 | Semi-formal Methods | R | HR | HR | - |
+| 22 | Formal Methods | - | R | HR | D.28 |
+| 23 | Performance Modelling | - | R | R | - |
+
+**Legend**: **M** = Mandatory, **HR** = Highly Recommended, **R** = Recommended, **-** = No recommendation, **NR** = Not Recommended
+
+### Approved Technique Combinations (SIL 3-4)
+
+Per EN 50128 Table A.3, the following pre-approved combinations satisfy SIL 3-4 requirements:
+
+- **Option A**: Techniques 1, 7, 19, 22 + one from {4, 5, 12, 21}
+- **Option B**: Techniques 1, 4, 19, 22 + one from {2, 5, 12, 15, 21}
+
+## EN 50128 Role Definition (Annex B — Designer)
+
+**EN 50128 Reference**: Section 5.3.2, Table B.2
+
+**Responsibility**: Software architecture and design.
+
+**Key Activities**: Create Software Architecture Specification, create Software Design Specification, define all software interfaces, apply design techniques from Table A.3, participate in design reviews, ensure design is traceable to requirements.
+
+**Independence**: Not required (but designer should not assess their own design). For SIL 3-4, design must be independently verified by VER.
+
+## Independence and Role Combination Rules
+
+**Allowed Combinations**:
+- Designer + Software Manager
+- Designer + Implementer
+- Designer + Integrator
+
+**Prohibited Combinations (SIL 3-4)**:
+- Designer + Verifier (independence — VER must independently verify DES output)
+- Designer + Validator (development role involvement)
+- Designer + Assessor
+
+**SIL-specific Notes**:
+- SIL 0-2: Designer may participate in code reviews
+- SIL 3-4: Designer MUST NOT perform verification of own design artifacts
+
+---
+
 **Now proceed with the user's request. Remember to load the en50128-design skill first!**
