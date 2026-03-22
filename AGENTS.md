@@ -82,7 +82,7 @@ EN 50128:2011 defines the following organizational roles:
 | Role | EN 50128 Reference | Description | Independence Required |
 |------|-------------------|-------------|----------------------|
 | **Lifecycle Coordinator (COD)** | Platform Extension (Section 5.3) | End-to-end lifecycle orchestration, phase gate enforcement | No |
-| **V&V Manager (VMGR)** | Platform Extension (Section 5.1.2.10) | Independent V&V authority, manages Verifier team, provides final V&V approval | Yes (SIL 3-4) |
+| **V&V Manager (VMGR)** | Platform Extension (Section 5.1.2.10e) | Independent V&V authority, manages Verifier team, provides final V&V approval | Yes (SIL 3-4) |
 | **Project Manager** | Section 5, Table B.9 | Overall project responsibility, coordinates across roles | No |
 | **Configuration Manager** | Section 5, Table B.10 | Configuration and change management | No |
 
@@ -135,63 +135,96 @@ Full role specifications — including EN 50128 technique tables, Annex B narrat
 ```
 Safety Authority / Customer
 ├── COD (Lifecycle Coordinator) ◄──coordinate──► VMGR (Independent V&V Authority)
-│     • Phase gate management      (no report)    • Manages VER team
-│     • Lifecycle state                           • Reviews VER/VAL reports
-│     • Compliance enforcement                    • Final V&V decision
-│     • Cannot override VMGR                        (cannot be overridden)
+│     • Phase gates                (no report)    • Manages VER team
+│     • Lifecycle state                           • Reviews VER reports
+│     • Compliance                                • Reviews VAL reports
+│     • Cannot override VMGR                      • Final V&V decision
+│                                                   (cannot be overridden)
 │ authorizes phases                              manages
 ▼                                                   ▼
 PM (Project Manager)                           VER (Verifier)
 │  • Team coordination                         • Verification reports
 │  • Resource mgmt                             • Static analysis
-│  • CCB leadership                            • Coverage checks
-│  • Reports to COD for lifecycle              • Reports to VMGR
-└──► orchestrates per phase:
+│  • Stakeholder comms                         • Coverage checks
+│  • CCB leadership                            • Reports to VMGR
+│  • Reports to COD for lifecycle
+└──► orchestrates: REQ · DES · IMP · INT · TST · QUA · CM · SAF
 
      ┌─────────┐
-     │   REQ   │ Requirements Specification (Phase 2)
-     │         │ - Extract requirements (USER APPROVAL REQUIRED)
-     │         │ - Assign SIL levels
-     │         │ - Generate traceability
+     │ PHASE 1 │ Planning
+     │  PM+QUA │ - SQAP, SCMP, SVP, SVaP
+     │  +CM+SAF│
      └────┬────┘
           │ deliverable → QUA check → VER → VMGR → VAL → VMGR
-          │ COD Gate Check: @cod gate-check phase-2
+          │ COD Gate Check: @cod gate-check planning
           ▼
      ┌─────────┐
-     │   DES   │ Design (Phase 3)
-     │         │ - Architecture design (SAS)
-     │         │ - Module/interface design (SDS)
+     │ PHASE 2 │ Requirements Specification
+     │   REQ   │ - SRS (USER APPROVAL REQUIRED)
+     │  +SAF   │ - Assign SIL levels, traceability
      └────┬────┘
           │ deliverable → QUA check → VER → VMGR → VAL → VMGR
-          │ COD Gate Check: @cod gate-check phase-3
+          │ COD Gate Check: @cod gate-check requirements
           ▼
      ┌─────────┐
-     │   IMP   │ Implementation (Phase 4)
-     │  + TST  │ - Code modules (MISRA C)
-     │         │ - Unit tests + coverage
+     │ PHASE 3 │ Architecture & Design
+     │   DES   │ - SAS, SDS, Software Interface Specifications
+     │  +SAF   │ - Integration test specifications, FMEA/FTA
      └────┬────┘
           │ deliverable → QUA check → VER → VMGR → VAL → VMGR
-          │ COD Gate Check: @cod gate-check phase-4
+          │ COD Gate Check: @cod gate-check design
           ▼
      ┌─────────┐
-     │   INT   │ Integration (Phase 5)
-     │         │ - Integrate components
-     │         │ - Integration testing
+     │ PHASE 4 │ Component Design
+     │   DES   │ - Software Component Design Specification
+     │  +TST   │ - Software Component Test Specification
      └────┬────┘
           │ deliverable → QUA check → VER → VMGR → VAL → VMGR
-          │ COD Gate Check: @cod gate-check phase-5
+          │ COD Gate Check: @cod gate-check component-design
           ▼
      ┌─────────┐
-     │   VAL   │ Validation (Phase 6) — COD invokes independently
-     │         │ - System testing
-     │         │ - Acceptance testing
+     │ PHASE 5 │ Implementation & Testing
+     │   IMP   │ - Code modules (MISRA C)
+     │  +TST   │ - Unit tests + coverage
+     └────┬────┘
+          │ deliverable → QUA check → VER → VMGR → VAL → VMGR
+          │ COD Gate Check: @cod gate-check implementation-testing
+          ▼
+     ┌─────────┐
+     │ PHASE 6 │ Integration
+     │   INT   │ - Integrate components
+     │  +TST   │ - Integration testing
+     └────┬────┘
+          │ deliverable → QUA check → VER → VMGR → VAL → VMGR
+          │ COD Gate Check: @cod gate-check integration
+          ▼
+     ┌─────────┐
+     │ PHASE 7 │ Validation — COD invokes VAL independently
+     │   VAL   │ - System testing, acceptance testing
+     │  +TST   │ - Overall Software Test Report, Release Note
      └────┬────┘
           │ VAL report → QUA check → VMGR approval
-          │ COD Gate Check: @cod gate-check phase-6
+          │ COD Gate Check: @cod gate-check validation
           ▼
      ┌─────────┐
-     │  DONE   │ Ready for Deployment
-     └─────────┘
+     │ PHASE 8 │ Assessment — mandatory SIL 1-4 (§6.4.1.1)
+     │  ASR    │ - Software Assessment Plan & Report
+     │ (indep.)│ - Independent assessor reviews all artifacts
+     └────┬────┘
+          │ COD Gate Check: @cod gate-check assessment
+          ▼
+     ┌─────────┐
+     │ PHASE 9 │ Deployment
+     │  PM+CM  │ - Release and Deployment Plan
+     │  +VER   │ - Deployment Records + Verification Report
+     └────┬────┘
+          │ COD Gate Check: @cod gate-check deployment
+          ▼
+     ┌──────────┐
+     │ PHASE 10 │ Maintenance (ongoing)
+     │  PM+CM   │ - Change Records, Maintenance Records
+     │  +VER    │ - Maintenance Verification Report
+     └──────────┘
 
      ── Active throughout all phases ──────────────────────────
 
@@ -217,29 +250,34 @@ PM (Project Manager)                           VER (Verifier)
 
 # Execute each phase (PM orchestrates all agents internally)
 @pm execute-phase 1    # Planning: SQAP, SCMP, SVP, SVaP
-@cod gate-check phase-1
+@cod gate-check planning
 
-@pm execute-phase 2    # Requirements: SRS, Hazard Log
-@cod gate-check phase-2
+@pm execute-phase 2    # Requirements: SRS, Overall SW Test Spec
+@cod gate-check requirements
 
-@pm execute-phase 3    # Design: SAS, SDS, SIS, FMEA
-@cod gate-check phase-3
+@pm execute-phase 3    # Architecture & Design: SAS, SDS, SIS, Integration Test Specs
+@cod gate-check design
 
-@pm execute-phase 4    # Implementation + Unit Testing
-@cod gate-check phase-4
+@pm execute-phase 4    # Component Design: Component Design Spec, Component Test Spec
+@cod gate-check component-design
 
-@pm execute-phase 5    # Integration
-@cod gate-check phase-5
+@pm execute-phase 5    # Implementation & Testing: source code, unit tests, coverage
+@cod gate-check implementation-testing
 
-# Phase 6: Validation — COD coordinates VAL directly (independence requirement)
-@cod gate-check phase-6
+@pm execute-phase 6    # Integration: integration testing, SW/HW integration
+@cod gate-check integration
 
-# Phase 7: Assessment (SIL 3-4 only)
-@cod gate-check phase-7
+# Phase 7: Validation — COD coordinates VAL directly (independence requirement)
+@pm execute-phase 7
+@cod gate-check validation
 
-@pm execute-phase 8    # Deployment: release package, final baseline
+# Phase 8: Assessment — mandatory SIL 1-4 (independent assessor)
+@cod gate-check assessment
 
-@cod finish            # Final compliance check, project archived
+@pm execute-phase 9    # Deployment: release package, final baseline
+@cod gate-check deployment
+
+# Phase 10: Maintenance (ongoing — triggered by change requests via CCB)
 ```
 
 ---
@@ -279,7 +317,7 @@ Each agent **internally loads its skill** when invoked. Users do not load skills
 | CM | Configuration Manager | `en50128-configuration` | Section 6.6 |
 | COD | Lifecycle Coordinator | `en50128-lifecycle-coordination` | Section 5.3 |
 | PM | Project Manager | `en50128-project-management` | Section 5, Table B.9 |
-| VMGR | V&V Manager | (planned: `en50128-vv-management`) | Section 5.1.2.10e |
+| VMGR | V&V Manager | `en50128-lifecycle-coordination` (base) | Section 5.1.2.10e |
 
 ---
 
