@@ -3,7 +3,9 @@ phase:
   number: 3
   name: "Architecture and Design"
   
-  # Agent activities (EN 50128 Section 7.3 - 6 documents + 1 best practice)
+  # Agent activities — TRACK A ONLY (PM-orchestrated development activities)
+  # VER, VAL, and VMGR are Track B (COD-orchestrated). They are NOT listed here.
+  # Track B is driven by the `verification:` and `validation:` sections below.
   activities:
     # Activity 0: DES creates Software Architecture Specification (Annex C #9)
     - agent: "des"
@@ -70,64 +72,6 @@ phase:
           doc_type: "Software-Hardware-Integration-Test-Specification"
           qua_required: true
       dependencies: [2, 3]        # HW integration tests depend on design and interfaces
-    
-    # Activity 6: VER creates Software Architecture and Design Verification Report (Annex C #14)
-    - agent: "ver"
-      task_description: "Create Software Architecture and Design Verification Report documenting independent verification of all Phase 3 deliverables"
-      owner: "ver"
-      deliverables:
-        - path: "docs/reports/Software-Architecture-and-Design-Verification-Report.md"
-          doc_id: "DOC-ARCHDESIGNVER-2026-001"
-          doc_type: "Software-Architecture-and-Design-Verification-Report"
-          qua_required: true        # VER reports require QUA template review
-      dependencies: [0, 1, 2, 3, 4, 5]  # VER depends on all phase deliverables being complete
-    
-    # Activity 7: QUA reviews Verification Report for template compliance (MANDATORY SIL 3-4)
-    - agent: "qua"
-      task_description: "Review Software Architecture and Design Verification Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
-      owner: "qua"
-      deliverables:
-        - path: "docs/reports/QA-Template-Review-Architecture-Design-Verification.md"
-          doc_id: "DOC-QAREV-2026-003"
-          doc_type: "QA-Template-Compliance-Review"
-          qua_required: false      # QUA self-review not required
-      dependencies: [6]            # QUA depends on VER report (index 6)
-      sil_requirements:
-        sil_0: "optional"
-        sil_1: "recommended"
-        sil_2: "recommended"
-        sil_3: "mandatory"
-        sil_4: "mandatory"
-    
-    # Activity 8: VAL creates Software Architecture and Design Validation Report (SIL 3-4 independence)
-    # NOTE: Platform-specific per-phase validation report (not an Annex C deliverable).
-    # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
-    - agent: "val"
-      task_description: "Create Software Architecture and Design Validation Report documenting independent validation of operational suitability for all Phase 3 deliverables. For SIL 3-4, VMGR performs this activity."
-      owner: "val"
-      deliverables:
-        - path: "docs/reports/Software-Architecture-Design-Validation-Report.md"
-          doc_id: "DOC-DESVAL-2026-001"
-          doc_type: "Software-Architecture-Design-Validation-Report"
-          qua_required: true        # VAL reports require QUA template review
-      dependencies: [6, 7]          # VAL depends on VER report and QUA template review
-    
-    # Activity 9: QUA reviews Validation Report for template compliance (MANDATORY SIL 3-4)
-    - agent: "qua"
-      task_description: "Review Software Architecture and Design Validation Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
-      owner: "qua"
-      deliverables:
-        - path: "docs/reports/QA-Template-Review-Architecture-Design-Validation.md"
-          doc_id: "DOC-QAREV-2026-004"
-          doc_type: "QA-Template-Compliance-Review"
-          qua_required: false      # QUA self-review not required
-      dependencies: [8]            # QUA depends on VAL report (index 8)
-      sil_requirements:
-        sil_0: "optional"
-        sil_1: "recommended"
-        sil_2: "recommended"
-        sil_3: "mandatory"
-        sil_4: "mandatory"
   
   # Phase completion criteria (EN 50128 Section 7.3)
   completion_criteria:

@@ -3,7 +3,10 @@ phase:
   number: 6
   name: "Integration"
   
-  # Agent activities (EN 50128 Section 7.6 - 2 Annex C documents produced here)
+  # Agent activities — TRACK A ONLY (PM-orchestrated development activities)
+  # VER, VAL, and VMGR are Track B (COD-orchestrated). They are NOT listed here.
+  # Track B is driven by the `verification:` and `validation:` sections below.
+  # EN 50128 Section 7.6 - 2 Annex C documents produced here: #21 and #22
   # NOTE: Software Integration Verification Report (Annex C #23) is produced in Phase 7 (Validation)
   #       per DELIVERABLES.md. Only Annex C #21 and #22 are Phase 6 outputs.
   # WORKFLOW: INT coordinates → TST executes tests → INT documents results
@@ -74,37 +77,6 @@ phase:
           qua_required: true
       dependencies: [4]  # INT report depends on TST results (activity 4)
       parallel_group: 2
-    
-    # Activity 2 (Platform Extension): VAL creates Software Integration Validation Report (SIL 3-4)
-    # NOTE: This is a platform-specific per-phase validation report, NOT an Annex C deliverable.
-    # The Annex C Software Integration Verification Report (#23) is produced in Phase 7 (Validation).
-    # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
-    - agent: "val"
-      task_description: "Create Software Integration Validation Report validating that integrated software meets architectural specifications and performs correctly on target hardware. For SIL 3-4, VMGR performs this activity. NOTE: This is a platform-specific per-phase validation report (not Annex C). The Annex C #23 Software Integration Verification Report is produced in Phase 7."
-      owner: "val"
-      deliverables:
-        - path: "docs/reports/Software-Integration-Validation-Report.md"
-          doc_id: "DOC-INTVAL-2026-001"
-          doc_type: "Software-Integration-Validation-Report"
-          qua_required: true        # VAL reports require QUA template review
-      dependencies: [2, 5]  # Validation depends on both integration test reports (activities 2, 5)
-    
-    # Activity 3: QUA reviews Validation Report for template compliance (MANDATORY SIL 3-4)
-    - agent: "qua"
-      task_description: "Review Software Integration Validation Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
-      owner: "qua"
-      deliverables:
-        - path: "docs/reports/QA-Template-Review-Integration-Validation.md"
-          doc_id: "DOC-QAREV-2026-010"
-          doc_type: "QA-Template-Compliance-Review"
-          qua_required: false      # QUA self-review not required
-      dependencies: [6]            # QUA depends on VAL report (activity 6)
-      sil_requirements:
-        sil_0: "optional"
-        sil_1: "recommended"
-        sil_2: "recommended"
-        sil_3: "mandatory"
-        sil_4: "mandatory"
   
   # Phase completion criteria (EN 50128 Section 7.6)
   completion_criteria:

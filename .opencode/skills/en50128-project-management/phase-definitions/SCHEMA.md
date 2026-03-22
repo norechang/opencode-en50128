@@ -11,6 +11,29 @@ Examples:
 - `phase-3-architecture-design.yaml`
 - `phase-4-implementation.yaml`
 
+## Two-Track Execution Model
+
+Phase execution is strictly divided into two independent tracks per WORKFLOW.md:
+
+```
+TRACK A — Development (PM-orchestrated)
+  USER → PM → dev agents (REQ · DES · IMP · INT · TST · SAF · CM)
+             → QUA template checks of dev deliverables
+             → PM reports Track A complete to COD
+
+TRACK B — Independent V&V (COD-orchestrated, begins after Track A)
+  COD → VMGR → VER → QUA (VER report review) → VMGR
+  COD → VAL  → QUA (VAL report review) → VMGR → COD gate-check
+```
+
+**Key constraint**: PM has NO authority over VER, VAL, or VMGR.  
+VER and VAL MUST NOT appear in the `activities` list — they belong exclusively in the
+`verification:` and `validation:` sections, which COD reads to orchestrate Track B.
+
+The `activities:` list contains **only** Track A agents:
+- Development agents: `req`, `saf`, `des`, `imp`, `int`, `tst`, `cm`
+- QUA template reviews of **development deliverables** (not VER/VAL reports)
+
 ## YAML Schema
 
 ```yaml
@@ -20,9 +43,13 @@ phase:
   number: integer                 # Phase number (0-8)
   name: string                    # Human-readable name
   
-  # Agent activities (sequential execution)
+  # TRACK A: Agent activities (PM-orchestrated development activities ONLY)
+  # VER, VAL, and VMGR MUST NOT appear here — they are Track B (COD-orchestrated).
+  # Track B is driven by the `verification:` and `validation:` sections below.
   activities:
-    - agent: string               # Agent role (req, saf, tst, des, imp, etc.)
+    - agent: string               # Agent role — dev agents only: req, saf, tst, des, imp, int, cm, qua
+                                  # qua is allowed ONLY for template reviews of dev deliverables
+                                  # NEVER use: ver, val, vmgr (those are Track B)
       task_description: string    # What the agent should do
       owner: string               # Document owner agent (same as agent usually)
       deliverables:               # List of deliverables this activity produces
@@ -43,16 +70,19 @@ phase:
       code_branch: integer                    # % branch coverage (if applicable)
     custom_checks: []                         # List of custom checks (optional)
   
-  # Verification and validation requirements
+  # TRACK B: Verification requirements (COD-orchestrated — NOT part of activities list)
+  # COD reads this section to orchestrate VER via VMGR after Track A completes.
   verification:
     required: boolean             # Independent verification required?
-    verifier: string              # Verifier agent (usually "ver")
-    criteria: []                  # List of verification criteria
+    verifier: string              # Verifier agent (always "ver")
+    criteria: []                  # List of verification criteria VER must check
   
+  # TRACK B: Validation requirements (COD-orchestrated — NOT part of activities list)
+  # COD reads this section to orchestrate VAL via VMGR after VER completes.
   validation:
     required_sil: []              # List of SIL levels requiring validation (e.g., [3, 4])
-    validator: string             # Validator agent (usually "val")
-    criteria: []                  # List of validation criteria
+    validator: string             # Validator agent (always "val")
+    criteria: []                  # List of validation criteria VAL must satisfy
   
   # Gate check configuration
   gate_check:
@@ -167,14 +197,26 @@ When `qua_required: true`, the PM agent will:
 4. If QUA PASS: Mark deliverable as accepted
 5. Once all activities complete and all deliverables QUA-accepted, report to COD
 
-## Verification and Validation Flow
+## Verification and Validation Flow (Two-Track Model)
 
-After PM reports phase complete:
-1. COD invokes VER agent (if `verification.required: true`)
-2. COD invokes VAL agent (if SIL level in `validation.required_sil`)
-3. COD performs gate check using `completion_criteria`
-4. If VER/VAL FAIL: COD instructs PM to resolve defects and re-execute
-5. If VER/VAL PASS: COD authorizes transition to next phase
+Track A (PM-orchestrated) completes first, then Track B (COD-orchestrated) begins:
+
+```
+TRACK A:  PM → dev agents → QUA template checks → PM reports to COD
+TRACK B:  COD → VMGR → VER → VMGR → COD → VAL → VMGR → COD gate-check
+```
+
+1. PM executes all `activities` (Track A dev agents + QUA template checks)
+2. PM reports Track A complete to COD
+3. COD hands off to VMGR, who manages VER (if `verification.required: true`)
+4. QUA reviews VER report; VMGR approves
+5. COD invokes VAL (if SIL level in `validation.required_sil`)
+6. QUA reviews VAL report; VMGR approves
+7. COD performs gate check using `completion_criteria`
+8. If Track B FAIL: COD instructs PM to resolve defects (re-enters Track A)
+9. If Track B PASS: COD authorizes transition to next phase
+
+**PM has NO authority over VER, VAL, or VMGR** (WORKFLOW.md Key Independence Constraints).
 
 ## File Location
 

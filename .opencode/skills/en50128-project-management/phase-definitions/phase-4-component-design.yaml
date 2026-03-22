@@ -3,7 +3,9 @@ phase:
   number: 4
   name: "Component Design"
   
-  # Agent activities (EN 50128 Section 7.4 - 3 documents)
+  # Agent activities — TRACK A ONLY (PM-orchestrated development activities)
+  # VER, VAL, and VMGR are Track B (COD-orchestrated). They are NOT listed here.
+  # Track B is driven by the `verification:` and `validation:` sections below.
   activities:
     # Activity 0: DES creates Software Component Design Specification (Annex C #15)
     - agent: "des"
@@ -26,64 +28,6 @@ phase:
           doc_type: "Software-Component-Test-Specification"
           qua_required: true
       dependencies: [0]           # Component tests depend on component design
-    
-    # Activity 2: VER creates Software Component Design Verification Report (Annex C #17)
-    - agent: "ver"
-      task_description: "Create Software Component Design Verification Report documenting independent verification of all Phase 4 deliverables"
-      owner: "ver"
-      deliverables:
-        - path: "docs/reports/Software-Component-Design-Verification-Report.md"
-          doc_id: "DOC-COMPDESIGNVER-2026-001"
-          doc_type: "Software-Component-Design-Verification-Report"
-          qua_required: true        # VER reports require QUA template review
-      dependencies: [0, 1]        # VER depends on all phase deliverables being complete
-    
-    # Activity 3: QUA reviews Verification Report for template compliance (MANDATORY SIL 3-4)
-    - agent: "qua"
-      task_description: "Review Software Component Design Verification Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
-      owner: "qua"
-      deliverables:
-        - path: "docs/reports/QA-Template-Review-Component-Design-Verification.md"
-          doc_id: "DOC-QAREV-2026-005"
-          doc_type: "QA-Template-Compliance-Review"
-          qua_required: false      # QUA self-review not required
-      dependencies: [2]            # QUA depends on VER report (index 2)
-      sil_requirements:
-        sil_0: "optional"
-        sil_1: "recommended"
-        sil_2: "recommended"
-        sil_3: "mandatory"
-        sil_4: "mandatory"
-    
-    # Activity 4: VAL creates Software Component Design Validation Report (SIL 3-4 independence)
-    # NOTE: Platform-specific per-phase validation report (not an Annex C deliverable).
-    # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
-    - agent: "val"
-      task_description: "Create Software Component Design Validation Report documenting independent validation of operational suitability for all Phase 4 deliverables. For SIL 3-4, VMGR performs this activity."
-      owner: "val"
-      deliverables:
-        - path: "docs/reports/Software-Component-Design-Validation-Report.md"
-          doc_id: "DOC-COMPVAL-2026-001"
-          doc_type: "Software-Component-Design-Validation-Report"
-          qua_required: true        # VAL reports require QUA template review
-      dependencies: [2, 3]        # VAL depends on VER report and QUA template review
-    
-    # Activity 5: QUA reviews Validation Report for template compliance (MANDATORY SIL 3-4)
-    - agent: "qua"
-      task_description: "Review Software Component Design Validation Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
-      owner: "qua"
-      deliverables:
-        - path: "docs/reports/QA-Template-Review-Component-Design-Validation.md"
-          doc_id: "DOC-QAREV-2026-006"
-          doc_type: "QA-Template-Compliance-Review"
-          qua_required: false      # QUA self-review not required
-      dependencies: [4]            # QUA depends on VAL report (index 4)
-      sil_requirements:
-        sil_0: "optional"
-        sil_1: "recommended"
-        sil_2: "recommended"
-        sil_3: "mandatory"
-        sil_4: "mandatory"
   
   # Phase completion criteria (EN 50128 Section 7.4)
   completion_criteria:

@@ -1,0 +1,109 @@
+phase:
+  id: "deployment"
+  number: 9
+  name: "Software Deployment"
+
+  # Agent activities — TRACK A ONLY (PM-orchestrated development activities)
+  # VER produces the Deployment Verification Report (Annex C #40) — Track B (COD-orchestrated).
+  # Track B is driven by the `verification:` and `validation:` sections below.
+  #
+  # EN 50128 Section 9.1 — 5 Annex C documents: #36, #37, #38, #39, #40
+  # NOTE: "Release Notes" (plural, item 38) is the deployment-phase release notes document —
+  #       DISTINCT from the "Release Note" (singular, §7.7.4.12 normative) produced in Phase 7.
+  activities:
+    # Activity 0: PM creates Software Release and Deployment Plan (Annex C #36)
+    - agent: "pm"
+      task_description: "Create Software Release and Deployment Plan documenting the complete plan for releasing and deploying the software to the operational environment, including deployment procedures, rollback plan, acceptance criteria, and responsible parties per EN 50128 Section 9.1"
+      owner: "pm"
+      deliverables:
+        - path: "docs/deployment/Software-Release-and-Deployment-Plan.md"
+          doc_id: "DOC-DEPLOYPLAN-2026-001"
+          doc_type: "Software-Release-and-Deployment-Plan"
+          qua_required: true
+    
+    # Activity 1: DES/PM creates Software Deployment Manual (Annex C #37)
+    # Per DELIVERABLES.md note: PM is default responsible party; DES supports technical content
+    - agent: "des"
+      task_description: "Create Software Deployment Manual documenting all technical steps required to install, configure, and verify the software on the target hardware platform. Include system prerequisites, installation procedures, configuration settings, verification steps, and known limitations."
+      owner: "des"
+      deliverables:
+        - path: "docs/deployment/Software-Deployment-Manual.md"
+          doc_id: "DOC-DEPLOYMAN-2026-001"
+          doc_type: "Software-Deployment-Manual"
+          qua_required: true
+      dependencies: [0]        # Deployment Manual depends on Deployment Plan
+    
+    # Activity 2: CM/PM creates Release Notes (Annex C #38)
+    # NOTE: "Release Notes" (plural) = deployment release notes. DISTINCT from Phase 7 "Release Note" (§7.7.4.12).
+    - agent: "pm"
+      task_description: "Create Release Notes documenting the software release content, version identification, configuration baseline, known issues, deviations from requirements, and any operational constraints or limitations. NOTE: This is the deployment-phase 'Release Notes' (plural, Annex C #38) — distinct from the Phase 7 'Release Note' (singular, §7.7.4.12)."
+      owner: "pm"
+      deliverables:
+        - path: "docs/deployment/Release-Notes.md"
+          doc_id: "DOC-RELEASENOTES-2026-001"
+          doc_type: "Release-Notes"
+          qua_required: true
+      dependencies: [0, 1]     # Release Notes depend on Deployment Plan and Manual
+    
+    # Activity 3: CM creates Deployment Records (Annex C #39)
+    - agent: "cm"
+      task_description: "Create Deployment Records documenting all deployment activities performed, including evidence of: software identity verification on target, configuration verification, deployment steps executed, acceptance test results, and final deployment confirmation. Records SHALL be created during and immediately after deployment execution."
+      owner: "cm"
+      deliverables:
+        - path: "docs/deployment/Deployment-Records.md"
+          doc_id: "DOC-DEPLOYREC-2026-001"
+          doc_type: "Deployment-Records"
+          qua_required: true
+      dependencies: [0, 1, 2]  # Records depend on Plan, Manual, and Release Notes
+  
+  # Phase completion criteria (EN 50128 Section 9.1)
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true
+    custom_checks:
+      - "All 5 Phase 9 deliverables produced: Software Release and Deployment Plan (#36), Software Deployment Manual (#37), Release Notes (#38), Deployment Records (#39), Deployment Verification Report (#40)"
+      - "Phase 8 Assessment gate passed before deployment begins (MANDATORY)"
+      - "Software Release and Deployment Plan approved before deployment execution"
+      - "Software Deployment Manual complete with all installation and configuration steps"
+      - "Release Notes identify all known issues and operational constraints"
+      - "Deployment Records confirm actual deployment activities (not planned activities)"
+      - "Software identity verified on target hardware (checksums, version identifiers)"
+      - "Configuration baseline established for deployed system"
+      - "Deployment Verification Report produced by VER confirming correct deployment"
+      - "Operational acceptance obtained"
+  
+  # Verification requirements (EN 50128 Section 9.1, Annex C #40)
+  verification:
+    required: true
+    verifier: "ver"
+    criteria:
+      - "Software Release and Deployment Plan template compliance (DOC-ID, Document Control, Approvals)"
+      - "Deployment Plan covers all mandatory deployment activities"
+      - "Software Deployment Manual template compliance and technical correctness"
+      - "Release Notes template compliance and completeness (known issues documented)"
+      - "Deployment Records confirm software identity matches approved baseline"
+      - "Deployment Records confirm all deployment steps executed correctly"
+      - "Deployed software configuration matches approved release baseline"
+      - "Traceability: Software baseline → Release Notes → Deployment Records → Deployed system"
+  
+  # Validation requirements
+  # No separate VAL activity for Phase 9 — deployment verification by VER is sufficient.
+  validation:
+    required_sil: []
+    validator: "val"
+    criteria: []
+  
+  # Gate check configuration
+  gate_check:
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [3, 4]
+    criteria:
+      - "Phase 8 Assessment gate passed (deployment authorization obtained)"
+      - "Software Release and Deployment Plan approved"
+      - "Software Deployment Manual approved"
+      - "Release Notes approved"
+      - "Deployment Records complete (actual deployment evidence)"
+      - "Deployment Verification Report approved (VER)"
+      - "Software identity verified on target hardware"
+      - "Deployment baseline established"
+      - "Operational acceptance obtained"

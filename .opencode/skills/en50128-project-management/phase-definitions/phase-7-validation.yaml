@@ -3,22 +3,16 @@ phase:
   number: 7
   name: "Overall Software Testing / Final Validation"
   
-  # Agent activities (EN 50128 Section 7.7 - 4 Annex C documents: #23, #24, #25, #26 + normative Release Note)
+  # Agent activities — TRACK A ONLY (PM-orchestrated development activities)
+  # VER, VAL, VMGR are Track B (COD-orchestrated). They are NOT listed here.
+  # Track B is driven by the `verification:` and `validation:` sections below.
+  # EN 50128 Section 7.7 — Annex C documents #23 (VER), #24 (TST), #25 (VAL), #26 (VAL) + Release Note
+  # NOTE: VER produces Annex C #23 (Software Integration Verification Report) in Track B.
+  # NOTE: VAL produces Annex C #25 (Software Validation Report), Annex C #26 (Tools Validation
+  #       Report), and the Release Note in Track B.
+  # Only the Overall Software Test Report (Annex C #24, produced by TST) is a Track A activity.
   activities:
-    # Activity 0: VER creates Software Integration Verification Report (Annex C #23)
-    # This report verifies the integration test results from Phase 6 (items 21 and 22).
-    # Annex C assigns it to Phase 7 (Validation), not Phase 6.
-    - agent: "ver"
-      task_description: "Create Software Integration Verification Report (Annex C #23) verifying that the Software Integration Test Report and Software/Hardware Integration Test Report from Phase 6 meet all verification criteria, traceability requirements, and EN 50128 Section 7.6 compliance"
-      owner: "ver"
-      deliverables:
-        - path: "docs/integration/Software-Integration-Verification-Report.md"
-          doc_id: "DOC-INTVER-2026-001"
-          doc_type: "Software-Integration-Verification-Report"
-          qua_required: true
-      parallel_group: 1
-
-    # Activity 1: TST executes Overall Software Test Report (Annex C #24)
+    # Activity 0: TST executes Overall Software Test Report (Annex C #24)
     - agent: "tst"
       task_description: "Execute Overall Software Tests per Overall Software Test Specification and create Overall Software Test Report with comprehensive system-level test results"
       owner: "tst"
@@ -27,67 +21,6 @@ phase:
           doc_id: "DOC-OVERALLTESTRPT-2026-001"
           doc_type: "Overall-Software-Test-Report"
           qua_required: true
-      parallel_group: 1
-    
-    # Activity 2: VAL creates Tools Validation Report (Annex C #26)
-    # HR for SIL 1+, R for SIL 0. Writer is VAL per DELIVERABLES.md.
-    - agent: "val"
-      task_description: "Create Tools Validation Report (Annex C #26) validating all software tools used during development (compilers, static analysis tools, test frameworks) to confirm they are fit for purpose at the applicable SIL level per EN 50128 Section 6.7"
-      owner: "val"
-      deliverables:
-        - path: "docs/validation/Tools-Validation-Report.md"
-          doc_id: "DOC-TOOLSVALRPT-2026-001"
-          doc_type: "Tools-Validation-Report"
-          qua_required: true
-      dependencies: [0, 1]          # Tools validation depends on integration VER and overall test results
-      sil_requirements:
-        sil_0: "recommended"
-        sil_1: "highly_recommended"
-        sil_2: "highly_recommended"
-        sil_3: "highly_recommended"
-        sil_4: "highly_recommended"
-
-    # Activity 3: VAL performs validation and creates Software Validation Report (Annex C #25)
-    # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
-    - agent: "val"
-      task_description: "Perform independent software validation including supplementary tests, operational scenarios, and create Software Validation Report confirming fitness for intended application. For SIL 3-4, VMGR performs this activity."
-      owner: "val"
-      deliverables:
-        - path: "docs/validation/Software-Validation-Report.md"
-          doc_id: "DOC-VALRPT-2026-001"
-          doc_type: "Software-Validation-Report"
-          qua_required: true        # Validation reports require QUA template review
-      dependencies: [0, 1, 2]      # Validation depends on integration VER, overall test results, and tools validation
-    
-    # Activity 4: QUA reviews Software Validation Report for template compliance (MANDATORY SIL 3-4)
-    - agent: "qua"
-      task_description: "Review Software Validation Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
-      owner: "qua"
-      deliverables:
-        - path: "docs/reports/QA-Template-Review-Software-Validation.md"
-          doc_id: "DOC-QAREV-2026-011"
-          doc_type: "QA-Template-Compliance-Review"
-          qua_required: false      # QUA self-review not required
-      dependencies: [3]            # QUA depends on Software Validation Report (index 3)
-      sil_requirements:
-        sil_0: "optional"
-        sil_1: "recommended"
-        sil_2: "recommended"
-        sil_3: "mandatory"
-        sil_4: "mandatory"
-    
-    # Activity 5: VAL creates Release Note (normative §7.7.4.12; no Annex C number)
-    # NOTE: Writer is unspecified in EN 50128 Annex C (footnote a). VAL is the platform-assigned
-    # responsible party for this normative §7.7.4.12 output. Platform choice — not standard-mandated.
-    - agent: "val"
-      task_description: "Create Release Note documenting software identity, configuration, known issues, and release authorization. For SIL 3-4, VMGR performs this activity."
-      owner: "val"
-      deliverables:
-        - path: "docs/Release-Note.md"
-          doc_id: "DOC-RELEASENOTE-2026-001"
-          doc_type: "Release-Note"
-          qua_required: true
-      dependencies: [3, 4]        # Release note depends on validation approval and QUA review
   
   # Phase completion criteria (EN 50128 Section 7.7)
   completion_criteria:
