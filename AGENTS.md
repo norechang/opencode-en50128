@@ -22,6 +22,7 @@ See `docs/USER-GUIDE.md` for complete usage instructions and the V-Model example
 - **`docs/USER-GUIDE.md`** - Complete usage guide with agent commands and V-Model example (START HERE)
 - **`LIFECYCLE.md`** - Complete EN 50128 V-Model software development lifecycle
 - **`TOOLS.md`** - Comprehensive tool catalog with usage information for agents (CRITICAL); includes Agent Tool Usage Protocol
+- **`WORKFLOW.md`** - **FUNDAMENTAL REFERENCE** — agent interaction and phase re-entry workflows; COD/PM/VMGR authority structure, per-phase execution loop, CCB change request re-entry flow
 - **`.opencode/agents/`** - Agent definition files (one per role) — full role specs, techniques, Annex B narratives, and combination rules
 - **`.opencode/skills/`** - Domain-specific skills loaded internally by agents
 - **`std/EN50128-2011.md`** - Full EN 50128 standard (LLM-friendly Markdown)

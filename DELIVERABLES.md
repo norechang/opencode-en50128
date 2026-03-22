@@ -3,7 +3,9 @@
 > **Source**: EN 50128:2011 Annex C (informative) — Documents Control Summary  
 > **Phase numbering**: Per project lifecycle (LIFECYCLE.md)  
 > **Role codes**: IMP = Implementer, DES = Designer, REQ = Requirements Engineer, TST = Tester, INT = Integrator, VER = Verifier, VAL = Validator, ASR = Assessor, CM = Configuration Manager  
-> **Template column**: Path relative to `deliverables/`; `—` = no template file in repository
+> **Template column**: Path relative to `deliverables/`; `—` = no template file in repository  
+> **Legend** (Annex C SIL columns): **M** = Mandatory · **HR** = Highly Recommended (justification required if not used) · **R** = Recommended · **-** = No recommendation  
+> **NOTE**: Annex C Table C.1 is *informative*, not normative. Normative SIL requirements are in the corresponding Section 7.x clauses.
 
 | Phase No. | Phase Name | Doc No. | Document Name | Written By | 1st Check | 2nd Check | Template |
 |-----------|------------|---------|---------------|------------|-----------|-----------|----------|
@@ -65,3 +67,157 @@
 3. **Validation docs (25–27)**: Docs 25–27 have no writer specified in the standard (footnote `a`) — VAL is the responsible party by role definition for docs 25–26; doc 27 writer is unspecified per the standard.
 
 4. **Phase 8 (Assessment)** is **mandatory for SIL 1–4**; SIL 0 projects are exempt (§6.4.1.1 and §6.4.1.2).
+
+---
+
+## Normative Override — Planning Documents
+
+**IMPORTANT**: The planning documents (Annex C items 1–5) carry "HR" in Annex C Table C.1 (which is *informative*). However, the following normative clauses impose binding "shall" obligations regardless of SIL level:
+
+- **§5.3.2.4** — "A Software Development Plan shall be produced" (encompasses SVP, SVaP, SQAP, SCMP)
+- **§6.2.4.2** — "A Software Verification Plan shall be produced" (item 4, SVP)
+- **§6.3.4.2** — "A Software Validation Plan shall be produced" (item 5, SVaP)
+- **§6.5.4.3** — "A Software Quality Assurance Plan shall be written, under the responsibility of the Verifier" (item 1, SQAP)
+- **§6.6.4.1** — "A Software Configuration Management Plan shall be produced" (item 3, SCMP)
+
+Agents (COD, PM, QUA) SHALL enforce production of all five planning documents for all SIL levels on the basis of these normative clauses.
+
+---
+
+## Naming Conventions
+
+**Exact EN 50128 Names**
+
+EN 50128 uses **EXACT** document names in Section 7 output specifications. All platform phase definitions, agent commands, and QUA checkers MUST use these exact names.
+
+- EN 50128 uses **singular or plural** based on the section definition.
+- Example: "Software Interface Specification**s**" (plural — §7.3.3 item 3)
+- Example: "Software Architecture Specification" (singular — §7.3.3 item 1)
+
+**File Naming Strategy**
+
+Use exact EN 50128 name with hyphens replacing spaces:
+- `Software-Architecture-Specification.md` (recommended)
+- `Software-Interface-Specifications.md` (plural — matches standard!)
+- `Software-Hardware-Integration-Test-Report.md` (use hyphen in filename for "/")
+- `SAS.md`, `SDS.md` — abbreviations NOT recommended
+
+---
+
+## Key Corrections and Normative Notes
+
+- **Item 1 (SQAP)** is written by **QUA** under §6.5.4.3; Annex C "Written by" column is blank for item 1.
+- **Item 2** (Software Quality Assurance Verification Report) was missing from older versions — now included above.
+- **Item 4 (SVP)** is written by **VER**, not PM.
+- **Item 5 (SVaP)** is written by **VAL**, not PM.
+- **Item 11** is **plural** — "Software Interface Specification**s**".
+- **Item 17** (Software Component Design Verification Report) belongs to the Component Implementation and Testing phase per Annex C.
+- **Item 18**: lowercase "and supporting documentation".
+- **Item 20** (Software Component Test Report) is a **Phase 5 output** per §7.5.3 and Annex C Table C.1 — not Phase 6.
+- **Item 23** (Software Integration Verification Report) is in the **Validation** phase per Annex C — not in Integration.
+- **Item 26** (Tools Validation Report) — HR for SIL 1+, R for SIL 0.
+- **Item 27** (Release Note) — normative §7.7.4.12 output; listed as doc 27 here. Distinct from "Release Notes" (plural, item 38, deployment phase).
+- **Items 28–35** apply only to generic software platforms (Section 8) — out of scope for bespoke application software.
+- **Items 45–46** are written by **ASR** (Assessor), NOT PM. Assessment is mandatory for SIL 1–4 per §6.4.1.1 and §5.1.2.4.
+- **Item 42** contains a typo in the standard ("Software Chang Records") — correct name per Section 9.2.4 is "Software Change Records".
+
+---
+
+## Document ID Convention
+
+Format: `DOC-<TYPE>-YYYY-NNN`
+
+| EN 50128 Document Name | Abbreviation | Example ID |
+|------------------------|--------------|------------|
+| Software Quality Assurance Plan | SQAP | DOC-SQAP-2026-001 |
+| Software Quality Assurance Verification Report | SQAVR | DOC-SQAVR-2026-001 |
+| Software Configuration Management Plan | SCMP | DOC-SCMP-2026-001 |
+| Software Verification Plan | SVP | DOC-SVP-2026-001 |
+| Software Validation Plan | SVaP | DOC-SVaP-2026-001 |
+| Software Requirements Specification | SRS | DOC-SRS-2026-001 |
+| Overall Software Test Specification | OTSTSPEC | DOC-OTSTSPEC-2026-001 |
+| Software Requirements Verification Report | REQVER | DOC-REQVER-2026-001 |
+| Software Architecture Specification | SAS | DOC-SAS-2026-001 |
+| Software Design Specification | SDS | DOC-SDS-2026-001 |
+| Software Interface Specifications | INTERFACES | DOC-INTERFACES-2026-001 |
+| Software Integration Test Specification | INTTESTSPEC | DOC-INTTESTSPEC-2026-001 |
+| Software/Hardware Integration Test Specification | HWINTTESTSPEC | DOC-HWINTTESTSPEC-2026-001 |
+| Software Architecture and Design Verification Report | ARCHDESIGNVER | DOC-ARCHDESIGNVER-2026-001 |
+| Software Component Design Specification | COMPDESIGN | DOC-COMPDESIGN-2026-001 |
+| Software Component Test Specification | COMPTESTSPEC | DOC-COMPTESTSPEC-2026-001 |
+| Software Component Design Verification Report | COMPDESIGNVER | DOC-COMPDESIGNVER-2026-001 |
+| Software Source Code and supporting documentation | SOURCECODE | DOC-SOURCECODE-2026-001 |
+| Software Component Test Report | COMPTESTRPT | DOC-COMPTESTRPT-2026-001 |
+| Software Source Code Verification Report | SOURCECODEVER | DOC-SOURCECODEVER-2026-001 |
+| Software Integration Test Report | INTTESTRPT | DOC-INTTESTRPT-2026-001 |
+| Software/Hardware Integration Test Report | HWINTTESTRPT | DOC-HWINTTESTRPT-2026-001 |
+| Software Integration Verification Report | INTVER | DOC-INTVER-2026-001 |
+| Overall Software Test Report | OVERALLTESTRPT | DOC-OVERALLTESTRPT-2026-001 |
+| Software Validation Report | VALRPT | DOC-VALRPT-2026-001 |
+| Tools Validation Report | TOOLSVALRPT | DOC-TOOLSVALRPT-2026-001 |
+| Release Note (§7.7.4.12 normative, no Annex C #) | RELEASENOTE | DOC-RELEASENOTE-2026-001 |
+| Software Release and Deployment Plan | DEPLOYPLAN | DOC-DEPLOYPLAN-2026-001 |
+| Software Deployment Manual | DEPLOYMAN | DOC-DEPLOYMAN-2026-001 |
+| Release Notes | RELEASENOTES | DOC-RELEASENOTES-2026-001 |
+| Deployment Records | DEPLOYREC | DOC-DEPLOYREC-2026-001 |
+| Deployment Verification Report | DEPLOYVER | DOC-DEPLOYVER-2026-001 |
+| Software Maintenance Plan | MAINTPLAN | DOC-MAINTPLAN-2026-001 |
+| Software Change Records | CHANGEREC | DOC-CHANGEREC-2026-001 |
+| Software Maintenance Records | MAINTREC | DOC-MAINTREC-2026-001 |
+| Software Maintenance Verification Report | MAINTVER | DOC-MAINTVER-2026-001 |
+| Software Assessment Plan | ASSESSPLAN | DOC-ASSESSPLAN-2026-001 |
+| Software Assessment Report | ASSESSRPT | DOC-ASSESSRPT-2026-001 |
+
+---
+
+## Phase Quick Reference
+
+| Phase | Annex C Items | EN 50128 Section | Documents | Phase Definition File |
+|-------|--------------|-----------------|-----------|----------------------|
+| Phase 0: Initialization | — | Platform Extension | 1 document | N/A (COD internal) |
+| Phase 1: Planning | 1–5 | 5, 6.5, 6.6 | 5 documents | N/A (manual setup) |
+| Phase 2: Requirements | 6–8 | 7.2 | 3 documents | `phase-2-requirements.yaml` |
+| Phase 3: Architecture & Design | 9–14 | 7.3 | 6 documents | `phase-3-architecture-design.yaml` |
+| Phase 4: Component Design | 15–17 | 7.4 | 3 documents | `phase-4-component-design.yaml` |
+| Phase 5: Implementation & Testing | 18–20 | 7.5 | 3 documents | `phase-5-implementation-testing.yaml` |
+| Phase 6: Integration | 21–22 | 7.6 | 2 documents | `phase-6-integration.yaml` |
+| Phase 7: Validation | 23–26 | 7.7 | 4 documents | `phase-7-validation.yaml` |
+| Phase 8: Assessment | 45–46 | 6.4 | 2 documents | Mandatory SIL 1-4 (§6.4.1.1, §5.1.2.4); SIL 0 exempt |
+| Phase 9: Deployment | 36–40 | 9.1 | 5 documents | Not yet created |
+| Phase 10: Maintenance | 41–44 | 9.2 | 4 documents | Not yet created |
+| (Section 8 only) | 28–35 | 8 | 8 documents | N/A — generic software platforms only |
+
+**Total Annex C Documents**: 46 (items 1–46)  
+**Applicable to bespoke application software**: 37 (items 1–26 + 36–46; items 28–35 are Section 8 generic platform only; Release Note is a normative §7.7.4.12 requirement with no Annex C number)
+
+---
+
+## Phase SIL Levels Summary
+
+| Phase | Annex C Items | Documents | SIL 0 Level | SIL 1-4 Level |
+|-------|--------------|-----------|-------------|---------------|
+| Phase 0: Initialization | — | 1 | N/A | N/A |
+| Phase 1: Planning | 1–5 | 5 | HR (normative override → M) | HR (normative override → M) |
+| Phase 2: Requirements | 6–8 | 3 | HR | HR |
+| Phase 3: Architecture & Design | 9–14 | 6 | HR | HR |
+| Phase 4: Component Design | 15–17 | 3 | R | HR |
+| Phase 5: Implementation & Testing | 18–19 | 2 | HR | HR |
+| Phase 6: Integration | 20–22 | 3 | R (×1), HR (×2) | HR |
+| Phase 7: Validation | 23–26 | 4 | HR (×3), R (×1) | HR |
+| Phase 8: Assessment | 45–46 | 2 | R | HR |
+| Phase 9: Deployment | 36–40 | 5 | HR (×1), R (×4) | HR |
+| Phase 10: Maintenance | 41–44 | 4 | HR (×1), R (×3) | HR |
+| Section 8 (generic platform only) | 28–35 | 8 | HR | HR |
+| **TOTAL (Annex C)** | **1–46** | **46** | — | — |
+| **Total for bespoke app (excl. §8)** | **1–26, 36–46** | **37** | — | — |
+
+---
+
+## V-Model Specification → Report Correspondence
+
+| Specification (Left side) | Annex C # | Phase Created | Report (Right side) | Annex C # | Phase Produced |
+|---------------------------|-----------|--------------|---------------------|-----------|----------------|
+| Overall Software Test Specification | 7 | 2: Requirements | Overall Software Test Report | 24 | 7: Validation |
+| Software Integration Test Specification | 12 | 3: Architecture & Design | Software Integration Test Report | 21 | 6: Integration |
+| Software/Hardware Integration Test Specification | 13 | 3: Architecture & Design | Software/Hardware Integration Test Report | 22 | 6: Integration |
+| Software Component Test Specification | 16 | 4: Component Design | Software Component Test Report | 20 | 5: Implementation & Testing |

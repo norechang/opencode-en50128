@@ -385,6 +385,22 @@ QUA uses automated rule-based checks defined in YAML:
 - **Location**: `.opencode/skills/en50128-quality/review-criteria/`
 - **Checker Files**: `<doc-type>-checker.yaml` (e.g., `srs-checker.yaml`)
 
+**Document Type Mapping** (`doc_type` YAML key → checker filename):
+
+| EN 50128 Document Name | `doc_type` (YAML key) | Checker File |
+|------------------------|----------------------|--------------|
+| Software Quality Assurance Plan | `SQAP` | `sqap-checker.yaml` |
+| Software Quality Assurance Verification Report | `SQAVR` | `sqavr-checker.yaml` |
+| Software Requirements Specification | `SRS` | `srs-checker.yaml` |
+| Overall Software Test Specification | `Overall-Test-Spec` | `overall-test-spec-checker.yaml` |
+| Software Architecture Specification | `SAS` | `sas-checker.yaml` |
+| Software Design Specification | `SDS` | `sds-checker.yaml` |
+| Software Interface Specifications | `Interface-Specs` | `interface-specs-checker.yaml` |
+| Software Integration Test Specification | `Integration-Test-Spec` | `integration-test-spec-checker.yaml` |
+| Software/Hardware Integration Test Specification | `HW-Integration-Test-Spec` | `hw-integration-test-spec-checker.yaml` |
+| Software Component Design Specification | `Component-Design-Spec` | `component-design-spec-checker.yaml` |
+| Software Component Test Specification | `Component-Test-Spec` | `component-test-spec-checker.yaml` |
+
 **Check Types**:
 - `regex`: Pattern matching (e.g., Document ID format `DOC-XXX-YYYY-NNN`)
 - `section_exists`: Required section verification
