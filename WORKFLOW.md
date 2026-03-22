@@ -40,61 +40,87 @@ PM (Project Manager)                            VER (Verifier)
 
 ### Per-Phase Execution Loop (SIL 3-4)
 
+Two sequential tracks per phase. PM owns Track A; COD owns Track B.
+Track B begins only after Track A completes (PM reports QUA PASS to COD).
+
 ```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ TRACK A — Development  (PM orchestrates)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 USER → @pm execute-phase N
   │
   ▼
-PM: orchestrates dev agents → deliverable produced
-  │
+PM orchestrates dev agents (REQ · DES · IMP · INT · TST · SAF · CM)
+  │  deliverable(s) produced
   ▼
 QUA template check (1-pass rule)
-  ├── FAIL ──► loops back to author (PM coordinates rework)
+  ├── FAIL ──► PM coordinates rework with author
+  │             └── author re-submits → QUA re-checks (max 1 resubmission)
   └── PASS
         │
         ▼
-      VER verification
-        ├── REJECT ──► loops back to PM (rework required)
-        └── APPROVE
-              │
-              ▼
-            VER report → QUA template check (1-pass rule)
-              ├── FAIL ──► loops back to VER (re-issue report)
-              └── PASS
-                    │
-                    ▼
-                  VMGR reviews VER report
-                    ├── REJECT ──► loops to VER rework
-                    └── APPROVE
-                          │
-                          ▼
-                        COD invokes VAL (independent from VMGR and PM)
-                          │
-                          ▼
-                        VAL Validation Report
-                          │
-                          ▼
-                        QUA template check (1-pass rule)
-                          ├── FAIL ──► loops back to VAL (re-issue report)
-                          └── PASS
-                                │
-                                ▼
-                              VMGR reviews VAL report
-                                ├── REJECT ──► loops to VAL rework
-                                └── APPROVE ── VMGR V&V Decision (cannot be overridden)
-                                      │
-                                      ▼
-                                    COD gate-check:
-                                      ✓ VER report VMGR-approved
-                                      ✓ VAL report VMGR-approved
-                                      ✓ All deliverables QUA-passed
-                                      ✓ Traceability complete
-                                      ✓ Zero critical defects
-                                      │
-                                      ├── PASS ──► COD authorizes next phase
-                                      │             → @pm execute-phase N+1
-                                      └── FAIL ──► COD BLOCKS
-                                                    PM coordinates rework
-                                                    COD re-runs gate-check
+      PM reports phase deliverables complete to COD
+        │
+        ▼
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ TRACK B — Independent V&V  (COD orchestrates)
+ PM has NO authority over any agent in this track
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+COD receives phase-complete report from PM
+  │
+  ▼
+COD → VMGR: assign VER to verify phase deliverables  [SIL 3-4 only]
+  │          (SIL 0-2: COD invokes VER directly)
+  ▼
+VER performs verification of phase deliverables
+  ├── REJECT deliverable ──► COD notifies PM; PM coordinates rework
+  │                           → rework re-enters Track A from QUA check
+  └── APPROVE → VER produces Verification Report
+                  │
+                  ▼
+                QUA template check on VER report (1-pass rule)
+                  ├── FAIL ──► VER re-issues report (max 1 resubmission)
+                  └── PASS
+                        │
+                        ▼
+                      VMGR reviews VER report  [SIL 3-4 only]
+                        ├── REJECT ──► VER reworks report; QUA re-checks
+                        └── APPROVE
+                              │
+                              ▼
+                            COD invokes VAL (independent from VMGR and PM)
+                              │
+                              ▼
+                            VAL performs validation; produces Validation Report
+                              ├── REJECT deliverable ──► COD notifies PM; PM coordinates rework
+                              │                           → rework re-enters Track A from QUA check
+                              └── APPROVE → VAL Validation Report produced
+                                              │
+                                              ▼
+                                            QUA template check on VAL report (1-pass rule)
+                                              ├── FAIL ──► VAL re-issues report (max 1 resubmission)
+                                              └── PASS
+                                                    │
+                                                    ▼
+                                                  VMGR reviews VAL report  [SIL 3-4 only]
+                                                    ├── REJECT ──► VAL reworks report; QUA re-checks
+                                                    └── APPROVE ── VMGR V&V Decision (cannot be overridden)
+                                                          │
+                                                          ▼
+                                                        COD gate-check:
+                                                          ✓ All deliverables QUA-passed
+                                                          ✓ VER report QUA-passed + VMGR-approved
+                                                          ✓ VAL report QUA-passed + VMGR-approved
+                                                          ✓ Traceability complete
+                                                          ✓ Zero critical defects
+                                                          │
+                                                          ├── PASS ──► COD authorizes next phase
+                                                          │             → @pm execute-phase N+1
+                                                          └── FAIL ──► COD BLOCKS
+                                                                        PM coordinates rework
+                                                                        COD re-runs gate-check
 ```
 
 ### Phase Transition Authority Summary
@@ -174,8 +200,8 @@ CCB meeting (PM chairs)
             PM re-executes phase activities
               │
               ▼
-            QUA → VER → VMGR full approval chain
-            (same loop as Diagram 1 per-phase execution)
+            QUA (Track A) → COD → VMGR → VER → QUA → VAL → QUA → VMGR → COD gate-check
+            (same two-track loop as Diagram 1 per-phase execution)
               │
               ▼
             COD gate-check → PASS → mark re-entry complete
