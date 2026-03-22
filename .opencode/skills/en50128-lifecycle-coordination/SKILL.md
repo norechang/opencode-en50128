@@ -579,11 +579,55 @@ See [`DELIVERABLES.md`](../../../DELIVERABLES.md) for the complete Annex C Table
 
 ### Document Approval Workflow
 
-1. **Author** creates document
-2. **1st Check** (usually VER) verifies document
-3. **2nd Check** (usually VAL) validates document
-4. **Baseline** established in configuration management
-5. **Change Control** active for all changes
+**Per-Phase Execution Loop (SIL 3-4)** — see WORKFLOW.md Diagram 1 for the authoritative flow:
+
+```
+PM: orchestrates dev agents → deliverable produced
+  │
+  ▼
+QUA template check (1-pass rule)
+  ├── FAIL ──► loops back to author (PM coordinates rework)
+  └── PASS
+        │
+        ▼
+      VER verification
+        ├── REJECT ──► loops back to PM (rework required)
+        └── APPROVE
+              │
+              ▼
+            VER report → QUA template check (1-pass rule)
+              ├── FAIL ──► loops back to VER (re-issue report)
+              └── PASS
+                    │
+                    ▼
+                  VMGR reviews VER report
+                    ├── REJECT ──► loops to VER rework
+                    └── APPROVE
+                          │
+                          ▼
+                        COD invokes VAL (independent from VMGR and PM)
+                          │
+                          ▼
+                        VAL Validation Report → QUA template check (1-pass rule)
+                          ├── FAIL ──► loops back to VAL (re-issue report)
+                          └── PASS
+                                │
+                                ▼
+                              VMGR reviews VAL report
+                                ├── REJECT ──► loops to VAL rework
+                                └── APPROVE ── VMGR V&V Decision (cannot be overridden)
+                                      │
+                                      ▼
+                                    COD gate-check:
+                                      ✓ VER report VMGR-approved
+                                      ✓ VAL report VMGR-approved
+                                      ✓ All deliverables QUA-passed
+                                      ✓ Traceability complete
+                                      ✓ Zero critical defects
+                                      → PASS: COD authorizes next phase
+```
+
+**SIL 0-2 simplified loop** (VER-only phases): deliverable → QUA → VER → PASS → COD gate-check (VAL required only for Phase 5/7)
 
 ### Document Baseline Strategy
 
@@ -1186,6 +1230,10 @@ python3 tools/regression_test_selector.py --sil 3 --rtm-file rtm.md --output tes
 @val validate-iteration --iteration-id ITER-001
 # Result: APPROVED (TEST-SYS-025 now PASS)
 
+# STEP 11a: VMGR reviews and approves VAL report (SIL 3-4 mandatory)
+# VMGR reviews VAL report — cannot be overridden by COD or PM
+# Result: VMGR V&V APPROVED
+
 # STEP 12: COD completes iteration
 @cod complete-iteration --iteration-id ITER-001
 
@@ -1206,7 +1254,9 @@ python3 tools/regression_test_selector.py --sil 3 --rtm-file rtm.md --output tes
 - ✓ **Full regression suite passed** (MANDATORY)
 - ✓ Traceability updated and validated (100% coverage)
 - ✓ VER re-verification complete
+- ✓ VMGR approval of VER report recorded
 - ✓ VAL re-validation complete
+- ✓ VMGR approval of VAL report recorded (cannot be overridden)
 - ✓ Baselines updated
 - ✓ CR closed with all approvals
 

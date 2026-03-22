@@ -4,6 +4,8 @@
 
 This document provides practical workflow examples for using the Lifecycle Coordinator (COD) agent throughout the EN 50128 software development lifecycle.
 
+> **Note on `@agentname` / `/agentname` syntax**: Throughout these examples, `@cod`, `@pm`, `@ver`, `/int`, `/val`, etc. represent **user-facing chat commands** typed by a human operator into OpenCode. They are illustrative of the user interaction model. Agent-to-agent invocations (e.g. COD invoking VER internally) are performed exclusively via the `task` tool — writing `@agentname` in an agent's output does **not** trigger another agent.
+
 ---
 
 ## Workflow 1: Complete SIL 3 Project Lifecycle
@@ -38,11 +40,12 @@ Lifecycle Phases:
   1. [ ] Planning (Current Phase)
   2. [ ] Requirements
   3. [ ] Architecture & Design
-  4. [ ] Implementation & Testing
-  5. [ ] Integration
-  6. [ ] Validation
-  7. [ ] Assessment (Required for SIL 3)
-  8. [ ] Deployment
+  4. [ ] Component Design
+  5. [ ] Implementation & Testing
+  6. [ ] Integration
+  7. [ ] Validation
+  8. [ ] Assessment (Required for SIL 3)
+  9. [ ] Deployment
 
 Next Steps:
   1. Review lifecycle plan in LIFECYCLE_STATE.md
@@ -225,7 +228,26 @@ If passed → authorize transition to Implementation
 
 ---
 
-#### Step 5: Phase 4 - Implementation & Testing
+#### Step 5: Phase 4 - Component Design
+
+```bash
+@des   # Designer - Software Component Design Specifications, Component Test Specifications
+@qua   # Quality - template compliance check
+```
+
+**COD monitors**: component design completeness, test specifications ready, traceability to SAS/SDS
+
+When component design complete:
+
+```bash
+@cod gate-check component-design
+```
+
+**COD verifies** all component designs approved, test specifications ready, traceability to architecture complete.
+
+---
+
+#### Step 6: Phase 5 - Implementation & Testing
 
 ```bash
 @imp   # Implementer - write C code
@@ -288,7 +310,7 @@ User fixes issues, then:
 
 ---
 
-#### Step 6-8: Integration, Validation, Assessment, Deployment
+#### Step 7-9: Integration, Validation, Assessment, Deployment
 
 Similar pattern continues:
 
@@ -334,13 +356,13 @@ User (or PM):
 
 WARNING: Requirement change during Implementation phase.
 
-Current Phase: Implementation & Testing (Phase 4)
+Current Phase: Implementation & Testing (Phase 5)
 Activity: Modify Software Requirements
 
 Impact Analysis:
   - Requirements phase already complete (Phase 2)
   - Design based on current requirements (Phase 3)
-  - Implementation in progress (Phase 4)
+  - Implementation in progress (Phase 5)
   
 Potential Impact:
   - Design may need updates
@@ -373,9 +395,9 @@ Files to be modified:
 Impact Assessment:
   Phase 2 (Requirements): Update SRS, RTM
   Phase 3 (Design): Review design for REQ-043, modify timing for REQ-012
-  Phase 4 (Implementation): Implement new code, modify existing code
-  Phase 5 (Integration): Update integration tests
-  Phase 6 (Validation): Update system tests
+  Phase 5 (Implementation): Implement new code, modify existing code
+  Phase 6 (Integration): Update integration tests
+  Phase 7 (Validation): Update system tests
 
 Affected Modules:
   - door_control.c (REQ-012)
@@ -410,7 +432,7 @@ Logged in: LIFECYCLE_STATE.md
   - CR#: (pending CCB assignment)
 
 ITERATION INITIATED:
-  From: Phase 4 (Implementation)
+  From: Phase 5 (Implementation)
   To: Phase 2 (Requirements) - temporary return
   
 Proceeding with Requirements Engineer (REQ)...
@@ -509,7 +531,7 @@ User attempts:
 You attempted to invoke Implementation (IMP) agent.
 
 Current Phase: Requirements (Phase 2)
-IMP Agent Allowed In: Implementation & Testing (Phase 4)
+IMP Agent Allowed In: Implementation & Testing (Phase 5)
 
 Implementation cannot begin until:
   1. Requirements phase complete
@@ -543,7 +565,7 @@ User attempts:
 You attempted to invoke Implementation (IMP) agent.
 
 Current Phase: Requirements (Phase 2)
-IMP Agent Allowed In: Implementation & Testing (Phase 4)
+IMP Agent Allowed In: Implementation & Testing (Phase 5)
 
 Recommendation: Complete Requirements → Design phases first.
 

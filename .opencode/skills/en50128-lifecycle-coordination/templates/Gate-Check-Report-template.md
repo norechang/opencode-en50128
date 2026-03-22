@@ -435,11 +435,11 @@ This Gate Check Report documents the Lifecycle Coordinator (COD) assessment of P
 
 | Role | Name | Signature | Date | Comment |
 |------|------|-----------|------|---------|
-| **Lifecycle Coordinator (COD)** | [Name] | | YYYY-MM-DD | Gate check decision |
+| **V&V Manager (VMGR)** (SIL 3-4) | [Name] | | YYYY-MM-DD | V&V approval — prerequisite for gate (cannot be overridden) |
+| **Lifecycle Coordinator (COD)** | [Name] | | YYYY-MM-DD | Gate check decision (requires VMGR approval first) |
 | **Project Manager (PM)** | [Name] | | YYYY-MM-DD | Acknowledge decision |
-| **V&V Manager (VMGR)** (SIL 3-4) | [Name] | | YYYY-MM-DD | Concurrence (independent) |
 
-**Note**: For SIL 3-4, VMGR must concur with gate decision (but COD has final authority for lifecycle progression).
+**Note**: For SIL 3-4, VMGR approval is a **prerequisite** for the gate decision — COD cannot authorize the gate until VMGR has approved both the VER and VAL reports. VMGR's V&V decision cannot be overridden by COD or PM (per WORKFLOW.md Diagram 1 and EN 50128 §5.1.2.10f).
 
 ---
 

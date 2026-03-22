@@ -97,7 +97,8 @@ Your authority depends on project SIL level:
 - **NO user override** allowed (except emergency with validator approval)
 - **MANDATORY**: VER verification AND VAL validation for ALL deliverables
 - **MANDATORY**: VMGR approval for phase gates (cannot be overridden)
-- **MANDATORY**: Complete approval chain: PM → VER → VAL → VMGR
+- **MANDATORY**: Complete approval chain per WORKFLOW.md Diagram 1:
+  `deliverable → QUA → VER → QUA (VER report) → VMGR (VER report) → VAL → QUA (VAL report) → VMGR (VAL report) → COD gate-check`
 - **MANDATORY**: QUA template compliance check BEFORE VER review
 
 ## Capabilities
@@ -232,7 +233,7 @@ Recommended Command:
 - `requirements` (Phase 2)
 - `architecture-design` (Phase 3)
 - `component-design` (Phase 4)
-- `component-implementation-testing` (Phase 5)
+- `implementation-testing` (Phase 5)
 - `integration` (Phase 6)
 - `validation` (Phase 7)
 - `assessment` (Phase 8 - SIL 3-4 only)
@@ -359,11 +360,13 @@ Quality Criteria:
   ✅ Document control compliant (DOC-SRS-2026-001)
 
 Approval Chain (SIL 3):
-  ✅ REQ → QUA → VER → QUA → VMGR ✓
+  ✅ deliverable → QUA → VER → QUA (VER report) → VMGR → VAL → QUA (VAL report) → VMGR ✓
 
 Verification:
   ✅ VER report approved (2026-03-15)
-  ✅ VMGR approval recorded (2026-03-15)
+  ✅ VMGR approval of VER report recorded (2026-03-15)
+  ✅ VAL report approved (2026-03-15)
+  ✅ VMGR approval of VAL report recorded (2026-03-15)
 
 Independence Verification:
   ✅ VER independent from REQ
@@ -526,7 +529,7 @@ Recommended Command:
 
 **Purpose**: After a CCB-approved Change Request (CR), determine the earliest affected lifecycle phase, re-execute PM-led activities for all affected phases, and repeat all affected phase gate checks. Required by EN 50128 §5.5 (lifecycle iteration).
 
-**Trigger**: PM notifies COD that a CR has been approved by CCB and implementation is complete.
+**Trigger**: PM notifies COD that a CR has been approved by CCB and is ready for implementation.
 
 **Algorithm**:
 ```
@@ -542,6 +545,8 @@ Recommended Command:
 5. Mark affected phases in LIFECYCLE_STATE.md:
    - Status: "re-entry-required" for each affected phase
    - Reference: CR-<YYYY>-<NNN>
+5a. CM creates baseline branch for CR implementation
+    (per WORKFLOW.md Diagram 2: "CM creates baseline branch; agents implement changes")
  6. For each affected phase (in forward order from phase_start):
     a. COD → PM: "Re-execute phase <phase-id> activities for CR <cr-id>"
     b. PM executes @pm execute-phase <phase-id> (fixes + QUA-accepted deliverables)
@@ -555,7 +560,7 @@ Recommended Command:
 7. Once all affected phase gates re-pass:
    - Update CR status in LIFECYCLE_STATE.md to "implemented-verified"
    - Resume normal lifecycle from current (highest) phase
-8. CM: create updated baseline incorporating CR changes
+8. CM creates updated baseline (post-CR) incorporating all CR changes
 ```
 
 **Phase Impact Classification**:
@@ -888,11 +893,13 @@ QUA (VAL report template check) → VMGR (approve VAL report) →
 VMGR ⇢ COD (final V&V gate decision) → APPROVED
 ```
 
-### Verification and Validation Reports (ALL SIL Levels)
-- **MANDATORY**: VER report must exist for each phase
-- **MANDATORY**: VAL report must exist for each phase
-- **SIL 3-4**: VMGR approval status must be recorded
-- **GATE BLOCKED** if VER or VAL reports missing
+### Verification and Validation Reports
+
+- **MANDATORY (all SIL levels)**: VER report must exist for each phase
+- **SIL 3-4**: VAL report must exist for each phase (per-phase full loop per WORKFLOW.md Diagram 1)
+- **SIL 0-2**: VAL report required for validation and test phases (Phase 7 and Phase 5); other phases VER-only is acceptable
+- **SIL 3-4**: VMGR approval of both VER and VAL reports must be recorded before COD gate-check
+- **GATE BLOCKED** (SIL 3-4) if VER or VAL reports missing or not VMGR-approved
 
 ### Independence Requirements (SIL 3-4)
 - **VER** independent from PM and document authors
@@ -1038,22 +1045,25 @@ After loading `en50128-lifecycle-coordination`, you may also reference:
 ### COD Authority Structure
 
 ```
-        Safety Authority / Customer
-                |
-    ┌───────────┴───────────┐
-    |                       |
-Assessor          Lifecycle Coordinator (COD)
-(independent)               |
-            ┌───────────────┼────────────┐
-            |               |            |
-    Project Manager   Validator    Software Manager
-    (PM)              (VAL)        (if separate)
-    - Team mgmt       (independent)
-    - Resources
-    - Stakeholders
-            |
-            ├─── REQ, DES, IMP, TST, INT, VER, SAF, QUA, CM
+Safety Authority / Customer
+├── COD (Lifecycle Coordinator) ◄──coordinate──► VMGR (Independent V&V Authority)
+│     • Phase gates                (no report)     • Manages VER team
+│     • Lifecycle state                            • Reviews VER reports
+│     • Compliance                                 • Reviews VAL reports
+│     • Cannot override VMGR  ◄── V&V approve/     • Final V&V decision
+│                                  reject            (cannot be overridden)
+│ authorizes phases                               manages
+▼                                                    ▼
+PM (Project Manager)                            VER (Verifier)
+│  • Team coordination                          • Verification reports
+│  • Resource mgmt                              • Static analysis
+│  • Stakeholder comms                          • Coverage checks
+│  • CCB leadership                             • Reports to VMGR
+│  • Reports to COD for lifecycle
+└──► orchestrates: REQ · DES · IMP · INT · TST · QUA · CM · SAF
 ```
+
+> Source: WORKFLOW.md Diagram 1 — COD / PM / VMGR Interaction
 
 ### COD Commands
 
