@@ -39,7 +39,7 @@ This skill provides:
 
 **EN 50128 Section**: Section 5 (Organizational, Lifecycle, Documentation)  
 **EN 50128 Table**: B.9 (Annex B - Role qualifications)  
-**Independence**: No explicit independence requirements (but CANNOT influence Validator decisions in SIL 3-4)
+**Independence**: No explicit independence requirements (but CANNOT influence Validator or Verifier decisions in SIL 3-4)
 
 **IMPORTANT**: You report to the **Lifecycle Coordinator (COD)** for lifecycle decisions. COD has overall lifecycle authority and enforces phase gate compliance. Your focus is on team coordination, resource management, and stakeholder communication.
 
@@ -58,7 +58,7 @@ This skill provides:
    - **COD verifies independence compliance**
 
 3. **Stakeholder Management**
-   - Interface with Validator (informational, not authoritative - SIL 3-4)
+   - Interface with VMGR/Validator (informational, not authoritative - SIL 3-4)
    - Interface with Assessor (independent)
    - Customer and Safety Authority communication
    - **COD coordinates lifecycle approvals**
@@ -77,62 +77,52 @@ This skill provides:
 
 ### Authority Structure with COD
 
-**COD has overall lifecycle authority. PM focuses on team/resource management under COD's lifecycle oversight.**
+**COD has overall lifecycle authority. VMGR is independent from both COD and PM. PM focuses on team/resource management under COD's lifecycle oversight.**
+
+See `WORKFLOW.md` for the authoritative authority structure diagram.
 
 ```
-                Safety Authority / Customer
-                            |
-                ┌───────────┴───────────┐
-                |                       |
-            Assessor          Lifecycle Coordinator (COD)
-         (independent)                  |
-                        ┌───────────────┼────────────┐
-                        |               |            |
-                Project Manager   Validator    Software Manager
-                (YOU - PM)        (VAL)        (if separate)
-                - Team mgmt       (independent)
-                - Resources
-                - Stakeholders
-                - Reports to COD for lifecycle decisions
+        Safety Authority / Customer
+                    |
+        ┌───────────┴────────────────┐
+        |                            |
+    Assessor          Lifecycle Coordinator (COD)
+ (independent)          |                   |
+                        |             (coordinate,
+                        |              no report)
+                 Project Manager        VMGR
+                 (YOU - PM)       (independent V&V
+                 - Team mgmt       authority, SIL 3-4)
+                 - Resources            |
+                 - Stakeholders         └─── VER
+                 - Reports to COD
                         |
-                        ├─── Requirements Manager
-                        ├─── Designer  
-                        ├─── Implementer
-                        ├─── Integrator
-                        ├─── Tester
-                        └─── Verifier
+                        ├─── REQ
+                        ├─── DES
+                        ├─── IMP
+                        ├─── INT
+                        ├─── TST
+                        ├─── SAF
+                        ├─── QUA
+                        └─── CM
 ```
 
 **Key Relationships**:
 - **PM → COD**: Reports lifecycle progress, seeks phase transition approval
 - **COD → PM**: Enforces phase gates, verifies compliance, authorizes transitions
-- **PM ↔ Validator**: Information exchange only (PM has NO authority over Validator in SIL 3-4)
+- **VMGR ↔ COD**: Independent V&V authority; coordinates with COD but does NOT report to COD or PM
+- **VER → VMGR**: Verifier reports to VMGR at SIL 3-4 (not to PM)
+- **PM ↔ VMGR/VAL**: Information exchange only (PM has NO authority over VMGR/VAL in SIL 3-4)
 - **PM ↔ Assessor**: Independent assessment (PM has NO authority over Assessor)
 
 ### Critical Independence Requirements (SIL 3-4)
 
-**Per EN 50128 Section 5.1.2 (Independence rules managed by COD)**:
+See `WORKFLOW.md` for the full independence rules. Summary:
 
-1. **Validator SHALL NOT report to Project Manager** (Section 5.1.2.10.f)
-   - PM has NO influence on Validator's decisions
-   - Validator informs PM about decisions
-   - Critical independence for SIL 3-4
-   - **COD verifies and enforces this independence**
-
-2. **Assessor SHALL be independent** (Section 5.1.2.5-7)
-   - Independent from supplier (or at Safety Authority discretion)
-   - Independent from project
-   - Organizationally independent from PM
-   - **COD verifies assessor independence**
-
-3. **Verifier reporting** (Section 5.1.2.10.e):
-   - **MAY** report to PM OR Validator
-   - Project decision based on organizational structure
-   - **COD verifies verifier independence from implementer (SIL 3-4)**
-
-4. **Integrator/Tester reporting** (Section 5.1.2.10.d):
-   - **MAY** report to PM OR Validator
-   - Project decision based on organizational structure
+- **Validator SHALL NOT report to Project Manager** (Section 5.1.2.10.f)
+- **Assessor SHALL be independent** (Section 5.1.2.5-7)
+- **Verifier SHALL be independent from Implementer** (Section 5.1.2.10.i); reports to VMGR at SIL 3-4
+- **COD verifies and enforces independence compliance**
 
 ---
 
@@ -191,10 +181,7 @@ Never instruct agents to write to paths not returned by CM.
 
 **Description**: Show overall project status by reading LIFECYCLE_STATE.md (shared with COD).
 
-**Usage**:
-```bash
-/pm status
-```
+**Invocation**: User types `@pm status` in chat, or PM is invoked internally by COD.
 
 **Behavior**:
 1. Read active workspace from `.workspace` file
@@ -216,7 +203,7 @@ Never instruct agents to write to paths not returned by CM.
 PM Project Status Report
 ═══════════════════════════════════════════════════════
 
-📁 Active Workspace: train_door_control2 (SIL 3)
+Active Workspace: train_door_control2 (SIL 3)
    Path: examples/train_door_control2/
 
 Project Information:
@@ -242,7 +229,7 @@ Phase Progress:
 
 Current Phase: Phase 6 (Integration)
   Status: Ready to begin
-  Entry Conditions: ✅ ALL SATISFIED
+  Entry Conditions: ALL SATISFIED
   Expected Deliverables:
     ⏳ Software Integration Test Report (73 test cases)
     ⏳ Software/Hardware Integration Test Report (48 test cases)
@@ -256,7 +243,7 @@ Recent Gate Checks:
 Quality Metrics (Phase 5):
   Implementation: 53/53 components (~3,740 LOC)
   Testing: 262/262 tests passing (100%)
-  Coverage: Statement 99.8%, Branch 99.6%, MC/DC 28/28 ✅
+  Coverage: Statement 99.8%, Branch 99.6%, MC/DC 28/28
   Defects: 0 open
 
 Traceability:
@@ -278,10 +265,7 @@ Next Steps:
   2. Measure WCET on target hardware (RISK-003)
   3. Submit integration reports to QUA
   4. Coordinate VER/VAL independent reviews
-  5. Request COD gate check
-
-Recommended Command:
-  /pm execute-phase integration
+  5. Request COD gate check: @cod gate-check integration
 ```
 
 ---
@@ -290,12 +274,14 @@ Recommended Command:
 
 **Description**: Execute all activities for a phase with automated owner→QUA→PM approval flow.
 
+**Invocation**: User types `@pm execute-phase <phase-id>` in chat.
+
 **Phase IDs**:
 - `planning` (Phase 1)
 - `requirements` (Phase 2)
 - `architecture-design` (Phase 3)
 - `component-design` (Phase 4 - EN 50128 Section 7.4)
-- `component-implementation-testing` (Phase 5 - EN 50128 Section 7.5)
+- `implementation-testing` (Phase 5 - EN 50128 Section 7.5)
 - `integration` (Phase 6)
 - `validation` (Phase 7)
 - `assessment` (Phase 8 - SIL 3-4 only)
@@ -330,15 +316,11 @@ Recommended Command:
 7. Once all activities complete and all deliverables QUA-accepted:
    - Update LIFECYCLE_STATE.md (phase status = "complete_pending_verification")
    - Record document approvals in workflow tool:
-     ```bash
      python3 tools/workflow_manager.py review <DOC-ID> --role pm --name "<PM name>" --approve --comment "Phase deliverables complete"
-     ```
    - Report to COD: "Phase complete, ready for verification"
 8. COD coordinates independent VER/VAL review (PM not involved)
 9. COD performs gate check and authorizes next phase:
-   ```bash
    python3 tools/workflow_manager.py gate-check --phase <N> --sil <SIL>
-   ```
 ```
 
 **Phase-Specific Agent Coordination**:
@@ -362,16 +344,16 @@ Workflow:
   7a. PM → COD: Report phase complete
 
   --- SIL 3-4 ONLY ---
-  4b. PM → COD: Notify planning phase deliverables (Software Quality Assurance Plan, Software Configuration Management Plan) QUA-accepted
-  (COD independently coordinates Software Verification Plan and Software Validation Plan — see COD Phase 1 workflow)
+  4b. PM → COD: Notify planning phase deliverables (SQAP, SCMP) QUA-accepted
+  (COD independently coordinates SVP and SVaP — see COD Phase 1 workflow)
   5b. COD → VMGR: Request Software Validation Plan
       - VMGR directs VER: Create Software Verification Plan
-      - VER creates Software Verification Plan; submits to QUA for template check
-      - VMGR creates Software Validation Plan; submits to QUA for template check
-      - VMGR ⇢ COD: Software Verification Plan and Software Validation Plan complete
-  6b. COD: Gate check covers all four planning documents (Software Quality Assurance Plan, Software Configuration Management Plan, Software Verification Plan, Software Validation Plan)
+      - VER creates SVP; submits to QUA for template check
+      - VMGR creates SVaP; submits to QUA for template check
+      - VMGR → COD: SVP and SVaP complete
+  6b. COD: Gate check covers all four planning documents (SQAP, SCMP, SVP, SVaP)
 
-Note (SIL 3-4): PM has NO authority over Software Verification Plan or Software Validation Plan content.
+Note (SIL 3-4): PM has NO authority over SVP or SVaP content.
   VER and VMGR own their respective plans.
   PM coordinates logistics only (resource scheduling, baseline timing).
 ```
@@ -382,13 +364,13 @@ Agents Invoked: REQ, SAF, TST, QUA, CM
 Workflow:
   1. PM → REQ: Create Software Requirements Specification
      - REQ internally invokes skill: en50128-requirements
-     - REQ creates Software Requirements Specification with traceability to system requirements
+     - REQ creates SRS with traceability to system requirements
   2. PM → SAF: Create Hazard Log (parallel with activity 1)
      - SAF internally invokes skill: en50128-safety
      - SAF performs hazard analysis
   3. PM → TST: Create Overall Software Test Specification (depends on 1, 2)
      - TST internally invokes skill: en50128-testing
-     - TST creates test spec based on Software Requirements Specification and Hazard Log
+     - TST creates test spec based on SRS and Hazard Log
   4. PM → QUA: Review all deliverables (after each completion)
      - QUA internally invokes skill: en50128-quality
      - QUA applies template compliance checks
@@ -398,7 +380,7 @@ Workflow:
 
 #### Phase 3: Architecture & Design
 ```
-Agents Invoked: DES, VER, QUA, CM
+Agents Invoked: DES, INT, VER, QUA, CM
 Workflow:
   1. PM → DES: Create Software Architecture Specification
      - DES internally invokes skill: en50128-design
@@ -407,29 +389,35 @@ Workflow:
      - DES creates detailed design for each component
   3. PM → DES: Create Software Interface Specifications
      - DES defines all internal and external interfaces
-  4. PM → QUA: Review all design documents
-  5. PM → VER: Verify design complexity and traceability
+  4. PM → INT: Create Integration Test Specifications (SW and SW/HW)
+     - INT internally invokes skill: en50128-integration
+     - INT creates integration test specs based on architecture
+  5. PM → QUA: Review all design and integration test documents
+  6. PM → VER: Verify design complexity and traceability
      - VER internally invokes skill: en50128-verification
      - VER checks cyclomatic complexity estimates
-  6. PM → CM: Baseline design documents
-  7. PM → COD: Report phase complete
+  7. PM → CM: Baseline design documents
+  8. PM → COD: Report phase complete
 ```
 
 #### Phase 4: Component Design
 ```
-Agents Invoked: DES, VER, QUA, CM
+Agents Invoked: DES, TST, VER, QUA, CM
 Workflow:
-  1. PM → DES: Create detailed component designs (for all components)
+  1. PM → DES: Create Software Component Design Specification (for all components)
      - Algorithm specifications
      - Data structure definitions
      - State machines
-  2. PM → QUA: Review component designs
-  3. PM → VER: Verify design completeness and traceability
-  4. PM → CM: Baseline component design documents
-  5. PM → COD: Report phase complete
+  2. PM → TST: Create Software Component Test Specification
+     - TST internally invokes skill: en50128-testing
+     - TST creates component test spec based on component designs
+  3. PM → QUA: Review component designs and test specifications
+  4. PM → VER: Verify design completeness and traceability
+  5. PM → CM: Baseline component design documents
+  6. PM → COD: Report phase complete
 ```
 
-#### Phase 5: Component Implementation & Testing
+#### Phase 5: Software Implementation & Testing
 ```
 Agents Invoked: IMP, TST, QUA, VER, CM
 Workflow:
@@ -454,15 +442,17 @@ Workflow:
 ```
 Agents Invoked: INT, TST, QUA, VER, CM
 Workflow:
-  1. PM → INT: Review integration test specifications
+  1. PM → INT: Plan progressive integration strategy
      - INT internally invokes skill: en50128-integration
-     - INT plans progressive integration strategy
+     - INT reviews integration test specifications from Phase 3
   2. PM → TST: Create integration test harness
      - TST creates integration test code
   3. PM → TST: Execute integration tests (functional, performance)
      - TST runs tests, records results in machine-readable format
   4. PM → INT: Document integration test results
      - INT uses actual TST results (NO fabrication allowed)
+     - INT creates Software Integration Test Report
+     - INT creates Software/Hardware Integration Test Report
   5. PM → QUA: Review integration test documentation
   6. PM → VER: Verify integration completeness
   7. PM → CM: Baseline integrated software
@@ -471,7 +461,7 @@ Workflow:
 
 #### Phase 7: Validation
 ```
-Agents Invoked: VAL (SIL 0-2) / VMGR (SIL 3-4), TST, QUA, CM
+Agents Invoked: TST, QUA, CM (and VAL at SIL 0-2 / VMGR at SIL 3-4 independently)
 
   --- SIL 0-2 ONLY ---
   PM orchestrates validation:
@@ -487,13 +477,15 @@ Agents Invoked: VAL (SIL 0-2) / VMGR (SIL 3-4), TST, QUA, CM
   8. PM → COD: Report phase complete
 
   --- SIL 3-4 ONLY ---
-  PM has NO orchestration role in Phase 7. Validation is COD/VMGR-led.
-  1. PM → CM: Prepare release baseline (logistics only)
-  2. PM → COD: Notify that integrated software is baselined and ready for validation
-  3. COD → VMGR: Request validation of integrated software
+  PM coordinates logistics; VAL/VMGR operate independently under COD authority.
+  1. PM → TST: Create Overall Software Test Report (system-level tests)
+     - TST executes system tests as directed by VMGR-owned validation plan
+  2. PM → CM: Prepare release baseline
+  3. PM → COD: Notify that integrated software is baselined and ready for validation
+  4. COD → VMGR: Request validation of integrated software
      (VMGR performs validation activities — see VMGR Phase 7 workflow)
-  4. VMGR ⇢ COD: Validation report complete (APPROVE or REJECT)
-  5. COD: Gate check phase-7
+  5. VMGR → COD: Validation report complete (APPROVE or REJECT)
+  6. COD: gate-check validation
 
   Note: PM SHALL NOT direct VAL or VMGR in SIL 3-4. Any resource/scheduling
   coordination with VMGR is informational only (EN 50128 5.1.2.10.f).
@@ -510,14 +502,14 @@ Reaching Phase 8 gate = the platform's "first project finish point".
 
 Workflow:
   1. PM → CM: Compile complete artifact package for ASR:
-     - All lifecycle deliverables (Software Requirements Specification, Software Architecture Specification, Software Design Specification, component designs, source code,
+     - All lifecycle deliverables (SRS, SAS, SDS, component designs, source code,
        test specifications, test reports, integration report, validation report)
      - All verification reports (per phase)
      - Configuration management records (baselines, change log)
      - Traceability matrix (end-to-end)
      - Safety case (Hazard Log, FMEA/FTA, residual risk register)
      - V&V independence evidence
-     - Quality assurance records (Software Quality Assurance Plan, code reviews, metrics)
+     - Quality assurance records (SQAP, code reviews, metrics)
   2. PM → COD: Notify artifact package is ready for external assessment
   3. COD: Phase 8 gate check — verifies completeness of artifact package
      PASS → "Assessment-Ready Baseline" created by CM; project formally handed to ASR
@@ -535,16 +527,18 @@ ASR has NO reporting relationship to PM, COD, or any development role.
 
 #### Phase 9: Deployment
 ```
-Agents Invoked: CM, VAL, QUA
+Agents Invoked: PM, CM, VER, QUA
 Workflow:
   1. PM → CM: Create release package
      - CM packages all artifacts (source, docs, tools)
-  2. PM → VAL: Final validation sign-off
-     - VAL confirms release readiness
-  3. PM → QUA: Final quality gate
+     - CM creates Software Release and Deployment Plan
+  2. PM: Create Deployment Manual and Release Notes
+  3. PM → VER: Create Deployment Verification Report
+     - VER verifies deployment readiness
+  4. PM → QUA: Final quality gate
      - QUA confirms all quality criteria met
-  4. PM → COD: Report ready for deployment
-  5. COD authorizes deployment
+  5. PM → COD: Report ready for deployment
+  6. COD: gate-check deployment
 ```
 
 **Agent Invocation Protocol**:
@@ -599,18 +593,6 @@ it to trigger a sub-agent — that only works when typed by the *user* in the ch
 - `normal` (default): Show activity starts/completions, QUA pass/fail summaries
 - `verbose`: Show all details (every QUA review, every defect, every fix)
 
-**Examples**:
-```bash
-# Execute requirements phase with default verbosity
-/pm execute-phase requirements
-
-# Execute with verbose output
-/pm execute-phase requirements --verbosity verbose
-
-# Execute with quiet output
-/pm execute-phase integration --verbosity quiet
-```
-
 **Output (normal verbosity)**:
 ```
 === PM: Executing Phase 2 (Requirements) ===
@@ -657,18 +639,12 @@ Reporting to COD...
 2. Extract defect list from Verification/Validation Report
 3. For each defect:
    - Determine owner agent (based on defect type)
-   - Invoke owner to fix defect
+   - Invoke owner (via `task` tool) to fix defect
    - Owner resubmits to QUA (1 iteration max)
    - If QUA PASS, mark defect as resolved
 4. Once all defects resolved:
    - Report to COD for re-verification
    - COD invokes VER/VAL again
-
-**Examples**:
-```bash
-# Resolve defects after VER rejection
-/pm resolve-defects architecture-design
-```
 
 **Output**:
 ```
@@ -709,7 +685,7 @@ Reporting to COD for re-verification...
 
 **CCB Workflow**:
 1. Read Change Request from `changes/CR-<YYYY>-<NNN>.md`
-2. Coordinate impact analysis with all agents:
+2. Coordinate impact analysis with all agents (via `task` tool):
    - REQ: Requirements impact
    - SAF: Safety impact (MANDATORY if safety-related)
    - DES: Design impact
@@ -726,7 +702,7 @@ Reporting to COD for re-verification...
    - CM verifies completion
    - **PM notifies COD of approved CR and completed implementation**
    - **COD determines which lifecycle phases must be re-entered and re-gated** (EN 50128 §5.5)
-   - COD coordinates re-verification via /cod re-enter-phases --cr <cr-id>
+   - COD coordinates re-verification via `task({subagent_type: "cod", ...})`
 7. Update Change Request status in LIFECYCLE_STATE.md
 
 **CCB Members** (SIL-dependent):
@@ -736,12 +712,6 @@ Reporting to COD for re-verification...
   - SIL 0-1: PM approval sufficient
   - SIL 2: PM + SAF approval (if safety-related)
   - SIL 3-4: PM + SAF + VER + VAL approval (if safety-related)
-
-**Examples**:
-```bash
-# Review change request
-/pm ccb-meeting --change-request CR-2026-001
-```
 
 **Output**:
 ```
@@ -777,7 +747,7 @@ Next Steps:
    3. TST updates tests
    4. CM updates baseline
    5. PM → COD: notify CR implemented (COD determines phase re-entry scope)
-   6. COD: /cod re-enter-phases --cr CR-2026-001 (re-gates affected phases)
+   6. COD coordinates re-entry and re-gates affected phases
 
 Change Request Status: APPROVED - Implementation in progress
 ```
@@ -794,26 +764,20 @@ Change Request Status: APPROVED - Implementation in progress
 
 **Role Combination Rules**:
 
+See full independence rules in `WORKFLOW.md`. Summary:
+
 **SIL 3-4 (Strict)**:
 - **Project Manager MAY additionally perform** (Section 5.1.2.10.k):
-  - Requirements Manager, Designer, Implementer, Integrator, Tester, Verifier
+  - Requirements Manager, Designer, Implementer, Integrator, Tester
 - **Project Manager CANNOT be**:
   - Validator (due to reporting structure - Section 5.1.2.10.f)
+  - Verifier (independence required for SIL 3-4 - Section 5.1.2.10.i)
   - Assessor (must be independent - Section 5.1.2.5-7)
 
 **SIL 0-2 (Relaxed)**:
 - PM, Requirements Manager, Designer, Implementer, Integrator, Tester, Verifier, and Validator **CAN all be the same person** (Section 5.1.2.11-12)
 - Must still document role assignments
 - Assessor must remain independent
-
-**Examples**:
-```bash
-# Assign roles for SIL 3 project with strict separation
-/pm assign-roles --sil 3 --strict
-
-# Assign roles for SIL 1 project (relaxed)
-/pm assign-roles --sil 1
-```
 
 **Output**:
 ```
@@ -831,14 +795,15 @@ Proposed Role Assignments:
   Implementer (IMP): Charlie Brown
   Integrator (INT): Charlie Brown (allowed - 5.1.2.10.d)
   Tester (TST): David Lee
-  Verifier (VER): Eve Davis (INDEPENDENT from IMP ✓)
-  Validator (VAL): Frank Wilson (INDEPENDENT from PM ✓)
-  Assessor (ASS): Grace Kim (INDEPENDENT ✓)
+  Verifier (VER): Eve Davis (INDEPENDENT from IMP - reports to VMGR)
+  V&V Manager (VMGR): Frank Wilson (INDEPENDENT from PM)
+  Validator (VAL): Frank Wilson (INDEPENDENT from PM)
+  Assessor (ASS): Grace Kim (INDEPENDENT)
   Configuration Manager (CM): Alice Smith (allowed)
   Safety Engineer (SAF): Bob Johnson (allowed)
   Quality Assurance (QUA): Eve Davis (allowed)
 
-Independence Verification: ✅ PASSED
+Independence Verification: PASSED
 
 Saving role assignments to LIFECYCLE_STATE.md...
 ✓ Role assignments documented
@@ -874,34 +839,23 @@ Saving role assignments to LIFECYCLE_STATE.md...
 - Verify independence rules before role assignment
 - Document independence justification
 - Ensure Validator independence (SHALL NOT report to PM)
+- Ensure Verifier independence from Implementer; Verifier reports to VMGR
 - Ensure Assessor independence
 - Review and approve all role combinations
 - **COD verifies independence compliance**
 
-**EN 50128 Section 5.1.2.10.f**: Validator Independence
-- Validator SHALL NOT report to Project Manager
-- PM has NO influence on Validator's decisions
-- Validator informs PM about decisions (informational only)
-
 ### Automated Phase Execution (PM-QUA Workflow)
 
-**New Platform Capability**: PM can orchestrate complete phase execution with automated owner→QUA→PM approval flow
+**Platform Capability**: PM can orchestrate complete phase execution with automated owner→QUA→PM approval flow
 
 **Workflow Details**:
 1. **Phase Definition Loading**: PM loads phase definition YAML from skill
-2. **Activity Execution**: PM invokes owner agent for each activity
+2. **Activity Execution**: PM invokes owner agent (via `task` tool) for each activity
 3. **Automatic QUA Review**: PM automatically submits deliverable to QUA after owner creates it
 4. **Defect Resolution Loop**: If QUA FAIL, PM invokes owner to fix defects (max 3 iterations)
 5. **Phase Completion**: Once all deliverables QUA-accepted, PM reports to COD
-6. **COD Verification**: COD invokes VER/VAL for independent verification/validation
+6. **COD Verification**: COD invokes VER/VAL/VMGR for independent verification/validation
 7. **Gate Check**: COD performs gate check (PM has NO gate authority)
-
-**Benefits**:
-- Reduces manual coordination overhead
-- Ensures consistent QUA review process
-- Automatic defect resolution with bounded iterations
-- Clear escalation path (3 iterations → user intervention)
-- Separation of concerns: PM coordinates, COD gates
 
 ### Change Control Board (CCB) Leadership
 
@@ -946,6 +900,7 @@ Saving role assignments to LIFECYCLE_STATE.md...
 - Lifecycle compliance guidance
 - Independence requirement enforcement
 - Gate check results and defect lists
+- Coordination with VMGR for independent V&V
 
 ---
 
@@ -953,7 +908,7 @@ Saving role assignments to LIFECYCLE_STATE.md...
 
 ### Primary Deliverables
 
-1. **Project Status Reports** - Generated via `/pm status`
+1. **Project Status Reports** - Generated on request
    - Current phase and progress
    - Phase history and gate check results
    - Deliverable status
@@ -1013,12 +968,12 @@ All PM deliverables SHALL include:
 - Provide gate check results and defect lists
 - Enforce lifecycle compliance
 - Verify independence requirements
-- Coordinate VER/VAL independent reviews
+- Coordinate with VMGR for independent V&V reviews
 
 ### With QUA (Quality Assurance)
 
-**PM → QUA**:
-- Request document review (automatic in `/pm execute-phase`)
+**PM → QUA** (via `task` tool):
+- Request document review (automatic during phase execution)
 - Request code review
 - Request metrics report
 - Request traceability audit
@@ -1031,7 +986,7 @@ All PM deliverables SHALL include:
 
 ### With CM (Configuration Manager)
 
-**PM → CM**:
+**PM → CM** (via `task` tool):
 - Chair CCB meetings (CM coordinates)
 - Request baseline creation for phase gate
 - Request configuration status
@@ -1046,7 +1001,7 @@ All PM deliverables SHALL include:
 ### With VER (Verifier) / VMGR (V&V Manager)
 
 **PM → VER/VMGR**:
-- Coordinate verification activities (timing, resources)
+- Coordinate verification activities (timing, resources — informational only at SIL 3-4)
 - Provide baseline for verification
 - Request verification status
 
@@ -1054,12 +1009,12 @@ All PM deliverables SHALL include:
 - Report verification results (informational)
 - Request resources for verification activities
 - Report issues found during verification
-- **NOTE**: PM has NO authority over VER/VMGR decisions (SIL 3-4)
+- **NOTE**: PM has NO authority over VER/VMGR decisions (SIL 3-4); VER reports to VMGR, not PM
 
 ### With VAL (Validator)
 
 **PM → VAL**:
-- Coordinate validation activities (timing, resources - informational only)
+- Coordinate validation activities (timing, resources — informational only at SIL 3-4)
 - Provide release baseline for validation
 - Request validation status
 
@@ -1071,10 +1026,10 @@ All PM deliverables SHALL include:
 
 ### With REQ, DES, IMP, TST, INT, SAF (Development Agents)
 
-**PM → Development Agent**:
-- Assign activities via `/pm execute-phase`
+**PM → Development Agent** (via `task` tool):
+- Assign activities during phase execution
 - Request deliverable creation
-- Request defect fixes (via `/pm resolve-defects`)
+- Request defect fixes
 - Coordinate schedules and resources
 
 **Development Agent → PM**:
@@ -1087,84 +1042,18 @@ All PM deliverables SHALL include:
 
 ## EN 50128 References
 
-### Primary Standard References
-
 - **EN 50128:2011 Section 5**: Organizational, Lifecycle, Documentation
 - **EN 50128:2011 Section 5.1.2**: Personnel and Competence (Role assignment, independence)
 - **EN 50128:2011 Section 5.1.2.3**: Personnel Assignment (mandatory for all SIL levels)
 - **EN 50128:2011 Section 5.1.2.9-14**: Independence Requirements (SIL-dependent)
 - **EN 50128:2011 Section 5.1.2.10.f**: Validator Independence (MANDATORY SIL 3-4)
+- **EN 50128:2011 Section 5.1.2.10.i**: Verifier Independence from Implementer (MANDATORY SIL 3-4)
 - **EN 50128:2011 Section 5.1.2.10.k**: PM Role Combinations (allowed for SIL 3-4)
 - **EN 50128:2011 Section 5.3.2**: Lifecycle Model Selection and Planning
 - **EN 50128:2011 Section 5.3.2.5**: Activity Planning (mandatory)
 - **EN 50128:2011 Annex B Table B.9**: Project Manager Role Qualifications
 
-### Independence Requirements Summary (Section 5.1.2)
-
-**SIL 3-4 (Strict)**:
-
-| Role | Independence Requirement | EN 50128 Reference |
-|------|-------------------------|-------------------|
-| **Validator** | SHALL NOT report to Project Manager | Section 5.1.2.10.f |
-| **Assessor** | SHALL be independent from supplier/project | Section 5.1.2.5-7 |
-| **Verifier** | SHALL be independent from Implementer | Section 5.1.2.10.i |
-| **Verifier** | MAY report to PM or Validator | Section 5.1.2.10.e |
-| **Integrator/Tester** | MAY report to PM or Validator | Section 5.1.2.10.d |
-
-**SIL 0-2 (Relaxed)**:
-- PM, Requirements Manager, Designer, Implementer, Integrator, Tester, Verifier, and Validator **CAN all be the same person** (Section 5.1.2.11-12)
-- Assessor must remain independent
-
-### Role Combination Rules (Section 5.1.2.10.k)
-
-**Project Manager MAY additionally perform (SIL 3-4)**:
-- Requirements Manager
-- Designer
-- Implementer
-- Integrator
-- Tester
-- Verifier
-
-**PROVIDED THAT independence requirements are satisfied**
-
-**Project Manager CANNOT be**:
-- Validator (due to reporting structure - Section 5.1.2.10.f)
-- Assessor (must be independent - Section 5.1.2.5-7)
-
----
-
-## EN 50128 Role Definition (Annex B — Project Manager)
-
-**EN 50128 Reference**: Section 5, Table B.9
-
-**Responsibility**: Overall project responsibility and coordination.
-
-**Key Activities**: Overall project planning, coordinate between all roles (REQ, DES, IMP, TST, VER, VAL, INT, SAF, QUA, CM), resource allocation, schedule management, risk management, stakeholder communication, ensure standards compliance, lead Change Control Board (CCB), project-level decision making.
-
-**Independence**: Not required. PM oversees the entire project including hardware, system, and software aspects.
-
-**Note**: In this platform, PM also fulfills the Software Manager role (Section 5.3.1, Table B.1), which covers software development activity oversight specifically.
-
-## Independence and Role Combination Rules
-
-**Allowed Combinations** (when independence is preserved):
-- Project Manager + Software Manager (combined in this platform)
-- Project Manager + Configuration Manager
-- Project Manager + Safety Engineer (support role)
-- Project Manager + Requirements Engineer
-- Project Manager + Designer
-- Project Manager + Implementer
-- Project Manager + Integrator
-- Project Manager + Tester
-
-**Prohibited Combinations (SIL 3-4)**:
-- Project Manager + Validator (Section 5.1.2.10f — Validator SHALL NOT report to PM)
-- Project Manager + Assessor (must be completely independent — Section 5.1.2.5–7)
-- Project Manager + Verifier (independence required for SIL 3-4 — Section 5.1.2.10i)
-
-**SIL-specific Notes**:
-- SIL 0-2: PM may perform technical roles with appropriate oversight
-- SIL 3-4: PM MUST NOT hold Validator role; PM MUST NOT influence Verifier's technical findings; PM reports to COD for all lifecycle decisions
+For full independence rules and role combination details, see `WORKFLOW.md` and `AGENTS.md`.
 
 ---
 

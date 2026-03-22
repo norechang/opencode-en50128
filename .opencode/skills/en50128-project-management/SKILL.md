@@ -280,16 +280,32 @@ Based on SIL 3, the following independence requirements apply:
 **Document in Software Management Plan:**
 
 ```markdown
-# Lifecycle Model - V-Model with Iterations
+# Lifecycle Model - V-Model (EN 50128 10-Phase)
 
-## Phase Structure:
-1. Requirements Specification
-2. Architecture & Design
-3. Component Design
-4. Implementation & Unit Testing
-5. Integration & Integration Testing
-6. System Testing / Validation
-7. Deployment
+## Phase Structure (see LIFECYCLE.md for authoritative detail):
+- Phase 0:  Initialization       (COD only — @cod plan)
+- Phase 1:  Planning             (@pm execute-phase planning)
+- Phase 2:  Requirements         (@pm execute-phase requirements)
+- Phase 3:  Architecture & Design(@pm execute-phase architecture-design)
+- Phase 4:  Component Design     (@pm execute-phase component-design)
+- Phase 5:  Implementation &     (@pm execute-phase implementation-testing)
+            Testing
+- Phase 6:  Integration          (@pm execute-phase integration)
+- Phase 7:  Validation           (@pm execute-phase validation)
+- Phase 8:  Assessment           (SIL 3-4 mandatory — external ASR)
+- Phase 9:  Deployment           (@pm execute-phase deployment)
+- Phase 10: Maintenance          (ongoing — CCB-driven change requests)
+
+## Gate-Check Commands (COD only):
+  @cod gate-check planning
+  @cod gate-check requirements
+  @cod gate-check design
+  @cod gate-check component-design
+  @cod gate-check implementation-testing
+  @cod gate-check integration
+  @cod gate-check validation
+  @cod gate-check assessment
+  @cod gate-check deployment
 
 ## Iteration Strategy:
 - **Iteration 1 (3 months):** Core track circuit monitoring
@@ -299,12 +315,13 @@ Based on SIL 3, the following independence requirements apply:
 ## Quality Assurance:
 - QA activities run in parallel with all phases (Section 5.3.2.3)
 - Independent verification at each phase gate
-- Independent validation before release
+- Independent validation before release (VMGR-led at SIL 3-4)
 
 ## Phase Gate Criteria:
 Each phase requires:
-- All deliverables complete
-- Verification report approved
+- All deliverables complete and QUA-accepted
+- Verification report approved (VER → VMGR at SIL 3-4)
+- Validation report approved (VAL → VMGR at SIL 3-4)
 - All defects resolved or deferred with rationale
 - Traceability updated (MANDATORY SIL 3+)
 ```

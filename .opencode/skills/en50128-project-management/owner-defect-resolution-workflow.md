@@ -10,38 +10,30 @@ When an owner agent creates a deliverable (e.g., REQ creates SRS), the deliverab
 
 **Approval Flow**: Owner → QUA → [Fix Loop] → PM
 
+Owner agents are invoked by PM via the `task()` tool. QUA review is also invoked by PM (or by the owner agent itself) via `task()`. There are no slash commands — all inter-agent invocations use the `task()` tool.
+
 ---
 
-## Standard Commands for Owner Agents
+## Workflow: Submit Deliverable to QUA
 
-Each owner agent (REQ, SAF, TST, DES, IMP) implements these commands:
+When PM invokes an owner agent to create a deliverable, the owner agent shall:
 
-### 1. `/[agent] submit-to-qua <doc-path> [--doc-type <type>]`
-
-**Description**: Submit deliverable to QUA for quality review
-
-**Parameters**:
-- `<doc-path>`: Path to document (e.g., `docs/SRS.md`)
-- `--doc-type <type>`: Optional document type (auto-detected if not provided)
-
-**Workflow**:
-```
-1. Verify document exists and is complete
-2. Invoke QUA: /qua review-document <doc-path> --owner [agent] --doc-type [type]
-3. QUA returns: PASS/FAIL + defect list
+1. Create the deliverable (document or code artifact)
+2. Invoke QUA via `task()` to review the deliverable:
+   ```
+   task({
+     description: "Review <doc-name>",
+     subagent_type: "qua",
+     prompt: "Review <doc-path> for <doc-type> compliance. SIL: <N>. Return PASS or FAIL with defect list."
+   })
+   ```
+3. Receive QUA result: PASS or FAIL + defect list
 4. If PASS:
    - Log: "✓ [Document] accepted by QUA"
-   - Return: SUCCESS
+   - Return SUCCESS to PM (deliverable path + status)
 5. If FAIL:
    - Log: "✗ [Document] rejected by QUA ([N] errors)"
-   - Return: FAIL + defect list
-```
-
-**Example**:
-```bash
-# REQ submits SRS to QUA
-/req submit-to-qua docs/SRS.md --doc-type SRS
-```
+   - Proceed to defect fix loop (see below)
 
 **Output (PASS)**:
 ```
@@ -68,59 +60,22 @@ Defects found:
    Location: Section 3.2
    Fix: Consider splitting into multiple requirements
 
-Status: DEFECTS MUST BE FIXED
-Next: Use /req fix-defects docs/SRS.md
+Status: DEFECTS MUST BE FIXED — proceeding to auto-fix loop
 ```
 
 ---
 
-### 2. `/[agent] fix-defects <doc-path> --defects <defect-list-json>`
+## Workflow: Fix Defects
 
-**Description**: Automatically fix defects reported by QUA
+When QUA returns defects, the owner agent shall apply automated fixes directly to the deliverable:
 
-**Parameters**:
-- `<doc-path>`: Path to document
-- `--defects <json>`: JSON array of defects (from QUA report)
-
-**Workflow**:
-```
-1. Load document
-2. For each defect in defect list:
-   a. Parse defect (check_id, location, issue, fix_suggestion)
-   b. Apply automated fix based on defect type:
-      - Document ID format: Update to correct format
-      - Missing field: Add field with appropriate value
-      - Incorrect format: Correct format
-      - Missing section: Add section
+1. Load the document
+2. For each defect in the defect list:
+   a. Parse the defect (check_id, location, issue, fix_suggestion)
+   b. Apply automated fix based on defect type (see fix strategies below)
    c. Log fix applied
-3. Save updated document
-4. Return: SUCCESS
-```
-
-**Automated Fix Strategies by Defect Type**:
-
-| Defect Type | Automated Fix Strategy |
-|-------------|------------------------|
-| **Document ID format** | Extract components, reformat to DOC-XXX-YYYY-NNN |
-| **Missing SIL level** | Infer from context or default to project SIL |
-| **Missing keywords** | Add appropriate keyword based on requirement type |
-| **Missing verification method** | Default to "Test" for functional, "Review" for non-functional |
-| **Missing section** | Add section with template structure |
-| **Missing table** | Add table with required columns |
-| **Incorrect format** | Reformat to match pattern |
-
-**Example**:
-```bash
-/req fix-defects docs/SRS.md --defects '[
-  {
-    "check_id": "SRS-T001",
-    "severity": "error",
-    "location": "Document Control",
-    "issue": "Document ID format incorrect",
-    "fix": "Update to DOC-SRS-2026-001"
-  }
-]'
-```
+3. Save the updated document
+4. Resubmit to QUA (repeat submit workflow above)
 
 **Output**:
 ```
@@ -138,42 +93,30 @@ Defect 2/2: SRS-Q002 - Missing SIL level
 
 Summary: 2/2 defects fixed
 Status: READY FOR RESUBMISSION
-Next: Use /req submit-to-qua docs/SRS.md
 ```
 
 ---
 
-### 3. `/[agent] submit-with-retry <doc-path> [--max-iterations 3]`
+## Workflow: Submit with Retry Loop
 
-**Description**: Submit to QUA with automatic defect fixing and retry (used by PM orchestration)
+The owner agent shall iterate up to `max_iterations` (default: 3) times:
 
-**Parameters**:
-- `<doc-path>`: Path to document
-- `--max-iterations <N>`: Maximum retry attempts (default: 3)
-
-**Workflow**:
 ```
 iteration = 1
 while iteration <= max_iterations:
-  1. Submit to QUA: /[agent] submit-to-qua <doc-path>
+  1. Invoke QUA via task() to review document
   2. If QUA PASS:
      - Log: "✓ [Document] accepted by QUA after [N] iteration(s)"
-     - Return: SUCCESS
+     - Return: SUCCESS to PM
   3. If QUA FAIL:
      - Log: "✗ Iteration [N]/[max]: QUA rejected with [M] errors"
      - If iteration < max_iterations:
-       - Fix defects: /[agent] fix-defects <doc-path> --defects [defect_list]
+       - Apply auto-fixes to document
        - Increment iteration
        - Continue loop
      - Else:
        - Log: "⚠ Failed after [max] iterations, escalating to user"
-       - Return: ESCALATE + defect list
-```
-
-**Example**:
-```bash
-# PM invokes with automatic retry
-/req submit-with-retry docs/SRS.md --max-iterations 3
+       - Return: ESCALATE + remaining defect list to PM
 ```
 
 **Output (Success after 2 iterations)**:
@@ -300,80 +243,86 @@ Action: Please fix defect manually and retry
 
 ---
 
-## Integration with PM Orchestration
+## Integration with PM Phase Execution
 
-When PM executes `/pm execute-phase <phase-id>`:
+When PM executes a phase (invoked by user as `@pm execute-phase <phase-id>`), PM orchestrates owner agents via the `task()` tool using the following pattern:
 
 ```python
-# Pseudocode
+# Pseudocode for PM phase execution inner loop
 for activity in phase.activities:
   # 1. Invoke owner to create deliverable
-  owner_agent = activity.agent
-  deliverables = owner_agent.create_deliverables(activity)
+  owner_result = task({
+    subagent_type: activity.agent,
+    prompt: f"Create {activity.deliverable_name} for {phase_id}. ..."
+  })
   
-  # 2. For each deliverable
-  for deliverable in deliverables:
-    if deliverable.qua_required:
-      # 3. Submit with automatic retry
-      result = owner_agent.submit_with_retry(
-        doc_path=deliverable.path,
-        max_iterations=3
-      )
-      
-      # 4. Handle result
-      if result.status == "SUCCESS":
-        pm.mark_deliverable_accepted(deliverable)
-        if verbosity >= "normal":
-          print(f"✓ {deliverable.name} accepted by QUA after {result.iterations} iteration(s)")
-      
-      elif result.status == "ESCALATE":
-        # User intervention required
-        if verbosity >= "quiet":
-          print(f"⚠ {deliverable.name} requires manual intervention")
-          print(f"Remaining defects: {result.defects}")
-        
-        user_choice = prompt_user([
-          "Fix manually and retry",
-          "Skip this deliverable (phase incomplete)",
-          "Abort phase execution"
-        ])
-        
-        if user_choice == "fix_and_retry":
-          # Wait for user to fix, then retry
-          wait_for_user_fix()
-          result = owner_agent.submit_with_retry(deliverable.path, max_iterations=1)
+  # owner_result includes deliverable path + QUA submit-with-retry outcome
+  
+  # 2. Handle result
+  if owner_result.qua_status == "SUCCESS":
+    pm.mark_deliverable_accepted(owner_result.deliverable)
+    print(f"✓ {owner_result.deliverable.name} accepted by QUA after {owner_result.iterations} iteration(s)")
+  
+  elif owner_result.qua_status == "ESCALATE":
+    # User intervention required
+    print(f"⚠ {owner_result.deliverable.name} requires manual intervention")
+    print(f"Remaining defects: {owner_result.defects}")
+    
+    # PM suspends phase execution and asks user how to proceed:
+    # - Fix manually and PM retries (invokes same owner agent again via task())
+    # - Skip this deliverable (phase incomplete — PM reports to COD)
+    # - Abort phase execution
 ```
+
+Owner agents receiving PM's `task()` invocation SHALL:
+1. Create the deliverable
+2. Run the submit-with-retry loop internally (invoking QUA via `task()`)
+3. Return a structured result to PM containing:
+   - `deliverable_path`: canonical path returned by CM
+   - `qua_status`: "SUCCESS" | "ESCALATE"
+   - `iterations`: number of QUA review cycles
+   - `defects`: remaining defects if ESCALATE
 
 ---
 
-## Owner Agent Implementation Checklist
+## Owner Agent Behavior Checklist
 
 Each owner agent (REQ, SAF, TST, DES, IMP) must implement:
 
-- [ ] `/[agent] submit-to-qua <doc-path>` - Submit to QUA
-- [ ] `/[agent] fix-defects <doc-path> --defects <json>` - Auto-fix defects
-- [ ] `/[agent] submit-with-retry <doc-path>` - Submit with retry loop
-- [ ] Defect auto-fix logic for common defect types
-- [ ] Escalation handling for complex defects
+- [ ] On PM invocation via `task()`: create deliverable, then run QUA submit-with-retry loop
+- [ ] Invoke QUA via `task({subagent_type: "qua", ...})` — not via any slash command
+- [ ] Apply defect auto-fix logic for common defect types
+- [ ] Escalate to PM (via return value) when auto-fix is exhausted after 3 iterations
+- [ ] Return structured result (deliverable path, QUA status, iteration count, remaining defects)
 
 ---
 
 ## Example: REQ Agent Workflow
 
-```bash
-# 1. REQ creates SRS (invoked by PM)
-/req create-srs --project train_door_control2
+```
+1. PM invokes REQ via task():
+   task({
+     description: "Create Software Requirements Specification",
+     subagent_type: "req",
+     prompt: "Create the SRS for project train_door_control2 at SIL 3.
+              Query CM for canonical path first.
+              After creating, run QUA submit-with-retry loop (max 3 iterations).
+              Return: {deliverable_path, qua_status, iterations, defects}."
+   })
 
-# 2. PM invokes submit-with-retry (automatic)
-/req submit-with-retry docs/SRS.md
+2. REQ internally:
+   a. task({subagent_type: "cm", prompt: "query-location --doc srs"})
+      → returns: phase-2-requirements/Software-Requirements-Specification.md
+   b. Creates Software-Requirements-Specification.md
+   c. Iteration 1: task({subagent_type: "qua", prompt: "Review phase-2-requirements/Software-Requirements-Specification.md ..."})
+      → QUA FAIL (2 errors)
+   d. Auto-fixes 2/2 defects
+   e. Iteration 2: task({subagent_type: "qua", prompt: "Review ..."})
+      → QUA PASS
+   f. Returns to PM: {deliverable_path: "phase-2-requirements/Software-Requirements-Specification.md", qua_status: "SUCCESS", iterations: 2}
 
-# Internal workflow:
-#   Iteration 1: Submit → QUA FAIL (2 errors) → Auto-fix → Resubmit
-#   Iteration 2: Submit → QUA PASS
-#   Result: SUCCESS after 2 iterations
-
-# 3. PM marks SRS as QUA-accepted
-# 4. PM continues with next activity (SAF creates Hazard Log)
+3. PM marks SRS as QUA-accepted
+4. PM continues with next activity (SAF creates Hazard Log)
 ```
 
 ---
@@ -390,6 +339,5 @@ Each owner agent (REQ, SAF, TST, DES, IMP) must implement:
 
 ## Files
 
-- Owner agent commands: `.opencode/commands/req.md`, `saf.md`, `tst.md`, `des.md`, `imp.md`
 - QUA checkers: `.opencode/skills/en50128-quality/review-criteria/*.yaml`
 - Phase definitions: `.opencode/skills/en50128-project-management/phase-definitions/*.yaml`

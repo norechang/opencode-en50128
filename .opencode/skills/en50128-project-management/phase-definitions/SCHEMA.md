@@ -183,4 +183,4 @@ Phase definition files are stored in:
 .opencode/skills/en50128-project-management/phase-definitions/
 ```
 
-Phase definitions are loaded by PM agent when executing `/pm execute-phase <phase-id>`.
+Phase definitions are loaded by PM agent when the user invokes `@pm execute-phase <phase-id>`.
