@@ -175,16 +175,16 @@ Format: `DOC-<TYPE>-YYYY-NNN`
 | Phase | Annex C Items | EN 50128 Section | Documents | Phase Definition File |
 |-------|--------------|-----------------|-----------|----------------------|
 | Phase 0: Initialization | — | Platform Extension | 1 document | N/A (COD internal) |
-| Phase 1: Planning | 1–5 | 5, 6.5, 6.6 | 5 documents | N/A (manual setup) |
+| Phase 1: Planning | 1–5 | 5, 6.5, 6.6 | 5 documents | `phase-1-planning.yaml` |
 | Phase 2: Requirements | 6–8 | 7.2 | 3 documents | `phase-2-requirements.yaml` |
 | Phase 3: Architecture & Design | 9–14 | 7.3 | 6 documents | `phase-3-architecture-design.yaml` |
 | Phase 4: Component Design | 15–17 | 7.4 | 3 documents | `phase-4-component-design.yaml` |
 | Phase 5: Implementation & Testing | 18–20 | 7.5 | 3 documents | `phase-5-implementation-testing.yaml` |
 | Phase 6: Integration | 21–22 | 7.6 | 2 documents | `phase-6-integration.yaml` |
 | Phase 7: Validation | 23–26 | 7.7 | 4 documents | `phase-7-validation.yaml` |
-| Phase 8: Assessment | 45–46 | 6.4 | 2 documents | Mandatory SIL 1-4 (§6.4.1.1, §5.1.2.4); SIL 0 exempt |
-| Phase 9: Deployment | 36–40 | 9.1 | 5 documents | Not yet created |
-| Phase 10: Maintenance | 41–44 | 9.2 | 4 documents | Not yet created |
+| Phase 8: Assessment | 45–46 | 6.4 | 2 documents | `phase-8-assessment.yaml` (Mandatory SIL 1-4; SIL 0 exempt §6.4.1.2) |
+| Phase 9: Deployment | 36–40 | 9.1 | 5 documents | `phase-9-deployment.yaml` |
+| Phase 10: Maintenance | 41–44 | 9.2 | 4 documents | `phase-10-maintenance.yaml` |
 | (Section 8 only) | 28–35 | 8 | 8 documents | N/A — generic software platforms only |
 
 **Total Annex C Documents**: 46 (items 1–46)  

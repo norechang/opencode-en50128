@@ -1,0 +1,127 @@
+phase:
+  id: "planning"
+  number: 1
+  name: "Software Planning"
+
+  # Agent activities — TRACK A ONLY (PM-orchestrated development activities)
+  # VER, VAL, and VMGR are Track B (COD-orchestrated). They are NOT listed here.
+  # Track B is driven by the `verification:` and `validation:` sections below.
+  #
+  # EN 50128 Sections 5, 6.5, 6.6 — 5 Annex C documents: #1, #2, #3, #4, #5
+  #
+  # IMPORTANT — Track B ownership of planning documents:
+  #   Annex C #2  (Software Quality Assurance Verification Report) — written by VER (Track B)
+  #   Annex C #4  (Software Verification Plan)                     — written by VER (Track B)
+  #   Annex C #5  (Software Validation Plan)                       — written by VAL (Track B)
+  #
+  # NORMATIVE OVERRIDE: All five planning documents are MANDATORY for ALL SIL levels
+  # despite Annex C showing "HR" (Annex C is informative). Normative clauses:
+  #   §5.3.2.4  — "A Software Development Plan shall be produced"
+  #   §6.2.4.2  — "A Software Verification Plan shall be produced"
+  #   §6.3.4.2  — "A Software Validation Plan shall be produced"
+  #   §6.5.4.3  — "A Software Quality Assurance Plan shall be written"
+  #   §6.6.4.1  — "A Software Configuration Management Plan shall be produced"
+  activities:
+    # Activity 0: QUA creates Software Quality Assurance Plan (Annex C #1, §6.5.4.3)
+    # Written by QUA per §6.5.4.3 "under the responsibility of the Verifier".
+    # Note: Annex C "Written by" is blank for item 1; QUA is the responsible role by definition.
+    - agent: "qua"
+      task_description: "Create Software Quality Assurance Plan (SQAP) per EN 50128 §6.5.4.3. The SQAP SHALL document: quality assurance activities and responsibilities throughout the lifecycle, document control procedures, deviation control, non-conformance handling, QA audit schedule, and applicable standards (MISRA C:2012 for SIL 2+). MANDATORY for all SIL levels per §6.5.4.3."
+      owner: "qua"
+      deliverables:
+        - path: "docs/planning/Software-Quality-Assurance-Plan.md"
+          doc_id: "DOC-SQAP-2026-001"
+          doc_type: "Software-Quality-Assurance-Plan"
+          qua_required: true
+      parallel_group: 1
+
+    # Activity 1: CM creates Software Configuration Management Plan (Annex C #3, §6.6.4.1)
+    - agent: "cm"
+      task_description: "Create Software Configuration Management Plan (SCMP) per EN 50128 §6.6.4.1. The SCMP SHALL document: configuration identification procedures, version control scheme (Git), baseline management strategy, change control board (CCB) procedures, configuration audit procedures, and tool configuration (compiler, static analysis tools). MANDATORY for all SIL levels per §6.6.4.1."
+      owner: "cm"
+      deliverables:
+        - path: "docs/planning/Software-Configuration-Management-Plan.md"
+          doc_id: "DOC-SCMP-2026-001"
+          doc_type: "Software-Configuration-Management-Plan"
+          qua_required: true
+      parallel_group: 1
+
+    # Activity 2: SAF determines SIL levels and establishes safety planning
+    # Not an Annex C document, but a mandatory LIFECYCLE.md Phase 1 activity.
+    # SAF provides SIL level determination input to all planning documents.
+    - agent: "saf"
+      task_description: "Determine SIL levels for all software functions based on system safety requirements. Establish safety planning inputs: identify safety-critical functions, assign SIL levels per EN 50126/EN 50128 §5.1.2, document SIL assignments in a SIL Assignment Record, and provide SIL level inputs to SQAP, SCMP, SVP, and SVaP. SIL assignments SHALL be approved before Phase 2 begins."
+      owner: "saf"
+      deliverables:
+        - path: "docs/planning/SIL-Assignment-Record.md"
+          doc_id: "DOC-SILASSIGN-2026-001"
+          doc_type: "SIL-Assignment-Record"
+          qua_required: true
+      parallel_group: 1
+
+  # Phase completion criteria (checked by COD during gate check)
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: false     # Traceability matrix begins in Phase 2 (Requirements)
+    custom_checks:
+      - "All 5 Annex C planning documents produced: SQAP (#1), SQAVR (#2), SCMP (#3), SVP (#4), SVaP (#5)"
+      - "SQAP approved (mandatory §6.5.4.3 for all SIL levels)"
+      - "SCMP approved (mandatory §6.6.4.1 for all SIL levels)"
+      - "SVP approved (mandatory §6.2.4.2 for all SIL levels)"
+      - "SVaP approved (mandatory §6.3.4.2 for all SIL levels)"
+      - "SIL levels determined and documented in SIL Assignment Record"
+      - "Project standards and guidelines defined (MISRA C:2012 for SIL 2+)"
+      - "Configuration management system operational (Git repository initialized)"
+      - "Quality gates defined in SQAP"
+      - "Verification and validation strategies established in SVP and SVaP"
+      - "VMGR V&V approval obtained (SIL 3-4 MANDATORY)"
+
+  # Verification requirements (independent technical verification)
+  # VER produces Annex C #2 (Software Quality Assurance Verification Report) and
+  # Annex C #4 (Software Verification Plan) — both are Track B deliverables.
+  verification:
+    required: true
+    verifier: "ver"
+    criteria:
+      - "Software Quality Assurance Plan (#1) template compliance (DOC-ID, Document Control, Approvals)"
+      - "SQAP covers all mandatory §6.5 activities"
+      - "SQAP identifies all lifecycle phases and QA activities"
+      - "SQAP identifies applicable standards (MISRA C:2012, EN 50128)"
+      - "Software Verification Plan (#4) template compliance"
+      - "SVP covers all mandatory §6.2 verification activities"
+      - "SVP defines verification methods for each lifecycle phase"
+      - "SVP defines independence requirements per SIL level"
+      - "Software Configuration Management Plan (#3) template compliance"
+      - "SCMP covers all mandatory §6.6 CM activities"
+      - "SCMP defines baseline management strategy"
+      - "SCMP defines CCB procedures"
+      - "SIL Assignment Record is consistent with system safety requirements"
+      - "SIL levels assigned to all software functions"
+
+  # Validation requirements (independent validation at SIL 3-4)
+  # VAL produces Annex C #5 (Software Validation Plan) — a Track B deliverable.
+  validation:
+    required_sil: [3, 4]
+    validator: "val"
+    criteria:
+      - "Software Validation Plan (#5) template compliance"
+      - "SVaP covers all mandatory §6.3 validation activities"
+      - "SVaP defines validation scope (what constitutes 'correct functioning')"
+      - "SVaP defines acceptance criteria for software validation"
+      - "SVaP defines independence requirements for validation at the applicable SIL"
+      - "SVaP is consistent with SQAP and SVP"
+      - "Validation resources and tools identified in SVaP"
+
+  # Gate check configuration
+  gate_check:
+    mandatory_sil: [0, 1, 2, 3, 4]   # Planning gate required for all SIL levels
+    blocking_sil: [3, 4]              # Gate check blocks transition for SIL 3-4
+    criteria:
+      - "SQAP produced and approved (mandatory all SIL per §6.5.4.3)"
+      - "SCMP produced and approved (mandatory all SIL per §6.6.4.1)"
+      - "SVP produced and approved (mandatory all SIL per §6.2.4.2)"
+      - "SVaP produced and approved (mandatory all SIL per §6.3.4.2)"
+      - "Software Quality Assurance Verification Report (#2) produced by VER"
+      - "SIL levels assigned and documented"
+      - "Configuration management system operational"
+      - "VMGR V&V approval obtained (SIL 3-4)"
