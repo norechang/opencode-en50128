@@ -33,9 +33,8 @@ phase:
       owner: "ver"
       deliverables:
         - path: "docs/reports/Software-Source-Code-Verification-Report.md"
-          doc_id: "DOC-IMPVER-2026-001"
-          doc_type: "Software-Source-Code-Verification-Report"
-          qua_required: true        # VER reports require QUA template review
+          doc_id: "DOC-SOURCECODEVER-2026-001"
+          doc_type: "Software-Source-Code-Verification-Report"          qua_required: true        # VER reports require QUA template review
       dependencies: [0, 1]        # Verification depends on source code and test report
     
     # Activity 3: QUA reviews Verification Report for template compliance (MANDATORY SIL 3-4)

@@ -3,9 +3,22 @@ phase:
   number: 7
   name: "Overall Software Testing / Final Validation"
   
-  # Agent activities (EN 50128 Section 7.7 - 3 documents)
+  # Agent activities (EN 50128 Section 7.7 - 4 Annex C documents: #23, #24, #25, #26 + normative Release Note)
   activities:
-    # Activity 0: TST executes Overall Software Test Report (Annex C #24)
+    # Activity 0: VER creates Software Integration Verification Report (Annex C #23)
+    # This report verifies the integration test results from Phase 6 (items 21 and 22).
+    # Annex C assigns it to Phase 7 (Validation), not Phase 6.
+    - agent: "ver"
+      task_description: "Create Software Integration Verification Report (Annex C #23) verifying that the Software Integration Test Report and Software/Hardware Integration Test Report from Phase 6 meet all verification criteria, traceability requirements, and EN 50128 Section 7.6 compliance"
+      owner: "ver"
+      deliverables:
+        - path: "docs/integration/Software-Integration-Verification-Report.md"
+          doc_id: "DOC-INTVER-2026-001"
+          doc_type: "Software-Integration-Verification-Report"
+          qua_required: true
+      parallel_group: 1
+
+    # Activity 1: TST executes Overall Software Test Report (Annex C #24)
     - agent: "tst"
       task_description: "Execute Overall Software Tests per Overall Software Test Specification and create Overall Software Test Report with comprehensive system-level test results"
       owner: "tst"
@@ -16,19 +29,37 @@ phase:
           qua_required: true
       parallel_group: 1
     
-    # Activity 1: VAL performs validation and creates Software Validation Report (Annex C #25)
+    # Activity 2: VAL creates Tools Validation Report (Annex C #26)
+    # HR for SIL 1+, R for SIL 0. Writer is VAL per DELIVERABLES.md.
+    - agent: "val"
+      task_description: "Create Tools Validation Report (Annex C #26) validating all software tools used during development (compilers, static analysis tools, test frameworks) to confirm they are fit for purpose at the applicable SIL level per EN 50128 Section 6.7"
+      owner: "val"
+      deliverables:
+        - path: "docs/validation/Tools-Validation-Report.md"
+          doc_id: "DOC-TOOLSVALRPT-2026-001"
+          doc_type: "Tools-Validation-Report"
+          qua_required: true
+      dependencies: [0, 1]          # Tools validation depends on integration VER and overall test results
+      sil_requirements:
+        sil_0: "recommended"
+        sil_1: "highly_recommended"
+        sil_2: "highly_recommended"
+        sil_3: "highly_recommended"
+        sil_4: "highly_recommended"
+
+    # Activity 3: VAL performs validation and creates Software Validation Report (Annex C #25)
     # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
     - agent: "val"
       task_description: "Perform independent software validation including supplementary tests, operational scenarios, and create Software Validation Report confirming fitness for intended application. For SIL 3-4, VMGR performs this activity."
       owner: "val"
       deliverables:
-        - path: "docs/Software-Validation-Report.md"
+        - path: "docs/validation/Software-Validation-Report.md"
           doc_id: "DOC-VALRPT-2026-001"
           doc_type: "Software-Validation-Report"
           qua_required: true        # Validation reports require QUA template review
-      dependencies: [0]           # Validation depends on overall test results
+      dependencies: [0, 1, 2]      # Validation depends on integration VER, overall test results, and tools validation
     
-    # Activity 2: QUA reviews Software Validation Report for template compliance (MANDATORY SIL 3-4)
+    # Activity 4: QUA reviews Software Validation Report for template compliance (MANDATORY SIL 3-4)
     - agent: "qua"
       task_description: "Review Software Validation Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
       owner: "qua"
@@ -37,7 +68,7 @@ phase:
           doc_id: "DOC-QAREV-2026-011"
           doc_type: "QA-Template-Compliance-Review"
           qua_required: false      # QUA self-review not required
-      dependencies: [1]            # QUA depends on Software Validation Report (index 1)
+      dependencies: [3]            # QUA depends on Software Validation Report (index 3)
       sil_requirements:
         sil_0: "optional"
         sil_1: "recommended"
@@ -45,16 +76,18 @@ phase:
         sil_3: "mandatory"
         sil_4: "mandatory"
     
-    # Activity 3: VAL creates Release Note (Annex C #26)
+    # Activity 5: VAL creates Release Note (normative §7.7.4.12; no Annex C number)
+    # NOTE: Writer is unspecified in EN 50128 Annex C (footnote a). VAL is the platform-assigned
+    # responsible party for this normative §7.7.4.12 output. Platform choice — not standard-mandated.
     - agent: "val"
       task_description: "Create Release Note documenting software identity, configuration, known issues, and release authorization. For SIL 3-4, VMGR performs this activity."
       owner: "val"
       deliverables:
         - path: "docs/Release-Note.md"
-          doc_id: "DOC-RELEASE-2026-001"
+          doc_id: "DOC-RELEASENOTE-2026-001"
           doc_type: "Release-Note"
           qua_required: true
-      dependencies: [1, 2]        # Release note depends on validation approval and QUA review
+      dependencies: [3, 4]        # Release note depends on validation approval and QUA review
   
   # Phase completion criteria (EN 50128 Section 7.7)
   completion_criteria:
@@ -63,8 +96,10 @@ phase:
     coverage_requirements:
       requirements_to_tests: 100   # 100% software requirements validated
     custom_checks:
-      - "All 4 EN 50128 documents delivered (Overall Software Test Report, Software Validation Report, QA Template Review of Software Validation Report, Release Note)"
+      - "All 5 Phase 7 deliverables produced: Software Integration Verification Report (Annex C #23), Overall Software Test Report (Annex C #24), Software Validation Report (Annex C #25), Tools Validation Report (Annex C #26), Release Note (normative §7.7.4.12)"
+      - "Software Integration Verification Report (Annex C #23) produced by VER verifying Phase 6 integration test reports"
       - "All overall software tests executed and passed (100% pass rate)"
+      - "Tools Validation Report produced (HR for SIL 1+)"
       - "Validator supplementary tests executed (complex operational scenarios)"
       - "Software tested on target hardware or validated simulation"
       - "Software exercised under normal operation, anticipated occurrences, and undesired conditions"
@@ -86,8 +121,10 @@ phase:
     required: true
     verifier: "ver"
     criteria:
+      - "Software Integration Verification Report (Annex C #23) complete and verifies Phase 6 integration test reports"
       - "Overall Software Test Report adequately records tests per Overall Software Test Specification"
       - "Overall Software Test Report meets readability and traceability requirements"
+      - "Tools Validation Report complete (HR for SIL 1+)"
       - "Software Validation Report written per Software Validation Plan"
       - "Software Validation Report confirms Software Requirements Specification requirements met"
       - "Test coverage on requirements complete (100%)"
@@ -115,6 +152,7 @@ phase:
       - "Performance requirements validated (MANDATORY SIL 3-4 per Table A.7)"
       - "Functional and black-box testing complete (MANDATORY SIL 3-4 per Table A.7)"
       - "Validator supplementary tests executed (validator's discretion)"
+      - "Tools validated for intended use at the applicable SIL level"
       - "Customer acceptance obtained"
       - "Safety requirements validated"
       - "Software behavior acceptable in target environment"
@@ -126,8 +164,10 @@ phase:
     blocking_sil: [3, 4]
     criteria:
       - "All deliverables QUA accepted"
+      - "Software Integration Verification Report (Annex C #23) approved by VER"
       - "Verification report approved"
       - "Software Validation Report approved"
+      - "Tools Validation Report produced (HR for SIL 1+)"
       - "Traceability complete (Software Requirements → Overall Tests → Validation)"
       - "No open critical or high defects"
       - "All overall software tests passed (100% pass rate)"

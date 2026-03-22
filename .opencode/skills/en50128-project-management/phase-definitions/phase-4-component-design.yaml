@@ -11,7 +11,7 @@ phase:
       owner: "des"
       deliverables:
         - path: "docs/Software-Component-Design-Specification.md"
-          doc_id: "DOC-COMPDES-2026-001"
+          doc_id: "DOC-COMPDESIGN-2026-001"
           doc_type: "Software-Component-Design-Specification"
           qua_required: true
       parallel_group: 1
@@ -22,7 +22,7 @@ phase:
       owner: "tst"
       deliverables:
         - path: "docs/test/Software-Component-Test-Specification.md"
-          doc_id: "DOC-COMPTEST-2026-001"
+          doc_id: "DOC-COMPTESTSPEC-2026-001"
           doc_type: "Software-Component-Test-Specification"
           qua_required: true
       dependencies: [0]           # Component tests depend on component design
@@ -33,7 +33,7 @@ phase:
       owner: "ver"
       deliverables:
         - path: "docs/reports/Software-Component-Design-Verification-Report.md"
-          doc_id: "DOC-COMPVER-2026-001"
+          doc_id: "DOC-COMPDESIGNVER-2026-001"
           doc_type: "Software-Component-Design-Verification-Report"
           qua_required: true        # VER reports require QUA template review
       dependencies: [0, 1]        # VER depends on all phase deliverables being complete
@@ -56,6 +56,7 @@ phase:
         sil_4: "mandatory"
     
     # Activity 4: VAL creates Software Component Design Validation Report (SIL 3-4 independence)
+    # NOTE: Platform-specific per-phase validation report (not an Annex C deliverable).
     # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
     - agent: "val"
       task_description: "Create Software Component Design Validation Report documenting independent validation of operational suitability for all Phase 4 deliverables. For SIL 3-4, VMGR performs this activity."

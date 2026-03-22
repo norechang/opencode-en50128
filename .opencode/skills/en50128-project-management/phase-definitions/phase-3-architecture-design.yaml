@@ -55,7 +55,7 @@ phase:
       owner: "int"
       deliverables:
         - path: "docs/test/Software-Integration-Test-Specification.md"
-          doc_id: "DOC-INTTEST-2026-001"
+          doc_id: "DOC-INTTESTSPEC-2026-001"
           doc_type: "Software-Integration-Test-Specification"
           qua_required: true
       dependencies: [2, 3]        # Integration tests depend on design and interfaces
@@ -66,7 +66,7 @@ phase:
       owner: "int"
       deliverables:
         - path: "docs/test/Software-Hardware-Integration-Test-Specification.md"
-          doc_id: "DOC-HWINTTEST-2026-001"
+          doc_id: "DOC-HWINTTESTSPEC-2026-001"
           doc_type: "Software-Hardware-Integration-Test-Specification"
           qua_required: true
       dependencies: [2, 3]        # HW integration tests depend on design and interfaces
@@ -76,9 +76,9 @@ phase:
       task_description: "Create Software Architecture and Design Verification Report documenting independent verification of all Phase 3 deliverables"
       owner: "ver"
       deliverables:
-        - path: "docs/reports/Software-Architecture-Design-Verification-Report.md"
-          doc_id: "DOC-DESVER-2026-001"
-          doc_type: "Software-Architecture-Design-Verification-Report"
+        - path: "docs/reports/Software-Architecture-and-Design-Verification-Report.md"
+          doc_id: "DOC-ARCHDESIGNVER-2026-001"
+          doc_type: "Software-Architecture-and-Design-Verification-Report"
           qua_required: true        # VER reports require QUA template review
       dependencies: [0, 1, 2, 3, 4, 5]  # VER depends on all phase deliverables being complete
     
@@ -100,6 +100,7 @@ phase:
         sil_4: "mandatory"
     
     # Activity 8: VAL creates Software Architecture and Design Validation Report (SIL 3-4 independence)
+    # NOTE: Platform-specific per-phase validation report (not an Annex C deliverable).
     # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
     - agent: "val"
       task_description: "Create Software Architecture and Design Validation Report documenting independent validation of operational suitability for all Phase 3 deliverables. For SIL 3-4, VMGR performs this activity."

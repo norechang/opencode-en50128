@@ -3,7 +3,9 @@ phase:
   number: 6
   name: "Integration"
   
-  # Agent activities (EN 50128 Section 7.6 - 7 documents)
+  # Agent activities (EN 50128 Section 7.6 - 2 Annex C documents produced here)
+  # NOTE: Software Integration Verification Report (Annex C #23) is produced in Phase 7 (Validation)
+  #       per DELIVERABLES.md. Only Annex C #21 and #22 are Phase 6 outputs.
   # WORKFLOW: INT coordinates → TST executes tests → INT documents results
   # EN 50128 5.1.2.10c: "Integrator and Tester can be same person"
   # For SIL 3-4: Separate roles RECOMMENDED for independence
@@ -29,7 +31,7 @@ phase:
       dependencies: [0]  # TST depends on INT coordination (activity 0)
       parallel_group: 1
     
-    # Sub-activity 0c: INT documents Software Integration Test Report based on TST results
+    # Sub-activity 0c: INT documents Software Integration Test Report (Annex C #21)
     - agent: "int"
       task_description: "Create Software Integration Test Report based on actual test results from TST execution. Document all test case results, component configurations, Table A.6 technique usage. CRITICAL: All results SHALL be from actual TST execution (not fabricated)."
       owner: "int"
@@ -61,7 +63,7 @@ phase:
       dependencies: [3]  # TST depends on INT coordination (activity 3)
       parallel_group: 2
     
-    # Sub-activity 1c: INT documents Software/Hardware Integration Test Report based on TST results
+    # Sub-activity 1c: INT documents Software/Hardware Integration Test Report (Annex C #22)
     - agent: "int"
       task_description: "Create Software/Hardware Integration Test Report based on actual test results from TST execution. Document hardware limitations if applicable. Distinguish measurements (real HW) from estimates (simulation). CRITICAL: All results SHALL be from actual TST execution (not fabricated)."
       owner: "int"
@@ -73,47 +75,21 @@ phase:
       dependencies: [4]  # INT report depends on TST results (activity 4)
       parallel_group: 2
     
-    # Activity 2: VER creates Software Integration Verification Report (Annex C #23)
-    - agent: "ver"
-      task_description: "Create Software Integration Verification Report verifying that integration tests adequately verify the Software Architecture Specification and that all integration test objectives are met"
-      owner: "ver"
-      deliverables:
-        - path: "docs/reports/Software-Integration-Verification-Report.md"
-          doc_id: "DOC-INTVER-2026-001"
-          doc_type: "Software-Integration-Verification-Report"
-          qua_required: true        # VER reports require QUA template review
-      dependencies: [2, 5]        # Verification depends on both integration test reports (activities 2, 5)
-    
-    # Activity 3: QUA reviews Verification Report for template compliance (MANDATORY SIL 3-4)
-    - agent: "qua"
-      task_description: "Review Software Integration Verification Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
-      owner: "qua"
-      deliverables:
-        - path: "docs/reports/QA-Template-Review-Integration-Verification.md"
-          doc_id: "DOC-QAREV-2026-009"
-          doc_type: "QA-Template-Compliance-Review"
-          qua_required: false      # QUA self-review not required
-      dependencies: [6]            # QUA depends on VER report (activity 6)
-      sil_requirements:
-        sil_0: "optional"
-        sil_1: "recommended"
-        sil_2: "recommended"
-        sil_3: "mandatory"
-        sil_4: "mandatory"
-    
-    # Activity 4: VAL creates Software Integration Validation Report (SIL 3-4)
+    # Activity 2 (Platform Extension): VAL creates Software Integration Validation Report (SIL 3-4)
+    # NOTE: This is a platform-specific per-phase validation report, NOT an Annex C deliverable.
+    # The Annex C Software Integration Verification Report (#23) is produced in Phase 7 (Validation).
     # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
     - agent: "val"
-      task_description: "Create Software Integration Validation Report validating that integrated software meets architectural specifications and performs correctly on target hardware. For SIL 3-4, VMGR performs this activity."
+      task_description: "Create Software Integration Validation Report validating that integrated software meets architectural specifications and performs correctly on target hardware. For SIL 3-4, VMGR performs this activity. NOTE: This is a platform-specific per-phase validation report (not Annex C). The Annex C #23 Software Integration Verification Report is produced in Phase 7."
       owner: "val"
       deliverables:
         - path: "docs/reports/Software-Integration-Validation-Report.md"
           doc_id: "DOC-INTVAL-2026-001"
           doc_type: "Software-Integration-Validation-Report"
           qua_required: true        # VAL reports require QUA template review
-      dependencies: [2, 5, 6, 7]  # Validation depends on integration reports (2, 5), verification report (6), and QUA review (7)
+      dependencies: [2, 5]  # Validation depends on both integration test reports (activities 2, 5)
     
-    # Activity 5: QUA reviews Validation Report for template compliance (MANDATORY SIL 3-4)
+    # Activity 3: QUA reviews Validation Report for template compliance (MANDATORY SIL 3-4)
     - agent: "qua"
       task_description: "Review Software Integration Validation Report for template compliance (Document ID format, Document Control table, Approvals table, required sections). 1-pass rule: Approve or reject with ONE resubmission allowed."
       owner: "qua"
@@ -122,7 +98,7 @@ phase:
           doc_id: "DOC-QAREV-2026-010"
           doc_type: "QA-Template-Compliance-Review"
           qua_required: false      # QUA self-review not required
-      dependencies: [8]            # QUA depends on VAL report (activity 8)
+      dependencies: [6]            # QUA depends on VAL report (activity 6)
       sil_requirements:
         sil_0: "optional"
         sil_1: "recommended"
@@ -138,7 +114,8 @@ phase:
       architecture_to_integration: 100   # 100% architectural interfaces tested
       components_to_integration: 100     # 100% component integrations tested
     custom_checks:
-      - "All 9 EN 50128 documents/artifacts delivered (Software Integration Test Results from TST, Software Integration Test Report from INT, Software/Hardware Integration Test Results from TST, Software/Hardware Integration Test Report from INT, Software Integration Verification Report, QA Template Review of Verification Report, Software Integration Validation Report, QA Template Review of Validation Report)"
+      - "Annex C deliverables for Phase 6: Software Integration Test Report (#21), Software/Hardware Integration Test Report (#22)"
+      - "NOTE: Software Integration Verification Report (Annex C #23) is produced in Phase 7 (Validation)"
       - "TST executed all integration tests (actual execution, not fabricated results)"
       - "INT documented actual TST test results in reports"
       - "Progressive integration strategy documented (bottom-up, top-down, or sandwich)"
@@ -157,9 +134,11 @@ phase:
       - "QUA template compliance reviews approved (SIL 3-4 MANDATORY)"
       - "VMGR V&V approval obtained (SIL 3-4 MANDATORY)"
   
-  # Verification requirements (EN 50128 Section 7.6.4.11-7.6.4.13, Annex C #23)
+  # Verification requirements for Phase 6 integration test outputs
+  # NOTE: The Software Integration Verification Report (Annex C #23) is produced in Phase 7.
+  #       Phase 6 verification criteria are checked by VER when producing that Phase 7 report.
   verification:
-    required: true
+    required: false    # VER produces the Annex C #23 report in Phase 7, not Phase 6
     verifier: "ver"
     criteria:
       - "Software Integration Test Report adequately records tests per Software Integration Test Specification"
@@ -195,7 +174,6 @@ phase:
     blocking_sil: [3, 4]
     criteria:
       - "All deliverables QUA accepted"
-      - "Verification report approved"
       - "Validation report approved (SIL 3-4 only)"
       - "Traceability complete (Architecture → Integration Tests → Integration Results)"
       - "No open critical or high defects"

@@ -33,7 +33,7 @@ phase:
       owner: "tst"
       deliverables:
         - path: "docs/test/Overall-Software-Test-Specification.md"
-          doc_id: "DOC-OVERALLTESTSPEC-2026-001"
+          doc_id: "DOC-OTSTSPEC-2026-001"
           doc_type: "Overall-Software-Test-Specification"
           qua_required: true
       dependencies: [0, 1]        # TST depends on REQ (index 0) and SAF (index 1)
@@ -67,6 +67,7 @@ phase:
         sil_4: "mandatory"
     
     # VAL: Create Software Requirements Validation Report (SIL 3-4)
+    # NOTE: Platform-specific per-phase validation report (not an Annex C deliverable).
     # NOTE: For SIL 3-4, VMGR performs this validation activity (not VAL agent)
     - agent: "val"
       task_description: "Create Software Requirements Validation Report validating that requirements are testable, unambiguous, complete, consistent, and that safety requirements adequately mitigate hazards. For SIL 3-4, VMGR performs this activity."

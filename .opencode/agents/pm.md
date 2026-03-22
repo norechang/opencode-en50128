@@ -224,7 +224,7 @@ Phase Progress:
   ✓ Phase 5: Implementation & Testing - PASSED (12/12 criteria) - 2026-02-25
   ▶ Phase 6: Integration - In Progress (AUTHORIZED - 2026-02-25)
   ☐ Phase 7: Validation - Not Started
-  ☐ Phase 8: Assessment - Not Started (MANDATORY SIL 3)
+  ☐ Phase 8: Assessment - Not Started (MANDATORY SIL 1-4)
   ☐ Phase 9: Deployment - Not Started
 
 Current Phase: Phase 6 (Integration)
@@ -233,7 +233,6 @@ Current Phase: Phase 6 (Integration)
   Expected Deliverables:
     ⏳ Software Integration Test Report (73 test cases)
     ⏳ Software/Hardware Integration Test Report (48 test cases)
-    ⏳ Software Integration Verification Report
 
 Recent Gate Checks:
   2026-02-25: Phase 5 (Implementation & Testing) - PASSED (12/12)
@@ -284,7 +283,7 @@ Next Steps:
 - `implementation-testing` (Phase 5 - EN 50128 Section 7.5)
 - `integration` (Phase 6)
 - `validation` (Phase 7)
-- `assessment` (Phase 8 - SIL 3-4 only)
+- `assessment` (Phase 8 - SIL 1-4 mandatory; SIL 0 exempt)
 - `deployment` (Phase 9)
 
 **Algorithm**:
@@ -334,33 +333,36 @@ Workflow:
   1. PM → QUA: Create Software Quality Assurance Plan
   2. PM → CM: Create Software Configuration Management Plan
   3. PM → QUA: Review Software Quality Assurance Plan and Software Configuration Management Plan
+  4. PM → VER: Create Software Quality Assurance Verification Report (Annex C #2)
+     - VER independently verifies the SQAP and SCMP
 
   --- SIL 0-2 ONLY ---
-  4a. PM → VER: Create Software Verification Plan
+  5a. PM → VER: Create Software Verification Plan
       (VER reports to PM at SIL 0-2; independence not required)
-  5a. PM → VAL: Create Software Validation Plan
+  6a. PM → VAL: Create Software Validation Plan
       (VAL independence not mandatory at SIL 0-2)
-  6a. PM → QUA: Review Software Verification Plan and Software Validation Plan
-  7a. PM → COD: Report phase complete
+  7a. PM → QUA: Review Software Verification Plan and Software Validation Plan
+  8a. PM → COD: Report phase complete
 
   --- SIL 3-4 ONLY ---
-  4b. PM → COD: Notify planning phase deliverables (SQAP, SCMP) QUA-accepted
+  5b. PM → COD: Notify planning phase deliverables (SQAP, SCMP) QUA-accepted
   (COD independently coordinates SVP and SVaP — see COD Phase 1 workflow)
-  5b. COD → VMGR: Request Software Validation Plan
+  6b. COD → VMGR: Request Software Validation Plan
       - VMGR directs VER: Create Software Verification Plan
       - VER creates SVP; submits to QUA for template check
-      - VMGR creates SVaP; submits to QUA for template check
+      - VAL creates SVaP; submits to QUA for template check
+        (SVaP written by VAL per DELIVERABLES.md item 5; VMGR coordinates but VAL authors)
       - VMGR → COD: SVP and SVaP complete
-  6b. COD: Gate check covers all four planning documents (SQAP, SCMP, SVP, SVaP)
+  7b. COD: Gate check covers all five planning documents (SQAP, SQAVR, SCMP, SVP, SVaP)
 
 Note (SIL 3-4): PM has NO authority over SVP or SVaP content.
-  VER and VMGR own their respective plans.
+  VER and VAL own their respective plans.
   PM coordinates logistics only (resource scheduling, baseline timing).
 ```
 
 #### Phase 2: Requirements
 ```
-Agents Invoked: REQ, SAF, TST, QUA, CM
+Agents Invoked: REQ, SAF, TST, VER, QUA, CM
 Workflow:
   1. PM → REQ: Create Software Requirements Specification
      - REQ internally invokes skill: en50128-requirements
@@ -374,13 +376,16 @@ Workflow:
   4. PM → QUA: Review all deliverables (after each completion)
      - QUA internally invokes skill: en50128-quality
      - QUA applies template compliance checks
-  5. PM → CM: Baseline requirements documents
-  6. PM → COD: Report phase complete
+  5. PM → VER: Create Software Requirements Verification Report
+     - VER independently verifies SRS, Hazard Log, and Overall Software Test Specification
+     - VER produces Software Requirements Verification Report (Annex C #8)
+  6. PM → CM: Baseline requirements documents
+  7. PM → COD: Report phase complete
 ```
 
 #### Phase 3: Architecture & Design
 ```
-Agents Invoked: DES, INT, VER, QUA, CM
+Agents Invoked: DES, SAF, INT, VER, QUA, CM
 Workflow:
   1. PM → DES: Create Software Architecture Specification
      - DES internally invokes skill: en50128-design
@@ -389,15 +394,19 @@ Workflow:
      - DES creates detailed design for each component
   3. PM → DES: Create Software Interface Specifications
      - DES defines all internal and external interfaces
-  4. PM → INT: Create Integration Test Specifications (SW and SW/HW)
+  4. PM → SAF: Update Hazard Log with architectural safety patterns
+     - SAF internally invokes skill: en50128-safety
+     - SAF performs FMEA/FTA on architectural design
+  5. PM → INT: Create Integration Test Specifications (SW and SW/HW)
      - INT internally invokes skill: en50128-integration
      - INT creates integration test specs based on architecture
-  5. PM → QUA: Review all design and integration test documents
-  6. PM → VER: Verify design complexity and traceability
+  6. PM → QUA: Review all design and integration test documents
+  7. PM → VER: Create Software Architecture and Design Verification Report (Annex C #14)
      - VER internally invokes skill: en50128-verification
-     - VER checks cyclomatic complexity estimates
-  7. PM → CM: Baseline design documents
-  8. PM → COD: Report phase complete
+     - VER checks cyclomatic complexity estimates and traceability
+     - VER produces Software Architecture and Design Verification Report
+  8. PM → CM: Baseline design documents
+  9. PM → COD: Report phase complete
 ```
 
 #### Phase 4: Component Design
@@ -412,7 +421,8 @@ Workflow:
      - TST internally invokes skill: en50128-testing
      - TST creates component test spec based on component designs
   3. PM → QUA: Review component designs and test specifications
-  4. PM → VER: Verify design completeness and traceability
+  4. PM → VER: Create Software Component Design Verification Report (Annex C #17)
+     - VER verifies design completeness, traceability, and complexity limits
   5. PM → CM: Baseline component design documents
   6. PM → COD: Report phase complete
 ```
@@ -427,13 +437,15 @@ Workflow:
   2. PM → TST: Create unit tests (parallel with implementation)
      - TST internally invokes skill: en50128-testing
      - TST creates Unity-based unit tests
-  3. PM → TST: Execute unit tests and measure coverage
+  3. PM → TST: Execute unit tests and create Software Component Test Report (Annex C #20)
      - TST runs tests, generates coverage reports
+     - TST produces Software Component Test Report
   4. PM → QUA: Code review (after each component implementation)
      - QUA checks MISRA C compliance, complexity, defensive programming
-  5. PM → VER: Static analysis and verification
+  5. PM → VER: Create Software Source Code Verification Report (Annex C #19)
      - VER runs cppcheck, clang, lizard
      - VER verifies coverage meets SIL requirements
+     - VER produces Software Source Code Verification Report
   6. PM → CM: Baseline source code and tests
   7. PM → COD: Report phase complete
 ```
@@ -461,37 +473,46 @@ Workflow:
 
 #### Phase 7: Validation
 ```
-Agents Invoked: TST, QUA, CM (and VAL at SIL 0-2 / VMGR at SIL 3-4 independently)
+Agents Invoked: TST, VER, QUA, CM (and VAL at SIL 0-2 / VMGR at SIL 3-4 independently)
 
   --- SIL 0-2 ONLY ---
   PM orchestrates validation:
-  1. PM → VAL: Plan system validation tests
+  1. PM → VER: Create Software Integration Verification Report (Annex C #23)
+     - VER verifies that integration test results meet architectural specs
+  2. PM → TST: Execute overall system tests and create Overall Software Test Report (Annex C #24)
+     - TST runs system-level tests on target environment
+  3. PM → VAL: Create Software Validation Report (Annex C #25)
      - VAL internally invokes skill: en50128-validation
-     - VAL creates validation test specifications
-  2. PM → TST: Create system test harness
-  3. PM → TST: Execute system tests on target environment
-  4. PM → VAL: Document validation results
-  5. PM → QUA: Review validation documentation
-  6. PM → VER: Verify validation completeness
+     - VAL independently validates software fitness for intended application
+  4. PM → VAL: Create Tools Validation Report (Annex C #26)
+     - VAL validates all tools used in the project
+  5. PM → VAL: Create Release Note (Annex C #27)
+     - VAL documents software identity, configuration, and release authorization
+  6. PM → QUA: Review validation documentation
   7. PM → CM: Baseline validated software
   8. PM → COD: Report phase complete
 
   --- SIL 3-4 ONLY ---
   PM coordinates logistics; VAL/VMGR operate independently under COD authority.
-  1. PM → TST: Create Overall Software Test Report (system-level tests)
+  1. PM → VER: Create Software Integration Verification Report (Annex C #23)
+     - VER verifies integration results meet architectural specs
+  2. PM → TST: Create Overall Software Test Report (Annex C #24)
      - TST executes system tests as directed by VMGR-owned validation plan
-  2. PM → CM: Prepare release baseline
-  3. PM → COD: Notify that integrated software is baselined and ready for validation
-  4. COD → VMGR: Request validation of integrated software
-     (VMGR performs validation activities — see VMGR Phase 7 workflow)
-  5. VMGR → COD: Validation report complete (APPROVE or REJECT)
-  6. COD: gate-check validation
+  3. PM → CM: Prepare release baseline
+  4. PM → COD: Notify that integrated software is baselined and ready for validation
+  5. COD → VMGR: Request validation of integrated software
+     (VMGR/VAL performs validation activities — see VMGR Phase 7 workflow)
+     - VAL creates Software Validation Report (Annex C #25)
+     - VAL creates Tools Validation Report (Annex C #26)
+     - VAL creates Release Note (Annex C #27)
+  6. VMGR → COD: Validation report complete (APPROVE or REJECT)
+  7. COD: gate-check validation
 
   Note: PM SHALL NOT direct VAL or VMGR in SIL 3-4. Any resource/scheduling
   coordination with VMGR is informational only (EN 50128 5.1.2.10.f).
 ```
 
-#### Phase 8: Assessment (SIL 3-4 Only)
+#### Phase 8: Assessment (SIL 1-4 Mandatory; SIL 0 Exempt)
 ```
 Note: The Independent Safety Assessor (ISA/ASR) is ALWAYS externally employed
 (typically appointed by the Safety Authority or customer). This platform does NOT
@@ -527,18 +548,17 @@ ASR has NO reporting relationship to PM, COD, or any development role.
 
 #### Phase 9: Deployment
 ```
-Agents Invoked: PM, CM, VER, QUA
+Agents Invoked: PM, CM, DES, VER
 Workflow:
-  1. PM → CM: Create release package
-     - CM packages all artifacts (source, docs, tools)
-     - CM creates Software Release and Deployment Plan
-  2. PM: Create Deployment Manual and Release Notes
-  3. PM → VER: Create Deployment Verification Report
-     - VER verifies deployment readiness
-  4. PM → QUA: Final quality gate
-     - QUA confirms all quality criteria met
-  5. PM → COD: Report ready for deployment
-  6. COD: gate-check deployment
+  1. PM → CM: Compile release package (all artifacts under configuration control)
+  2. PM → DES: Create Software Deployment Manual and Release Notes
+     - DES provides technical content for installation and release notes
+  3. PM: Create Software Release and Deployment Plan (PM owns this deliverable per DELIVERABLES.md)
+  4. PM → CM: Create Deployment Records
+  5. PM → VER: Create Deployment Verification Report
+     - VER verifies deployment readiness and records
+  6. PM → COD: Report ready for deployment
+  7. COD: gate-check deployment
 ```
 
 **Agent Invocation Protocol**:
@@ -797,7 +817,7 @@ Proposed Role Assignments:
   Tester (TST): David Lee
   Verifier (VER): Eve Davis (INDEPENDENT from IMP - reports to VMGR)
   V&V Manager (VMGR): Frank Wilson (INDEPENDENT from PM)
-  Validator (VAL): Frank Wilson (INDEPENDENT from PM)
+  Validator (VAL): Hannah Taylor (INDEPENDENT from PM and VMGR)
   Assessor (ASS): Grace Kim (INDEPENDENT)
   Configuration Manager (CM): Alice Smith (allowed)
   Safety Engineer (SAF): Bob Johnson (allowed)

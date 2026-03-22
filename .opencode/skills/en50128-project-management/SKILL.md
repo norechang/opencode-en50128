@@ -292,7 +292,7 @@ Based on SIL 3, the following independence requirements apply:
             Testing
 - Phase 6:  Integration          (@pm execute-phase integration)
 - Phase 7:  Validation           (@pm execute-phase validation)
-- Phase 8:  Assessment           (SIL 3-4 mandatory — external ASR)
+- Phase 8:  Assessment           (SIL 1-4 mandatory; SIL 0 exempt — external ASR)
 - Phase 9:  Deployment           (@pm execute-phase deployment)
 - Phase 10: Maintenance          (ongoing — CCB-driven change requests)
 
