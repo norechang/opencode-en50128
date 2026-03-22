@@ -130,107 +130,78 @@ Full role specifications — including EN 50128 technique tables, Annex B narrat
 
 ### Typical Development Flow
 
+> Full authority structure and per-phase gate loop: see **`WORKFLOW.md`**.
+
 ```
-                  ┌─────────┐
-                  │   COD   │ Lifecycle Coordinator
-                  │         │ - Phase gate management
-                  │         │ - Compliance enforcement
-                  │         │ - Agent coordination
-                  └────┬────┘
-                       │ (Orchestrates all phases)
-                       ▼
-┌─────────┐
-│   REQ   │ Requirements Specification
-│         │ - Extract requirements (USER APPROVAL REQUIRED)
-│         │ - Assign SIL levels
-│         │ - Generate traceability
-└────┬────┘
-     │ (Software Requirements Specification, Traceability)
-     │ COD Gate Check: @cod gate-check phase-2
-     ▼
-┌─────────┐
-│   DES   │ Design
-│         │ - Architecture design
-│         │ - Module design
-│         │ - Interface design
-└────┬────┘
-     │ (Software Architecture Specification, Software Design Specification)
-     │ COD Gate Check: @cod gate-check phase-3
-     ▼
-┌─────────┐
-│   IMP   │ Implementation (C)
-│         │ - Code modules
-│         │ - Unit tests
-│         │ - MISRA C compliance
-└────┬────┘
-     │ (Source code, Unit tests)
-     │ COD Gate Check: @cod gate-check phase-4
-     ▼
-┌─────────┐
-│   TST   │ Testing
-│         │ - Execute tests
-│         │ - Measure coverage
-│         │ - Unit testing
-└────┬────┘
-     │ (Test reports, Coverage)
-     ▼
-┌─────────┐
-│   INT   │ Integration
-│         │ - Integrate components
-│         │ - Integration testing
-│         │ - Interface testing
-└────┬────┘
-     │ (Integration report)
-     │ COD Gate Check: @cod gate-check phase-5
-     ▼
-┌─────────┐
-│   VER   │ Verification
-│         │ - Static analysis
-│         │ - Evidence collection
-│         │ - Compliance check
-└────┬────┘
-     │ (Verification report)
-     ▼
-┌─────────┐
-│   VAL   │ Validation
-│         │ - System testing
-│         │ - Acceptance testing
-│         │ - Customer approval
-└────┬────┘
-     │ (Validation report)
-     │ COD Gate Check: @cod gate-check phase-6
-     ▼
-┌─────────┐
-│  DONE   │ Ready for Deployment
-└─────────┘
+Safety Authority / Customer
+├── COD (Lifecycle Coordinator) ◄──coordinate──► VMGR (Independent V&V Authority)
+│     • Phase gate management      (no report)    • Manages VER team
+│     • Lifecycle state                           • Reviews VER/VAL reports
+│     • Compliance enforcement                    • Final V&V decision
+│     • Cannot override VMGR                        (cannot be overridden)
+│ authorizes phases                              manages
+▼                                                   ▼
+PM (Project Manager)                           VER (Verifier)
+│  • Team coordination                         • Verification reports
+│  • Resource mgmt                             • Static analysis
+│  • CCB leadership                            • Coverage checks
+│  • Reports to COD for lifecycle              • Reports to VMGR
+└──► orchestrates per phase:
 
      ┌─────────┐
-     │   SAF   │ (Throughout)
-     │         │ - Hazard analysis
-     │         │ - Safety requirements
-     │         │ - Safety case
-     └─────────┘
-     
+     │   REQ   │ Requirements Specification (Phase 2)
+     │         │ - Extract requirements (USER APPROVAL REQUIRED)
+     │         │ - Assign SIL levels
+     │         │ - Generate traceability
+     └────┬────┘
+          │ deliverable → QUA check → VER → VMGR → VAL → VMGR
+          │ COD Gate Check: @cod gate-check phase-2
+          ▼
      ┌─────────┐
-     │   QUA   │ (Throughout)
-     │         │ - Code reviews
-     │         │ - Audits
-     │         │ - Quality gates
-     └─────────┘
-     
+     │   DES   │ Design (Phase 3)
+     │         │ - Architecture design (SAS)
+     │         │ - Module/interface design (SDS)
+     └────┬────┘
+          │ deliverable → QUA check → VER → VMGR → VAL → VMGR
+          │ COD Gate Check: @cod gate-check phase-3
+          ▼
      ┌─────────┐
-     │   CM    │ (Throughout)
-     │         │ - Version control
-     │         │ - Change management
-     │         │ - Baselines
-     └─────────┘
-     
+     │   IMP   │ Implementation (Phase 4)
+     │  + TST  │ - Code modules (MISRA C)
+     │         │ - Unit tests + coverage
+     └────┬────┘
+          │ deliverable → QUA check → VER → VMGR → VAL → VMGR
+          │ COD Gate Check: @cod gate-check phase-4
+          ▼
      ┌─────────┐
-     │   PM    │ (Throughout)
-     │         │ - Coordination
-     │         │ - CCB leadership
-     │         │ - Risk management
+     │   INT   │ Integration (Phase 5)
+     │         │ - Integrate components
+     │         │ - Integration testing
+     └────┬────┘
+          │ deliverable → QUA check → VER → VMGR → VAL → VMGR
+          │ COD Gate Check: @cod gate-check phase-5
+          ▼
+     ┌─────────┐
+     │   VAL   │ Validation (Phase 6) — COD invokes independently
+     │         │ - System testing
+     │         │ - Acceptance testing
+     └────┬────┘
+          │ VAL report → QUA check → VMGR approval
+          │ COD Gate Check: @cod gate-check phase-6
+          ▼
+     ┌─────────┐
+     │  DONE   │ Ready for Deployment
      └─────────┘
+
+     ── Active throughout all phases ──────────────────────────
+
+     ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐
+     │   SAF   │   │   QUA   │   │   CM    │   │   PM    │
+     │ Hazard  │   │Template │   │Version  │   │Coord-   │
+     │ analysis│   │checks / │   │control /│   │ination /│
+     │ Safety  │   │ audits  │   │baselines│   │   CCB   │
+     │ case    │   │         │   │         │   │         │
+     └─────────┘   └─────────┘   └─────────┘   └─────────┘
 ```
 
 ### Example Workflow
