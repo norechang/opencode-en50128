@@ -1,0 +1,337 @@
+# EN 50128 Organizational Role Structure
+# Source: ORGANIZATION.md (ISA PASS), EN 50128:2011 §5.1.2.4–5.1.2.14
+#
+# This file encodes:
+#   - Platform label → EN 50128 Annex B role mapping
+#   - SIL-tiered organizational structures (SIL 0, SIL 1–2, SIL 3–4)
+#   - Role independence requirements by SIL tier
+#   - Role combination rules (allowed, conditional, forbidden)
+#   - Independence reference matrix
+#
+# LLM agents consume this file to determine:
+#   - Which roles require independence at which SIL level
+#   - Which role combinations are permitted or forbidden
+#   - The authority structure for each SIL tier
+
+organization:
+  source_document: "ORGANIZATION.md (ISA PASS)"
+  standard: "EN 50128:2011"
+  normative_basis: "§5.1.2.4–5.1.2.14"
+
+  platform_notice: >
+    The 'VMGR (V&V Manager)' role is a platform-defined extension not enumerated in
+    EN 50128:2011 Annex B. The closest normative analogue is §5.1.2.10(e) (Verifier
+    may report to Validator) and §5.1.2.10(f) (Validator shall not report to PM).
+    The VMGR construct implements the 'Verifier reports to Validator' option of
+    §5.1.2.10(e) via a named independent V&V authority. This architecture must be
+    approved by the Safety Authority and documented in the SQAP before use on any
+    SIL 1–4 project.
+
+  # ── Platform label → EN 50128 Annex B role mapping ────────────────────────
+  role_mapping:
+    - platform_label: "req"
+      en50128_role: "Requirements Manager"
+      annex_b_table: "Table B.1"
+    - platform_label: "des"
+      en50128_role: "Designer"
+      annex_b_table: "Table B.2"
+    - platform_label: "imp"
+      en50128_role: "Implementer"
+      annex_b_table: "Table B.3"
+    - platform_label: "tst"
+      en50128_role: "Tester"
+      annex_b_table: "Table B.4"
+    - platform_label: "ver"
+      en50128_role: "Verifier"
+      annex_b_table: "Table B.5"
+    - platform_label: "int"
+      en50128_role: "Integrator"
+      annex_b_table: "Table B.6"
+    - platform_label: "val"
+      en50128_role: "Validator"
+      annex_b_table: "Table B.7"
+    - platform_label: "asr"
+      en50128_role: "Assessor"
+      annex_b_table: "Table B.8"
+    - platform_label: "pm"
+      en50128_role: "Project Manager"
+      annex_b_table: "Table B.9"
+    - platform_label: "cm"
+      en50128_role: "Configuration Manager"
+      annex_b_table: "Table B.10"
+    - platform_label: "saf"
+      en50128_role: "Safety Engineer"
+      annex_b_ref: "§7.1 (platform extension)"
+    - platform_label: "qua"
+      en50128_role: "Quality Assurance"
+      annex_b_ref: "§6.5 (platform extension)"
+    - platform_label: "cod"
+      en50128_role: "Lifecycle Coordinator"
+      annex_b_ref: "§5.3 (platform extension)"
+    - platform_label: "vmgr"
+      en50128_role: "V&V Manager"
+      annex_b_ref: "Platform extension — basis: §5.1.2.10(e–f)"
+
+  # ── SIL-tiered organizational structures ──────────────────────────────────
+  sil_tiers:
+
+    sil_0:
+      description: >
+        Maximum role consolidation permitted. INT, TST, VER, VAL for the same
+        component may all be the same person (§5.1.2.12(b)). Assessor may be waived
+        with ISO 9001 certificate (§6.4.1.2). Residual prohibitions apply: REQ/DES/IMP
+        shall not also be TST/INT for the same component (§5.1.2.12(d)); VER/VAL shall
+        not also be REQ/DES/IMP (§5.1.2.12(e)).
+      key_characteristics:
+        - "V&V stream consolidation permitted per §5.1.2.12(b)"
+        - "Residual prohibitions still apply: §5.1.2.12(d–e)"
+        - "Assessor waivable — ISO 9001 certificate required (§6.4.1.2)"
+        - "VAL holds release authority — no release without sign-off (§5.1.2.8, §6.3.4.16)"
+        - "VER and VAL may report to PM (§5.1.2.12(a))"
+      vmgr_required: false
+      asr_required: false              # Waivable per §6.4.1.2 with ISO 9001 cert
+
+    sil_12:
+      description: >
+        Assessment is mandatory (§5.1.2.4). VER and VAL must not also hold development
+        roles — mandatory 'shall' prohibition (§5.1.2.11(h)). Organisational reporting
+        independence for VER/VAL is HR. No VMGR required. VER and VAL may be same person
+        (§5.1.2.11(d)).
+      key_characteristics:
+        - "ASR mandatory — no ISO 9001 waiver at SIL 1–2 (§5.1.2.4)"
+        - "VER/VAL must not hold REQ/DES/IMP/INT/TST — mandatory 'shall' (§5.1.2.11(h))"
+        - "Organisational reporting independence for VER/VAL: HR — may report to PM (§5.1.2.11(e))"
+        - "VER and VAL may be same person (§5.1.2.11(d))"
+        - "No VMGR required — VER/VAL under COD/PM oversight"
+        - "VAL holds release authority — no release without sign-off (§5.1.2.8, §6.3.4.16)"
+      vmgr_required: false
+      asr_required: true               # Mandatory §5.1.2.4, §5.1.2.11(k)
+
+    sil_34:
+      description: >
+        Mandatory independence wall (§5.1.2.10(g–j)) separates development from V&V.
+        VMGR required (platform extension, basis §5.1.2.10(e–f)). External Assessor
+        mandatory per §5.1.2.4, §5.1.2.10(m), §6.4.4.1. VAL shall not report to PM.
+      key_characteristics:
+        - "Hard independence wall §5.1.2.10(g–j): sub-clauses g–j use 'shall neither' — mandatory prohibitions"
+        - "VMGR required: platform-defined independent V&V authority (§5.1.2.10(e–f)); Safety Authority approval required"
+        - "VER/VAL mandatorily organisationally independent from all development roles"
+        - "VAL shall not report to PM (§5.1.2.10(f))"
+        - "ASR mandatory and independent from project per §5.1.2.6"
+        - "ASR appointed by supplier, customer, or Safety Authority (§5.1.2.4)"
+        - "ASR may be external or — at SA discretion — internal (§5.1.2.5)"
+        - "TST independence: HR"
+        - "VAL holds release authority (§5.1.2.8, §6.3.4.16)"
+      independence_wall: "§5.1.2.10(g–j) — mandatory 'shall neither' prohibitory clauses"
+      vmgr_required: true              # Platform rule; basis §5.1.2.10(e–f)
+      asr_required: true               # §5.1.2.4, §5.1.2.10(m), §6.4.4.1
+
+  # ── Independence Reference Matrix ─────────────────────────────────────────
+  independence_matrix:
+    - role: "req"
+      sil_0: "No"
+      sil_12: "No"
+      sil_34: "No"
+    - role: "des"
+      sil_0: "No"
+      sil_12: "No"
+      sil_34: "No"
+    - role: "imp"
+      sil_0: "No"
+      sil_12: "No"
+      sil_34: "No"
+    - role: "int"
+      sil_0: "No"
+      sil_12: "No"
+      sil_34: "No"
+    - role: "tst"
+      sil_0: "No"
+      sil_12: "HR"
+      sil_34: "HR"
+    - role: "ver"
+      sil_0: "No (§5.1.2.12)"
+      sil_12: "Role-combination prohibition: M (§5.1.2.11(h)); Org. separation: HR (§5.1.2.11(b–e))"
+      sil_34: "Mandatory (§5.1.2.10(g–j))"
+    - role: "val"
+      sil_0: "No (§5.1.2.12)"
+      sil_12: "Role-combination prohibition: M (§5.1.2.11(h)); Org. separation: HR (§5.1.2.11(b–c))"
+      sil_34: "Mandatory (§5.1.2.10(f–j))"
+    - role: "vmgr"
+      sil_0: "No"
+      sil_12: "No"
+      sil_34: "Platform policy (basis §5.1.2.10(e–f))"
+    - role: "asr"
+      sil_0: "Waivable (ISO 9001 cert) §6.4.1.2"
+      sil_12: "Mandatory §5.1.2.4, §5.1.2.11(k)"
+      sil_34: "Mandatory §5.1.2.4, §5.1.2.10(m), §6.4.4.1"
+    - role: "pm"
+      sil_0: "No"
+      sil_12: "No"
+      sil_34: "No"
+    - role: "cm"
+      sil_0: "No"
+      sil_12: "No"
+      sil_34: "No"
+    - role: "saf"
+      sil_0: "No"
+      sil_12: "No"
+      sil_34: "No"
+    - role: "qua"
+      sil_0: "No"
+      sil_12: "No"
+      sil_34: "No"
+
+  # Legend for independence_matrix values
+  independence_legend:
+    M: "Mandatory — normative 'shall' requirement"
+    HR: "Highly Recommended — rationale required if not applied"
+    No: "Not required by standard"
+    role_combination_prohibition: "Person holding this role shall not also hold REQ/DES/IMP/INT/TST roles"
+    org_separation: "Organisational/reporting line independence from development"
+
+  # ── Role Stability Rule ────────────────────────────────────────────────────
+  role_stability:
+    description: >
+      The roles of Verifier and Validator shall be defined at the project level and
+      shall remain unchanged throughout the development project (§5.1.2.14). Any
+      personnel change within VER or VAL roles must be formally documented and assessed.
+    reference: "§5.1.2.14"
+    applies_to: ["ver", "val"]
+
+  # ── Role Combination Rules ─────────────────────────────────────────────────
+  combination_rules:
+
+    allowed_all_sil:
+      description: "Allowed at all SIL levels"
+      rules:
+        - combination: ["des", "imp"]
+          description: "Designer may also implement (same component)"
+          reference: "§5.1.2.10(a), §5.1.2.11(a)"
+        - combination: ["req", "des", "imp"]
+          description: "Requirements Manager, Designer, Implementer may be one person"
+          reference: "§5.1.2.10(a)"
+        - combination: ["pm", "software_manager"]
+          description: "Combined management role"
+          reference: "§5.1.2.10(k), §5.1.2.11(i), §5.1.2.12(f)"
+        - combination: ["pm", "req_des_imp_int_tst_ver"]
+          description: "PM may also perform these roles provided independence requirements for those roles are respected"
+          reference: "§5.1.2.10(k), §5.1.2.11(i), §5.1.2.12(f)"
+        - combination: ["req_des_imp_component_A", "tst_int_component_B"]
+          description: "Cross-component: developer of one component may test/integrate a different component"
+          reference: "§5.1.2.13"
+
+    allowed_sil_0_only:
+      description: "Allowed at SIL 0 only (§5.1.2.12)"
+      rules:
+        - combination: ["int", "tst", "ver", "val"]
+          description: "All four roles may be the same person for the same component"
+          reference: "§5.1.2.12(b)"
+
+    allowed_sil_12:
+      description: "Allowed at SIL 1–2 (§5.1.2.11)"
+      rules:
+        - combination: ["ver", "val"]
+          description: "Verifier and Validator may be the same person"
+          reference: "§5.1.2.11(d)"
+        - combination: ["ver_or_val", "pm_reporting"]
+          description: "Both VER and VAL may report to Project Manager"
+          reference: "§5.1.2.11(e)"
+        - combination: ["int", "tst"]
+          description: "Same person may integrate and test"
+          reference: "§5.1.2.11(f)"
+
+    conditional_exceptions_sil_12:
+      description: "Conditional exceptions at SIL 1–2 (§5.1.2.11)"
+      rules:
+        - combination: ["ver", "int", "tst"]
+          description: "Verifier may also integrate and test; VAL must review Verifier's output documents"
+          reference: "§5.1.2.11(l)"
+        - combination: ["val", "ver", "int", "tst"]
+          description: "Validator may also be Verifier, Integrator, and Tester; VER output reviewed by another competent person; subject to Assessor approval"
+          reference: "§5.1.2.11(m)"
+
+    conditional_exceptions_sil_34:
+      description: "Conditional exceptions at SIL 3–4 (subject to Assessor approval)"
+      rules:
+        - combination: ["val", "ver"]
+          description: "Permitted if VER output reviewed by another competent independent person; subject to Assessor approval"
+          reference: "§5.1.2.10(n)"
+        - combination: ["ver", "int", "tst"]
+          description: "Verifier may also integrate and test; VAL must check adequacy of documented evidence"
+          reference: "§5.1.2.10(o)"
+
+    forbidden_all_sil:
+      description: "Mandatory prohibition at all SIL levels (SIL 0–4)"
+      rules:
+        - combination: ["req_des_imp", "tst_int_same_component"]
+          description: "Developer shall not test or integrate the same component — applies at ALL SIL levels including SIL 0"
+          reference: "§5.1.2.12(d), §5.1.2.10(g–h), §5.1.2.11(f–g)"
+        - combination: ["ver_val", "req_des_imp"]
+          description: >
+            Verifier/Validator shall not hold requirements, design, or implementation roles.
+            Applies at ALL SIL levels including SIL 0.
+            SIL 0 scope note: §5.1.2.12(e) restricts this to REQ/DES/IMP only — INT/TST not included at SIL 0.
+            At SIL 1–4 the prohibition extends to include INT and TST per §5.1.2.11(h) and §5.1.2.10(i–j).
+          reference: "§5.1.2.12(e), §5.1.2.10(i–j), §5.1.2.11(h)"
+
+    forbidden_sil_14:
+      description: "Mandatory prohibition at SIL 1–4"
+      rules:
+        - combination: ["req_des_imp_int_tst", "ver"]
+          description: "VER shall not hold any development or test role"
+          reference: "§5.1.2.11(h), §5.1.2.10(g–i)"
+        - combination: ["req_des_imp_int_tst", "val"]
+          description: "VAL shall not hold any development or test role"
+          reference: "§5.1.2.11(h), §5.1.2.10(g–i)"
+        - combination: ["any_role", "asr"]
+          description: "Assessor must be fully independent from all project roles"
+          reference: "§5.1.2.5–5.1.2.6, §5.1.2.10(m)"
+        - combination: ["val", "pm_reporting"]
+          description: "Validator shall not report to Project Manager at SIL 3–4"
+          reference: "§5.1.2.10(f)"
+          sil_levels: [3, 4]
+
+  # ── Key Differences Summary ────────────────────────────────────────────────
+  key_differences:
+    description: "SIL-tier comparison of independence and combination constraints"
+    aspects:
+      - aspect: "VER role-combination prohibition"
+        sil_0: "Permitted (§5.1.2.12(b))"
+        sil_12: "Mandatory 'shall' — VER not REQ/DES/IMP/INT/TST (§5.1.2.11(h))"
+        sil_34: "Mandatory (§5.1.2.10(g–j))"
+      - aspect: "VAL role-combination prohibition"
+        sil_0: "Permitted (§5.1.2.12(b))"
+        sil_12: "Mandatory 'shall' — VAL not REQ/DES/IMP/INT/TST (§5.1.2.11(h))"
+        sil_34: "Mandatory (§5.1.2.10(g–j))"
+      - aspect: "VER/VAL organisational independence"
+        sil_0: "Not required"
+        sil_12: "HR — may report to PM (§5.1.2.11(e))"
+        sil_34: "Mandatory — VAL shall not report to PM (§5.1.2.10(f))"
+      - aspect: "VMGR role"
+        sil_0: "Not required"
+        sil_12: "Not required"
+        sil_34: "Platform-defined authority (basis §5.1.2.10(e–f))"
+      - aspect: "TST independence"
+        sil_0: "Not required"
+        sil_12: "HR"
+        sil_34: "HR"
+      - aspect: "ASR (Assessor)"
+        sil_0: "Waivable (ISO 9001 cert) §6.4.1.2"
+        sil_12: "Mandatory §5.1.2.4, §5.1.2.11(k)"
+        sil_34: "Mandatory §5.1.2.4, §5.1.2.10(m), §6.4.4.1"
+      - aspect: "REQ/DES/IMP + TST same component"
+        sil_0: "Permitted"
+        sil_12: "Forbidden (§5.1.2.11(f–g)) — allowed for different component (§5.1.2.13)"
+        sil_34: "Forbidden (§5.1.2.10(g–h)) — allowed for different component (§5.1.2.13)"
+      - aspect: "INT + TST same person (same component)"
+        sil_0: "Permitted"
+        sil_12: "Allowed"
+        sil_34: "Allowed (§5.1.2.10(o))"
+      - aspect: "Organisational boundary"
+        sil_0: "Informal"
+        sil_12: "Informal"
+        sil_34: "Hard wall — enforced (§5.1.2.10(g–j))"
+      - aspect: "VAL release authority"
+        sil_0: "Mandatory §6.3.4.16"
+        sil_12: "Mandatory §6.3.4.16"
+        sil_34: "Mandatory §6.3.4.16"

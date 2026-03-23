@@ -11,372 +11,248 @@ metadata:
 
 # Phase Gate Checklists
 
-**Load trigger**: Load this skill at the start of any `@cod gate-check <phase>` or
-`@cod start-phase <phase>` operation. Only the checklist section for the target phase
-needs to be applied; the others are available for reference.
+**Load trigger**: Load at the start of any `@cod gate-check <phase>` or `@cod start-phase <phase>`.
+Apply only the section for the target phase; the others are reference.
+
+**Deliverables for each phase**: see `DELIVERABLES.md` (Annex C Table C.1) and
+`activities/phase-N-*.yaml §gate_check §criteria`. These checklists cover quality,
+technique, and SIL-specific criteria not captured in the deliverables matrix.
 
 ---
 
-## Phase 1 Gate: Planning Complete
+## Phase 1 — Planning
 
-**Purpose**: Verify project foundation established
+**Quality criteria**:
+- [ ] All planning documents internally consistent and cross-referencing
+- [ ] Quality gates defined for all subsequent phases (SQAP covers full lifecycle)
+- [ ] V&V strategy established: VER and VAL roles identified with independence level per SIL
+- [ ] Configuration management operational (repo initialized, naming convention agreed)
 
-**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 1: Planning (Annex C items 1–5).
+**Team organization**:
+- [ ] All roles assigned with named individuals or team designations
+- [ ] SIL-required independence satisfied (SIL 3–4: VAL independent of PM; ASR independent of supplier)
+- [ ] Reporting structure documented in SQAP (source: `ORGANIZATION.md` for SIL-tiered charts)
+- [ ] Tool qualification plan in place if tool failure could affect SIL classification
 
-**Quality Criteria**:
-- [ ] All planning documents approved
-- [ ] Quality gates defined for all phases
-- [ ] Verification/validation strategies established
-- [ ] Configuration management operational
-
-**Team Organization**:
-- [ ] All roles assigned
-- [ ] Independence requirements satisfied (SIL 3-4: Validator, Assessor independent)
-- [ ] Reporting structure compliant with SIL level
-- [ ] Team competency verified
-
-**Tools**:
-- [ ] Development environment configured
-- [ ] Build system operational
-- [ ] Version control initialized
-- [ ] Tool qualification complete (if applicable)
-
-**SIL-Specific**:
-- **SIL 0-1**: Basic SQAP, SCMP
-- **SIL 2**: Add MISRA C compliance plan, static analysis planning
-- **SIL 3-4**: Add formal verification plan, independent role verification, assessor engagement
+**SIL-specific**:
+- SIL 0–1: Basic SQAP and SCMP sufficient; SVP/SVaP optional
+- SIL 2: MISRA C compliance plan required; static analysis tooling nominated
+- SIL 3–4: SVP authored by VER (not PM); SVaP authored by VMGR (not PM); formal tool qualification plan required
 
 ---
 
-## Phase 2 Gate: Requirements Complete
+## Phase 2 — Requirements
 
-**Purpose**: Verify requirements complete, unambiguous, testable, traceable
-
-**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 2: Requirements (Annex C items 6–8).
-
-**Requirements Quality**:
-- [ ] All requirements unambiguous (no undefined terms, clear meaning)
-- [ ] All requirements testable (acceptance criteria defined)
-- [ ] All requirements traceable (unique IDs assigned)
-- [ ] SHALL/SHOULD/MAY keywords used correctly (RFC 2119)
+**Requirements quality**:
+- [ ] All requirements unambiguous (no undefined terms; single clear interpretation)
+- [ ] All requirements testable (acceptance criterion defined for each)
+- [ ] Unique IDs assigned to all requirements
+- [ ] SHALL/SHOULD/MAY keywords used correctly (RFC 2119 or project standard)
 - [ ] SIL levels assigned to all requirements
-- [ ] C language constraints considered (data types, memory, timing)
+- [ ] C language constraints reflected (data types, timing, memory)
 
 **Traceability**:
-- [ ] RTM complete: System Requirements → Software Requirements
-- [ ] Forward traceability: All system requirements covered by software requirements
-- [ ] Backward traceability: All software requirements traced to system requirements
-- [ ] Orphan requirements identified and justified
+- [ ] RTM complete: system requirements → software requirements (bidirectional, rule T2)
+- [ ] No orphan software requirements (or justified)
 
 **Safety**:
-- [ ] Hazard analysis complete (FMEA/FTA as appropriate)
-- [ ] Safety requirements identified and documented
-- [ ] SIL levels assigned per hazard severity
-- [ ] Hazard log established and maintained
+- [ ] Hazard analysis initiated or updated (FMEA/FTA as appropriate for SIL)
+- [ ] Safety requirements identified and linked to hazards
+- [ ] Hazard log established
 
-**EN 50128 Techniques (Table A.2)**:
-- [ ] One or more techniques applied:
-  - Formal Methods (R for SIL 1-2, HR for SIL 3-4)
-  - Modelling (R for all, HR for SIL 3-4)
-  - Structured Methodology (R for all, HR for SIL 3-4)
-  - Decision Tables (R for all, HR for SIL 3-4)
+**EN 50128 Table A.2 techniques**:
+- [ ] Structured Methodology (R SIL 0–1; HR SIL 2–4)
+- [ ] Modelling (R all; HR SIL 3–4)
+- [ ] Formal Methods (R SIL 1–2; HR SIL 3–4)
 
-**SIL-Specific**:
-- **SIL 0-1**: Basic requirements, informal methods OK
-- **SIL 2**: Structured methodology, traceability highly recommended
-- **SIL 3-4**: Formal/semiformal methods highly recommended, traceability MANDATORY
+**SIL-specific**:
+- SIL 0–1: Informal methods acceptable; traceability recommended
+- SIL 2: Structured methodology and traceability highly recommended
+- SIL 3–4: Traceability MANDATORY; formal/semi-formal methods highly recommended
 
 ---
 
-## Phase 3 Gate: Architecture & Design Complete
+## Phase 3 — Architecture & Design
 
-**Purpose**: Verify architecture and design complete, modular, traceable
+**Architecture quality**:
+- [ ] Modular design (MANDATORY SIL 2+)
+- [ ] Module interfaces fully specified and unambiguous
+- [ ] No dynamic memory allocation (MANDATORY SIL 2+)
+- [ ] No recursion (HR SIL 3–4)
+- [ ] Bounded execution time for all modules
 
-**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 3: Architecture & Design (Annex C items 9–14) and Phase 4: Component Design (Annex C items 15–17).
-
-> Note: Component Design Specification and Component Test Specification (items 15–16) are Phase 4 deliverables listed here for gate awareness; they are formally required by the Phase 4 gate.
-
-**Architecture Quality**:
-- [ ] Modular design (MANDATORY for SIL 2+)
-- [ ] Module dependencies minimal and documented
-- [ ] Interface definitions complete and unambiguous
-- [ ] Static memory allocation only (SIL 2+)
-- [ ] No dynamic memory allocation (malloc/free forbidden for SIL 2+)
-- [ ] No recursion (highly recommended SIL 3-4)
-
-**Design Quality (C-Specific)**:
-- [ ] Cyclomatic complexity within limits:
-  - SIL 3-4: ≤ 10 per function
-  - SIL 2: ≤ 15 per function
-  - SIL 0-1: ≤ 20 per function
-- [ ] Fixed-width types specified (uint8_t, uint16_t, uint32_t, etc.)
-- [ ] Bounded execution time for all functions
-- [ ] Defensive programming patterns applied
-- [ ] Error handling strategy defined for all failure modes
+**Design quality (C-specific)**:
+- [ ] Cyclomatic complexity limits defined: SIL 3–4 ≤ 10; SIL 2 ≤ 15; SIL 0–1 ≤ 20
+- [ ] Fixed-width integer types specified (uint8_t, uint32_t, etc.)
+- [ ] Error handling strategy defined for all identified failure modes
+- [ ] Defensive programming patterns specified
 
 **Traceability**:
-- [ ] RTM updated: Requirements → Architecture → Design
-- [ ] All requirements mapped to architectural components
-- [ ] All architectural components mapped to design modules
+- [ ] RTM updated: requirements → architecture → design modules (bidirectional, rules T3–T4)
 - [ ] No orphan design elements (or justified)
 
-**Safety Design**:
-- [ ] Fault detection and diagnosis mechanisms defined (R for SIL 1-2, HR for SIL 3-4)
-- [ ] Safety-critical functions identified
-- [ ] Defensive programming applied to safety functions
-- [ ] Error handling covers all identified failure modes from FMEA
+**Safety design**:
+- [ ] Safety-critical functions identified and isolated
+- [ ] Fault detection / diagnosis mechanisms defined (R SIL 1–2; HR SIL 3–4)
+- [ ] FMEA/FTA updated to reflect architecture decisions
 
-**EN 50128 Techniques (Table A.3)**:
-- [ ] Structured Methodology (R for SIL 0-1, HR for SIL 1-2, M for SIL 3-4)
-- [ ] Modular Approach (HR for SIL 0-1, M for SIL 2+)
-- [ ] Design and Coding Standards defined (HR for SIL 0-2, M for SIL 3-4)
-- [ ] Defensive Programming (HR for SIL 1-4)
-- [ ] Information Encapsulation (R for SIL 0-1, HR for SIL 2+)
+**EN 50128 Table A.3 techniques**:
+- [ ] Structured Methodology (HR SIL 1–2; M SIL 3–4)
+- [ ] Modular Approach (HR SIL 0–1; M SIL 2+)
+- [ ] Design and Coding Standards defined (HR SIL 0–2; M SIL 3–4)
+- [ ] Defensive Programming (HR SIL 1–4)
 
-**SIL-Specific**:
-- **SIL 0-1**: Basic modular design, informal methods
-- **SIL 2**: Modular approach MANDATORY, static allocation MANDATORY
-- **SIL 3-4**: All above + structured methodology MANDATORY, complexity ≤10, no recursion
+**SIL-specific**:
+- SIL 0–1: Basic modular design; informal methods
+- SIL 2: Static allocation MANDATORY; modular approach MANDATORY
+- SIL 3–4: All above + structured methodology MANDATORY; complexity limits enforced; no recursion HR
 
 ---
 
-## Phase 4 Gate: Component Design Complete
+## Phase 4 — Component Design
 
-**Purpose**: Verify detailed component designs and component test specifications are complete and approved
+**Design quality**:
+- [ ] Component design traceable to SDS (rule T5)
+- [ ] Test strategies defined per component (test cases traceable to component requirements)
+- [ ] Complexity limits respected per SIL
 
-**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 4: Component Design (Annex C items 15–17).
-
-**Design Quality**:
-- [ ] Component design traceable to Software Design Specification
-- [ ] Component test strategies defined (test cases traceable to component requirements)
-- [ ] Complexity limits respected per SIL (≤10 SIL 3-4, ≤15 SIL 2, ≤20 SIL 0-1)
-
-**SIL-Specific**:
-- **SIL 0-1**: Component designs recommended
-- **SIL 2**: Component designs highly recommended; VER review highly recommended
-- **SIL 3-4**: Component designs, test specs, and VER report MANDATORY
+**SIL-specific**:
+- SIL 0–1: Component designs recommended; VER review optional
+- SIL 2: Component designs highly recommended; VER review highly recommended
+- SIL 3–4: Component designs, test specifications, and VER report MANDATORY
 
 ---
 
-## Phase 5 Gate: Implementation & Testing Complete
+## Phase 5 — Implementation & Testing
 
-**Purpose**: Verify code complete, MISRA C compliant, tested, coverage adequate
+**Code quality (C-specific)**:
+- [ ] MISRA C:2012 compliance (MANDATORY SIL 2+): mandatory rules satisfied; deviations justified in deviation log
+- [ ] No dynamic memory allocation; no recursion (HR SIL 3–4)
+- [ ] Fixed-width integer types used throughout
+- [ ] All pointer dereferences validated; all return values checked
+- [ ] All external inputs validated (defensive programming)
+- [ ] Cyclomatic complexity measured and within SIL limit for every function
 
-**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 5: Implementation & Testing (Annex C items 18–20).
+**Static analysis** (MANDATORY SIL 3–4; HR SIL 2):
+- [ ] Static analysis tool run (e.g., PC-lint Plus, Cppcheck, Clang Static Analyzer)
+- [ ] All violations resolved or entered in deviation log with justification
+- [ ] No dead code; no unreachable code
 
-**Code Quality (C-Specific)**:
-- [ ] MISRA C:2012 compliance (MANDATORY for SIL 2+):
-  - All mandatory rules satisfied
-  - All required rules satisfied or deviated with justification
-  - Advisory rules considered
-  - Deviation log maintained
-- [ ] Static allocation only (no malloc/calloc/realloc/free for SIL 2+)
-- [ ] No recursion (highly recommended SIL 3-4)
-- [ ] Fixed-width integer types (uint8_t, uint16_t, uint32_t, int8_t, etc.)
-- [ ] All pointers validated before use
-- [ ] All return values checked
-- [ ] All inputs validated (defensive programming)
-- [ ] Complexity within limits per SIL level
+**Unit testing**:
+- [ ] All units tested; all unit tests passing
+- [ ] Coverage measured and meets SIL threshold:
+  - SIL 0–1: Statement HR; Branch HR
+  - SIL 2: Statement HR; Branch **M**
+  - SIL 3–4: Statement **M**; Branch **M**; Condition **M** (or data flow HR)
+- [ ] Boundary value tests included; error handling paths tested
+- [ ] Fault injection testing (HR SIL 3–4)
 
-**Static Analysis**:
-- [ ] Static analysis performed (PC-lint Plus, Cppcheck, Clang Static Analyzer)
-- [ ] All violations resolved or justified in deviation log
-- [ ] Complexity analysis performed (Lizard, SonarQube, or similar)
-- [ ] All functions within cyclomatic complexity limits
-- [ ] No dead code
-- [ ] No unreachable code
-
-**Unit Testing**:
-- [ ] Unit tests written for all components
-- [ ] All unit tests passing
-- [ ] Unit test coverage measured:
-  - **SIL 0-1**: Statement (HR), Branch (HR)
-  - **SIL 2**: Statement (HR), Branch (**M**)
-  - **SIL 3-4**: Statement (**M**), Branch (**M**), Condition (**M**)
-- [ ] Coverage gaps justified or additional tests added
-- [ ] Boundary value testing performed
-- [ ] Error handling paths tested
-- [ ] Fault injection testing (HR for SIL 3-4)
-
-**Code Review**:
-- [ ] Code review conducted (QUA) - MANDATORY for ALL code
-- [ ] MISRA C compliance verified in review
-- [ ] Defensive programming verified
-- [ ] Safety-critical code double-checked (SAF involved)
-- [ ] All review findings addressed
+**Code review** (MANDATORY all SIL levels):
+- [ ] QUA code review conducted; MISRA C and defensive programming verified
+- [ ] All review findings resolved
 
 **Traceability**:
-- [ ] RTM updated: Design → Source Code → Unit Tests
-- [ ] All design elements implemented in code
-- [ ] All source files mapped to design components
-- [ ] All unit tests mapped to design elements and requirements
+- [ ] RTM updated: design → source files → unit tests (bidirectional, rules T6–T8)
+- [ ] No untested source files (or justified)
 
-**EN 50128 Techniques (Table A.4)**:
-- [ ] Structured Methodology (R for SIL 0-1, HR for SIL 1-2, M for SIL 3-4)
-- [ ] Modular Approach (HR for SIL 0-1, M for SIL 2+)
-- [ ] Design and Coding Standards (HR for SIL 0-2, M for SIL 3-4)
-- [ ] Analysable Programs (HR for SIL 0-2, M for SIL 3-4)
-- [ ] Structured Programming (R for SIL 0-1, HR for SIL 1-2, M for SIL 3-4)
-
-**SIL-Specific**:
-- **SIL 0-1**: Basic coding standards, basic testing
-- **SIL 2**: MISRA C MANDATORY, branch coverage MANDATORY, static analysis HR
-- **SIL 3-4**: All above + static analysis MANDATORY, all coverage types MANDATORY
+**EN 50128 Table A.4 techniques**:
+- [ ] Structured Programming (HR SIL 1–2; M SIL 3–4)
+- [ ] Design and Coding Standards (HR SIL 0–2; M SIL 3–4)
+- [ ] Analysable Programs (HR SIL 0–2; M SIL 3–4)
 
 ---
 
-## Phase 6 Gate: Integration Complete
+## Phase 6 — Integration
 
-**Purpose**: Verify components integrated, interfaces tested, performance adequate
+**Integration execution**:
+- [ ] Integration strategy (bottom-up / top-down / incremental) executed as planned
+- [ ] All components integrated without conflict; build system produces executable
 
-**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 6: Integration (Annex C items 21–22).
-
-**Integration Activities**:
-- [ ] Integration strategy executed (bottom-up, top-down, or sandwich)
-- [ ] All components integrated without conflicts
-- [ ] Build system produces executable successfully
-- [ ] Integration incremental and controlled (not "big bang")
-
-**Integration Testing**:
-- [ ] Integration test specification followed
-- [ ] All integration tests executed
-- [ ] All integration tests passing
-- [ ] Interface testing complete (MANDATORY for all SILs - HR)
-- [ ] Performance testing complete (R for SIL 1-2, HR for SIL 3-4)
+**Integration testing**:
+- [ ] All integration tests executed and passing
+- [ ] Interface testing complete (HR all SIL levels): data flow across interfaces; error handling at interfaces; boundary conditions
+- [ ] Performance testing: timing requirements verified; WCET measured (HR SIL 3–4)
 - [ ] Regression testing performed after each integration step
 
-**Interface Testing**:
-- [ ] All module interfaces tested
-- [ ] All hardware interfaces tested (if applicable)
-- [ ] Data flow across interfaces verified
-- [ ] Interface error handling tested
-- [ ] Boundary conditions tested at interfaces
+**Traceability**:
+- [ ] RTM updated: components → integration tests (rules T9–T10); interface coverage complete
 
-**Performance Testing** (SIL 3-4):
-- [ ] Timing requirements verified
-- [ ] Memory usage verified (static allocation limits)
-- [ ] Throughput requirements met
-- [ ] Worst-case execution time (WCET) verified
-- [ ] Resource utilization acceptable (CPU, memory, I/O)
+**EN 50128 Table A.6 techniques**:
+- [ ] Functional/Black-box Testing (HR all SIL levels)
+- [ ] Performance Testing (R SIL 1–2; HR SIL 3–4)
 
-**EN 50128 Techniques (Table A.6)**:
-- [ ] Functional and Black-box Testing (HR for all SILs)
-- [ ] Performance Testing (R for SIL 1-2, HR for SIL 3-4)
-
-**SIL-Specific**:
-- **SIL 0-1**: Basic integration testing
-- **SIL 2**: Interface testing highly recommended, performance testing recommended
-- **SIL 3-4**: Interface testing highly recommended, performance testing HIGHLY RECOMMENDED
+**SIL-specific**:
+- SIL 0–1: Basic integration testing
+- SIL 2: Interface testing HR; performance testing R
+- SIL 3–4: Interface testing HR; performance testing HR; WCET analysis HR
 
 ---
 
-## Phase 7 Gate: Validation Complete
+## Phase 7 — Validation
 
-**Purpose**: Verify software meets requirements, customer acceptance obtained
+**Validation testing**:
+- [ ] Overall Software Test Specification executed in full
+- [ ] All system tests passing; testing performed in target environment or representative simulator
+- [ ] Operational scenarios tested; performance testing complete (HR SIL 1–2; M SIL 3–4)
+- [ ] Functional/black-box testing complete (HR SIL 0–2; M SIL 3–4)
 
-**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 7: Validation (Annex C items 23–27).
+**Requirements validation**:
+- [ ] RTM complete end-to-end: requirements → design → code → tests → results (rule T11)
+- [ ] 100% requirements coverage (every requirement has at least one passing test)
 
-**Validation Testing**:
-- [ ] Overall Software Test Specification executed completely
-- [ ] All system tests passing
-- [ ] Testing performed in target environment (or representative simulator)
-- [ ] Operational scenarios tested
-- [ ] Performance testing complete (HR for SIL 1-2, M for SIL 3-4)
-- [ ] Functional/black-box testing complete (HR for SIL 0-2, M for SIL 3-4)
+**Independence (SIL 3–4)**:
+- [ ] Validation performed by independent Validator (VAL)
+- [ ] VAL does NOT report to PM (§5.1.2.10f)
+- [ ] VAL independence documented
 
-**Requirements Validation**:
-- [ ] RTM complete end-to-end: Requirements → Design → Code → Tests → Results
-- [ ] All requirements validated (every requirement has passing test)
-- [ ] All test cases traceable to requirements
-- [ ] 100% requirements coverage verified
-- [ ] Acceptance criteria met for all requirements
+**Customer acceptance**:
+- [ ] Acceptance criteria met; customer sign-off obtained; deviations documented
 
-**Independence (SIL 3-4)**:
-- [ ] Validation performed by independent Validator
-- [ ] Validator does NOT report to Project Manager
-- [ ] Validator has no undue influence from development team
-- [ ] Validator independence documented in organizational chart
+**EN 50128 Table A.7 techniques**:
+- [ ] Performance Testing (HR SIL 1–2; M SIL 3–4)
+- [ ] Functional/Black-box Testing (HR SIL 0–2; M SIL 3–4)
 
-**Customer Acceptance**:
-- [ ] Customer/stakeholder acceptance testing performed
-- [ ] Customer acceptance obtained (formal sign-off)
-- [ ] All acceptance criteria met
-- [ ] Any deviations documented and accepted by customer
-
-**EN 50128 Techniques (Table A.7)**:
-- [ ] Performance Testing (HR for SIL 1-2, M for SIL 3-4)
-- [ ] Functional and Black-box Testing (HR for SIL 0-2, M for SIL 3-4)
-
-**SIL-Specific**:
-- **SIL 0-1**: Basic system testing, customer acceptance
-- **SIL 2**: Functional testing highly recommended, performance testing highly recommended
-- **SIL 3-4**: Independent validation MANDATORY, performance testing MANDATORY, functional testing MANDATORY
+**SIL-specific**:
+- SIL 0–1: Basic system testing; customer acceptance
+- SIL 2: Functional and performance testing HR
+- SIL 3–4: Independent validation MANDATORY; performance and functional testing MANDATORY
 
 ---
 
-## Phase 8 Gate: Assessment Complete (SIL 1-4)
+## Phase 8 — Assessment
 
-**Purpose**: Independent assessment by Assessor, safety case approved
-
-**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 8: Assessment (Annex C items 45–46).
-
-**Independence (SIL 1-4)**:
-- [ ] Assessment performed by independent Assessor
+**Independence** (MANDATORY SIL 1–4 per §6.4.1.1; exempt SIL 0 per §6.4.1.2):
 - [ ] Assessor independent from supplier (or Safety Authority discretion)
-- [ ] Assessor independent from project
-- [ ] Assessor independence documented
+- [ ] Assessor independence documented; no reporting to COD or PM
 
-**Assessment Activities**:
-- [ ] Process compliance audit performed (all EN 50128 requirements)
-- [ ] All lifecycle documents reviewed
-- [ ] All evidence reviewed (test results, reviews, verifications)
-- [ ] Safety case evaluated
-- [ ] Traceability verified end-to-end (requirements → deployment)
+**Assessment activities**:
+- [ ] Process compliance audit performed (all EN 50128 lifecycle requirements)
+- [ ] All lifecycle documents reviewed; all evidence reviewed
+- [ ] Safety case evaluated; traceability verified end-to-end (rule T15)
 
-**Assessment Findings**:
-- [ ] All findings documented in Assessment Report
-- [ ] All findings addressed or accepted with justification
-- [ ] No open critical findings
-- [ ] Residual risks acceptable and documented
+**Findings**:
+- [ ] All findings documented in Assessment Report; all addressed or accepted with justification
+- [ ] No open critical findings; residual risks accepted and documented
 
 **Safety Authority**:
-- [ ] Safety Authority notified (if required by regulation)
-- [ ] Safety Authority approval obtained (if required)
-- [ ] All Safety Authority comments addressed
-
-**SIL-Specific**:
-- **SIL 0**: Assessment exempt per §6.4.1.2
-- **SIL 1-2**: Assessment MANDATORY per §6.4.1.1 and §5.1.2.4
-- **SIL 3-4**: Assessment MANDATORY, independent Assessor MANDATORY
+- [ ] Safety Authority notified and approval obtained if required by applicable regulation
 
 ---
 
-## Phase 9 Gate: Deployment Complete
+## Phase 9 — Deployment
 
-**Purpose**: Software deployed, maintenance established
-
-**Deliverables**: See [`DELIVERABLES.md`](../../../DELIVERABLES.md) — Phase 9: Deployment (Annex C items 36–40) and Phase 10: Maintenance (Annex C items 41–44).
-
-**Release Package**:
+**Release package**:
 - [ ] Release package complete (executable, libraries, configuration, documentation)
-- [ ] Release package verified against baseline
-- [ ] Release package signed/authenticated (for SIL 3-4)
-- [ ] Deployment Manual complete and tested
+- [ ] Package verified against CM baseline; signed/authenticated (SIL 3–4)
 
 **Deployment**:
-- [ ] Software deployed to operational environment
-- [ ] Deployment procedure followed exactly
-- [ ] Deployment verified (smoke tests, operational checks)
-- [ ] Deployment records complete (what, when, where, who)
+- [ ] Deployment procedure followed; deployment records complete (what/when/where/who)
+- [ ] Post-deployment verification performed (smoke tests, operational checks)
 
 **Maintenance**:
-- [ ] Maintenance plan established
-- [ ] Change control process active
-- [ ] Defect tracking system operational
-- [ ] Maintenance team assigned and trained
+- [ ] Maintenance plan established; change control process active
+- [ ] Defect tracking system operational; maintenance team assigned and trained
 
-**Configuration Management**:
-- [ ] Final release baselined (version tagged in repository)
-- [ ] Baseline 8 established
-- [ ] Traceability complete from requirements to deployed code
-- [ ] All artifacts archived for future reference
+**Configuration management**:
+- [ ] Final release baselined and tagged in repository
+- [ ] All artifacts archived; traceability complete from requirements to deployed code (rule T15)

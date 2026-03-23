@@ -1,0 +1,148 @@
+# EN 50128 Phase 4: Software Component Design
+# Source: LIFECYCLE.md §6 (ISA PASS), EN 50128:2011 §7.4
+# Annex C Items: 15–17
+
+phase:
+  id: "component-design"
+  number: 4
+  name: "Software Component Design"
+  en50128_section: "§7.4"
+  executor: "pm"
+  gate_command: "@cod gate-check component-design"
+  description: >
+    Phase 4 decomposes the Software Design Specification (item 10) into detailed
+    component-level specifications. DES is the PRIMARY agent. TST writes the
+    Software Component Test Specification (item 16) which is the left-side V-Model
+    specification whose counterpart is the Software Component Test Report (item 20)
+    in Phase 5. VER produces the Software Component Design Verification Report
+    (item 17). Note: item 17 has no 2nd Check in Annex C (unlike most other items).
+
+  # ── Track A: Activities (PM-orchestrated, dev agents only) ────────────────
+  activities:
+    - agent: "des"
+      task_description: >
+        Decompose the Software Design Specification to component level.
+        Write Software Component Design Specification (SCDS) for each component.
+        Define: component interfaces, data structures, algorithms, state machines,
+        pre/postconditions, error handling, timing constraints, and resource usage.
+        Specifications must be detailed enough for direct implementation in C.
+        Enforce SIL-appropriate design constraints (complexity, no dynamic memory, etc.)
+      owner: "des"
+      deliverables:
+        - path: "docs/component-design/Software-Component-Design-Specification.md"
+          doc_id: "DOC-COMPDESIGN-YYYY-001"
+          doc_type: "Software Component Design Specification"
+          annex_c_item: 15
+          qua_required: true
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "tst"
+      task_description: >
+        Write Software Component Test Specification per §7.4.
+        Define unit test cases, test vectors, expected outputs, and coverage
+        criteria for each component. Test cases must trace to component design
+        specifications and ultimately to SRS requirements. This document is the
+        V-Model counterpart to Software Component Test Report (item 20, Phase 5).
+      owner: "tst"
+      deliverables:
+        - path: "docs/component-design/Software-Component-Test-Specification.md"
+          doc_id: "DOC-COMPTESTSPEC-YYYY-001"
+          doc_type: "Software Component Test Specification"
+          annex_c_item: 16
+          qua_required: true
+      dependencies: [0]                   # After component design spec (tests trace to design)
+      parallel_group: 2
+
+  # ── Completion Criteria ────────────────────────────────────────────────────
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true            # Component design traceable to SDS
+    custom_checks:
+      - "All components from SDS have corresponding Component Design Specification entries"
+      - "Component design traceable to SDS (bidirectional)"
+      - "Component interfaces completely specified"
+      - "Component test specification covers all component design specifications"
+      - "Test cases trace to component design (bidirectional)"
+      - "Complexity limits respected at component level"
+      - "No dynamic memory allocation (SIL 2+)"
+      - "Component design review passed"
+
+  # ── Track B: Verification ─────────────────────────────────────────────────
+  verification:
+    required: true
+    verifier: "ver"
+    produces:
+      - doc_type: "Software Component Design Verification Report"
+        annex_c_item: 17
+        path: "docs/component-design/Software-Component-Design-Verification-Report.md"
+    criteria:
+      - "Component design specifications comply with §7.4"
+      - "Component designs consistent with SDS"
+      - "Component interfaces match Software Interface Specifications"
+      - "Component test specifications cover all component behaviors"
+      - "Design complexity within SIL-appropriate limits"
+      - "No MISRA C:2012 constraint violations in design patterns (SIL 2+)"
+      - "Traceability from component design to SRS maintained"
+    note: "Item 17 has no 2nd Check in Annex C (both first_check and second_check are null)"
+
+  # ── Track B: Validation (2nd Check only — no VAL report in Phase 4) ───────
+  validation:
+    required_sil: []
+    val_role: "2nd Check reviewer on items 15 and 16 (not on item 17)"
+    validator: "val"
+    independence_required_sil: [3, 4]
+    produces: []
+    criteria: []
+    note: "VAL is 2nd Check on items 15 and 16 per Annex C. Item 17 has no 2nd Check."
+
+  # ── Workflow ──────────────────────────────────────────────────────────────
+  workflow:
+    track_a:
+      description: >
+        PM coordinates DES (item 15) first, then TST (item 16) after component design
+        is baselined. QUA checks both deliverables. PM reports complete to COD.
+      completion_signal: "PM reports items 15 and 16 QUA-passed to COD"
+    track_b:
+      sil_34:
+        description: >
+          COD → VMGR → VER verifies items 15–16 → VER produces item 17 (COMPDESIGNVER)
+          → QUA checks item 17 → VMGR reviews → VMGR reports to COD.
+          VAL 2nd Check on items 15 and 16 only (not 17).
+        vmgr_gateway: true
+      sil_02:
+        description: >
+          COD → VER verifies items 15–16 and produces item 17. QUA checks item 17.
+          COD receives VER report directly.
+    rework_path: >
+      If VER rejects: VMGR notifies COD → PM coordinates rework with DES/TST →
+      re-enter QUA check → resubmit to VER.
+
+  # ── Transitions ───────────────────────────────────────────────────────────
+  transitions:
+    - event: "gate_pass"
+      guard: "true"
+      target: "implementation-testing"
+      action: "COD authorizes @pm execute-phase 5"
+    - event: "gate_fail"
+      guard: "sil >= 3"
+      target: "component-design"
+      action: "COD BLOCKS; PM coordinates rework; COD re-runs gate"
+    - event: "gate_fail"
+      guard: "sil < 3"
+      target: "component-design"
+      action: "COD warns; PM coordinates rework"
+
+  # ── Gate Check ────────────────────────────────────────────────────────────
+  gate_check:
+    command: "@cod gate-check component-design"
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [2, 3, 4]
+    criteria:
+      - "Software Component Design Specification (item 15) QUA-passed"
+      - "Software Component Test Specification (item 16) QUA-passed"
+      - "Software Component Design Verification Report (item 17) QUA-passed"
+      - "VMGR approved item 17 (SIL 3–4)"
+      - "Component design traceable to SDS (bidirectional)"
+      - "Test specification covers all component designs"
+      - "Zero critical open defects"

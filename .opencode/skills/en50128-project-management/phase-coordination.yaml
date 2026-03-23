@@ -1,0 +1,459 @@
+# PM Phase Coordination Notes
+#
+# PM-specific execution notes for all lifecycle phases.
+# BASE DATA for each phase lives in activities/phase-N-*.yaml (Track A activities,
+# deliverables, Track B criteria, gate check criteria). This file adds ONLY:
+#   - special_cases: SIL-conditional branching and independence rules
+#   - agent_sequence: PM invocation order where global YAML dependencies are insufficient
+#   - escalation_triggers: conditions requiring COD report vs. retry
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 1 — Planning
+# ─────────────────────────────────────────────────────────────────────────────
+phase_1:
+  id: "planning"
+  global_data: "activities/phase-1-planning.yaml"
+
+  special_cases:
+
+    svp_independence:
+      rule: "VER authors the Software Verification Plan (SVP). PM coordinates logistics
+             (invokes VER via task tool) but has ZERO content authority over SVP.
+             COD authorizes VER to begin. PM does not review or approve SVP content."
+      standard_ref: "WORKFLOW.md Diagram 2; pm.md Critical Hard Rules rule 6"
+
+    svap_independence:
+      rule: "VAL (via VMGR at SIL 3-4) authors the Software Validation Plan (SVaP).
+             PM coordinates logistics but has ZERO content authority over SVaP.
+             COD authorizes VAL/VMGR to begin. PM does not review or approve SVaP content."
+      standard_ref: "WORKFLOW.md Diagram 2; §5.1.2.10f"
+
+  agent_sequence:
+    # VER (SVP) and VAL/VMGR (SVaP) are Track B — NOT PM-orchestrated.
+    - step: 1
+      agent: "qua"
+      deliverable: "Software-Quality-Assurance-Plan"
+      note: "SQAP first — other planning documents reference it."
+    - step: 2
+      agent: "cm"
+      deliverable: "Software-Configuration-Management-Plan"
+      depends_on: [1]
+    - step: 3
+      agent: "saf"
+      deliverable: "SIL-Assignment-Record"
+      depends_on: [1]
+
+  escalation_triggers:
+    - condition: "QUA rejects SQAP after 3 iterations"
+      action: "Suspend Phase 1. Report to COD. Await user intervention."
+    - condition: "SAF identifies unacceptable hazard risk before SRS exists"
+      action: "Report to COD and Safety Authority immediately. Do not proceed to Phase 2."
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 2 — Requirements Specification
+# ─────────────────────────────────────────────────────────────────────────────
+phase_2:
+  id: "requirements"
+  global_data: "activities/phase-2-requirements.yaml"
+
+  special_cases:
+
+    user_approval_required:
+      rule: "USER APPROVAL IS REQUIRED before REQ finalizes the SRS and before
+             Track B (VER/VAL) proceeds. PM must present the completed SRS to the
+             user and obtain explicit sign-off. Not optional at any SIL level."
+      action: "After REQ + SAF produce QUA-accepted deliverables, PM pauses:
+               'SRS is ready for your review and approval. Please confirm before
+               I report Track A complete to COD.'"
+
+    sil_assignment:
+      rule: "SAF assigns SIL levels to each requirement. PM confirms SIL assignments
+             are recorded in the SRS before reporting Track A complete. If SAF identifies
+             requirements at a higher SIL than the project-level SIL, PM escalates to COD."
+
+  agent_sequence:
+    - step: 1
+      agent: "req"
+      deliverable: "Software-Requirements-Specification"
+    - step: 2
+      agent: "saf"
+      deliverable: "Hazard-Log"
+      depends_on: [1]
+      note: "SAF updates Hazard Log: assign SIL levels, link hazards to SRS requirements."
+    - step: 3
+      user_approval: true
+      note: "PM presents SRS to user for approval before reporting Track A complete to COD."
+
+  escalation_triggers:
+    - condition: "SAF identifies requirements with contradictory SIL assignments"
+      action: "Report to COD and Safety Authority. Do not proceed until resolved."
+    - condition: "User rejects SRS content (not just formatting)"
+      action: "Return to REQ for content revision. Restart Owner→QUA loop."
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 3 — Architecture and Design
+# ─────────────────────────────────────────────────────────────────────────────
+phase_3:
+  id: "architecture-design"
+  global_data: "activities/phase-3-architecture-design.yaml"
+
+  special_cases:
+
+    hazard_log_update_before_sds:
+      rule: "SAF updates Hazard Log BEFORE DES finalizes the SDS. SDS must reference
+             updated Hazard Log. PM enforces: SAS → SAF Hazard Log update → SDS."
+
+    integration_test_specs_in_phase_3:
+      rule: "SW Integration Test Specification and SW/HW Integration Test Specification
+             are Phase 3 outputs (INT authors them now). Execution is Phase 6.
+             PM invokes INT in Phase 3 for spec authoring."
+
+  agent_sequence:
+    - step: 1
+      agent: "des"
+      deliverable: "Software-Architecture-Specification"
+    - step: 2
+      agent: "saf"
+      deliverable: "Hazard-Log"
+      depends_on: [1]
+    - step: 3
+      agent: "des"
+      deliverable: "Software-Design-Specification"
+      depends_on: [1, 2]
+    - step: 4
+      agent: "des"
+      deliverable: "Software-Interface-Specifications"
+      depends_on: [1]
+      parallel_with: [2]
+    - step: 5
+      agent: "int"
+      deliverable: "Software-Integration-Test-Specification"
+      depends_on: [3, 4]
+    - step: 6
+      agent: "int"
+      deliverable: "Software-Hardware-Integration-Test-Specification"
+      depends_on: [3, 4]
+      parallel_with: [5]
+
+  escalation_triggers:
+    - condition: "DES identifies architectural constraint that makes a safety requirement unachievable"
+      action: "Report to COD and SAF immediately. May require Phase 2 re-entry."
+    - condition: "Cyclomatic complexity limits cannot be met at architectural level"
+      action: "Report to COD. Architecture must be revised before Phase 4."
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 4 — Component Design
+# ─────────────────────────────────────────────────────────────────────────────
+phase_4:
+  id: "component-design"
+  global_data: "activities/phase-4-component-design.yaml"
+
+  special_cases:
+
+    test_spec_before_implementation:
+      rule: "Software Component Test Specification (Phase 4) must be QUA-accepted BEFORE
+             IMP begins coding in Phase 5. PM confirms test spec is baselined before
+             authorizing Phase 5 entry."
+
+  agent_sequence:
+    - step: 1
+      agent: "des"
+      deliverable: "Software-Component-Design-Specification"
+    - step: 2
+      agent: "tst"
+      deliverable: "Software-Component-Test-Specification"
+      depends_on: [1]
+      note: "Test spec produced before implementation (test-first discipline, SIL 2+)."
+
+  escalation_triggers:
+    - condition: "DES cannot decompose a module within cyclomatic complexity limits"
+      action: "Report to COD. May require Phase 3 re-entry."
+    - condition: "TST identifies untestable components (no observable outputs)"
+      action: "Return to DES for interface revision before TST spec can be completed."
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 5 — Component Implementation and Testing
+# ─────────────────────────────────────────────────────────────────────────────
+phase_5:
+  id: "implementation-testing"
+  global_data: "activities/phase-5-implementation-testing.yaml"
+
+  special_cases:
+
+    no_fabricated_results:
+      rule: "PM MUST NOT accept a test report with fabricated results. TST must execute
+             tests against actual compiled code. Coverage data must come from an actual
+             coverage tool (gcov, lcov, etc.)."
+
+    misra_zero_tolerance:
+      rule: "At SIL 2+, MISRA C:2012 mandatory rule violations = ZERO. Required rule
+             violations need documented justification in source code."
+
+    coverage_requirements_by_sil:
+      sil_2: "100% statement + 100% branch."
+      sil_3_4: "100% statement + 100% branch + 100% MC/DC."
+      action: "PM checks coverage data in test report before accepting. If target not
+               met, returns to TST (not IMP) for additional tests."
+
+  agent_sequence:
+    - step: 1
+      agent: "imp"
+      deliverable: "Software-Source-Code-and-supporting-documentation"
+    - step: 2
+      agent: "tst"
+      deliverable: "Software-Component-Test-Report"
+      depends_on: [1]
+      note: "TST executes tests against compiled code; collects coverage with tool."
+
+  escalation_triggers:
+    - condition: "Unit tests reveal defect in Component Design Specification"
+      action: "Suspend Phase 5. Return to DES for Phase 4 re-entry via COD."
+    - condition: "Coverage target not achievable (dead code from safety guards)"
+      action: "IMP documents unreachable code with justification. VER reviews in Track B.
+               PM does not unilaterally waive coverage."
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 6 — Integration
+# ─────────────────────────────────────────────────────────────────────────────
+phase_6:
+  id: "integration"
+  global_data: "activities/phase-6-integration.yaml"
+
+  special_cases:
+
+    int_tst_two_step:
+      rule: "Two-step pattern per §5.1.2.10c: INT coordinates → TST executes →
+             INT documents. TST MUST NOT document results (INT does). INT MUST NOT
+             fabricate results (TST provides them)."
+      sil_note: "At SIL 3-4, INT and TST SHOULD be separate roles. PM records
+                 role assignments before Phase 6 begins."
+
+    hardware_availability:
+      rule: "If target hardware is unavailable, TST documents the limitation clearly.
+             PM does NOT fabricate HW test results. Limitation reported to COD."
+
+    ver_report_in_phase_7:
+      rule: "Software Integration Verification Report (Annex C #23) is produced in
+             Phase 7 by VER (Track B). Phase 6 only produces Annex C #21 and #22.
+             PM must not expect a VER report at the Phase 6 gate."
+
+  agent_sequence:
+    # SW integration: INT coordinates → TST executes → INT documents
+    - step: 1
+      agent: "int"
+      action: "coordinate-sw"
+    - step: 2
+      agent: "tst"
+      action: "execute-sw"
+      depends_on: [1]
+    - step: 3
+      agent: "int"
+      deliverable: "Software-Integration-Test-Report"
+      depends_on: [2]
+    # HW/SW integration (parallel stream)
+    - step: 4
+      agent: "int"
+      action: "coordinate-hw"
+      parallel_with: [1]
+    - step: 5
+      agent: "tst"
+      action: "execute-hw"
+      depends_on: [4]
+      parallel_with: [2]
+    - step: 6
+      agent: "int"
+      deliverable: "Software-Hardware-Integration-Test-Report"
+      depends_on: [5]
+      parallel_with: [3]
+
+  escalation_triggers:
+    - condition: "Integration test reveals interface defect not caught in Phase 4/5"
+      action: "Suspend Phase 6. Invoke COD for phase re-entry assessment."
+    - condition: "100% integration test pass rate not achieved"
+      action: "Do not report Track A complete to COD. Return to defect owners for fixes."
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 7 — Overall Software Testing / Final Validation
+# ─────────────────────────────────────────────────────────────────────────────
+phase_7:
+  id: "validation"
+  global_data: "activities/phase-7-validation.yaml"
+
+  special_cases:
+
+    val_independence_sil_3_4:
+      rule: "At SIL 3-4, VAL operates INDEPENDENTLY from PM. PM MUST NOT direct, instruct,
+             or review VAL's activities or conclusions. VAL does not report to PM (§5.1.2.10f).
+             COD invokes VAL directly. After PM reports Track A complete, PM's Phase 7 role ends."
+
+    baseline_before_handoff:
+      rule: "Before reporting Track A complete to COD, PM confirms with CM that a
+             configuration baseline exists for the build under validation."
+
+    overall_test_report_is_track_a:
+      rule: "Overall Software Test Report (Annex C #24, by TST) is the ONLY Track A
+             deliverable in Phase 7. Annex C #23, #25, #26, and Release Note are Track B."
+
+  agent_sequence:
+    - step: 1
+      agent: "cm"
+      action: "create-baseline"
+      note: "Baseline before TST begins overall testing."
+    - step: 2
+      agent: "tst"
+      deliverable: "Overall-Software-Test-Report"
+      depends_on: [1]
+    - step: 3
+      action: "report-to-cod"
+      depends_on: [2]
+      note: "PM reports Track A complete. PM's Phase 7 role ends here."
+
+  escalation_triggers:
+    - condition: "Overall software tests reveal unsatisfied requirement"
+      action: "Suspend phase. Invoke COD for re-entry assessment."
+    - condition: "Customer acceptance not obtained"
+      action: "Report to COD. Gate cannot pass without customer sign-off."
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 8 — Software Assessment
+# ─────────────────────────────────────────────────────────────────────────────
+phase_8:
+  id: "assessment"
+  global_data: "activities/phase-8-assessment.yaml"
+
+  special_cases:
+
+    sil_0_exemption:
+      rule: "Phase 8 is EXEMPT for SIL 0 per §6.4.1.2. PM checks SIL at phase entry.
+             If SIL 0, PM reports to COD: 'Phase 8 skipped — SIL 0 exemption §6.4.1.2'.
+             COD proceeds directly to Phase 9."
+
+    facilitation_only:
+      rule: "PM has NO document production authority in Phase 8. ASR is entirely outside
+             PM authority. PM role: compile artifact package, provide access, track findings."
+
+    asr_independence:
+      rule: "PM MUST NOT direct ASR activities, suggest findings, or pressure ASR toward
+             any conclusion. ASR independence is a normative requirement (§6.4.1.1)."
+
+  agent_sequence:
+    - step: 1
+      agent: "cm"
+      action: "produce-artifact-inventory"
+      note: "CM produces complete inventory of all lifecycle artifacts for ASR access."
+    - step: 2
+      agent: "pm"
+      action: "facilitate-asr-access"
+      depends_on: [1]
+    - step: 3
+      agent: "pm"
+      action: "track-findings"
+      note: "PM maintains finding log; coordinates resolution via COD."
+
+  escalation_triggers:
+    - condition: "ASR finding requires changes to safety requirements or design"
+      action: "Report to COD immediately. May require CCB and phase re-entry."
+    - condition: "ASR rejects the safety case"
+      action: "Report to COD and Safety Authority. Deployment is BLOCKED."
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 9 — Software Deployment
+# ─────────────────────────────────────────────────────────────────────────────
+phase_9:
+  id: "deployment"
+  global_data: "activities/phase-9-deployment.yaml"
+
+  special_cases:
+
+    phase_8_gate_prerequisite:
+      rule: "Phase 9 MUST NOT begin until Phase 8 gate is passed and ASR has granted
+             deployment authorization. PM verifies this with COD before invoking any agent."
+
+    release_notes_disambiguation:
+      rule: "Two distinct documents: (1) 'Release Note' singular §7.7.4.12 — produced by
+             VAL in Phase 7 (Track B). (2) 'Release Notes' plural Annex C #38 — produced
+             by PM in Phase 9 (Track A). PM produces #2 only."
+
+  agent_sequence:
+    - step: 1
+      agent: "pm"
+      deliverable: "Software-Release-and-Deployment-Plan"
+    - step: 2
+      agent: "des"
+      deliverable: "Software-Deployment-Manual"
+      depends_on: [1]
+    - step: 3
+      agent: "pm"
+      deliverable: "Release-Notes"
+      depends_on: [1, 2]
+      note: "Annex C #38 — distinct from Phase 7 Release Note (§7.7.4.12)."
+    - step: 4
+      agent: "cm"
+      deliverable: "Deployment-Records"
+      depends_on: [1, 2, 3]
+      note: "Actual deployment evidence — not a plan."
+
+  escalation_triggers:
+    - condition: "Deployment reveals software behavior inconsistent with validation results"
+      action: "HALT deployment. Report to COD immediately."
+    - condition: "Target hardware configuration differs from validation environment"
+      action: "Report to COD. Configuration delta must be assessed by VER."
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 10 — Software Maintenance
+# ─────────────────────────────────────────────────────────────────────────────
+phase_10:
+  id: "maintenance"
+  global_data: "activities/phase-10-maintenance.yaml"
+
+  special_cases:
+
+    recurring_phase:
+      rule: "Phase 10 repeats for each CCB-approved maintenance release. Maintenance Plan
+             (Annex C #41) produced ONCE. Change Records (#42) and Maintenance Records (#43)
+             recur per change batch."
+
+    annex_c_typo:
+      rule: "EN 50128 Annex C typo: item 42 is 'Software Chang Records'. Correct name per
+             §9.2.4 is 'Software Change Records'. All agents must use the correct name."
+
+    ccb_gates_every_change:
+      rule: "EVERY maintenance change must be CCB-approved before implementation. PM as
+             CCB chair must process each CR before invoking implementation agents."
+
+    significant_changes_trigger_revalidation:
+      rule: "Significant functional or safety-critical changes may trigger re-validation
+             (COD decision, not PM). PM flags such changes to COD before implementing."
+
+  agent_sequence:
+    # One-time at Phase 10 entry
+    - step: 1
+      agent: "pm"
+      deliverable: "Software-Maintenance-Plan"
+      once: true
+    # Recurring per CCB-approved change batch
+    - step: 2
+      agent: "cm"
+      deliverable: "Software-Change-Records"
+      depends_on: [1]
+      recurring: true
+    - step: 3
+      agent: "cm"
+      deliverable: "Software-Maintenance-Records"
+      depends_on: [2]
+      recurring: true
+
+  escalation_triggers:
+    - condition: "Regression testing reveals defect in unchanged safety-critical component"
+      action: "Report to COD and Safety Authority. May require re-entry to earlier phases."
+    - condition: "Maintenance change cannot be implemented within original SIL constraints"
+      action: "Report to COD. SIL re-assessment may be required."

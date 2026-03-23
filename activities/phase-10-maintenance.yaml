@@ -1,0 +1,273 @@
+# EN 50128 Phase 10: Software Maintenance
+# Source: LIFECYCLE.md §13 (ISA PASS), EN 50128:2011 §9.2
+# Annex C Items: 41–44
+#
+# Item 44 (Software Maintenance Verification Report) PLATFORM DEVIATION:
+#   Annex C Table C.1 places item 44 under "Software assessment" column.
+#   This platform assigns item 44 to Phase 10 (Maintenance), justified by §9.2
+#   (normative maintenance clause) and the logical dependency that maintenance
+#   activities generate the verification report. This constitutes a platform
+#   deviation from Annex C Table C.1's phase column; must be documented in SQAP
+#   and is subject to Safety Authority review. (See DELIVERABLES.md Note 6.)
+#
+# Item 42 (Software Change Records): Annex C Table C.1 contains a typo —
+#   "Software Chang Records". The correct name per Section 9.2.4 is
+#   "Software Change Records". (See DELIVERABLES.md Key Corrections.)
+#
+# RECURRING PHASE: Phase 10 repeats per CCB-approved change request.
+#   Each maintenance iteration produces a new set of items 42–44 (and updates
+#   item 41 as needed). The CCB re-entry workflow (see workflow.yaml) governs
+#   which prior phases must be re-entered when a change affects them.
+#
+# Writers: PM writes items 41–43 (Annex C footnote a). VER writes item 44.
+# VAL 2nd Check applies to all items 41–44 per Annex C checker column.
+
+phase:
+  id: "maintenance"
+  number: 10
+  name: "Software Maintenance"
+  en50128_section: "§9.2"
+  executor: "pm"
+  gate_command: "@cod gate-check maintenance"
+  recurring: true                          # Phase 10 repeats per CCB-approved change
+  description: >
+    Phase 10 manages software changes after deployment. It is a recurring phase —
+    each CCB-approved change request triggers a maintenance iteration. PM leads the
+    CCB, coordinates changes, and produces the Software Maintenance Plan (item 41),
+    Software Change Records (item 42), and Software Maintenance Records (item 43).
+    VER produces the Software Maintenance Verification Report (item 44) — a platform
+    deviation from Annex C Table C.1 which places item 44 under "Software assessment"
+    column; this platform assigns it to Phase 10 per §9.2 normative clause.
+    Note: Annex C item 42 contains a typo ("Software Chang Records") — the correct
+    name per §9.2.4 is "Software Change Records".
+    All changes shall maintain the SIL level established in Phase 1. Significant
+    changes affecting safety requirements may require re-entry of earlier phases
+    per the CCB re-entry workflow (see workflow.yaml). Maintenance baselines must
+    be established in CM after each approved maintenance release.
+    Entry: Phase 9 Deployment complete; Software Maintenance Plan approved; CCB operational.
+
+  # ── Track A: Activities (PM-orchestrated, dev agents only) ────────────────
+  activities:
+    - agent: "pm"
+      task_description: >
+        Establish Software Maintenance Plan: define the maintenance strategy,
+        change control procedures, CCB composition and authority, maintenance
+        schedule, resource allocation, and criteria for determining whether a
+        change requires re-entry of earlier lifecycle phases. The plan shall
+        cover procedures for emergency changes (field defects), planned
+        enhancements, and third-party component updates. VER 1st Check and
+        VAL 2nd Check apply per Annex C. Produced once and updated as needed.
+      owner: "pm"
+      deliverables:
+        - path: "docs/maintenance/Software-Maintenance-Plan.md"
+          doc_id: "DOC-MAINTPLAN-YYYY-001"
+          doc_type: "Software Maintenance Plan"
+          annex_c_item: 41
+          qua_required: true
+          first_check: "ver"
+          second_check: "val"
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "pm"
+      task_description: >
+        Maintain Software Change Records: for each CCB-approved change request,
+        record the change identifier, description, rationale, SIL impact assessment,
+        phases affected, approval status, and resolution. This document accumulates
+        all change history for the software. VER 1st Check and VAL 2nd Check apply
+        per Annex C. NOTE: Annex C item 42 contains a typo "Software Chang Records"
+        — the correct name per §9.2.4 is "Software Change Records".
+      owner: "pm"
+      deliverables:
+        - path: "docs/maintenance/Software-Change-Records.md"
+          doc_id: "DOC-CHANGEREC-YYYY-001"
+          doc_type: "Software Change Records"
+          annex_c_item: 42
+          qua_required: true
+          first_check: "ver"
+          second_check: "val"
+          note: >
+            Annex C item 42 contains a typo: "Software Chang Records".
+            Correct name per §9.2.4 is "Software Change Records".
+            All platform references use the corrected name.
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "cm"
+      task_description: >
+        Maintain Software Maintenance Records: record all maintenance activities
+        performed — changes implemented, components modified, tests executed,
+        baselines established, tools used, and maintenance schedule adherence.
+        Provide a traceable audit trail of all maintenance work. VER 1st Check
+        and VAL 2nd Check apply per Annex C. CM is the primary author; PM has
+        oversight responsibility (Annex C footnote a writer assignment).
+      owner: "cm"
+      deliverables:
+        - path: "docs/maintenance/Software-Maintenance-Records.md"
+          doc_id: "DOC-MAINTREC-YYYY-001"
+          doc_type: "Software Maintenance Records"
+          annex_c_item: 43
+          qua_required: true
+          first_check: "ver"
+          second_check: "val"
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "cm"
+      task_description: >
+        Manage maintenance baselines: for each approved maintenance release,
+        establish a new CM baseline. Update configuration management records.
+        Ensure traceability between changed artifacts and the CCB change request.
+        Coordinate with all technical agents whose artifacts were modified.
+      owner: "cm"
+      deliverables: []                    # CM baseline records (CM-internal artifacts)
+      dependencies: [1]                   # Baseline established after change records complete
+      parallel_group: 2
+
+  # ── Completion Criteria (per maintenance iteration) ───────────────────────
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true            # Change records trace to CCB requests
+    custom_checks:
+      - "Software Maintenance Plan (item 41) approved and current"
+      - "Software Change Records (item 42) updated for all CCB-approved changes in this iteration"
+      - "Software Maintenance Records (item 43) complete for all maintenance activities"
+      - "Software Maintenance Verification Report (item 44) produced by VER"
+      - "VER 1st Check completed on items 41–44 per Annex C checker column"
+      - "VAL 2nd Check completed on items 41–44 per Annex C checker column"
+      - "All maintenance changes verified against original SIL requirements"
+      - "If safety-significant change: earlier phases re-entered per CCB re-entry workflow"
+      - "Maintenance baseline established in CM"
+      - "No critical open defects in maintained software"
+      - "Item 44 platform deviation documented in SQAP (Annex C anomaly per DELIVERABLES.md Note 6)"
+
+  # ── Track B: Verification ─────────────────────────────────────────────────
+  verification:
+    required: true
+    verifier: "ver"
+    produces:
+      - doc_type: "Software Maintenance Verification Report"
+        annex_c_item: 44
+        path: "docs/maintenance/Software-Maintenance-Verification-Report.md"
+        doc_id: "DOC-MAINTVER-YYYY-001"
+        platform_deviation: >
+          Annex C Table C.1 places item 44 under "Software assessment" column.
+          This platform assigns item 44 to Phase 10 (Maintenance) per §9.2 normative
+          clause. Deviation documented in DELIVERABLES.md Note 6. Must be recorded
+          in SQAP and is subject to Safety Authority review.
+    criteria:
+      - "All maintenance changes verified against Software Maintenance Plan (item 41)"
+      - "Software Change Records (item 42) consistent with CCB decisions"
+      - "Software Maintenance Records (item 43) accurate and complete"
+      - "Changed software components verified against original specifications"
+      - "No regression defects introduced by maintenance changes"
+      - "SIL requirements maintained for all changed components"
+      - "Maintenance baseline verified in CM"
+      - "Re-entered phase verifications completed (if earlier phases re-entered)"
+
+  # ── Track B: Validation (2nd Check on all items — no VAL report in Phase 10) ──
+  validation:
+    required_sil: []
+    val_role: "2nd Check reviewer on items 41, 42, 43, and 44 (Annex C checker column)"
+    validator: "val"
+    independence_required_sil: [3, 4]
+    produces: []                           # VAL produces NO reports in Phase 10
+    criteria: []
+    note: >
+      VAL acts as 2nd Check reviewer on items 41–44 per Annex C checker column.
+      VAL does NOT produce a Validation Report in Phase 10 — VAL reports were
+      produced in Phase 7 only. If a maintenance change is significant enough to
+      trigger re-entry of Phase 7, a new Validation Report would be produced in
+      that re-entered Phase 7 instance. For routine maintenance, VAL 2nd Check
+      on items 41–44 is a review activity without a separate report artifact.
+
+  # ── Workflow ──────────────────────────────────────────────────────────────
+  workflow:
+    track_a:
+      description: >
+        PM receives CCB-approved change request. PM updates Software Change Records
+        (item 42). PM coordinates technical agents (REQ, DES, IMP, TST, INT as
+        needed per change scope). CM records maintenance activities (item 43).
+        QUA checks all Track A deliverables. PM assesses if earlier phases must
+        be re-entered per CCB re-entry workflow. PM reports Track A complete to COD.
+      completion_signal: "PM reports items 41–43 QUA-passed and maintenance activities complete to COD"
+    track_b:
+      description: >
+        VER produces item 44 (Software Maintenance Verification Report) after
+        maintenance activities complete. VAL performs 2nd Check on items 41–44.
+      sil_34:
+        description: >
+          COD routes item 44 through VMGR at SIL 3–4.
+          VAL independence required for 2nd Check.
+          VMGR confirms VER maintenance report is acceptable.
+          COD receives VMGR approval before closing maintenance iteration.
+          If earlier phases re-entered: full V&V loop (Track B) for those phases applies.
+        vmgr_gateway: true
+        val_independence_required: true
+      sil_02:
+        description: >
+          COD invokes VER directly for item 44.
+          VAL 2nd Check on items 41–44 without independence requirement.
+          COD receives VER report and VAL review completion confirmations.
+        vmgr_gateway: false
+    ccb_re_entry: >
+      If a maintenance change affects requirements (Phase 2), design (Phases 3–4),
+      implementation (Phase 5), integration (Phase 6), or validation (Phase 7):
+      COD applies the CCB re-entry workflow (workflow.yaml). Affected phases are
+      re-entered with full V&V loop. New VER reports produced for re-entered phases.
+      VAL re-validation required if Phase 7 re-entered. ASR re-assessment may be
+      required per §6.4 if changes are safety-significant.
+    recurring_note: >
+      Phase 10 is recurring — each CCB-approved change triggers a new maintenance
+      iteration. Deliverables 42–44 accumulate entries per iteration; item 41
+      (Maintenance Plan) is updated as needed. COD tracks per-iteration gate checks.
+    rework_path: >
+      If VER identifies maintenance non-conformances: PM coordinates resolution.
+      If the change introduced regressions: additional technical work in affected
+      phases; re-verification required. VER updates item 44 after resolution.
+      COD does NOT close the maintenance iteration while critical findings remain.
+
+  # ── Transitions ───────────────────────────────────────────────────────────
+  transitions:
+    - event: "gate_pass"
+      guard: "true"
+      target: "maintenance"
+      action: "COD closes iteration; Phase 10 remains active for next CCB-approved change"
+    - event: "gate_pass_final"
+      guard: "no_pending_changes == true and project_closure_authorized == true"
+      target: "closed"
+      action: "COD closes project lifecycle; final baseline established in CM"
+    - event: "gate_fail"
+      guard: "sil >= 3"
+      target: "maintenance"
+      action: "COD BLOCKS iteration; PM coordinates rework; re-runs gate"
+    - event: "gate_fail"
+      guard: "sil < 3"
+      target: "maintenance"
+      action: "COD warns; PM coordinates rework"
+    - event: "phase_reentry"
+      guard: "safety_significant_change == true"
+      target: "requirements"               # or design/implementation/integration/validation as applicable
+      action: "COD invokes CCB re-entry workflow; targeted re-entry of affected phases"
+
+  # ── Gate Check ────────────────────────────────────────────────────────────
+  gate_check:
+    command: "@cod gate-check maintenance"
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [2, 3, 4]
+    note: "Gate check applies per maintenance iteration, not just once for the project."
+    criteria:
+      - "Software Maintenance Plan (item 41) current and QUA-passed"
+      - "Software Change Records (item 42) updated for all changes in this iteration and QUA-passed"
+      - "Software Maintenance Records (item 43) complete and QUA-passed"
+      - "Software Maintenance Verification Report (item 44) produced by VER and QUA-passed"
+      - "VMGR approved item 44 (SIL 3–4)"
+      - "VER 1st Check completed on items 41–44 per Annex C"
+      - "VAL 2nd Check completed on items 41–44 per Annex C"
+      - "All CCB-approved changes implemented and verified"
+      - "No critical open defects"
+      - "Maintenance baseline established in CM"
+      - "Earlier phase re-entry completed (if required by CCB assessment)"
+      - "SIL requirements maintained across all changes"
+      - "Item 44 platform deviation documented in SQAP (Annex C anomaly per DELIVERABLES.md Note 6)"
+      - "Item 42 typo correction noted: Annex C 'Software Chang Records' → 'Software Change Records' (§9.2.4)"

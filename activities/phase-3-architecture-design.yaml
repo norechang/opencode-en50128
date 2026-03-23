@@ -1,0 +1,218 @@
+# EN 50128 Phase 3: Software Architecture and Design
+# Source: LIFECYCLE.md §5 (ISA PASS), EN 50128:2011 §7.3
+# Annex C Items: 9–14
+
+phase:
+  id: "architecture-design"
+  number: 3
+  name: "Software Architecture and Design"
+  en50128_section: "§7.3"
+  executor: "pm"
+  gate_command: "@cod gate-check design"
+  description: >
+    Phase 3 defines the software architecture and detailed design. DES is the PRIMARY
+    agent. SAF contributes FMEA/FTA analysis (HR at SIL 3–4 per Tables A.3/A.8).
+    Both specification-level documents (items 9–13) AND a verification report (item 14)
+    are produced here. Note: items 12 and 13 are Integration Test Specifications written
+    in this phase; they are the left-side V-Model counterparts to test reports produced
+    in Phase 6. The SDS (item 10) is the parent design document that feeds Phase 4
+    component design decomposition.
+
+  # ── Track A: Activities (PM-orchestrated, dev agents only) ────────────────
+  activities:
+    - agent: "des"
+      task_description: >
+        Create Software Architecture Specification (SAS) per §7.3.
+        Define top-level software structure, major components, communication
+        paths, and architectural patterns. Apply defensive programming principles.
+        For SIL 2+: no dynamic memory allocation, no recursion (HR), bounded loops.
+        Establish cyclomatic complexity limits (SIL 0-1: ≤20; SIL 2: ≤15; SIL 3-4: ≤10).
+      owner: "des"
+      deliverables:
+        - path: "docs/architecture/Software-Architecture-Specification.md"
+          doc_id: "DOC-SAS-YYYY-001"
+          doc_type: "Software Architecture Specification"
+          annex_c_item: 9
+          qua_required: true
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "des"
+      task_description: >
+        Create Software Design Specification (SDS) per §7.3.
+        Define detailed design for all software modules: interfaces, data structures,
+        algorithms, state machines, and error handling. SDS decomposes the architecture
+        into module-level designs. SDS is the parent document for Phase 4 component design.
+      owner: "des"
+      deliverables:
+        - path: "docs/architecture/Software-Design-Specification.md"
+          doc_id: "DOC-SDS-YYYY-001"
+          doc_type: "Software Design Specification"
+          annex_c_item: 10
+          qua_required: true
+      dependencies: [0]                   # After SAS (SDS decomposes the architecture)
+      parallel_group: 2
+
+    - agent: "des"
+      task_description: >
+        Define Software Interface Specifications (plural per §7.3.3 item 3) for all
+        module and external interfaces. Specify data types, ranges, preconditions,
+        and postconditions. Interface specifications must be complete before integration
+        test specifications can be written.
+      owner: "des"
+      deliverables:
+        - path: "docs/architecture/Software-Interface-Specifications.md"
+          doc_id: "DOC-INTERFACES-YYYY-001"
+          doc_type: "Software Interface Specifications"
+          annex_c_item: 11
+          qua_required: true
+      dependencies: [1]                   # After SDS
+      parallel_group: 3
+
+    - agent: "int"
+      task_description: >
+        Write Software Integration Test Specification per §7.3.
+        Defines integration test cases, scenarios, and acceptance criteria for
+        software integration. This is the left-side V-Model specification whose
+        counterpart is the Software Integration Test Report (item 21) in Phase 6.
+      owner: "int"
+      deliverables:
+        - path: "docs/integration/Software-Integration-Test-Specification.md"
+          doc_id: "DOC-INTTESTSPEC-YYYY-001"
+          doc_type: "Software Integration Test Specification"
+          annex_c_item: 12
+          qua_required: true
+      dependencies: [2]                   # After interface specs defined
+      parallel_group: 4
+
+    - agent: "int"
+      task_description: >
+        Write Software/Hardware Integration Test Specification per §7.3.
+        Defines test cases for software/hardware integration. This is the V-Model
+        counterpart to the Software/Hardware Integration Test Report (item 22) in Phase 6.
+      owner: "int"
+      deliverables:
+        - path: "docs/architecture/Hardware-Software-Integration-Test-Specification.md"
+          doc_id: "DOC-HWINTTESTSPEC-YYYY-001"
+          doc_type: "Software/Hardware Integration Test Specification"
+          annex_c_item: 13
+          qua_required: true
+      dependencies: [2]                   # After interface specs defined
+      parallel_group: 4
+
+    - agent: "saf"
+      task_description: >
+        Perform FMEA (Failure Mode and Effects Analysis) and FTA (Fault Tree Analysis)
+        on the software architecture per Tables A.3/A.8 (HR at SIL 3–4, R at SIL 2).
+        Update Hazard Log with design-phase findings. Verify architecture addresses
+        all safety requirements from the SRS.
+      owner: "saf"
+      deliverables:
+        - path: "docs/safety/Hazard-Log.md"
+          doc_id: null
+          doc_type: "Hazard Log (safety cross-cutting artifact)"
+          annex_c_item: null
+          qua_required: false
+      dependencies: [1]                   # After SDS
+      parallel_group: 3
+      sil_condition:
+        sil_34: "FMEA: HR; FTA: HR (Table A.3, Table A.8)"
+        sil_2: "FMEA: R; FTA: R"
+
+  # ── Completion Criteria ────────────────────────────────────────────────────
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true            # Design traceable to SRS requirements
+    custom_checks:
+      - "SAS defines top-level architecture, components, and communication paths"
+      - "SDS decomposes architecture to module-level design"
+      - "Software Interface Specifications complete (plural form per §7.3.3)"
+      - "Integration test specifications complete and cover all interfaces"
+      - "Design traceable to requirements (SAS/SDS → SRS)"
+      - "Cyclomatic complexity limits established and documented"
+      - "No dynamic memory allocation design patterns (SIL 2+)"
+      - "FMEA/FTA completed (HR SIL 3–4)"
+      - "Architecture design review passed"
+
+  # ── Track B: Verification ─────────────────────────────────────────────────
+  verification:
+    required: true
+    verifier: "ver"
+    produces:
+      - doc_type: "Software Architecture and Design Verification Report"
+        annex_c_item: 14
+        path: "docs/architecture/Software-Architecture-and-Design-Verification-Report.md"
+    criteria:
+      - "SAS complies with §7.3 requirements"
+      - "SDS is consistent with SAS"
+      - "Interface specifications complete and unambiguous"
+      - "Integration test specifications cover all interfaces and integration scenarios"
+      - "Design traceable to SRS requirements (bidirectional)"
+      - "Complexity limits appropriate for SIL level"
+      - "FMEA/FTA evidence adequate (SIL 3–4)"
+      - "No design patterns violating MISRA C:2012 principles"
+      - "Safety requirements addressed in design"
+
+  # ── Track B: Validation (2nd Check only — no VAL report in Phase 3) ───────
+  validation:
+    required_sil: []
+    val_role: "2nd Check reviewer on items 9, 10, 11, 12, 13, 14"
+    validator: "val"
+    independence_required_sil: [3, 4]
+    produces: []
+    criteria: []
+
+  # ── Workflow ──────────────────────────────────────────────────────────────
+  workflow:
+    track_a:
+      description: >
+        PM coordinates DES (items 9–11) in dependency order, INT (items 12–13 after
+        interfaces), and SAF (FMEA/FTA after SDS). QUA checks all 5 deliverables.
+        PM reports complete to COD.
+      completion_signal: "PM reports items 9–13 QUA-passed to COD"
+    track_b:
+      sil_34:
+        description: >
+          COD → VMGR → VER verifies items 9–13 → VER produces item 14 (ARCHDESIGNVER)
+          → QUA checks item 14 → VMGR reviews → VMGR reports to COD.
+          VAL 2nd Check on all items.
+        vmgr_gateway: true
+      sil_02:
+        description: >
+          COD → VER verifies and produces item 14. QUA checks item 14.
+          COD receives VER report directly.
+    rework_path: >
+      If VER rejects: VMGR notifies COD → PM coordinates rework with DES/INT →
+      re-enter QUA check → resubmit to VER.
+
+  # ── Transitions ───────────────────────────────────────────────────────────
+  transitions:
+    - event: "gate_pass"
+      guard: "true"
+      target: "component-design"
+      action: "COD authorizes @pm execute-phase 4"
+    - event: "gate_fail"
+      guard: "sil >= 3"
+      target: "architecture-design"
+      action: "COD BLOCKS; PM coordinates rework; COD re-runs gate"
+    - event: "gate_fail"
+      guard: "sil < 3"
+      target: "architecture-design"
+      action: "COD warns; PM coordinates rework"
+
+  # ── Gate Check ────────────────────────────────────────────────────────────
+  gate_check:
+    command: "@cod gate-check design"
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [2, 3, 4]
+    criteria:
+      - "SAS (item 9) QUA-passed"
+      - "SDS (item 10) QUA-passed"
+      - "Software Interface Specifications (item 11) QUA-passed"
+      - "Software Integration Test Specification (item 12) QUA-passed"
+      - "Software/Hardware Integration Test Specification (item 13) QUA-passed"
+      - "Software Architecture and Design Verification Report (item 14) QUA-passed"
+      - "VMGR approved item 14 (SIL 3–4)"
+      - "Design traceable to SRS requirements (bidirectional)"
+      - "FMEA/FTA documented (SIL 3–4)"
+      - "Zero critical open defects"

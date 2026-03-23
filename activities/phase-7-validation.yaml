@@ -1,0 +1,203 @@
+# EN 50128 Phase 7: Overall Software Testing and Final Validation
+# Source: LIFECYCLE.md §9 (ISA PASS), EN 50128:2011 §7.7
+# Annex C Items: 23–27
+#
+# CRITICAL: This is the ONLY phase where VAL authors formal Validation Reports.
+# Phase 7 uses a SPECIALIZED two-track flow (see workflow.yaml per_phase_phase7).
+# The VER Integration Verification Report (item 23) is also produced here.
+# VAL produces Validation Reports (items 25, 26) and Release Note (§7.7.4.12).
+
+phase:
+  id: "validation"
+  number: 7
+  name: "Overall Software Testing and Final Validation"
+  en50128_section: "§7.7"
+  executor: "pm"                          # Track A (TST); COD coordinates Track B (VAL)
+  gate_command: "@cod gate-check validation"
+  description: >
+    Phase 7 is titled "Overall Software Testing / Final Validation" per EN 50128:2011
+    §7.7 Table A.1. Both TST (overall software testing) and VAL (final validation)
+    are mandatory per §7.7. This is the ONLY phase where VAL authors formal Validation
+    Reports. Track A: PM orchestrates TST to produce the Overall Software Test Report
+    (item 24). Track B: COD coordinates VER (item 23) THEN VAL (items 25, 26, Release
+    Note). The Phase 7 flow is specialized — see workflow.yaml per_phase_phase7.
+    VAL holds release authority: software shall not be released without VAL sign-off
+    (§5.1.2.8, §6.3.4.16). SVaP (item 5, Phase 1) must be at an approved baseline
+    per §5.3.2.4 before Phase 7 begins.
+
+  # ── Track A: Activities (PM-orchestrated — TST only) ─────────────────────
+  activities:
+    - agent: "tst"
+      task_description: >
+        Execute the overall software test plan (SVaP) against the Overall Software
+        Test Specification (item 7, produced in Phase 2). Perform functional and
+        black-box testing. For SIL 3–4: performance testing (mandatory per Table A.7).
+        Validate operational scenarios in target environment. Conduct user acceptance
+        testing. Record all test results, defects, and evidence.
+      owner: "tst"
+      deliverables:
+        - path: "docs/validation/Overall-Software-Test-Report.md"
+          doc_id: "DOC-OVERALLTESTRPT-YYYY-001"
+          doc_type: "Overall Software Test Report"
+          annex_c_item: 24
+          qua_required: true
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "saf"
+      task_description: >
+        Support validation activities: confirm all safety requirements from SRS are
+        validated by test evidence. Update Hazard Log with final validation findings.
+        Confirm safety case is complete and consistent with validation results.
+      owner: "saf"
+      deliverables: []
+      dependencies: [0]                   # After overall test report
+      parallel_group: 2
+
+  # ── Completion Criteria ────────────────────────────────────────────────────
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true            # Test results trace to SRS requirements via item 7
+    custom_checks:
+      - "All SVaP validation activities completed per §6.3.4.4–6.3.4.6"
+      - "SVaP at approved baseline per §5.3.2.4 (must have been prepared in Phase 1)"
+      - "Overall Software Test Report covers all Overall Software Test Specification cases"
+      - "All safety requirements validated by test evidence"
+      - "Performance requirements met (mandatory SIL 3–4)"
+      - "All validation test failures resolved"
+      - "Customer/user acceptance obtained"
+      - "Release Note produced per §7.7.4.12"
+      - "VAL sign-off obtained — release authority (§6.3.4.16)"
+
+  # ── Track B: Verification ─────────────────────────────────────────────────
+  # NOTE: Item 23 (Software Integration Verification Report) is produced here
+  # per Annex C Table C.1 — this is the VER report for Phase 6 integration evidence.
+  verification:
+    required: true
+    verifier: "ver"
+    produces:
+      - doc_type: "Software Integration Verification Report"
+        annex_c_item: 23
+        path: "docs/integration/Software-Integration-Verification-Report.md"
+    criteria:
+      - "All integration evidence from Phase 6 verified"
+      - "Integration test reports (items 21, 22) complete and consistent"
+      - "All integration defects resolved"
+      - "Integration test coverage complete"
+      - "Overall Software Test Report (item 24) verified"
+    note: >
+      In Phase 7, VER produces item 23 (Software Integration Verification Report)
+      BEFORE VAL performs final validation. See workflow.yaml per_phase_phase7
+      Track B steps B1 (VER) then B2 (VAL). This is the specialized Phase 7 flow.
+
+  # ── Track B: Validation (VAL PRODUCES REPORTS HERE — only in Phase 7) ────
+  validation:
+    required_sil: [0, 1, 2, 3, 4]        # VAL produces Validation Reports in Phase 7 at all SIL
+    validator: "val"
+    independence_required_sil: [3, 4]     # Mandatory independence per §5.1.2.10(f–j)
+    val_produces_reports: true            # VAL produces Validation Reports ONLY in Phase 7
+    produces:
+      - doc_type: "Software Validation Report"
+        annex_c_item: 25
+        path: "docs/validation/Software-Validation-Report.md"
+      - doc_type: "Tools Validation Report"
+        annex_c_item: 26
+        path: "docs/validation/Tools-Validation-Report.md"
+        conditional: "applicable only if tool qualification evidence required"
+      - doc_type: "Release Note"
+        annex_c_item: 27
+        path: "docs/validation/Release-Note.md"
+        normative_basis: "§7.7.4.12 'shall' clause — unconditionally required"
+    criteria:
+      - "All phase evidence reviewed (items 1–24)"
+      - "All safety requirements validated"
+      - "All validation criteria from SVaP satisfied"
+      - "Software meets intended purpose per §6.3.4.16"
+      - "Customer acceptance obtained"
+      - "Tool qualification evidence reviewed (if applicable)"
+    release_authority_note: >
+      VAL holds release authority — software shall not be released without VAL
+      sign-off per §5.1.2.8 and §6.3.4.16.
+    release_note_note: >
+      Release Note is normatively required by §7.7.4.12 'shall' clause.
+      Item 27 assignment is by sequential Annex C numbering — confirm status
+      against printed standard and document in SQAP if discrepancy found.
+      'Release Note' (singular, §7.7.4.12) is distinct from 'Release Notes'
+      (plural, item 38, Phase 9 deployment).
+
+  # ── Workflow ──────────────────────────────────────────────────────────────
+  # Phase 7 uses SPECIALIZED flow — see workflow.yaml per_phase_phase7
+  workflow:
+    track_a:
+      description: >
+        PM orchestrates TST only in Track A (no other dev agents in Phase 7 Track A).
+        TST executes overall software tests and produces item 24. QUA checks item 24.
+        PM reports Track A complete to COD.
+      completion_signal: "PM reports item 24 (Overall Software Test Report) QUA-passed to COD"
+    track_b:
+      description: >
+        SPECIALIZED Phase 7 flow — two sequential steps in Track B.
+        See workflow.yaml per_phase_phase7 for the full step sequence.
+      sil_34:
+        description: >
+          COD → VMGR requests Phase 7 V&V.
+          Step B1 (Verification): VMGR assigns VER; VER produces item 23;
+            QUA checks item 23; VMGR reviews item 23; VMGR approves.
+          Step B2 (Validation): VMGR assigns VAL; VAL reviews all evidence,
+            produces items 25, 26, and Release Note; QUA checks VAL reports;
+            VMGR reviews VAL reports; VMGR Final V&V Decision (cannot be overridden).
+          VMGR reports V&V outcome to COD.
+        vmgr_gateway: true
+        vv_steps: "B1 (VER) → VMGR review → B2 (VAL) → VMGR Final Decision"
+      sil_02:
+        description: >
+          COD invokes VER directly → VER produces item 23.
+          COD invokes VAL directly → VAL produces items 25–27.
+          QUA checks all reports. COD receives reports directly.
+    rework_path: >
+      If VAL rejects (evidence insufficient): VMGR notifies COD → COD notifies PM
+      → PM coordinates rework → full B1–B2 loop repeats. If evidence requires
+      changes to closed phases, CCB process applies.
+
+  # ── Transitions ───────────────────────────────────────────────────────────
+  transitions:
+    - event: "gate_pass"
+      guard: "sil >= 1"
+      target: "assessment"
+      action: "COD authorizes Phase 8 (Assessment — mandatory SIL 1–4)"
+    - event: "gate_pass"
+      guard: "sil == 0 and iso9001_certified == true"
+      target: "deployment"
+      action: "COD skips Phase 8 (SIL 0 exempt per §6.4.1.2); authorizes @pm execute-phase 9"
+    - event: "gate_pass"
+      guard: "sil == 0 and iso9001_certified == false"
+      target: "assessment"
+      action: "COD proceeds to Phase 8 (SIL 0 without ISO 9001 cert — not exempt)"
+    - event: "gate_fail"
+      guard: "sil >= 3"
+      target: "validation"
+      action: "COD BLOCKS; coordinates rework; re-runs gate"
+    - event: "gate_fail"
+      guard: "sil < 3"
+      target: "validation"
+      action: "COD warns; PM coordinates rework"
+
+  # ── Gate Check ────────────────────────────────────────────────────────────
+  gate_check:
+    command: "@cod gate-check validation"
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [2, 3, 4]
+    criteria:
+      - "Overall Software Test Report (item 24) QUA-passed"
+      - "Software Integration Verification Report (item 23) QUA-passed"
+      - "VMGR approved item 23 (SIL 3–4)"
+      - "Software Validation Report (item 25) QUA-passed"
+      - "VMGR approved item 25 (SIL 3–4)"
+      - "Tools Validation Report (item 26) QUA-passed (if applicable)"
+      - "Release Note (§7.7.4.12) present"
+      - "SVaP validation criteria satisfied per §6.3.4.4–6.3.4.6"
+      - "VMGR Final V&V Decision: APPROVED (SIL 3–4)"
+      - "VAL release authority sign-off obtained (§6.3.4.16)"
+      - "All safety requirements validated by evidence"
+      - "Customer acceptance obtained"
+      - "Zero critical open defects"

@@ -1,0 +1,166 @@
+# EN 50128 Phase 6: Software Integration
+# Source: LIFECYCLE.md §8 (ISA PASS), EN 50128:2011 §7.6
+# Annex C Items: 21–22
+#
+# IMPORTANT: verification.required = false in this phase.
+# The VER Verification Report for integration-phase evidence (Annex C item 23,
+# Software Integration Verification Report) is produced in Phase 7 (Validation)
+# per Annex C Table C.1. There is no separate VER report in Phase 6 itself.
+
+phase:
+  id: "integration"
+  number: 6
+  name: "Software Integration"
+  en50128_section: "§7.6"
+  executor: "pm"
+  gate_command: "@cod gate-check integration"
+  description: >
+    Phase 6 integrates software modules progressively and performs integration
+    testing. INT is the PRIMARY agent. Both software integration (item 21) and
+    software/hardware integration (item 22) test reports are produced here.
+    IMPORTANT: The VER Verification Report (Annex C item 23, Software Integration
+    Verification Report) is produced in Phase 7 (Validation), NOT here — this
+    is the Annex C Table C.1 assignment. verification.required is therefore false
+    in this phase; the verification of integration evidence occurs in Phase 7.
+
+  # ── Track A: Activities (PM-orchestrated, dev agents only) ────────────────
+  activities:
+    - agent: "int"
+      task_description: >
+        Plan and execute software integration progressively (bottom-up, top-down,
+        or sandwich strategy per §7.6). Execute integration tests against the
+        Software Integration Test Specification (item 12, produced in Phase 3).
+        Verify all module interfaces and data flows. Produce Software Integration
+        Test Report documenting test results, defects found, and integration status.
+      owner: "int"
+      deliverables:
+        - path: "docs/integration/Software-Integration-Test-Report.md"
+          doc_id: "DOC-INTTESTRPT-YYYY-001"
+          doc_type: "Software Integration Test Report"
+          annex_c_item: 21
+          qua_required: true
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "int"
+      task_description: >
+        Execute software/hardware integration tests against the Software/Hardware
+        Integration Test Specification (item 13, produced in Phase 3). Verify the
+        integrated software operates correctly on target hardware. Test timing,
+        resource usage, and hardware interface behavior.
+        Performance testing: HR at SIL 3–4 per Table A.6.
+      owner: "int"
+      deliverables:
+        - path: "docs/integration/Hardware-Software-Integration-Test-Report.md"
+          doc_id: "DOC-HWINTTESTRPT-YYYY-001"
+          doc_type: "Software/Hardware Integration Test Report"
+          annex_c_item: 22
+          qua_required: true
+      dependencies: []                    # May run in parallel with SW integration
+      parallel_group: 1
+
+    - agent: "cm"
+      task_description: >
+        Manage integration baselines. Ensure all components being integrated are
+        at approved baselines. Record integration build configuration and produce
+        integration baseline record. Update configuration management records.
+      owner: "cm"
+      deliverables: []                    # CM baseline records (CM-internal artifacts)
+      dependencies: []
+      parallel_group: 1
+
+  # ── Completion Criteria ────────────────────────────────────────────────────
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true            # Integration tests trace to specs (items 12, 13)
+    custom_checks:
+      - "All software integration tests executed against item 12 specification"
+      - "All SW/HW integration tests executed against item 13 specification"
+      - "All integration test failures resolved or formally waived"
+      - "All module interfaces verified"
+      - "Data flow between components verified"
+      - "Performance requirements met (HR SIL 3–4)"
+      - "Integration baselines established in CM"
+      - "Integration defects resolved"
+      - "Integration traceability complete"
+
+  # ── Track B: Verification ─────────────────────────────────────────────────
+  # IMPORTANT: verification.required = false.
+  # Item 23 (Software Integration Verification Report) is produced in Phase 7.
+  # See Annex C Table C.1 and DELIVERABLES.md notes.
+  verification:
+    required: false
+    note: >
+      The Software Integration Verification Report (Annex C item 23) is produced
+      in Phase 7 (Validation) per Annex C Table C.1 — NOT in Phase 6.
+      VER does NOT produce a verification report in Phase 6 itself.
+      VER review of integration test reports (items 21, 22) occurs as 1st Check
+      activities for those documents (Annex C checker column), but no separate
+      VER report artifact is produced until Phase 7.
+
+  # ── Track B: Validation (2nd Check only — no VAL report in Phase 6) ───────
+  validation:
+    required_sil: []
+    val_role: "2nd Check reviewer on items 21 and 22"
+    validator: "val"
+    independence_required_sil: [3, 4]
+    produces: []
+    criteria: []
+
+  # ── Workflow ──────────────────────────────────────────────────────────────
+  workflow:
+    track_a:
+      description: >
+        PM coordinates INT to execute integration tests (items 21 and 22) per
+        specifications from Phase 3. CM manages integration baselines in parallel.
+        QUA checks items 21 and 22. PM reports complete to COD.
+      completion_signal: "PM reports items 21 and 22 QUA-passed to COD"
+    track_b:
+      sil_34:
+        description: >
+          No VER report produced in Phase 6. VER acts as 1st Check reviewer on
+          items 21 and 22 (Annex C 'First Check' column) but produces no VER report
+          artifact. VAL acts as 2nd Check reviewer. Full VER report (item 23) is
+          produced in Phase 7. COD routes checker reviews through VMGR as applicable.
+        vmgr_gateway: true
+        no_ver_report: true               # VER report produced in Phase 7, not here
+      sil_02:
+        description: >
+          VER reviews items 21 and 22 as 1st Check. No VER report produced in Phase 6.
+          COD receives confirmation of review completion. Full VER report in Phase 7.
+        no_ver_report: true
+    rework_path: >
+      If integration tests fail: PM coordinates rework with INT (and IMP/DES as
+      needed to fix root-cause defects). Re-enter QUA check after rework. If defects
+      require changes to closed phases, CCB process applies (see workflow.yaml CCB re-entry).
+
+  # ── Transitions ───────────────────────────────────────────────────────────
+  transitions:
+    - event: "gate_pass"
+      guard: "true"
+      target: "validation"
+      action: "COD authorizes @pm execute-phase 7"
+    - event: "gate_fail"
+      guard: "sil >= 3"
+      target: "integration"
+      action: "COD BLOCKS; PM coordinates rework; COD re-runs gate"
+    - event: "gate_fail"
+      guard: "sil < 3"
+      target: "integration"
+      action: "COD warns; PM coordinates rework"
+
+  # ── Gate Check ────────────────────────────────────────────────────────────
+  gate_check:
+    command: "@cod gate-check integration"
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [2, 3, 4]
+    criteria:
+      - "Software Integration Test Report (item 21) QUA-passed"
+      - "Software/Hardware Integration Test Report (item 22) QUA-passed"
+      - "All integration tests executed — no unresolved critical failures"
+      - "All module interfaces verified"
+      - "Integration baseline established in CM"
+      - "Integration traceability to specifications (items 12, 13) complete"
+      - "Performance requirements verified (HR SIL 3–4)"
+      - "Zero critical open defects"
+      - "NOTE: VER report (item 23) is produced in Phase 7 — not a gate criterion here"

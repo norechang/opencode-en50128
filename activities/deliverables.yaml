@@ -1,0 +1,794 @@
+# EN 50128 Deliverables — Annex C Table C.1
+# Source: DELIVERABLES.md (ISA PASS), EN 50128:2011 Annex C
+#
+# This file encodes all 46 Annex C deliverables with:
+#   - Phase assignment (platform lifecycle phases 0–10)
+#   - Writer, 1st Check, 2nd Check roles
+#   - Document IDs and template paths
+#   - SIL recommendation levels
+#   - Normative override notes
+#   - Platform deviations from Annex C Table C.1 (documented in SQAP)
+#
+# LLM agents consume this file to:
+#   - Determine which documents must be produced in a given phase
+#   - Identify the responsible agent (writer) for each document
+#   - Check QUA/VER/VAL review chain for each document
+#   - Generate document IDs using the DOC-<TYPE>-YYYY-NNN convention
+
+deliverables:
+  source_document: "DELIVERABLES.md (ISA PASS)"
+  standard: "EN 50128:2011"
+  annex_c: "Annex C (informative) — Documents Control Summary"
+  note: >
+    Annex C Table C.1 is INFORMATIVE, not normative. Normative SIL requirements
+    are in the corresponding Section 7.x clauses. See 'normative_overrides' below
+    for cases where 'shall' clauses override Annex C's informative HR labels.
+
+  # ── Normative Overrides ───────────────────────────────────────────────────
+  normative_overrides:
+    - item: 1
+      document: "Software Quality Assurance Plan"
+      annex_c_level: "HR"
+      normative_clause: "§6.5.4.3"
+      effective_level: "M (all SIL)"
+      override: "§6.5.4.3 'shall' clause overrides HR — mandatory at all SIL levels"
+    - item: 3
+      document: "Software Configuration Management Plan"
+      annex_c_level: "HR"
+      normative_clause: "§6.6.4.1"
+      effective_level: "M (all SIL)"
+      override: "§6.6.4.1 'shall' clause — mandatory at all SIL levels"
+    - item: 4
+      document: "Software Verification Plan"
+      annex_c_level: "HR"
+      normative_clause: "§6.2.4.2"
+      effective_level: "M (all SIL)"
+      override: "§6.2.4.2 'shall' clause — mandatory at all SIL levels"
+    - item: 5
+      document: "Software Validation Plan"
+      annex_c_level: "HR"
+      normative_clause: "§6.3.4.2"
+      effective_level: "M (all SIL)"
+      override: "§6.3.4.2 'shall' clause — mandatory at all SIL levels"
+
+  # ── Platform Deviations from Annex C Table C.1 ────────────────────────────
+  # These must be documented in the project SQAP and are subject to Safety Authority review.
+  platform_deviations:
+    - item: 5
+      document: "Software Validation Plan"
+      annex_c_phase: "Software requirements"
+      platform_phase: 1
+      justification: "§6.3.4.3 (SVaP based on input docs) and §5.3.2.4 (planning before lifecycle phase commencement) require early placement"
+    - item: 20
+      document: "Software Component Test Report"
+      annex_c_phase: "Integration"
+      platform_phase: 5
+      justification: "§7.5.4.5 (normative output clause) and logical prerequisite that integration requires prior unit test completion; Table A.1 associates item 20 with Component Implementation and Testing"
+    - item: 40
+      document: "Deployment Verification Report"
+      annex_c_phase: "Software maintenance (Annex C column)"
+      platform_phase: 9
+      justification: "§9.1 normative deployment clause and logical dependency that deployment must be verified before maintenance begins"
+    - item: 44
+      document: "Software Maintenance Verification Report"
+      annex_c_phase: "Software assessment (Annex C column)"
+      platform_phase: 10
+      justification: "§9.2 normative maintenance clause and logical dependency that maintenance activities generate the verification report"
+
+  # ── Document Naming Convention ─────────────────────────────────────────────
+  doc_id_convention: "DOC-<ABBREVIATION>-YYYY-NNN"
+  doc_id_notes:
+    - "EN 50128 uses EXACT document names with precise singular/plural forms"
+    - "Example: 'Software Interface Specifications' (plural per §7.3.3 item 3)"
+    - "File naming: exact EN 50128 name with hyphens replacing spaces"
+    - "Abbreviations like SAS, SDS NOT recommended — use exact names"
+
+  # ── Full Annex C Catalogue ────────────────────────────────────────────────
+  # Phase numbers reference platform lifecycle phases (LIFECYCLE.md).
+  # SIL columns use Annex C values; normative_overrides above may supersede.
+  catalogue:
+
+    # Phase 1: Planning (items 1–5)
+    - annex_c_item: 1
+      phase: 1
+      phase_name: "Planning"
+      document_name: "Software Quality Assurance Plan"
+      abbreviation: "SQAP"
+      doc_id_example: "DOC-SQAP-2026-001"
+      written_by: "qua"                   # §6.5.4.3 — written under QUA responsibility
+      first_check: "ver"
+      second_check: "val"
+      template: "planning/Software-Quality-Assurance-Plan.yaml"
+      sil_0: "HR"                         # Normative override: M (§6.5.4.3)
+      sil_14: "HR"                        # Normative override: M (§6.5.4.3)
+      normative_override: "M — §6.5.4.3 'shall' clause mandatory at all SIL levels"
+      notes: "Annex C 'Written by' column is blank for item 1; QUA is responsible per §6.5.4.3"
+
+    - annex_c_item: 2
+      phase: 1
+      phase_name: "Planning"
+      document_name: "Software Quality Assurance Verification Report"
+      abbreviation: "SQAVR"
+      doc_id_example: "DOC-SQAVR-2026-001"
+      written_by: "ver"
+      first_check: null
+      second_check: "val"
+      template: "planning/Software-Quality-Assurance-Verification-Report.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+
+    - annex_c_item: 3
+      phase: 1
+      phase_name: "Planning"
+      document_name: "Software Configuration Management Plan"
+      abbreviation: "SCMP"
+      doc_id_example: "DOC-SCMP-2026-001"
+      written_by: "cm"
+      first_check: "ver"
+      second_check: "val"
+      template: "planning/Software-Configuration-Management-Plan.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      normative_override: "M — §6.6.4.1 'shall' clause mandatory at all SIL levels"
+
+    - annex_c_item: 4
+      phase: 1
+      phase_name: "Planning"
+      document_name: "Software Verification Plan"
+      abbreviation: "SVP"
+      doc_id_example: "DOC-SVP-2026-001"
+      written_by: "ver"                   # NOT PM — written by VER per §6.2.4.2
+      first_check: null
+      second_check: "val"
+      template: "planning/Software-Verification-Plan.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      normative_override: "M — §6.2.4.2 'shall' clause mandatory at all SIL levels"
+      notes: "Written by VER, not PM"
+
+    - annex_c_item: 5
+      phase: 1
+      phase_name: "Planning"
+      document_name: "Software Validation Plan"
+      abbreviation: "SVaP"
+      doc_id_example: "DOC-SVaP-2026-001"
+      written_by: "val"                   # Written by VAL per §6.3.4.2
+      first_check: "ver"
+      second_check: null
+      template: "planning/Software-Validation-Plan.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      normative_override: "M — §6.3.4.2 'shall' clause mandatory at all SIL levels"
+      platform_deviation: "Assigned to Phase 1 (Planning); Annex C places in 'Software requirements' phase. Justified by §6.3.4.3 and §5.3.2.4. Document in SQAP."
+      notes: "Written by VAL, not PM"
+
+    # Phase 2: Requirements (items 6–8)
+    - annex_c_item: 6
+      phase: 2
+      phase_name: "Requirements"
+      document_name: "Software Requirements Specification"
+      abbreviation: "SRS"
+      doc_id_example: "DOC-SRS-2026-001"
+      written_by: "req"
+      first_check: "ver"
+      second_check: "val"
+      template: "requirements/Software-Requirements-Specification.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      user_approval_required: true
+
+    - annex_c_item: 7
+      phase: 2
+      phase_name: "Requirements"
+      document_name: "Overall Software Test Specification"
+      abbreviation: "OTSTSPEC"
+      doc_id_example: "DOC-OTSTSPEC-2026-001"
+      written_by: "tst"
+      first_check: "ver"
+      second_check: "val"
+      template: "requirements/Overall-Software-Test-Specification.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      v_model_correspondence: "Specification consumed in Phase 7 → Overall Software Test Report (item 24)"
+
+    - annex_c_item: 8
+      phase: 2
+      phase_name: "Requirements"
+      document_name: "Software Requirements Verification Report"
+      abbreviation: "REQVER"
+      doc_id_example: "DOC-REQVER-2026-001"
+      written_by: "ver"
+      first_check: null
+      second_check: "val"
+      template: "requirements/Software-Requirements-Verification-Report.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+
+    # Phase 3: Architecture & Design (items 9–14)
+    - annex_c_item: 9
+      phase: 3
+      phase_name: "Architecture and Design"
+      document_name: "Software Architecture Specification"
+      abbreviation: "SAS"
+      doc_id_example: "DOC-SAS-2026-001"
+      written_by: "des"
+      first_check: "ver"
+      second_check: "val"
+      template: "architecture/Software-Architecture-Specification.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+
+    - annex_c_item: 10
+      phase: 3
+      phase_name: "Architecture and Design"
+      document_name: "Software Design Specification"
+      abbreviation: "SDS"
+      doc_id_example: "DOC-SDS-2026-001"
+      written_by: "des"
+      first_check: "ver"
+      second_check: "val"
+      template: "component-design/Software-Design-Specification.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+
+    - annex_c_item: 11
+      phase: 3
+      phase_name: "Architecture and Design"
+      document_name: "Software Interface Specifications"           # PLURAL per §7.3.3 item 3
+      abbreviation: "INTERFACES"
+      doc_id_example: "DOC-INTERFACES-2026-001"
+      written_by: "des"
+      first_check: "ver"
+      second_check: "val"
+      template: "architecture/Software-Interface-Specifications.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      notes: "PLURAL form — 'Software Interface Specifications' per §7.3.3 item 3"
+
+    - annex_c_item: 12
+      phase: 3
+      phase_name: "Architecture and Design"
+      document_name: "Software Integration Test Specification"
+      abbreviation: "INTTESTSPEC"
+      doc_id_example: "DOC-INTTESTSPEC-2026-001"
+      written_by: "int"
+      first_check: "ver"
+      second_check: "val"
+      template: "integration/Software-Integration-Test-Specification.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      v_model_correspondence: "Specification consumed in Phase 6 → Software Integration Test Report (item 21)"
+
+    - annex_c_item: 13
+      phase: 3
+      phase_name: "Architecture and Design"
+      document_name: "Software/Hardware Integration Test Specification"
+      abbreviation: "HWINTTESTSPEC"
+      doc_id_example: "DOC-HWINTTESTSPEC-2026-001"
+      written_by: "int"
+      first_check: "ver"
+      second_check: "val"
+      template: "architecture/Hardware-Software-Integration-Test-Specification.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      v_model_correspondence: "Specification consumed in Phase 6 → Software/Hardware Integration Test Report (item 22)"
+
+    - annex_c_item: 14
+      phase: 3
+      phase_name: "Architecture and Design"
+      document_name: "Software Architecture and Design Verification Report"
+      abbreviation: "ARCHDESIGNVER"
+      doc_id_example: "DOC-ARCHDESIGNVER-2026-001"
+      written_by: "ver"
+      first_check: null
+      second_check: "val"
+      template: "architecture/Software-Architecture-and-Design-Verification-Report.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+
+    # Phase 4: Component Design (items 15–17)
+    - annex_c_item: 15
+      phase: 4
+      phase_name: "Component Design"
+      document_name: "Software Component Design Specification"
+      abbreviation: "COMPDESIGN"
+      doc_id_example: "DOC-COMPDESIGN-2026-001"
+      written_by: "des"
+      first_check: "ver"
+      second_check: "val"
+      template: "component-design/Software-Component-Design-Specification.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+
+    - annex_c_item: 16
+      phase: 4
+      phase_name: "Component Design"
+      document_name: "Software Component Test Specification"
+      abbreviation: "COMPTESTSPEC"
+      doc_id_example: "DOC-COMPTESTSPEC-2026-001"
+      written_by: "tst"
+      first_check: "ver"
+      second_check: "val"
+      template: "component-design/Software-Component-Test-Specification.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+      v_model_correspondence: "Specification consumed in Phase 5 → Software Component Test Report (item 20)"
+
+    - annex_c_item: 17
+      phase: 4
+      phase_name: "Component Design"
+      document_name: "Software Component Design Verification Report"
+      abbreviation: "COMPDESIGNVER"
+      doc_id_example: "DOC-COMPDESIGNVER-2026-001"
+      written_by: "ver"
+      first_check: null
+      second_check: null
+      template: "component-design/Software-Component-Design-Verification-Report.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+
+    # Phase 5: Implementation and Testing (items 18–20)
+    - annex_c_item: 18
+      phase: 5
+      phase_name: "Implementation and Testing"
+      document_name: "Software Source Code and supporting documentation"  # lowercase 'and supporting'
+      abbreviation: "SOURCECODE"
+      doc_id_example: "DOC-SOURCECODE-2026-001"
+      written_by: "imp"
+      first_check: "ver"
+      second_check: "val"
+      template: "implementation/Software-Source-Code.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      notes: "Lowercase 'and supporting documentation' per Annex C"
+
+    - annex_c_item: 19
+      phase: 5
+      phase_name: "Implementation and Testing"
+      document_name: "Software Source Code Verification Report"
+      abbreviation: "SOURCECODEVER"
+      doc_id_example: "DOC-SOURCECODEVER-2026-001"
+      written_by: "ver"
+      first_check: null
+      second_check: "val"
+      template: "implementation/Software-Source-Code-Verification-Report.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      notes: "Item 19 per Table A.1 convention = Source Code Verification Report (Phase 5)"
+
+    - annex_c_item: 20
+      phase: 5
+      phase_name: "Implementation and Testing"
+      document_name: "Software Component Test Report"
+      abbreviation: "COMPTESTRPT"
+      doc_id_example: "DOC-COMPTESTRPT-2026-001"
+      written_by: "tst"
+      first_check: "ver"
+      second_check: "val"
+      template: "implementation/Software-Component-Test-Report.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      platform_deviation: "Assigned to Phase 5 per §7.5.4.5 and Table A.1; Annex C Table C.1 places in 'Integration' phase. Document in SQAP. Subject to Safety Authority review."
+
+    # Phase 6: Integration (items 21–22)
+    - annex_c_item: 21
+      phase: 6
+      phase_name: "Integration"
+      document_name: "Software Integration Test Report"
+      abbreviation: "INTTESTRPT"
+      doc_id_example: "DOC-INTTESTRPT-2026-001"
+      written_by: "int"
+      first_check: "ver"
+      second_check: "val"
+      template: "integration/Software-Integration-Test-Report.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+
+    - annex_c_item: 22
+      phase: 6
+      phase_name: "Integration"
+      document_name: "Software/Hardware Integration Test Report"
+      abbreviation: "HWINTTESTRPT"
+      doc_id_example: "DOC-HWINTTESTRPT-2026-001"
+      written_by: "int"
+      first_check: "ver"
+      second_check: "val"
+      template: "integration/Hardware-Software-Integration-Test-Report.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+
+    # Phase 7: Validation (items 23–27)
+    - annex_c_item: 23
+      phase: 7
+      phase_name: "Validation"
+      document_name: "Software Integration Verification Report"
+      abbreviation: "INTVER"
+      doc_id_example: "DOC-INTVER-2026-001"
+      written_by: "ver"
+      first_check: null
+      second_check: null
+      template: "integration/Software-Integration-Verification-Report.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      notes: "Produced in Phase 7 (Validation) per Annex C — NOT in Phase 6 (Integration)"
+
+    - annex_c_item: 24
+      phase: 7
+      phase_name: "Validation"
+      document_name: "Overall Software Test Report"
+      abbreviation: "OVERALLTESTRPT"
+      doc_id_example: "DOC-OVERALLTESTRPT-2026-001"
+      written_by: "tst"
+      first_check: "ver"
+      second_check: "val"
+      template: "validation/Overall-Software-Test-Report.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      track_a_deliverable: true           # Produced in Track A (TST) in Phase 7
+
+    - annex_c_item: 25
+      phase: 7
+      phase_name: "Validation"
+      document_name: "Software Validation Report"
+      abbreviation: "VALRPT"
+      doc_id_example: "DOC-VALRPT-2026-001"
+      written_by: "val"                   # VAL produces Validation Reports ONLY in Phase 7
+      first_check: "ver"
+      second_check: null
+      template: "validation/Software-Validation-Report.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      notes: "Annex C 'Written by' column blank for item 25; VAL is responsible by role definition"
+
+    - annex_c_item: 26
+      phase: 7
+      phase_name: "Validation"
+      document_name: "Tools Validation Report"
+      abbreviation: "TOOLSVALRPT"
+      doc_id_example: "DOC-TOOLSVALRPT-2026-001"
+      written_by: "val"
+      first_check: "ver"
+      second_check: null
+      template: "validation/Tools-Validation-Report.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+      conditional: "applicable only if tool qualification evidence required"
+
+    - annex_c_item: 27
+      phase: 7
+      phase_name: "Validation"
+      document_name: "Release Note"                               # SINGULAR — distinct from item 38 'Release Notes' (plural, Phase 9)
+      abbreviation: "RELEASENOTE"
+      doc_id_example: "DOC-RELEASENOTE-2026-001"
+      written_by: null                    # Writer unspecified in Annex C (footnote a)
+      first_check: "ver"
+      second_check: "val"
+      template: "deployment/Release-Notes.yaml"
+      sil_0: "HR"
+      sil_14: "HR"
+      normative_requirement: "§7.7.4.12 'A Release Note shall be produced' — binding regardless of Annex C item status"
+      notes: >
+        AMBIGUITY: Item 27 assignment is based on sequential Annex C numbering after item 26.
+        If printed standard does not carry formal item 27, this remains a §7.7.4.12 normative
+        output without an Annex C number. Confirm against printed standard and document in SQAP.
+        Distinct from 'Release Notes' (plural, item 38, Phase 9).
+
+    # Systems Configured by Application Data/Algorithms (items 28–35)
+    # Applies ONLY to Section 8 generic software platforms — out of scope for bespoke software
+    - annex_c_item: 28
+      phase: null                         # Parallel to architecture/component/implementation phases
+      phase_name: "Systems Configured by Application Data/Algorithms (§8)"
+      document_name: "Application Requirements Specification"
+      abbreviation: null
+      written_by: "req"
+      first_check: "ver"
+      second_check: "val"
+      template: "application/Application-Requirements-Specification.yaml"
+      scope: "Section 8 generic platforms only — not applicable to bespoke application software"
+
+    - annex_c_item: 29
+      phase: null
+      phase_name: "Systems Configured by Application Data/Algorithms (§8)"
+      document_name: "Application Preparation Plan"
+      written_by: "req_or_des"
+      first_check: "ver"
+      second_check: "val"
+      template: "application/Application-Preparation-Plan.yaml"
+      scope: "Section 8 only"
+
+    - annex_c_item: 30
+      phase: null
+      phase_name: "Systems Configured by Application Data/Algorithms (§8)"
+      document_name: "Application Test Specification"
+      written_by: "tst"
+      first_check: "ver"
+      second_check: "val"
+      template: "application/Application-Test-Specification.yaml"
+      scope: "Section 8 only"
+
+    - annex_c_item: 31
+      phase: null
+      phase_name: "Systems Configured by Application Data/Algorithms (§8)"
+      document_name: "Application Architecture and Design"
+      written_by: "des"
+      first_check: "ver"
+      second_check: "val"
+      template: "application/Application-Architecture-and-Design.yaml"
+      scope: "Section 8 only"
+
+    - annex_c_item: 32
+      phase: null
+      phase_name: "Systems Configured by Application Data/Algorithms (§8)"
+      document_name: "Application Preparation Verification Report"
+      written_by: "ver"
+      first_check: null
+      second_check: null
+      template: "application/Application-Preparation-Verification-Report.yaml"
+      scope: "Section 8 only"
+
+    - annex_c_item: 33
+      phase: null
+      phase_name: "Systems Configured by Application Data/Algorithms (§8)"
+      document_name: "Application Test Report"
+      written_by: "tst"
+      first_check: "ver"
+      second_check: "val"
+      template: "application/Application-Test-Report.yaml"
+      scope: "Section 8 only"
+
+    - annex_c_item: 34
+      phase: null
+      phase_name: "Systems Configured by Application Data/Algorithms (§8)"
+      document_name: "Source Code of Application Data/Algorithms"
+      written_by: "des"
+      first_check: "ver"
+      second_check: "val"
+      template: "application/Source-Code-of-Application-Data-Algorithms.yaml"
+      scope: "Section 8 only"
+
+    - annex_c_item: 35
+      phase: null
+      phase_name: "Systems Configured by Application Data/Algorithms (§8)"
+      document_name: "Application Data/Algorithms Verification Report"
+      written_by: "ver"
+      first_check: null
+      second_check: "val"
+      template: "application/Application-Data-Algorithms-Verification-Report.yaml"
+      scope: "Section 8 only"
+
+    # Phase 9: Deployment (items 36–40)
+    - annex_c_item: 36
+      phase: 9
+      phase_name: "Deployment"
+      document_name: "Software Release and Deployment Plan"
+      abbreviation: "DEPLOYPLAN"
+      doc_id_example: "DOC-DEPLOYPLAN-2026-001"
+      written_by: "pm"                    # Default; SQAP should designate actual writer
+      first_check: "ver"
+      second_check: "val"
+      template: "deployment/Software-Release-and-Deployment-Plan.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+      notes: "Annex C 'Written by' blank (footnote a) — PM assigned as default. SQAP designates actual writer."
+
+    - annex_c_item: 37
+      phase: 9
+      phase_name: "Deployment"
+      document_name: "Software Deployment Manual"
+      abbreviation: "DEPLOYMAN"
+      doc_id_example: "DOC-DEPLOYMAN-2026-001"
+      written_by: "pm"
+      first_check: "ver"
+      second_check: "val"
+      template: "deployment/Software-Deployment-Manual.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+
+    - annex_c_item: 38
+      phase: 9
+      phase_name: "Deployment"
+      document_name: "Release Notes"                              # PLURAL — distinct from item 27 'Release Note' (singular, Phase 7)
+      abbreviation: "RELEASENOTES"
+      doc_id_example: "DOC-RELEASENOTES-2026-001"
+      written_by: "pm"
+      first_check: "ver"
+      second_check: "val"
+      template: "deployment/Release-Notes.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+      notes: "PLURAL form 'Release Notes' — distinct from 'Release Note' (singular, item 27, Phase 7 §7.7.4.12)"
+
+    - annex_c_item: 39
+      phase: 9
+      phase_name: "Deployment"
+      document_name: "Deployment Records"
+      abbreviation: "DEPLOYREC"
+      doc_id_example: "DOC-DEPLOYREC-2026-001"
+      written_by: "pm"
+      first_check: "ver"
+      second_check: "val"
+      template: "deployment/Deployment-Records.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+
+    - annex_c_item: 40
+      phase: 9
+      phase_name: "Deployment"
+      document_name: "Deployment Verification Report"
+      abbreviation: "DEPLOYVER"
+      doc_id_example: "DOC-DEPLOYVER-2026-001"
+      written_by: "ver"
+      first_check: null
+      second_check: null
+      template: "deployment/Deployment-Verification-Report.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+      platform_deviation: "Assigned to Phase 9; Annex C Table C.1 places under 'Software maintenance'. Justified by §9.1 and logical dependency. Document in SQAP."
+
+    # Phase 10: Maintenance (items 41–44)
+    - annex_c_item: 41
+      phase: 10
+      phase_name: "Maintenance"
+      document_name: "Software Maintenance Plan"
+      abbreviation: "MAINTPLAN"
+      doc_id_example: "DOC-MAINTPLAN-2026-001"
+      written_by: "pm"
+      first_check: "ver"
+      second_check: "val"
+      template: "maintenance/Software-Maintenance-Plan.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+
+    - annex_c_item: 42
+      phase: 10
+      phase_name: "Maintenance"
+      document_name: "Software Change Records"                    # Typo in standard: 'Software Chang Records'
+      abbreviation: "CHANGEREC"
+      doc_id_example: "DOC-CHANGEREC-2026-001"
+      written_by: "pm"
+      first_check: "ver"
+      second_check: "val"
+      template: "maintenance/Software-Change-Records.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+      notes: "Standard has typo 'Software Chang Records' (§9.2.4) — correct name is 'Software Change Records'"
+
+    - annex_c_item: 43
+      phase: 10
+      phase_name: "Maintenance"
+      document_name: "Software Maintenance Records"
+      abbreviation: "MAINTREC"
+      doc_id_example: "DOC-MAINTREC-2026-001"
+      written_by: "pm"
+      first_check: "ver"
+      second_check: "val"
+      template: "maintenance/Software-Maintenance-Records.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+
+    - annex_c_item: 44
+      phase: 10
+      phase_name: "Maintenance"
+      document_name: "Software Maintenance Verification Report"
+      abbreviation: "MAINTVER"
+      doc_id_example: "DOC-MAINTVER-2026-001"
+      written_by: "ver"
+      first_check: null
+      second_check: "val"
+      template: "maintenance/Software-Maintenance-Verification-Report.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+      platform_deviation: "Assigned to Phase 10; Annex C Table C.1 places under 'Software assessment'. Justified by §9.2 and logical dependency. Document in SQAP."
+
+    # Phase 8: Assessment (items 45–46)
+    - annex_c_item: 45
+      phase: 8
+      phase_name: "Assessment"
+      document_name: "Software Assessment Plan"
+      abbreviation: "ASSESSPLAN"
+      doc_id_example: "DOC-ASSESSPLAN-2026-001"
+      written_by: "asr"                   # Assessor writes — NOT PM
+      first_check: "ver"
+      second_check: null
+      template: "assessment/Software-Assessment-Plan.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+      sil_condition: "Mandatory SIL 1–4 (§6.4.1.1); SIL 0 exempt if ISO 9001 cert (§6.4.1.2)"
+      notes: "Written by ASR (Assessor), NOT PM. Assessment mandatory SIL 1–4 per §6.4.1.1."
+
+    - annex_c_item: 46
+      phase: 8
+      phase_name: "Assessment"
+      document_name: "Software Assessment Report"
+      abbreviation: "ASSESSRPT"
+      doc_id_example: "DOC-ASSESSRPT-2026-001"
+      written_by: "asr"
+      first_check: "ver"
+      second_check: null
+      template: "assessment/Software-Assessment-Report.yaml"
+      sil_0: "R"
+      sil_14: "HR"
+      sil_condition: "Mandatory SIL 1–4 (§6.4.1.1); SIL 0 exempt if ISO 9001 cert (§6.4.1.2)"
+      notes: "Written by ASR (Assessor), NOT PM"
+
+  # ── Phase Quick Reference ──────────────────────────────────────────────────
+  phase_summary:
+    - phase: 0
+      name: "Initialization"
+      annex_c_items: []
+      document_count: 1
+      note: "LIFECYCLE_STATE.md — COD internal, no Annex C number"
+    - phase: 1
+      name: "Planning"
+      annex_c_items: [1, 2, 3, 4, 5]
+      document_count: 5
+    - phase: 2
+      name: "Requirements"
+      annex_c_items: [6, 7, 8]
+      document_count: 3
+    - phase: 3
+      name: "Architecture and Design"
+      annex_c_items: [9, 10, 11, 12, 13, 14]
+      document_count: 6
+    - phase: 4
+      name: "Component Design"
+      annex_c_items: [15, 16, 17]
+      document_count: 3
+    - phase: 5
+      name: "Implementation and Testing"
+      annex_c_items: [18, 19, 20]
+      document_count: 3
+    - phase: 6
+      name: "Integration"
+      annex_c_items: [21, 22]
+      document_count: 2
+    - phase: 7
+      name: "Validation"
+      annex_c_items: [23, 24, 25, 26, 27]
+      document_count: 5
+      note: "Item 27 (Release Note) — normatively required by §7.7.4.12; Annex C item status confirm against printed standard"
+    - phase: 8
+      name: "Assessment"
+      annex_c_items: [45, 46]
+      document_count: 2
+      note: "Mandatory SIL 1–4 (§6.4.1.1); SIL 0 exempt (§6.4.1.2)"
+    - phase: 9
+      name: "Deployment"
+      annex_c_items: [36, 37, 38, 39, 40]
+      document_count: 5
+    - phase: 10
+      name: "Maintenance"
+      annex_c_items: [41, 42, 43, 44]
+      document_count: 4
+
+  totals:
+    annex_c_total: 46
+    bespoke_software_applicable: 37         # Items 1–26, 36–46 (items 28–35 are §8 only)
+    section_8_only: 8                       # Items 28–35
+
+  # ── V-Model Specification → Report Correspondence ─────────────────────────
+  v_model_correspondence:
+    - specification_doc: "Overall Software Test Specification"
+      spec_annex_c_item: 7
+      spec_phase: 2
+      report_doc: "Overall Software Test Report"
+      report_annex_c_item: 24
+      report_phase: 7
+    - specification_doc: "Software Integration Test Specification"
+      spec_annex_c_item: 12
+      spec_phase: 3
+      report_doc: "Software Integration Test Report"
+      report_annex_c_item: 21
+      report_phase: 6
+    - specification_doc: "Software/Hardware Integration Test Specification"
+      spec_annex_c_item: 13
+      spec_phase: 3
+      report_doc: "Software/Hardware Integration Test Report"
+      report_annex_c_item: 22
+      report_phase: 6
+    - specification_doc: "Software Component Test Specification"
+      spec_annex_c_item: 16
+      spec_phase: 4
+      report_doc: "Software Component Test Report"
+      report_annex_c_item: 20
+      report_phase: 5

@@ -1,0 +1,245 @@
+# EN 50128 Phase 9: Software Deployment
+# Source: LIFECYCLE.md §12 (ISA PASS), EN 50128:2011 §9.1
+# Annex C Items: 36–40
+#
+# Item 40 (Deployment Verification Report) PLATFORM DEVIATION:
+#   Annex C Table C.1 places item 40 under "Software maintenance" column.
+#   This platform assigns item 40 to Phase 9 (Deployment), justified by §9.1
+#   (normative deployment clause) and the logical dependency that deployment
+#   must be verified before maintenance begins. This constitutes a platform
+#   deviation from Annex C Table C.1's phase column; must be documented in SQAP
+#   and is subject to Safety Authority review. (See DELIVERABLES.md Note 6.)
+#
+# "Release Notes" (item 38, plural) in Phase 9 is DISTINCT from "Release Note"
+# (singular, §7.7.4.12 normative output, Annex C item 27) produced in Phase 7.
+#
+# Items 36–39: Writer is PM per Annex C footnote (a) — see DELIVERABLES.md Note 2.
+# Item 40: Writer is VER (Deployment Verification Report).
+#
+# VAL 2nd Check applies to items 36–39. Item 40 (VER report) has no 2nd Check.
+
+phase:
+  id: "deployment"
+  number: 9
+  name: "Software Deployment"
+  en50128_section: "§9.1"
+  executor: "pm"
+  gate_command: "@cod gate-check deployment"
+  description: >
+    Phase 9 deploys the validated and assessed software to the operational
+    environment in a controlled and traceable manner. PM is the PRIMARY
+    coordinator. CM manages the deployment baseline. DES supports deployment
+    manual and release notes. VER produces the Deployment Verification Report
+    (item 40) — a platform deviation from Annex C Table C.1 which places item 40
+    under the "Software maintenance" column; this platform assigns it to Phase 9
+    per §9.1 normative clause.
+    IMPORTANT: "Release Notes" (item 38, plural) is the deployment-phase document —
+    distinct from "Release Note" (singular, item 27) produced in Phase 7 per §7.7.4.12.
+    Entry requirement: Phase 8 Assessment gate passed (deployment authorization
+    obtained from ASR). If SIL 0 exempt from Phase 8, Phase 7 gate suffices.
+
+  # ── Track A: Activities (PM-orchestrated, dev agents only) ────────────────
+  activities:
+    - agent: "pm"
+      task_description: >
+        Prepare Software Release and Deployment Plan: define deployment scope,
+        target environment, deployment procedure, rollback plan, schedule,
+        and responsibilities. The plan shall reference the approved software
+        baseline and link to the Deployment Records (item 39). VER 1st Check
+        and VAL 2nd Check apply per Annex C.
+      owner: "pm"
+      deliverables:
+        - path: "docs/deployment/Software-Release-and-Deployment-Plan.md"
+          doc_id: "DOC-DEPLOYPLAN-YYYY-001"
+          doc_type: "Software Release and Deployment Plan"
+          annex_c_item: 36
+          qua_required: true
+          first_check: "ver"
+          second_check: "val"
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "pm"
+      task_description: >
+        Prepare Software Deployment Manual: document all steps required to
+        install and configure the software on the target platform. Include
+        hardware prerequisites, installation procedures, configuration parameters,
+        verification steps, and known constraints. VER 1st Check and VAL 2nd
+        Check apply per Annex C. DES supports technical content.
+      owner: "pm"
+      deliverables:
+        - path: "docs/deployment/Software-Deployment-Manual.md"
+          doc_id: "DOC-DEPLOYMAN-YYYY-001"
+          doc_type: "Software Deployment Manual"
+          annex_c_item: 37
+          qua_required: true
+          first_check: "ver"
+          second_check: "val"
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "pm"
+      task_description: >
+        Prepare Release Notes (plural — deployment-phase document, Annex C item 38):
+        summarize what is included in this software release, known limitations,
+        open issues (with risk assessment), changes from previous release, and
+        any deployment-specific instructions. VER 1st Check and VAL 2nd Check
+        apply per Annex C. IMPORTANT: This is "Release Notes" (plural, item 38)
+        — distinct from "Release Note" (singular, §7.7.4.12, item 27, Phase 7).
+      owner: "pm"
+      deliverables:
+        - path: "docs/deployment/Release-Notes.md"
+          doc_id: "DOC-RELEASENOTES-YYYY-001"
+          doc_type: "Release Notes"
+          annex_c_item: 38
+          qua_required: true
+          first_check: "ver"
+          second_check: "val"
+          note: >
+            "Release Notes" (plural, item 38) is the deployment-phase document.
+            Distinct from "Release Note" (singular, §7.7.4.12, item 27) produced
+            in Phase 7 by VAL. Must not be confused in SQAP or CM baseline.
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "cm"
+      task_description: >
+        Execute deployment activities and produce Deployment Records: record the
+        actual deployment execution — date, environment, software version, hardware
+        configuration, personnel, and any deviations from the plan. Establish
+        the deployment baseline in the configuration management system.
+        VER 1st Check and VAL 2nd Check apply per Annex C.
+      owner: "cm"
+      deliverables:
+        - path: "docs/deployment/Deployment-Records.md"
+          doc_id: "DOC-DEPLOYREC-YYYY-001"
+          doc_type: "Deployment Records"
+          annex_c_item: 39
+          qua_required: true
+          first_check: "ver"
+          second_check: "val"
+      dependencies: [0]                   # Deployment Records require Plan first
+      parallel_group: 2
+
+  # ── Completion Criteria ────────────────────────────────────────────────────
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true            # Deployment records trace to approved baseline
+    custom_checks:
+      - "Software Release and Deployment Plan (item 36) VER 1st-checked, VAL 2nd-checked, QUA-passed"
+      - "Software Deployment Manual (item 37) VER 1st-checked, VAL 2nd-checked, QUA-passed"
+      - "Release Notes (item 38, plural) VER 1st-checked, VAL 2nd-checked, QUA-passed"
+      - "Deployment Records (item 39) complete and QUA-passed"
+      - "Deployment Verification Report (item 40) produced by VER and QUA-passed"
+      - "Deployment executed per approved Software Release and Deployment Plan"
+      - "Deployment baseline established in CM"
+      - "Operational system accepted by responsible parties"
+      - "No critical open defects blocking deployment"
+      - "Rollback plan documented in case of deployment failure"
+      - "Target environment verified against requirements"
+
+  # ── Track B: Verification ─────────────────────────────────────────────────
+  verification:
+    required: true
+    verifier: "ver"
+    produces:
+      - doc_type: "Deployment Verification Report"
+        annex_c_item: 40
+        path: "docs/deployment/Deployment-Verification-Report.md"
+        doc_id: "DOC-DEPLOYVER-YYYY-001"
+        platform_deviation: >
+          Annex C Table C.1 places item 40 under "Software maintenance" column.
+          This platform assigns item 40 to Phase 9 (Deployment) per §9.1 normative
+          clause. Deviation documented in DELIVERABLES.md Note 6. Must be recorded
+          in SQAP and is subject to Safety Authority review.
+    criteria:
+      - "Deployment executed in accordance with Software Release and Deployment Plan (item 36)"
+      - "Software Deployment Manual (item 37) accurate and complete"
+      - "Release Notes (item 38) accurately describe the deployed release"
+      - "Deployment Records (item 39) complete and consistent with deployment activities"
+      - "Deployed software version matches approved and assessed baseline"
+      - "Target environment configuration verified"
+      - "No unauthorized changes introduced during deployment"
+
+  # ── Track B: Validation (2nd Check only — no VAL report in Phase 9) ───────
+  validation:
+    required_sil: []
+    val_role: "2nd Check reviewer on items 36, 37, 38, and 39 (Annex C checker column)"
+    validator: "val"
+    independence_required_sil: [3, 4]
+    produces: []                           # VAL produces NO reports in Phase 9
+    criteria: []
+    note: >
+      VAL acts as 2nd Check reviewer on items 36–39 per Annex C checker column.
+      VAL does NOT produce a Validation Report in Phase 9 — VAL reports were
+      produced in Phase 7 only. Item 40 (Deployment Verification Report, VER-authored)
+      has NO 2nd Check in Annex C. VAL's 2nd Check on items 36–39 is a review
+      activity, not a separate report artifact.
+
+  # ── Workflow ──────────────────────────────────────────────────────────────
+  workflow:
+    track_a:
+      description: >
+        PM coordinates preparation of items 36–38 (plan, manual, release notes)
+        and CM prepares item 39 (deployment records during execution).
+        QUA checks all Track A deliverables. PM reports Track A complete to COD.
+      completion_signal: "PM reports items 36–39 QUA-passed and deployment executed to COD"
+    track_b:
+      description: >
+        VER produces item 40 (Deployment Verification Report) after deployment.
+        No VMGR gateway in Phase 9 for the VER deployment report (simplified flow).
+        VAL performs 2nd Check on items 36–39.
+      sil_34:
+        description: >
+          COD routes VER report (item 40) through VMGR for review at SIL 3–4.
+          VAL independence required for 2nd Check at SIL 3–4.
+          VMGR confirms VER deployment report is acceptable.
+          COD receives VMGR approval before closing Phase 9.
+        vmgr_gateway: true
+        val_independence_required: true
+      sil_02:
+        description: >
+          COD invokes VER directly for item 40.
+          VAL 2nd Check on items 36–39 without independence requirement.
+          COD receives VER report and VAL review completion confirmations.
+        vmgr_gateway: false
+    rework_path: >
+      If VER identifies deployment non-conformances: PM coordinates resolution.
+      Minor deployment deviations: document in Deployment Records; VER accepts.
+      If the deployed software differs from approved baseline: rollback and
+      re-deploy, or CCB change request for formal deviation acceptance. VER
+      re-verifies after corrective action. COD does NOT close Phase 9 while
+      critical non-conformances remain open.
+
+  # ── Transitions ───────────────────────────────────────────────────────────
+  transitions:
+    - event: "gate_pass"
+      guard: "true"
+      target: "maintenance"
+      action: "COD authorizes Phase 10 (Maintenance — recurring, triggered by CCB change requests)"
+    - event: "gate_fail"
+      guard: "sil >= 3"
+      target: "deployment"
+      action: "COD BLOCKS; PM coordinates rework; re-runs gate after corrections"
+    - event: "gate_fail"
+      guard: "sil < 3"
+      target: "deployment"
+      action: "COD warns; PM coordinates rework"
+
+  # ── Gate Check ────────────────────────────────────────────────────────────
+  gate_check:
+    command: "@cod gate-check deployment"
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [2, 3, 4]
+    criteria:
+      - "Software Release and Deployment Plan (item 36) VER 1st-checked, VAL 2nd-checked, QUA-passed"
+      - "Software Deployment Manual (item 37) VER 1st-checked, VAL 2nd-checked, QUA-passed"
+      - "Release Notes (item 38) VER 1st-checked, VAL 2nd-checked, QUA-passed"
+      - "Deployment Records (item 39) complete and QUA-passed"
+      - "Deployment Verification Report (item 40) produced by VER and QUA-passed"
+      - "VMGR approved item 40 (SIL 3–4)"
+      - "Deployed software version matches approved and assessed baseline"
+      - "Deployment baseline established in CM"
+      - "No critical unresolved deployment non-conformances"
+      - "Operational system accepted by responsible parties"
+      - "Item 40 platform deviation documented in SQAP (Annex C anomaly per DELIVERABLES.md Note 6)"

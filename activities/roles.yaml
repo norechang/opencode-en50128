@@ -1,0 +1,330 @@
+# EN 50128 Agent Role Definitions
+# Source: AGENTS.md (ISA PASS), ORGANIZATION.md (ISA PASS), EN 50128:2011
+#
+# This file encodes:
+#   - All 14 platform agent roles with EN 50128 section references
+#   - SIL independence requirements per role
+#   - Skills loaded by each agent
+#   - Role combination rules (from organization.yaml for quick reference)
+#   - Development vs V&V track assignment
+#
+# LLM agents consume this file to determine:
+#   - Their normative role basis and responsibilities
+#   - Which SIL levels require independence for their role
+#   - Which skills to load when activated
+#   - Which track (A: dev/PM, B: V&V/COD) they belong to
+
+roles:
+  source_document: "AGENTS.md (ISA PASS)"
+  standard: "EN 50128:2011"
+
+  # ── Track Assignment ───────────────────────────────────────────────────────
+  tracks:
+    track_a:
+      owner: "pm"
+      description: "Development track — PM orchestrates"
+      agents: ["req", "des", "imp", "int", "tst", "saf", "cm", "qua", "pm"]
+      constraint: "VER, VAL, VMGR MUST NOT appear in Track A activities"
+    track_b:
+      owner: "cod"
+      description: "Independent V&V track — COD coordinates"
+      agents: ["ver", "val", "vmgr"]
+      sil_34_gateway: "vmgr"             # COD routes all Track B through VMGR at SIL 3–4
+    orchestrators:
+      description: "Lifecycle orchestration agents — not in either track"
+      agents: ["cod", "asr"]
+
+  # ── Role Definitions ───────────────────────────────────────────────────────
+  agents:
+
+    - id: "cod"
+      name: "Lifecycle Coordinator"
+      en50128_role: "Lifecycle Coordinator (platform extension)"
+      en50128_section: "§5.3 (platform extension)"
+      annex_b: null
+      track: "orchestrator"
+      invocation: "@cod"
+      user_facing: true
+      description: >
+        COD orchestrates the complete EN 50128 V-Model lifecycle. COD enforces
+        phase gate compliance, maintains LIFECYCLE_STATE.md, authorizes phase
+        transitions, and coordinates Track B (V&V). At SIL 3–4 COD routes all
+        V&V through VMGR — no direct COD→VER or COD→VAL.
+      skill: "en50128-lifecycle-coordination"
+      independence_required_sil: []
+      key_commands:
+        - "@cod plan --sil <level> --project <name>"
+        - "@cod generate-system"
+        - "@cod gate-check <phase>"
+      cannot:
+        - "Override VMGR V&V decisions"
+        - "Invoke VER or VAL directly at SIL 3–4 (must route through VMGR)"
+
+    - id: "pm"
+      name: "Project Manager"
+      en50128_role: "Project Manager"
+      en50128_section: "Section 5, Table B.9"
+      annex_b: "Table B.9"
+      track: "track_a"
+      invocation: "@pm"
+      user_facing: true
+      description: >
+        PM coordinates the development team (REQ, DES, IMP, INT, TST, SAF, QUA, CM).
+        PM executes phases on COD authorization, leads the CCB, manages resources,
+        and reports phase completion to COD. PM has NO authority over VER, VAL, VMGR,
+        or ASR.
+      skill: "en50128-project-management"
+      independence_required_sil: []
+      key_commands:
+        - "@pm execute-phase <N>"
+      no_authority_over: ["ver", "val", "vmgr", "asr"]
+
+    - id: "req"
+      name: "Requirements Engineer"
+      en50128_role: "Requirements Manager"
+      en50128_section: "Section 7.2, Table A.2"
+      annex_b: "Table B.1"
+      track: "track_a"
+      user_facing: false
+      description: >
+        REQ elicits, analyses, and documents software requirements. PRIMARY agent
+        in Phase 2. Produces Software Requirements Specification (Annex C item 6)
+        and contributes to Overall Software Test Specification (item 7) alongside TST.
+      skill: "en50128-requirements"
+      independence_required_sil: []
+      primary_phase: 2
+      primary_deliverables: [6]
+
+    - id: "des"
+      name: "Designer"
+      en50128_role: "Designer"
+      en50128_section: "Section 7.3, Table A.3"
+      annex_b: "Table B.2"
+      track: "track_a"
+      user_facing: false
+      description: >
+        DES creates software architecture and detailed design. PRIMARY agent in Phases
+        3 and 4. Produces SAS (item 9), SDS (item 10), Software Interface Specifications
+        (item 11), Software Component Design Specification (item 15). Also produces
+        integration test specifications (items 12, 13) with INT.
+      skill: "en50128-design"
+      independence_required_sil: []
+      primary_phases: [3, 4]
+      primary_deliverables: [9, 10, 11, 15]
+
+    - id: "imp"
+      name: "Implementer"
+      en50128_role: "Implementer"
+      en50128_section: "Section 7.5, Table A.4"
+      annex_b: "Table B.3"
+      track: "track_a"
+      user_facing: false
+      description: >
+        IMP implements software in C following MISRA C:2012. PRIMARY agent in Phase 5.
+        Produces Software Source Code and supporting documentation (item 18).
+        MISRA C:2012 mandatory at SIL 2+.
+      skill: "en50128-implementation"
+      independence_required_sil: []
+      primary_phase: 5
+      primary_deliverables: [18]
+      language: "C"
+      coding_standard: "MISRA C:2012 (mandatory SIL 2+)"
+
+    - id: "tst"
+      name: "Tester"
+      en50128_role: "Tester"
+      en50128_section: "Sections 7.4, 7.5, 7.7, Table A.5"
+      annex_b: "Table B.4"
+      track: "track_a"
+      user_facing: false
+      description: >
+        TST writes test specifications and executes tests across phases. Produces
+        Overall Software Test Specification (item 7, Phase 2), Software Component
+        Test Specification (item 16, Phase 4), Software Component Test Report (item 20,
+        Phase 5), and Overall Software Test Report (item 24, Phase 7 Track A).
+      skill: "en50128-testing"
+      independence_required_sil_hr: [2, 3, 4]   # HR not mandatory
+      independence_required_sil: []              # No mandatory independence required
+      primary_deliverables: [7, 16, 20, 24]
+
+    - id: "saf"
+      name: "Safety Engineer"
+      en50128_role: "Safety Engineer (platform extension)"
+      en50128_section: "§7.1 (platform extension)"
+      annex_b: null
+      track: "track_a"
+      user_facing: false
+      description: >
+        SAF performs hazard analysis, maintains the Hazard Log, determines SIL levels,
+        and contributes safety inputs to all lifecycle phases. Active throughout all
+        phases. Not an Annex B role — platform extension supporting §7.1.
+      skill: "en50128-safety"
+      independence_required_sil: []
+
+    - id: "ver"
+      name: "Verifier"
+      en50128_role: "Verifier"
+      en50128_section: "Section 6.2, Tables A.5, A.19"
+      annex_b: "Table B.5"
+      track: "track_b"
+      user_facing: false
+      description: >
+        VER performs independent verification throughout all lifecycle phases.
+        Produces per-phase Verification Reports (items 2, 4, 8, 14, 17, 19, 23, 40, 44).
+        At SIL 3–4 VER reports to VMGR — COD must NOT invoke VER directly.
+        Role-combination prohibition: VER must NOT also be REQ/DES/IMP/INT/TST (SIL 1–4).
+      skill: "en50128-verification"
+      independence_required_sil: [3, 4]          # Mandatory independence
+      independence_hr_sil: [2]
+      role_combination_prohibition_sil: [1, 2, 3, 4]   # §5.1.2.11(h) — must not hold dev roles
+      reports_to:
+        sil_34: "vmgr"
+        sil_02: "cod or pm"              # §5.1.2.11(e) may report to PM at SIL 1–2
+      val_note: "VER writes 1st Check on SVaP (item 5) — VAL writes the SVaP and VER reviews it"
+
+    - id: "val"
+      name: "Validator"
+      en50128_role: "Validator"
+      en50128_section: "Section 7.7, Table A.7"
+      annex_b: "Table B.7"
+      track: "track_b"
+      user_facing: false
+      description: >
+        VAL performs independent validation. In Phases 1–6 and 9–10, VAL acts as
+        '2nd Check' reviewer only (DELIVERABLES.md column '2nd Check') — does NOT
+        produce Validation Reports. VAL produces Validation Reports ONLY in Phase 7
+        (items 25, 26, and Release Note per §7.7.4.12). VAL holds release authority
+        — software SHALL NOT be released without VAL sign-off (§5.1.2.8, §6.3.4.16).
+      skill: "en50128-validation"
+      independence_required_sil: [3, 4]          # Mandatory independence
+      independence_hr_sil: [2]
+      role_combination_prohibition_sil: [1, 2, 3, 4]   # §5.1.2.11(h)
+      val_not_report_to_pm_sil: [3, 4]           # §5.1.2.10(f) — mandatory
+      release_authority: true                     # §5.1.2.8, §6.3.4.16
+      validation_report_phases: [7]              # VAL authors Validation Reports ONLY in Phase 7
+      second_check_phases: [1, 2, 3, 4, 5, 6, 9, 10]  # 2nd Check reviewer in all other phases
+
+    - id: "vmgr"
+      name: "V&V Manager"
+      en50128_role: "V&V Manager (platform extension)"
+      en50128_section: "§5.1.2.10(e–f) (platform extension)"
+      annex_b: null
+      track: "track_b"
+      user_facing: false
+      description: >
+        VMGR is the independent V&V authority for SIL 3–4. VMGR manages the VER
+        team, reviews all VER Verification Reports, reviews VAL Validation Reports
+        in Phase 7, and provides the final V&V approval that cannot be overridden
+        by COD or PM. VMGR requires Safety Authority approval and SQAP documentation.
+        Not in EN 50128:2011 Annex B — platform extension based on §5.1.2.10(e–f).
+      skill: "en50128-lifecycle-coordination"    # Uses same skill as COD (base)
+      independence_required_sil: [3, 4]          # Platform policy; basis §5.1.2.10(e–f)
+      required_sil: [3, 4]                       # VMGR only required at SIL 3–4
+      safety_authority_approval_required: true
+      reports_to: "safety_authority"             # Does NOT report to COD or PM
+      manages: ["ver"]
+      reviews: ["val_reports_phase_7"]
+      final_vv_approval: true                    # Cannot be overridden
+
+    - id: "int"
+      name: "Integrator"
+      en50128_role: "Integrator"
+      en50128_section: "Section 7.6, Table A.6"
+      annex_b: "Table B.6"
+      track: "track_a"
+      user_facing: false
+      description: >
+        INT integrates software modules progressively and performs integration testing.
+        PRIMARY agent in Phase 6. Also produces integration test specifications in
+        Phase 3 (items 12, 13) with DES. Produces integration test reports (items 21, 22).
+      skill: "en50128-integration"
+      independence_required_sil: []
+      primary_phase: 6
+      primary_deliverables: [12, 13, 21, 22]
+
+    - id: "qua"
+      name: "Quality Assurance"
+      en50128_role: "Quality Assurance (platform extension)"
+      en50128_section: "Section 6.5 (platform extension)"
+      annex_b: null
+      track: "track_a"
+      user_facing: false
+      description: >
+        QUA enforces the SQAP and performs template compliance checks on all
+        deliverables before VER review. QUA checks deliverables in Track A and
+        VER/VAL reports in Track B. Active throughout all phases.
+        Also writes the SQAP (item 1) per §6.5.4.3.
+      skill: "en50128-quality"
+      independence_required_sil: []
+      primary_deliverables: [1]           # SQAP (item 1) written by QUA
+
+    - id: "cm"
+      name: "Configuration Manager"
+      en50128_role: "Configuration Manager"
+      en50128_section: "Section 6.6, Table A.9"
+      annex_b: "Table B.10"
+      track: "track_a"
+      user_facing: false
+      description: >
+        CM maintains version control, baselines, change records, and traceability
+        throughout the lifecycle. CM manages CCB change requests in Phase 10.
+        Configuration Management is MANDATORY for ALL SIL levels per Table A.9.
+        Writes the SCMP (item 3) and produces change/maintenance records (items 42, 43).
+      skill: "en50128-configuration"
+      independence_required_sil: []
+      mandatory_all_sil: true             # Table A.9 — mandatory
+      primary_deliverables: [3, 42, 43]
+
+    - id: "asr"
+      name: "Assessor"
+      en50128_role: "Assessor"
+      en50128_section: "§5.1.2.4–5.1.2.7, §6.4, Annex B Table B.8"
+      annex_b: "Table B.8"
+      track: "orchestrator"               # Independent of both tracks
+      user_facing: false
+      description: >
+        ASR performs independent software assessment. Mandatory for SIL 1–4 per
+        §6.4.1.1 and §5.1.2.4; SIL 0 exempt per §6.4.1.2 (ISO 9001 cert required).
+        ASR is independent from all project roles including COD. Appointed by supplier,
+        customer, or Safety Authority. May be external or — at SA discretion — internal
+        to the organisation. ASR reviews all lifecycle artifacts and produces items 45–46.
+      skill: null                         # External role — no platform skill file
+      independence_required_sil: [1, 2, 3, 4]   # §6.4.1.1, §5.1.2.4
+      sil_0_waivable: true                # §6.4.1.2 — ISO 9001 cert required for waiver
+      appointed_by: "supplier, customer, or Safety Authority (§5.1.2.4)"
+      independent_from: "all project roles including COD"
+      primary_deliverables: [45, 46]
+      primary_phase: 8
+
+  # ── Role Independence Quick Reference ────────────────────────────────────
+  # For full independence matrix see organization.yaml
+  independence_summary:
+    mandatory_independence_sil_34: ["ver", "val", "asr"]
+    mandatory_independence_sil_12: ["asr"]
+    hr_independence_sil_34: ["tst"]
+    hr_independence_sil_12: ["ver", "val", "tst"]
+    vmgr_platform_policy_sil_34: ["vmgr"]
+    no_independence_required: ["req", "des", "imp", "int", "pm", "cm", "saf", "qua", "cod"]
+
+  # ── Development Language Constraints ──────────────────────────────────────
+  language_constraints:
+    primary_language: "C"
+    safety_software_only: true             # C is for safety software
+    scripting:
+      language: "Python"
+      permitted_use: "Build automation, testing harness, analysis tools — NOT safety software"
+      safety_software: false
+    misra_c:
+      standard: "MISRA C:2012"
+      mandatory_sil: [2, 3, 4]
+      recommended_sil: [0, 1]
+    complexity_limits:
+      sil_01: 20
+      sil_2: 15
+      sil_34: 10
+    no_dynamic_memory:
+      mandatory_sil: [2, 3, 4]
+      recommended_sil: [0, 1]
+    no_recursion:
+      hr_sil: [2, 3, 4]
+      recommended_sil: [0, 1]

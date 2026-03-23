@@ -1,0 +1,163 @@
+# EN 50128 Phase 2: Software Requirements
+# Source: LIFECYCLE.md §4 (ISA PASS), EN 50128:2011 §7.2
+# Annex C Items: 6–8
+
+phase:
+  id: "requirements"
+  number: 2
+  name: "Software Requirements"
+  en50128_section: "§7.2"
+  executor: "pm"
+  gate_command: "@cod gate-check requirements"
+  description: >
+    Phase 2 defines complete, unambiguous, and testable software requirements.
+    REQ is the PRIMARY agent. SAF contributes hazard analysis and SIL assignment.
+    The Software Requirements Specification (item 6) requires USER/CUSTOMER APPROVAL
+    before it can proceed to VER verification. The Overall Software Test Specification
+    (item 7) is written by TST and is the V-Model counterpart to the Overall Software
+    Test Report (item 24) produced in Phase 7.
+
+  # ── Track A: Activities (PM-orchestrated, dev agents only) ────────────────
+  activities:
+    - agent: "req"
+      task_description: >
+        Elicit requirements from stakeholders and system specification (system docs
+        from Phase 0). Write Software Requirements Specification (SRS) per §7.2.
+        All requirements must be unambiguous, testable, traceable to system requirements,
+        and assigned SIL levels. Safety requirements identified in collaboration with SAF.
+      owner: "req"
+      deliverables:
+        - path: "docs/requirements/Software-Requirements-Specification.md"
+          doc_id: "DOC-SRS-YYYY-001"
+          doc_type: "Software Requirements Specification"
+          annex_c_item: 6
+          qua_required: true
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "saf"
+      task_description: >
+        Perform hazard analysis for this phase. Update Hazard Log with software-level
+        hazards derived from system hazards. Assign SIL levels to requirements in
+        collaboration with REQ. Identify and tag safety requirements in the SRS.
+      owner: "saf"
+      deliverables:
+        - path: "docs/safety/Hazard-Log.md"
+          doc_id: null
+          doc_type: "Hazard Log (safety cross-cutting artifact)"
+          annex_c_item: null
+          qua_required: false
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "tst"
+      task_description: >
+        Write Overall Software Test Specification per §7.7 planning requirements.
+        This document is the left-side V-Model specification whose counterpart is
+        the Overall Software Test Report (item 24) produced in Phase 7.
+        Test specification must cover all requirements from the SRS.
+      owner: "tst"
+      deliverables:
+        - path: "docs/requirements/Overall-Software-Test-Specification.md"
+          doc_id: "DOC-OTSTSPEC-YYYY-001"
+          doc_type: "Overall Software Test Specification"
+          annex_c_item: 7
+          qua_required: true
+      dependencies: [0]                   # After SRS baseline (tests must trace to requirements)
+      parallel_group: 2
+
+  # ── Completion Criteria ────────────────────────────────────────────────────
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true            # Requirements must trace to system requirements
+    user_approval_required: true           # SRS requires customer/user approval before VER
+    custom_checks:
+      - "All requirements unambiguous and testable"
+      - "All requirements traceable to system requirements (bidirectional)"
+      - "SIL levels assigned to all requirements"
+      - "Safety requirements identified and tagged"
+      - "SHALL/SHOULD/MAY keywords used correctly"
+      - "C language constraints considered in requirements"
+      - "SRS approved by user/customer before proceeding to VER"
+      - "Overall Software Test Specification covers all SRS requirements"
+      - "Requirements traceability matrix established"
+
+  # ── Track B: Verification ─────────────────────────────────────────────────
+  verification:
+    required: true
+    verifier: "ver"
+    produces:
+      - doc_type: "Software Requirements Verification Report"
+        annex_c_item: 8
+        path: "docs/requirements/Software-Requirements-Verification-Report.md"
+    criteria:
+      - "SRS complies with §7.2 requirements"
+      - "All requirements testable and unambiguous"
+      - "SIL level assignments correct and justified"
+      - "Requirements traceable to system requirements"
+      - "Overall Software Test Specification covers all requirements"
+      - "Safety requirements correctly identified"
+      - "No inconsistencies between SRS and system-level documents"
+
+  # ── Track B: Validation (2nd Check only — no VAL report in Phase 2) ───────
+  validation:
+    required_sil: []
+    val_role: "2nd Check reviewer on SRS (item 6), Overall SW Test Spec (item 7)"
+    validator: "val"
+    independence_required_sil: [3, 4]
+    produces: []
+    criteria: []
+
+  # ── Workflow ──────────────────────────────────────────────────────────────
+  workflow:
+    track_a:
+      description: >
+        PM coordinates REQ (SRS), SAF (Hazard Log), and TST (Overall SW Test Spec)
+        in parallel (group 1). TST depends on SRS baseline (group 2). QUA performs
+        template check on all deliverables. USER/CUSTOMER APPROVES SRS before Track B.
+        PM reports complete to COD.
+      completion_signal: "PM reports items 6 and 7 QUA-passed and SRS user-approved to COD"
+    track_b:
+      sil_34:
+        description: >
+          COD → VMGR → VER verifies SRS and Overall SW Test Spec → VER produces
+          item 8 (REQVER) → QUA checks item 8 → VMGR reviews → VMGR reports to COD.
+          VAL acts as 2nd Check reviewer on items 6 and 7 — no VAL report.
+        vmgr_gateway: true
+      sil_02:
+        description: >
+          COD → VER verifies and produces item 8. QUA checks item 8.
+          COD receives VER report directly.
+    rework_path: >
+      If VER rejects: VMGR notifies COD → COD notifies PM → PM coordinates rework
+      with REQ/TST → deliverable re-enters QUA check → resubmit to VER.
+
+  # ── Transitions ───────────────────────────────────────────────────────────
+  transitions:
+    - event: "gate_pass"
+      guard: "true"
+      target: "architecture-design"
+      action: "COD authorizes @pm execute-phase 3"
+    - event: "gate_fail"
+      guard: "sil >= 3"
+      target: "requirements"
+      action: "COD BLOCKS; PM coordinates rework; COD re-runs gate"
+    - event: "gate_fail"
+      guard: "sil < 3"
+      target: "requirements"
+      action: "COD warns; PM coordinates rework"
+
+  # ── Gate Check ────────────────────────────────────────────────────────────
+  gate_check:
+    command: "@cod gate-check requirements"
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [2, 3, 4]
+    criteria:
+      - "SRS (item 6) QUA-passed, user/customer approved, and at baseline"
+      - "Overall Software Test Specification (item 7) QUA-passed"
+      - "Software Requirements Verification Report (item 8) QUA-passed"
+      - "VMGR approved item 8 (SIL 3–4)"
+      - "All requirements traceable to system requirements (bidirectional)"
+      - "SIL levels assigned and justified"
+      - "Safety requirements identified"
+      - "Zero critical open defects"

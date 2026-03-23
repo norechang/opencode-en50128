@@ -10,7 +10,7 @@ This document defines the complete software development lifecycle for EN 50128:2
 | **Section** | Section 6: Software Lifecycle Issues |
 | **Lifecycle Model** | V-Model (Highly Recommended / Industry Standard for SIL 2-4 per §5.3, Figures 3–4) |
 | **Language** | C (MISRA C:2012 for SIL 2+) |
-| **Version** | 1.3 |
+| **Version** | 1.9 |
 
 ---
 
@@ -489,11 +489,11 @@ See `.opencode/agents/int.md` for full Table A.6 technique/measure details.
 - Integration defects resolved
 - Integration traceability complete
 
-### 8.9 Integration Checklist
+### 8.10 Integration Checklist
 
 See `.opencode/agents/int.md` for the full integration checklist.
 
-### 8.10 Phase Gate (COD Checkpoint)
+### 8.11 Phase Gate (COD Checkpoint)
 
 **Command**: `@cod gate-check integration`
 
@@ -502,6 +502,8 @@ Full gate checklist and COD enforcement behavior: see `.opencode/agents/cod.md` 
 ---
 
 ## 9. Phase 7: Software Validation (Section 7.7)
+
+> **Standard phase name**: EN 50128:2011 §7.7 is titled **"Overall Software Testing / Final Validation"** (Table A.1). This platform uses the shorthand "Software Validation" for this phase, but both TST (overall software testing) and VAL (final validation) activities are equally mandatory per §7.7 — the Overall Software Test Report (Annex C item 24, written by TST) is a required deliverable alongside the Software Validation Report (item 25, written by VAL).
 
 ### 9.1 Objectives
 - Validate software against system requirements
@@ -533,7 +535,7 @@ Full gate checklist and COD enforcement behavior: see `.opencode/agents/cod.md` 
 
 ### 9.5 Deliverables
 
-See [`DELIVERABLES.md`](DELIVERABLES.md) — Phase 7: Validation (Annex C items 23–26, 27).
+See [`DELIVERABLES.md`](DELIVERABLES.md) — Phase 7: Validation (Annex C items 23–26, plus Release Note per §7.7.4.12 — Annex C item 27 status unconfirmed against printed standard; see DELIVERABLES.md Note 3).
 
 **Additional normative outputs (no Annex C number)**:
 - **Software Validation Verification Report** (`docs/reports/Software-Validation-Verification-Report.md`) — written by VER — required by §6.3.3
@@ -648,12 +650,12 @@ See `.opencode/agents/ver.md` for full Table A.5 technique/measure details, cove
 6. Prepare assessment report
 
 ### 11.3 Agents Involved
-- **Assessor** (independent, mandatory for SIL 1–4 per §6.4.1.1 and §5.1.2.4; SIL 0 exempt per §6.4.1.2; per EN 50128 Section 5.3.8, Table B.8)
+- **Assessor** (independent, mandatory for SIL 1–4 per §6.4.1.1 and §5.1.2.4; SIL 0 exempt per §6.4.1.2; role requirements: §5.1.2.4–§5.1.2.7; role characterisation: Annex B, Table B.8)
 - **Project Manager** (overall project responsibility)
 - **Software Manager** (software development responsibility)
 - Quality Assurance (QUA)
 
-**Note**: The Assessor role is explicitly defined in EN 50128 Section 5.3.8 and MUST be completely independent for SIL 1–4. SIL 0 is exempt per §6.4.1.2 (ISO 9001 certified organisations).
+**Note**: The Assessor is a role whose requirements are stated at §5.1.2.4–§5.1.2.7 and whose characterisation appears in Annex B, Table B.8. The Assessor MUST be independent from the project for SIL 1–4 (§5.1.2.6). The Assessor shall also be independent from the supplier unless the Safety Authority permits otherwise (§5.1.2.5). SIL 0 is exempt per §6.4.1.2 (ISO 9001 certified organisations).
 
 ### 11.4 Deliverables
 
@@ -667,8 +669,12 @@ See [`DELIVERABLES.md`](DELIVERABLES.md) — Phase 8: Assessment (Annex C items 
 > **See** `.opencode/agents/cod.md` → Phase Gate Reference → Gate 7: Assessment Gate for the full assessment checklist, COD behavior, and independence verification procedure.
 
 ### 11.6 EN 50128 References
-- **Section 6.4.1.1**: "The software shall be subjected to an independent assessment" — mandatory in practice for SIL 3-4
-- **Section 6.4.4.1**: Assessment activities mandatory for SIL 3-4
+- **Section 6.4.1.1**: "The software shall be subjected to an independent assessment" — applies to **SIL 1–4** (SIL 0 exempt per §6.4.1.2)
+- **Section 6.4.4.1**: Assessment activities apply to **SIL 1–4** (wherever independent assessment is required per §6.4.1.1)
+- **Section 5.1.2.4**: Assessor role requirement for SIL 1–4
+- **Section 5.1.2.5**: Assessor independence from supplier — mandatory, with Safety Authority discretion to permit internal assessor
+- **Section 5.1.2.6**: Assessor independence from project — mandatory
+- **Section 5.1.2.7**: Assessor independence from supplier organisation — mandatory
 - Section 6.4: Software assessment (general)
 - Table A.1: Lifecycle requirements
 
@@ -894,7 +900,7 @@ Templates available in:
 |--------|-------------|
 | Lifecycle | V-Model recommended |
 | Independence | Not required |
-| Coverage | 80% statement, 70% branch |
+| Coverage | Quantified measure shall be defined per project (Table A.21, Req. 1); Statement coverage R, Branch coverage HR for SIL 1 — no standard-mandated percentage thresholds |
 | MISRA C | Recommended |
 | Complexity | ≤ 20 |
 
@@ -902,9 +908,9 @@ Templates available in:
 
 | Aspect | Requirement |
 |--------|-------------|
-| Lifecycle | V-Model mandatory |
+| Lifecycle | V-Model highly recommended per §5.3, Figures 3–4; alternative models permissible per §5.3.2.14 |
 | Independence | Highly recommended |
-| Coverage | 100% statement, 100% branch |
+| Coverage | Quantified measure shall be defined per project (Table A.21, Req. 1); Statement coverage HR, Branch coverage HR for SIL 2 — no standard-mandated percentage thresholds |
 | MISRA C | Mandatory |
 | Complexity | ≤ 15 |
 | Static Analysis | Mandatory |
@@ -913,9 +919,9 @@ Templates available in:
 
 | Aspect | Requirement |
 |--------|-------------|
-| Lifecycle | V-Model mandatory |
+| Lifecycle | V-Model highly recommended per §5.3, Figures 3–4; alternative lifecycle models permissible per §5.3.2.14 with Safety Authority agreement |
 | Independence | Mandatory (verification & validation) |
-| Coverage | 100% statement, branch, MC/DC |
+| Coverage | Quantified measure required (Table A.21, Req. 1); Branch coverage (HR) + Compound Condition or Data Flow (HR) at component level for SIL 3-4 per Table A.21 Req. 2. Note: "MC/DC" is not an EN 50128 term — "Compound Condition" (Table A.21 item 3) is the closest analogue; projects adopting MC/DC must document rationale and tool qualification evidence in the SQAP |
 | MISRA C | Mandatory |
 | Complexity | ≤ 10 |
 | Static Analysis | Mandatory |
@@ -953,7 +959,10 @@ Templates available in:
 | 1.2 | 2026-03-19 | EN50128 Team | ISA finding resolution: Added Phase 4 Component Design (§7.4) splitting it from Phase 5 Implementation (§7.5); renumbered Integration→Phase 6, Validation→Phase 7, Assessment→Phase 8, Deployment→Phase 9, Maintenance→Phase 10; removed Verification as discrete phase (now described as continuous cross-cutting activity); fixed V-Model diagram §7.4/7.5 labels; fixed SQAP ownership to VER (§6.5.4.3); removed fictitious Annex C item 27; moved SVaP to entry criteria in Validation phase; updated Assessment SIL note to reflect mandatory in practice (§6.4.1.1) for SIL 3-4; updated section numbering throughout (Sections 14–25); updated all COD gate references |
 | 1.3 | 2026-03-19 | EN50128 Team | ISA finding resolution (v1.3): B4 — fixed clause ref §7.2.4.27→§7.2.4.20 for item 8 (Section 25 Phase 2); B5 — fixed clause refs for items 13 (§7.3.4.33→§7.3.4.29) and 14 (§7.3.4.40→§7.3.4.38) (Section 25 Phase 3); B6 — added SVaP approved baseline requirement per §5.3.2.4 to Phase 7 entry criteria (§9.9) and gate checklist (§9.11); B7 — corrected V-Model lifecycle model description from "mandatory" to "highly recommended per §5.3, Figures 3–4; alternative models permissible per §5.3.2.14" (header + §1.1); B8 — fixed gate command `@cod gate-check implementation` → `@cod gate-check implementation-testing` in Section 15 workflow examples; C1 — removed duplicate item 17 from Component Design Phase table in Section 24 (header corrected to "items 15–16"); C2 — added normative note to Planning table in Section 24 explaining §5.3.2.4/§6.2.4.2/§6.3.4.2/§6.5.4.3/§6.6.4.1 "shall" clauses override Annex C informative HR labels; C3 — replaced "(see note)" with explicit ownership in Section 24 Deployment table (item 36: PM/CM, item 37: PM/DES, item 38: PM/DES, item 39: CM, item 40: VER) |
 | 1.4 | 2026-03-19 | EN50128 Team | Document reorganization: LIFECYCLE.md slimmed to lean V-Model reference (~900 lines from 2350). Operational content redistributed to authoritative agent files — per-phase gate checklists, COD behavior blocks, and workflow examples moved to `.opencode/agents/cod.md`; CM procedures (version control, baseline management, CCB change management, traceability management, Table A.9 CM subset) moved to `.opencode/agents/cm.md`; tool qualification catalogue moved to `TOOLS.md`. All operational content replaced with pointers. Sections 14, 15, 19, 20 replaced with pointer stubs. Phase-level checklists (§11.5, §12.5, §13.5) and gate blocks (§11.7, §12.9) replaced with pointers. Section 22 references updated to identify authoritative sources. |
-| 1.5 | 2026-03-19 | EN50128 Team | Deliverables consolidation: All inline deliverable listings in phase sections (§3.4, §4.5, §5.5, §6.4, §7.5, §8.5, §9.5, §10.5, §11.4, §12.4, §13.4), §18.1, and all per-phase sub-tables in §24 and §25 replaced with pointers to `DELIVERABLES.md` (single source of truth for Annex C Table C.1). Normative notes, naming conventions, doc type mapping, compliance checklist, Quick Reference Table, Summary Statistics, and V-Model correspondence table retained in LIFECYCLE.md. Doc 27 (Release Note) updated to reflect its confirmed listing in DELIVERABLES.md. |
+| 1.6 | 2026-03-23 | EN50128 Team | ISA Round 1 finding resolution: M01 — Annex C item 19/20 phase assignment corrected in DELIVERABLES.md; M02 — §11.6 assessment SIL scope corrected to SIL 1-4; m01 — removed 80%/70% coverage thresholds from §21.1; m02 — §21.2 V-Model changed from "mandatory" to HR; m03 — Phase 7 standard name mapping note added; m04 — §21.3 MC/DC coverage claim replaced with Table A.21 Req. 2; O01 — item 27 ambiguity documented in DELIVERABLES.md. |
+| 1.7 | 2026-03-23 | EN50128 Team | ISA Round 2 finding resolution: M-NEW-01 — DELIVERABLES.md Note 6 for items 40/44 phase anomalies; M-NEW-02 — §21.3 SIL 3-4 lifecycle corrected to HR; M-NEW-03 — AGENTS.md Assessor row corrected to M for SIL 1-4; m-NEW-01 — §5.1.2.5 added to §11.6; m-NEW-02 — §21.2 coverage percentages removed; m-NEW-03 — §9.5 Phase 7 reference aligned; O-NEW-01 — VMGR platform-extension description updated. |
+| 1.8 | 2026-03-23 | EN50128 Team | ISA Round 3 finding resolution: M-R3-01 — AGENTS.md Agent Mapping Assessor row corrected to "Mandatory SIL 1-4"; m-R3-01 — §11.3 Assessor citation corrected from non-existent "Section 5.3.8" to §5.1.2.4–§5.1.2.7 and Annex B Table B.8; m-R3-02 — AGENTS.md Software Manager reference corrected (removed false "Table B.1"), Assessor reference corrected (removed false "5.3.8"); m-R3-03 — DELIVERABLES.md Note 7 added for SVaP item 5 phase-column deviation; O-R3-01 — duplicate §8.9 section resolved in Phase 6 Integration section. Also applied residual fix: LIFECYCLE.md §11.3 prose Note corrected from "Section 5.3.8" to §5.1.2.4–§5.1.2.7 and Annex B Table B.8. |
+| 1.9 | 2026-03-23 | EN50128 Team | ISA Round 4 finding resolution: R4-01 — LIFECYCLE.md §11.3 prose Note corrected from "EN 50128 Section 5.3.8" to §5.1.2.4–§5.1.2.7 and Annex B Table B.8; R4-02 — AGENTS.md Core Development Roles table Assessor "Independence Required" corrected from "Yes (SIL 3-4)" to "Yes (SIL 1-4) — §6.4.1.1; SIL 0 exempt §6.4.1.2"; R4-03 — AGENTS.md Important Notes independence bullet split: VER/VAL mandatory SIL 3-4 (HR at SIL 2), Assessor mandatory SIL 1-4 (§6.4.1.1; SIL 0 exempt §6.4.1.2); R4-04 — DELIVERABLES.md item 44 "1st Check" corrected from "VER" to "—" for consistency with all other VER-authored verification reports. |
 
 ---
 

@@ -68,30 +68,31 @@ EN 50128:2011 defines the following organizational roles:
 
 | Role | EN 50128 Section | Description | Independence Required |
 |------|------------------|-------------|----------------------|
-| **Software Manager** | 5.3.1, Table B.1 | Overall software development responsibility | No |
+| **Software Manager** | §5.3.1, §5.1 (no dedicated Annex B table) | Overall software development responsibility | No |
 | **Designer** | 5.3.2, Table B.2 | Software architecture and design | No |
 | **Implementer** | 5.3.3, Table B.3 | Code implementation | No |
 | **Tester** | 5.3.4, Table B.4 | Software testing | No |
 | **Verifier** | 5.3.5, Table B.5 | Software verification | Yes (SIL 3-4) |
 | **Integrator** | 5.3.6, Table B.6 | Software integration | No |
 | **Validator** | 5.3.7, Table B.7 | Software validation | Yes (SIL 3-4) |
-| **Assessor** | 5.3.8, Table B.8 | Independent safety assessment | Yes (SIL 3-4) |
+| **Assessor** | §5.1.2.4–§5.1.2.7, Annex B Table B.8 | Independent safety assessment | Yes (SIL 1-4) — §6.4.1.1; SIL 0 exempt §6.4.1.2 |
 
 ### Management and Support Roles (Section 5, Annex B)
 
 | Role | EN 50128 Reference | Description | Independence Required |
 |------|-------------------|-------------|----------------------|
 | **Lifecycle Coordinator (COD)** | Platform Extension (Section 5.3) | End-to-end lifecycle orchestration, phase gate enforcement | No |
-| **V&V Manager (VMGR)** | Platform Extension (Section 5.1.2.10e) | Independent V&V authority, manages Verifier team, provides final V&V approval | Yes (SIL 3-4) |
+| **V&V Manager (VMGR)** | Platform Extension (§5.1.2.10e, §5.1.2.10f) | Platform-defined coordination role; no direct EN 50128 equivalent. Implemented by assigning an independent Validator (§5.1.2.10f) to coordinate Verifiers (§5.1.2.10e). SQAP shall document VMGR responsibilities mapped to §6.2 and §6.3. Requires Safety Authority approval. | Yes (SIL 3-4) |
 | **Project Manager** | Section 5, Table B.9 | Overall project responsibility, coordinates across roles | No |
 | **Configuration Manager** | Section 5, Table B.10 | Configuration and change management | No |
 
 **Important Notes**:
 - **Lifecycle Coordinator (COD)** is a platform extension role (not explicitly in EN 50128) that orchestrates the complete V-Model lifecycle
-- **V&V Manager (VMGR)** is a platform extension role (based on EN 50128 Section 5.1.2.10e "Verifier can report to Validator") that provides independent V&V authority for SIL 3-4 projects
+- **V&V Manager (VMGR)** is a platform-defined coordination role with no direct EN 50128:2011 equivalent. It is implemented by assigning an independent Validator (§5.1.2.10f) to coordinate Verifiers (§5.1.2.10e). The SQAP shall document how VMGR responsibilities are discharged and map them to §6.2 (Verification) and §6.3 (Validation) requirements. Requires Safety Authority approval.
 - **COD has overall lifecycle authority**; PM reports to COD for lifecycle decisions
 - **VMGR is INDEPENDENT from COD and PM** (SIL 3-4); coordinates with COD but does not report to COD
-- Independence is MANDATORY for Verifier, Validator, and Assessor roles at SIL 3-4
+- Independence is MANDATORY for Verifier and Validator roles at SIL 3-4 (HR at SIL 2)
+- Independence is MANDATORY for the Assessor from SIL 1–4 (§6.4.1.1); SIL 0 exempt per §6.4.1.2
 - One person MAY perform multiple roles IF independence requirements are met
 
 ---
@@ -291,7 +292,7 @@ PM (Project Manager)                           VER (Verifier)
 | No dynamic memory allocation | R | **M** | **M** |
 | Static analysis | R | HR | **M** |
 | Cyclomatic complexity ≤ limit | 20 | 15 | 10 |
-| 100% statement/branch/MC/DC coverage | - | branch **M** | all **M** |
+| Statement/Branch/Compound Condition coverage | - | branch **HR** | branch + compound condition or data flow **HR** (Table A.21 Req. 2; no mandatory % threshold) |
 | No recursion | R | HR | HR |
 | No function pointers | R | HR | HR |
 
@@ -345,9 +346,9 @@ Each agent **internally loads its skill** when invoked. Users do not load skills
 | Verifier | No | HR | **M** |
 | Integrator | No | No | No |
 | Validator | No | HR | **M** |
-| Assessor | N/A | N/A | **M** |
+| Assessor | – (exempt §6.4.1.2) | **M** (§6.4.1.1) | **M** (§6.4.1.1) |
 
-**Legend**: **M** = Mandatory, **HR** = Highly Recommended, **No** = Not required
+**Legend**: **M** = Mandatory, **HR** = Highly Recommended, **No** = Not required, **–** = Exempt (SIL 0: exempt per §6.4.1.2 for ISO 9001-certified organisations)
 
 ### Role Combination Rules
 
@@ -385,7 +386,7 @@ Each agent **internally loads its skill** when invoked. Users do not load skills
 | Verifier | VER | **Mandatory for SIL 3-4** |
 | Integrator | INT | Not required |
 | Validator | VAL | **Mandatory for SIL 3-4** |
-| Assessor | (external) | **Mandatory for SIL 3-4** |
+| Assessor | (external) | **Mandatory for SIL 1-4** (§6.4.1.1); exempt SIL 0 per §6.4.1.2 |
 
 **Additional Agents** (platform extensions):
 - Safety Engineer (SAF) — Supports safety analysis per Section 7.1

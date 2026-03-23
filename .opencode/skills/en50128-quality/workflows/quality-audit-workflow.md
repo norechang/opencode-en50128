@@ -94,7 +94,7 @@ Quality audits provide **independent verification** that:
 |-----------|--------------------------------|
 | **SIL 0-1** | Recommended (can be internal QA) |
 | **SIL 2** | Highly Recommended (should be independent of project) |
-| **SIL 3-4** | **MANDATORY** (Independent Assessor per EN 50128 Section 5.3.8) |
+| **SIL 3-4** | **MANDATORY** (Independent Assessor per EN 50128 §6.4.1.1; §5.1.2.4–§5.1.2.7) |
 
 **SIL 3-4 Independence**:
 - Auditor MUST NOT be part of development team
@@ -1247,7 +1247,7 @@ workspace.py wf create-audit \
 ## 15. References
 
 - EN 50128:2011 Section 6.5 (Software Quality Assurance)
-- EN 50128:2011 Section 5.3.8 (Assessor Role)
+- EN 50128:2011 §5.1.2.4–§5.1.2.7, Annex B Table B.8 (Assessor Role)
 - EN 50128:2011 Annex B (Tool Classification and Qualification)
 - EN 50128:2011 Annex C (Document Control Summary - Table C.1)
 - EN ISO 9001:2015 Section 9.2 (Internal Audit)

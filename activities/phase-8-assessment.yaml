@@ -1,0 +1,240 @@
+# EN 50128 Phase 8: Software Assessment
+# Source: LIFECYCLE.md §11 (ISA PASS), EN 50128:2011 §6.4
+# Annex C Items: 45–46
+#
+# CRITICAL: Phase 8 is MANDATORY for SIL 1–4 per §6.4.1.1 and §5.1.2.4.
+# SIL 0 is EXEMPT per §6.4.1.2 (ISO 9001 certified organisations only).
+# The executor is ASR (Assessor) — NOT PM. ASR is independent from all
+# project roles, including COD and PM (§5.1.2.4–§5.1.2.7).
+# ASR is independent from the supplier unless Safety Authority permits
+# otherwise (§5.1.2.5). ASR must be independent from the project (§5.1.2.6).
+# Role characterisation: Annex B Table B.8.
+#
+# TWO-TRACK MODEL:
+#   Track A (ASR-independent): ASR reviews all lifecycle artifacts, produces
+#     items 45–46. ASR does NOT report to PM or COD during assessment conduct.
+#   Track B: VER acts as 1st Check on ASR reports (Annex C checker column);
+#     no separate VER report is produced in Phase 8 (no VER Annex C item here).
+#   NOTE: verification.required = false because there is no VER Annex C report
+#     for Phase 8. VER's 1st Check role on items 45–46 is NOT a separate report.
+
+phase:
+  id: "assessment"
+  number: 8
+  name: "Software Assessment"
+  en50128_section: "§6.4"
+  executor: "asr"                          # ASR is INDEPENDENT — does NOT report to PM
+  gate_command: "@cod gate-check assessment"
+  skip_condition: "sil == 0 and iso9001_certified == true"   # §6.4.1.2 — SIL 0 exempt
+  description: >
+    Phase 8 is an independent assessment of the software against EN 50128. It is
+    mandatory for SIL 1–4 (§6.4.1.1 and §5.1.2.4). SIL 0 organisations holding
+    ISO 9001 certification are exempt per §6.4.1.2; SIL 0 without ISO 9001
+    certification must proceed to assessment.
+    The Assessor (ASR) is independent from all development roles AND from the
+    project team (§5.1.2.6). ASR must also be independent from the supplier
+    unless the Safety Authority permits otherwise (§5.1.2.5). The ASR reviews
+    ALL lifecycle artifacts (phases 1–7), verification evidence, validation
+    results, and the safety case. The ASR produces the Software Assessment Plan
+    (item 45) and Software Assessment Report (item 46). ASR is NOT managed by
+    PM or COD during assessment conduct — COD coordinates Phase 8 logistics only
+    (artifact handover, schedule); COD cannot direct or override ASR findings.
+    ASR findings must be resolved by PM before COD closes Phase 8.
+
+  # ── Track A: Activities (ASR-independent — not PM-orchestrated) ──────────
+  # The two activities here reflect ASR work, not PM work. COD coordinates
+  # artifact handover to ASR and tracks ASR schedule. PM provides requested
+  # materials but does NOT direct ASR activities.
+  activities:
+    - agent: "asr"
+      task_description: >
+        Prepare Software Assessment Plan: define the scope, methods, and schedule
+        for the independent assessment. The plan shall identify all artifacts to be
+        reviewed, criteria used to assess compliance with EN 50128, and any areas
+        requiring particular scrutiny based on SIL level and hazard analysis results.
+        The plan shall be produced before assessment activities begin per §6.4.
+        VER performs 1st Check on the plan (Annex C checker column).
+      owner: "asr"
+      deliverables:
+        - path: "docs/assessment/Software-Assessment-Plan.md"
+          doc_id: "DOC-ASSESSPLAN-YYYY-001"
+          doc_type: "Software Assessment Plan"
+          annex_c_item: 45
+          qua_required: true               # QUA checks for document completeness
+          first_check: "ver"               # VER is 1st Check per Annex C
+          second_check: null               # No 2nd Check on ASR documents
+      dependencies: []
+      parallel_group: 1
+      note: >
+        ASR produces item 45. ASR is NOT directed by PM. COD facilitates access
+        to lifecycle artifacts. VER performs 1st Check (Annex C checker column)
+        but does NOT produce a separate VER report for Phase 8.
+
+    - agent: "asr"
+      task_description: >
+        Conduct independent assessment per Software Assessment Plan (item 45):
+        Review all lifecycle artifacts (items 1–46 as applicable), verification
+        evidence (VER reports), validation results (items 23–27), safety case,
+        SQAP, SCMP, and compliance with all EN 50128 Annex A technique requirements.
+        Assess whether the software is fit for its intended safety function at the
+        assigned SIL level. Produce Software Assessment Report documenting findings,
+        compliance status, and any outstanding issues. For SIL 3–4: VER performs
+        1st Check on the report. §6.4.4.6 requires a Software Assessment Verification
+        Report written by VER — this is a normative output outside Annex C numbering.
+      owner: "asr"
+      deliverables:
+        - path: "docs/assessment/Software-Assessment-Report.md"
+          doc_id: "DOC-ASSESSRPT-YYYY-001"
+          doc_type: "Software Assessment Report"
+          annex_c_item: 46
+          qua_required: true
+          first_check: "ver"               # VER is 1st Check per Annex C
+          second_check: null               # No 2nd Check on ASR documents
+        - path: "docs/assessment/Software-Assessment-Verification-Report.md"
+          doc_id: "DOC-ASSESSVER-YYYY-001"
+          doc_type: "Software Assessment Verification Report"
+          annex_c_item: null               # Normative per §6.4.4.6 — no Annex C number
+          written_by: "ver"                # VER writes this report (§6.4.4.6)
+          qua_required: true
+          note: >
+            Software Assessment Verification Report: normative per §6.4.4.6;
+            written by VER (not ASR). No Annex C item number — this is a
+            normative deliverable outside Annex C sequential numbering.
+            Must be documented in SQAP as a required phase output.
+      dependencies: [0]                   # Assessment Report requires Plan first
+      parallel_group: 2
+
+  # ── Completion Criteria ────────────────────────────────────────────────────
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true            # ASR review covers all lifecycle artifacts
+    custom_checks:
+      - "ASR independence from project verified (§5.1.2.6)"
+      - "ASR independence from supplier verified or Safety Authority exemption documented (§5.1.2.5)"
+      - "Software Assessment Plan (item 45) approved by ASR and QUA-checked"
+      - "All lifecycle artifacts (items 1–46 as applicable) reviewed by ASR"
+      - "All verification evidence reviewed by ASR"
+      - "All validation results (items 23–27) reviewed by ASR"
+      - "Safety case reviewed and found acceptable by ASR"
+      - "Software Assessment Report (item 46) complete"
+      - "All ASR findings resolved or formally accepted with rationale"
+      - "Software Assessment Verification Report (§6.4.4.6) produced by VER"
+      - "VER 1st Check on items 45 and 46 complete (Annex C checker column)"
+      - "No outstanding critical or major assessment findings"
+      - "ASR authorizes progression to deployment (§6.4.4.1)"
+
+  # ── Track B: Verification ─────────────────────────────────────────────────
+  # IMPORTANT: verification.required = false — there is no standalone VER
+  # Annex C report for Phase 8. VER's 1st Check on items 45/46 is captured
+  # in the deliverable checker column, not as a separate Annex C report.
+  # The normative §6.4.4.6 Software Assessment Verification Report is VER-authored
+  # and is listed as a non-Annex-C deliverable under activity[1] above.
+  verification:
+    required: false
+    note: >
+      VER acts as 1st Check reviewer on ASR documents (items 45 and 46) per
+      Annex C checker column. VER also produces the Software Assessment Verification
+      Report (normative per §6.4.4.6 — no Annex C number). No standalone VER
+      Annex C report is produced specifically for Phase 8. The §6.4.4.6 report
+      is captured under activities[1] deliverables as a VER-authored artifact.
+
+  # ── Track B: Validation (2nd Check only — no VAL report in Phase 8) ───────
+  validation:
+    required_sil: []
+    val_role: "No VAL involvement in Phase 8 — ASR is independent of all roles"
+    validator: null
+    independence_required_sil: []
+    produces: []
+    criteria: []
+    note: >
+      VAL is NOT involved in Phase 8. The Assessor is independent of all project
+      roles including VAL. VAL completed its work in Phase 7 (Validation Reports,
+      items 25–26, Release Note). Annex C checker column for items 45–46 shows
+      no 2nd Check entry.
+
+  # ── Workflow ──────────────────────────────────────────────────────────────
+  workflow:
+    track_a:
+      description: >
+        COD facilitates artifact handover to ASR. PM provides all requested lifecycle
+        artifacts (items 1–44 baselines, verification evidence, validation reports).
+        ASR conducts independent assessment — ASR is NOT directed by PM or COD.
+        ASR produces items 45 and 46. VER performs 1st Check on items 45 and 46
+        and produces §6.4.4.6 report. QUA checks all ASR documents. PM resolves
+        any ASR findings (may require CCB process for changes to closed artifacts).
+        PM reports ASR findings resolved to COD. COD does NOT close Phase 8 while
+        unresolved critical findings remain.
+      completion_signal: "ASR reports assessment complete; all findings resolved; PM confirms to COD"
+    track_b:
+      description: >
+        No VMGR/VER/VAL track B flow in Phase 8 in the standard sense.
+        VER's 1st Check on ASR documents is coordinated by COD (not VMGR in this
+        phase — VMGR managed V&V in Phases 1–7). COD tracks VER completion of
+        §6.4.4.6 Software Assessment Verification Report.
+      sil_34:
+        description: >
+          COD verifies ASR independence per §5.1.2.4–§5.1.2.7.
+          If independence is not established, COD BLOCKS the phase.
+          VER performs 1st Check; VER §6.4.4.6 report produced.
+          COD cannot override ASR findings — findings must be resolved.
+        vmgr_gateway: false               # VMGR does not manage ASR phase
+        independence_check_required: true
+      sil_12:
+        description: >
+          Same independence verification requirement as SIL 3–4.
+          ASR mandatory for SIL 1–4 per §6.4.1.1. VER 1st Check required.
+        independence_check_required: true
+      sil_0:
+        description: >
+          Phase 8 skipped if sil == 0 AND iso9001_certified == true (§6.4.1.2).
+          If SIL 0 without ISO 9001 cert: ASR is still required.
+          COD applies skip_condition check before invoking Phase 8 activities.
+        skip_if: "sil == 0 and iso9001_certified == true"
+    rework_path: >
+      If ASR issues findings (non-conformances): PM coordinates resolution.
+      Minor findings: PM documents resolution; ASR accepts; no rework of artifacts.
+      Major findings requiring artifact changes: CCB process applies; affected
+      phase(s) re-entered; re-verification/re-validation may be required.
+      ASR reviews resolved findings and updates Software Assessment Report.
+      COD does NOT close Phase 8 until ASR confirms all critical findings resolved.
+
+  # ── Transitions ───────────────────────────────────────────────────────────
+  transitions:
+    - event: "gate_pass"
+      guard: "true"
+      target: "deployment"
+      action: "COD authorizes @pm execute-phase 9 (Deployment)"
+    - event: "gate_skip"
+      guard: "sil == 0 and iso9001_certified == true"
+      target: "deployment"
+      action: "COD skips Phase 8 (SIL 0 exempt per §6.4.1.2); authorizes @pm execute-phase 9"
+    - event: "gate_fail"
+      guard: "independence_not_established == true"
+      target: "assessment"
+      action: "COD BLOCKS; independence deficiency must be resolved before ASR proceeds"
+    - event: "gate_fail"
+      guard: "unresolved_critical_findings == true"
+      target: "assessment"
+      action: "COD BLOCKS; PM coordinates finding resolution; ASR reviews resolutions"
+    - event: "gate_fail"
+      guard: "sil >= 1"
+      target: "assessment"
+      action: "COD BLOCKS (SIL 1–4, mandatory); coordinates finding resolution with PM"
+
+  # ── Gate Check ────────────────────────────────────────────────────────────
+  gate_check:
+    command: "@cod gate-check assessment"
+    mandatory_sil: [1, 2, 3, 4]           # SIL 0 exempt per §6.4.1.2 (with ISO 9001)
+    blocking_sil: [1, 2, 3, 4]            # ALL SIL levels where assessment is mandatory
+    skip_condition: "sil == 0 and iso9001_certified == true"
+    criteria:
+      - "Phase 8 skipped only if SIL 0 AND ISO 9001 certification documented (§6.4.1.2)"
+      - "ASR independence from project established and documented (§5.1.2.6)"
+      - "ASR independence from supplier established or Safety Authority exemption documented (§5.1.2.5)"
+      - "Software Assessment Plan (item 45) VER 1st-checked and QUA-passed"
+      - "Software Assessment Report (item 46) VER 1st-checked and QUA-passed"
+      - "Software Assessment Verification Report (§6.4.4.6) produced by VER"
+      - "All ASR findings resolved or formally accepted with documented rationale"
+      - "No critical unresolved non-conformances against EN 50128"
+      - "ASR authorizes progression to deployment"
+      - "Assessment baseline established in CM"

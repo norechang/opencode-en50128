@@ -1,0 +1,349 @@
+# EN 50128 Lifecycle State Machine
+# Source: LIFECYCLE.md v1.9 (ISA PASS), EN 50128:2011 §5.3
+#
+# This file encodes the complete EN 50128 V-Model lifecycle as a structured FSM.
+# LLM agents (COD in particular) consume this file to determine:
+#   - The ordered sequence of phases
+#   - SIL-conditional phase skips (e.g., Phase 8 exempt at SIL 0)
+#   - Cross-cutting activities that run throughout all phases
+#   - The gate command for each phase
+#   - Entry/exit criteria at lifecycle level
+
+lifecycle:
+  name: "EN 50128 V-Model Software Development Lifecycle"
+  standard: "EN 50128:2011"
+  version: "1.9"                          # Tracks LIFECYCLE.md version
+  lifecycle_model: "V-Model"
+  model_status: "HR"                      # Highly Recommended per §5.3 Figures 3–4; not mandatory
+  model_reference: "§5.3.2.14"           # Alternatives permissible with equivalent safety assurance
+  primary_language: "C"
+  coding_standard: "MISRA C:2012"        # Mandatory for SIL 2+
+  orchestrator: "cod"                    # COD agent owns lifecycle state
+
+  # ── Phase sequence ────────────────────────────────────────────────────────
+  # Phases execute in order 0 → 10. Each phase has a gate that must pass
+  # before the next phase begins. COD enforces gate compliance per SIL level.
+  # Phase 8 is SIL-conditional (skipped at SIL 0, mandatory SIL 1–4).
+  phases:
+    - id: "initialization"
+      number: 0
+      name: "Initialization"
+      en50128_section: "§5.3 (platform extension)"
+      gate_command: null                  # No gate; COD internal setup
+      skip_condition: null               # Never skipped
+      executor: "cod"                    # COD runs this phase directly (no PM)
+      phase_file: "phase-0-initialization.yaml"
+
+    - id: "planning"
+      number: 1
+      name: "Software Planning"
+      en50128_section: "§5, §6.5, §6.6"
+      gate_command: "@cod gate-check planning"
+      skip_condition: null
+      executor: "pm"
+      phase_file: "phase-1-planning.yaml"
+
+    - id: "requirements"
+      number: 2
+      name: "Software Requirements"
+      en50128_section: "§7.2"
+      gate_command: "@cod gate-check requirements"
+      skip_condition: null
+      executor: "pm"
+      phase_file: "phase-2-requirements.yaml"
+      user_approval_required: true        # SRS requires user/customer approval before VER
+
+    - id: "architecture-design"
+      number: 3
+      name: "Software Architecture and Design"
+      en50128_section: "§7.3"
+      gate_command: "@cod gate-check design"
+      skip_condition: null
+      executor: "pm"
+      phase_file: "phase-3-architecture-design.yaml"
+
+    - id: "component-design"
+      number: 4
+      name: "Software Component Design"
+      en50128_section: "§7.4"
+      gate_command: "@cod gate-check component-design"
+      skip_condition: null
+      executor: "pm"
+      phase_file: "phase-4-component-design.yaml"
+
+    - id: "implementation-testing"
+      number: 5
+      name: "Software Implementation and Testing"
+      en50128_section: "§7.5"
+      gate_command: "@cod gate-check implementation-testing"
+      skip_condition: null
+      executor: "pm"
+      phase_file: "phase-5-implementation-testing.yaml"
+
+    - id: "integration"
+      number: 6
+      name: "Software Integration"
+      en50128_section: "§7.6"
+      gate_command: "@cod gate-check integration"
+      skip_condition: null
+      executor: "pm"
+      phase_file: "phase-6-integration.yaml"
+
+    - id: "validation"
+      number: 7
+      name: "Overall Software Testing and Final Validation"
+      en50128_section: "§7.7"
+      gate_command: "@cod gate-check validation"
+      skip_condition: null
+      executor: "pm"                      # Track A (TST); COD coordinates Track B (VAL)
+      phase_file: "phase-7-validation.yaml"
+      note: >
+        §7.7 standard title is "Overall Software Testing / Final Validation". Both TST
+        (overall software testing) and VAL (final validation) are mandatory per §7.7.
+        VAL Validation Reports are produced ONLY in this phase.
+
+    - id: "assessment"
+      number: 8
+      name: "Software Assessment"
+      en50128_section: "§6.4"
+      gate_command: "@cod gate-check assessment"
+      skip_condition: "sil == 0 and iso9001_certified == true"   # §6.4.1.2 exemption
+      mandatory_sil: [1, 2, 3, 4]        # §6.4.1.1 — mandatory SIL 1–4
+      executor: "asr"                    # Independent Assessor (external to PM chain)
+      phase_file: "phase-8-assessment.yaml"
+      note: >
+        ASR is mandatory and independent per §5.1.2.4–5.1.2.7. SIL 0 exempt per §6.4.1.2
+        if an ISO 9001 certificate is in place. ASR does not report to PM or COD.
+
+    - id: "deployment"
+      number: 9
+      name: "Software Deployment"
+      en50128_section: "§9.1"
+      gate_command: "@cod gate-check deployment"
+      skip_condition: null
+      executor: "pm"
+      phase_file: "phase-9-deployment.yaml"
+
+    - id: "maintenance"
+      number: 10
+      name: "Software Maintenance"
+      en50128_section: "§9.2"
+      gate_command: "@cod gate-check maintenance"
+      skip_condition: null
+      executor: "pm"
+      recurring: true                    # Phase 10 repeats per CCB-approved change
+      phase_file: "phase-10-maintenance.yaml"
+
+  # ── Lifecycle-level FSM transitions ──────────────────────────────────────
+  # These are COD-level transitions between phases (not intra-phase).
+  # Intra-phase transitions (Track A → Track B → gate) are in each phase file.
+  transitions:
+    - from: "initialization"
+      event: "cod_init_complete"
+      to: "planning"
+      action: "COD authorizes @pm execute-phase 1"
+
+    - from: "planning"
+      event: "gate_pass"
+      to: "requirements"
+      action: "COD authorizes @pm execute-phase 2"
+
+    - from: "planning"
+      event: "gate_fail"
+      guard: "sil >= 3"
+      to: "planning"                     # re-entry
+      action: "COD BLOCKS; PM coordinates rework; COD re-runs gate"
+
+    - from: "planning"
+      event: "gate_fail"
+      guard: "sil < 3"
+      to: "planning"
+      action: "COD warns; PM coordinates rework at PM discretion"
+
+    - from: "requirements"
+      event: "gate_pass"
+      to: "architecture-design"
+      action: "COD authorizes @pm execute-phase 3"
+
+    - from: "requirements"
+      event: "gate_fail"
+      guard: "sil >= 3"
+      to: "requirements"
+      action: "COD BLOCKS; PM coordinates rework; COD re-runs gate"
+
+    - from: "architecture-design"
+      event: "gate_pass"
+      to: "component-design"
+      action: "COD authorizes @pm execute-phase 4"
+
+    - from: "component-design"
+      event: "gate_pass"
+      to: "implementation-testing"
+      action: "COD authorizes @pm execute-phase 5"
+
+    - from: "implementation-testing"
+      event: "gate_pass"
+      to: "integration"
+      action: "COD authorizes @pm execute-phase 6"
+
+    - from: "integration"
+      event: "gate_pass"
+      to: "validation"
+      action: "COD authorizes @pm execute-phase 7"
+
+    - from: "validation"
+      event: "gate_pass"
+      guard: "sil >= 1"
+      to: "assessment"
+      action: "COD authorizes assessment phase (ASR independent)"
+
+    - from: "validation"
+      event: "gate_pass"
+      guard: "sil == 0 and iso9001_certified == true"
+      to: "deployment"                   # Assessment skipped per §6.4.1.2
+      action: "COD skips Phase 8 (SIL 0 exempt); authorizes @pm execute-phase 9"
+
+    - from: "validation"
+      event: "gate_pass"
+      guard: "sil == 0 and iso9001_certified == false"
+      to: "assessment"
+      action: "COD proceeds to assessment (SIL 0 without ISO 9001 cert — not exempt)"
+
+    - from: "assessment"
+      event: "gate_pass"
+      to: "deployment"
+      action: "COD authorizes @pm execute-phase 9"
+
+    - from: "deployment"
+      event: "gate_pass"
+      to: "maintenance"
+      action: "COD authorizes @pm execute-phase 10"
+
+    - from: "maintenance"
+      event: "ccb_change_approved"
+      to: "maintenance"                  # CCB re-entry loop — see workflow.yaml
+      action: "COD marks affected phases re-entry-required; PM re-executes"
+
+  # ── Cross-cutting activities (run throughout all phases) ──────────────────
+  # These are NOT discrete phases. They are continuous activities triggered
+  # within each phase. COD monitors them throughout the lifecycle.
+  cross_cutting:
+    - id: "verification"
+      name: "Software Verification"
+      en50128_section: "§6.2"
+      agent: "ver"
+      description: >
+        VER performs verification activities throughout all lifecycle phases.
+        At SIL 3–4 VER is routed through VMGR (COD must not invoke VER directly).
+        Produces per-phase Verification Reports (see deliverables.yaml).
+      independence_required_sil: [3, 4]
+      hr_sil: [2]
+
+    - id: "quality_assurance"
+      name: "Quality Assurance"
+      en50128_section: "§6.5"
+      agent: "qua"
+      description: >
+        QUA performs template compliance checks on all deliverables before
+        VER review. QUA also reviews VER and VAL reports. SQAP governs all QA
+        activities throughout the lifecycle.
+      independence_required_sil: []
+
+    - id: "configuration_management"
+      name: "Configuration Management"
+      en50128_section: "§6.6"
+      agent: "cm"
+      description: >
+        CM maintains version control, baselines, and change records throughout
+        the lifecycle. CM manages CCB change requests in Phase 10. MANDATORY
+        for all SIL levels per Table A.9.
+      independence_required_sil: []
+
+    - id: "safety_management"
+      name: "Safety Management"
+      en50128_section: "§7.1"
+      agent: "saf"
+      description: >
+        SAF performs hazard analysis and maintains the Hazard Log throughout
+        the lifecycle. SAF provides SIL level inputs to all planning documents
+        and updates the Hazard Log as design evolves.
+      independence_required_sil: []
+
+  # ── SIL-specific requirements summary ────────────────────────────────────
+  # Agents should use this table to determine applicable requirements by SIL.
+  sil_requirements:
+    - sil: 0
+      lifecycle_model: "R"               # Recommended
+      independence_ver: false
+      independence_val: false
+      independence_tst: false
+      assessor_required: false           # Exempt per §6.4.1.2 (ISO 9001 cert)
+      misra_c: "R"
+      cyclomatic_complexity_limit: 20
+      static_analysis: "R"
+      no_dynamic_memory: "R"
+      no_recursion: "R"
+      coverage: "quantified measure defined per project (Table A.21 Req.1)"
+
+    - sil: 1
+      lifecycle_model: "HR"              # Highly Recommended per §5.3 Figures 3–4
+      independence_ver: false            # Role-combination prohibition: M (§5.1.2.11(h))
+      independence_val: false            # Org. separation: HR
+      independence_tst: false            # HR
+      assessor_required: true            # Mandatory §6.4.1.1, §5.1.2.4
+      misra_c: "R"
+      cyclomatic_complexity_limit: 20
+      static_analysis: "HR"
+      no_dynamic_memory: "R"
+      no_recursion: "R"
+      coverage: "quantified measure defined per project (Table A.21 Req.1); statement R, branch HR"
+
+    - sil: 2
+      lifecycle_model: "HR"              # Highly Recommended per §5.3 Figures 3–4
+      independence_ver: false            # Role-combination prohibition: M; org. separation: HR
+      independence_val: false            # HR
+      independence_tst: false            # HR
+      assessor_required: true            # Mandatory §6.4.1.1, §5.1.2.4
+      misra_c: "M"
+      cyclomatic_complexity_limit: 15
+      static_analysis: "M"
+      no_dynamic_memory: "M"
+      no_recursion: "HR"
+      coverage: "quantified measure defined per project (Table A.21 Req.1); statement HR, branch HR"
+
+    - sil: 3
+      lifecycle_model: "HR"              # Highly Recommended per §5.3 Figures 3–4
+      independence_ver: true             # Mandatory §5.1.2.10(g–j)
+      independence_val: true             # Mandatory §5.1.2.10(f–j)
+      independence_tst: false            # HR
+      assessor_required: true            # Mandatory §6.4.1.1, §5.1.2.4
+      vmgr_required: true                # Platform rule: VER/VAL routed through VMGR
+      misra_c: "M"
+      cyclomatic_complexity_limit: 10
+      static_analysis: "M"
+      no_dynamic_memory: "M"
+      no_recursion: "HR"
+      fmea: "HR"
+      fta: "HR"
+      coverage: >
+        Quantified measure required (Table A.21 Req.1). Branch coverage HR;
+        Compound Condition or Data Flow HR at component level (Table A.21 Req.2).
+        Note: 'MC/DC' is not an EN 50128 term — 'Compound Condition' (Table A.21
+        item 3) is the closest analogue. No standard-mandated percentage thresholds.
+
+    - sil: 4
+      lifecycle_model: "HR"
+      independence_ver: true
+      independence_val: true
+      independence_tst: false            # HR
+      assessor_required: true
+      vmgr_required: true
+      misra_c: "M"
+      cyclomatic_complexity_limit: 10
+      static_analysis: "M"
+      no_dynamic_memory: "M"
+      no_recursion: "HR"
+      fmea: "M"
+      fta: "M"
+      coverage: >
+        Same as SIL 3. No standard-mandated percentage thresholds.

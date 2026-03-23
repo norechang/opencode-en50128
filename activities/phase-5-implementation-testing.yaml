@@ -1,0 +1,177 @@
+# EN 50128 Phase 5: Software Implementation and Testing
+# Source: LIFECYCLE.md §7 (ISA PASS), EN 50128:2011 §7.5
+# Annex C Items: 18–20
+
+phase:
+  id: "implementation-testing"
+  number: 5
+  name: "Software Implementation and Testing"
+  en50128_section: "§7.5"
+  executor: "pm"
+  gate_command: "@cod gate-check implementation-testing"
+  description: >
+    Phase 5 implements software modules in C and executes component (unit) tests.
+    IMP is the PRIMARY agent for source code; TST executes component tests per the
+    Software Component Test Specification (item 16) from Phase 4.
+    Platform assigns item 20 (Software Component Test Report) to Phase 5 per §7.5.4.5
+    and Table A.1 — this is a platform deviation from Annex C Table C.1 which places
+    item 20 under 'Integration'. MISRA C:2012 is mandatory for SIL 2+.
+    Coverage: no percentage thresholds exist in EN 50128:2011 — Table A.21 Req.1 only
+    requires a quantified measure be defined per project.
+
+  # ── Track A: Activities (PM-orchestrated, dev agents only) ────────────────
+  activities:
+    - agent: "imp"
+      task_description: >
+        Implement all software components in C following MISRA C:2012 (mandatory SIL 2+).
+        Produce Software Source Code and supporting documentation per §7.5.
+        Apply defensive programming: no dynamic memory, bounded loops, no recursion (HR SIL 2+),
+        no function pointers (HR SIL 2+), explicit error handling on all returns.
+        Cyclomatic complexity limits: ≤20 (SIL 0-1), ≤15 (SIL 2), ≤10 (SIL 3-4).
+        Code must be directly traceable to Software Component Design Specification entries.
+      owner: "imp"
+      deliverables:
+        - path: "src/"
+          doc_id: "DOC-SOURCECODE-YYYY-001"
+          doc_type: "Software Source Code and supporting documentation"
+          annex_c_item: 18
+          qua_required: true
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "tst"
+      task_description: >
+        Execute component tests per Software Component Test Specification (item 16).
+        Run all test cases using Unity test framework (or equivalent). Measure code
+        coverage. Document test results, defects found, and coverage achieved.
+        A quantified measure of coverage shall be defined per project (Table A.21 Req.1).
+        There are no EN 50128-mandated percentage thresholds — coverage thresholds must
+        be defined in the SVP/SQAP and agreed with the Safety Authority.
+      owner: "tst"
+      deliverables:
+        - path: "docs/implementation/Software-Component-Test-Report.md"
+          doc_id: "DOC-COMPTESTRPT-YYYY-001"
+          doc_type: "Software Component Test Report"
+          annex_c_item: 20
+          qua_required: true
+      dependencies: [0]                   # After source code implementation
+      parallel_group: 2
+      note: >
+        Platform deviation: item 20 assigned to Phase 5 per §7.5.4.5 and Table A.1.
+        Annex C Table C.1 places item 20 under 'Integration'. Document in SQAP.
+        Subject to Safety Authority review.
+
+  # ── Completion Criteria ────────────────────────────────────────────────────
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: true            # Code traceable to component design
+    coverage_requirements:
+      note: >
+        No EN 50128-mandated percentage thresholds exist. Table A.21 Req.1 requires
+        a quantified measure be defined per project. Coverage thresholds must be
+        established in the SVP/SQAP. The following are recommendations per Table A.21:
+        SIL 0: no specific coverage technique required.
+        SIL 1: Statement coverage R; Branch coverage HR.
+        SIL 2: Statement coverage HR; Branch coverage HR.
+        SIL 3-4: Branch coverage HR; Compound Condition or Data Flow HR (component level).
+        Note: 'MC/DC' is NOT an EN 50128 term. 'Compound Condition' (Table A.21 item 3) is
+        the closest analogue. Projects using MC/DC must document rationale in SQAP.
+      coverage_technique_sil_0: "No specific technique required"
+      coverage_technique_sil_1: "Statement: R; Branch: HR"
+      coverage_technique_sil_2: "Statement: HR; Branch: HR"
+      coverage_technique_sil_34: "Branch: HR; Compound Condition or Data Flow: HR (component level)"
+    custom_checks:
+      - "All code implemented and reviewed (peer review or formal inspection)"
+      - "MISRA C:2012 compliance verified (mandatory SIL 2+)"
+      - "All component tests executed against Software Component Test Specification"
+      - "Coverage quantified per project-defined thresholds (Table A.21 Req.1)"
+      - "Static analysis clean (mandatory SIL 2+)"
+      - "Cyclomatic complexity within SIL-appropriate limits"
+      - "No dynamic memory allocation (SIL 2+)"
+      - "No recursion (HR SIL 2+)"
+      - "Code traceable to component design (bidirectional)"
+      - "All component test failures resolved"
+
+  # ── Track B: Verification ─────────────────────────────────────────────────
+  verification:
+    required: true
+    verifier: "ver"
+    produces:
+      - doc_type: "Software Source Code Verification Report"
+        annex_c_item: 19
+        path: "docs/implementation/Software-Source-Code-Verification-Report.md"
+    criteria:
+      - "Source code complies with §7.5 requirements"
+      - "MISRA C:2012 compliance confirmed (SIL 2+)"
+      - "Static analysis results reviewed — no unresolved critical findings"
+      - "Code traceable to component design specifications"
+      - "Coverage quantified and meets project-defined thresholds"
+      - "Component test report confirms all test cases executed"
+      - "No open defects classified as critical"
+      - "Complexity limits verified"
+      - "Defensive programming patterns applied correctly"
+
+  # ── Track B: Validation (2nd Check only — no VAL report in Phase 5) ───────
+  validation:
+    required_sil: []
+    val_role: "2nd Check reviewer on items 18, 19, and 20"
+    validator: "val"
+    independence_required_sil: [3, 4]
+    produces: []
+    criteria: []
+
+  # ── Workflow ──────────────────────────────────────────────────────────────
+  workflow:
+    track_a:
+      description: >
+        PM coordinates IMP (source code, item 18) first. After code baseline,
+        TST executes tests and produces item 20. QUA checks items 18 and 20.
+        PM reports complete to COD.
+      completion_signal: "PM reports items 18 and 20 QUA-passed to COD"
+    track_b:
+      sil_34:
+        description: >
+          COD → VMGR → VER performs static analysis and code review; verifies
+          items 18 and 20 → VER produces item 19 (SOURCECODEVER) → QUA checks
+          item 19 → VMGR reviews → VMGR reports to COD.
+          VAL 2nd Check on items 18, 19, and 20.
+        vmgr_gateway: true
+      sil_02:
+        description: >
+          COD → VER verifies items 18 and 20; produces item 19. QUA checks item 19.
+          COD receives VER report directly.
+    rework_path: >
+      If VER rejects: VMGR notifies COD → PM coordinates rework with IMP/TST →
+      re-enter QUA check → resubmit to VER.
+
+  # ── Transitions ───────────────────────────────────────────────────────────
+  transitions:
+    - event: "gate_pass"
+      guard: "true"
+      target: "integration"
+      action: "COD authorizes @pm execute-phase 6"
+    - event: "gate_fail"
+      guard: "sil >= 3"
+      target: "implementation-testing"
+      action: "COD BLOCKS; PM coordinates rework; COD re-runs gate"
+    - event: "gate_fail"
+      guard: "sil < 3"
+      target: "implementation-testing"
+      action: "COD warns; PM coordinates rework"
+
+  # ── Gate Check ────────────────────────────────────────────────────────────
+  gate_check:
+    command: "@cod gate-check implementation-testing"
+    mandatory_sil: [0, 1, 2, 3, 4]
+    blocking_sil: [2, 3, 4]
+    criteria:
+      - "Software Source Code and supporting documentation (item 18) QUA-passed"
+      - "Software Source Code Verification Report (item 19) QUA-passed"
+      - "Software Component Test Report (item 20) QUA-passed"
+      - "VMGR approved item 19 (SIL 3–4)"
+      - "All component tests pass"
+      - "Coverage quantified and meets project-defined thresholds"
+      - "MISRA C:2012 compliance confirmed (SIL 2+)"
+      - "Static analysis clean — no unresolved critical findings (SIL 2+)"
+      - "Code traceable to component design (bidirectional)"
+      - "Zero critical open defects"

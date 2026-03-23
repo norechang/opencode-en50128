@@ -1,0 +1,134 @@
+# EN 50128 Phase 0: Initialization
+# Source: LIFECYCLE.md §2 (ISA PASS), EN 50128:2011 §5.3
+#
+# Phase 0 is a platform extension — not a discrete EN 50128 phase.
+# COD executes this phase directly (no PM). No Annex C deliverables.
+# Output: LIFECYCLE_STATE.md + 4 system-level documents.
+
+phase:
+  id: "initialization"
+  number: 0
+  name: "Initialization"
+  en50128_section: "§5.3 (platform extension)"
+  executor: "cod"                          # COD runs this phase — no PM
+  description: >
+    Phase 0 is a COD-specific platform initialization phase with no normative
+    EN 50128 counterpart. COD initializes the project workspace, establishes
+    the lifecycle state file (LIFECYCLE_STATE.md), and generates the four
+    mandatory system-level input documents required before Phase 2 (Requirements)
+    can begin. No Annex C deliverables are produced; LIFECYCLE_STATE.md is a
+    platform tracking artifact.
+
+  # ── Track A: Activities ────────────────────────────────────────────────────
+  # Phase 0 has no Track A/Track B split — COD executes all activities.
+  # No dev agents, no VER, no VAL. No QUA check.
+  activities:
+    - agent: "cod"
+      task_description: "Initialize lifecycle state file LIFECYCLE_STATE.md with project name and SIL level"
+      owner: "cod"
+      deliverables:
+        - path: "LIFECYCLE_STATE.md"
+          doc_id: null
+          doc_type: "Lifecycle State File (platform artifact)"
+          annex_c_item: null
+          qua_required: false
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "cod"
+      task_description: >
+        Generate 4 mandatory system-level input documents from TYPICAL-SYSTEMS.md
+        catalogue using @cod generate-system (or @cod generate-system --system N).
+        System documents required as inputs to Phase 2 requirements.
+      owner: "cod"
+      deliverables:
+        - path: "docs/system/System-Requirements-Specification.md"
+          doc_id: null
+          doc_type: "System Requirements Specification (system-level input)"
+          annex_c_item: null
+          qua_required: false
+        - path: "docs/system/System-Architecture-Description.md"
+          doc_id: null
+          doc_type: "System Architecture Description (system-level input)"
+          annex_c_item: null
+          qua_required: false
+        - path: "docs/system/System-Safety-Plan.md"
+          doc_id: null
+          doc_type: "System Safety Plan (system-level input)"
+          annex_c_item: null
+          qua_required: false
+        - path: "docs/system/System-Safety-Requirements-Specification.md"
+          doc_id: null
+          doc_type: "System Safety Requirements Specification (system-level input)"
+          annex_c_item: null
+          qua_required: false
+      dependencies: [0]                   # After LIFECYCLE_STATE.md exists
+      parallel_group: 2
+
+  # ── System Documents Catalogue ─────────────────────────────────────────────
+  system_catalogue_reference: "assets/sample_system/TYPICAL-SYSTEMS.md"
+  available_systems:
+    - number: 1
+      name: "Train Door Control System"
+      default_sil: 3
+    - number: 2
+      name: "Level Crossing Protection System"
+      default_sil: 4
+    - number: 3
+      name: "ATP On-Board Unit"
+      default_sil: 4
+    - number: 4
+      name: "Platform Screen Door Control System"
+      default_sil: 2
+    - number: 5
+      name: "LRT Interlocking System"
+      default_sil: 4
+
+  # ── Completion Criteria ────────────────────────────────────────────────────
+  completion_criteria:
+    all_deliverables_qua_accepted: false   # No QUA check in Phase 0
+    traceability_complete: false           # N/A in Phase 0
+    custom_checks:
+      - "LIFECYCLE_STATE.md created with project name and SIL level"
+      - "All 4 system-level documents generated and reviewed"
+      - "SIL level confirmed and recorded"
+
+  # ── Verification ──────────────────────────────────────────────────────────
+  verification:
+    required: false                        # No VER in Phase 0 (COD-internal)
+
+  # ── Validation ───────────────────────────────────────────────────────────
+  validation:
+    required_sil: []
+    validator: null
+    independence_required_sil: []
+    produces: []
+    criteria: []
+
+  # ── Workflow ──────────────────────────────────────────────────────────────
+  workflow:
+    description: >
+      Phase 0 has no Track A/Track B split. COD executes all activities directly
+      using @cod plan and @cod generate-system commands. No PM orchestration.
+      No VER/VAL/QUA involvement.
+    commands:
+      - "@cod plan --sil <level> --project <name>"
+      - "@cod generate-system"
+      - "@cod generate-system --system <N>"
+
+  # ── Transitions ───────────────────────────────────────────────────────────
+  transitions:
+    - event: "cod_init_complete"
+      guard: "all 4 system docs reviewed"
+      target: "planning"
+      action: "COD authorizes @pm execute-phase 1"
+
+  # ── Gate Check ────────────────────────────────────────────────────────────
+  gate_check:
+    command: null                          # No formal gate command for Phase 0
+    mandatory_sil: []
+    blocking_sil: []
+    criteria:
+      - "LIFECYCLE_STATE.md initialized"
+      - "SIL level recorded"
+      - "4 system-level input documents available"

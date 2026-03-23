@@ -1,0 +1,344 @@
+# EN 50128 Agent Interaction Workflow
+# Source: WORKFLOW.md (ISA PASS), EN 50128:2011 §5.1.2.10
+#
+# This file encodes the four key workflow patterns from WORKFLOW.md:
+#   1. Authority structure by SIL tier
+#   2. Per-phase execution loop (Track A + Track B)
+#   3. Phase 7 validation-specific flow
+#   4. CCB change request re-entry of closed phases
+#
+# LLM agents (COD, PM, VMGR) consume this file to determine:
+#   - Who has authority over whom
+#   - How Track A hands off to Track B
+#   - How VER/VAL/VMGR are coordinated at each SIL tier
+#   - How the CCB re-entry loop works
+
+workflow:
+  source_document: "WORKFLOW.md (ISA PASS)"
+  standard: "EN 50128:2011"
+
+  # ── 1. Authority Structure ─────────────────────────────────────────────────
+  authority:
+    description: >
+      The EN 50128 organizational hierarchy defines who has authority over which
+      agents and decisions. Authority structure differs by SIL tier (0–2 vs 3–4).
+      See ORGANIZATION.md / organization.yaml for full role independence matrix.
+
+    # At SIL 3–4: mandatory independence wall (§5.1.2.10(g–j))
+    sil_34:
+      safety_authority: "governs COD and ASR; COD and ASR both report to Safety Authority"
+      cod:
+        role: "Lifecycle Coordinator"
+        authority:
+          - "Phase gate enforcement — COD authorizes phase transitions"
+          - "Lifecycle state management (LIFECYCLE_STATE.md)"
+          - "Overall compliance monitoring"
+        cannot:
+          - "Override VMGR V&V decisions"
+          - "Invoke VER or VAL directly — must route through VMGR"
+        peer_coordination: ["vmgr"]   # COD and VMGR coordinate; neither reports to the other
+        authorizes: "pm"
+
+      vmgr:
+        role: "V&V Manager (platform extension — basis §5.1.2.10(e–f))"
+        independent_from: ["cod", "pm"]   # Platform rule; basis §5.1.2.10(e–f)
+        reports_to: "safety_authority"
+        authority:
+          - "Manages VER team (§5.1.2.10(e))"
+          - "Reviews all VER Verification Reports"
+          - "Reviews all VAL Validation Reports (Phase 7)"
+          - "Final V&V approval decision — cannot be overridden by COD or PM"
+        receives_from: "cod"              # COD sends V&V requests to VMGR
+        reports_outcome_to: "cod"         # VMGR reports V&V outcome to COD
+
+      pm:
+        role: "Project Manager"
+        reports_to: "cod"                 # Reports to COD for lifecycle decisions
+        authority:
+          - "Team coordination for dev agents"
+          - "CCB leadership"
+          - "Resource management"
+          - "Orchestrates: req, des, imp, int, tst, saf, qua, cm"
+        no_authority_over: ["vmgr", "ver", "val", "asr"]
+
+      asr:
+        role: "Assessor (mandatory SIL 1–4)"
+        independent_from: ["cod", "pm", "req", "des", "imp", "int", "tst", "ver", "val"]
+        reference: "§5.1.2.4–5.1.2.7, §6.4.1.1, §5.1.2.10(m), §6.4.4.1"
+        reports_to: "safety_authority"
+
+    # At SIL 0–2: no VMGR; VER and VAL may report to PM (§5.1.2.11(e), §5.1.2.12(a))
+    sil_02:
+      description: >
+        At SIL 0–2, VMGR is not required. COD interacts with VER and VAL directly.
+        At SIL 1–2, VER/VAL may report to PM (§5.1.2.11(e)); role-combination
+        prohibition for VER/VAL still applies (§5.1.2.11(h)). At SIL 0 VER/VAL
+        may be consolidated (§5.1.2.12(b)) subject to §5.1.2.12(d–e) residual rules.
+      cod_invokes_ver_directly: true
+      cod_invokes_val_directly: true
+      vmgr_required: false
+      asr_required_sil_1_2: true          # Mandatory §6.4.1.1, §5.1.2.4
+      asr_waivable_sil_0: true            # §6.4.1.2 — ISO 9001 cert required
+
+  # ── 2. Per-Phase Execution Loop ────────────────────────────────────────────
+  # Applies to all phases EXCEPT Phase 7 (which uses per_phase_phase7 below).
+  # Two sequential tracks per phase. PM owns Track A; COD coordinates Track B.
+  # Track B begins ONLY after Track A is complete.
+  per_phase_loop:
+    description: >
+      Standard two-track execution loop for Phases 1–6 and 9–10. Phase 7 has
+      a specialized flow (see per_phase_phase7 below). PM has NO authority over
+      any agent in Track B.
+
+    track_a:
+      owner: "pm"
+      description: >
+        PM orchestrates development agents (REQ, DES, IMP, INT, TST, SAF, CM
+        as applicable to the phase). Agents produce phase deliverables. QUA
+        performs template compliance check on each deliverable. PM reports
+        phase deliverables complete to COD when all pass QUA check.
+      steps:
+        - id: "A1"
+          action: "PM invokes applicable dev agents to produce phase deliverables"
+        - id: "A2"
+          action: "QUA template check on each deliverable"
+          on_fail: "PM coordinates rework with author; re-check"
+          on_pass: "proceed"
+        - id: "A3"
+          action: "PM reports phase deliverables complete to COD"
+
+    track_b:
+      owner: "cod"
+      description: >
+        COD coordinates independent verification (and in Phase 7, also validation).
+        PM has no authority over any agent in Track B.
+
+      sil_34:
+        description: >
+          At SIL 3–4, COD routes ALL V&V work through VMGR. COD does not interact
+          with VER or VAL directly. VMGR is the sole gateway.
+        steps:
+          - id: "B1"
+            action: "COD sends V&V request to VMGR"
+          - id: "B2"
+            action: "VMGR assigns VER; VER verifies phase deliverables"
+            on_reject: "VMGR notifies COD; COD notifies PM; PM coordinates rework → re-enters Track A from QUA check"
+            on_approve: "proceed"
+          - id: "B3"
+            action: "VER produces Verification Report"
+          - id: "B4"
+            action: "QUA template check on VER report"
+            on_fail: "VER re-issues (max 1 resubmission)"
+            on_pass: "proceed"
+          - id: "B5"
+            action: "VMGR reviews VER report"
+            on_reject: "VER reworks; QUA re-checks"
+            on_approve: "proceed"
+          - id: "B6"
+            action: "VMGR reports V&V outcome to COD"
+
+      sil_02:
+        description: >
+          At SIL 0–2, COD invokes VER directly. No VMGR. QUA checks VER report.
+          COD receives VER report directly.
+        steps:
+          - id: "B1"
+            action: "COD invokes VER; VER verifies phase deliverables and produces Verification Report"
+          - id: "B2"
+            action: "QUA template check on VER report"
+            on_fail: "VER re-issues"
+            on_pass: "proceed"
+          - id: "B3"
+            action: "COD receives VER report directly"
+
+    val_role_phases_1_6_9_10:
+      description: >
+        In Phases 1–6 and 9–10, VAL reviews deliverables as '2nd Check' reviewer
+        (see DELIVERABLES.md column '2nd Check'). VAL does NOT produce a Validation
+        Report in these phases. VAL Validation Reports are produced ONLY in Phase 7.
+      val_produces_report: false
+      val_role: "2nd Check reviewer (DELIVERABLES.md Annex C table)"
+
+    gate_check:
+      owner: "cod"
+      criteria:
+        - "All phase deliverables QUA-passed"
+        - "VER Verification Report QUA-passed and VMGR-approved (SIL 3–4)"
+        - "VER Verification Report received (SIL 0–2)"
+        - "Traceability complete"
+        - "Zero critical open defects"
+      on_pass: "COD authorizes next phase → @pm execute-phase N+1"
+      on_fail: "COD BLOCKS (SIL 3–4); PM coordinates rework; COD re-runs gate"
+
+  # ── 3. Phase 7 Validation Flow ─────────────────────────────────────────────
+  # Phase 7 is the ONLY phase where VAL authors formal Validation Reports.
+  # VER Verification Report (Annex C item 23) is also produced here.
+  per_phase_phase7:
+    description: >
+      Phase 7 (§7.7 "Overall Software Testing / Final Validation") has a specialized
+      two-track flow. Track A is TST (overall software testing). Track B includes both
+      VER step (item 23) and VAL step (items 25–26, Release Note per §7.7.4.12).
+      VAL produces Validation Reports ONLY in this phase.
+
+    track_a:
+      owner: "pm"
+      steps:
+        - id: "A1"
+          action: "PM orchestrates TST; TST produces Overall Software Test Report (Annex C item 24)"
+        - id: "A2"
+          action: "QUA template check on Overall Software Test Report"
+          on_fail: "PM coordinates rework; re-check"
+          on_pass: "proceed"
+        - id: "A3"
+          action: "PM reports Track A complete to COD"
+
+    track_b:
+      owner: "cod"
+
+      sil_34:
+        description: >
+          COD routes Phase 7 V&V through VMGR. Two sequential sub-steps:
+          B1 (Verification by VER) then B2 (Validation by VAL).
+        steps:
+          - id: "B0"
+            action: "COD sends Phase 7 V&V request to VMGR"
+          - id: "B1_verification"
+            label: "Step B1 — Verification"
+            action: "VMGR assigns VER; VER produces Software Integration Verification Report (Annex C item 23)"
+          - id: "B1_qua"
+            action: "QUA template check on VER report (item 23)"
+            on_fail: "VER re-issues"
+            on_pass: "proceed"
+          - id: "B1_vmgr_review"
+            action: "VMGR reviews VER report"
+            on_reject: "VER reworks; QUA re-checks"
+            on_approve: "proceed to B2"
+          - id: "B2_validation"
+            label: "Step B2 — Validation"
+            action: >
+              VMGR assigns VAL; VAL performs final validation:
+              reviews all phase evidence;
+              produces Software Validation Report (item 25);
+              produces Tools Validation Report (item 26, if applicable);
+              produces Release Note (§7.7.4.12)
+          - id: "B2_reject_path"
+            action: "If VAL rejects (evidence insufficient): VMGR notifies COD; COD notifies PM; PM coordinates rework → full B1–B2 loop repeats"
+          - id: "B2_qua"
+            action: "QUA template check on VAL reports (items 25, 26)"
+            on_fail: "VAL re-issues; QUA re-checks"
+            on_pass: "proceed"
+          - id: "B2_vmgr_review"
+            action: "VMGR reviews VAL reports"
+            on_reject: "VAL reworks; QUA re-checks"
+            on_approve: "VMGR Final V&V Decision — cannot be overridden"
+          - id: "B3"
+            action: "VMGR reports V&V outcome to COD"
+
+      sil_02:
+        steps:
+          - id: "B1"
+            action: "COD invokes VER directly; VER produces item 23"
+          - id: "B2"
+            action: "COD invokes VAL directly; VAL produces items 25–27"
+          - id: "B3"
+            action: "QUA checks all reports; COD receives reports directly"
+
+    gate_check:
+      command: "@cod gate-check validation"
+      criteria:
+        - "Overall Software Test Report (item 24) QUA-passed"
+        - "VER Integration Verification Report (item 23) QUA-passed and VMGR-approved (SIL 3–4)"
+        - "VAL Validation Report (item 25) QUA-passed and VMGR-approved (SIL 3–4)"
+        - "Tools Validation Report (item 26, if applicable) QUA-passed"
+        - "Release Note (§7.7.4.12) present"
+        - "SVaP validation criteria satisfied — §6.3.4.4–6.3.4.6"
+        - "Zero critical open defects"
+      on_pass: "COD authorizes Phase 8 (SIL 1–4) or Phase 9 (SIL 0 exempt)"
+      on_fail: "COD BLOCKS; coordinates rework; re-runs gate"
+
+  # ── 4. CCB Change Request Re-entry ─────────────────────────────────────────
+  # Re-entry of already-CLOSED phases requires CCB approval.
+  # No informal rework path for closed phases at SIL 3–4.
+  ccb_re_entry:
+    description: >
+      There is NO informal rework path for closed phases at SIL 3–4. Every backward
+      movement MUST go through CCB and re-run the full gate chain.
+      At SIL 0–1 COD warns rather than blocks, but CCB remains the correct mechanism.
+
+    trigger: "defect found or enhancement needed in a CLOSED phase"
+    steps:
+      - id: "CR1"
+        action: "PM raises Change Request (CR)"
+      - id: "CR2"
+        action: >
+          CCB meeting — PM chairs; REQ, SAF, DES, IMP, TST, VER, CM participate;
+          impact analysis determines earliest affected phase;
+          vote: APPROVED or REJECTED
+        on_rejected: "CR closed; no action"
+        on_approved: "proceed to CR3"
+      - id: "CR3"
+        action: "CM creates baseline branch"
+      - id: "CR4"
+        action: "COD marks affected phases 're-entry-required' in LIFECYCLE_STATE.md"
+      - id: "CR5"
+        action: >
+          For each affected phase (forward order): PM re-executes phase via full
+          Track A + Track B loop (per_phase_loop or per_phase_phase7 as applicable)
+      - id: "CR6"
+        action: "All affected COD gates re-pass"
+      - id: "CR7"
+        action: "CM creates updated baseline (post-CR)"
+      - id: "CR8"
+        action: "Lifecycle resumes from current (highest) phase"
+
+    # Earliest re-entry phase by CR scope
+    re_entry_scope_table:
+      - cr_scope: "Requirements change"
+        earliest_re_entry_phase: 2
+        re_execute_through: "highest active phase"
+      - cr_scope: "Architecture/Design change"
+        earliest_re_entry_phase: 3
+        re_execute_through: "highest active phase"
+      - cr_scope: "Component design change"
+        earliest_re_entry_phase: 4
+        re_execute_through: "highest active phase"
+      - cr_scope: "Code / unit test change"
+        earliest_re_entry_phase: 5
+        re_execute_through: "highest active phase"
+      - cr_scope: "Integration change"
+        earliest_re_entry_phase: 6
+        re_execute_through: "highest active phase"
+
+  # ── Phase Transition Authority Summary ────────────────────────────────────
+  transition_authority:
+    - role: "cod"
+      can_start_phase: true
+      can_block_phase: true
+      can_override: false          # Cannot override VMGR decisions
+    - role: "pm"
+      can_start_phase: false       # Requests only; COD authorizes
+      can_block_phase: false
+      can_override: false
+    - role: "vmgr"
+      can_start_phase: false
+      can_block_phase: true        # VMGR V&V reject blocks phase completion
+      can_override: true           # VMGR Final V&V Decision cannot be overridden
+
+  # ── Key Independence Constraints (SIL 3–4) ────────────────────────────────
+  independence_constraints_sil_34:
+    - constraint: "PM has NO authority over VAL, VER, ASR, or VMGR"
+      reference: "§5.1.2.10(e–f), (f), (m)"
+    - constraint: "COD routes ALL V&V work through VMGR — no direct COD→VER or COD→VAL"
+      reference: "§5.1.2.10(e–f)"
+    - constraint: "COD CANNOT override VMGR V&V decisions"
+      reference: "Platform rule; basis §5.1.2.10(e–f)"
+    - constraint: "VMGR does NOT report to COD or PM"
+      reference: "§5.1.2.10(f); platform"
+    - constraint: "VER reports to VMGR"
+      reference: "§5.1.2.10(e)"
+    - constraint: "VAL shall NOT report to PM"
+      reference: "§5.1.2.10(f)"
+    - constraint: "VAL operates independently; VMGR coordinates VAL work in Phase 7 and reviews VAL Validation Reports; VMGR provides Final V&V approval — VAL does not report to VMGR but VMGR is the V&V authority that reviews and approves VAL output"
+      reference: "§5.1.2.10(f–j); platform"
+    - constraint: "ASR is independent from all project roles including COD"
+      reference: "§5.1.2.5–5.1.2.6, §6.4.1.1"

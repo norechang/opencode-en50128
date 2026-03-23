@@ -11,7 +11,7 @@ This document contains the official abbreviations defined in EN 50128:2011. All 
 
 | Abbreviation | Full Name | EN 50128 Reference |
 |--------------|-----------|-------------------|
-| **ASR** | Assessor | Section 5.3.8, Table B.8 |
+| **ASR** | Assessor | §5.1.2.4–§5.1.2.7, Annex B Table B.8 |
 | **DES** | Designer | Section 5.3.2, Table B.2 |
 | **IMP** | Implementer | Section 5.3.3, Table B.3 |
 | **INT** | Integrator | Section 5.3.6, Table B.6 |

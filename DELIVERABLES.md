@@ -52,7 +52,7 @@
 | 10 | Maintenance | 41 | Software Maintenance Plan | PM | VER | VAL | `maintenance/Software-Maintenance-Plan.yaml` |
 | 10 | Maintenance | 42 | Software Change Records | PM | VER | VAL | `maintenance/Software-Change-Records.yaml` |
 | 10 | Maintenance | 43 | Software Maintenance Records | PM | VER | VAL | `maintenance/Software-Maintenance-Records.yaml` |
-| 10 | Maintenance | 44 | Software Maintenance Verification Report | VER | VER | VAL | `maintenance/Software-Maintenance-Verification-Report.yaml` |
+| 10 | Maintenance | 44 | Software Maintenance Verification Report | VER | — | VAL | `maintenance/Software-Maintenance-Verification-Report.yaml` |
 | 8 | Assessment | 45 | Software Assessment Plan | ASR | VER | — | `assessment/Software-Assessment-Plan.yaml` |
 | 8 | Assessment | 46 | Software Assessment Report | ASR | VER | — | `assessment/Software-Assessment-Report.yaml` |
 
@@ -64,9 +64,18 @@
 
 2. **Deployment docs (36–40)**: The standard lists the writer as blank with footnote `a` (meaning "see project-specific assignment"). PM is assigned here as the default responsible party; the actual writer should be designated in the project's SQAP.
 
-3. **Validation docs (25–27)**: Docs 25–27 have no writer specified in the standard (footnote `a`) — VAL is the responsible party by role definition for docs 25–26; doc 27 writer is unspecified per the standard.
+3. **Validation docs (25–27)**: Docs 25–27 have no writer specified in the standard (footnote `a`) — VAL is the responsible party by role definition for docs 25–26; doc 27 writer is unspecified per the standard. **Note on item 27 (Release Note)**: The Release Note is normatively required by §7.7.4.12 ("A Release Note shall be produced"). Its assignment as Annex C item 27 is based on the sequential numbering following item 26 (Tools Validation Report) in the standard's Annex C Table C.1. If the printed standard does not carry a formal item 27 entry, the Release Note remains a binding normative §7.7.4.12 output without an Annex C number. Projects must confirm the item numbering against the printed standard and document any discrepancy in the SQAP. The distinction between the singular "Release Note" (§7.7.4.12, Phase 7) and plural "Release Notes" (item 38, Phase 9 deployment) must be maintained regardless of item numbering resolution.
 
 4. **Phase 8 (Assessment)** is **mandatory for SIL 1–4**; SIL 0 projects are exempt (§6.4.1.1 and §6.4.1.2).
+
+5. **Item 19/20 Numbering Convention and Phase Assignment**: This platform follows the **Table A.1 item numbering** (item 19 = Software Source Code Verification Report; item 20 = Software Component Test Report), both logically placed in the "Component Implementation and Testing" phase (Phase 5). EN 50128:2011 contains an internal inconsistency: Annex C Table C.1 places item 20 (Software Component Test Report) in the "Integration" phase column. This platform's Phase 5 assignment is justified by §7.5.4.5 (normative: "A Software Component Test Report shall be written") and the logical prerequisite that integration testing requires prior unit test completion. This constitutes a platform deviation from Annex C Table C.1's phase column assignment; it must be documented in the project SQAP and is subject to Safety Authority review.
+
+6. **Additional Annex C Table C.1 Phase-Column Anomalies (items 40 and 44)**: EN 50128:2011 Annex C Table C.1 contains additional internal phase-column anomalies not reflected in the logical phase assignments used by this platform:
+   - **Item 40 (Deployment Verification Report)**: Annex C Table C.1 places item 40 under **"Software maintenance"** rather than "Software deployment." This platform assigns item 40 to **Phase 9: Deployment**, justified by §9.1 (normative deployment clause) and the logical dependency that deployment must be verified before maintenance begins.
+   - **Item 44 (Software Maintenance Verification Report)**: Annex C Table C.1 places item 44 under **"Software assessment"** rather than "Software maintenance." This platform assigns item 44 to **Phase 10: Maintenance**, justified by §9.2 (normative maintenance clause) and the logical dependency that maintenance activities generate the verification report.
+   Both assignments constitute platform deviations from Annex C Table C.1's phase column, analogous to the item 20 deviation documented in Note 5. They must be documented in the project SQAP and are subject to Safety Authority review.
+
+7. **Item 5 (SVaP) Annex C Phase-Column Deviation**: Annex C Table C.1 places the Software Validation Plan (item 5) under the **"Software requirements"** lifecycle phase column. This platform assigns SVaP to **Phase 1: Planning**. This deviation is justified by §6.3.4.3 (SVaP shall be prepared on the basis of input documents, requiring early definition) and §5.3.2.4 (planning activities, including validation planning, shall be performed before the commencement of the relevant lifecycle phase). Early placement ensures the validation criteria are established before requirements elaboration begins. This constitutes a platform deviation from Annex C Table C.1's phase column; it must be documented in the project SQAP and is subject to Safety Authority review.
 
 ---
 
@@ -113,10 +122,10 @@ Use exact EN 50128 name with hyphens replacing spaces:
 - **Item 11** is **plural** — "Software Interface Specification**s**".
 - **Item 17** (Software Component Design Verification Report) belongs to the Component Implementation and Testing phase per Annex C.
 - **Item 18**: lowercase "and supporting documentation".
-- **Item 20** (Software Component Test Report) is a **Phase 5 output** per §7.5.3 and Annex C Table C.1 — not Phase 6.
+- **Item 20** (Software Component Test Report) is placed in **Phase 5** in this platform, justified by §7.5.3 and the normative output clause §7.5.4.5 ("A Software Component Test Report shall be written"). **NOTE**: EN 50128:2011 Annex C Table C.1 places item 20 in the "Integration" phase column — this is an internal inconsistency in the standard itself (Table A.1 associates it with "Component Implementation and Testing"). This platform adopts the Table A.1 / §7.5 interpretation (Phase 5) on the grounds that integration testing requires prior unit test completion; the Annex C phase-column label is treated as informative. This interpretation constitutes a deviation from Annex C Table C.1's phase column and is subject to Safety Authority review.
 - **Item 23** (Software Integration Verification Report) is in the **Validation** phase per Annex C — not in Integration.
 - **Item 26** (Tools Validation Report) — HR for SIL 1+, R for SIL 0.
-- **Item 27** (Release Note) — normative §7.7.4.12 output; listed as doc 27 here. Distinct from "Release Notes" (plural, item 38, deployment phase).
+- **Item 27** (Release Note) — normatively required by §7.7.4.12; assigned item number 27 by sequential Annex C numbering. **Ambiguity note**: If the printed standard does not carry a formal Annex C item 27, this remains a §7.7.4.12 normative output without an Annex C number. Projects must confirm against the printed standard and document in SQAP. Distinct from "Release Notes" (plural, item 38, deployment phase).
 - **Items 28–35** apply only to generic software platforms (Section 8) — out of scope for bespoke application software.
 - **Items 45–46** are written by **ASR** (Assessor), NOT PM. Assessment is mandatory for SIL 1–4 per §6.4.1.1 and §5.1.2.4.
 - **Item 42** contains a typo in the standard ("Software Chang Records") — correct name per Section 9.2.4 is "Software Change Records".
@@ -155,7 +164,7 @@ Format: `DOC-<TYPE>-YYYY-NNN`
 | Overall Software Test Report | OVERALLTESTRPT | DOC-OVERALLTESTRPT-2026-001 |
 | Software Validation Report | VALRPT | DOC-VALRPT-2026-001 |
 | Tools Validation Report | TOOLSVALRPT | DOC-TOOLSVALRPT-2026-001 |
-| Release Note (§7.7.4.12 normative, no Annex C #) | RELEASENOTE | DOC-RELEASENOTE-2026-001 |
+| Release Note (§7.7.4.12 normative; Annex C item 27 if confirmed in printed standard) | RELEASENOTE | DOC-RELEASENOTE-2026-001 |
 | Software Release and Deployment Plan | DEPLOYPLAN | DOC-DEPLOYPLAN-2026-001 |
 | Software Deployment Manual | DEPLOYMAN | DOC-DEPLOYMAN-2026-001 |
 | Release Notes | RELEASENOTES | DOC-RELEASENOTES-2026-001 |
@@ -170,28 +179,6 @@ Format: `DOC-<TYPE>-YYYY-NNN`
 
 ---
 
-## Phase Quick Reference
-
-| Phase | Annex C Items | EN 50128 Section | Documents | Phase Definition File |
-|-------|--------------|-----------------|-----------|----------------------|
-| Phase 0: Initialization | — | Platform Extension | 1 document | N/A (COD internal) |
-| Phase 1: Planning | 1–5 | 5, 6.5, 6.6 | 5 documents | `phase-1-planning.yaml` |
-| Phase 2: Requirements | 6–8 | 7.2 | 3 documents | `phase-2-requirements.yaml` |
-| Phase 3: Architecture & Design | 9–14 | 7.3 | 6 documents | `phase-3-architecture-design.yaml` |
-| Phase 4: Component Design | 15–17 | 7.4 | 3 documents | `phase-4-component-design.yaml` |
-| Phase 5: Implementation & Testing | 18–20 | 7.5 | 3 documents | `phase-5-implementation-testing.yaml` |
-| Phase 6: Integration | 21–22 | 7.6 | 2 documents | `phase-6-integration.yaml` |
-| Phase 7: Validation | 23–26 | 7.7 | 4 documents | `phase-7-validation.yaml` |
-| Phase 8: Assessment | 45–46 | 6.4 | 2 documents | `phase-8-assessment.yaml` (Mandatory SIL 1-4; SIL 0 exempt §6.4.1.2) |
-| Phase 9: Deployment | 36–40 | 9.1 | 5 documents | `phase-9-deployment.yaml` |
-| Phase 10: Maintenance | 41–44 | 9.2 | 4 documents | `phase-10-maintenance.yaml` |
-| (Section 8 only) | 28–35 | 8 | 8 documents | N/A — generic software platforms only |
-
-**Total Annex C Documents**: 46 (items 1–46)  
-**Applicable to bespoke application software**: 37 (items 1–26 + 36–46; items 28–35 are Section 8 generic platform only; Release Note is a normative §7.7.4.12 requirement with no Annex C number)
-
----
-
 ## Phase SIL Levels Summary
 
 | Phase | Annex C Items | Documents | SIL 0 Level | SIL 1-4 Level |
@@ -201,8 +188,8 @@ Format: `DOC-<TYPE>-YYYY-NNN`
 | Phase 2: Requirements | 6–8 | 3 | HR | HR |
 | Phase 3: Architecture & Design | 9–14 | 6 | HR | HR |
 | Phase 4: Component Design | 15–17 | 3 | R | HR |
-| Phase 5: Implementation & Testing | 18–19 | 2 | HR | HR |
-| Phase 6: Integration | 20–22 | 3 | R (×1), HR (×2) | HR |
+| Phase 5: Implementation & Testing | 18–20 | 3 | HR | HR |
+| Phase 6: Integration | 21–22 | 2 | HR (×2) | HR |
 | Phase 7: Validation | 23–26 | 4 | HR (×3), R (×1) | HR |
 | Phase 8: Assessment | 45–46 | 2 | R | HR |
 | Phase 9: Deployment | 36–40 | 5 | HR (×1), R (×4) | HR |

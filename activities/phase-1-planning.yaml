@@ -1,0 +1,180 @@
+# EN 50128 Phase 1: Software Planning
+# Source: LIFECYCLE.md §3 (ISA PASS), EN 50128:2011 §5, §6.5, §6.6
+# Annex C Items: 1–5
+
+phase:
+  id: "planning"
+  number: 1
+  name: "Software Planning"
+  en50128_section: "§5, §6.5, §6.6"
+  executor: "pm"
+  gate_command: "@cod gate-check planning"
+  description: >
+    Phase 1 establishes the project's quality assurance, configuration management,
+    verification, and validation strategies. All five planning documents are
+    normatively required at all SIL levels (Annex C HR labels are overridden by
+    'shall' clauses in §5.3.2.4, §6.2.4.2, §6.3.4.2, §6.5.4.3, §6.6.4.1).
+    NOTE: Items 4 (SVP) is written by VER and item 5 (SVaP) is written by VAL —
+    these appear in Track B activities section; Track A agents produce items 1–3.
+
+  # ── Track A: Activities (PM-orchestrated, dev agents only) ────────────────
+  activities:
+    - agent: "qua"
+      task_description: >
+        Write Software Quality Assurance Plan (SQAP) per §6.5.4.3.
+        SQAP governs all QA activities; defines document templates, compliance
+        checks, audit schedule, and QA authority.
+      owner: "qua"
+      deliverables:
+        - path: "docs/planning/Software-Quality-Assurance-Plan.md"
+          doc_id: "DOC-SQAP-YYYY-001"
+          doc_type: "Software Quality Assurance Plan"
+          annex_c_item: 1
+          qua_required: true
+      dependencies: []
+      parallel_group: 1
+
+    - agent: "cm"
+      task_description: >
+        Write Software Configuration Management Plan (SCMP) per §6.6.4.1.
+        SCMP defines version control, baselines, change management (CCB),
+        and traceability management for the lifecycle.
+      owner: "cm"
+      deliverables:
+        - path: "docs/planning/Software-Configuration-Management-Plan.md"
+          doc_id: "DOC-SCMP-YYYY-001"
+          doc_type: "Software Configuration Management Plan"
+          annex_c_item: 3
+          qua_required: true
+      dependencies: []
+      parallel_group: 1
+
+    # NOTE: Items 4 (SVP) and 5 (SVaP) are written by VER and VAL respectively.
+    # Although VER and VAL are Track B agents, they AUTHOR these planning documents
+    # in Phase 1 (VER authors SVP per §6.2.4.2; VAL authors SVaP per §6.3.4.2).
+    # These are Track A deliverables produced by specialist V&V authors.
+    # They appear here so PM can coordinate the authoring with VER and VAL.
+    - agent: "ver"
+      task_description: >
+        Write Software Verification Plan (SVP) per §6.2.4.2.
+        SVP defines the verification approach, methods, scope, and schedule
+        for all lifecycle phases. Written by VER, not PM.
+      owner: "ver"
+      deliverables:
+        - path: "docs/planning/Software-Verification-Plan.md"
+          doc_id: "DOC-SVP-YYYY-001"
+          doc_type: "Software Verification Plan"
+          annex_c_item: 4
+          qua_required: true
+      dependencies: [0]                   # After SQAP established (defines VER scope)
+      parallel_group: 2
+      note: "Written by VER per §6.2.4.2 — not PM. Independence rules apply."
+
+    - agent: "val"
+      task_description: >
+        Write Software Validation Plan (SVaP) per §6.3.4.2–6.3.4.3.
+        SVaP defines validation criteria, scope, test strategy, and acceptance
+        criteria. Must be approved and at a baseline per §5.3.2.4 before Phase 7.
+        Written by VAL, not PM. Platform assigns to Phase 1 per §5.3.2.4 deviation.
+      owner: "val"
+      deliverables:
+        - path: "docs/planning/Software-Validation-Plan.md"
+          doc_id: "DOC-SVaP-YYYY-001"
+          doc_type: "Software Validation Plan"
+          annex_c_item: 5
+          qua_required: true
+      dependencies: [0]
+      parallel_group: 2
+      note: >
+        Written by VAL per §6.3.4.2. Platform deviation: assigned to Phase 1
+        (Annex C places in 'requirements' phase). Justified by §5.3.2.4 and §6.3.4.3.
+        Document deviation in SQAP. Subject to Safety Authority review.
+
+  # ── Completion Criteria ────────────────────────────────────────────────────
+  completion_criteria:
+    all_deliverables_qua_accepted: true
+    traceability_complete: false           # N/A in planning
+    custom_checks:
+      - "SQAP approved — defines templates, compliance checks, audit schedule"
+      - "SCMP approved — version control and CCB procedures established"
+      - "SVP approved — verification approach defined for all lifecycle phases"
+      - "SVaP approved and at an approved baseline per §5.3.2.4 (required before Phase 7)"
+      - "SIL levels determined and documented"
+      - "Project standards and guidelines defined"
+
+  # ── Track B: Verification ─────────────────────────────────────────────────
+  verification:
+    required: true
+    verifier: "ver"
+    produces:
+      - doc_type: "Software Quality Assurance Verification Report"
+        annex_c_item: 2
+        path: "docs/planning/Software-Quality-Assurance-Verification-Report.md"
+    criteria:
+      - "SQAP complies with §6.5 requirements"
+      - "SCMP complies with §6.6 requirements"
+      - "SVP complies with §6.2.4 requirements"
+      - "SVaP complies with §6.3.4 requirements"
+      - "All planning documents internally consistent"
+
+  # ── Track B: Validation (2nd Check only — no VAL report in Phase 1) ───────
+  validation:
+    required_sil: []                       # VAL does NOT produce a Validation Report here
+    val_role: "2nd Check reviewer on SQAP (item 1), SCMP (item 3), SVP (item 4)"
+    validator: "val"
+    independence_required_sil: [3, 4]
+    produces: []                           # No Validation Report in Phase 1
+    criteria: []
+
+  # ── Workflow ──────────────────────────────────────────────────────────────
+  workflow:
+    track_a:
+      description: >
+        PM coordinates QUA (SQAP), CM (SCMP), VER (SVP), and VAL (SVaP) authoring.
+        QUA performs template compliance check on all items 1–5. PM reports complete to COD.
+      completion_signal: "PM reports all 5 planning documents QUA-passed to COD"
+    track_b:
+      sil_34:
+        description: >
+          COD → VMGR → VER verifies planning documents → VER produces item 2
+          (SQAVR) → QUA checks item 2 → VMGR reviews → VMGR reports to COD.
+          VAL acts as 2nd Check reviewer on items 1, 3, 4 only — no VAL report.
+        vmgr_gateway: true
+      sil_02:
+        description: >
+          COD → VER verifies planning documents and produces item 2 (SQAVR).
+          QUA checks item 2. COD receives VER report directly.
+    rework_path: >
+      If VER rejects a planning document: VMGR notifies COD (SIL 3–4) or COD
+      notifies PM directly (SIL 0–2); PM coordinates rework with author; deliverable
+      re-enters QUA check before resubmission to VER.
+
+  # ── Transitions ───────────────────────────────────────────────────────────
+  transitions:
+    - event: "gate_pass"
+      guard: "true"
+      target: "requirements"
+      action: "COD authorizes @pm execute-phase 2"
+    - event: "gate_fail"
+      guard: "sil >= 3"
+      target: "planning"
+      action: "COD BLOCKS; PM coordinates rework; COD re-runs gate"
+    - event: "gate_fail"
+      guard: "sil < 3"
+      target: "planning"
+      action: "COD warns; PM coordinates rework at PM discretion"
+
+  # ── Gate Check ────────────────────────────────────────────────────────────
+  gate_check:
+    command: "@cod gate-check planning"
+    mandatory_sil: [0, 1, 2, 3, 4]        # All SIL — normative override makes all items mandatory
+    blocking_sil: [2, 3, 4]
+    criteria:
+      - "SQAP (item 1) QUA-passed and approved"
+      - "SQAVR (item 2) QUA-passed and VER-issued"
+      - "SCMP (item 3) QUA-passed and approved"
+      - "SVP (item 4) QUA-passed and approved"
+      - "SVaP (item 5) QUA-passed and at an approved baseline (§5.3.2.4)"
+      - "VMGR approved VER report (SIL 3–4)"
+      - "SIL level documented"
+      - "Zero critical open defects"
