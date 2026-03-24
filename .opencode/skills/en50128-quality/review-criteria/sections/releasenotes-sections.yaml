@@ -1,0 +1,24 @@
+# Required sections supplement — Release Notes (plural)
+# Annex C item: 38
+# Written by: PM (or per SQAP)
+# Standard reference: EN 50128:2011 §9.1, Annex C
+# Note: distinct from item 27 (Release Note, Phase 7); this is a Phase 9 deliverable
+
+doc_key: "RELEASENOTES"
+annex_c_item: 38
+standard_reference: "§9.1"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; software release identifier"
+  - heading: "Release Summary"
+    notes: "What this release contains; baseline tag"
+  - heading: "New Features"
+    notes: "New functionality in this release (if any)"
+  - heading: "Bug Fixes"
+    notes: "Defects resolved since previous release; CR reference numbers"
+  - heading: "Known Issues"
+    notes: "Unresolved issues; conditions of use; waivers"
+  - heading: "Compatibility"
+    notes: "Hardware/firmware/OS compatibility information"

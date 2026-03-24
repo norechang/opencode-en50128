@@ -1,0 +1,28 @@
+# Required sections supplement — Overall Software Test Report
+# Annex C item: 24
+# Written by: VAL (with TST)
+# Standard reference: EN 50128:2011 §7.7.4.7–7.7.4.11
+# Note: Track A deliverable; QUA checks before PM reports to COD
+
+doc_key: "OVERALLTESTRPT"
+annex_c_item: 24
+standard_reference: "§7.7.4.7–7.7.4.11"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; reference to OTSTSPEC (item 7)"
+  - heading: "Test Environment"
+    notes: "Actual test environment; hardware and software configuration"
+  - heading: "Overall Test Execution Summary"
+    notes: "Total tests run, passed, failed; overall pass/fail verdict"
+  - heading: "Test Results"
+    notes: "§7.7.4.9: per-test-case result; failure descriptions"
+  - heading: "Defects Found"
+    notes: "Defects identified; severity; resolution status"
+  - heading: "Software Baseline"
+    notes: "§6.3.4.10: exact software baseline tested (version, CM tag)"
+  - heading: "Known Deficiencies"
+    notes: "§6.3.4.11: any known deficiencies and their assessed impact on safety"
+  - heading: "Conclusion"
+    notes: "§7.7.4.11: validation criteria met / not met"

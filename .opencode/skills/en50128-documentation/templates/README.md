@@ -64,7 +64,6 @@
 - **RTM** - Requirements Traceability Matrix (embedded in SRS)
 
 ### Implementation Phase Templates
-- **`Code-Review-Checklist.md`** - Code review checklist
 - **`Unit-Test-Spec-template.md`** - Unit test specification
 
 ### Testing Phase Templates

@@ -1,0 +1,23 @@
+# Required sections supplement — Deployment and Installation Manual
+# Annex C item: 37
+# Written by: PM (or per SQAP)
+# Standard reference: EN 50128:2011 §9.1.4
+
+doc_key: "DEPLOYMAN"
+annex_c_item: 37
+standard_reference: "§9.1.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; audience; related documents"
+  - heading: "System Requirements"
+    notes: "Hardware and software prerequisites for operation"
+  - heading: "Installation Procedure"
+    notes: "Detailed step-by-step installation guide"
+  - heading: "Configuration"
+    notes: "Configuration parameters and their valid ranges"
+  - heading: "Verification"
+    notes: "Post-installation checks; acceptance test reference"
+  - heading: "Troubleshooting"
+    notes: "Common installation issues and resolutions"

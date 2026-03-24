@@ -1,207 +1,127 @@
-# QUA Review Criteria - Rule-Based Checkers
+# QUA Review Criteria
 
-This directory contains rule-based checkers for QUA (Quality Assurance) document reviews.
+This directory contains the format-check rules QUA applies to every Annex C deliverable.
 
-## Purpose
+**Authority**: `tasks/QUALITY_PROCESS.md` (ISA PASS), `activities/quality-process.yaml`
 
-When a document owner (REQ, SAF, TST, DES, IMP, etc.) submits a deliverable to QUA for internal quality review, QUA applies **automated rule-based checks** to verify:
+---
 
-1. **Template Compliance**: Document follows EN 50128 template structure
-2. **Quality Standards**: Document meets quality criteria (completeness, consistency, format)
-3. **Content Requirements**: Document contains required sections and information
+## Architecture
 
-## Review Process
+QUA format-gate checks consist of two layers applied together:
 
 ```
-Owner Agent → QUA Review → Pass/Fail + Defect List
-                ↓
-         [If FAIL: Return to Owner]
-                ↓
-         Owner fixes defects
-                ↓
-         Resubmit (max 3 iterations)
+Layer 1: generic-format-checker.yaml        ← universal; applies to every document
+Layer 2: sections/<doc-key>-sections.yaml   ← document-specific required section list
 ```
 
-## Checker Files
+### Layer 1 — Generic Format Checker
 
-Each document type has a corresponding checker file:
+**File**: `generic-format-checker.yaml`
 
-| Document Type | Checker File | Description | Status |
-|---------------|--------------|-------------|--------|
-| SRS | `srs-checker.yaml` | Software Requirements Specification | ✅ Complete |
-| RTM | `rtm-checker.yaml` | Requirements Traceability Matrix | ⏳ Pending |
-| Hazard-Log | `hazard-log-checker.yaml` | Hazard Analysis and Safety | ✅ Complete |
-| Test-Spec | `test-spec-checker.yaml` | Test Specifications | ✅ Complete |
-| SAS | `sas-checker.yaml` | Software Architecture Specification | ✅ Complete |
-| SDS | `sds-checker.yaml` | Software Design Specification | ✅ Complete |
-| Source-Code | `source-code-checker.yaml` | C Implementation | ⏳ Pending |
+Three rules applied to every deliverable regardless of type:
 
-## Checker YAML Schema
+| Rule | What it checks |
+|------|---------------|
+| GF-001 | Document ID format: `DOC-<ABBREV>-<YYYY>-<NNN>` |
+| GF-002 | Document Control table: all five required fields present and non-empty |
+| GF-003 | Approvals table: correct columns and minimum roles (Author, Reviewer QUA, Approver PM) |
 
-```yaml
-document_type: string             # Document type (e.g., "SRS", "Hazard-Log")
-checker_version: string           # Checker version (e.g., "1.0")
+The checker is **parameterized** — supply `doc_abbreviation` and `sil_level` at runtime.
 
-# Template compliance checks
-template_checks:
-  - id: string                    # Check ID (e.g., "SRS-T001")
-    name: string                  # Check name
-    description: string           # What this check does
-    severity: string              # "error" or "warning"
-    rule_type: string             # "regex", "section_exists", "table_exists", "field_format"
-    rule_params:                  # Parameters specific to rule_type
-      pattern: string             # Regex pattern (for regex rule_type)
-      section: string             # Section name (for section_exists)
-      table: string               # Table name (for table_exists)
-      field: string               # Field name (for field_format)
-    expected: string              # Expected result
-    failure_message: string       # Message shown on failure
-    fix_suggestion: string        # How to fix this issue
+### Layer 2 — Document-Specific Sections Supplement
 
-# Quality standards checks
-quality_checks:
-  - id: string
-    name: string
-    description: string
-    severity: string
-    rule_type: string
-    rule_params: {}
-    expected: string
-    failure_message: string
-    fix_suggestion: string
+**Directory**: `sections/`
 
-# Content requirement checks
-content_checks:
-  - id: string
-    name: string
-    description: string
-    severity: string
-    rule_type: string
-    rule_params: {}
-    expected: string
-    failure_message: string
-    fix_suggestion: string
-```
+One YAML file per document type. Lists the mandatory section headings for that document
+type, derived from the normative EN 50128:2011 output clauses.
 
-## Rule Types
+Rule GF-004 (Required Sections) is defined by this layer.
 
-### 1. `regex`
-Match content against a regular expression.
-```yaml
-rule_type: "regex"
-rule_params:
-  pattern: "^DOC-[A-Z]+-[0-9]{4}-[0-9]{3}$"
-  search_section: "Document Control"  # Optional: limit search to section
-```
+---
 
-### 2. `section_exists`
-Check that a section exists in the document.
-```yaml
-rule_type: "section_exists"
-rule_params:
-  section: "1. Introduction"
-  level: 1                            # Heading level (1-6)
-```
+## Sections Index
 
-### 3. `table_exists`
-Check that a table exists with specific columns.
-```yaml
-rule_type: "table_exists"
-rule_params:
-  table_header: "Document Control"
-  required_columns: ["Field", "Value"]
-```
+| Annex C item | Doc key | Sections file | qua_check_type |
+|---|---|---|---|
+| 1 | SQAP | `sections/sqap-sections.yaml` | template_compliance |
+| 2 | SQAVR | `sections/sqavr-sections.yaml` | template_compliance_one_pass |
+| 3 | SCMP | `sections/scmp-sections.yaml` | template_compliance |
+| 4 | SVP | `sections/svp-sections.yaml` | template_compliance_one_pass |
+| 5 | SVaP | `sections/svap-sections.yaml` | template_compliance_one_pass |
+| 6 | SRS | `sections/srs-sections.yaml` | template_compliance |
+| 7 | OTSTSPEC | `sections/otstspec-sections.yaml` | template_compliance |
+| 8 | REQVER | `sections/reqver-sections.yaml` | template_compliance_one_pass |
+| 9 | SAS | `sections/sas-sections.yaml` | template_compliance |
+| 10 | SDS | `sections/sds-sections.yaml` | template_compliance |
+| 11 | INTERFACES | `sections/interfaces-sections.yaml` | template_compliance |
+| 12 | INTTESTSPEC | `sections/inttestspec-sections.yaml` | template_compliance |
+| 13 | HWINTTESTSPEC | `sections/hwinttestspec-sections.yaml` | template_compliance |
+| 14 | ARCHDESIGNVER | `sections/archdesignver-sections.yaml` | template_compliance_one_pass |
+| 15 | COMPDESIGN | `sections/compdesign-sections.yaml` | template_compliance |
+| 16 | COMPTESTSPEC | `sections/comptestspec-sections.yaml` | template_compliance |
+| 17 | COMPDESIGNVER | `sections/compdesignver-sections.yaml` | template_compliance_one_pass |
+| 18 | SOURCECODE | `sections/sourcecode-sections.yaml` | template_compliance |
+| 19 | SOURCECODEVER | `sections/sourcecodever-sections.yaml` | template_compliance_one_pass |
+| 20 | COMPTESTRPT | `sections/comptestrpt-sections.yaml` | template_compliance |
+| 21 | INTTESTRPT | `sections/inttestrpt-sections.yaml` | template_compliance |
+| 22 | HWINTTESTRPT | `sections/hwinttestrpt-sections.yaml` | template_compliance |
+| 23 | INTVER | `sections/intver-sections.yaml` | template_compliance_one_pass |
+| 24 | OVERALLTESTRPT | `sections/overalltestrpt-sections.yaml` | template_compliance |
+| 25 | VALRPT | `sections/valrpt-sections.yaml` | template_compliance_one_pass |
+| 26 | TOOLSVALRPT | `sections/toolsvalrpt-sections.yaml` | template_compliance_one_pass |
+| 27 | RELEASENOTE | `sections/releasenote-sections.yaml` | template_compliance |
+| 36 | DEPLOYPLAN | `sections/deployplan-sections.yaml` | template_compliance |
+| 37 | DEPLOYMAN | `sections/deployman-sections.yaml` | template_compliance |
+| 38 | RELEASENOTES | `sections/releasenotes-sections.yaml` | template_compliance |
+| 39 | DEPLOYREC | `sections/deployrec-sections.yaml` | template_compliance |
+| 40 | DEPLOYVER | `sections/deployver-sections.yaml` | template_compliance_one_pass |
+| 41 | MAINTPLAN | `sections/maintplan-sections.yaml` | template_compliance |
+| 42 | CHANGEREC | `sections/changerec-sections.yaml` | template_compliance |
+| 43 | MAINTREC | `sections/maintrec-sections.yaml` | template_compliance |
+| 44 | MAINTVER | `sections/maintver-sections.yaml` | template_compliance_one_pass |
 
-### 4. `field_format`
-Check that a field has correct format.
-```yaml
-rule_type: "field_format"
-rule_params:
-  field_name: "Document ID"
-  format_pattern: "^DOC-[A-Z]+-[0-9]{4}-[0-9]{3}$"
-```
+**Phase 8 items (45, 46)**: NO QUA touchpoint. ASR is fully independent.
+QUA MUST NOT check items 45 or 46.
 
-### 5. `count_minimum`
-Check that at least N items exist (requirements, test cases, etc.).
-```yaml
-rule_type: "count_minimum"
-rule_params:
-  item_pattern: "^REQ-[A-Z]+-[0-9]{3}"
-  minimum_count: 1
-```
+---
 
-### 6. `all_items_match`
-Check that all items of a type match a pattern.
-```yaml
-rule_type: "all_items_match"
-rule_params:
-  item_pattern: "^REQ-[A-Z]+-[0-9]{3}"
-  field_pattern: "SIL [0-4]"
-  field_description: "SIL level"
-```
+## qua_check_type Values
+
+| Value | Iteration limit | Applies to |
+|-------|----------------|-----------|
+| `template_compliance` | 3; then PM escalates | Development deliverables (Track A) |
+| `template_compliance_one_pass` | 1 resubmission; then NCR MAJOR + PM escalation | VER and VAL reports (Track B format check) |
+| `none` | — | Phase 8 ASR documents |
+
+Full iteration-limit logic: `en50128-quality` SKILL.md §3 (Format-Gate Algorithm).
+
+---
+
+## What QUA Checks — and What It Does Not
+
+**QUA checks (FORMAT only)**:
+- Document ID present and correctly formatted
+- Document Control table with all required fields
+- Approvals table with minimum required roles
+- Required section headings present
+
+**QUA does NOT check**:
+- Technical correctness of any content
+- MISRA C compliance (VER, §7.5.4.10)
+- Traceability link completeness (VER, T1–T15 per `TRACEABILITY.md`)
+- Test coverage figures (TST/VER)
+- Static analysis results (VER)
+- Safety argument adequacy (SAF/VER)
+
+---
 
 ## Severity Levels
 
-- **error**: Must be fixed before QUA accepts document (blocks acceptance)
-- **warning**: Should be fixed but doesn't block acceptance (for user visibility)
+| Severity | Meaning |
+|----------|---------|
+| `error` | Must be fixed before QUA accepts the document |
+| `warning` | Should be fixed; does not block acceptance |
 
-## Implementation
-
-QUA agent loads the appropriate checker file based on document type and applies all checks sequentially. Results are collected into a **QUA Review Report**:
-
-```markdown
-# QUA Review Report
-
-**Document**: docs/SRS.md (DOC-SRS-2026-001)
-**Reviewer**: QUA Agent
-**Date**: 2026-02-20
-**Result**: FAIL
-
-## Defects Found (2 errors, 1 warning)
-
-### Error: SRS-T001 - Document ID Format
-**Severity**: error
-**Location**: Document Control table
-**Issue**: Document ID "DOC-SRS-2026-1" does not match required format
-**Expected**: DOC-XXX-YYYY-NNN (e.g., DOC-SRS-2026-001)
-**Fix**: Update Document ID to "DOC-SRS-2026-001"
-
-### Error: SRS-C005 - Missing SIL Level
-**Severity**: error
-**Location**: Requirement REQ-TDC-023
-**Issue**: Requirement does not specify SIL level
-**Expected**: All requirements must have "SIL [0-4]" field
-**Fix**: Add SIL level to REQ-TDC-023
-
-### Warning: SRS-Q002 - Long Requirement Text
-**Severity**: warning
-**Location**: Requirement REQ-TDC-045
-**Issue**: Requirement text exceeds 500 characters (may be ambiguous)
-**Expected**: Requirements should be concise (< 500 chars)
-**Fix**: Consider splitting REQ-TDC-045 into multiple requirements
-
-## Summary
-- ❌ Template Compliance: 1 error
-- ❌ Quality Standards: 1 warning
-- ❌ Content Requirements: 1 error
-- **Overall: FAIL (2 errors must be fixed)**
-```
-
-## Usage in PM Workflow
-
-```python
-# Pseudocode
-result = qua.review_document(
-    doc_path="docs/SRS.md",
-    doc_type="SRS",
-    checker="srs-checker.yaml"
-)
-
-if result.status == "FAIL":
-    # Send defects to owner agent
-    owner.fix_defects(
-        doc_path="docs/SRS.md",
-        defects=result.defects
-    )
-    # Resubmit (max 3 iterations)
-```
+All three generic rules (GF-001, GF-002, GF-003) are `error` severity.
+Section checks (GF-004) are `error` severity for mandatory sections.

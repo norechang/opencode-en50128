@@ -1,0 +1,25 @@
+# Required sections supplement — Software Maintenance Plan
+# Annex C item: 41
+# Written by: PM (or per SQAP)
+# Standard reference: EN 50128:2011 §9.2.4
+
+doc_key: "MAINTPLAN"
+annex_c_item: 41
+standard_reference: "§9.2.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; scope of maintenance activities covered"
+  - heading: "Maintenance Strategy"
+    notes: "§9.2.4: corrective, adaptive, perfective maintenance approach"
+  - heading: "Change Control Procedure"
+    notes: "§6.6.4.1: how change requests are received, assessed, and implemented"
+  - heading: "Impact Assessment"
+    notes: "How safety impact of changes is assessed; SAF involvement"
+  - heading: "Re-entry Rules"
+    notes: "Which V-Model phases must be re-entered for given change types (§6.6.4.2)"
+  - heading: "Regression Testing"
+    notes: "How regression is handled after each maintenance change"
+  - heading: "Records"
+    notes: "Maintenance records kept; retention period"

@@ -1,0 +1,25 @@
+# Required sections supplement — Integration Verification Report
+# Annex C item: 23
+# Written by: VER
+# Standard reference: EN 50128:2011 §6.2.4.12–6.2.4.13, §7.6.4.11
+# qua_check_type: template_compliance_one_pass (1-Pass Rule applies)
+# Note: placed Phase 7 per Annex C; produced in Phase 6 context
+
+doc_key: "INTVER"
+annex_c_item: 23
+standard_reference: "§6.2.4.12–6.2.4.13, §7.6.4.11"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; integration test reports (items 21, 22) document IDs and versions verified"
+  - heading: "Verification Scope"
+    notes: "Which integration activities were verified; criteria applied"
+  - heading: "Verification Method"
+    notes: "Techniques used"
+  - heading: "Findings"
+    notes: "§6.2.4.13: findings with severity and integration document reference"
+  - heading: "Conclusion"
+    notes: "Overall verdict: integration meets exit criteria / does not meet"
+  - heading: "Open Items"
+    notes: "Outstanding defects with resolution plan"

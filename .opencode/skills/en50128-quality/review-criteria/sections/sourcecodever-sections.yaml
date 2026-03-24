@@ -1,0 +1,29 @@
+# Required sections supplement — Source Code Verification Report
+# Annex C item: 19
+# Written by: VER
+# Standard reference: EN 50128:2011 §7.5.4.10, §6.2.4.12–6.2.4.13
+# qua_check_type: template_compliance_one_pass (1-Pass Rule applies)
+# Platform deviation D6: platform assigns VAL 2nd check (Annex C Table C.1 blank)
+
+doc_key: "SOURCECODEVER"
+annex_c_item: 19
+standard_reference: "§7.5.4.10, §6.2.4.12–6.2.4.13"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; source code package (item 18) document ID and version reviewed"
+  - heading: "Verification Scope"
+    notes: "Which modules were reviewed; §7.5.4.10(a)–(e) criteria applied"
+  - heading: "Static Analysis Results"
+    notes: "§7.5.4.10(c): MISRA C findings summary; tool used; violation counts"
+  - heading: "Complexity Results"
+    notes: "§7.5.4.10(c): cyclomatic complexity results; any limit exceedances"
+  - heading: "Code Review Findings"
+    notes: "§7.5.4.10: manual inspection findings; severity and module reference"
+  - heading: "Traceability Check"
+    notes: "Evidence that T7, T12 traceability rules were applied"
+  - heading: "Conclusion"
+    notes: "Overall verdict: code meets entry criteria / does not meet"
+  - heading: "Open Items"
+    notes: "Outstanding defects; waivers if any"

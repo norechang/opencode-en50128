@@ -1,0 +1,26 @@
+# Required sections supplement — Architecture and Design Verification Report
+# Annex C item: 14
+# Written by: VER
+# Standard reference: EN 50128:2011 §6.2.4.12–6.2.4.13
+# qua_check_type: template_compliance_one_pass (1-Pass Rule applies)
+
+doc_key: "ARCHDESIGNVER"
+annex_c_item: 14
+standard_reference: "§6.2.4.12–6.2.4.13"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; SAS/SDS/INTERFACES document IDs and versions verified"
+  - heading: "Verification Scope"
+    notes: "Which design documents and criteria were applied"
+  - heading: "Verification Method"
+    notes: "Techniques used (inspection, walkthrough, formal review)"
+  - heading: "Findings"
+    notes: "§6.2.4.13: findings with severity and design document clause reference"
+  - heading: "Traceability Check"
+    notes: "Evidence that T3–T5 traceability rules were applied"
+  - heading: "Conclusion"
+    notes: "Overall verdict: design meets entry criteria / does not meet"
+  - heading: "Open Items"
+    notes: "Outstanding defects with resolution plan and target phase gate"

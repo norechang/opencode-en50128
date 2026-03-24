@@ -3,7 +3,7 @@
 **AI-powered development platform for EN 50128:2011 compliant railway software**
 
 **Status**: Active Development — agent and skill rewrite in progress (see [Agent Rewrite Status](#agent-rewrite-status))
-**Version**: 3.1.0
+**Version**: 3.2.0
 
 ---
 
@@ -105,6 +105,7 @@ The platform is structured in three tiers:
 │  AGENTS.md · LIFECYCLE.md · WORKFLOW.md · ORGANIZATION.md    │
 │  DELIVERABLES.md · TRACEABILITY.md · TOOLS.md                │
 │  tasks/BASELINE_MANAGEMENT.md · tasks/QUALITY_PROCESS.md     │
+│  tasks/SAFETY_ENGINEERING.md                                 │
 ├──────────────────────────────────────────────────────────────┤
 │  TIER 2 — Machine-Readable YAML (activities/)                 │
 │  phase-N-*.yaml · workflow.yaml · deliverables.yaml          │
@@ -133,6 +134,8 @@ These files are the single source of truth for all platform rules. They are ISA-
 | [`TRACEABILITY.md`](TRACEABILITY.md) | Traceability rules T1–T15, gate enforcement |
 | [`TOOLS.md`](TOOLS.md) | Tool catalogue, SIL requirements, T1/T2/T3 confidence levels |
 | [`tasks/BASELINE_MANAGEMENT.md`](tasks/BASELINE_MANAGEMENT.md) | Baseline management lifecycle diagrams, role responsibilities, EN 50128 terminology corrections |
+| [`tasks/QUALITY_PROCESS.md`](tasks/QUALITY_PROCESS.md) | QUA workflow, deliverable touchpoints (all 46 Annex C items), two-track gate positions, Table A.9 SIL-tiered obligations |
+| [`tasks/SAFETY_ENGINEERING.md`](tasks/SAFETY_ENGINEERING.md) | SAF role phase activities, cross-cutting artifacts, hazard-to-validation traceability chain, Table A.8 technique matrix |
 
 ### Machine-Readable YAML (`activities/`)
 
@@ -148,6 +151,9 @@ The `activities/` directory provides machine-readable representations of the lif
 | `roles.yaml` | Role definitions with independence requirements by SIL |
 | `organization.yaml` | Role combination rules, org structure |
 | `traceability.yaml` | Traceability rules T1–T15 in structured form |
+| `baseline-management.yaml` | Baseline lifecycle, 8 gate baselines, 7-step creation procedure, CR re-entry path |
+| `quality-process.yaml` | QUA process: per-phase activities, all 46 Annex C touchpoints, two-track gate positions, Table A.9 |
+| `safety-process.yaml` | SAF process: phase activity map, cross-cutting artifacts, Table A.8 (5 entries), EN 50126 companion techniques |
 
 ### OpenCode Tabs
 
@@ -223,7 +229,7 @@ Use the **RailDev** tab for all EN 50128 development work.
 
 ## Agent Rewrite Status
 
-The COD and PM agents have been rewritten following a **thin shell** philosophy: agent and skill files reference authoritative sources (fundamental documents + `activities/` YAMLs) rather than duplicating them. This eliminates content drift and reduces context load.
+Five agents have been rewritten following a **thin shell** philosophy: agent and skill files reference authoritative sources (fundamental documents + `activities/` YAMLs) rather than duplicating them. This eliminates content drift and reduces context load.
 
 ### Completed
 
@@ -231,20 +237,29 @@ The COD and PM agents have been rewritten following a **thin shell** philosophy:
 |-------|--------|-------|-----------|
 | **COD** (`cod.md` + 5 skill files) | ~13,600 lines | ~1,100 lines | 92% |
 | **PM** (`pm.md` + skill + phase YAMLs) | ~5,100 lines | ~670 lines | 87% |
+| **CM** (`cm.md` + skill) | ~2,400 lines | ~180 lines | 93% |
+| **QUA** (`qua.md` + skill + review-criteria/) | ~3,100 lines | ~310 lines | 90% |
+| **SAF** (`saf.md` + skill + templates + workflows) | ~4,200 lines | ~590 lines | 86% |
 
-**COD** skill files rewritten: `en50128-lifecycle-coordination`, `en50128-lifecycle-capabilities`, `en50128-lifecycle-phase-checklists`, `en50128-lifecycle-examples`. Ten obsolete COD workflow/template files deleted.
+**COD** skill files rewritten: `en50128-lifecycle-coordination`, `en50128-lifecycle-capabilities`, `en50128-lifecycle-phase-checklists`, `en50128-lifecycle-examples`. Ten obsolete workflow/template files deleted.
 
-**PM** skill files rewritten: `en50128-project-management/SKILL.md` and all phase coordination data consolidated into a single `phase-coordination.yaml`. Five obsolete PM files deleted (SCHEMA.md, defect workflow, 3 templates). PM-local phase YAMLs now contain only PM-specific coordination notes (special cases, agent sequencing, escalation triggers) — all base phase data is read from `activities/phase-N-*.yaml`.
+**PM** skill rewritten: `en50128-project-management/SKILL.md`; phase data consolidated into `phase-coordination.yaml`. Five obsolete files deleted.
+
+**CM** rewrite: FCA/PCA terminology removed; grounded in `tasks/BASELINE_MANAGEMENT.md` and `activities/baseline-management.yaml`.
+
+**QUA** rewrite: 9 per-deliverable YAML checkers and 4 workflow files deleted; replaced by `generic-format-checker.yaml` + `sections/` directory; grounded in `tasks/QUALITY_PROCESS.md` and `activities/quality-process.yaml`.
+
+**SAF** rewrite: Safety Case removed (not in EN 50128); CCF corrected to HR (not Mandatory); Table A.8 fixed to 5 entries; `§6.3.4.16` release authority corrected to Validator; 4 workflow files and Safety-Case-template deleted; grounded in `tasks/SAFETY_ENGINEERING.md` and `activities/safety-process.yaml`.
 
 ### In Progress
 
-The remaining 12 agent files (REQ, DES, IMP, TST, INT, VER, VAL, SAF, QUA, CM, VMGR, and supporting raildev/doc-reviewer agents) are being rewritten using the same thin-shell approach. Until rewritten, they remain functional but may carry more prose than necessary.
+The remaining 9 agent files (REQ, DES, IMP, TST, INT, VER, VAL, VMGR, and supporting raildev/doc-reviewer agents) are being rewritten using the same thin-shell approach. Until rewritten, they remain functional but may carry more prose than necessary.
 
-**Rewrite principles applied to each agent:**
-1. Agent file (`*.md`) is a boot script only (~70–90 lines): identity, skill load instruction, capabilities list, hard rules, reference table
-2. Primary skill (`SKILL.md`) is an authoritative-sources table + unique behavioral patterns only (~120–150 lines)
+**Rewrite principles:**
+1. Agent file (`*.md`) is a boot script only (~70–100 lines): identity, skill load instruction, capabilities list, hard rules, reference table
+2. Primary skill (`SKILL.md`) is an authoritative-sources table + unique behavioral patterns only (~250–330 lines)
 3. All rules and data live in fundamental documents or `activities/` YAMLs — never duplicated in agent/skill files
-4. Phase-specific coordination notes live in a single `phase-coordination.yaml` per skill, keyed by phase number
+4. Phase-specific coordination notes live in a single process YAML per skill (e.g. `phase-coordination.yaml`, `quality-process.yaml`, `safety-process.yaml`)
 
 ---
 
@@ -262,7 +277,8 @@ EN50128/
 ├── TOOLS.md                           # Tool catalog (T1/T2/T3 confidence)      ← fundamental doc
 ├── tasks/
 │   ├── BASELINE_MANAGEMENT.md         # Baseline management diagrams, role boundaries ← fundamental doc
-│   └── QUALITY_PROCESS.md             # QUA workflow, deliverable touchpoints, SIL obligations ← fundamental doc
+│   ├── QUALITY_PROCESS.md             # QUA workflow, deliverable touchpoints, SIL obligations ← fundamental doc
+│   └── SAFETY_ENGINEERING.md          # SAF phase activities, artifacts, Table A.8 matrix ← fundamental doc
 ├── SETUP.md                           # Installation guide
 ├── CONTRIBUTING.md                    # Contribution guidelines
 ├── CHANGELOG.md                       # Version history
@@ -284,18 +300,23 @@ EN50128/
 │   ├── lifecycle.yaml                # Phase FSM, SIL enforcement rules
 │   ├── roles.yaml                    # Role definitions and independence rules
 │   ├── organization.yaml             # Role combination rules
-│   └── traceability.yaml             # Traceability rules T1–T15
+│   ├── traceability.yaml             # Traceability rules T1–T15
+│   ├── baseline-management.yaml      # Baseline lifecycle, 8 gate baselines, CR re-entry
+│   ├── quality-process.yaml          # QUA process, all 46 Annex C touchpoints, Table A.9
+│   └── safety-process.yaml           # SAF process, Table A.8 (5 entries), phase map
 │
 ├── .opencode/
 │   ├── agents/                        # 14 agent definition files (thin boot scripts)
 │   │   ├── raildev.md                # Primary RailDev mode
 │   │   ├── cod.md                    # Lifecycle Coordinator  ✓ rewritten
 │   │   ├── pm.md                     # Project Manager        ✓ rewritten
+│   │   ├── cm.md                     # Config Manager         ✓ rewritten
+│   │   ├── qua.md                    # Quality Assurance      ✓ rewritten
+│   │   ├── saf.md                    # Safety Engineer        ✓ rewritten
 │   │   ├── req.md, des.md, imp.md   # Requirements, Design, Implementation
 │   │   ├── tst.md, int.md           # Testing, Integration
 │   │   ├── ver.md, val.md           # Verification, Validation
-│   │   ├── saf.md, qua.md           # Safety, Quality
-│   │   ├── cm.md, vmgr.md           # Config, V&V Manager
+│   │   ├── vmgr.md                   # V&V Manager
 │   │   └── doc-reviewer.md           # ISA / doc review
 │   └── skills/                        # 18 domain-specific skills
 │       ├── en50128-lifecycle-coordination/   ✓ rewritten
@@ -306,6 +327,15 @@ EN50128/
 │       ├── en50128-project-management/       ✓ rewritten
 │       │   ├── SKILL.md
 │       │   └── phase-coordination.yaml       # PM coordination notes for all 10 phases
+│       ├── en50128-configuration/            ✓ rewritten
+│       ├── en50128-quality/                  ✓ rewritten
+│       │   ├── SKILL.md
+│       │   ├── review-criteria/              # generic-format-checker.yaml + sections/
+│       │   └── templates/
+│       ├── en50128-safety/                   ✓ rewritten
+│       │   ├── SKILL.md
+│       │   ├── templates/                    # Hazard-Log, FMEA, FTA templates
+│       │   └── workflows/                    # safety-analysis-procedures.md
 │       ├── en50128-requirements/
 │       ├── en50128-design/
 │       ├── en50128-implementation/
@@ -313,10 +343,7 @@ EN50128/
 │       ├── en50128-integration/
 │       ├── en50128-verification/
 │       ├── en50128-validation/
-│       ├── en50128-safety/
-│       ├── en50128-quality/
 │       ├── en50128-documentation/
-│       ├── en50128-configuration/
 │       └── en50128-tools/
 │
 ├── std/                               # EN 50128 Standards (LLM-friendly Markdown)
@@ -385,6 +412,8 @@ These are produced by System Engineering (EN 50126/50129) and consumed by Softwa
 | [`TRACEABILITY.md`](TRACEABILITY.md) | Traceability rules T1–T15 |
 | [`TOOLS.md`](TOOLS.md) | Tool catalog with SIL requirements, confidence levels (T1/T2/T3) |
 | [`tasks/BASELINE_MANAGEMENT.md`](tasks/BASELINE_MANAGEMENT.md) | Baseline management diagrams, role boundaries, EN 50128 terminology |
+| [`tasks/QUALITY_PROCESS.md`](tasks/QUALITY_PROCESS.md) | QUA workflow, deliverable touchpoints, Table A.9 SIL obligations |
+| [`tasks/SAFETY_ENGINEERING.md`](tasks/SAFETY_ENGINEERING.md) | SAF phase activities, artifacts, hazard traceability chain, Table A.8 |
 | [`SETUP.md`](SETUP.md) | Installation and environment setup |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Contribution guidelines |
 | [`CHANGELOG.md`](CHANGELOG.md) | Version history |

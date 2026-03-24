@@ -1,0 +1,835 @@
+# EN 50128 Safety Engineering Process
+# Source: tasks/SAFETY_ENGINEERING.md (ISA PASS), EN 50128:2011
+#
+# This file is the machine-readable translation of tasks/SAFETY_ENGINEERING.md.
+# tasks/SAFETY_ENGINEERING.md remains the ISA-reviewed human-readable authority;
+# this YAML encodes the same information for direct LLM agent consumption.
+#
+# Primary consumer: SAF agent.
+# Also consumed by: COD (gate-check enforcement), PM (phase coordination).
+#
+# This file SUPPLEMENTS deliverables.yaml, traceability.yaml, and organization.yaml.
+# It does NOT duplicate their content.
+# Cross-reference by annex_c_item number, T-rule key, or agent short code.
+#
+# Normative clauses: §6.3, §6.4, §6.4.1.1, §6.4.1.2, §6.4.4.8, §6.3.4.16,
+#                    §7.1, §7.2.4.3, §7.2.4.13, §7.3.4.2, §7.7.4.8,
+#                    §5.1.2.5, §5.1.2.6, §5.1.2.7, §5.1.2.10i,
+#                    Table A.8, EN 50126-1:2017 §6.3, EN 50126-2:2017 Table F.2
+
+safety_process:
+  source_document: "tasks/SAFETY_ENGINEERING.md (ISA PASS)"
+  standard: "EN 50128:2011"
+  upstream_documents:
+    - "WORKFLOW.md (ISA PASS)"
+    - "DELIVERABLES.md (ISA PASS)"
+    - "TRACEABILITY.md (ISA PASS)"
+    - "ORGANIZATION.md (ISA PASS)"
+    - "LIFECYCLE.md (ISA PASS)"
+    - "AGENTS.md (ISA PASS)"
+  clauses:
+    - "§6.3"
+    - "§6.4"
+    - "§6.4.1.1"
+    - "§6.4.1.2"
+    - "§6.4.4.8"
+    - "§6.3.4.16"
+    - "§7.1"
+    - "§7.2.4.3"
+    - "§7.2.4.13"
+    - "§7.3.4.2"
+    - "§7.7.4.8"
+    - "§5.1.2.5"
+    - "§5.1.2.6"
+    - "§5.1.2.7"
+    - "§5.1.2.10i"
+    - "Table A.8"
+    - "EN 50126-1:2017 §6.3"
+    - "EN 50126-2:2017 Table F.2"
+
+  # ── Terminology Notes ────────────────────────────────────────────────────────
+  # Encodes the Terminology Notes section from tasks/SAFETY_ENGINEERING.md.
+  terminology:
+    phase_numbering_convention: >
+      Phase numbers 1–10 in this file always mean EN 50128 software lifecycle phases
+      (Planning through Maintenance). EN 50126 defines a separate 12-phase system
+      lifecycle; references to that lifecycle are always qualified as "EN 50126 Phase N".
+      An unqualified "Phase N" always means an EN 50128 software phase.
+    phase_0_status: >
+      "Phase 0" is a platform extension convenience label for pre-software, system-level
+      inputs that arrive from the EN 50126 RAMS lifecycle. It is NOT a normative phase
+      number in EN 50128 or EN 50126. It is encoded here as system_inputs[], separate
+      from phase_activities[], to avoid implying it is an EN 50128 lifecycle phase.
+    concepts:
+      - term: "EN 50128 phases 1–10"
+        source: "EN 50128 platform lifecycle (LIFECYCLE.md)"
+        meaning: "Planning (1) → Requirements (2) → Design (3) → Component Design (4) → Implementation (5) → Integration (6) → Validation (7) → Assessment (8) → Deployment (9) → Maintenance (10)"
+      - term: "Phase 0"
+        source: "Platform extension — not in EN 50128 or EN 50126"
+        meaning: "Convenience label for system-level inputs from EN 50126 RAMS analysis. SAF has no activity here."
+      - term: "EN 50126 lifecycle phases"
+        source: "EN 50126-1:2017 §6.1"
+        meaning: "12-phase system lifecycle (Concept → Decommissioning). Distinct numbering from EN 50128."
+      - term: "Hazard Log"
+        source: "SAF cross-cutting artifact"
+        meaning: "Created Phase 2, updated Phases 3 and 7. NOT an Annex C item. CM-controlled per §6.6."
+      - term: "S4 — System Safety Requirements Specification"
+        source: "EN 50126 system lifecycle output"
+        meaning: "Phase 0 input (platform convention). Normative input to Phase 2 per §7.2.2. Not produced by SAF."
+      - term: "REQ-SAFE-xxx"
+        source: "EN 50128 §7.2.4.13"
+        meaning: "Safety requirements derived by SAF and recorded by REQ in SRS (Annex C item 6)."
+      - term: "Table A.8"
+        source: "EN 50128 §6.3"
+        meaning: "Software analysis techniques — exactly 5 entries. FMEA/FTA/HAZOP/CCF are NOT in Table A.8."
+      - term: "Safety Case"
+        source: "EN 50129"
+        meaning: "Not an EN 50128 Annex C deliverable. Produced under EN 50129 governance if required."
+
+  # ── System Inputs (Phase 0 — platform extension label) ──────────────────────
+  # SAF has NO activity at Phase 0. These are EN 50126 RAMS outputs consumed
+  # by SAF in Phase 2 as normative inputs per §7.2.2.
+  system_inputs:
+    label: "Phase 0 — system-level inputs (platform extension, not a normative phase)"
+    normative_basis: "§7.2.2 (SRS shall be based on system requirements specification)"
+    saf_activity: "none"
+    inputs:
+      - id: "S3"
+        name: "System Safety Plan"
+        source: "EN 50126 system lifecycle RAMS analysis"
+        feeds: "EN 50128 Phase 1 (SQAP, SVP, SVaP)"
+      - id: "S4"
+        name: "System Safety Requirements Specification"
+        source: "EN 50126 system lifecycle RAMS analysis"
+        feeds: "EN 50128 Phase 2 SRS (normative per §7.2.2)"
+        saf_consumes_in_phase: 2
+
+  # ── Phase Activities ─────────────────────────────────────────────────────────
+  # SAF activity map across EN 50128 Phases 1–10.
+  # Phase 0 is encoded above as system_inputs[]; it does NOT appear here.
+  # Phases with no SAF primary activity are recorded with saf_activity: monitoring
+  # or saf_activity: none, with rationale.
+  phase_activities:
+
+    - phase: 1
+      phase_name: "Planning"
+      clauses: ["§5", "§6.5", "§6.6"]
+      saf_engagement: "advisory"
+      saf_activity: >
+        SAF reviews the SQAP to confirm safety analysis activities are planned and
+        Table A.8 technique selection is recorded. SAF coordinates with PM on hazard
+        analysis schedule.
+      primary_outputs: []
+      gate_input: "none — SAF advisory only; no SAF gate deliverable at Phase 1"
+
+    - phase: 2
+      phase_name: "Requirements"
+      clauses: ["§7.2", "§7.2.4.3", "§7.2.4.13"]
+      saf_engagement: "primary"
+      trigger: >
+        PM assigns SAF in parallel with REQ. Both start from S4 (System Safety
+        Requirements Specification) and S1 (System Requirements Specification).
+      inputs:
+        - id: "S4"
+          description: "System Safety Requirements Specification — normative input per §7.2.2"
+        - id: "S1"
+          description: "System Requirements Specification"
+      activities:
+        - id: "2A"
+          label: "Hazard identification"
+          description: "Identify software-relevant hazards from S4"
+          clause: "§7.2.4.13"
+        - id: "2B"
+          label: "Preliminary risk assessment"
+          description: "Severity × frequency → risk level per EN 50126-2 Table 8"
+          clause: "EN 50126-2:2017 Table 8"
+        - id: "2C"
+          label: "SIL assignment"
+          description: "Tolerable hazard rates per EN 50126-2 Table 8; recorded in SRS"
+          clause: "§7.2.4.3"
+        - id: "2D"
+          label: "Safety requirements derivation"
+          description: >
+            Produce REQ-SAFE-xxx entries; coordinate with REQ to record in SRS per
+            §7.2.4.13. SAF derives; REQ records as primary author of Annex C item 6.
+          clause: "§7.2.4.13"
+        - id: "2E"
+          label: "Software Error Effect Analysis (SEEA)"
+          description: >
+            Table A.8 entry 5 — HR SIL 3–4. Analyse effects on the software system
+            of each software component fault.
+          clause: "Table A.8 entry 5"
+          sil_condition: "HR SIL 3–4; R SIL 1–2"
+      primary_outputs:
+        - artifact: "Hazard Log (initial)"
+          type: "cross_cutting_artifact"
+          cm_controlled: true
+          clause: "§6.6"
+          annex_c_item: null
+          note: "Living document. Not an Annex C item. CM controls versioning per §6.6."
+      contributes_to_annex_c:
+        - annex_c_item: 6
+          doc_name: "Software Requirements Specification"
+          primary_author: "req"
+          saf_contribution: "Derives REQ-SAFE-xxx safety requirements; SIL levels recorded per §7.2.4.3"
+          traceability_ref: "TRACEABILITY.md Diagram 3 — Author: REQ + SAF (Phase 2, item 6)"
+      gate_input: "Hazard Log initial baseline; REQ-SAFE-xxx requirements recorded in SRS draft"
+
+    - phase: 3
+      phase_name: "Architecture and Design"
+      clauses: ["§7.3", "§7.3.4.2", "Table A.8"]
+      saf_engagement: "secondary"
+      trigger: >
+        PM assigns SAF after SDS draft is available, in parallel with DES review.
+      inputs:
+        - "SRS (with REQ-SAFE-xxx)"
+        - "SAS (draft)"
+        - "SDS (draft)"
+      activities:
+        - id: "3A"
+          label: "FMEA on software architecture"
+          description: >
+            Failure mode analysis of key software modules. System-level technique from
+            EN 50126 (D.27 / IEC 60812), applied to software via §7.1.
+            HR SIL 2; HR SIL 3–4. NOT a Table A.8 entry.
+          source_standard: "EN 50126 / D.27 / IEC 60812 (applied via §7.1)"
+          not_in_table_a8: true
+          sil_condition: "HR SIL 2; HR SIL 3–4"
+        - id: "3B"
+          label: "FTA for critical hazards"
+          description: >
+            Top-down causal analysis for hazards with severity ≥ 8 (Catastrophic/Critical).
+            System-level technique from EN 50126 (D.30 / IEC 61025), applied via §7.1.
+            CCF analysis sub-section is HR SIL 3–4 per EN 50126-2:2017 Table F.2 (item 11).
+            HR SIL 2; HR SIL 3–4. NOT a Table A.8 entry.
+          source_standard: "EN 50126 / D.30 / IEC 61025 (applied via §7.1)"
+          not_in_table_a8: true
+          sil_condition: "HR SIL 2; HR SIL 3–4"
+          ccf_sub_activity:
+            label: "Common Cause Failure (CCF) Analysis"
+            recommendation: "HR SIL 3–4"
+            normative_basis: "EN 50126-2:2017 Table F.2 item 11"
+            not_mandatory: true
+            note: "CCF is HR (not Mandatory) even at SIL 4. Must be included in FTA scope when used."
+        - id: "3C"
+          label: "Verify design addresses all safety requirements from SRS"
+          description: >
+            SAF checks all REQ-SAFE-xxx entries are addressed by architecture elements
+            in SAS/SDS. Reports gaps to DES and PM.
+          clause: "§7.3.4.2"
+        - id: "3D"
+          label: "Update Hazard Log — design-phase findings"
+          description: >
+            Update Hazard Log with new failure modes and mitigations found during
+            FMEA/FTA analysis.
+          clause: "§6.6 (CM controls versioning)"
+        - id: "3E"
+          label: "Static Software Analysis on architecture"
+          description: >
+            Table A.8 entry 1 — Static Software Analysis. HR SIL 1–4. Covers MISRA C
+            compliance checking, control flow analysis, data flow analysis, cyclomatic
+            complexity, dead code detection.
+          clause: "Table A.8 entry 1"
+          sil_condition: "R SIL 0; HR SIL 1–4"
+      primary_outputs:
+        - artifact: "Hazard Log (updated — design phase)"
+          type: "cross_cutting_artifact"
+          cm_controlled: true
+          clause: "§6.6"
+          annex_c_item: null
+        - artifact: "FMEA Report(s)"
+          type: "cross_cutting_artifact"
+          cm_controlled: true
+          clause: "§6.6"
+          annex_c_item: null
+          note: "One report per major subsystem or module group. Bottom-up failure analysis."
+        - artifact: "FTA Report(s)"
+          type: "cross_cutting_artifact"
+          cm_controlled: true
+          clause: "§6.6"
+          annex_c_item: null
+          note: >
+            Top-down causal analysis for hazards severity ≥ 8. Includes CCF section
+            if CCF analysis performed (HR SIL 3–4 per EN 50126-2:2017 Table F.2).
+      contributes_to_annex_c:
+        - annex_c_item: 9
+          doc_name: "Software Architecture Specification"
+          primary_author: "des"
+          saf_contribution: >
+            Reviews architecture against safety requirements; FMEA/FTA findings feed
+            SAS safety section.
+          traceability_ref: "TRACEABILITY.md Diagram 3 — Author: DES + SAF (Phase 3, item 9)"
+      gate_input: "FMEA/FTA reports complete; Hazard Log updated; SAF input to SAS safety section"
+
+    - phase: 4
+      phase_name: "Component Design"
+      clauses: ["§7.4"]
+      saf_engagement: "monitoring"
+      saf_activity: >
+        Monitoring and advisory only. SAF reviews component design outputs for new
+        safety implications but produces no primary artifact. IMP and TST apply safety
+        requirements through MISRA C compliance, defensive programming, and
+        safety-tagged test cases (REQ-SAFE-xxx coverage). SAF escalates newly
+        identified hazards to PM for CCB evaluation.
+      primary_outputs: []
+      gate_input: "none — SAF advisory only; escalate hazards to PM/CCB if found"
+
+    - phase: 5
+      phase_name: "Implementation and Testing"
+      clauses: ["§7.5"]
+      saf_engagement: "monitoring"
+      saf_activity: >
+        Monitoring and advisory only. SAF monitors that REQ-SAFE-xxx test cases are
+        present in Component Test Specification (item 16) and implemented in source
+        code per §7.2.4.13 (safety function identification). SAF escalates newly
+        identified hazards to PM for CCB evaluation.
+      primary_outputs: []
+      gate_input: "none — SAF advisory only; escalate hazards to PM/CCB if found"
+
+    - phase: 6
+      phase_name: "Integration"
+      clauses: ["§7.6"]
+      saf_engagement: "monitoring"
+      saf_activity: >
+        Monitoring and advisory only. SAF monitors integration testing for end-to-end
+        safety function coverage (T10a, T10b — TRACEABILITY.md). SAF escalates newly
+        identified hazards to PM for CCB evaluation.
+      primary_outputs: []
+      gate_input: "none — SAF advisory only; escalate hazards to PM/CCB if found"
+
+    - phase: 7
+      phase_name: "Validation"
+      clauses: ["§7.7", "§7.7.4.8"]
+      saf_engagement: "confirmation"
+      trigger: "PM assigns SAF to support VAL's independence check."
+      inputs:
+        - "Software Validation Report (draft)"
+        - "Hazard Log (current CM-controlled baseline)"
+      activities:
+        - id: "7A"
+          label: "REQ-SAFE-xxx coverage confirmation"
+          description: >
+            Confirm all REQ-SAFE-xxx requirements are covered by test evidence in
+            Overall SW Test Report (item 24).
+          clause: "§7.7.4.8(b)"
+          traceability_rule: "T13 (TRACEABILITY.md)"
+        - id: "7B"
+          label: "Hazard Log closure check"
+          description: >
+            Confirm all HAZ-xxx entries reach CLOSED or ACCEPTED-RESIDUAL status.
+            Any unclosed hazard blocks Validation Report sign-off.
+          clause: "§7.7.4.8(b)"
+        - id: "7C"
+          label: "Safety evidence consistency check"
+          description: >
+            Confirm safety case evidence is consistent with validation results.
+            Report to PM: any unclosed hazard blocks sign-off.
+          clause: "§7.7.4.8(b)"
+      primary_outputs:
+        - artifact: "Safety confirmation"
+          type: "input_to_val"
+          description: >
+            SAF confirmation that all hazards are closed; provided as input to VAL
+            for the Validation Report content (§7.7.4.8(b)).
+          annex_c_item: null
+          note: "Input to Annex C item 25 (Validation Report). SAF does not author item 25."
+        - artifact: "Final Hazard Log baseline"
+          type: "cross_cutting_artifact"
+          cm_controlled: true
+          clause: "§6.6"
+          annex_c_item: null
+          note: "Closed at end of Phase 7 validation under CM control."
+      contributes_to_annex_c:
+        - annex_c_item: 25
+          doc_name: "Software Validation Report"
+          primary_author: "val"
+          saf_contribution: >
+            SAF confirmation that all HAZ-xxx entries closed and all REQ-SAFE-xxx
+            covered by test evidence (§7.7.4.8(b)).
+      gate_input: >
+        SAF safety confirmation delivered to VAL; Final Hazard Log baseline
+        under CM control
+
+    - phase: 8
+      phase_name: "Assessment"
+      clauses: ["§6.4", "§6.4.1.1", "§6.4.1.2", "§6.4.4.1", "§6.4.4.8"]
+      saf_engagement: "evidence_provision"
+      saf_activity: >
+        Evidence provision only. The INDEPENDENT ASSESSOR (ASR) — not SAF —
+        performs assessment per §6.4.4.1. ASR is mandatory SIL 1–4 per §6.4.1.1.
+        SAF is prohibited from being the assessor (§6.4.4.1 independence requirement).
+        SAF provides: Hazard Log final baseline, FMEA/FTA reports, and safety
+        requirements coverage evidence to ASR.
+      asr_mandatory_sil: [1, 2, 3, 4]
+      asr_exempt_sil: [0]
+      asr_exemption_clause: "§6.4.1.2 (ISO 9001-certified organisations; SIL 0 only)"
+      asr_independence_clauses: ["§5.1.2.5", "§5.1.2.6", "§5.1.2.7"]
+      asr_independence_note: "ASR must be independent from project AND supplier."
+      saf_provides_to_asr:
+        - "Hazard Log final baseline"
+        - "FMEA Report(s)"
+        - "FTA Report(s)"
+        - "Safety requirements coverage evidence"
+      primary_outputs: []
+      gate_input: "none — SAF provides evidence; ASR produces items 45 and 46"
+
+    - phase: 9
+      phase_name: "Deployment"
+      clauses: ["§9.1", "§6.3.4.16", "§6.4.4.8", "§6.6.4.2"]
+      saf_engagement: "ccb_triggered"
+      saf_activity: >
+        CCB-triggered only. No SAF primary activity at Phase 9 unless a change
+        request affects safety requirements or SIL assignment. If triggered,
+        SAF re-engages at Phase 2 (SIL changes) or Phase 3 (design change only)
+        per §6.6.4.2.
+      release_authority_note: >
+        Safety-critical software is released only after Validator authorisation per
+        §6.3.4.16, AND ASR fitness assessment completion per §6.4.4.8.
+        These are separate obligations: §6.3.4.16 = Validator (VAL role);
+        §6.4.4.8 = Independent Assessor (ASR role). SAF is neither.
+      primary_outputs: []
+      gate_input: "none — SAF advisory only; CCB re-entry only if safety-relevant change"
+
+    - phase: 10
+      phase_name: "Maintenance"
+      clauses: ["§9.2", "§6.6.4.2"]
+      saf_engagement: "ccb_triggered"
+      saf_activity: >
+        CCB-triggered only. If a CCB change request affects safety requirements
+        or SIL assignment, SAF re-engages to update the Hazard Log and re-derive
+        safety requirements. Entry point is Phase 2 (if SIL changes) or Phase 3
+        (if design change only). §6.6.4.2: all changes shall initiate return to
+        an appropriate lifecycle phase.
+      primary_outputs: []
+      gate_input: "none — SAF advisory only; CCB re-entry only if safety-relevant change"
+
+  # ── Cross-cutting Activities ─────────────────────────────────────────────────
+  # Active throughout all phases (TRACEABILITY.md Diagram 3, cross-cutting row).
+  cross_cutting_activities:
+    - role: "saf"
+      activity: "Hazard/safety analysis updates — ongoing Hazard Log maintenance across all phases"
+      traceability_ref: "TRACEABILITY.md Diagram 3, cross-cutting row"
+    - role: "ver"
+      activity: "Ongoing verification activities — independent per §6.2"
+    - role: "qua"
+      activity: "Ongoing audits and template compliance checks — per §6.5"
+    - role: "cm"
+      activity: "Configuration management and baselines — including Hazard Log versioning per §6.6"
+
+  # ── Cross-cutting Artifacts ──────────────────────────────────────────────────
+  # SAF-owned artifacts outside Annex C Table C.1.
+  # Cross-reference deliverables.yaml by annex_c_item for Annex C items.
+  cross_cutting_artifacts:
+
+    - artifact: "Hazard Log"
+      owner: "saf"
+      cm_controlled: true
+      cm_clause: "§6.6"
+      annex_c_item: null
+      phase_created: 2
+      phases_updated: [3, 7]
+      phase_closed: 7
+      reviewed_by: ["ver", "val"]
+      review_order: "ver first; val second"
+      content_fields:
+        - "HAZ-xxx identifier"
+        - "Severity (1–10)"
+        - "Frequency"
+        - "SIL assignment"
+        - "Mitigation measure"
+        - "Residual risk"
+        - "Link to REQ-SAFE-xxx requirements"
+        - "Status: OPEN / CLOSED / ACCEPTED-RESIDUAL"
+      lifecycle_note: >
+        Living document. Created in Phase 2, updated in Phases 3 and 7.
+        Final baseline closed at end of Phase 7 validation.
+        CM controls all versions per §6.6.
+
+    - artifact: "FMEA Report(s)"
+      owner: "saf"
+      cm_controlled: true
+      cm_clause: "§6.6"
+      annex_c_item: null
+      phase_created: 3
+      phases_updated: [3]
+      reviewed_by: ["ver", "val"]
+      review_order: "ver first; val second"
+      content_fields:
+        - "Failure mode"
+        - "Effect"
+        - "Severity (1–10)"
+        - "Occurrence"
+        - "Detection"
+        - "Risk Priority Number (RPN)"
+        - "Mitigation actions"
+      source_standard: "EN 50126 / D.27 / IEC 60812 (applied via §7.1)"
+      scope_note: "One report per major subsystem or module group. Bottom-up analysis."
+
+    - artifact: "FTA Report(s)"
+      owner: "saf"
+      cm_controlled: true
+      cm_clause: "§6.6"
+      annex_c_item: null
+      phase_created: 3
+      phases_updated: [3]
+      reviewed_by: ["ver", "val"]
+      review_order: "ver first; val second"
+      source_standard: "EN 50126 / D.30 / IEC 61025 (applied via §7.1)"
+      scope_note: "Top-down causal analysis for hazards with severity ≥ 8 (Catastrophic/Critical)."
+      ccf_section:
+        required: false
+        recommendation: "HR SIL 3–4"
+        normative_basis: "EN 50126-2:2017 Table F.2 item 11"
+        not_table_a8: true
+        typical_scope:
+          - "Common design faults"
+          - "Shared hardware platform"
+          - "Common power supply"
+          - "EMI / electromagnetic interference"
+
+  # ── Annex C Contributions ────────────────────────────────────────────────────
+  # Annex C items where SAF contributes but is NOT the primary author.
+  # Primary author and full item data are in deliverables.yaml (by annex_c_item).
+  annex_c_contributions:
+    - annex_c_item: 6
+      doc_name: "Software Requirements Specification"
+      phase: 2
+      primary_author: "req"
+      saf_contribution: >
+        Derives REQ-SAFE-xxx safety requirements; SIL levels recorded per §7.2.4.3.
+        SAF co-author alongside REQ per TRACEABILITY.md Diagram 3.
+      traceability_rule: "T2 — each hazard (HAZ-xxx) must trace to a safety requirement (REQ-SAFE-xxx) in SRS"
+
+    - annex_c_item: 9
+      doc_name: "Software Architecture Specification"
+      phase: 3
+      primary_author: "des"
+      saf_contribution: >
+        Reviews architecture against safety requirements; FMEA/FTA findings feed
+        SAS safety section on redundancy, safe states, and fault detection.
+        SAF co-author alongside DES per TRACEABILITY.md Diagram 3.
+      traceability_rule: "T3/T4 — SRS reqs ↔ architecture elements (including REQ-SAFE-xxx)"
+
+    - annex_c_item: 25
+      doc_name: "Software Validation Report"
+      phase: 7
+      primary_author: "val"
+      saf_contribution: >
+        SAF confirmation that all HAZ-xxx entries are CLOSED or ACCEPTED-RESIDUAL
+        and all REQ-SAFE-xxx are covered by test evidence. Required by §7.7.4.8(b):
+        "validation shall demonstrate all safety requirements are met."
+      traceability_rule: "T13 — Validation Report confirms all SRS requirements including REQ-SAFE-xxx"
+
+  # ── What SAF Does Not Own ────────────────────────────────────────────────────
+  # Explicit boundary statement: artifacts and roles outside SAF scope.
+  saf_does_not_own:
+    - item: "Safety Case"
+      standard: "EN 50129"
+      rationale: >
+        "Safety Case" is an EN 50129 concept (Safety Related Electronic Systems for
+        Signalling). EN 50128:2011 Annex C contains no Safety Case item. If a project
+        requires a formal Safety Case per EN 50129, it is produced under EN 50129
+        governance, not EN 50128 Annex C governance.
+
+    - item: "Software Assessment Plan (Annex C item 45)"
+      owner: "asr"
+      rationale: >
+        Owned entirely by the independent Assessor (ASR). SAF has zero authorship
+        or review role. §6.4.4.1 requires assessor independence from the project.
+
+    - item: "Software Assessment Report (Annex C item 46)"
+      owner: "asr"
+      clause: "§6.4.4.8"
+      rationale: >
+        Owned entirely by the independent Assessor (ASR). §6.4.4.8: "software is
+        fit for its intended purpose and safety integrity level" — ASR judgement only.
+        SAF provides evidence to ASR but cannot be the assessor.
+
+    - item: "Release authorisation"
+      owner: "val"
+      clause: "§6.3.4.16"
+      rationale: >
+        Safety-critical software release requires Validator authorisation per §6.3.4.16.
+        This is VAL's obligation, not SAF's. SAF safety confirmation is an input to VAL,
+        but does not constitute release authorisation.
+
+  # ── Hazard Traceability Thread ───────────────────────────────────────────────
+  # Safety-specific forward and backward traceability chain.
+  # Full T-rule definitions are in traceability.yaml — referenced here by rule ID only.
+  # Full Annex C item details are in deliverables.yaml — referenced by annex_c_item only.
+  hazard_traceability_thread:
+
+    forward_chain:
+      - step: 1
+        level: "System (Phase 0 — platform ext.)"
+        artifact: "EN 50126 RAMS Analysis"
+        description: "System-level FMEA, FTA, HAZOP at system level per EN 50126-1 §6.3"
+        produces: "S4 — System Safety Requirements Specification"
+
+      - step: 2
+        phase: 2
+        clause: "§7.2.2 (normative input)"
+        actor: "saf"
+        activity: "Initial hazard analysis — consumes S4"
+        produces:
+          - "HAZ-xxx entries in Hazard Log"
+          - "REQ-SAFE-xxx entries (derived; recorded by REQ in SRS item 6)"
+        traceability_rules: ["T1", "T2"]
+        t2_note: "T2: each HAZ-xxx must trace to a REQ-SAFE-xxx in SRS"
+        ver_checks: "VER checks SRS completeness including REQ-SAFE-xxx per §7.2.4.22"
+
+      - step: 3
+        phase: 3
+        clause: "§7.3.4.2"
+        actor: "saf"
+        activity: "FMEA/FTA on software architecture"
+        produces:
+          - "FMEA Report"
+          - "FTA Report"
+          - "Updated Hazard Log (new failure modes, mitigations)"
+          - "Input to SAS item 9 safety section"
+        traceability_rules: ["T3", "T4"]
+
+      - step: 4
+        phases: [4, 5]
+        clause: "§7.4, §7.5"
+        actor: "saf"
+        activity: "Monitoring only"
+        key_safety_thread:
+          - "Source Code (item 18): MISRA C:2012 mandatory SIL 2+; safety-tagged functions per §7.2.4.13"
+          - "Component Test Report (item 20): REQ-SAFE-xxx test cases must exist (T8, T9)"
+        traceability_rules: ["T7", "T8", "T9"]
+
+      - step: 5
+        phase: 6
+        clause: "§7.6"
+        actor: "saf"
+        activity: "Monitoring only"
+        key_safety_thread:
+          - "SW Integration Test Report (item 21): T10a — traces to SRS, SAS, SDS, Interfaces"
+          - "SW/HW Integration Test Report (item 22): T10b — traces to System Design Desc, SRS"
+        traceability_rules: ["T10a", "T10b"]
+
+      - step: 6
+        phase: 7
+        clause: "§7.7.4.8(b)"
+        actor: "saf"
+        activity: "Confirms all HAZ-xxx CLOSED; all REQ-SAFE-xxx covered by test evidence"
+        produces:
+          - "Safety confirmation (input to VAL)"
+          - "Final Hazard Log baseline"
+        traceability_rules: ["T12", "T13"]
+        t13_note: "T13: Validation Report must confirm all SRS reqs including REQ-SAFE-xxx"
+
+      - step: 7
+        phase: 8
+        clause: "§6.4.4.8"
+        actor: "asr"
+        activity: "ASR independently reviews entire safety evidence chain"
+        reviews_chain: "Hazard Log → REQ-SAFE-xxx → Architecture → Code → Tests → Validation"
+        produces: "Software Assessment Report (item 46)"
+
+      - step: 8
+        phase: 9
+        clauses: ["§6.3.4.16", "§6.4.4.8"]
+        release_preconditions:
+          - "Validator authorisation (§6.3.4.16) — VAL role"
+          - "ASR fitness assessment complete (§6.4.4.8) — ASR role"
+        note: >
+          These are two SEPARATE obligations. §6.3.4.16 is the Validator's; §6.4.4.8
+          is the Assessor's. Both must be satisfied before software release.
+
+    backward_chain:
+      description: >
+        All links are reversible per §5.3.2.7. Traceability rules T1–T15 checked by
+        VER at each phase gate per §6.5.4.14–6.5.4.17. COD blocks phase progression
+        when VER flags gaps per TRACEABILITY.md §7.
+      links:
+        - from: "Software Validation Report [25]"
+          to: "Overall SW Test Report [24]"
+        - from: "Overall SW Test Report [24]"
+          to: "SW Integration Test Reports [21, 22]"
+        - from: "SW Integration Test Reports [21, 22]"
+          to: "Source Code [18] and Component Tests [20]"
+        - from: "Source Code [18]"
+          to: "Component Design Specification [15]"
+        - from: "Component Design Specification [15]"
+          to: "SDS [10]"
+        - from: "SDS [10]"
+          to: "SAS [9]"
+        - from: "SAS [9]"
+          to: "SRS REQ-SAFE-xxx [6]"
+        - from: "SRS REQ-SAFE-xxx [6]"
+          to: "S4 — System Safety Requirements Specification"
+        - from: "S4"
+          to: "EN 50126 RAMS Hazard Analysis"
+
+  # ── Table A.8: Software Analysis Techniques ──────────────────────────────────
+  # EN 50128:2011 §6.3 — exactly 5 entries.
+  # FMEA, FTA, HAZOP, CCF are NOT in Table A.8; see en50126_companion_techniques[].
+  # SIL recommendation levels: M=Mandatory, HR=Highly Recommended, R=Recommended, -=None.
+  table_a8_techniques:
+    source: "EN 50128:2011 §6.3 Table A.8"
+    normative_note: >
+      One or more of these techniques shall be selected to satisfy the Software
+      Safety Integrity Level being addressed.
+    entry_count: 5
+    entries:
+
+      - id: 1
+        technique: "Static Software Analysis"
+        references: ["D.13", "D.37", "Table A.19"]
+        sil_0: "R"
+        sil_1: "HR"
+        sil_2: "HR"
+        sil_3: "HR"
+        sil_4: "HR"
+        scope_note: >
+          Covers MISRA C compliance checking, control flow analysis, data flow analysis,
+          cyclomatic complexity, dead code detection. Sub-techniques in Table A.19.
+
+      - id: 2
+        technique: "Dynamic Software Analysis"
+        references: ["Table A.13", "Table A.14"]
+        sil_0: "-"
+        sil_1: "R"
+        sil_2: "R"
+        sil_3: "HR"
+        sil_4: "HR"
+        scope_note: >
+          Covers execution profiling, memory analysis, timing analysis, runtime fault
+          injection. Sub-techniques in Table A.13 and Table A.14.
+
+      - id: 3
+        technique: "Cause Consequence Diagrams"
+        references: ["D.6"]
+        sil_0: "R"
+        sil_1: "R"
+        sil_2: "R"
+        sil_3: "R"
+        sil_4: "R"
+
+      - id: 4
+        technique: "Event Tree Analysis"
+        references: ["D.22"]
+        sil_0: "-"
+        sil_1: "R"
+        sil_2: "R"
+        sil_3: "R"
+        sil_4: "R"
+
+      - id: 5
+        technique: "Software Error Effect Analysis (SEEA)"
+        references: ["D.25"]
+        sil_0: "-"
+        sil_1: "R"
+        sil_2: "R"
+        sil_3: "HR"
+        sil_4: "HR"
+        scope_note: >
+          Software-specific analysis: analyse effects on the software system of each
+          software component fault. Analogous to FMEA but scoped to software failure
+          modes (NULL pointer, overflow, state machine stuck-at, uninitialized variable).
+
+  # ── EN 50126 Companion Techniques ───────────────────────────────────────────
+  # Techniques commonly used in railway safety engineering that are NOT in Table A.8.
+  # These are EN 50126 system-level techniques applied to software via §7.1.
+  # When cited in an EN 50128 project SQAP, they must be attributed to EN 50126
+  # and applied via the §7.1 gateway.
+  en50126_companion_techniques:
+    attribution_note: >
+      These techniques originate from EN 50126 and EN 50126 companion standards.
+      When applied to software in an EN 50128 project, they are applied via the
+      §7.1 gateway ("software safety requirements based on RAMS analysis").
+      SIL recommendation levels below are from EN 50126 RAMS tables, not Table A.8.
+    techniques:
+
+      - technique: "Failure Mode and Effects Analysis (FMEA)"
+        sources: ["EN 50126", "D.27", "IEC 60812"]
+        not_in_table_a8: true
+        software_applicability: >
+          Applied at software level (EN 50128 Phase 3) per §7.1; informs SAS/SDS
+          safety sections.
+        sil_recommendation: "HR SIL 2; HR SIL 3–4"
+        recommendation_source: "EN 50126 risk tables"
+
+      - technique: "Fault Tree Analysis (FTA)"
+        sources: ["EN 50126", "D.30", "IEC 61025"]
+        not_in_table_a8: true
+        software_applicability: >
+          Top-down analysis of critical hazards (severity ≥ 8). CCF analysis is
+          a HR sub-activity SIL 3–4 per EN 50126-2:2017 Table F.2 (item 11).
+        sil_recommendation: "HR SIL 2; HR SIL 3–4"
+        recommendation_source: "EN 50126 risk tables"
+        ccf_sub_activity:
+          recommendation: "HR SIL 3–4"
+          basis: "EN 50126-2:2017 Table F.2 item 11"
+          not_mandatory: true
+
+      - technique: "Hazard and Operability Study (HAZOP)"
+        sources: ["EN 50126", "D.32"]
+        not_in_table_a8: true
+        software_applicability: >
+          Applied at software interfaces and data streams.
+        sil_recommendation: "HR SIL 2; HR SIL 3–4"
+        recommendation_source: "EN 50126 risk tables"
+
+      - technique: "Common Cause Failure Analysis (CCF)"
+        sources: ["EN 50126", "D.9", "D.11"]
+        not_in_table_a8: true
+        software_applicability: >
+          HR SIL 3–4 per EN 50126-2:2017 Table F.2 (item 11). Must be included
+          in FTA scope. Typically addresses: common design faults, shared hardware
+          platform, common power supply, EMI.
+        sil_recommendation: "HR SIL 3–4"
+        recommendation_source: "EN 50126-2:2017 Table F.2 item 11"
+        not_mandatory: true
+
+      - technique: "Markov Analysis"
+        sources: ["EN 50126"]
+        not_in_table_a8: true
+        software_applicability: >
+          Quantitative availability and reliability modelling.
+        sil_recommendation: "R SIL 2; R SIL 3–4"
+        recommendation_source: "EN 50126 risk tables"
+
+  # ── Independence and Boundaries ─────────────────────────────────────────────
+  # SAF-specific role boundary statement.
+  # Full independence matrix (all roles, all SIL levels) is in organization.yaml.
+  # This block encodes only SAF-specific boundaries per tasks/SAFETY_ENGINEERING.md §5.
+  independence:
+    saf_independence_required: false
+    saf_independence_clause: "none"
+    saf_independence_rationale: >
+      EN 50128:2011 has no §5.1.2 independence clause for SAF. SAF may be part of the
+      development team at all SIL levels. Any project document claiming SAF+REQ is
+      prohibited at SIL 3–4 has no normative basis.
+    full_matrix_ref: "organization.yaml (independence matrix for all roles)"
+
+    related_role_independence:
+      - role: "ver"
+        requirement: "HR SIL 2; M SIL 3–4"
+        clause: "§5.1.2.10i"
+        role_exclusions: >
+          Shall NOT be: Requirements Manager, Designer, Implementer, Integrator,
+          Tester, or Validator.
+        note: "§5.1.2.10i governs role exclusion. §5.1.2.10e governs reporting lines only."
+      - role: "val"
+        requirement: "HR SIL 2; M SIL 3–4"
+        clause: "§5.1.2.10f"
+        note: "VAL must be independent from all development roles."
+      - role: "asr"
+        requirement: "M SIL 1–4"
+        mandatory_clauses: ["§6.4.1.1", "§5.1.2.5", "§5.1.2.6", "§5.1.2.7"]
+        exempt: "SIL 0 per §6.4.1.2"
+        note: "ASR must be independent from project AND supplier. ASR ≠ SAF at any SIL."
+
+    allowed_combinations:
+      - "saf + req: ALLOWED — SAF derives safety requirements; REQ records in SRS (§7.2.4.13)"
+      - "saf + des: ALLOWED — SAF reviews design for safety compliance (EN 50128 Phase 3)"
+      - "saf + pm: ALLOWED — SAF provides hazard status for gate checks"
+
+    prohibited_boundaries:
+      - "saf + asr: PROHIBITED — SAF provides evidence to ASR but cannot be the assessor (§6.4.4.1)"
+      - "saf + ver_role: BOUNDARY — SAF does not perform independent verification (VER role per §6.2)"
+      - "saf + val_signoff: BOUNDARY — SAF does not perform validation sign-off (VAL role per §6.3)"

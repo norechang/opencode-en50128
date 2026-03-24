@@ -1,0 +1,23 @@
+# Required sections supplement — Release Note
+# Annex C item: 27
+# Written by: PM (or per SQAP)
+# Standard reference: EN 50128:2011 §9.1, Annex C
+
+doc_key: "RELEASENOTE"
+annex_c_item: 27
+standard_reference: "§9.1"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; software system and version being released"
+  - heading: "Software Baseline"
+    notes: "Exact CM baseline tag; list of all deliverables in this release"
+  - heading: "Changes in This Release"
+    notes: "Summary of changes since previous release; change record references"
+  - heading: "Known Issues"
+    notes: "Known deficiencies; waivers; conditions of use"
+  - heading: "Installation Instructions"
+    notes: "How to deploy this release"
+  - heading: "Validation Status"
+    notes: "Reference to Validation Report (item 25) confirming this baseline was validated"

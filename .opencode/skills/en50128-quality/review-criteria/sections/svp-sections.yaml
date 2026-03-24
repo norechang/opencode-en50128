@@ -1,0 +1,26 @@
+# Required sections supplement — Software Verification Plan
+# Annex C item: 4
+# Written by: VER
+# Standard reference: EN 50128:2011 §6.2.4.2–6.2.4.9
+# qua_check_type: template_compliance_one_pass (1-Pass Rule applies)
+
+doc_key: "SVP"
+annex_c_item: 4
+standard_reference: "§6.2.4.2–6.2.4.9"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose, scope, normative basis"
+  - heading: "Verification Strategy"
+    notes: "§6.2.4.3: activities to ensure correctness of outputs at each phase"
+  - heading: "Techniques and Tools"
+    notes: "§6.2.4.5: criteria, techniques, tools per SIL level"
+  - heading: "Independence Requirements"
+    notes: "§6.2.4.9: how verifier independence is maintained (mandatory SIL 3–4)"
+  - heading: "Verification Activities per Phase"
+    notes: "§6.2.4.4: per-phase verification breakdown; which reports are produced"
+  - heading: "Result Retention"
+    notes: "§6.2.4.8: where and how verification results are retained"
+  - heading: "Update Procedure"
+    notes: "§6.5.4.9: plan update frequency and responsibility"

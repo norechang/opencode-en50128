@@ -1,0 +1,25 @@
+# Required sections supplement — Deployment and Installation Plan
+# Annex C item: 36
+# Written by: PM (or per SQAP)
+# Standard reference: EN 50128:2011 §9.1.4
+
+doc_key: "DEPLOYPLAN"
+annex_c_item: 36
+standard_reference: "§9.1.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; target deployment environment"
+  - heading: "Deployment Scope"
+    notes: "Which software baseline; target hardware; site(s)"
+  - heading: "Prerequisites"
+    notes: "Hardware, firmware, OS, and tool prerequisites"
+  - heading: "Installation Procedure"
+    notes: "§9.1.4.2: step-by-step installation instructions"
+  - heading: "Verification Steps"
+    notes: "§9.1.4.3: post-installation checks to confirm correct deployment"
+  - heading: "Rollback Procedure"
+    notes: "How to revert to previous version if deployment fails"
+  - heading: "Responsibilities"
+    notes: "Who performs each step; authorisation required"

@@ -1,0 +1,27 @@
+# Required sections supplement — Software Configuration Management Plan
+# Annex C item: 3
+# Written by: CM
+# Standard reference: EN 50128:2011 §6.6.4
+
+doc_key: "SCMP"
+annex_c_item: 3
+standard_reference: "§6.6.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose, scope, relationship to SQAP"
+  - heading: "Configuration Identification"
+    notes: "Naming conventions, Document ID scheme, CI identification"
+  - heading: "Configuration Control"
+    notes: "§6.6.4.1(a–i): change request procedure, CCB authority, CR fields"
+  - heading: "Configuration Status Accounting"
+    notes: "How CI status is tracked and reported"
+  - heading: "Baseline Management"
+    notes: "Baseline types, creation procedure, gate-to-baseline map"
+  - heading: "Audits and Reviews"
+    notes: "CM audit procedures; CRITICAL/MAJOR violation alarm protocol"
+  - heading: "Tool and Environment Control"
+    notes: "§6.5.4.12: tools, translators, test files, hardware platforms under CM"
+  - heading: "Update Procedure"
+    notes: "§6.5.4.9: how and when SCMP is updated"

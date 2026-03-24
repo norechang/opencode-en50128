@@ -1,0 +1,25 @@
+# Required sections supplement — Software Component Test Specification
+# Annex C item: 16
+# Written by: TST
+# Standard reference: EN 50128:2011 §7.4.4, §7.5.4
+
+doc_key: "COMPTESTSPEC"
+annex_c_item: 16
+standard_reference: "§7.4.4, §7.5.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose, scope; component(s) covered; reference to COMPDESIGN"
+  - heading: "Test Strategy"
+    notes: "Unit test approach; test framework used (e.g. Unity); coverage targets"
+  - heading: "Test Environment"
+    notes: "Build environment, test runner, simulators, stubs"
+  - heading: "Test Cases"
+    notes: "§7.5.4.5–7.5.4.6: test case IDs, function under test, inputs, expected outputs, pass/fail criteria"
+  - heading: "Coverage Targets"
+    notes: "Statement, branch, MC/DC targets per SIL level (Table A.21)"
+  - heading: "Pass/Fail Criteria"
+    notes: "All test cases pass AND coverage target met"
+  - heading: "Traceability"
+    notes: "Test cases traced to COMPDESIGN interface definitions and SRS requirements"

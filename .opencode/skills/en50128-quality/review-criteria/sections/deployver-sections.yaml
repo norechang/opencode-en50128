@@ -1,0 +1,26 @@
+# Required sections supplement — Deployment Verification Report
+# Annex C item: 40
+# Written by: VER
+# Standard reference: EN 50128:2011 §6.2.4.12–6.2.4.13, §9.1.4.3
+# qua_check_type: template_compliance_one_pass (1-Pass Rule applies)
+# Platform deviation D3: placed Phase 9; Annex C places in Maintenance phase
+# Note: no VAL 2nd check per Annex C
+
+doc_key: "DEPLOYVER"
+annex_c_item: 40
+standard_reference: "§6.2.4.12–6.2.4.13, §9.1.4.3"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; deployment records (item 39) and software baseline verified"
+  - heading: "Verification Scope"
+    notes: "Which deployment activities were verified; §9.1.4.3 criteria applied"
+  - heading: "Verification Method"
+    notes: "Techniques used"
+  - heading: "Findings"
+    notes: "§6.2.4.13: findings with severity"
+  - heading: "Conclusion"
+    notes: "Deployment verified / not verified; software correctly installed and operational"
+  - heading: "Open Items"
+    notes: "Any outstanding items; conditions of acceptance"

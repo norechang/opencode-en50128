@@ -33,6 +33,9 @@ Each YAML file answers specific questions an agent needs to act:
 | `organization.yaml` | SIL-tiered org charts, role independence matrix, permitted and prohibited role combinations |
 | `deliverables.yaml` | Full Annex C catalogue (46 items): writer, 1st Check, 2nd Check, doc ID, path, platform deviations |
 | `roles.yaml` | Agent-to-role mapping, independence requirements by SIL, track assignment (A or B), skills loaded |
+| `baseline-management.yaml` | Baseline lifecycle, 8 gate baselines, 7-step creation procedure, CR re-entry path; source: `tasks/BASELINE_MANAGEMENT.md` |
+| `quality-process.yaml` | QUA process: per-phase activities, all 46 Annex C touchpoints, two-track gate positions, Table A.9; source: `tasks/QUALITY_PROCESS.md` |
+| `safety-process.yaml` | SAF process: phase activity map, cross-cutting artifacts, Table A.8 (5 entries), EN 50126 companion techniques; source: `tasks/SAFETY_ENGINEERING.md` |
 
 ### Phase Files
 
@@ -135,8 +138,9 @@ The markdown documents are the normative human reference. The YAML files are der
 | **VMGR** | `workflow.yaml` (V&V routing), `phase-N-*.yaml` (verification + validation blocks) |
 | **VER** | `phase-N-*.yaml` (verification criteria), `deliverables.yaml` |
 | **VAL** | `phase-7-validation.yaml` (produces reports), all phases (2nd Check role) |
-| **QUA** | `deliverables.yaml` (template paths, doc IDs), `phase-N-*.yaml` (qua_required flags) |
-| **CM** | `deliverables.yaml` (all 46 items for baseline management) |
+| **QUA** | `deliverables.yaml` (template paths, doc IDs), `phase-N-*.yaml` (qua_required flags), `quality-process.yaml` |
+| **CM** | `deliverables.yaml` (all 46 items for baseline management), `baseline-management.yaml` |
+| **SAF** | `safety-process.yaml` (phase activity map, Table A.8, artifact list), `phase-N-*.yaml` (SAF activities) |
 | **ASR** | `phase-8-assessment.yaml`, `deliverables.yaml` (all items for review) |
 
 ---

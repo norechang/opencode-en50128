@@ -1,0 +1,21 @@
+# Required sections supplement — Software Maintenance Records
+# Annex C item: 43
+# Written by: PM (or per SQAP)
+# Standard reference: EN 50128:2011 §9.2.4
+
+doc_key: "MAINTREC"
+annex_c_item: 43
+standard_reference: "§9.2.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; applicable software system"
+  - heading: "Maintenance Activity Log"
+    notes: "List of maintenance activities; date, type, CR reference, responsible person"
+  - heading: "Impact Assessments"
+    notes: "Safety impact assessment for each maintenance activity"
+  - heading: "Test Results"
+    notes: "Regression and re-entry test results for each maintenance change"
+  - heading: "Baseline Updates"
+    notes: "Which CM baseline was updated; new baseline tag"

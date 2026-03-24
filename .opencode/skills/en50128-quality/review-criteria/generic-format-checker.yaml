@@ -1,0 +1,128 @@
+# Generic Format Checker
+#
+# EN 50128 QUA — Universal document format rules
+# Applied to EVERY deliverable with a QUA touchpoint.
+# Parameterized by: doc_abbreviation, sil_level
+#
+# Source authority: tasks/QUALITY_PROCESS.md (ISA PASS)
+# Touchpoint data:  activities/quality-process.yaml
+#
+# Usage:
+#   1. Load this file for every QUA format-gate check.
+#   2. Supply doc_abbreviation (from deliverables.yaml 'abbreviation' field)
+#      and sil_level (0-4) at runtime.
+#   3. Then load the matching sections/<doc-key>-sections.yaml for the
+#      required-sections check (Rule GF-004).
+#
+# NOTE: This checker enforces FORMAT only.
+# Technical content (requirements correctness, design quality, code standards,
+# traceability link completeness) is NOT checked here — that is VER's role.
+
+checker_name: "generic-format-checker"
+checker_version: "1.0"
+description: >
+  Universal format rules applied by QUA to every Annex C deliverable.
+  Three rules: Document ID format, Document Control table, Approvals table.
+  A fourth rule (required sections) is supplied by the document-specific
+  sections supplement in sections/<doc-key>-sections.yaml.
+
+parameters:
+  doc_abbreviation:
+    type: string
+    description: >
+      Abbreviation from deliverables.yaml 'abbreviation' field (e.g. "SRS",
+      "SQAP", "SVP"). Used to validate the abbreviation segment of Document ID.
+    required: true
+  sil_level:
+    type: integer
+    minimum: 0
+    maximum: 4
+    description: Project SIL level — determines required Approvals table roles.
+    required: true
+
+rules:
+
+  - id: "GF-001"
+    name: "Document ID Format"
+    description: >
+      The Document Control table must contain a Document ID field whose value
+      matches the pattern DOC-<ABBREV>-<YYYY>-<NNN>, where ABBREV matches the
+      expected abbreviation for this document type.
+    severity: error
+    rule_type: regex
+    rule_params:
+      search_section: "Document Control"
+      field_name: "Document ID"
+      pattern: "DOC-{doc_abbreviation}-[0-9]{4}-[0-9]{3}"
+      # {doc_abbreviation} is substituted at runtime with the parameter value
+    expected: "DOC-<ABBREV>-YYYY-NNN (e.g. DOC-SRS-2026-001)"
+    failure_message: >
+      Document ID is missing or does not match required format
+      DOC-{doc_abbreviation}-YYYY-NNN.
+    fix_suggestion: >
+      Update the Document ID field in the Document Control table to
+      DOC-{doc_abbreviation}-[year]-[sequence] (e.g. DOC-{doc_abbreviation}-2026-001).
+
+  - id: "GF-002"
+    name: "Document Control Table"
+    description: >
+      A Document Control table must be present with all five required fields
+      populated and non-empty.
+    severity: error
+    rule_type: table_fields
+    rule_params:
+      table_header: "Document Control"
+      required_fields:
+        - name: "Document ID"
+          must_be_non_empty: true
+        - name: "Version"
+          must_be_non_empty: true
+        - name: "Date"
+          must_be_non_empty: true
+          format_hint: "YYYY-MM-DD"
+        - name: "Author"
+          must_be_non_empty: true
+        - name: "Status"
+          must_be_non_empty: true
+          allowed_values: ["Draft", "Review", "Approved", "Baseline"]
+    expected: >
+      Document Control table with fields: Document ID, Version, Date, Author,
+      Status — all non-empty.
+    failure_message: "Document Control table missing or has unpopulated required fields."
+    fix_suggestion: >
+      Add or complete the Document Control table. All five fields (Document ID,
+      Version, Date, Author, Status) must be present and non-empty.
+
+  - id: "GF-003"
+    name: "Approvals Table"
+    description: >
+      An Approvals table must be present with the correct columns and minimum
+      required roles for the SIL level. Required roles: Author, Reviewer (QUA),
+      Approver (PM) for all SIL levels.
+      Note: VER, VAL, VMGR are Track B roles — they do NOT appear as Approvals
+      table signatories on development deliverables. Track A sign-off only.
+    severity: error
+    rule_type: table_roles
+    rule_params:
+      table_header: "Approvals"
+      required_columns: ["Role", "Name", "Signature", "Date"]
+      required_roles:
+        sil_0_to_4:           # same minimum for all SIL levels
+          - "Author"
+          - "Reviewer (QUA)"
+          - "Approver (PM)"
+    expected: >
+      Approvals table with columns Role/Name/Signature/Date and roles:
+      Author, Reviewer (QUA), Approver (PM).
+    failure_message: >
+      Approvals table missing, columns incomplete, or required roles absent.
+    fix_suggestion: >
+      Add Approvals table with columns: Role, Name, Signature, Date.
+      Include rows for: Author, Reviewer (QUA), Approver (PM).
+      Do not add VER/VAL/VMGR rows — those are Track B and do not sign
+      the Approvals table on development deliverables.
+
+# Rule GF-004 (Required Sections) is NOT defined here.
+# It is supplied by the document-specific sections supplement:
+#   review-criteria/sections/<doc-key>-sections.yaml
+# QUA loads both files and applies all four rules together.

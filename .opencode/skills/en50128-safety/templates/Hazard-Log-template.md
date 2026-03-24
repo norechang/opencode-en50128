@@ -1,481 +1,261 @@
 # Hazard Log
 
-**TEMPLATE VERSION**: 1.0  
-**REFERENCE**: [Related requirements]
+**Document Type**: Cross-cutting safety artifact (outside Annex C Table C.1)  
+**Standard**: EN 50128:2011 §7.1, §7.2.4.13, §6.6  
+**Template version**: 2.0
 
 ---
 
-## STANDARD HEADER
+## Document Control
 
 | Field | Value |
 |-------|-------|
-| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Document ID** | DOC-HAZLOG-[YYYY]-[NNN] |
 | **Version** | [X.Y] |
 | **Date** | [YYYY-MM-DD] |
 | **Project** | [Project Name] |
-| **SIL Level** | [0, 1, 2, 3, or 4] |
-| **Author** | [Name], [Role] |
-| **Reviewer** | [Name], [Role] |
-| **Approver** | [Name], [Role] |
+| **SIL Level** | [0 / 1 / 2 / 3 / 4] |
+| **Author** | [Name] (SAF) |
 | **Status** | [Draft \| Review \| Approved \| Baseline] |
 
-## DOCUMENT CONTROL
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft — Phase 2 hazard analysis |
 
-| Version | Date | Author | Changes | Approved By |
-|---------|------|--------|---------|-------------|
-| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
+## Approvals
 
-## APPROVALS
-
-**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
-**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
+> **Note**: VER, VAL, and ASR do not appear in the Approvals table.
+> VER and VAL review this artifact in Track B; their sign-off is recorded in
+> their respective verification/validation reports — not here.
+> ASR independently reviews all safety evidence; ASR sign-off is in item 46.
+>
+> Track A Approvals table (document release):
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Author** | [Name] | | YYYY-MM-DD |
-| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
-| **QA Manager** | [Name] | | YYYY-MM-DD |
-| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
-| **Project Manager** | [Name] | | YYYY-MM-DD |
-| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Author** (SAF) | [Name] | | YYYY-MM-DD |
+| **Reviewer** (QUA) | [Name] | | YYYY-MM-DD |
+| **Approver** (PM) | [Name] | | YYYY-MM-DD |
 
 ---
 
-## 1. INTRODUCTION
+## 1. Introduction
 
 ### 1.1 Purpose
 
-This Hazard Log documents all identified hazards, risks, and safety measures for **[Project Name]** in accordance with EN 50128:2011 Section 7.1 and EN 50126:2017.
+This Hazard Log documents all software-relevant hazards identified for **[Project Name]**
+in accordance with EN 50128:2011 §7.1 and EN 50126:2017. It is a living document,
+maintained by SAF and CM-controlled per §6.6.
 
 The Hazard Log provides:
-- Complete hazard identification and analysis
-- Risk assessment and SIL determination
-- Safety requirements traceability
-- FMEA (Failure Modes and Effects Analysis) for critical functions
-- FTA (Fault Tree Analysis) for catastrophic hazards
-- Verification methods and residual risk assessment
-
-**Intended Audience**:
-- Safety engineers
-- System and software designers
-- Verification and validation teams
-- Project management
-- Customer and certification authorities
+- Complete hazard identification (HAZ-xxx) with severity, frequency, risk, and SIL assignment
+- REQ-SAFE-xxx safety requirement derivation and links (§7.2.4.13)
+- Mitigation strategy and residual risk assessment
+- Hazard closure status for Validation phase (§7.7.4.8(b))
+- SEEA findings (if SIL 3–4; Table A.8 entry 5)
 
 ### 1.2 Scope
 
-This Hazard Log covers:
-- Software-related hazards in the [system name]
-- Hardware-software interface failures
-- Common cause failures
-- Systematic failures in software
-- Random hardware failures affecting software behavior
+This Hazard Log covers software-relevant hazards in [system name], including:
+- Software-induced hazardous states
+- Hardware-software interface failures relevant to software behaviour
+- Systematic software failures
 
-**Out of Scope** (covered by System Hazard Analysis):
-- Pure mechanical failures
-- Electrical power supply failures (unless affecting software)
-- Human factors - addressed at system level
+Out of scope: pure mechanical failures, pure electrical supply failures, human factors
+analysed entirely at system level. These are covered by the System Hazard Analysis (S4).
 
-### 1.3 Safety Analysis Methods Applied
+### 1.3 Safety Analysis Techniques Applied
 
-Per EN 50128 Table A.1 and A.8, the following safety analysis techniques have been applied:
+Per EN 50128 Table A.8 (§6.3) and EN 50126:
 
-| Technique | SIL 0-1 | SIL 2 | SIL 3-4 | Applied | Evidence |
-|-----------|---------|-------|---------|---------|----------|
-| **Hazard Identification** | R | HR | HR | ✓ | Section 3 |
-| **Risk Assessment** | R | HR | HR | ✓ | Section 3 |
-| **FMEA** | - | R | HR | ✓ | Section 5 |
-| **FTA** | - | R | HR | ✓ | Section 6 |
-| **Common Cause Failure Analysis** | - | R | **M** | ✓ | Section 4 |
-| **Software Error Effect Analysis** | - | R | HR | ✓ | Section 5 |
+| Technique | Source | SIL 0 | SIL 1 | SIL 2 | SIL 3 | SIL 4 | Applied |
+|-----------|--------|-------|-------|-------|-------|-------|---------|
+| Static Software Analysis | Table A.8 entry 1 | R | HR | HR | HR | HR | [Yes/No] |
+| Dynamic Software Analysis | Table A.8 entry 2 | — | R | R | HR | HR | [Yes/No] |
+| Cause Consequence Diagrams | Table A.8 entry 3 | R | R | R | R | R | [Yes/No] |
+| Event Tree Analysis | Table A.8 entry 4 | — | R | R | R | R | [Yes/No] |
+| Software Error Effect Analysis (SEEA) | Table A.8 entry 5 | — | R | R | HR | HR | [Yes/No] |
+| FMEA (EN 50126 D.27, via §7.1) | EN 50126 | — | R | HR | HR | HR | [Yes/No] |
+| FTA (EN 50126 D.30, via §7.1) | EN 50126 | — | R | HR | HR | HR | [Yes/No] |
+| CCF Analysis (EN 50126 D.9/D.11, via §7.1) | EN 50126-2 Table F.2 | — | — | R | HR | HR | [Yes/No] |
 
-**Key**: M = Mandatory, HR = Highly Recommended, R = Recommended
+> **Note**: FMEA, FTA, and CCF are EN 50126 system-level techniques applied to support
+> software analysis via EN 50128 §7.1. They are NOT Table A.8 entries. CCF is
+> **Highly Recommended** (not Mandatory) at SIL 3–4 per EN 50126-2:2017 Table F.2 item 11.
 
 ### 1.4 References
 
 | Reference | Document |
 |-----------|----------|
-| **[EN50128]** | EN 50128:2011 Railway applications - Software for railway control and protection systems |
-| **[EN50126-1]** | EN 50126-1:2017 Railway applications - RAMS - Part 1: Generic RAMS process |
-| **[EN50126-2]** | EN 50126-2:2017 Railway applications - RAMS - Part 2: Systems approach to safety |
-| **[EN50129]** | EN 50129:2018 Railway applications - Safety related electronic systems for signalling |
-| **[SRS]** | Software Requirements Specification, DOC-SRS-YYYY-NNN |
-| **[SAS]** | Software Architecture Specification, DOC-SAS-YYYY-NNN |
-| **[RTM]** | Requirements Traceability Matrix, DOC-RTM-YYYY-NNN |
+| [S4] | System Safety Requirements Specification (EN 50126 output) |
+| [SRS] | Software Requirements Specification, DOC-SRS-[YYYY]-[NNN] |
+| [SAS] | Software Architecture Specification, DOC-SAS-[YYYY]-[NNN] |
+| [EN50128] | EN 50128:2011 Railway applications — Software standard |
+| [EN50126-1] | EN 50126-1:2017 RAMS Part 1 |
+| [EN50126-2] | EN 50126-2:2017 RAMS Part 2 |
 
 ---
 
-## 2. HAZARD ANALYSIS SUMMARY
+## 2. Hazard Analysis Summary
 
 ### 2.1 Hazard Count by Severity
 
-| Severity Level | Count | Catastrophic | Critical | Marginal | Negligible |
-|----------------|-------|--------------|----------|----------|------------|
-| **Total Hazards** | [N] | [N] | [N] | [N] | [N] |
+| Severity (score) | Count |
+|-----------------|-------|
+| Catastrophic (9–10) | [N] |
+| Critical (7–8) | [N] |
+| Moderate (4–6) | [N] |
+| Minor (1–3) | [N] |
+| **Total** | [N] |
 
 ### 2.2 Hazard Status Summary
 
-| Status | Count | Description |
-|--------|-------|-------------|
-| **Open** | [N] | Hazard identified, no mitigation yet |
-| **Mitigated** | [N] | Safety requirements defined, implementation pending |
-| **Closed** | [N] | Mitigation implemented and verified |
+| Status | Count |
+|--------|-------|
+| OPEN | [N] |
+| CLOSED | [N] |
+| ACCEPTED-RESIDUAL | [N] |
 
 ### 2.3 SIL Distribution
 
-| SIL Level | Hazard Count | Percentage |
-|-----------|--------------|------------|
-| **SIL 4** | [N] | [X]% |
-| **SIL 3** | [N] | [X]% |
-| **SIL 2** | [N] | [X]% |
-| **SIL 1** | [N] | [X]% |
-| **SIL 0** | [N] | [X]% |
+| SIL | Count |
+|-----|-------|
+| SIL 4 | [N] |
+| SIL 3 | [N] |
+| SIL 2 | [N] |
+| SIL 1 | [N] |
+| SIL 0 | [N] |
 
 ---
 
-## 3. HAZARD REGISTER
+## 3. Hazard Register
 
 ### HAZ-001: [Hazard Title]
 
-**Hazard Category**: [Category]  
-**System**: [System Name]  
-**Status**: [Open / Mitigated / Closed]  
-**SIL Level**: [0, 1, 2, 3, or 4]
-
-#### 3.1.1 Hazard Description
-
-[Detailed description of the hazard condition]
-
-#### 3.1.2 Consequences
-
-- **Severity**: [Catastrophic / Critical / Marginal / Negligible]
-- **Impact**:
-  - [Impact 1]
-  - [Impact 2]
-  - [Impact 3]
-
-#### 3.1.3 Causes (Root Cause Analysis)
-
-1. **[Cause Category 1]**:
-   - [Specific cause 1]
-   - [Specific cause 2]
-
-2. **[Cause Category 2]**:
-   - [Specific cause 1]
-   - [Specific cause 2]
-
-#### 3.1.4 Risk Assessment
-
-**Frequency Assessment**:
-- [Failure mode]: [Frequency] ([probability per hour])
-
-**Severity**: [Catastrophic / Critical / Marginal / Negligible]
-
-**Risk Matrix**:
-
-| Frequency ↓ / Severity → | Negligible | Marginal | Critical | Catastrophic |
-|--------------------------|------------|----------|----------|--------------|
-| Frequent                 | Tolerable  | Undesirable | Unacceptable | Unacceptable |
-| Probable                 | Tolerable  | Undesirable | Unacceptable | Unacceptable |
-| Occasional               | Tolerable  | Undesirable | Unacceptable | Unacceptable |
-| Remote                   | Acceptable | Tolerable | Undesirable | Undesirable |
-| Improbable               | Acceptable | Tolerable | Tolerable | Tolerable |
-
-**Initial Risk Level**: [Unacceptable / Undesirable / Tolerable / Acceptable]
-
-**Target Risk Level**: [Tolerable / Acceptable]
-
-**Assigned SIL**: [0, 1, 2, 3, or 4]
-
-#### 3.1.5 Safety Requirements (Mitigations)
-
-| SW Req ID | Description | Mitigation Effectiveness |
-|-----------|-------------|-------------------------|
-| **[REQ-ID]** | [Requirement description] | [Mitigation type] |
-
-**Combined Mitigation Strategy**:
-1. [Strategy 1]
-2. [Strategy 2]
-3. [Strategy 3]
-
-**Expected Risk Reduction**: [Factor]
-
-#### 3.1.6 Verification Methods
-
-- **Test**: [Test description]
-- **FMEA**: Section [X]
-- **FTA**: Section [X]
-- **Fault Injection**: [Description]
-- **Coverage Analysis**: [Coverage target]
-
-#### 3.1.7 Residual Risk
-
-After mitigation, residual risk:
-- **Failure Rate**: [Target rate]
-- **Severity**: [Level]
-- **Risk Level**: [Tolerable / Acceptable]
-
-**Assumptions**:
-- [Assumption 1]
-- [Assumption 2]
-
-**Acceptance**: Residual risk is **[TOLERABLE / ACCEPTABLE]** per EN 50126 risk acceptance criteria (ALARP principle).
+| Field | Value |
+|-------|-------|
+| **HAZ-ID** | HAZ-001 |
+| **Description** | [Hazard event description] |
+| **Source** | [S4 reference or analysis result] |
+| **Severity** | [1–10] |
+| **Frequency** | [1–10] |
+| **Risk Level** | [Severity × Frequency] |
+| **SIL Assignment** | [SIL 0/1/2/3/4] — per EN 50126-2 Table 8 |
+| **Mitigation** | [Software safeguard strategy] |
+| **Residual Risk** | [Integer 1–100] |
+| **REQ-SAFE-xxx** | [REQ-SAFE-001, REQ-SAFE-002, ...] |
+| **Status** | OPEN |
+| **Evidence** | [Populated in Phase 7: test case ID] |
+| **Acceptance Authority** | [For ACCEPTED-RESIDUAL: role + name] |
 
 ---
 
-[Repeat HAZ-002, HAZ-003, etc. for each hazard]
+[Add HAZ-002, HAZ-003, etc. for each identified hazard]
 
 ---
 
-## 4. COMMON CAUSE FAILURE ANALYSIS
+## 4. Common Cause Failure (CCF) Analysis
 
-**EN 50128 Requirement**: Common Cause Failure (CCF) analysis is **MANDATORY** for SIL 3-4 (Table A.1, A.8).
+> **EN 50128 / EN 50126-2 note**: CCF Analysis is **Highly Recommended** (HR) at SIL 3–4
+> per EN 50126-2:2017 Table F.2 item 11. It is NOT Mandatory. Include this section if the
+> project SQAP selects CCF analysis; otherwise note the justified waiver here.
+> CCF is an EN 50126 technique applied to software via EN 50128 §7.1; it is NOT a
+> Table A.8 entry.
 
-### 4.1 Common Cause Failure Scenarios
+**CCF Analysis status**: [Selected / Waived — see SQAP §[X] for justification]
 
-#### CCF-001: [Common Cause Failure Description]
+### CCF-001: [Common Cause Failure Scenario]
 
-**Scenario**: [Detailed scenario description]
-
-**Hazard**: [Related hazard ID]
-
-**Likelihood**: [Frequency]
-
-**Mitigation**:
-- **Hardware Design**: [Hardware mitigation]
-- **Software**: [Software mitigation]
-
-**Status**: [Mitigated / Partially Mitigated]
-
----
-
-[Repeat for CCF-002, CCF-003, etc.]
+| Field | Value |
+|-------|-------|
+| **CCF-ID** | CCF-001 |
+| **Scenario** | [Description of common cause] |
+| **Related HAZ** | [HAZ-xxx] |
+| **Cause type** | [Common design fault / Shared HW platform / EMI / Common power supply] |
+| **Affected modules** | [Module list] |
+| **Mitigation** | [Diverse design, spatial separation, independent power, EMI shielding] |
+| **Status** | [Mitigated / Partially Mitigated] |
 
 ---
 
-### 4.2 Common Cause Failure Summary
+## 5. Software Error Effect Analysis (SEEA)
 
-| CCF ID | Scenario | Affected Hazard | Likelihood | Mitigation | Status |
-|--------|----------|----------------|------------|------------|--------|
-| CCF-001 | [Scenario] | [HAZ-ID] | [Frequency] | [Mitigation] | [Status] |
+> **EN 50128 Table A.8 entry 5**: SEEA is HR at SIL 3–4. Record findings per fault mode.
+> This section is filled in Phase 2 (preliminary) and updated in Phase 3.
 
-**Conclusion**: [Overall CCF analysis conclusion]
-
----
-
-## 5. FAILURE MODES AND EFFECTS ANALYSIS (FMEA)
-
-### 5.1 FMEA: [Subsystem Name]
-
-**Module**: [Module Name]  
-**SIL**: [0, 1, 2, 3, or 4]  
-**Reference**: [Related requirements]
-
-| Failure Mode | Effect | Severity | Cause | Detection | Mitigation | Residual Risk |
-|--------------|--------|----------|-------|-----------|------------|---------------|
-| [Failure mode] | [Effect] | [1-10] | [Cause] | [Detection method] | [Mitigation] | [Risk level] |
-
-**FMEA Summary**:
-- **Critical failure modes**: [Count]
-- **Mitigations**: [Summary]
-- **Residual Risk**: [Overall assessment]
+| Module | Fault Mode | Effect (module) | Effect (system) | Safeguard | HAZ link |
+|--------|-----------|-----------------|-----------------|-----------|----------|
+| [Module] | NULL pointer | [Effect] | [Effect] | Null check guard / MISRA Rule 17.3 | [HAZ-xxx] |
+| [Module] | Integer overflow | [Effect] | [Effect] | Range check / saturating arithmetic | [HAZ-xxx] |
+| [Module] | State stuck-at | [Effect] | [Effect] | Watchdog / timeout exit | [HAZ-xxx] |
+| [Module] | Uninitialized var | [Effect] | [Effect] | Explicit initialization / MISRA Rule 9.3 | [HAZ-xxx] |
+| [Module] | Array out-of-bounds | [Effect] | [Effect] | Bounds check | [HAZ-xxx] |
+| [Module] | Division by zero | [Effect] | [Effect] | Non-zero denominator check | [HAZ-xxx] |
 
 ---
 
-[Repeat for additional FMEA sections]
+## 6. Safety Requirements Summary (HAZ → REQ-SAFE trace)
+
+| HAZ-ID | Severity | SIL | REQ-SAFE-xxx | SRS Section | Status |
+|--------|----------|-----|--------------|-------------|--------|
+| HAZ-001 | [Score] | [SIL] | REQ-SAFE-001 | §[X] | [Open/Covered] |
 
 ---
 
-## 6. FAULT TREE ANALYSIS (FTA)
+## 7. Hazard Closure Record (Phase 7)
 
-### 6.1 Fault Tree: "[Top Event Description]"
+Populated by SAF in Phase 7 per §7.7.4.8(b). All entries must reach CLOSED or
+ACCEPTED-RESIDUAL before Validation Report sign-off.
 
-**Top Event**: [Description of top event]
-
-```
-                     ┌───────────────────────────────────────┐
-                     │         [Top Event]                   │
-                     │         (SEVERITY)                    │
-                     └─────────────────┬─────────────────────┘
-                                       │
-                             ┌─────────┴─────────┐
-                             │     [GATE]        │
-                             └─────────┬─────────┘
-                     ┌─────────────────┼─────────────────┐
-                     ▼                 ▼                 ▼
-           [Event 1]          [Event 2]          [Event 3]
-```
-
-**Fault Tree Analysis**:
-
-**Top Event Probability** (without mitigation): [Calculation]
-
-**Mitigation Effect**: [Description of mitigations]
-
-**Top Event Probability** (with mitigation): [Calculation]
-
-**Critical Cut Sets**: [Minimal combinations leading to top event]
-
-**Conclusion**: [FTA conclusion and SIL achievement]
+| HAZ-ID | REQ-SAFE-xxx | Test Case (item 24) | Test Result | Closure Status | Date |
+|--------|-------------|---------------------|-------------|----------------|------|
+| HAZ-001 | REQ-SAFE-001 | [TC-ID] | [PASS/FAIL] | [CLOSED/OPEN] | YYYY-MM-DD |
 
 ---
 
-[Repeat for additional FTA sections]
+## Appendix A: Risk Matrix Reference
+
+### Severity Scale (1–10)
+
+| Score | Level | Description |
+|-------|-------|-------------|
+| 9–10 | Catastrophic | Death or multiple serious injuries |
+| 7–8 | Critical | Single serious injury |
+| 4–6 | Moderate | Minor injuries or significant service loss |
+| 1–3 | Minor | No injury, minor inconvenience |
+
+### Frequency Scale (1–10)
+
+| Score | Level | Probability range (per operating hour) |
+|-------|-------|----------------------------------------|
+| 9–10 | Frequent | > 10⁻³ |
+| 7–8 | Probable | 10⁻³ to 10⁻⁴ |
+| 4–6 | Occasional | 10⁻⁴ to 10⁻⁶ |
+| 1–3 | Remote/Improbable | < 10⁻⁶ |
+
+### SIL Assignment from THR (EN 50126-2 Table 8)
+
+| THR (per hour) | SIL |
+|----------------|-----|
+| ≥ 10⁻⁵ to < 10⁻⁴ | SIL 1 |
+| ≥ 10⁻⁶ to < 10⁻⁵ | SIL 2 |
+| ≥ 10⁻⁷ to < 10⁻⁶ | SIL 3 |
+| ≥ 10⁻⁸ to < 10⁻⁷ | SIL 4 |
 
 ---
 
-## 7. SAFETY REQUIREMENTS SUMMARY
+## Appendix B: EN 50128 Table A.8 (Normative Reference)
 
-### 7.1 Hazard to Safety Requirement Mapping
+Source: EN 50128:2011 §6.3. **Exactly 5 entries.** FMEA, FTA, CCF, and HAZOP are NOT
+in Table A.8 (they are EN 50126 techniques applied via §7.1).
 
-| Hazard ID | Description | SIL | Safety Requirements | Status |
-|-----------|-------------|-----|---------------------|--------|
-| **HAZ-001** | [Description] | [SIL] | [Requirements] | [Status] |
-
-**Total Safety Requirements**: [Count]
-
----
-
-## 8. VERIFICATION AND VALIDATION PLAN
-
-### 8.1 Hazard Verification Methods
-
-Each hazard SHALL be verified using the following methods:
-
-| Hazard ID | Verification Method | Test Cases | FMEA | FTA | Fault Injection | Status |
-|-----------|---------------------|------------|------|-----|----------------|--------|
-| HAZ-001 | [Methods] | [Test IDs] | [Section] | [Section] | [Description] | [Status] |
-
-**Verification Responsibility**:
-- **Test**: Tester (TST) and Verifier (VER)
-- **FMEA/FTA**: Safety Engineer (SAF) and Verifier (VER)
-- **Fault Injection**: Tester (TST) with safety test rig
-- **Static Analysis**: Verifier (VER)
-
----
-
-## 9. RESIDUAL RISK ASSESSMENT
-
-### 9.1 Residual Risk Summary
-
-After application of all safety requirements and mitigations:
-
-| Hazard ID | Initial Risk | Target Risk | Residual Risk | Acceptable? |
-|-----------|-------------|-------------|---------------|-------------|
-| HAZ-001 | [Risk] | [Risk] | [Risk] | [Yes/No] |
-
-**Conclusion**: [Overall residual risk assessment]
-
-### 9.2 Risk Acceptance
-
-**Risk Acceptance Authority**: Customer / Railway Safety Authority
-
-**Acceptance Criteria**: 
-1. [Criterion 1]
-2. [Criterion 2]
-3. [Criterion 3]
-
-**Status**: [Pending / Accepted / Rejected]
-
----
-
-## 10. SAFETY CASE SUMMARY
-
-### 10.1 Safety Argument
-
-[System name] is safe for SIL [X] operation based on the following argument:
-
-1. **Hazards Identified**: [Summary]
-
-2. **Risks Assessed**: [Summary]
-
-3. **SIL Determined**: [Summary]
-
-4. **Safety Requirements Defined**: [Summary]
-
-5. **Multiple Mitigations Applied**: [Summary]
-
-6. **Verification Performed**: [Summary]
-
-7. **Independent Assessment**: [Summary]
-
-8. **Residual Risk Acceptable**: [Summary]
-
-### 10.2 Safety Case Evidence
-
-| Evidence Type | Document | Status |
-|---------------|----------|--------|
-| **Hazard Log** | This document | [Status] |
-| **FMEA Reports** | Section 5 | [Status] |
-| **FTA Reports** | Section 6 | [Status] |
-| **Safety Requirements** | SRS DOC-SRS-YYYY-NNN | [Status] |
-| **Verification Reports** | DOC-SVR-YYYY-NNN | [Status] |
-| **Test Reports** | DOC-STR-YYYY-NNN | [Status] |
-
-### 10.3 Safety Case Conclusion
-
-**Claim**: [System name] achieves SIL [X] and is safe for deployment in railway operations.
-
-**Evidence**: [Summary of evidence]
-
-**Recommendation**: [Recommendation for acceptance]
-
----
-
-## APPENDIX A: RISK MATRIX DEFINITIONS
-
-### A.1 Severity Definitions
-
-| Severity | Description | Examples |
-|----------|-------------|----------|
-| **Catastrophic** | Death or multiple serious injuries | Passenger falls from moving train, train collision |
-| **Critical** | Single serious injury or multiple minor injuries | Passenger crushed by door, broken bones |
-| **Marginal** | Minor injury, first aid required | Bruising, cuts, passenger alarm |
-| **Negligible** | No injury, minor inconvenience | Service delay, passenger confusion |
-
-### A.2 Frequency Definitions
-
-| Frequency | Description | Probability Range (per hour) |
-|-----------|-------------|------------------------------|
-| **Frequent** | Expected to occur often | > 10^-3 |
-| **Probable** | Will occur several times | 10^-4 to 10^-3 |
-| **Occasional** | Likely to occur sometime | 10^-5 to 10^-4 |
-| **Remote** | Unlikely but possible | 10^-6 to 10^-5 |
-| **Improbable** | Very unlikely to occur | < 10^-6 |
-
-### A.3 Risk Levels
-
-| Risk Level | Description | Action Required |
-|------------|-------------|-----------------|
-| **Unacceptable** | Risk must be eliminated | Redesign required, operation prohibited |
-| **Undesirable** | Risk must be reduced | Additional mitigations required |
-| **Tolerable** | Risk accepted with mitigations | ALARP demonstration required |
-| **Acceptable** | Risk broadly acceptable | No additional mitigations required |
-
----
-
-## APPENDIX B: SAFETY ANALYSIS TECHNIQUES REFERENCE
-
-### B.1 EN 50128 Table A.8 - Software Analysis Techniques
-
-| Technique | SIL 0 | SIL 1 | SIL 2 | SIL 3 | SIL 4 | Reference |
-|-----------|-------|-------|-------|-------|-------|-----------|
-| **Common Cause Failure Analysis** | - | - | R | **M** | **M** | EN 50128 D.11 |
-| **FMEA** | - | - | R | HR | HR | EN 50128 D.25 |
-| **FTA** | - | - | R | HR | HR | EN 50128 D.31 |
-| **Hazard and Risk Analysis** | R | R | HR | HR | HR | EN 50126 |
-
-**Key**: M = Mandatory, HR = Highly Recommended, R = Recommended, - = No recommendation
-
----
-
-## APPENDIX C: REVISION HISTORY
-
-| Date | Version | Author | Changes | Approval |
-|------|---------|--------|---------|----------|
-| YYYY-MM-DD | 0.1 | [Author] | Initial template | Draft |
+| # | Technique | SIL 0 | SIL 1 | SIL 2 | SIL 3 | SIL 4 |
+|---|-----------|-------|-------|-------|-------|-------|
+| 1 | Static Software Analysis (D.13, D.37, Table A.19) | R | HR | HR | HR | HR |
+| 2 | Dynamic Software Analysis (Table A.13, A.14) | — | R | R | HR | HR |
+| 3 | Cause Consequence Diagrams (D.6) | R | R | R | R | R |
+| 4 | Event Tree Analysis (D.22) | — | R | R | R | R |
+| 5 | Software Error Effect Analysis — SEEA (D.25) | — | R | R | HR | HR |
 
 ---
 

@@ -30,6 +30,8 @@ in structured, LLM-consumable form.
 | `phase-9-deployment.yaml` | Phase 9: Deployment activities, deliverables, workflow, transitions | `LIFECYCLE.md §12` |
 | `phase-10-maintenance.yaml` | Phase 10: Maintenance activities, deliverables, workflow, transitions | `LIFECYCLE.md §13` |
 | `baseline-management.yaml` | Machine-readable baseline lifecycle: 8 gate baselines (Diagram 1), 7-step creation procedure (Diagram 2), CR re-entry path, role boundaries, EN 50128 terminology corrections | `tasks/BASELINE_MANAGEMENT.md (ISA PASS)` |
+| `quality-process.yaml` | Machine-readable QUA process: per-phase activities (Diagram 1), deliverable touchpoints for all 46 Annex C items with `qua_check_type`/`one_pass_rule` fields (Diagram 2), two-track workflow gate positions (Diagram 3), Table A.9 SIL-tiered obligations T1–T8 with phase mapping (Diagram 4), mandatory baseline, deviation register D1–D8 | `tasks/QUALITY_PROCESS.md (ISA PASS)` |
+| `safety-process.yaml` | Machine-readable SAF process: terminology corrections, system inputs (Phase 0 platform extension), per-phase SAF activity map (Phases 1–10), cross-cutting artifacts (Hazard Log, FMEA/FTA reports), Annex C contributions (items 6, 9, 25), `saf_does_not_own[]` (Safety Case, items 45/46, release authority), hazard-to-validation traceability thread (8 steps forward + backward chain), Table A.8 (exactly 5 entries), EN 50126 companion techniques (FMEA/FTA/HAZOP/CCF/Markov with `not_in_table_a8: true`), SAF independence boundaries | `tasks/SAFETY_ENGINEERING.md (ISA PASS)` |
 
 ---
 

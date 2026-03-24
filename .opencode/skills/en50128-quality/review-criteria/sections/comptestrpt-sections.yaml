@@ -1,0 +1,26 @@
+# Required sections supplement — Software Component Test Report
+# Annex C item: 20
+# Written by: TST
+# Standard reference: EN 50128:2011 §7.5.4.5–7.5.4.6
+# Platform deviation D2: placed in Phase 5; Annex C places in Integration phase
+
+doc_key: "COMPTESTRPT"
+annex_c_item: 20
+standard_reference: "§7.5.4.5–7.5.4.6"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; reference to COMPTESTSPEC (item 16)"
+  - heading: "Test Environment"
+    notes: "Actual environment used; build configuration; tool versions"
+  - heading: "Test Execution Summary"
+    notes: "Total tests run, passed, failed, skipped"
+  - heading: "Test Results"
+    notes: "Per-test-case result: PASS / FAIL / SKIP; failure description if applicable"
+  - heading: "Coverage Results"
+    notes: "Statement, branch, MC/DC coverage achieved vs. target; coverage tool output reference"
+  - heading: "Defects Found"
+    notes: "Defects identified during testing; severity; resolution status"
+  - heading: "Conclusion"
+    notes: "All tests passed AND coverage target met — or list of open items"

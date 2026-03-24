@@ -1,0 +1,26 @@
+# Required sections supplement — Software Interface Specifications
+# Annex C item: 11
+# Written by: DES
+# Standard reference: EN 50128:2011 §7.3.4.12–7.3.4.13
+# Note: plural form per §7.3.3 item 3
+
+doc_key: "INTERFACES"
+annex_c_item: 11
+standard_reference: "§7.3.4.12–7.3.4.13"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose, scope; list of interfaces covered"
+  - heading: "External Interface Overview"
+    notes: "Summary of all SW/HW, SW/SW, and operator interfaces"
+  - heading: "Interface Definitions"
+    notes: "Per interface: name, direction, data type, range, units, protocol"
+  - heading: "Hardware Interfaces"
+    notes: "I/O register maps, interrupt lines, timing constraints"
+  - heading: "Software Interfaces"
+    notes: "API definitions; shared memory; IPC mechanisms"
+  - heading: "Operator Interfaces"
+    notes: "Human-machine interface elements if applicable"
+  - heading: "Traceability"
+    notes: "Interface specifications traced to SRS interface requirements"

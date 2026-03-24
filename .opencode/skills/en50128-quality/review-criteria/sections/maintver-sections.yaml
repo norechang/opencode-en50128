@@ -1,0 +1,26 @@
+# Required sections supplement — Software Maintenance Verification Report
+# Annex C item: 44
+# Written by: VER
+# Standard reference: EN 50128:2011 §6.2.4.12–6.2.4.13, §9.2.4
+# qua_check_type: template_compliance_one_pass (1-Pass Rule applies)
+# Platform deviation D4: placed Phase 10; Annex C places in Assessment phase
+# Platform deviation D7: platform assigns VAL 2nd check (may be blank in Annex C)
+
+doc_key: "MAINTVER"
+annex_c_item: 44
+standard_reference: "§6.2.4.12–6.2.4.13, §9.2.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; maintenance records (item 43) and change records (item 42) verified"
+  - heading: "Verification Scope"
+    notes: "Which maintenance changes were verified; criteria applied"
+  - heading: "Verification Method"
+    notes: "Techniques used"
+  - heading: "Findings"
+    notes: "§6.2.4.13: findings with severity"
+  - heading: "Conclusion"
+    notes: "Maintenance changes verified / not verified"
+  - heading: "Open Items"
+    notes: "Outstanding items; conditions of acceptance"

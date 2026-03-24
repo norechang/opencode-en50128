@@ -1,0 +1,23 @@
+# Required sections supplement — Deployment Records
+# Annex C item: 39
+# Written by: PM (or per SQAP)
+# Standard reference: EN 50128:2011 §9.1.4
+
+doc_key: "DEPLOYREC"
+annex_c_item: 39
+standard_reference: "§9.1.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; deployment event reference"
+  - heading: "Deployment Details"
+    notes: "Date, site, target hardware, software baseline deployed"
+  - heading: "Installation Steps Performed"
+    notes: "Record of each step performed per Deployment Plan"
+  - heading: "Verification Results"
+    notes: "Post-installation verification checks performed and results"
+  - heading: "Authorisation"
+    notes: "Sign-off by authorised person confirming successful deployment"
+  - heading: "Issues Encountered"
+    notes: "Any deviations from plan; corrective actions taken"

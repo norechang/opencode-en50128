@@ -1,0 +1,25 @@
+# Required sections supplement — Software Design Specification
+# Annex C item: 10
+# Written by: DES
+# Standard reference: EN 50128:2011 §7.3.4, §7.4.4
+
+doc_key: "SDS"
+annex_c_item: 10
+standard_reference: "§7.3.4, §7.4.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose, scope, relationship to SAS"
+  - heading: "Design Overview"
+    notes: "Design approach; structured programming techniques applied"
+  - heading: "Module Descriptions"
+    notes: "§7.4.4.3–7.4.4.5: each module's purpose, public interface, internal data"
+  - heading: "Data Design"
+    notes: "Data structures, types, global/shared data; no dynamic allocation rationale"
+  - heading: "Control Flow"
+    notes: "State machines, sequence diagrams, or pseudocode for complex control"
+  - heading: "Error Handling"
+    notes: "§7.4.4.6: error detection, reporting, recovery per module"
+  - heading: "Traceability"
+    notes: "Module design traced to SAS components and SRS requirements (T6, T11)"

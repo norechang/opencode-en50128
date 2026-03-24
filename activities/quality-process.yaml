@@ -1,0 +1,1440 @@
+# EN 50128 Quality Assurance Process
+# Source: tasks/QUALITY_PROCESS.md (ISA PASS), EN 50128:2011
+#
+# This file is the machine-readable translation of tasks/QUALITY_PROCESS.md.
+# tasks/QUALITY_PROCESS.md remains the ISA-reviewed human-readable authority;
+# this YAML encodes the same information for direct LLM agent consumption.
+#
+# Primary consumer: QUA agent.
+# Also consumed by: COD (gate-check enforcement), PM (phase coordination).
+#
+# Upstream documents embedded here (option A — full encoding, no lookup required):
+#   WORKFLOW.md  → two-track model, QUA gate positions
+#   DELIVERABLES.md → per-item writer/checker; qua_required flags
+#
+# This file SUPPLEMENTS deliverables.yaml — it does NOT duplicate it.
+# Cross-reference by annex_c_item number for QUA-specific fields not present
+# in deliverables.yaml (qua_check_type, one_pass_rule, self_cert_conflict).
+#
+# Normative clauses: §6.5, §6.5.4.3, §6.5.4.5, §6.5.4.10, §6.5.4.11,
+#                    §6.5.4.14–17, §7.5.4.10, §9.2.4, Table A.9, Annex C Table C.1
+
+quality_process:
+  source_document: "tasks/QUALITY_PROCESS.md (ISA PASS)"
+  standard: "EN 50128:2011"
+  upstream_documents:
+    - "WORKFLOW.md (ISA PASS)"
+    - "DELIVERABLES.md (ISA PASS)"
+    - "TRACEABILITY.md (ISA PASS)"
+    - "ORGANIZATION.md (ISA PASS)"
+  clauses:
+    - "§6.5"
+    - "§6.5.4.3"
+    - "§6.5.4.5"
+    - "§6.5.4.10"
+    - "§6.5.4.11"
+    - "§6.5.4.14"
+    - "§6.5.4.15"
+    - "§6.5.4.16"
+    - "§6.5.4.17"
+    - "§7.5.4.10"
+    - "§9.2.4"
+    - "Table A.9"
+    - "Annex C Table C.1"
+
+  # ── Key Definitions ───────────────────────────────────────────────────────────
+  key_definitions:
+    template_compliance_check: >
+      QUA reviews a deliverable for format and structure correctness: Document ID
+      format, Document Control table, Approvals table, required sections present,
+      SIL-appropriate approvers. QUA checks FORMAT — not technical content. Technical
+      content review is performed by VER (1st Check column, DELIVERABLES.md) after
+      QUA accepts the document.
+    one_pass_rule: >
+      Applies to VER/VAL reports only. If QUA rejects a VER or VAL report for
+      template non-compliance, VER/VAL may resubmit once. If the resubmission also
+      fails, PM/COD is notified (process failure — training intervention required).
+      Development deliverables allow up to 3 iterations before PM escalates.
+    independence: >
+      QUA SHALL NOT report to DES, IMP, TST, or Software Manager. QUA reports to
+      COD/PM directly. QUA decisions to reject deliverables CANNOT be overridden by
+      the development team. At SIL 3-4 QUA MUST be a documented independent function.
+      PLATFORM GOVERNANCE POLICY ONLY — EN 50128:2011 does not define a normative QUA
+      independence requirement. §6.5.2 is the Input Documents clause only. See
+      ORGANIZATION.md Independence Reference Matrix, which records QUA independence
+      as "No" at all SIL levels.
+
+  # ── Diagram 1: QUA Tasks Across the V-Model Lifecycle ────────────────────────
+  # Per-phase QUA trigger, activities, outputs, and SIL conditions.
+  # Phase 8 is encoded explicitly as qua_activity: none with normative rationale.
+  # cross_cutting[] encodes activities active throughout all phases.
+  phase_activities:
+
+    - phase: 0
+      phase_name: "Initialization"
+      qua_activity: "none"
+      rationale: >
+        COD generates system-level documents (S1-S4). QUA is not yet instantiated;
+        the SQAP that governs QUA does not yet exist.
+
+    - phase: 1
+      phase_name: "Planning"
+      clauses: ["§5", "§6.5", "§6.6"]
+      trigger: "PM invokes @pm execute-phase 1"
+      activities:
+        - id: "1A"
+          label: "SQAP authorship"
+          description: >
+            QUA writes the Software Quality Assurance Plan (item 1) under VER
+            direction and responsibility (§6.5.4.3, deviation D8). QUA cannot
+            2nd-check its own plan (self-certification conflict).
+          normative_clause: "§6.5.4.3"
+          sil_condition: "all"                  # MANDATORY at all SIL
+          deviation: "D8"
+          annex_c_item: 1
+          self_cert_conflict: true
+        - id: "1B"
+          label: "Template compliance — all Phase 1 deliverables"
+          description: >
+            Template compliance check on items 1-5. Item 1 is author-exception
+            (QUA authors; VER 1st-checks). Items 4 and 5 are author-exceptions
+            where VER/VAL author their own planning documents; QUA still performs
+            template compliance on all five.
+          annex_c_items: [1, 2, 3, 4, 5]
+          note: "Item 4 (SVP) and item 5 (SVaP) are VER/VAL-authored; QUA still checks format."
+      outputs:
+        - "QUA Review Reports for items 1-5"
+      gate_input: "All items QUA-PASS before PM reports Track A complete"
+
+    - phase: 2
+      phase_name: "Requirements"
+      clauses: ["§7.2"]
+      trigger: >
+        PM invokes @pm execute-phase 2; REQ+SAF produce SRS; TST produces
+        Overall Test Spec; VER produces Requirements VER Report
+      activities:
+        - id: "2A"
+          label: "Template compliance: Item 6 — SRS"
+          annex_c_item: 6
+          qua_check_type: "template_compliance"
+          user_approval_required: true
+          user_approval_clause: "§7.2.4.1"
+        - id: "2B"
+          label: "Template compliance: Item 7 — Overall Software Test Specification"
+          annex_c_item: 7
+          qua_check_type: "template_compliance"
+        - id: "2C"
+          label: "Template compliance + 1-Pass: Item 8 — Software Requirements VER Report"
+          annex_c_item: 8
+          qua_check_type: "template_compliance_one_pass"
+          one_pass_rule: true
+          note: "QUA checks VER report before VMGR reviews it — SIL 3-4."
+        - id: "2D"
+          label: "Traceability audit — T1, T2"
+          description: >
+            VER checks T1-T2 (§6.5.4.14-17); QUA audits traceability completeness
+            evidence (mandatory SIL 3-4 per Table A.9 Technique 7). QUA does NOT
+            independently re-check traceability links.
+          sil_condition: "sil >= 3"
+          normative_clause: "§6.5.4.14-17, Table A.9 T7"
+          traceability_rules: ["T1", "T2"]
+      outputs:
+        - "QUA Review Reports for items 6-8"
+        - "Traceability Audit Report (SIL 3-4)"
+
+    - phase: 3
+      phase_name: "Architecture and Design"
+      clauses: ["§7.3"]
+      trigger: >
+        PM invokes @pm execute-phase 3; DES+SAF produce SAS, SDS, Interface
+        Specs, Integration Test Specs; VER produces Architecture VER Report
+      activities:
+        - id: "3A"
+          label: "Template compliance: Item 9 — Software Architecture Specification"
+          annex_c_item: 9
+          qua_check_type: "template_compliance"
+        - id: "3B"
+          label: "Template compliance: Item 10 — Software Design Specification"
+          annex_c_item: 10
+          qua_check_type: "template_compliance"
+        - id: "3C"
+          label: "Template compliance: Item 11 — Software Interface Specifications"
+          annex_c_item: 11
+          qua_check_type: "template_compliance"
+          note: "Plural form per §7.3.3 item 3."
+        - id: "3D"
+          label: "Template compliance: Item 12 — Software Integration Test Specification"
+          annex_c_item: 12
+          qua_check_type: "template_compliance"
+        - id: "3E"
+          label: "Template compliance: Item 13 — Software/Hardware Integration Test Spec"
+          annex_c_item: 13
+          qua_check_type: "template_compliance"
+        - id: "3F"
+          label: "Template compliance + 1-Pass: Item 14 — Architecture and Design VER Report"
+          annex_c_item: 14
+          qua_check_type: "template_compliance_one_pass"
+          one_pass_rule: true
+          note: "QUA checks VER report; 1-Pass Rule applies; VMGR reviews after QUA PASS."
+        - id: "3G"
+          label: "Traceability audit — T3-T5c"
+          description: >
+            VER checks T3-T5c (§7.3.4.42-7.3.4.43); QUA audits traceability
+            completeness evidence (SIL 3-4).
+          sil_condition: "sil >= 3"
+          normative_clause: "§7.3.4.42-7.3.4.43, Table A.9 T7"
+          traceability_rules: ["T3", "T4", "T5a", "T5b", "T5c"]
+      outputs:
+        - "QUA Review Reports for items 9-14"
+        - "Traceability Audit Report (SIL 3-4)"
+
+    - phase: 4
+      phase_name: "Component Design"
+      clauses: ["§7.4"]
+      trigger: >
+        PM invokes @pm execute-phase 4; DES produces Component Design Spec;
+        TST produces Component Test Spec; VER produces Component Design VER Report
+      activities:
+        - id: "4A"
+          label: "Template compliance: Item 15 — Software Component Design Specification"
+          annex_c_item: 15
+          qua_check_type: "template_compliance"
+        - id: "4B"
+          label: "Template compliance: Item 16 — Software Component Test Specification"
+          annex_c_item: 16
+          qua_check_type: "template_compliance"
+        - id: "4C"
+          label: "Template compliance + 1-Pass: Item 17 — Component Design VER Report"
+          annex_c_item: 17
+          qua_check_type: "template_compliance_one_pass"
+          one_pass_rule: true
+          note: >
+            Item 17 has no VAL 2nd check (blank in DELIVERABLES.md); QUA template
+            compliance still applies before VER produces and VMGR reviews this report.
+        - id: "4D"
+          label: "Traceability audit — T6, T11"
+          description: >
+            VER checks T6, T11 (§7.4.4.13); QUA audits (SIL 3-4).
+          sil_condition: "sil >= 3"
+          normative_clause: "§7.4.4.13, Table A.9 T7"
+          traceability_rules: ["T6", "T11"]
+      outputs:
+        - "QUA Review Reports for items 15-17"
+        - "Traceability Audit Report (SIL 3-4)"
+
+    - phase: 5
+      phase_name: "Implementation and Testing"
+      clauses: ["§7.5"]
+      trigger: >
+        PM invokes @pm execute-phase 5; IMP produces source code; TST produces
+        Component Test Report; VER produces Source Code VER Report
+      activities:
+        - id: "5A"
+          label: "Template compliance: Item 18 — Software Source Code and Supporting Docs"
+          annex_c_item: 18
+          qua_check_type: "template_compliance"
+          description: >
+            QUA checks FORMAT of the source code delivery package (document structure,
+            Document ID, required sections). QUA does NOT perform code inspection or
+            coding standards checking — that is VER's duty under §7.5.4.10.
+        - id: "5B"
+          label: "Template compliance + 1-Pass: Item 19 — Source Code VER Report"
+          annex_c_item: 19
+          qua_check_type: "template_compliance_one_pass"
+          one_pass_rule: true
+          description: >
+            VER performs the actual code review (§7.5.4.10): MISRA C compliance, coding
+            standards, cyclomatic complexity, correctness of implementation against SDS.
+            VER records findings in item 19. QUA then checks that item 19 is FORMAT-correct
+            before VMGR reviews it. 1-Pass Rule applies.
+          note: >
+            Code review execution (MISRA checking, static analysis, complexity measurement)
+            belongs to VER (§7.5.4.10(c)) and IMP+TST — not to QUA.
+        - id: "5C"
+          label: "Template compliance: Item 20 — Software Component Test Report"
+          annex_c_item: 20
+          qua_check_type: "template_compliance"
+          deviation: "D2"
+          note: "Platform deviation D2: Phase 5 (Annex C places in Integration phase)."
+        - id: "5D"
+          label: "Traceability audit — T7, T12"
+          description: >
+            QUA audits the EVIDENCE that VER performed traceability checking (T7, T12
+            per §7.5.4.10) and that the evidence is recorded and CM-controlled
+            (§6.5.4.14-17, Table A.9 T7). QUA does not independently re-check
+            traceability links.
+          sil_condition: "sil >= 3"
+          normative_clause: "§7.5.4.10, §6.5.4.14-17, Table A.9 T7"
+          traceability_rules: ["T7", "T12"]
+        - id: "5E"
+          label: "QA process data recording (Table A.9 T8)"
+          description: >
+            QUA records QA process data per the SQAP: NCR counts, gate pass/fail rates,
+            process audit findings, QUA review outcomes. QUA verifies that measurement
+            data required by T8 (coverage reports, defect counts, complexity distributions)
+            has been produced by IMP/TST/VER and is placed under CM control.
+            QUA does NOT run measurement tools (cppcheck, gcov, lizard) itself — those
+            are IMP/TST/VER responsibilities. QUA audits that the evidence exists.
+          sil_condition_mandatory: "sil >= 3"   # MANDATORY SIL 3-4
+          sil_condition_hr: "sil <= 2"          # HR SIL 0-2
+          normative_clause: "Table A.9 T8 (D.12)"
+      outputs:
+        - "QUA Review Reports for items 18-20"
+        - "QA Process Data Record (SIL 3-4, Table A.9 T8)"
+        - "Traceability Audit Report (SIL 3-4)"
+
+    - phase: 6
+      phase_name: "Integration"
+      clauses: ["§7.6"]
+      trigger: "PM invokes @pm execute-phase 6; INT+TST produce Integration Test Reports"
+      activities:
+        - id: "6A"
+          label: "Template compliance: Item 21 — Software Integration Test Report"
+          annex_c_item: 21
+          qua_check_type: "template_compliance"
+        - id: "6B"
+          label: "Template compliance: Item 22 — Software/Hardware Integration Test Report"
+          annex_c_item: 22
+          qua_check_type: "template_compliance"
+        - id: "6C"
+          label: "Traceability audit — T10a, T10b, T12"
+          description: >
+            VER checks T10a, T10b, T12 (§7.6.4.13); QUA audits (SIL 3-4).
+          sil_condition: "sil >= 3"
+          normative_clause: "§7.6.4.13, Table A.9 T7"
+          traceability_rules: ["T10a", "T10b", "T12"]
+      outputs:
+        - "QUA Review Reports for items 21-22"
+        - "Traceability Audit Report (SIL 3-4)"
+      note: >
+        Item 23 (Software Integration Verification Report) is produced in Phase 7 per
+        Annex C, not Phase 6. QUA checks item 23 in Phase 7.
+
+    - phase: 7
+      phase_name: "Validation"
+      clauses: ["§7.7"]
+      trigger: "PM orchestrates TST (Track A); COD -> VMGR coordinates VER+VAL (Track B)"
+      activities:
+        track_a:
+          - id: "7A"
+            label: "Template compliance: Item 24 — Overall Software Test Report"
+            annex_c_item: 24
+            qua_check_type: "template_compliance"
+            track: "A"
+            note: "Track A deliverable; QUA checks before PM reports to COD."
+        track_b:
+          - id: "7B"
+            label: "Template compliance + 1-Pass: Item 23 — Software Integration VER Report"
+            annex_c_item: 23
+            qua_check_type: "template_compliance_one_pass"
+            one_pass_rule: true
+            track: "B"
+            note: >
+              Produced by VER; 1-Pass Rule applies; VMGR reviews after QUA PASS.
+              Normative production clause §7.6.4.11 (Integration); placed Phase 7 per Annex C.
+          - id: "7C"
+            label: "Template compliance + 1-Pass: Item 25 — Software Validation Report"
+            annex_c_item: 25
+            qua_check_type: "template_compliance_one_pass"
+            one_pass_rule: true
+            track: "B"
+            independence_required_sil: [3, 4]
+            clause: "§5.1.2.10(f)"
+            note: "VAL MUST BE INDEPENDENT SIL 3-4. No 2nd Check — VAL cannot 2nd-check own report."
+          - id: "7D"
+            label: "Template compliance + 1-Pass: Item 26 — Tools Validation Report"
+            annex_c_item: 26
+            qua_check_type: "template_compliance_one_pass"
+            one_pass_rule: true
+            track: "B"
+            conditional: true
+            sil_recommendation: "HR SIL 1+; R SIL 0"
+            note: "Same independence constraint as item 25."
+          - id: "7E"
+            label: "Template compliance: Item 27 — Release Note"
+            annex_c_item: 27
+            qua_check_type: "template_compliance"
+            track: "B"
+            note: >
+              Authorship unresolved in Annex C (footnote a). Author per project SQAP.
+              See DELIVERABLES.md Note 3 for Annex C numbering ambiguity.
+      phase_7_note: >
+        This is the only phase where QUA template-checks VAL-authored formal Validation
+        Reports. QUA checks FORMAT only; VMGR reviews technical content (SIL 3-4).
+      outputs:
+        - "QUA Review Reports for items 23-27"
+        - "QA Template Compliance Reports (for VER/VAL reports, 1-Pass Rule)"
+
+    - phase: 8
+      phase_name: "Assessment"
+      clauses: ["§6.4"]
+      qua_activity: "none"
+      rationale: >
+        ASR (Assessor) is fully independent from the project AND supplier
+        (§5.1.2.5-5.1.2.7). ASR is not directed by COD, PM, or QUA.
+        COD does not coordinate QUA activities during Phase 8.
+        Items 45-46 are ASR-authored; VER performs 1st check only; no VAL 2nd check
+        and no QUA template compliance step (ASR operates outside the standard
+        Track A -> QUA -> PM -> COD chain).
+      mandatory:
+        sil_levels: [1, 2, 3, 4]
+        clause: "§6.4.1.1"
+      sil_0_exemption: "§6.4.1.2"
+
+    - phase: 9
+      phase_name: "Deployment"
+      clauses: ["§9.1"]
+      trigger: >
+        PM invokes @pm execute-phase 9; PM/DES/CM produce deployment docs;
+        VER produces Deployment VER Report
+      activities:
+        - id: "9A"
+          label: "Template compliance: Item 36 — Software Release and Deployment Plan"
+          annex_c_item: 36
+          qua_check_type: "template_compliance"
+        - id: "9B"
+          label: "Template compliance: Item 37 — Software Deployment Manual"
+          annex_c_item: 37
+          qua_check_type: "template_compliance"
+          note: "Author per project SQAP (Annex C footnote a)."
+        - id: "9C"
+          label: "Template compliance: Item 38 — Release Notes"
+          annex_c_item: 38
+          qua_check_type: "template_compliance"
+          note: "Plural — distinct from item 27 (Release Note, Phase 7)."
+        - id: "9D"
+          label: "Template compliance: Item 39 — Deployment Records"
+          annex_c_item: 39
+          qua_check_type: "template_compliance"
+          note: "Author per project SQAP (Annex C footnote a)."
+        - id: "9E"
+          label: "Template compliance + 1-Pass: Item 40 — Deployment Verification Report"
+          annex_c_item: 40
+          qua_check_type: "template_compliance_one_pass"
+          one_pass_rule: true
+          deviation: "D3"
+          note: >
+            VER-authored; no VAL 2nd check per Annex C (see deviation D3).
+            1-Pass Rule applies to this VER report.
+      outputs:
+        - "QUA Review Reports for items 36-40"
+
+    - phase: 10
+      phase_name: "Maintenance"
+      clauses: ["§9.2"]
+      trigger: "Each CCB-approved Change Request; PM re-executes affected phases"
+      recurring: true
+      activities:
+        - id: "10A"
+          label: "Template compliance: Item 41 — Software Maintenance Plan"
+          annex_c_item: 41
+          qua_check_type: "template_compliance"
+        - id: "10B"
+          label: "Template compliance: Item 42 — Software Change Records"
+          annex_c_item: 42
+          qua_check_type: "template_compliance"
+          note: "Annex C typo ('Software Chang Records') — correct name per §9.2.4."
+        - id: "10C"
+          label: "Template compliance: Item 43 — Software Maintenance Records"
+          annex_c_item: 43
+          qua_check_type: "template_compliance"
+        - id: "10D"
+          label: "Template compliance + 1-Pass: Item 44 — Maintenance VER Report"
+          annex_c_item: 44
+          qua_check_type: "template_compliance_one_pass"
+          one_pass_rule: true
+          deviation: "D4"
+          note: >
+            VER-authored; VAL 2nd check is a project addition (deviation D4).
+            1-Pass Rule applies on the VER report.
+        - id: "10E"
+          label: "Process audit — CCB change control procedures"
+          description: >
+            Verify CCB change control procedures followed per SCMP and §6.6.4.2.
+          sil_condition: "sil >= 3"             # MANDATORY SIL 3-4
+          normative_clause: "§6.6.4.2"
+        - id: "10F"
+          label: "Traceability impact audit"
+          description: >
+            Verify all downstream traceability links re-checked for each CR scope
+            (MANDATORY SIL 3-4 per §6.5.4.14-17; continuous traceability obligation
+            applicable through maintenance per §9.2.4).
+          sil_condition: "sil >= 3"             # MANDATORY SIL 3-4
+          normative_clause: "§6.5.4.14-17, §9.2.4"
+      outputs:
+        - "QUA Review Reports for items 41-44"
+        - "Process Audit Report (SIL 3-4)"
+
+  # ── Cross-cutting activities (all phases except Phase 8) ─────────────────────
+  cross_cutting:
+    - id: "P"
+      label: "Process audits"
+      frequency:
+        sil_34: "Monthly (MANDATORY, Table A.9 Technique 8)"
+        sil_2: "Quarterly (HR)"
+        sil_01: "Optional"
+      sil_condition_mandatory: "sil >= 3"
+      normative_clause: "Table A.9 T8"
+      outputs:
+        - "Process Audit Reports"
+
+    - id: "M"
+      label: "Quality metrics collection and trend analysis"
+      frequency:
+        sil_34: "Per phase (MANDATORY, Table A.9 Technique 8)"
+        sil_12: "Per phase (HR)"
+        sil_0: "Optional"
+      sil_condition_mandatory: "sil >= 3"
+      sil_condition_hr: "sil >= 1 and sil <= 2"
+      normative_clause: "Table A.9 T8"
+      outputs:
+        - "Quality Metrics Reports"
+
+    - id: "T"
+      label: "Traceability audits"
+      description: >
+        DISTINCT from VER traceability checking. VER checks technical completeness
+        of traceability (§6.5.4.14-17). QUA audits the evidence that VER traceability
+        checking was performed, recorded, and baselined under CM control (§6.5.4.15).
+      sil_condition_mandatory: "sil >= 3"
+      sil_condition_hr: "sil >= 1 and sil <= 2"
+      normative_clause: "§6.5.4.15, Table A.9 T7"
+      outputs:
+        - "Traceability Audit Reports"
+
+    - id: "N"
+      label: "Non-conformance management"
+      description: >
+        QUA logs and tracks NCRs; escalates to PM/COD if unresolved.
+        MANDATORY SIL 3-4: recording and trend analysis.
+      sil_condition_mandatory: "sil >= 3"
+      normative_clause: "§6.5.4.5"
+      outputs:
+        - "Non-Conformance Reports (NCRs)"
+
+  # ── Diagram 2: QUA Touchpoints on All Annex C Deliverables ───────────────────
+  # This section SUPPLEMENTS deliverables.yaml — it does NOT replace it.
+  # deliverables.yaml carries the canonical per-item data (writer, doc_id, path, etc.).
+  # This section adds QUA-specific fields: qua_check_type, one_pass_rule,
+  # self_cert_conflict, deviation.
+  #
+  # qua_check_type values:
+  #   "template_compliance"          — [QUA]       dev deliverable; up to 3 iterations
+  #   "template_compliance_one_pass" — [QUA-VER] or [QUA-VAL]; VER/VAL reports; 1-Pass Rule
+  #   "none"                         — [—]          QUA has no check (ASR documents only)
+  #
+  # Phase 8 items (45-46) have qua_check_type: "none" — ASR is fully independent.
+  #
+  # Section 8 items (28-35) are included for completeness (generic platform / pre-existing
+  # software scope only — not applicable to bespoke software development).
+  deliverable_touchpoints:
+
+    # ── Phase 1: Planning ──────────────────────────────────────────────────────
+    - annex_c_item: 1
+      name: "Software Quality Assurance Plan"
+      phase: 1
+      writer: "qua"
+      qua_check_type: "template_compliance"
+      self_cert_conflict: true
+      self_cert_note: >
+        QUA authors under VER direction (§6.5.4.3, deviation D8). VER holds
+        normative §6.5.4.3 responsibility; QUA performs authoring.
+        QUA cannot 2nd-check its own document (self-certification conflict).
+      deviation: "D8"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 2
+      name: "Software QA Verification Report"
+      phase: 1
+      writer: "ver"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      first_check: null
+      second_check: "val"
+      note: "1-Pass Rule applies. VMGR reviews after QUA PASS (SIL 3-4)."
+
+    - annex_c_item: 3
+      name: "Software Configuration Management Plan"
+      phase: 1
+      writer: "cm"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 4
+      name: "Software Verification Plan"
+      phase: 1
+      writer: "ver"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      first_check: null
+      second_check: "val"
+      note: "1-Pass Rule applies. VER authors own planning document (Track A exception)."
+
+    - annex_c_item: 5
+      name: "Software Validation Plan"
+      phase: 1
+      writer: "val"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      first_check: "ver"
+      second_check: null
+      second_check_exempt_reason: "VAL cannot 2nd-check its own document."
+      deviation: "D1"
+      note: "Platform deviation D1: placed Phase 1 (Annex C places in Phase 2)."
+
+    # ── Phase 2: Requirements ──────────────────────────────────────────────────
+    - annex_c_item: 6
+      name: "Software Requirements Specification"
+      phase: 2
+      writer: "req+saf"
+      qua_check_type: "template_compliance"
+      user_approval_required: true
+      user_approval_clause: "§7.2.4.1"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 7
+      name: "Overall Software Test Specification"
+      phase: 2
+      writer: "tst"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 8
+      name: "Software Requirements Verification Report"
+      phase: 2
+      writer: "ver"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      first_check: null
+      second_check: "val"
+
+    # ── Phase 3: Architecture and Design ──────────────────────────────────────
+    - annex_c_item: 9
+      name: "Software Architecture Specification"
+      phase: 3
+      writer: "des+saf"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 10
+      name: "Software Design Specification"
+      phase: 3
+      writer: "des"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 11
+      name: "Software Interface Specifications"
+      phase: 3
+      writer: "des"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+      note: "Plural form per §7.3.3 item 3."
+
+    - annex_c_item: 12
+      name: "Software Integration Test Specification"
+      phase: 3
+      writer: "int"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 13
+      name: "Software/Hardware Integration Test Specification"
+      phase: 3
+      writer: "int"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 14
+      name: "Software Architecture and Design Verification Report"
+      phase: 3
+      writer: "ver"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      first_check: null
+      second_check: "val"
+
+    # ── Phase 4: Component Design ──────────────────────────────────────────────
+    - annex_c_item: 15
+      name: "Software Component Design Specification"
+      phase: 4
+      writer: "des"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 16
+      name: "Software Component Test Specification"
+      phase: 4
+      writer: "tst"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 17
+      name: "Software Component Design Verification Report"
+      phase: 4
+      writer: "ver"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      first_check: null
+      second_check: null
+      second_check_note: "No VAL 2nd check — blank in Annex C Table C.1."
+
+    # ── Phase 5: Implementation and Testing ───────────────────────────────────
+    - annex_c_item: 18
+      name: "Software Source Code and Supporting Documentation"
+      phase: 5
+      writer: "imp"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+      qua_scope_note: >
+        QUA checks FORMAT only. VER performs code review (§7.5.4.10): MISRA C,
+        coding standards, cyclomatic complexity, correctness. VER records
+        findings in item 19.
+
+    - annex_c_item: 19
+      name: "Software Source Code Verification Report"
+      phase: 5
+      writer: "ver"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      first_check: null
+      second_check: "val"
+      deviation: "D6"
+      deviation_note: "2nd Check (VAL) is project addition — Annex C Table C.1 2nd Check is blank."
+
+    - annex_c_item: 20
+      name: "Software Component Test Report"
+      phase: 5
+      writer: "tst"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+      deviation: "D2"
+      deviation_note: "Platform deviation D2: Phase 5 (Annex C places in Integration phase)."
+
+    # ── Phase 6: Integration ───────────────────────────────────────────────────
+    - annex_c_item: 21
+      name: "Software Integration Test Report"
+      phase: 6
+      writer: "int+tst"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 22
+      name: "Software/Hardware Integration Test Report"
+      phase: 6
+      writer: "int+tst"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    # ── Phase 7: Validation ────────────────────────────────────────────────────
+    - annex_c_item: 23
+      name: "Software Integration Verification Report"
+      phase: 7
+      writer: "ver"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      first_check: null
+      second_check: null
+      second_check_note: "No VAL 2nd check (blank in Annex C). VMGR reviews (SIL 3-4)."
+      normative_production_clause: "§7.6.4.11"
+      annex_c_placement_note: "Normative production in Integration; placed Phase 7 per Annex C."
+
+    - annex_c_item: 24
+      name: "Overall Software Test Report"
+      phase: 7
+      writer: "tst"
+      qua_check_type: "template_compliance"
+      track: "A"
+      first_check: "ver"
+      second_check: "val"
+      note: "Track A deliverable; QUA checks before PM reports to COD."
+
+    - annex_c_item: 25
+      name: "Software Validation Report"
+      phase: 7
+      writer: "val"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      first_check: "ver"
+      second_check: null
+      second_check_exempt_reason: "VAL cannot 2nd-check its own report."
+      independence_required_sil: [3, 4]
+      independence_clause: "§5.1.2.10(f)"
+
+    - annex_c_item: 26
+      name: "Tools Validation Report"
+      phase: 7
+      writer: "val"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      conditional: true
+      first_check: "ver"
+      second_check: null
+      second_check_exempt_reason: "VAL cannot 2nd-check its own report."
+      sil_recommendation: "HR SIL 1+; R SIL 0"
+
+    - annex_c_item: 27
+      name: "Release Note"
+      phase: 7
+      writer: null
+      writer_note: "Authorship unresolved in Annex C (footnote a). Author per project SQAP."
+      qua_check_type: "template_compliance"
+      normative_clause: "§7.7.4.12"
+      first_check: "ver"
+      second_check: "val"
+
+    # ── Phase 8: Assessment ────────────────────────────────────────────────────
+    # QUA has NO touchpoint — ASR is fully independent (§5.1.2.5-5.1.2.7)
+    - annex_c_item: 45
+      name: "Software Assessment Plan"
+      phase: 8
+      writer: "asr"
+      qua_check_type: "none"
+      first_check: "ver"
+      second_check: null
+      qua_exemption_rationale: >
+        ASR is independent from the project AND supplier (§5.1.2.5-5.1.2.7).
+        QUA does NOT check ASR documents. VER performs independent 1st check only.
+
+    - annex_c_item: 46
+      name: "Software Assessment Report"
+      phase: 8
+      writer: "asr"
+      qua_check_type: "none"
+      first_check: "ver"
+      second_check: null
+      qua_exemption_rationale: >
+        ASR is independent from the project AND supplier (§5.1.2.5-5.1.2.7).
+        QUA does NOT check ASR documents. VER performs independent 1st check only.
+      mandatory:
+        sil_levels: [1, 2, 3, 4]
+        clause: "§6.4.1.1"
+      sil_0_exemption: "§6.4.1.2"
+
+    # ── Phase 9: Deployment ────────────────────────────────────────────────────
+    - annex_c_item: 36
+      name: "Software Release and Deployment Plan"
+      phase: 9
+      writer: "pm"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 37
+      name: "Software Deployment Manual"
+      phase: 9
+      writer: null
+      writer_note: "Author per project SQAP (Annex C footnote a)."
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 38
+      name: "Release Notes"
+      phase: 9
+      writer: "pm"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+      note: "Plural — distinct from item 27 (Release Note, Phase 7)."
+
+    - annex_c_item: 39
+      name: "Deployment Records"
+      phase: 9
+      writer: null
+      writer_note: "Author per project SQAP (Annex C footnote a)."
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 40
+      name: "Deployment Verification Report"
+      phase: 9
+      writer: "ver"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      first_check: null
+      second_check: null
+      second_check_note: "No VAL 2nd check (blank in Annex C)."
+      deviation: "D3"
+      deviation_note: "Platform deviation D3: Phase 9 (Annex C places in Maintenance phase)."
+
+    # ── Phase 10: Maintenance ──────────────────────────────────────────────────
+    - annex_c_item: 41
+      name: "Software Maintenance Plan"
+      phase: 10
+      writer: "pm"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 42
+      name: "Software Change Records"
+      phase: 10
+      writer: "pm"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+      note: "Annex C typo ('Software Chang Records') — correct name per §9.2.4."
+
+    - annex_c_item: 43
+      name: "Software Maintenance Records"
+      phase: 10
+      writer: "pm"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 44
+      name: "Software Maintenance Verification Report"
+      phase: 10
+      writer: "ver"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      first_check: null
+      second_check: "val"
+      deviation: "D4"
+      deviation_note: "Platform deviation D4: Phase 10 (Annex C places in Assessment phase). VAL 2nd check is a project addition."
+
+    # ── Section 8 items (generic platform / pre-existing software only) ────────
+    # Not applicable to bespoke software development.
+    - annex_c_item: 28
+      name: "Application Requirements Specification"
+      phase: "section_8"
+      applicability: "generic_platform_only"
+      writer: "req"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 29
+      name: "Application Preparation Plan"
+      phase: "section_8"
+      applicability: "generic_platform_only"
+      writer: "req_or_des"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 30
+      name: "Application Test Specification"
+      phase: "section_8"
+      applicability: "generic_platform_only"
+      writer: "tst"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 31
+      name: "Application Architecture and Design"
+      phase: "section_8"
+      applicability: "generic_platform_only"
+      writer: "des"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 32
+      name: "Application Preparation Verification Report"
+      phase: "section_8"
+      applicability: "generic_platform_only"
+      writer: "ver"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      first_check: null
+      second_check: null
+
+    - annex_c_item: 33
+      name: "Application Test Report"
+      phase: "section_8"
+      applicability: "generic_platform_only"
+      writer: "tst"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 34
+      name: "Source Code of Application Data/Algorithms"
+      phase: "section_8"
+      applicability: "generic_platform_only"
+      writer: "des"
+      qua_check_type: "template_compliance"
+      first_check: "ver"
+      second_check: "val"
+
+    - annex_c_item: 35
+      name: "Application Data/Algorithms Verification Report"
+      phase: "section_8"
+      applicability: "generic_platform_only"
+      writer: "ver"
+      qua_check_type: "template_compliance_one_pass"
+      one_pass_rule: true
+      first_check: null
+      second_check: "val"
+
+  # ── Touchpoint Summary ────────────────────────────────────────────────────────
+  deliverable_touchpoint_summary:
+    total_annex_c_items_bespoke_scope: 37      # items 1-27 + 36-46
+    items_with_qua_template_check: 23          # development deliverables [QUA]
+    items_with_qua_ver_report_check: 11        # [QUA-VER]: 2, 4, 8, 14, 17, 19, 23, 32*, 35*, 40, 44
+    items_with_qua_val_report_check: 3         # [QUA-VAL]: 5, 25, 26
+    items_with_no_qua_check: 2                 # [—]: 45, 46 (ASR documents)
+    section_8_items_note: "32* and 35* are §8 scope only (generic platform)"
+
+  # ── Diagram 3: QUA in the Two-Track Workflow ──────────────────────────────────
+  # This section encodes QUA's gate positions and logic within the per-phase
+  # execution loop defined in WORKFLOW.md. Agents read this to understand
+  # HOW QUA intervenes, not what QUA checks (that is phase_activities[]).
+  workflow:
+
+    qua_gate_summary:
+      gate_1:
+        track: "A"
+        position: "Between deliverable production and PM -> COD handoff"
+        applies_to: "All development deliverables (every phase except Phase 8)"
+      gate_2:
+        track: "B"
+        position: "Between VER report production and VMGR technical review (SIL 3-4) or COD receipt (SIL 0-2)"
+        applies_to: "All VER Verification Reports"
+      gate_3:
+        track: "B"
+        position: "Between VAL report production and VMGR technical review (SIL 3-4)"
+        applies_to: "VAL Validation Reports — Phase 7 only"
+
+    blocking_rule: >
+      COD CANNOT open a gate-check until QUA has passed ALL deliverables for that phase.
+
+    track_a:
+      description: "Development track — PM orchestrates. QUA is a MANDATORY gate between deliverable production and PM->COD handoff."
+      sequence:
+        - step: 1
+          actor: "pm"
+          action: "PM orchestrates development agents (REQ, DES, IMP, INT, TST, SAF, CM as applicable)"
+        - step: 2
+          actor: "dev_agent"
+          action: "Deliverable produced"
+        - step: 3
+          actor: "qua"
+          action: "QUA template compliance check"
+          checks:
+            - "Document ID format correct"
+            - "Document Control table present and complete"
+            - "Approvals table with SIL-appropriate roles"
+            - "All required sections present"
+            - "No obvious structural violations"
+          qua_does_not_check: "Technical content — that is VER's role"
+        - step: 4a
+          condition: "FAIL"
+          actor: "pm"
+          action: "PM notifies author; author fixes; resubmits"
+          max_iterations: 3
+          on_max_exceeded: "PM escalates (process failure)"
+        - step: 4b
+          condition: "PASS"
+          actor: "pm"
+          action: "PM marks deliverable QUA-ACCEPTED in LIFECYCLE_STATE.md"
+        - step: 5
+          actor: "pm"
+          condition: "All phase deliverables QUA-ACCEPTED"
+          action: "PM reports Track A complete to COD"
+
+    track_b:
+      sil_34:
+        description: "Independent V&V track — COD coordinates via VMGR. PM has NO authority over any agent in this track."
+        sequence:
+          - step: 1
+            actor: "cod"
+            action: "COD receives Track A complete from PM; requests verification from VMGR"
+            note: "No direct COD->VER path at SIL 3-4."
+          - step: 2
+            actor: "vmgr"
+            action: "VMGR assigns VER; VER performs technical verification; VER produces Verification Report"
+          - step: 3
+            actor: "qua"
+            action: "QUA template compliance check — VER report (1-Pass Rule)"
+            checks:
+              - "Document ID format correct"
+              - "Document Control table present"
+              - "Approvals table with SIL-appropriate roles (VER, VMGR, COD for SIL 3-4)"
+              - "All required sections present"
+              - "No obvious formatting violations"
+            one_pass_rule: true
+          - step: 4a
+            condition: "FAIL"
+            actor: "ver"
+            action: "VER re-issues report (once only)"
+            on_second_fail: "Escalate to PM/COD (process failure — VER does not know own template)"
+          - step: 4b
+            condition: "PASS"
+            actor: "vmgr"
+            action: "VMGR reviews VER report — technical content"
+            vmgr_reject_path: "VER reworks technical content; new report -> QUA re-checks"
+            vmgr_approve_path: "Proceed to Phase 7 VAL step (if Phase 7) or COD gate-check"
+          - step: 5
+            phase_7_only: true
+            actor: "vmgr"
+            action: "VMGR assigns VAL; VAL performs final validation; VAL produces Validation Reports (items 25, 26)"
+          - step: 6
+            phase_7_only: true
+            actor: "qua"
+            action: "QUA template compliance check — VAL report (1-Pass Rule)"
+            one_pass_rule: true
+            note: "Same format checks as VER report. QUA checks FORMAT; VMGR reviews technical content."
+          - step: 7
+            phase_7_only: true
+            condition: "PASS"
+            actor: "vmgr"
+            action: "VMGR reviews VAL reports — technical content"
+            vmgr_reject_path: "VAL reworks; new report -> QUA re-checks"
+            vmgr_approve_path: "VMGR Final V&V Decision (cannot be overridden by COD or PM)"
+          - step: 8
+            phase_7_only: true
+            actor: "vmgr"
+            action: "VMGR reports V&V outcome to COD"
+
+      sil_02:
+        description: "SIL 0-2: No VMGR. Track A is identical. Track B simplified."
+        track_a: "Identical to SIL 3-4 (QUA template checks mandatory at all SIL)."
+        track_b: >
+          COD invokes VER directly -> VER produces report -> QUA template check
+          (1-Pass Rule still applies) -> QUA PASS -> COD receives VER report.
+          Phase 7: COD invokes VAL directly -> VAL produces reports -> QUA checks
+          -> COD receives reports directly.
+
+    cod_gate_check:
+      description: "COD reads QUA-passed and VMGR-approved reports. Gate cannot open until all criteria are met."
+      criteria:
+        - "All phase deliverables QUA-passed (Track A)"
+        - "VER Verification Report QUA-passed and VMGR-approved (Track B, SIL 3-4) OR VER report QUA-passed and received directly (SIL 0-2)"
+        - "VAL reports QUA-passed and VMGR-approved (Phase 7 only; SIL 3-4)"
+        - "Traceability complete (from VER Verification Report findings)"
+        - "Zero critical open defects"
+      on_pass: "COD authorizes next phase"
+      on_fail: "COD BLOCKS; PM coordinates rework; COD re-runs gate"
+
+  # ── Diagram 4: Table A.9 SIL-Tiered Obligations ───────────────────────────────
+  # EN 50128:2011 Table A.9 (Software Quality Assurance Techniques) mapped to
+  # lifecycle phases where each technique is exercised.
+  # SIL obligation values: M = Mandatory, HR = Highly Recommended, R = Recommended,
+  #                        "-" = not applicable this phase
+  table_a9_obligations:
+
+    - technique_id: "T1"
+      name: "Accredited to EN ISO 9001"
+      reference: "§7.1"
+      sil_0: "R"
+      sil_1: "HR"
+      sil_2: "HR"
+      sil_3: "HR"
+      sil_4: "HR"
+      mandatory_floor: false
+      lifecycle_trigger: "Phase 0 (project initialization)"
+      activity: "Organisation holds EN ISO 9001 accreditation."
+      qua_role: "Confirm accreditation certificate exists and is in scope; record in SQAP."
+      phases_active: [0]
+      outputs:
+        - "SQAP (accreditation reference section)"
+      note: >
+        Accreditation (T1) != compliance (T2). T2 is MANDATORY even if T1 is only HR.
+        These are distinct obligations.
+
+    - technique_id: "T2"
+      name: "Compliant with EN ISO 9001"
+      reference: "§7.1"
+      sil_0: "M"
+      sil_1: "M"
+      sil_2: "M"
+      sil_3: "M"
+      sil_4: "M"
+      mandatory_floor: true             # MANDATORY ALL SIL — no SIL-based waiver
+      lifecycle_trigger: "Continuous (all phases)"
+      activity: "Quality management system compliant with ISO 9001:2015."
+      qua_role: >
+        Develop and maintain SQAP (item 1) documenting how quality system complies;
+        conduct process audits to verify compliance; report non-conformances.
+      phases_active: [1, 2, 3, 4, 5, 6, 7, 9, 10]   # Phase 8 excluded (QUA not active)
+      outputs:
+        - "SQAP"
+        - "Process Audit Reports"
+        - "Non-Conformance Reports (NCRs)"
+      note: "Phase 1: SQAP written. Phases 2-10: SQAP enforced through audits."
+
+    - technique_id: "T3"
+      name: "Compliant with ISO/IEC 90003"
+      reference: "§7.1"
+      sil_0: "R"
+      sil_1: "R"
+      sil_2: "R"
+      sil_3: "R"
+      sil_4: "R"
+      mandatory_floor: false
+      lifecycle_trigger: "Phase 1 (referenced in SQAP)"
+      activity: "Apply ISO/IEC 90003:2014 software engineering guidelines for ISO 9001."
+      qua_role: "Note ISO/IEC 90003 applicability in SQAP if adopted; no mandatory audit."
+      phases_active: [1]
+      note: >
+        Recommended only at all SIL. ISO/IEC 90003 provides guidance on applying
+        ISO 9001 to software — useful but not required by the standard.
+
+    - technique_id: "T4"
+      name: "Company Quality System"
+      reference: "§7.1"
+      sil_0: "M"
+      sil_1: "M"
+      sil_2: "M"
+      sil_3: "M"
+      sil_4: "M"
+      mandatory_floor: true             # MANDATORY ALL SIL — no SIL-based waiver
+      lifecycle_trigger: "Continuous (all phases)"
+      activity: "Organisation has a documented company quality management system."
+      qua_role: >
+        Reference company QMS in SQAP; verify project practices are consistent
+        with company QMS procedures; audit for QMS compliance.
+      phases_active: [1, 2, 3, 4, 5, 6, 7, 9, 10]
+      outputs:
+        - "SQAP (QMS reference section)"
+        - "Process Audit Reports"
+      note: "Phase 1: SQAP documents QMS reference. Phases 2-10: audited continuously."
+
+    - technique_id: "T5"
+      name: "Software Configuration Management"
+      reference: "D.48"
+      sil_0: "M"
+      sil_1: "M"
+      sil_2: "M"
+      sil_3: "M"
+      sil_4: "M"
+      mandatory_floor: true             # MANDATORY ALL SIL — no SIL-based waiver
+      lifecycle_trigger: "Phase 1 (SCMP produced); continuous thereafter"
+      activity: "SCM processes for version control, baselines, change control per §6.6."
+      qua_role: >
+        Audit CM processes at each phase gate (SIL 3-4); verify:
+        - All deliverables placed under CM from first issue (§6.5.4.10)
+        - Changes to CM items authorised and recorded (§6.5.4.11)
+        - Traceability is under CM control (§6.5.4.15)
+        - Baseline integrity maintained between phases
+      phases_active: [1, 2, 3, 4, 5, 6, 7, 9, 10]
+      outputs:
+        - "Process Audit Reports (CM section)"
+        - "Non-Conformance Reports (NCRs) for CM violations"
+      note: >
+        CM is performed by CM agent; QUA audits CM process but does not own it.
+        Phase 1: SCMP reviewed. Phases 2-10: CM audited at each gate.
+
+    - technique_id: "T6"
+      name: "Checklists"
+      reference: "D.7"
+      sil_0: "R"
+      sil_1: "HR"
+      sil_2: "HR"
+      sil_3: "HR"
+      sil_4: "HR"
+      mandatory_floor: false
+      lifecycle_trigger: "Each deliverable review; each audit"
+      activity: "Structured checklists for reviews, inspections, audits."
+      qua_role: >
+        Maintain and apply checklists for:
+        - Phases 1-4: Document template compliance checklists (Document ID, Document
+          Control table, Approvals table, required sections)
+        - Phase 5: Template compliance checklists for items 18-20 only.
+          Code review checklists covering MISRA C, cyclomatic complexity, defensive
+          programming are VER tools under §7.5.4.10 — NOT QUA tools.
+        - Phases 5-7: Test report template compliance checklists (format only, not
+          test coverage adequacy)
+        - All phases: Process audit checklists
+      phases_active: [1, 2, 3, 4, 5, 6, 7, 9, 10]
+      outputs:
+        - "Completed checklists included in QUA Review Reports"
+
+    - technique_id: "T7"
+      name: "Traceability"
+      reference: "D.58"
+      sil_0: "R"
+      sil_1: "HR"
+      sil_2: "HR"
+      sil_3: "M"
+      sil_4: "M"
+      mandatory_floor: false
+      mandatory_floor_sil: 3            # MANDATORY at SIL 3-4; HR at SIL 1-2; R at SIL 0
+      lifecycle_trigger: "Each phase gate; mandatory per §6.5.4.14-17"
+      activity: "Bi-directional traceability S1->SRS->SAS->SDS->Code->Test (forward and backward)."
+      qua_role: >
+        QUA audits the EVIDENCE of traceability (that VER checked it and recorded
+        findings in the Verification Report; that traceability is under CM control
+        per §6.5.4.15). QUA does NOT independently check traceability links (that
+        is VER's technical responsibility per §6.5.4.14-17 and TRACEABILITY.md).
+      phases_active: [2, 3, 4, 5, 6, 7]
+      traceability_rules_by_phase:
+        phase_2: ["T1", "T2"]
+        phase_3: ["T3", "T4", "T5a", "T5b", "T5c"]
+        phase_4: ["T6", "T11"]
+        phase_5: ["T7", "T12"]
+        phase_6: ["T10a", "T10b"]
+        phase_7: ["T8", "T9", "T13"]
+      traceability_rule_reference: "TRACEABILITY.md Section 9 (rules T1-T15)"
+      outputs:
+        - "Traceability Audit Reports (per-phase gate, SIL 3-4)"
+
+    - technique_id: "T8"
+      name: "Data Recording and Analysis"
+      reference: "D.12"
+      sil_0: "HR"
+      sil_1: "HR"
+      sil_2: "HR"
+      sil_3: "M"
+      sil_4: "M"
+      mandatory_floor: false
+      mandatory_floor_sil: 3            # MANDATORY at SIL 3-4; HR at SIL 0-2
+      lifecycle_trigger: "Each phase gate (SIL 3-4); periodic (SIL 1-2)"
+      activity: "Collect, record, and trend-analyze quality metrics across the lifecycle."
+      qua_role: >
+        Collect and report metrics at each phase:
+        - Phase 2: Requirements count, SIL distribution, complexity
+        - Phase 3: Design module count, interface count, coupling metrics
+        - Phase 5: SLOC, comment density, cyclomatic complexity distribution,
+                   MISRA C violation counts (mandatory/required/advisory),
+                   defect density (defects/KLOC)
+        - Phases 5-7: Statement coverage %, branch coverage %,
+                      condition coverage % (SIL 3-4), test case count,
+                      defect detection rate, defect removal efficiency
+        - All phases: NCR counts by severity; open vs. closed trends
+      phases_active: [1, 2, 3, 4, 5, 6, 7, 9, 10]
+      frequency:
+        sil_34: "Per phase (MANDATORY)"
+        sil_12: "Per phase (HR)"
+        sil_0: "Optional"
+      outputs:
+        - "Quality Metrics Reports (per phase)"
+        - "Trend charts in SQAP updates"
+
+  # ── Obligation Summary Matrix (Phase x Technique) ─────────────────────────────
+  # Cell format: "sil_02_obligation / sil_34_obligation"
+  # Values: M = Mandatory, HR = Highly Recommended, R = Recommended, "-" = not active
+  # Phase 8 excluded — QUA has no active obligation in Phase 8.
+  obligation_summary:
+    legend:
+      M: "Mandatory"
+      HR: "Highly Recommended"
+      R: "Recommended"
+      "-": "Not active this phase"
+      cell_format: "SIL 0-2 obligation / SIL 3-4 obligation"
+    matrix:
+      #           T1     T2    T3    T4    T5    T6     T7     T8
+      phase_0:  ["R/HR", "M",  "R",  "M",  "M",  "-",   "-",   "-"   ]
+      phase_1:  ["R/HR", "M",  "R",  "M",  "M",  "R/HR","R/HR","HR/M"]
+      phase_2:  ["-",    "M",  "R",  "M",  "M",  "R/HR","HR/M","HR/M"]
+      phase_3:  ["-",    "M",  "R",  "M",  "M",  "R/HR","HR/M","HR/M"]
+      phase_4:  ["-",    "M",  "R",  "M",  "M",  "R/HR","HR/M","HR/M"]
+      phase_5:  ["-",    "M",  "R",  "M",  "M",  "R/HR","HR/M","HR/M"]
+      phase_6:  ["-",    "M",  "R",  "M",  "M",  "R/HR","HR/M","HR/M"]
+      phase_7:  ["-",    "M",  "R",  "M",  "M",  "R/HR","HR/M","HR/M"]
+      phase_8:  ["-",    "-",  "-",  "-",  "-",  "-",   "-",   "-"   ]
+      phase_9:  ["-",    "M",  "R",  "M",  "M",  "R/HR","R/HR","HR/M"]
+      phase_10: ["-",    "M",  "R",  "M",  "M",  "R/HR","HR/M","HR/M"]
+    column_order: ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"]
+
+  # ── Mandatory Baseline ────────────────────────────────────────────────────────
+  # Minimum QUA activities independent of SIL level.
+  # These apply at ALL SIL levels (0 through 4) without exception.
+  mandatory_baseline:
+    note: >
+      Below SIL 3-4, the SQAP MAY document a rationale for not applying HR/M+
+      techniques, per EN 50128:2011 Section 1 (SIL-appropriate application principle).
+      The Safety Authority must accept any downward deviation from HR obligations.
+    items:
+      - id: 1
+        description: "Produce SQAP"
+        normative_clause: "§6.5.4.3"
+        note: "'shall be written' — no SIL exemption"
+      - id: 2
+        description: "Implement quality system compliant with EN ISO 9001"
+        technique: "T2"
+        sil_obligation: "MANDATORY ALL SIL"
+      - id: 3
+        description: "Use company quality management system"
+        technique: "T4"
+        sil_obligation: "MANDATORY ALL SIL"
+      - id: 4
+        description: "Enforce software configuration management"
+        technique: "T5"
+        sil_obligation: "MANDATORY ALL SIL"
+      - id: 5
+        description: "Enforce quality gates — no phase transition without QUA approval"
+        note: "COD CANNOT open a gate-check until QUA has passed ALL deliverables."
+
+  # ── Deviations ────────────────────────────────────────────────────────────────
+  # Known standard ambiguities and platform deviations documented in
+  # tasks/QUALITY_PROCESS.md Notes section. D5 numbering gap preserved
+  # for alignment with DELIVERABLES.md deviation register.
+  deviations:
+    - id: "D1"
+      item_ref: 5
+      item_name: "Software Validation Plan"
+      issue: "Annex C places SVaP in Phase 2; platform places it in Phase 1 alongside the other planning documents."
+      resolution: "Platform deviation; SVaP authorship (VAL) and self-certification conflict documented in SQAP."
+
+    - id: "D2"
+      item_ref: 20
+      item_name: "Software Component Test Report"
+      issue: "Annex C places item 20 in Integration phase; platform places it in Phase 5 (Implementation & Testing) where it is produced."
+      resolution: "Platform deviation; document in SQAP."
+
+    - id: "D3"
+      item_ref: 40
+      item_name: "Deployment Verification Report"
+      issue: "Annex C places item 40 in Maintenance phase; platform places it in Phase 9 (Deployment) where it is produced."
+      resolution: "Platform deviation; no VAL 2nd check per Annex C; document in SQAP."
+
+    - id: "D4"
+      item_ref: 44
+      item_name: "Software Maintenance Verification Report"
+      issue: "Annex C places item 44 in Assessment phase; platform places it in Phase 10 (Maintenance) where it is produced."
+      resolution: "Platform deviation; VAL 2nd check is a project addition beyond Annex C; document in SQAP."
+
+    - id: "D5"
+      note: "Not used — numbering gap preserved to maintain alignment with DELIVERABLES.md deviation register."
+
+    - id: "D6"
+      item_ref: 19
+      item_name: "Software Source Code Verification Report"
+      issue: "Annex C Table C.1: 2nd Check blank; this platform assigns VAL 2nd check."
+      resolution: "Project addition beyond Annex C; document in SQAP."
+
+    - id: "D7"
+      item_ref: 44
+      item_name: "Software Maintenance Verification Report"
+      issue: "Annex C Table C.1: 2nd Check may be blank."
+      resolution: "If blank in printed standard, platform assignment of VAL 2nd check is project addition; document in SQAP."
+
+    - id: "D8"
+      item_ref: 1
+      item_name: "Software Quality Assurance Plan"
+      issue: "§6.5.4.3 'under responsibility of Verifier'; Annex C Written By: blank."
+      resolution: "Platform assigns QUA as author under VER direction; SQAP must document this role split."
+
+    - id: "phase_8_qua_exemption"
+      item_ref: null
+      item_name: "Phase 8 QUA exemption"
+      issue: "QUA has no track-A or track-B role during Assessment phase."
+      resolution: "Grounded in §5.1.2.5-5.1.2.7; document in SQAP that QUA scope excludes Phase 8."
+
+    - id: "table_a9_mandatory_floor"
+      item_ref: null
+      item_name: "Table A.9 mandatory floor (T2, T4, T5)"
+      issue: "T2, T4, T5 are MANDATORY at ALL SIL (including SIL 0)."
+      resolution: "No SIL-based waiver is available for these three techniques."

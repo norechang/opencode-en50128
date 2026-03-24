@@ -1,0 +1,23 @@
+# Required sections supplement — Software Integration Test Report
+# Annex C item: 21
+# Written by: INT (with TST)
+# Standard reference: EN 50128:2011 §7.6.4
+
+doc_key: "INTTESTRPT"
+annex_c_item: 21
+standard_reference: "§7.6.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; reference to INTTESTSPEC (item 12)"
+  - heading: "Test Environment"
+    notes: "Actual integration environment; hardware/software configuration"
+  - heading: "Integration Test Execution Summary"
+    notes: "Total tests run, passed, failed, skipped"
+  - heading: "Test Results"
+    notes: "Per-test-case result: PASS / FAIL / SKIP; failure description if applicable"
+  - heading: "Defects Found"
+    notes: "Integration defects; severity; resolution status"
+  - heading: "Conclusion"
+    notes: "Integration testing complete — all test cases passed or list of open items"

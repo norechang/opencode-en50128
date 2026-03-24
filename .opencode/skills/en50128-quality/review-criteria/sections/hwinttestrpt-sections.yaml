@@ -1,0 +1,23 @@
+# Required sections supplement — HW/SW Integration Test Report
+# Annex C item: 22
+# Written by: INT (with TST)
+# Standard reference: EN 50128:2011 §7.6.4
+
+doc_key: "HWINTTESTRPT"
+annex_c_item: 22
+standard_reference: "§7.6.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; reference to HWINTTESTSPEC (item 13); target hardware identified"
+  - heading: "Test Environment"
+    notes: "Target hardware configuration; firmware versions; test equipment"
+  - heading: "HW/SW Integration Test Execution Summary"
+    notes: "Total tests run, passed, failed, skipped"
+  - heading: "Test Results"
+    notes: "Per-test-case result: PASS / FAIL / SKIP; failure description if applicable"
+  - heading: "Defects Found"
+    notes: "HW/SW integration defects; severity; resolution status"
+  - heading: "Conclusion"
+    notes: "HW/SW integration testing complete — all test cases passed or list of open items"

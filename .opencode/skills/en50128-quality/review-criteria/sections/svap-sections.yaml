@@ -1,0 +1,27 @@
+# Required sections supplement — Software Validation Plan
+# Annex C item: 5
+# Written by: VAL
+# Standard reference: EN 50128:2011 §6.3.4.3–6.3.4.6
+# qua_check_type: template_compliance_one_pass (1-Pass Rule applies)
+# Platform deviation D1: placed in Phase 1; Annex C places in Phase 2
+
+doc_key: "SVaP"
+annex_c_item: 5
+standard_reference: "§6.3.4.3–6.3.4.6"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose, scope, relationship to SQAP"
+  - heading: "Validation Strategy"
+    notes: "§6.3.4.4: justification of the validation strategy chosen"
+  - heading: "Validation Activities"
+    notes: "§6.3.4.3: activities for each validation phase"
+  - heading: "Pre-existing Software"
+    notes: "§6.3.4.5: steps to demonstrate adequacy of any pre-existing software"
+  - heading: "Tools Validation"
+    notes: "§6.3.4.6: steps to demonstrate adequacy of tools used"
+  - heading: "Independence Requirements"
+    notes: "How validator independence is maintained (mandatory SIL 3–4)"
+  - heading: "Update Procedure"
+    notes: "§6.5.4.9: plan update frequency and responsibility"

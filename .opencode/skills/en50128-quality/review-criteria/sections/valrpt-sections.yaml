@@ -1,0 +1,26 @@
+# Required sections supplement — Software Validation Report
+# Annex C item: 25
+# Written by: VAL
+# Standard reference: EN 50128:2011 §6.3.4.7–6.3.4.11
+# qua_check_type: template_compliance_one_pass (1-Pass Rule applies)
+
+doc_key: "VALRPT"
+annex_c_item: 25
+standard_reference: "§6.3.4.7–6.3.4.11"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; software baseline validated identified"
+  - heading: "Validation Scope"
+    notes: "§6.3.4.8: what was validated; validation activities performed"
+  - heading: "Validation Results"
+    notes: "§6.3.4.8: documented results of all validation activities"
+  - heading: "Verification Completeness"
+    notes: "§6.3.4.9: confirmation that verification process is complete"
+  - heading: "Software Baseline"
+    notes: "§6.3.4.10: exact baseline validated (CM tag, version)"
+  - heading: "Known Deficiencies"
+    notes: "§6.3.4.11: any known deficiencies; assessed impact on safety"
+  - heading: "Conclusion"
+    notes: "Authorisation recommendation: software may / may not be released for operation"

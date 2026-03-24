@@ -1,0 +1,25 @@
+# Required sections supplement — Software Integration Test Specification
+# Annex C item: 12
+# Written by: INT (with TST)
+# Standard reference: EN 50128:2011 §7.6.4
+
+doc_key: "INTTESTSPEC"
+annex_c_item: 12
+standard_reference: "§7.6.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose, scope; which components are integrated in this plan"
+  - heading: "Integration Strategy"
+    notes: "§7.6.4.4: incremental integration order; rationale"
+  - heading: "Test Environment"
+    notes: "Target hardware, simulators, stubs, drivers used"
+  - heading: "Integration Test Cases"
+    notes: "§7.6.4.5: test case IDs, components under test, inputs, expected outputs, pass/fail criteria"
+  - heading: "Pass/Fail Criteria"
+    notes: "Integration-level acceptance criteria"
+  - heading: "Traceability"
+    notes: "Test cases traced to SAS component interfaces and SRS requirements"
+  - heading: "Test Completion Criteria"
+    notes: "When integration testing is deemed complete"

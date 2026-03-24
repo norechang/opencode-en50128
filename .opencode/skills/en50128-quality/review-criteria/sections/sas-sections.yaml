@@ -1,0 +1,25 @@
+# Required sections supplement — Software Architecture Specification
+# Annex C item: 9
+# Written by: DES
+# Standard reference: EN 50128:2011 §7.3.4
+
+doc_key: "SAS"
+annex_c_item: 9
+standard_reference: "§7.3.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose, scope, relationship to SRS"
+  - heading: "Architecture Overview"
+    notes: "§7.3.4.6–7.3.4.8: top-level decomposition; modules, components, layers"
+  - heading: "Component Descriptions"
+    notes: "§7.3.4.9: each component's purpose, interfaces, SIL assignment"
+  - heading: "Inter-Component Interfaces"
+    notes: "§7.3.4.12–7.3.4.13: data flows, control flows, shared resources"
+  - heading: "Safety Architecture"
+    notes: "SIL partitioning rationale; safety mechanisms (defensive programming, diversity)"
+  - heading: "Design Constraints"
+    notes: "MISRA C applicability per component; no dynamic memory; no recursion constraints"
+  - heading: "Traceability"
+    notes: "Architecture components traced to SRS requirements (T3–T5 per TRACEABILITY.md)"

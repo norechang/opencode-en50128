@@ -1,0 +1,25 @@
+# Required sections supplement — HW/SW Integration Test Specification
+# Annex C item: 13
+# Written by: INT (with TST)
+# Standard reference: EN 50128:2011 §7.6.4
+
+doc_key: "HWINTTESTSPEC"
+annex_c_item: 13
+standard_reference: "§7.6.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose, scope; target hardware platform identified"
+  - heading: "HW/SW Integration Strategy"
+    notes: "§7.6.4.4: approach for integrating software onto target hardware"
+  - heading: "Test Environment"
+    notes: "Target hardware configuration; any simulation or emulation used"
+  - heading: "HW/SW Integration Test Cases"
+    notes: "Test case IDs, HW/SW interactions under test, inputs, expected outputs"
+  - heading: "Pass/Fail Criteria"
+    notes: "HW/SW integration-level acceptance criteria"
+  - heading: "Traceability"
+    notes: "Test cases traced to interface specifications (item 11) and SRS"
+  - heading: "Test Completion Criteria"
+    notes: "When HW/SW integration testing is deemed complete"

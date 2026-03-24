@@ -1,0 +1,22 @@
+# Required sections supplement — Software Change Records
+# Annex C item: 42
+# Written by: CM
+# Standard reference: EN 50128:2011 §9.2.4, §6.6.4.1
+# Note: Annex C uses "Software Chang Records" — corrected name per §9.2.4
+
+doc_key: "CHANGEREC"
+annex_c_item: 42
+standard_reference: "§9.2.4, §6.6.4.1"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; applicable software system; CR numbering scheme"
+  - heading: "Change Request Log"
+    notes: "§6.6.4.1(a–i): list of all CRs with ID, date, originator, description, impact, status"
+  - heading: "CCB Decisions"
+    notes: "Approve/reject decisions with rationale; sign-off by PM (CCB Chair)"
+  - heading: "Implementation Records"
+    notes: "For each approved CR: implemented by, date, deliverables modified"
+  - heading: "Verification Records"
+    notes: "Post-implementation verification confirmation; VER sign-off reference"

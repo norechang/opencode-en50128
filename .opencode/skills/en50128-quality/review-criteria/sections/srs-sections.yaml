@@ -1,0 +1,27 @@
+# Required sections supplement — Software Requirements Specification
+# Annex C item: 6
+# Written by: REQ
+# Standard reference: EN 50128:2011 §7.2.4
+
+doc_key: "SRS"
+annex_c_item: 6
+standard_reference: "§7.2.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose, scope, relationship to system requirements"
+  - heading: "System Context"
+    notes: "Operational environment, interfaces to external systems"
+  - heading: "Software Requirements"
+    notes: "§7.2.4.6–7.2.4.16: functional, performance, safety requirements; each with unique ID and SIL assignment"
+  - heading: "Safety Requirements"
+    notes: "Safety-specific requirements; hazard references from Hazard Log"
+  - heading: "Interface Requirements"
+    notes: "External interfaces; HW/SW boundaries"
+  - heading: "Constraints"
+    notes: "Design constraints, standards compliance, MISRA C applicability"
+  - heading: "Traceability"
+    notes: "§6.5.4.14–17: traceability from system requirements to software requirements"
+  - heading: "Glossary"
+    notes: "Definitions; abbreviations"

@@ -1,7 +1,8 @@
 # Failure Modes and Effects Analysis (FMEA)
 
-**TEMPLATE VERSION**: 1.0  
-**REFERENCE**: EN 50128:2011 Section [X.Y], Table [A.N]
+**Document type**: Cross-cutting safety artifact (outside Annex C Table C.1)  
+**Standard**: EN 50128:2011 §7.1, EN 50126 D.27  
+**Template version**: 2.0
 
 ---
 
@@ -9,37 +10,34 @@
 
 | Field | Value |
 |-------|-------|
-| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Document ID** | DOC-FMEA-[YYYY]-[NNN] |
 | **Version** | [X.Y] |
 | **Date** | [YYYY-MM-DD] |
 | **Project** | [Project Name] |
-| **SIL Level** | [0, 1, 2, 3, or 4] |
-| **Author** | [Name], [Role] |
-| **Reviewer** | [Name], [Role] |
-| **Approver** | [Name], [Role] |
+| **SIL Level** | [0 / 1 / 2 / 3 / 4] |
+| **Author** | [Name] (SAF) |
 | **Status** | [Draft \| Review \| Approved \| Baseline] |
 
 ## DOCUMENT CONTROL
 
-| Version | Date | Author | Changes | Approved By |
-|---------|------|--------|---------|-------------|
-| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft |
 
 ## APPROVALS
 
-**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
-**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
+> **Note**: VER, VAL, and ASR do not appear in the Approvals table.
+> VER and VAL review this artifact in Track B; their sign-off is recorded in
+> their respective verification/validation reports — not here.
+> ASR independently reviews all safety evidence; ASR sign-off is in item 46.
+>
+> Track A Approvals table (document release):
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Author** | [Name] | | YYYY-MM-DD |
-| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
-| **QA Manager** | [Name] | | YYYY-MM-DD |
-| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
-| **Project Manager** | [Name] | | YYYY-MM-DD |
-| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Author** (SAF) | [Name] | | YYYY-MM-DD |
+| **Reviewer** (QUA) | [Name] | | YYYY-MM-DD |
+| **Approver** (PM) | [Name] | | YYYY-MM-DD |
 
 ---
 
@@ -264,7 +262,7 @@ This FMEA covers:
 - [ ] All mitigations defined
 - [ ] High-risk items (RPN > 100) have action plans
 - [ ] FMEA reviewed by independent reviewer (SIL 3-4)
-- [ ] FMEA approved by Safety Manager
+- [ ] FMEA approved by PM
 
 ---
 
@@ -333,9 +331,9 @@ This FMEA SHALL be updated when:
 
 ## APPENDIX C: REVISION HISTORY
 
-| Date | Version | Author | Changes | Approval |
-|------|---------|--------|---------|----------|
-| YYYY-MM-DD | 0.1 | [Author] | Initial FMEA | Draft |
+| Date | Version | Author | Changes |
+|------|---------|--------|---------|
+| YYYY-MM-DD | 0.1 | [Author] | Initial FMEA |
 
 ---
 

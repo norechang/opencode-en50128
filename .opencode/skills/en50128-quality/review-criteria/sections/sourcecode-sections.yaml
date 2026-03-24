@@ -1,0 +1,25 @@
+# Required sections supplement — Source Code (delivery package)
+# Annex C item: 18
+# Written by: IMP
+# Standard reference: EN 50128:2011 §7.5.4
+# Note: QUA checks PACKAGE STRUCTURE only — document ID, document control,
+# approvals, and a manifest/index section. QUA does NOT inspect code content,
+# MISRA compliance, or static analysis results. Those are VER responsibilities
+# per §7.5.4.10(c).
+
+doc_key: "SOURCECODE"
+annex_c_item: 18
+standard_reference: "§7.5.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Source Code Package Manifest"
+    notes: "List of all source files included in this delivery; version/hash for each file"
+  - heading: "Build Instructions"
+    notes: "How to compile the package; compiler version, flags, target"
+  - heading: "Change Summary"
+    notes: "What changed relative to previous delivery (or 'Initial release')"
+
+# QUA checks these three sections exist — nothing else.
+# Code content review, MISRA C checking, complexity analysis, coverage
+# measurement are performed by VER (§7.5.4.10) and IMP/TST — not QUA.

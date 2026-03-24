@@ -1,0 +1,25 @@
+# Required sections supplement — Software Component Design Specification
+# Annex C item: 15
+# Written by: DES
+# Standard reference: EN 50128:2011 §7.4.4
+
+doc_key: "COMPDESIGN"
+annex_c_item: 15
+standard_reference: "§7.4.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose, scope; component(s) covered; reference to SDS"
+  - heading: "Component Overview"
+    notes: "§7.4.4.3: component purpose, SIL assignment, module boundary"
+  - heading: "Interface Definition"
+    notes: "§7.4.4.4: public API (function signatures, parameters, return values)"
+  - heading: "Internal Design"
+    notes: "§7.4.4.5: data structures, algorithms, control flow"
+  - heading: "Error Handling"
+    notes: "§7.4.4.6: error detection, reporting, defensive programming mechanisms"
+  - heading: "Constraints"
+    notes: "No dynamic allocation; no recursion; complexity limit for SIL level"
+  - heading: "Traceability"
+    notes: "Component design traced to SDS module descriptions (T6, T11)"

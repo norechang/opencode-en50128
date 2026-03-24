@@ -1,0 +1,26 @@
+# Required sections supplement — Requirements Verification Report
+# Annex C item: 8
+# Written by: VER
+# Standard reference: EN 50128:2011 §6.2.4.12–6.2.4.13
+# qua_check_type: template_compliance_one_pass (1-Pass Rule applies)
+
+doc_key: "REQVER"
+annex_c_item: 8
+standard_reference: "§6.2.4.12–6.2.4.13"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Document purpose; SRS document ID and version verified"
+  - heading: "Verification Scope"
+    notes: "§6.2.4.13: which requirements were verified; criteria applied"
+  - heading: "Verification Method"
+    notes: "Techniques used (inspection, walkthrough, formal analysis)"
+  - heading: "Findings"
+    notes: "§6.2.4.13: list of findings with severity and SRS clause reference"
+  - heading: "Traceability Check"
+    notes: "Evidence that T1–T2 traceability rules were applied (§6.5.4.14–17)"
+  - heading: "Conclusion"
+    notes: "Overall verdict: requirements meet entry criteria / do not meet"
+  - heading: "Open Items"
+    notes: "Outstanding items; deferred defects with resolution plan"

@@ -1,0 +1,27 @@
+# Required sections supplement — Component Design Verification Report
+# Annex C item: 17
+# Written by: VER
+# Standard reference: EN 50128:2011 §6.2.4.12–6.2.4.13
+# qua_check_type: template_compliance_one_pass (1-Pass Rule applies)
+# Note: no VAL 2nd check per Annex C (blank in Table C.1)
+
+doc_key: "COMPDESIGNVER"
+annex_c_item: 17
+standard_reference: "§6.2.4.12–6.2.4.13"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; COMPDESIGN document ID and version verified"
+  - heading: "Verification Scope"
+    notes: "Which component design aspects were verified; criteria applied"
+  - heading: "Verification Method"
+    notes: "Techniques used (inspection, walkthrough, checklist)"
+  - heading: "Findings"
+    notes: "§6.2.4.13: findings with severity and COMPDESIGN clause reference"
+  - heading: "Traceability Check"
+    notes: "Evidence that T6, T11 traceability rules were applied"
+  - heading: "Conclusion"
+    notes: "Overall verdict: component design meets entry criteria / does not meet"
+  - heading: "Open Items"
+    notes: "Outstanding defects; must be resolved before Phase 5 entry"

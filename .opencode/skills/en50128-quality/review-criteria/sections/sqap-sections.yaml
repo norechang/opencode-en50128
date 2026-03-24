@@ -1,0 +1,30 @@
+# Required sections supplement — Software Quality Assurance Plan
+# Annex C item: 1
+# Written by: QUA (under VER direction, deviation D8)
+# Standard reference: EN 50128:2011 §6.5.4.4–6.5.4.6
+# Note: QUA cannot 2nd-check this document (self-certification conflict, deviation D8)
+
+doc_key: "SQAP"
+annex_c_item: 1
+standard_reference: "§6.5.4.4–6.5.4.6"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Document purpose, scope, applicable standards"
+  - heading: "Lifecycle Model"
+    notes: "§6.5.4.5(a): activities, entry/exit criteria, I/O, quality activities, responsible entities"
+  - heading: "Documentation Structure"
+    notes: "§6.5.4.5(b)"
+  - heading: "Documentation Control"
+    notes: "§6.5.4.5(c): roles for write/check/approval, distribution, archiving"
+  - heading: "Deviations"
+    notes: "§6.5.4.5(d): tracking and tracing of deviations; platform deviations D1–D8 must be listed"
+  - heading: "Quality Assurance Methods"
+    notes: "§6.5.4.5(e): techniques per Table A.9 for the project SIL level"
+  - heading: "Technique Selection Justification"
+    notes: "§6.5.4.5(f): justification per §4.7–4.9 for each technique selection"
+  - heading: "Update Procedure"
+    notes: "§6.5.4.9: frequency, responsibility, method for plan updates"
+  - heading: "Role Assignments"
+    notes: "Who performs QUA, VER, VAL, CM roles; independence declarations"

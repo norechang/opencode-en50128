@@ -1,0 +1,22 @@
+# Required sections supplement — Tools Validation Report
+# Annex C item: 26
+# Written by: VAL
+# Standard reference: EN 50128:2011 §6.7.4, §6.3.4
+# qua_check_type: template_compliance_one_pass (1-Pass Rule applies)
+
+doc_key: "TOOLSVALRPT"
+annex_c_item: 26
+standard_reference: "§6.7.4, §6.3.4"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose; list of T2/T3 tools assessed in this report"
+  - heading: "Tool Classification"
+    notes: "§6.7.4.1–6.7.4.2: each tool classified as T1/T2/T3; justification"
+  - heading: "Tool Qualification Evidence"
+    notes: "§6.7.4.3–6.7.4.5: specification/manual, validation evidence per tool class"
+  - heading: "Tool Usage Constraints"
+    notes: "Known limitations; compensating measures applied"
+  - heading: "Conclusion"
+    notes: "Tools are / are not adequate for their intended use at the project SIL level"

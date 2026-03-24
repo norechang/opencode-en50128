@@ -1,0 +1,25 @@
+# Required sections supplement — Overall Software Test Specification
+# Annex C item: 7
+# Written by: TST
+# Standard reference: EN 50128:2011 §7.7.4.1–7.7.4.6
+
+doc_key: "OTSTSPEC"
+annex_c_item: 7
+standard_reference: "§7.7.4.1–7.7.4.6"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Purpose, scope, relationship to SVaP and SRS"
+  - heading: "Test Strategy"
+    notes: "§7.7.4.1: overall test approach; black-box, functional, performance"
+  - heading: "Test Environment"
+    notes: "Hardware, software, tools used for overall testing"
+  - heading: "Test Cases"
+    notes: "§7.7.4.3–7.7.4.4: test case IDs, inputs, expected outputs, pass/fail criteria; traced to SRS requirements"
+  - heading: "Pass/Fail Criteria"
+    notes: "Overall system-level acceptance criteria"
+  - heading: "Traceability"
+    notes: "Test case to SRS requirement mapping"
+  - heading: "Test Completion Criteria"
+    notes: "When overall testing is deemed complete"

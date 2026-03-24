@@ -1,7 +1,8 @@
 # Fault Tree Analysis (FTA)
 
-**TEMPLATE VERSION**: 1.0  
-**REFERENCE**: EN 50128:2011 Section [X.Y], Table [A.N]
+**Document type**: Cross-cutting safety artifact (outside Annex C Table C.1)  
+**Standard**: EN 50128:2011 §7.1, EN 50126 D.30  
+**Template version**: 2.0
 
 ---
 
@@ -9,37 +10,34 @@
 
 | Field | Value |
 |-------|-------|
-| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Document ID** | DOC-FTA-[YYYY]-[NNN] |
 | **Version** | [X.Y] |
 | **Date** | [YYYY-MM-DD] |
 | **Project** | [Project Name] |
-| **SIL Level** | [0, 1, 2, 3, or 4] |
-| **Author** | [Name], [Role] |
-| **Reviewer** | [Name], [Role] |
-| **Approver** | [Name], [Role] |
+| **SIL Level** | [0 / 1 / 2 / 3 / 4] |
+| **Author** | [Name] (SAF) |
 | **Status** | [Draft \| Review \| Approved \| Baseline] |
 
 ## DOCUMENT CONTROL
 
-| Version | Date | Author | Changes | Approved By |
-|---------|------|--------|---------|-------------|
-| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft |
 
 ## APPROVALS
 
-**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
-**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
+> **Note**: VER, VAL, and ASR do not appear in the Approvals table.
+> VER and VAL review this artifact in Track B; their sign-off is recorded in
+> their respective verification/validation reports — not here.
+> ASR independently reviews all safety evidence; ASR sign-off is in item 46.
+>
+> Track A Approvals table (document release):
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Author** | [Name] | | YYYY-MM-DD |
-| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
-| **QA Manager** | [Name] | | YYYY-MM-DD |
-| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
-| **Project Manager** | [Name] | | YYYY-MM-DD |
-| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Author** (SAF) | [Name] | | YYYY-MM-DD |
+| **Reviewer** (QUA) | [Name] | | YYYY-MM-DD |
+| **Approver** (PM) | [Name] | | YYYY-MM-DD |
 
 ---
 
@@ -264,9 +262,16 @@ P(Top Event) = [New Boolean expression]
 - Focus mitigation efforts on [high-impact events]
 - [Specific recommendations]
 
-#### 2.1.6 Common Cause Failures
+#### 2.1.6 Common Cause Failures (HR SIL 3–4)
 
-**Common Cause Failures (CCF)** affecting multiple basic events:
+> **EN 50126-2:2017 Table F.2 item 11**: CCF Analysis is **Highly Recommended** (HR) at
+> SIL 3–4. It is NOT Mandatory. Include this section if the project SQAP selects CCF
+> analysis; otherwise note the justified waiver in the SQAP.
+> CCF is an EN 50126 technique applied via EN 50128 §7.1; it is NOT a Table A.8 entry.
+
+**CCF Analysis status**: [Selected / Waived — see SQAP §[X] for justification]
+
+**Common Cause Failures (CCF)** affecting multiple basic events (if selected):
 
 | CCF ID | Description | Affected Events | Impact | Mitigation |
 |--------|-------------|----------------|--------|------------|
@@ -381,7 +386,7 @@ P(Top Event) = [New Boolean expression]
 - [ ] Mitigations incorporated into fault tree
 - [ ] SIL achievement verified
 - [ ] FTA reviewed by independent reviewer (SIL 3-4)
-- [ ] FTA approved by Safety Manager
+- [ ] FTA approved by PM
 
 ### 5.2 Independent Review
 
@@ -476,9 +481,9 @@ Typical β values: 0.01 to 0.10 (1% to 10%)
 
 ## APPENDIX D: REVISION HISTORY
 
-| Date | Version | Author | Changes | Approval |
-|------|---------|--------|---------|----------|
-| YYYY-MM-DD | 0.1 | [Author] | Initial FTA | Draft |
+| Date | Version | Author | Changes |
+|------|---------|--------|---------|
+| YYYY-MM-DD | 0.1 | [Author] | Initial FTA |
 
 ---
 

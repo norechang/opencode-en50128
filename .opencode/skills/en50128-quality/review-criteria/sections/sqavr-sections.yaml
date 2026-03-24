@@ -1,0 +1,24 @@
+# Required sections supplement — Software Quality Assurance Verification Report
+# Annex C item: 2
+# Written by: VER
+# Standard reference: EN 50128:2011 §6.5.4.7–6.5.4.8
+# qua_check_type: template_compliance_one_pass (1-Pass Rule applies)
+
+doc_key: "SQAVR"
+annex_c_item: 2
+standard_reference: "§6.5.4.7–6.5.4.8"
+checker_rule_id: "GF-004"
+
+required_sections:
+  - heading: "Introduction"
+    notes: "Document purpose, scope, SQAP document ID being verified"
+  - heading: "Verification Scope"
+    notes: "Which SQAP clauses were verified; §6.5.4.8(a)–(b) criteria addressed"
+  - heading: "Verification Method"
+    notes: "Technique used (inspection, walkthrough, checklist)"
+  - heading: "Findings"
+    notes: "List of findings; each with severity and SQAP clause reference"
+  - heading: "Conclusion"
+    notes: "Overall verdict: SQAP meets requirements / does not meet requirements"
+  - heading: "Open Items"
+    notes: "Any outstanding items deferred to next lifecycle phase"
