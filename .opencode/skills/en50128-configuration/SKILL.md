@@ -21,15 +21,35 @@ Read these before any operation — do not invent rules.
 
 | File | Answers |
 |------|---------|
-| `std/EN50128-2011.md` §6.6 | Change control nine aspects (a–i), §6.6.4.2 re-entry, §6.6.3 outputs |
-| `std/EN50128-2011.md` §6.2.4.8 | VER evidence retention obligation |
-| `std/EN50128-2011.md` §9.1.4.2–3 | Deployment baseline recording and reproducibility |
+| `std/EN50128-2011.md` §6.6 | Change control nine aspects (a–i), §6.6.4.2 re-entry |
+| `std/EN50128-2011.md` §6.6.3 | CM normative output documents |
+| `std/EN50128-2011.md` §6.2.4.7–8 | VER functional completeness obligation; VER evidence retention |
+| `std/EN50128-2011.md` §6.2.4.13(a) | VER report content: identity/configuration of items verified |
+| `std/EN50128-2011.md` §6.3.4.9–10 | VAL verification-complete check; baseline stated in Validation Report |
+| `std/EN50128-2011.md` §9.1.4.2–3 | Baseline recording and reproducibility |
 | `std/EN50128-2011.md` §9.1.4.13 | Deployment Record as tracked evidence artifact |
-| `DELIVERABLES.md` | Annex C Table C.1 deliverable matrix |
-| `WORKFLOW.md` | Authority structure, CCB re-entry flow (Diagrams 1–4) |
-| `BASELINE_MANAGEMENT.md` | Baseline types, CM presence-check role, EN 50128 audit terminology (no FCA/PCA), role boundaries at each gate |
-| `activities/deliverables.yaml` | Machine-readable deliverable catalogue (CM registry is consistent with this) |
+| `std/EN50128-2011.md` §9.2.4 | Maintenance-phase change assessment and Software Change Records |
+| `std/EN50128-2011.md` D.48 | SCM records every version of every significant deliverable |
+| `BASELINE_MANAGEMENT.md` | Authoritative baseline lifecycle: Diagram 1 (gate map), Diagram 2 (creation procedure), terminology, role boundaries |
+| `activities/baseline-management.yaml` | Machine-readable form of BASELINE_MANAGEMENT.md — primary runtime reference for CM baseline capability |
+| `DELIVERABLES.md` | Annex C Table C.1 deliverable matrix; per-item 2nd-check assignments |
+| `activities/deliverables.yaml` | Machine-readable deliverable catalogue |
+| `WORKFLOW.md` | Authority structure (Diagram 1), per-phase loop (Diagram 2), CCB re-entry (Diagram 4) |
 | `document-registry.yaml` (this skill dir) | Canonical document-to-path and evidence-to-path lookup table |
+
+---
+
+## Terminology — EN 50128 Only
+
+The following terms are **NOT** used in EN 50128:2011 and MUST NOT appear in any CM
+deliverable, agent output, or template:
+
+| Forbidden term | Source standard | EN 50128 equivalent / correct clause |
+|---------------|----------------|--------------------------------------|
+| FCA (Functional Configuration Audit) | MIL-STD-973 / IEEE 828 | Functional completeness is VER's obligation — §6.2.4.7 |
+| PCA (Physical Configuration Audit) | MIL-STD-973 / IEEE 828 | CM presence-check at baseline: §6.6, D.48 |
+
+See `BASELINE_MANAGEMENT.md` Terminology note for the complete EN 50128 mapping.
 
 ---
 
@@ -57,8 +77,7 @@ writing any file. The layout below is normative for every project workspace.
 │   └── CR-<YYYYMMDD>-<NNN>.md          # one file per change request
 ├── baselines/
 │   └── <baseline-name>/
-│       ├── manifest.yaml               # list of all CIs at baseline time
-│       └── pca-fca-record.md           # PCA+FCA record (SIL 3-4)
+│       └── manifest.yaml               # CI manifest (Steps 4–5 in BASELINE_MANAGEMENT.md Diagram 2)
 │
 ├── phase-1-planning/
 │   ├── Software-Quality-Assurance-Plan.md
@@ -166,22 +185,35 @@ writing any file. The layout below is normative for every project workspace.
 
 ---
 
-## Baseline Types (per phase gate)
+## Baseline Capability — Runtime Reference
 
-| Gate | Baseline Name | Trigger | PCA+FCA required (SIL 3–4) |
-|------|--------------|---------|---------------------------|
-| Gate 1 | `planning-baseline` | Phase 1 complete | No (planning docs only) |
-| Gate 2 | `requirements-baseline` | Phase 2 complete | Yes |
-| Gate 3 | `design-baseline` | Phase 3 complete | Yes |
-| Gate 4 | `component-design-baseline` | Phase 4 complete | Yes |
-| Gate 5 | `implementation-baseline` | Phase 5 complete | Yes |
-| Gate 6 | `integration-baseline` | Phase 6 complete | Yes |
-| Gate 7 | `release-baseline` | Phase 7 complete | Yes — full PCA+FCA |
-| Gate 9 | `deployment-baseline` | Phase 9 complete | Yes — §9.1.4.2–3 |
+For the complete baseline procedure, CM MUST load `activities/baseline-management.yaml`.
+That file is the machine-readable form of `BASELINE_MANAGEMENT.md` (ISA PASS) and is the
+single authoritative runtime reference for:
 
-**§9.1.4.2**: Before delivering a software release, the software baseline SHALL be recorded and kept
-traceable under CM control.  
-**§9.1.4.3**: The release SHALL be reproducible throughout its baseline lifecycle.
+- `baselines[]` — gate-to-baseline map (8 gates, triggers, CI scope, VER/VAL requirements)
+- `baseline_creation_procedure` — 7-step procedure (Steps 1–7; pre-conditions, RACI, checks)
+- `change_request_baseline_path` — CR re-entry steps CR1–CR8 and archival rules
+- `terminology` — EN 50128 audit concept ownership table (no FCA/PCA)
+- `cm_role_boundary` — what CM does and does NOT do at a baseline event
+- `role_responsibilities` — per-role RACI at baseline creation
+
+**Baseline name → gate → trigger — quick index (detail in `baseline-management.yaml`):**
+
+| Gate | Baseline Name | VER report | VAL role |
+|------|--------------|-----------|---------|
+| 1 | `planning-baseline` | SQAVR | 2nd check (items 1,3,4; item 5 exempt) |
+| 2 | `requirements-baseline` | REQVER | 2nd check |
+| 3 | `design-baseline` | ARCHDESIGNVER | 2nd check |
+| 4 | `component-design-baseline` | COMPDESIGNVER | 2nd check |
+| 5 | `implementation-baseline` | SOURCECODEVER | 2nd check |
+| 6 | `integration-baseline` | VER review (INTVER produced in Phase 7) | 2nd check |
+| 7 | `release-baseline` ★ | INTVER | Formal VALRPT (§6.3.4.10) |
+| 9 | `deployment-baseline` | DEPLOYVER | 2nd check (items 36–39; item 40 exempt) |
+| per-CR | `per-cr-baseline` | MAINTVER | 2nd check |
+
+★ `release-baseline` is the most critical. §6.3.4.10 requires VALRPT to explicitly state this
+baseline. §9.1.4.3 requires reproducibility throughout the operational lifetime.
 
 ---
 
@@ -201,8 +233,9 @@ Every Software Change Record MUST address all nine aspects (a–i):
 | h | Reporting to all relevant parties | §6.6.4.1(h) |
 | i | Maintaining traceability of the change throughout the lifecycle | §6.6.4.1(i) |
 
-**§6.6.4.2**: ALL changes, regardless of size or urgency, SHALL initiate a return to an appropriate
-lifecycle phase. CM identifies the re-entry scope; COD authorizes re-entry.
+**§6.6.4.2**: ALL changes SHALL initiate a return to an appropriate lifecycle phase.
+CM identifies the re-entry scope; COD authorizes re-entry. See `WORKFLOW.md` Diagram 4
+and `activities/baseline-management.yaml` `change_request_baseline_path`.
 
 ---
 
@@ -210,18 +243,19 @@ lifecycle phase. CM identifies the re-entry scope; COD authorizes re-entry.
 
 Per §6.6.3, the normative CM outputs are:
 1. **Modified software and documentation** — all changed CIs at their new versions
-2. **Software Change Records** (§9.2.4.11) — one per approved CR; stored in `changes/`
+2. **Software Change Records** (§9.2.4) — one per approved CR; stored in `changes/`
 3. **New Configuration Records** — updated SCMP, configuration status accounting records
 
-The SCMP is a **planning input** (written in Phase 1), not a §6.6.3 output.
+The SCMP is a **planning input** written in Phase 1 per §6.6.4.1; it is not itself a §6.6.3
+output.
 
 ---
 
 ## §6.2.4.8 Evidence Retention
 
 Results of each verification activity SHALL be retained in a format defined or referenced in the
-SVP. CM is responsible for ensuring VER evidence is stored in the canonical `evidence/` paths and
-is included in the baseline manifest at each gate.
+SVP. CM is responsible for ensuring VER evidence is stored at canonical `evidence/` paths and
+included in the baseline manifest at each gate. **CM stores; VER produces.**
 
 ---
 
@@ -230,8 +264,9 @@ is included in the baseline manifest at each gate.
 | Severity | Condition | CM action |
 |----------|-----------|-----------|
 | CRITICAL | Document written to unregistered path | Invoke PM immediately via `task` tool |
-| CRITICAL | Baseline created without PCA+FCA (SIL 3–4) | Invoke PM immediately via `task` tool |
+| CRITICAL | Baseline created without COD authorization (gate-check not passed) | Invoke PM immediately via `task` tool |
 | CRITICAL | CI changed without an approved CR | Invoke PM immediately via `task` tool |
+| CRITICAL | VCS tag deleted or force-pushed without CCB approval + Change Record | Invoke PM immediately via `task` tool |
 | MAJOR | Evidence artifact not stored in canonical path | Log; report at next status accounting |
 | MAJOR | CR missing one of the nine §6.6.4.1(a–i) aspects | Log; return CR to originator |
 | MINOR | Version tag missing or inconsistent | Log; correct at next baseline cycle |

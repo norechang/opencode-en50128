@@ -1,7 +1,11 @@
 # Configuration Audit Report
 
-**TEMPLATE VERSION**: 2.0  
-**REFERENCE**: EN 50128:2011 Section [X.Y]
+**TEMPLATE VERSION**: 3.0  
+**REFERENCE**: EN 50128:2011 §6.6, §6.2.4.8, §6.2.4.13(a), §9.1.4.2–3, D.48
+
+> **Note on terminology**: EN 50128:2011 does not define "FCA" or "PCA". Those terms belong to
+> MIL-STD-973 / IEEE 828 and MUST NOT appear in any EN 50128 deliverable. For the correct EN 50128
+> ownership mapping see `BASELINE_MANAGEMENT.md` Terminology note.
 
 ---
 
@@ -9,479 +13,317 @@
 
 | Field | Value |
 |-------|-------|
-| **Document ID** | [DOC-XXX-YYYY-NNN] |
+| **Document ID** | [DOC-CAR-YYYYMMDD-NNN] |
 | **Version** | [X.Y] |
 | **Date** | [YYYY-MM-DD] |
 | **Project** | [Project Name] |
-| **SIL Level** | [0, 1, 2, 3, or 4] |
-| **Author** | [Name], [Role] |
+| **SIL Level** | [0 \| 1 \| 2 \| 3 \| 4] |
+| **Audit Type** | [Baseline Audit \| Internal Process Audit \| Post-CR Audit] |
+| **Gate / Trigger** | [Gate N — `<baseline-name>` \| Internal audit — no gate \| Post-CR audit — CR-YYYYMMDD-NNN] |
+| **Author** | [Name], Configuration Manager |
 | **Reviewer** | [Name], [Role] |
-| **Approver** | [Name], [Role] |
-| **Status** | [Draft \| Review \| Approved \| Baseline] |
+| **Approver** | [Name], Project Manager |
+| **Status** | [Draft \| Review \| Approved] |
+
+**Permitted Audit Types:**
+
+| Type | When | Gate? |
+|------|------|-------|
+| Baseline Audit | Triggered at each COD phase gate (Gates 1–7, 9) | Yes — gate authorizes baseline creation |
+| Internal Process Audit | CM-initiated quality check between gates | No |
+| Post-CR Audit | After CCB-approved CR is implemented and affected gate(s) re-passed | No new gate; per-CR baseline tagged |
+
+---
 
 ## DOCUMENT CONTROL
 
 | Version | Date | Author | Changes | Approved By |
 |---------|------|--------|---------|-------------|
-| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
+| 0.1 | YYYY-MM-DD | [Name] | Initial draft | — |
+
+---
 
 ## APPROVALS
 
-**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
-**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
+CM is author. PM approves. VER and VAL do NOT sign this report — they produce their own
+Verification and Validation Reports, which CM checks for presence only (§6.2.4.8, §6.3.4.10).
+ASR does NOT sign this report — ASR reviews the release-baseline artefacts and produces the
+Assessment Report (§6.4.4.10).
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Author** | [Name] | | YYYY-MM-DD |
-| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
-| **QA Manager** | [Name] | | YYYY-MM-DD |
-| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
-| **Project Manager** | [Name] | | YYYY-MM-DD |
-| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Configuration Manager (Author)** | [Name] | | YYYY-MM-DD |
+| **Quality Assurance** | [Name] | | YYYY-MM-DD |
+| **Project Manager (Approver)** | [Name] | | YYYY-MM-DD |
 
 ---
 
-## 1. Audit Information
-
-### 1.1 Audit Identification
+## 1. Audit Identification
 
 | Field | Value |
 |-------|-------|
-| **Audit ID** | AUDIT-YYYY-NNN |
-| **Audit Type** | [PCA \| FCA \| Internal \| Baseline] |
-| **Audit Objective** | [Describe audit purpose and objectives] |
-| **Baseline/Release** | [Version X.Y or Baseline-YYYY-MM-DD] |
-| **Configuration Items Audited** | [Number] |
+| **Audit ID** | CAR-YYYYMMDD-NNN |
+| **Gate Number** | [Gate N \| N/A for internal audits] |
+| **Baseline Authorized** | [Yes — COD gate-check PASS on YYYY-MM-DD \| N/A] |
+| **Baseline Name** | [`<baseline-name>` \| N/A] |
+| **VCS Tag** | [`<project>-gate<N>-<baseline-name>-<YYYYMMDD>` \| N/A] |
+| **Manifest Path** | [`baselines/<baseline-name>/manifest.yaml` \| N/A] |
 | **Audit Start Date** | YYYY-MM-DD |
 | **Audit End Date** | YYYY-MM-DD |
-| **Audit Duration** | [X days] |
-
-### 1.2 Audit Team
-
-| Name | Role | Organization | Independence Status |
-|------|------|--------------|-------------------|
-| [Name] | Lead Auditor | [Org] | [Independent / Not Applicable] |
-| [Name] | Configuration Manager | [Org] | N/A |
-| [Name] | Technical Auditor | [Org] | [Independent / Not Applicable] |
-| [Name] | Quality Auditor | [Org] | [Independent / Not Applicable] |
-
-**Independence Verification (SIL 3-4):**
-- [ ] Lead Auditor is independent of development team
-- [ ] No conflicts of interest identified
-- [ ] Independence documented and approved
-
-### 1.3 Audit Scope
-
-**Configuration Items Included:**
-- [ ] Software Requirements Specification (SRS)
-- [ ] Software Architecture Specification (SAS)
-- [ ] Software Design Specification (SDS)
-- [ ] Source code (all modules)
-- [ ] Test specifications and reports
-- [ ] Verification reports
-- [ ] Validation reports
-- [ ] Safety documentation (Hazard Log, FMEA, FTA, Safety Case) — owned by SAF; CM audits presence and version control, not content
-- [ ] Planning documents (SQAP, SCMP, SVP, SVaP)
-- [ ] Interface specifications
-- [ ] Build scripts and makefiles
-- [ ] Configuration management database
-- [ ] Change requests and records
-
-**Baseline Information:**
-- **Baseline ID:** [Baseline-YYYY-MM-DD or Version X.Y]
-- **Baseline Date:** YYYY-MM-DD
-- **Baseline Status:** [Draft | Released | Archived]
-- **Previous Baseline:** [Previous baseline ID]
+| **Configuration Items Audited** | [Number] |
 
 ---
 
-## 2. Audit Criteria
+## 2. Audit Scope
 
-### 2.1 EN 50128 Requirements (Section 6.6)
+CM audits **presence, version consistency, and path correctness** of configuration items.
+CM does NOT audit content correctness — that is the role of VER (§6.2.4.7), VAL (§6.3.4.9),
+and SAF (for safety artefacts).
 
-**Configuration Management Requirements:**
-- [ ] Configuration identification complete
-- [ ] Configuration control procedures followed
-- [ ] Configuration status accounting accurate
-- [ ] Configuration audits performed
-- [ ] All configuration items under version control
+### 2.1 Configuration Items in Scope
 
-**SIL-Specific Requirements:**
-- **SIL 0:** Basic configuration management
-- **SIL 1-2:** Formal configuration management with traceability
-- **SIL 3-4:** Mandatory traceability, data recording, independent audits
+Items in scope are determined by the gate. Authoritative item list:
+`activities/baseline-management.yaml` → `baselines[gate_<N>].content_scope`.
 
-### 2.2 Audit Checklist
+| CI Key | Canonical Path (from `document-registry.yaml`) | Expected Version | VCS Commit Hash | Present? | Version Match? |
+|--------|------------------------------------------------|-----------------|-----------------|----------|----------------|
+| SQAP | `phase-1-planning/Software-Quality-Assurance-Plan.md` | [X.Y] | [hash] | [Y/N] | [Y/N] |
+| SCMP | `phase-1-planning/Software-Configuration-Management-Plan.md` | [X.Y] | [hash] | [Y/N] | [Y/N] |
+| SVP | `phase-1-planning/Software-Verification-Plan.md` | [X.Y] | [hash] | [Y/N] | [Y/N] |
+| SVaP | `phase-1-planning/Software-Validation-Plan.md` | [X.Y] | [hash] | [Y/N] | [Y/N] |
+| SRS | `phase-2-requirements/Software-Requirements-Specification.md` | [X.Y] | [hash] | [Y/N] | [Y/N] |
+| SAS | `phase-3-architecture-design/Software-Architecture-Specification.md` | [X.Y] | [hash] | [Y/N] | [Y/N] |
+| SDS | `phase-3-architecture-design/Software-Design-Specification.md` | [X.Y] | [hash] | [Y/N] | [Y/N] |
+| [Add all CIs for this gate — consult `baseline-management.yaml`] | | | | | |
 
-The following checklist items were evaluated during the audit:
+**CM presence-check obligations** (§6.6, D.48):
 
-#### Configuration Identification
-- [ ] All configuration items uniquely identified
-- [ ] Configuration item naming conventions followed (DOC-XXX-YYYY-NNN)
-- [ ] Configuration items registered in CM database
-- [ ] Version numbering scheme consistently applied
-- [ ] Configuration item relationships documented
+- [ ] Each CI present at canonical path (`query-location` used to determine path)
+- [ ] Each CI at expected version in VCS
+- [ ] No CI changed outside an approved CR (`changes/CR-<YYYYMMDD>-<NNN>.md`)
+- [ ] File integrity hashes recorded in baseline manifest
 
-#### Configuration Control
-- [ ] All changes processed through Change Control Board (CCB)
-- [ ] Change requests properly documented
-- [ ] Change impact analysis performed for all changes
-- [ ] Change approvals obtained (SIL-appropriate)
-- [ ] Change implementation tracking maintained
-- [ ] No unauthorized changes detected
+### 2.2 Evidence Artefacts in Scope
 
-#### Version Control
-- [ ] All configuration items under version control (Git/SVN)
-- [ ] Version control repository structure correct
-- [ ] Commit messages follow conventions
-- [ ] Branch management policy followed
-- [ ] Tag/release management correct
-- [ ] No uncommitted changes in baseline
+Evidence paths are canonical per `document-registry.yaml` evidence section.
 
-#### Baselines
-- [ ] Baseline definition complete
-- [ ] Baseline contents documented
-- [ ] Baseline approval obtained
-- [ ] Baseline archived and retrievable
-- [ ] Baseline changes properly controlled
-- [ ] Baseline traceability maintained
+| Evidence Type | Canonical Path | Present? | Integrity Check |
+|---------------|---------------|----------|-----------------|
+| static-analysis | `phase-5-implementation-testing/evidence/static-analysis/` | [Y/N] | [hash/N/A] |
+| coverage | `phase-5-implementation-testing/evidence/coverage/` | [Y/N] | [hash/N/A] |
+| test-logs | `phase-5-implementation-testing/evidence/test-logs/` | [Y/N] | [hash/N/A] |
+| integration-test-logs | `phase-6-integration/evidence/integration-test-logs/` | [Y/N] | [hash/N/A] |
+| [Add evidence types for this gate] | | | |
 
-#### Traceability (Mandatory SIL 3-4)
-- [ ] Requirements traceability complete (forward and backward)
-- [ ] Design traceability to requirements
-- [ ] Code traceability to design
-- [ ] Test traceability to requirements
-- [ ] Traceability matrix up-to-date
-- [ ] No orphaned requirements or design elements
+**CM evidence retention obligation** (§6.2.4.8): results of each verification SHALL be retained
+in a format defined or referenced in the SVP. CM verifies presence and records paths in manifest.
+CM does NOT judge whether the evidence content demonstrates adequate coverage — that is VER.
 
-#### Document Control
-- [ ] All documents follow template structure
-- [ ] Document IDs assigned correctly
-- [ ] Version control tables complete
-- [ ] Approval tables complete with SIL-appropriate roles
-- [ ] Document status correct (Draft/Released/Archived)
-- [ ] Document references correct and up-to-date
+### 2.3 Required Signed Reports
 
-#### Physical Configuration (PCA)
-- [ ] Delivered items match baseline definition
-- [ ] Source code matches repository baseline
-- [ ] Build artifacts reproducible from source
-- [ ] Documentation matches code version
-- [ ] Installation media verified
-- [ ] Release notes accurate and complete
+CM checks reports are present and signed. CM does NOT re-perform the functional checks
+those reports document.
 
-#### Functional Configuration (FCA)
-- [ ] All requirements implemented
-- [ ] All tests executed successfully
-- [ ] Coverage criteria met (SIL-dependent)
-- [ ] Verification activities complete
-- [ ] Validation activities complete (SIL 3-4)
-- [ ] Defects resolved or documented
+| Report | Expected at This Gate | Present and Signed? | VMGR Approved? (SIL 3–4) |
+|--------|----------------------|--------------------|-----------------------------|
+| VER Verification Report | Yes — see BASELINE_MANAGEMENT.md Gate Quick Reference | [Y/N] | [Y/N/N/A] |
+| VER report states identity/configuration of items verified (§6.2.4.13(a)) | Confirm field present | [Y/N] | — |
+| VAL 2nd-check sign-off (non-Phase-7 gates) | See DELIVERABLES.md per-item | [Y/N] | — |
+| VAL Validation Report stating this baseline (Phase 7 only) (§6.3.4.10) | Phase 7 only | [Y/N/N/A] | — |
+| QUA template-compliance pass on all reports | Yes | [Y/N] | — |
+
+**Note on Gate 1 SVaP**: Item 5 (SVaP) has no VAL 2nd check — VAL cannot 2nd-check its own
+document. See DELIVERABLES.md.
+
+**Note on Gate 6**: The formal INTVER report (Annex C item 23) is produced in Phase 7, not Gate 6.
+At Gate 6, VER performs a review of integration test completeness; no separately named VER report
+covers this gate. See BASELINE_MANAGEMENT.md Diagram 1 Gate 6 note.
+
+**Note on Gate 9 DEPLOYVER**: Item 40 (DEPLOYVER) has no VAL 2nd check.
+See DELIVERABLES.md.
 
 ---
 
-## 3. Audit Findings
+## 3. CM Presence-Check Results
 
-### 3.1 Configuration Item Verification
-
-#### 3.1.1 Planning Documents
-
-| Document | Document ID | Expected Version | Actual Version | Status | Issues |
-|----------|-------------|-----------------|----------------|--------|--------|
-| Software Quality Assurance Plan | DOC-SQAP-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Software Configuration Management Plan | DOC-SCMP-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Software Verification Plan | DOC-SVP-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Software Validation Plan | DOC-SVaP-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-
-#### 3.1.2 Requirements Documents
-
-| Document | Document ID | Expected Version | Actual Version | Status | Issues |
-|----------|-------------|-----------------|----------------|--------|--------|
-| Software Requirements Specification | DOC-SRS-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Requirements Traceability Matrix | (Embedded in SRS) | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-
-#### 3.1.3 Design Documents
-
-| Document | Document ID | Expected Version | Actual Version | Status | Issues |
-|----------|-------------|-----------------|----------------|--------|--------|
-| Software Architecture Specification | DOC-SAS-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Software Design Specification | DOC-SDS-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Software Interface Specifications | DOC-SIS-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-
-#### 3.1.4 Source Code
-
-| Module/File | Expected Version | Actual Version | Repository Tag | Status | Issues |
-|-------------|-----------------|----------------|----------------|--------|--------|
-| [module.c] | [Git commit hash] | [Actual hash] | [tag] | [Pass/Fail] | [Issue description] |
-| [module.h] | [Git commit hash] | [Actual hash] | [tag] | [Pass/Fail] | [Issue description] |
-
-**Source Code Statistics:**
-- Total source files: [Number]
-- Total lines of code: [Number]
-- MISRA C violations (SIL 2+): [Number mandatory violations - MUST be 0 for SIL 2+]
-- Cyclomatic complexity: Max [Number] (Limit: ≤10 SIL 3-4, ≤15 SIL 2)
-
-#### 3.1.5 Test Documents
-
-| Document | Document ID | Expected Version | Actual Version | Status | Issues |
-|----------|-------------|-----------------|----------------|--------|--------|
-| Component Test Specification | DOC-CTS-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Component Test Report | DOC-CTR-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Integration Test Specification | DOC-ITS-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Integration Test Report | DOC-ITR-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Overall Software Test Specification | DOC-OSTS-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Overall Software Test Report | DOC-OSTR-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-
-**Test Coverage (SIL-Dependent):**
-- Statement coverage: [X%] (SIL 3-4 requirement: 100%)
-- Branch coverage: [X%] (SIL 2+ requirement: 100%)
-- Condition coverage: [X%] (SIL 3-4 requirement: 100%)
-
-#### 3.1.6 Verification and Validation Documents
-
-| Document | Document ID | Expected Version | Actual Version | Status | Issues |
-|----------|-------------|-----------------|----------------|--------|--------|
-| Software Verification Report | DOC-SVR-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Software Validation Report | DOC-SVaR-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Assessment Report (SIL 3-4) | DOC-AR-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-
-#### 3.1.7 Safety Documents
-
-Note: FMEA, FTA, and Safety Case are **owned by SAF** (Safety Engineer). CM audits their
-presence under configuration control and verifies version consistency — CM does NOT audit
-content correctness. Content correctness is audited by VER and assessed by ASR.
-
-| Document | Document ID | Expected Version | Actual Version | Status | Issues |
-|----------|-------------|-----------------|----------------|--------|--------|
-| Hazard Log | DOC-HL-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| FMEA | DOC-FMEA-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| FTA | DOC-FTA-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-| Safety Case | DOC-SC-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
-
-### 3.2 Configuration Control Verification
-
-#### 3.2.1 Change Control Review
-
-**Change Requests Processed Since Last Audit:** [Number]
-
-| CR ID | Title | Status | CCB Approval | Implementation Verified | Issues |
-|-------|-------|--------|--------------|------------------------|--------|
-| CR-YYYY-NNN | [Title] | [Status] | [Yes/No] | [Yes/No] | [Issue description] |
-
-**Findings:**
-- [ ] All changes processed through CCB
-- [ ] All changes have proper approvals
-- [ ] All changes properly implemented
-- [ ] No unauthorized changes detected
-- [ ] Change traceability maintained
-
-#### 3.2.2 Version Control Review
+### 3.1 CI Presence and Version Control
 
 **Repository Information:**
-- Repository type: [Git | SVN | Other]
-- Repository URL: [URL]
-- Baseline tag: [tag-name]
-- Baseline commit: [commit-hash]
 
-**Findings:**
-- [ ] All configuration items under version control
-- [ ] Commit history clean and complete
-- [ ] Branching strategy followed
-- [ ] No uncommitted changes in baseline
-- [ ] Repository tags correct
+| Field | Value |
+|-------|-------|
+| Repository type | [Git] |
+| Repository URL | [URL] |
+| Baseline tag | [`<project>-gate<N>-<baseline-name>-<YYYYMMDD>`] |
+| Tag commit | [commit-hash] |
 
-#### 3.2.3 Baseline Integrity
+**Version Control Findings:**
 
-**Baseline:** [Baseline-YYYY-MM-DD or Version X.Y]
+- [ ] All CIs registered in `document-registry.yaml`
+- [ ] No CI written to an unregistered path
+- [ ] Baseline tag created and protected (force-push disabled)
+- [ ] No uncommitted changes in baseline tree
+- [ ] Tag deletion requires CCB approval and Change Record (§9.1.4.2, D.48)
 
-**Baseline Verification:**
-- [ ] Baseline definition document exists
-- [ ] Baseline contents match CM database
-- [ ] Baseline archived and retrievable
-- [ ] Baseline build reproducible
-- [ ] Baseline checksums verified (MD5/SHA-256)
+### 3.2 Build Environment Record (§9.1.4.3 Reproducibility)
 
-**Baseline Checksums:**
-| File/Artifact | Expected Checksum | Actual Checksum | Status |
-|---------------|------------------|-----------------|--------|
-| [artifact.bin] | [checksum] | [checksum] | [Match/Mismatch] |
+Recorded in `baselines/<baseline-name>/manifest.yaml`. CM verifies these fields are present:
 
-### 3.3 Traceability Verification (Mandatory SIL 3-4)
+| Field | Recorded Value |
+|-------|---------------|
+| Compiler name and version | [e.g. gcc 12.3.0] |
+| Compiler flags | [e.g. -std=c11 -Wall -Wextra -Werror] |
+| Static analysis tool and version | [e.g. PC-lint Plus 2.0] |
+| Coverage tool and version | [e.g. gcov 12.3.0 / lcov 1.16] |
+| OS and build host | [e.g. Ubuntu 22.04 LTS, x86_64] |
 
-#### 3.3.1 Requirements Traceability
+**Basis**: §9.1.4.3 — release SHALL be reproducible throughout the baseline lifecycle.
 
-**Total Requirements:** [Number]
+### 3.3 Change Control Verification
 
-**Traceability Status:**
-- Requirements with design traceability: [Number / Total] ([X%])
-- Requirements with code traceability: [Number / Total] ([X%])
-- Requirements with test traceability: [Number / Total] ([X%])
-- Orphaned requirements: [Number] (MUST be 0 for SIL 3-4)
+**Change Requests since last baseline:** [Number]
 
-**Orphaned Requirements (if any):**
-| Requirement ID | Title | Issue |
-|---------------|-------|-------|
-| [REQ-NNN] | [Title] | [No design/code/test traceability] |
+| CR ID | Title | CCB Approved? | Affected CIs Updated? | Evidence Updated? | Status |
+|-------|-------|--------------|----------------------|------------------|--------|
+| CR-YYYYMMDD-NNN | [Title] | [Y/N] | [Y/N] | [Y/N] | [Open \| Closed] |
 
-#### 3.3.2 Backward Traceability
+**§6.6.4.1 Coverage Check** — each closed CR MUST address all nine aspects:
 
-**Test Cases Without Requirement Traceability:** [Number] (MUST be 0 for SIL 3-4)
+| CR ID | (a) Unique ID | (b) Reason | (c) Consequences | (d) Authorised approval | (e) Docs updated | (f) Affected CIs recorded | (g) Impl/VER/test done | (h) Parties notified | (i) Traceability maintained |
+|-------|--------------|------------|-----------------|------------------------|-----------------|--------------------------|----------------------|---------------------|-----------------------------|
+| CR-YYYYMMDD-NNN | [Y/N] | [Y/N] | [Y/N] | [Y/N] | [Y/N] | [Y/N] | [Y/N] | [Y/N] | [Y/N] |
 
-| Test Case ID | Issue |
-|--------------|-------|
-| [TC-NNN] | No requirement traceability |
+A "No" in any cell is a MAJOR violation. Log and return CR to PM for remediation.
 
-### 3.4 Document Control Review
+**§6.6.4.2 Lifecycle Re-entry** — all approved CRs triggered return to appropriate lifecycle phase:
 
-**Total Documents Audited:** [Number]
+- [ ] Each CR in the table above had affected phases re-executed
+- [ ] COD gate-checks re-passed for all phases re-entered
+- [ ] Post-CR baseline created (separate from gate baseline) if applicable
 
-**Document Control Findings:**
-- Documents following template structure: [Number / Total] ([X%])
-- Documents with correct ID format: [Number / Total] ([X%])
-- Documents with complete version control tables: [Number / Total] ([X%])
-- Documents with complete approval tables: [Number / Total] ([X%])
-- Documents with SIL-appropriate approvals: [Number / Total] ([X%])
+### 3.4 Baseline Manifest Completeness
 
-**Non-Conformances:**
-| Document ID | Issue | Severity |
-|-------------|-------|----------|
-| [DOC-XXX-YYYY-NNN] | [Issue description] | [Critical/Major/Minor] |
+Manifest stored at `baselines/<baseline-name>/manifest.yaml`. CM verifies all required fields:
+
+- [ ] Baseline name, gate number, phase name, creation date
+- [ ] All CIs listed: doc key · filename · VCS commit hash · document version
+- [ ] All evidence artefacts listed: type · canonical path · file hash
+- [ ] VER Verification Report reference + VMGR approval status (SIL 3–4)
+- [ ] VAL report reference (Phase 7) or per-item 2nd-check references (other gates)
+- [ ] QUA template-compliance pass records for all reports
+- [ ] Build environment record (§9.1.4.3)
+- [ ] Open defect list with disposition (CM records; VER determines disposition)
 
 ---
 
-## 4. Issues and Non-Conformances
+## 4. Non-Conformances
 
-### 4.1 Critical Issues
+### 4.1 CRITICAL — Must Resolve Before Baseline is Finalized
 
-**Definition:** Issues that violate EN 50128 mandatory requirements or present safety risks. MUST be resolved before release.
+CRITICAL issues prevent baseline creation. CM invokes PM immediately via `task` tool.
 
-| Issue ID | Description | Affected CI | EN 50128 Reference | Resolution Required |
-|----------|-------------|-------------|-------------------|-------------------|
-| CAR-CRIT-NNN | [Description] | [CI name] | [Section X.Y] | [Resolution action] |
+| Issue ID | Description | Affected CI | EN 50128 Clause | Assigned To | Resolution Required By |
+|----------|-------------|-------------|----------------|-------------|----------------------|
+| CAR-CRIT-NNN | [e.g. CI present at non-canonical path] | [CI key] | §6.6, D.48 | [Name] | YYYY-MM-DD |
 
-### 4.2 Major Issues
+### 4.2 MAJOR — Must Resolve Before Next Baseline Cycle
 
-**Definition:** Issues that violate highly recommended practices or significantly impact quality. SHOULD be resolved before release.
+| Issue ID | Description | Affected CI | EN 50128 Clause | Assigned To | Resolution Required By |
+|----------|-------------|-------------|----------------|-------------|----------------------|
+| CAR-MAJ-NNN | [e.g. CR missing §6.6.4.1(c) consequence analysis] | CR-YYYYMMDD-NNN | §6.6.4.1(c) | [Name] | YYYY-MM-DD |
 
-| Issue ID | Description | Affected CI | EN 50128 Reference | Resolution Required |
-|----------|-------------|-------------|-------------------|-------------------|
-| CAR-MAJ-NNN | [Description] | [CI name] | [Section X.Y] | [Resolution action] |
+### 4.3 MINOR — May Defer
 
-### 4.3 Minor Issues
-
-**Definition:** Issues that violate recommended practices but do not impact safety or quality. MAY be deferred to future release.
-
-| Issue ID | Description | Affected CI | EN 50128 Reference | Resolution Recommended |
-|----------|-------------|-------------|-------------------|----------------------|
-| CAR-MIN-NNN | [Description] | [CI name] | [Section X.Y] | [Resolution action] |
+| Issue ID | Description | Affected CI | EN 50128 Clause | Recommendation |
+|----------|-------------|-------------|----------------|----------------|
+| CAR-MIN-NNN | [e.g. version tag missing from evidence artefact] | [path] | D.48 | Correct at next baseline cycle |
 
 ### 4.4 Observations
 
-**Definition:** Areas for improvement that do not constitute non-conformances.
-
 | Observation ID | Description | Recommendation |
 |---------------|-------------|----------------|
-| CAR-OBS-NNN | [Description] | [Recommendation] |
+| CAR-OBS-NNN | [Process improvement suggestion] | [Action] |
 
 ---
 
 ## 5. Audit Conclusions
 
-### 5.1 Overall Assessment
+### 5.1 Baseline Creation Decision
 
-**Audit Result:** [Pass | Pass with Observations | Fail]
+| Item | Result |
+|------|--------|
+| All CIs present at canonical paths | [Pass \| Fail] |
+| All CIs at expected versions in VCS | [Pass \| Fail] |
+| No unauthorized changes detected | [Pass \| Fail] |
+| Required VER report present and signed | [Pass \| Fail] |
+| VER report states identity/configuration (§6.2.4.13(a)) | [Pass \| Fail] |
+| VMGR approval on VER report (SIL 3–4) | [Pass \| Fail \| N/A] |
+| VAL 2nd-check / VAL Report present (per gate) | [Pass \| Fail \| N/A] |
+| Build environment recorded (§9.1.4.3) | [Pass \| Fail] |
+| Manifest complete | [Pass \| Fail] |
+| VCS tag created and protected | [Pass \| Fail] |
+| **Overall Decision** | **[Baseline Created \| Blocked — CRITICAL issues open]** |
 
-**Summary:**
-[Provide overall assessment of configuration management state, baseline integrity, and compliance with EN 50128 requirements]
+**Baseline may only be created after COD gate-check PASS. CM does not independently authorize
+baseline creation.** (BASELINE_MANAGEMENT.md Diagram 2 Step 1; `activities/baseline-management.yaml`)
 
-**Compliance Assessment:**
-- EN 50128 Section 6.6 (Configuration Management): [Compliant | Not Compliant]
-- SIL-specific requirements: [Compliant | Not Compliant]
-- Traceability requirements (SIL 3-4): [Compliant | Not Compliant]
-
-### 5.2 Recommendations
-
-1. **Immediate Actions Required:**
-   - [Action 1 - address critical issues]
-   - [Action 2 - address critical issues]
-
-2. **Short-term Actions (before next baseline):**
-   - [Action 1 - address major issues]
-   - [Action 2 - address major issues]
-
-3. **Long-term Improvements:**
-   - [Improvement 1 - process improvements]
-   - [Improvement 2 - tool improvements]
-
-### 5.3 Release Readiness (if applicable)
-
-**Release Approval:** [Approved | Approved with Conditions | Not Approved]
-
-**Conditions for Approval (if applicable):**
-1. [Condition 1]
-2. [Condition 2]
-
-**Release Blocking Issues:**
-| Issue ID | Description | Resolution Status |
-|----------|-------------|------------------|
-| [CAR-CRIT-NNN] | [Description] | [Open/Resolved] |
-
----
-
-## 6. Follow-Up Actions
-
-### 6.1 Corrective Action Plan
+### 5.2 Corrective Action Plan
 
 | Issue ID | Corrective Action | Responsible | Target Date | Status |
-|----------|------------------|-------------|-------------|--------|
-| [CAR-XXX-NNN] | [Action description] | [Name] | YYYY-MM-DD | [Open/In Progress/Closed] |
+|----------|-----------------|-------------|-------------|--------|
+| [CAR-XXX-NNN] | [Action] | [Name] | YYYY-MM-DD | [Open \| In Progress \| Closed] |
 
-### 6.2 Next Audit
+### 5.3 Next Audit
 
-**Next Audit Type:** [PCA | FCA | Internal | Baseline]  
-**Planned Date:** YYYY-MM-DD  
-**Focus Areas:**
-- [Focus area 1]
-- [Focus area 2]
+| Field | Value |
+|-------|-------|
+| **Next Audit Type** | [Baseline Audit — Gate N+1 \| Internal Process Audit \| Post-CR Audit] |
+| **Planned Gate / Trigger** | [Gate N+1 \| Process review date \| Post-CR: CR-YYYYMMDD-NNN] |
+| **Planned Date** | YYYY-MM-DD |
+| **Focus Areas** | [Any open issues carried forward; specific CI categories if applicable] |
 
 ---
 
-## EN 50128 References
+## 6. EN 50128 Clause Reference
 
-- **Section 6.6:** Software Configuration Management
-- **Table A.9:** Software Quality Assurance techniques (includes Configuration Management)
-- **Section 5.3.2.5:** Configuration management activities during phases
-- **Annex C Table C.1:** Document control summary
-
-## EN 50126 RAMS References
-
-- **Section 8:** Configuration management in RAMS lifecycle
-- **Annex B:** Configuration management requirements
+| Clause | Relevance to this report |
+|--------|--------------------------|
+| §6.6 | Software Configuration Management — scope of CM duties |
+| §6.6.4.1(a–i) | Nine required aspects of every Software Change Record |
+| §6.6.4.2 | All changes SHALL initiate return to appropriate lifecycle phase |
+| §6.2.4.8 | VER evidence retention — CM stores; VER produces |
+| §6.2.4.13(a) | VER report shall state identity/configuration of items verified |
+| §6.3.4.9 | VAL checks verification is complete (evidenced in VAL report) |
+| §6.3.4.10 | VAL Validation Report shall state the baseline validated |
+| §9.1.4.2 | Baseline shall be recorded and kept traceable under CM control |
+| §9.1.4.3 | Release shall be reproducible throughout baseline lifecycle |
+| §9.1.4.13 | Deployment Record as CM-tracked evidence artefact |
+| §9.2.4 | Maintenance-phase change assessment and Software Change Records |
+| D.48 | SCM records every version of every significant deliverable |
 
 ---
 
 ## Appendices
 
-### Appendix A: Audit Checklist (Complete)
+### Appendix A: Baseline Manifest (reference)
 
-[Attach complete audit checklist with all items marked]
+Full manifest at `baselines/<baseline-name>/manifest.yaml`. Summary reproduced here if needed.
 
 ### Appendix B: Configuration Item List
 
-[Attach complete list of all configuration items audited]
+Complete list of all CIs audited (supplement to Section 2.1 table if too large for inline).
 
-### Appendix C: Traceability Matrix Review
+### Appendix C: Evidence Artefact List
 
-[Attach traceability matrix or reference document]
+Complete list of all evidence artefacts checked (supplement to Section 2.2 table).
 
-### Appendix D: Evidence
+### Appendix D: Audit Evidence
 
-[Attach evidence collected during audit: screenshots, logs, checksums, etc.]
+Screenshots, tool logs, checksum verification outputs collected during audit.
 
 ---
 
-**Template Version:** 1.0  
-**EN 50128:2011 Compliance:** Section 6.6, Table A.9  
-**Skill Owner:** Configuration Manager (`/cm`)
+**Template Version**: 3.0  
+**EN 50128:2011 Compliance**: §6.6, §6.2.4.8, §6.2.4.13(a), §9.1.4.2–3, D.48  
+**Skill Owner**: Configuration Manager (`/cm`)  
+**Authoritative baseline procedure**: `BASELINE_MANAGEMENT.md` + `activities/baseline-management.yaml`

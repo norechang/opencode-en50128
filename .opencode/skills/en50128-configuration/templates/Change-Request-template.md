@@ -1,412 +1,230 @@
-# Change Request
+# Software Change Request
 
-**TEMPLATE VERSION**: 2.0  
-**REFERENCE**: EN 50128:2011 Section [X.Y]
+**EN 50128:2011 Reference**: §6.6, §6.6.4.1(a–i), §6.6.4.2  
+**Template Version**: 3.0  
+**Stored at**: `changes/CR-<YYYYMMDD>-<NNN>.md`
 
 ---
 
-## STANDARD HEADER
+## Document Header
 
 | Field | Value |
 |-------|-------|
-| **Document ID** | [DOC-XXX-YYYY-NNN] |
-| **Version** | [X.Y] |
-| **Date** | [YYYY-MM-DD] |
-| **Project** | [Project Name] |
-| **SIL Level** | [0, 1, 2, 3, or 4] |
-| **Author** | [Name], [Role] |
-| **Reviewer** | [Name], [Role] |
-| **Approver** | [Name], [Role] |
-| **Status** | [Draft \| Review \| Approved \| Baseline] |
-
-## DOCUMENT CONTROL
-
-| Version | Date | Author | Changes | Approved By |
-|---------|------|--------|---------|-------------|
-| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
-
-## APPROVALS
-
-**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
-**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Project Manager
-
-Note: The Assessor (§6.4) reviews the overall lifecycle artifacts and signs the Software Assessment
-Report (Phase 8) — NOT individual CRs. Validator signs the Software Validation Report (Phase 7) —
-NOT individual CRs. Do not include Assessor or Validator in CR approval chains.
-
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| **Author** | [Name] | | YYYY-MM-DD |
-| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
-| **QA Manager** | [Name] | | YYYY-MM-DD |
-| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
-| **Project Manager** | [Name] | | YYYY-MM-DD |
-| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-
----
-
-## Table of Contents
-
-[To be added based on document structure]
-
----
-
-
-## Change Request Information
-
-### CR Identification
-
-| Field | Value |
-|-------|-------|
-| **CR Number** | CR-YYYY-NNN |
-| **CR Title** | [Short descriptive title] |
-| **Originator** | [Name, Role] |
+| **CR Number** | CR-YYYYMMDD-NNN |
+| **Document ID** | DOC-CHANGEREC-YYYY-NNN |
+| **Version** | 0.1 |
 | **Date Submitted** | YYYY-MM-DD |
-| **Priority** | [Critical \| High \| Medium \| Low] |
-| **Category** | [Defect \| Enhancement \| Documentation \| Other] |
-| **Status** | [Submitted \| Under Review \| Approved \| Rejected \| Implemented \| Closed] |
+| **Project** | [Project Name] |
+| **SIL Level** | [0 \| 1 \| 2 \| 3 \| 4] |
+| **Originator** | [Name, Role] |
+| **Status** | [Submitted \| Under CCB Review \| Approved \| Rejected \| Implemented \| Closed] |
+
+## Document History
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 0.1 | YYYY-MM-DD | [Name] | Initial submission |
 
 ---
 
-## Change Description
+## §6.6.4.1(a) — Change Identification
 
-### Problem/Opportunity Statement
+| Field | Value |
+|-------|-------|
+| **CR Title** | [Short descriptive title] |
+| **CR Number** | CR-YYYYMMDD-NNN |
+| **Priority** | [Critical \| High \| Medium \| Low] |
+| **Category** | [Defect \| Safety Issue \| Enhancement \| Documentation] |
 
-[Describe the problem being addressed or opportunity being pursued]
+---
+
+## §6.6.4.1(b) — Reason for Change
+
+**Problem / Change Need Statement:**
+
+[Describe the defect, non-conformance, or change need precisely. Reference the phase,
+document, or code location where the issue was found.]
 
 **Current Situation:**
-- [Describe current state]
-- [Impact of current situation]
 
-**Desired Situation:**
-- [Describe desired state]
-- [Expected benefits]
+[Describe the current erroneous or inadequate state.]
 
-### Affected Configuration Items
+**Desired Outcome:**
 
-| Configuration Item | Current Version | Document ID | Impact Level |
-|-------------------|----------------|-------------|--------------|
-| [CI Name] | [Version] | [DOC-XXX-YYYY-NNN] | [High \| Medium \| Low] |
-
-**Impact Level Definitions:**
-- **High:** Requires architecture/design changes, affects multiple components
-- **Medium:** Requires module-level changes, affects specific components
-- **Low:** Minor changes, documentation updates, no functional impact
+[Describe what the correct or improved state should be.]
 
 ---
 
-## Change Analysis
+## §6.6.4.1(c) — Consequence Analysis
 
-### Technical Analysis
+### Technical Impact
 
-**Scope of Change:**
-- [List affected modules/components]
-- [List affected interfaces]
-- [List affected requirements (with traceability IDs)]
+**Earliest affected lifecycle phase:**
 
-**Technical Approach:**
-```
-[Describe proposed solution/implementation approach]
-```
+| Phase | Affected | Re-entry required |
+|-------|----------|-------------------|
+| Phase 2 — Requirements | [Yes / No] | [Yes / No] |
+| Phase 3 — Architecture & Design | [Yes / No] | [Yes / No] |
+| Phase 4 — Component Design | [Yes / No] | [Yes / No] |
+| Phase 5 — Implementation & Testing | [Yes / No] | [Yes / No] |
+| Phase 6 — Integration | [Yes / No] | [Yes / No] |
+| Phase 7 — Validation | [Yes / No] | [Yes / No] |
+| Phase 9 — Deployment | [Yes / No] | [Yes / No] |
 
-**Alternatives Considered:**
-1. **Alternative 1:** [Description]
-   - Pros: [List advantages]
-   - Cons: [List disadvantages]
-2. **Alternative 2:** [Description]
-   - Pros: [List advantages]
-   - Cons: [List disadvantages]
+**Earliest re-entry phase**: Phase [N]  
+**Normative basis**: §6.6.4.2 — all changes shall initiate a return to an appropriate lifecycle phase.
 
-**Recommended Approach:** [Selected alternative with rationale]
+### Safety Impact
 
-### Safety Analysis (EN 50128 Section 6.3 / §7.1)
+- [ ] No safety impact — justification: [text]
+- [ ] Potential safety impact — SAF analysis required before CCB vote
+- [ ] Confirmed safety impact — SIL re-assessment required
 
-**Safety Impact Assessment:**
-- [ ] No safety impact
-- [ ] Potential safety impact - analysis required
-- [ ] Known safety impact - mitigation required
+**Hazard Log update required**: [Yes / No]
 
-**Hazard Analysis:**
-| Hazard ID | Description | Risk Level | Mitigation |
-|-----------|-------------|-----------|------------|
-| [HAZ-NNN] | [Hazard description] | [SIL] | [Mitigation approach] |
+### Affected Configuration Items (§6.6.4.1(f))
 
-**Safety Approval Required:** [Yes/No]
-
-### Impact Analysis
-
-**Requirements Impact:**
-- New requirements: [Number]
-- Modified requirements: [List requirement IDs]
-- Deleted requirements: [List requirement IDs]
-
-**Design Impact:**
-- Architecture changes: [Yes/No - describe]
-- Module design changes: [List affected modules]
-- Interface changes: [List affected interfaces]
-
-**Implementation Impact:**
-- New source files: [Number]
-- Modified source files: [List file names]
-- Deleted source files: [List file names]
-- Estimated LOC change: [+NNN/-NNN]
-
-**Testing Impact:**
-- New test cases required: [Number]
-- Modified test cases: [Number]
-- Regression testing scope: [Describe]
-
-**Documentation Impact:**
-| Document | Document ID | Change Required |
-|----------|-------------|----------------|
-| [Document Name] | [DOC-XXX-YYYY-NNN] | [Describe change] |
-
-**Verification/Validation Impact:**
-- [ ] Reverification required
-- [ ] Revalidation required
-- [ ] Re-assessment required (SIL 3-4)
+| CI Key | Document / Artifact | Current Version | Impact Level |
+|--------|---------------------|----------------|--------------|
+| [e.g. SRS] | Software Requirements Specification | [v1.2] | [High / Medium / Low] |
+| [e.g. COMPDESIGN] | Software Component Design Specification | [v1.0] | |
 
 ---
 
-## Resource Estimation
+## §6.6.4.1(d) — Approval (CCB Decision)
 
-### Effort Estimate
+**CCB Meeting Date**: YYYY-MM-DD  
+**CCB Chair**: [PM Name] (PM is CCB Chair per WORKFLOW.md)  
+**CM Secretary**: [CM Name] (CM records decisions; does not vote)
 
-| Activity | Estimated Effort (hours) | Resources Required |
-|----------|------------------------|-------------------|
-| Requirements update | [Hours] | [Role] |
-| Design update | [Hours] | [Role] |
-| Implementation | [Hours] | [Role] |
-| Unit testing | [Hours] | [Role] |
-| Integration testing | [Hours] | [Role] |
-| Verification | [Hours] | [Role] |
-| Validation | [Hours] | [Role] |
-| Documentation update | [Hours] | [Role] |
-| **Total** | **[Total Hours]** | - |
+**CCB Participants** (per WORKFLOW.md Diagram 4):
 
-### Schedule Impact
+| Role | Name | Present |
+|------|------|---------|
+| PM (Chair) | [Name] | [Yes / No] |
+| REQ | [Name] | [Yes / No] |
+| SAF | [Name] | [Yes / No] |
+| DES | [Name] | [Yes / No] |
+| IMP | [Name] | [Yes / No] |
+| TST | [Name] | [Yes / No] |
+| VER | [Name] | [Yes / No] |
+| CM (Secretary) | [Name] | Yes |
 
-**Estimated Duration:** [X weeks/months]
+**CCB Decision**: [Approved / Rejected / Deferred]
 
-**Critical Path Impact:**
-- [ ] No impact on critical path
-- [ ] Impacts critical path - delay of [X days/weeks]
-
-**Milestone Impact:**
-- [List affected milestones with new dates]
-
-### Cost Estimate
-
-| Cost Category | Estimated Cost |
-|---------------|----------------|
-| Development effort | [Currency amount] |
-| Testing effort | [Currency amount] |
-| Verification effort | [Currency amount] |
-| Documentation | [Currency amount] |
-| Tools/equipment | [Currency amount] |
-| **Total Estimated Cost** | **[Total]** |
-
----
-
-## Risk Assessment
-
-| Risk ID | Risk Description | Probability | Impact | Mitigation Strategy |
-|---------|-----------------|------------|--------|-------------------|
-| [RISK-NNN] | [Description] | [H/M/L] | [H/M/L] | [Mitigation approach] |
-
----
-
-## Change Control Board Review
-
-### CCB Meeting Information
-
-**Meeting Date:** YYYY-MM-DD  
-**CCB Members Present:**
-- [Name, Role]
-- [Name, Role]
-- [Name, Role]
-
-### CCB Decision
-
-**Decision:** [Approved | Approved with Conditions | Rejected | Deferred]
-
-**Conditions (if applicable):**
+**Conditions (if Approved with conditions)**:
 1. [Condition 1]
-2. [Condition 2]
 
-**Rejection Rationale (if applicable):**
-[Explain why change was rejected]
+**Rejection / Deferral Rationale (if applicable)**:
+[Reason]
 
-**Deferral Rationale (if applicable):**
-[Explain why change was deferred and when it will be reconsidered]
-
-### CCB Approvals (SIL-Dependent)
+**CCB Signatures** (SIL-dependent):
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Configuration Manager** | [Name] | [Signature] | YYYY-MM-DD |
-| **Project Manager** | [Name] | [Signature] | YYYY-MM-DD |
-| **Software Manager** | [Name] | [Signature] | YYYY-MM-DD |
-| **Designer** (if design impacted) | [Name] | [Signature] | YYYY-MM-DD |
-| **Safety Engineer** (if safety impacted) | [Name] | [Signature] | YYYY-MM-DD |
-| **Verifier** (SIL 2+, if verification impacted) | [Name] | [Signature] | YYYY-MM-DD |
-| **Validator** (SIL 3-4, if validation impacted) | [Name] | [Signature] | YYYY-MM-DD |
+| PM (Chair) | [Name] | | YYYY-MM-DD |
+| SAF (if safety impact) | [Name] | | YYYY-MM-DD |
+| VER (SIL 3–4) | [Name] | | YYYY-MM-DD |
 
-**Independence Note (SIL 3-4):**
-- Verifier SHALL NOT be Requirements Manager, Designer, Implementer, Integrator, or Tester
-- Validator SHALL NOT report to Project Manager
+> **Note**: VAL signs the Software Validation Report (Phase 7). ASR signs the Software Assessment
+> Report (Phase 8). Neither VAL nor ASR signs individual Change Requests. See WORKFLOW.md §independence.
 
 ---
 
-## Implementation Plan
+## §6.6.4.1(e) — Documents to be Updated
 
-### Implementation Phases
-
-**Phase 1: Requirements and Design**
-- Start Date: YYYY-MM-DD
-- End Date: YYYY-MM-DD
-- Activities:
-  - [ ] Update Software Requirements Specification
-  - [ ] Update Software Design Specification
-  - [ ] Update traceability matrices
-  - [ ] Design review
-
-**Phase 2: Implementation and Unit Testing**
-- Start Date: YYYY-MM-DD
-- End Date: YYYY-MM-DD
-- Activities:
-  - [ ] Implement code changes
-  - [ ] MISRA C compliance check (SIL 2+)
-  - [ ] Unit test implementation
-  - [ ] Code review (QA)
-  - [ ] Unit test execution
-
-**Phase 3: Integration and Testing**
-- Start Date: YYYY-MM-DD
-- End Date: YYYY-MM-DD
-- Activities:
-  - [ ] Software integration
-  - [ ] Integration testing
-  - [ ] Regression testing
-  - [ ] Coverage analysis (SIL-dependent)
-
-**Phase 4: Verification and Validation**
-- Start Date: YYYY-MM-DD
-- End Date: YYYY-MM-DD
-- Activities:
-  - [ ] Static analysis (SIL 3-4)
-  - [ ] Verification activities
-  - [ ] Validation testing
-  - [ ] Independent assessment (SIL 3-4)
-
-**Phase 5: Documentation and Closure**
-- Start Date: YYYY-MM-DD
-- End Date: YYYY-MM-DD
-- Activities:
-  - [ ] Update all affected documentation
-  - [ ] Configuration audit
-  - [ ] Baseline update
-  - [ ] Change closure
-
-### Rollback Plan
-
-**Rollback Criteria:**
-- [Define conditions under which change should be rolled back]
-
-**Rollback Procedure:**
-1. [Step 1]
-2. [Step 2]
-3. [Restore baseline version [X.Y]]
+| CI Key | Document Name | Current Version | Action |
+|--------|--------------|----------------|--------|
+| [SRS] | Software Requirements Specification | [v1.2] | [Update §X.Y] |
+| [SDS] | Software Design Specification | [v1.0] | [Update §X.Y] |
+| [SOURCECODE] | Source Code | [commit abc123] | [Modify module.c] |
 
 ---
 
-## Implementation Tracking
+## §6.6.4.1(g) — Implementation, Verification and Test
 
-### Implementation Status
+**Implementation approach**:
 
-| Work Item | Assigned To | Status | Completion Date |
-|-----------|------------|--------|----------------|
-| [Work item description] | [Name] | [Not Started \| In Progress \| Complete] | YYYY-MM-DD |
+[Describe the proposed solution.]
 
-### Issues and Observations
+**Verification activities required**:
+- [ ] VER re-verification of Phase [N] deliverables
+- [ ] Static analysis re-run (SIL 2–4)
+- [ ] Coverage re-measurement (SIL 2–4)
+- [ ] VER Verification Report update required
 
-| Issue ID | Description | Impact | Resolution | Status |
-|----------|-------------|--------|------------|--------|
-| [ISSUE-NNN] | [Description] | [H/M/L] | [Resolution approach] | [Open/Closed] |
+**Test activities required**:
+- [ ] Unit tests: [describe scope]
+- [ ] Integration tests: [describe scope]
+- [ ] Overall software tests (if Phase 7 affected): [describe scope]
 
----
-
-## Change Closure
-
-### Verification of Implementation
-
-- [ ] All planned work items completed
-- [ ] All affected configuration items updated
-- [ ] All documentation updated
-- [ ] Verification activities completed successfully
-- [ ] Validation activities completed successfully (if required)
-- [ ] Configuration audit passed (FCA if required)
-- [ ] New baseline established
-- [ ] Traceability updated
-
-### Lessons Learned
-
-**What went well:**
-- [Observation 1]
-- [Observation 2]
-
-**What could be improved:**
-- [Observation 1]
-- [Observation 2]
-
-**Recommendations for future changes:**
-- [Recommendation 1]
-- [Recommendation 2]
-
-### Final Approval
-
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| **Configuration Manager** | [Name] | [Signature] | YYYY-MM-DD |
-| **Project Manager** | [Name] | [Signature] | YYYY-MM-DD |
-
-**Change Status:** [Closed]  
-**Closure Date:** YYYY-MM-DD
+**Revalidation required** (if Phase 7 affected):
+- [ ] VAL Validation Report to be re-issued (§6.3.4.10 — must state new baseline)
 
 ---
 
-## EN 50128 References
+## §6.6.4.1(h) — Parties to be Notified
 
-- **Section 6.6:** Software Configuration Management (change control)
-- **Section 6.6:** Software Change Management (§6.6.4.1 nine aspects)
-- **Table A.9:** Software Configuration Management techniques
-- **Section 5.3.2.13:** Phase modification and change control
-
-## EN 50126 RAMS References
-
-- **Section 7.4:** Change management in RAMS lifecycle
-- **Annex B:** Configuration management requirements
+| Party | Name | Notification method | Date notified |
+|-------|------|---------------------|---------------|
+| COD | [Name] | [Task tool / meeting] | YYYY-MM-DD |
+| PM | [Name] | | YYYY-MM-DD |
+| Safety Authority (if safety impact) | [Name] | | YYYY-MM-DD |
 
 ---
 
-## Appendices
+## §6.6.4.1(i) — Traceability
 
-### Appendix A: Affected Requirements Traceability
+**Traceability update required**: [Yes / No]
 
-| Requirement ID | Current Version | New Version | Change Description |
-|---------------|----------------|-------------|-------------------|
-| [REQ-NNN] | [X.Y] | [X.Y+1] | [Description] |
+| Traceability link | Action |
+|-------------------|--------|
+| Requirement → Design | [Update if requirements changed] |
+| Design → Code | [Update if design changed] |
+| Code → Test | [Update if code changed] |
+| Test → Requirement | [Update if tests changed] |
 
-### Appendix B: Test Results Summary
-
-[Attach test results or reference test report documents]
-
-### Appendix C: Verification Evidence
-
-[Attach verification reports or reference verification documents]
+**Traceability rule reference**: `TRACEABILITY.md`
 
 ---
 
-**Template Version:** 1.0  
-**EN 50128:2011 Compliance:** Section 6.6, Table A.9  
-**Skill Owner:** Configuration Manager (`/cm`)
+## CM Baseline Actions (CM completes this section)
+
+**Baseline branch created from**: [e.g. `planning-baseline` gate 5 tag]  
+**Branch name**: [e.g. `cr-YYYYMMDD-NNN-branch`]
+
+After all affected gates re-pass:
+
+**Post-CR baseline name**: [e.g. `implementation-baseline-post-cr-YYYYMMDD-NNN`]  
+**VCS tag**: [e.g. `myproject-gate5-implementation-baseline-YYYYMMDD`]  
+**Manifest path**: `baselines/<baseline-name>/manifest.yaml`  
+**Superseded baseline archived**: [Yes / No]  
+**Normative basis**: §9.1.4.2, D.48 — superseded baselines are archived, never deleted.
+
+---
+
+## Closure
+
+**All §6.6.4.1(a–i) aspects addressed**: [Yes / No]
+
+| Aspect | Status |
+|--------|--------|
+| (a) Unique identification | [Complete] |
+| (b) Reason recorded | [Complete] |
+| (c) Consequences analysed | [Complete] |
+| (d) CCB approval obtained | [Complete / Pending] |
+| (e) Affected documents updated | [Complete / Pending] |
+| (f) Affected CIs recorded | [Complete] |
+| (g) Implementation, verification, test complete | [Complete / Pending] |
+| (h) Relevant parties notified | [Complete] |
+| (i) Traceability maintained | [Complete / Pending] |
+
+**CR Status**: [Closed]  
+**Closure Date**: YYYY-MM-DD  
+**CM sign-off**: [Name], YYYY-MM-DD
+
+---
+
+**EN 50128:2011 References**: §6.6, §6.6.4.1(a–i), §6.6.4.2, §9.2.4  
+**Related documents**: `WORKFLOW.md` Diagram 4, `activities/baseline-management.yaml` `change_request_baseline_path`  
+**Skill Owner**: Configuration Manager (`cm`)

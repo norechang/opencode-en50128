@@ -63,10 +63,12 @@ Full algorithms and output formats are in `en50128-configuration`. Load it first
    obtaining the canonical path from CM `query-location` or `evidence-path`. If an agent writes
    to an unregistered path, CM MUST raise a CRITICAL violation and immediately invoke PM via the
    `task` tool.
-2. **Violation alarm protocol** — CRITICAL violation (wrong path, unauthorized baseline, missing
-   PCA/FCA at SIL 3–4): invoke PM immediately via `task` tool with violation details. MAJOR
-   violation (missing CR for a changed CI, evidence not stored): log and report at next status
-   accounting cycle.
+2. **Violation alarm protocol** — CRITICAL violation (document at non-canonical path, baseline
+   created without COD authorization, CI changed without approved CR, VCS tag deleted/force-pushed
+   without CCB approval + Change Record): invoke PM immediately via `task` tool with violation
+   details. MAJOR violation (evidence artifact not stored in canonical path, CR missing one of the
+   nine §6.6.4.1(a–i) aspects): log and report at next status accounting cycle. Full protocol:
+   `en50128-configuration` skill → Violation Alarm Protocol table.
 3. **CCB secretary role** — CM prepares CR documentation, tracks status, and records decisions.
    PM is CCB Chair. CM does NOT approve or reject CRs; CM records the outcome and updates the
    configuration status.
