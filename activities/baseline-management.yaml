@@ -1,0 +1,662 @@
+# EN 50128 Baseline Management
+# Source: BASELINE_MANAGEMENT.md (ISA PASS), EN 50128:2011
+#
+# This file is the machine-readable translation of BASELINE_MANAGEMENT.md.
+# BASELINE_MANAGEMENT.md remains the ISA-reviewed human-readable authority;
+# this YAML encodes the same information for direct LLM agent consumption.
+#
+# Primary consumer: CM agent (baseline capability).
+# Also consumed by: COD (gate-check), PM (phase coordination).
+#
+# Upstream documents embedded here (option A — full encoding, no lookup required):
+#   WORKFLOW.md  → ccb_re_entry steps CR1–CR8 (workflow.yaml §4)
+#   DELIVERABLES.md → per-gate CI lists, VAL 2nd-check exemptions (deliverables.yaml)
+#
+# Normative clauses: §6.6, §6.2.4.7-8, §6.2.4.13(a), §6.3.4.9-10,
+#                    §6.4.4.10, §6.4.4.13, §6.6.4.2, §9.1.4.2-3, §9.1.4.13,
+#                    §9.2.4, D.48
+
+baseline_management:
+  source_document: "BASELINE_MANAGEMENT.md (ISA PASS)"
+  standard: "EN 50128:2011"
+  upstream_documents:
+    - "WORKFLOW.md (ISA PASS)"
+    - "DELIVERABLES.md (ISA PASS)"
+  clauses:
+    - "§6.6"
+    - "§6.2.4.7"
+    - "§6.2.4.8"
+    - "§6.2.4.13(a)"
+    - "§6.3.4.9"
+    - "§6.3.4.10"
+    - "§6.4.4.10"
+    - "§6.4.4.13"
+    - "§6.6.4.2"
+    - "§9.1.4.2"
+    - "§9.1.4.3"
+    - "§9.1.4.13"
+    - "§9.2.4"
+    - "D.48"
+
+  # ── Terminology Corrections ──────────────────────────────────────────────────
+  # EN 50128:2011 does NOT define "FCA" or "PCA". Those are MIL-STD-973/IEEE 828
+  # terms. The table below maps each concept to its correct EN 50128 owner and clause.
+  terminology:
+    fca_pca_note: >
+      Terms 'FCA' (Functional Configuration Audit) and 'PCA' (Physical Configuration
+      Audit) are NOT used in EN 50128:2011. They originate from MIL-STD-973/IEEE 828.
+      Do not use these terms in any EN 50128 deliverable or agent output.
+    concepts:
+      - concept: "Physical check — each CI matches VCS and build artefacts"
+        owner: "cm"
+        clause: "§6.6, D.48"
+        note: "CM presence-check only — does not judge content correctness"
+      - concept: "Functional completeness — requirements satisfied per phase"
+        owner: "ver"
+        clause: "§6.2.4.7"
+        note: "VER substantive obligation; exercised during phase, captured in VER report"
+      - concept: "VER report documents identity and configuration of items verified"
+        owner: "ver"
+        clause: "§6.2.4.13(a)"
+        note: "Documentation content requirement for the Verification Report"
+      - concept: "VER evidence retained in format defined/referenced in SVP"
+        owner: "cm"
+        clause: "§6.2.4.8"
+        note: "CM stores at canonical evidence paths; VER produces the evidence"
+      - concept: "Verification process complete"
+        owner: "val"
+        clause: "§6.3.4.9"
+      - concept: "Baseline stated in Validation Report"
+        owner: "val"
+        clause: "§6.3.4.10"
+        note: "VAL states it; CM checks for presence of the statement"
+      - concept: "CM records baseline under configuration control"
+        owner: "cm"
+        clause: "§9.1.4.2"
+
+  # ── CM Role Boundary Statement ───────────────────────────────────────────────
+  cm_role_boundary:
+    description: >
+      CM's role at every baseline event is record-keeping and presence-checking.
+      CM verifies that required signed documents and evidence artefacts are present,
+      correctly versioned, and stored at canonical paths.
+    cm_does_not:
+      - "Independently judge functional completeness (VER's responsibility — §6.2.4.7)"
+      - "Re-verify requirements traceability (VER's responsibility)"
+      - "Judge whether test coverage is adequate (VER/TST responsibility)"
+      - "Assess whether defects are safety-critical (SAF/VER responsibility)"
+      - "Confirm validation strategy is sufficient (VAL responsibility)"
+
+  # ── Diagram 1: Lifecycle Baseline Map ────────────────────────────────────────
+  # One baseline per COD phase gate. CM creates the baseline AFTER COD gate-check
+  # passes. Agents look up gate number to get CIs, VER report, VAL role, and clauses.
+  #
+  # val_role values:
+  #   "formal_report"  — VAL produces a Validation Report (Phase 7 only)
+  #   "2nd_check"      — VAL performs 2nd-check review of deliverables (DELIVERABLES.md)
+  #   "none"           — no VAL involvement at this gate
+  #   "read_only"      — ASR reviews (Phase 8 only; no baseline created)
+  baselines:
+
+    - gate: 1
+      phase: 1
+      phase_name: "Software Planning"
+      baseline_name: "planning-baseline"
+      baseline_trigger: "COD gate-check planning PASS"
+      cis_in_scope:
+        documents: [SQAP, SCMP, SVP, SVaP]
+        annex_c_items: [1, 3, 4, 5]
+        evidence_dirs: []                         # No evidence artefacts in Phase 1
+      ver_report:
+        required: true
+        report_key: "SQAVR"
+        annex_c_item: 2
+        note: "VER verifies all planning documents; produces Software Quality Assurance Verification Report"
+      val_role: "2nd_check"
+      val_2nd_check:
+        applies_to_items: [1, 3, 4]              # SQAP, SCMP, SVP
+        exempt_items: [5]                         # SVaP has no VAL 2nd check (DELIVERABLES.md item 5 second_check: null)
+        exempt_reason: "SVaP written by VAL — VAL cannot 2nd-check its own document"
+      key_clauses: ["§6.6"]
+      pca_fca_required: false                     # Planning docs only; no code artefacts
+      critical_baseline: false
+
+    - gate: 2
+      phase: 2
+      phase_name: "Software Requirements"
+      baseline_name: "requirements-baseline"
+      baseline_trigger: "COD gate-check requirements PASS"
+      cis_in_scope:
+        documents: [SRS, OTSTSPEC]
+        annex_c_items: [6, 7]
+        evidence_dirs: []
+      ver_report:
+        required: true
+        report_key: "REQVER"
+        annex_c_item: 8
+        note: "VER verifies SRS and OTSTSPEC; produces Software Requirements Verification Report"
+      val_role: "2nd_check"
+      val_2nd_check:
+        applies_to_items: [6, 7]
+        exempt_items: []
+      key_clauses: ["§6.2.4"]
+      pca_fca_required: false
+      critical_baseline: false
+
+    - gate: 3
+      phase: 3
+      phase_name: "Software Architecture and Design"
+      baseline_name: "design-baseline"
+      baseline_trigger: "COD gate-check design PASS"
+      cis_in_scope:
+        documents: [SAS, SDS, INTERFACES, INTTESTSPEC, HWINTTESTSPEC]
+        annex_c_items: [9, 10, 11, 12, 13]
+        evidence_dirs:
+          - "phase-3-architecture-design/evidence/design-analysis/"
+      ver_report:
+        required: true
+        report_key: "ARCHDESIGNVER"
+        annex_c_item: 14
+        note: "VER verifies architecture, design, and test specifications"
+      val_role: "2nd_check"
+      val_2nd_check:
+        applies_to_items: [9, 10, 11, 12, 13]
+        exempt_items: []
+      key_clauses: ["§6.2.4"]
+      pca_fca_required: false
+      critical_baseline: false
+
+    - gate: 4
+      phase: 4
+      phase_name: "Software Component Design"
+      baseline_name: "component-design-baseline"
+      baseline_trigger: "COD gate-check component-design PASS"
+      cis_in_scope:
+        documents: [COMPDESIGN, COMPTESTSPEC]
+        annex_c_items: [15, 16]
+        evidence_dirs:
+          - "phase-4-component-design/evidence/design-review/"
+      ver_report:
+        required: true
+        report_key: "COMPDESIGNVER"
+        annex_c_item: 17
+        note: "VER verifies component design specification and test specification"
+      val_role: "2nd_check"
+      val_2nd_check:
+        applies_to_items: [15, 16]
+        exempt_items: []
+      key_clauses: ["§6.2.4"]
+      pca_fca_required: false
+      critical_baseline: false
+
+    - gate: 5
+      phase: 5
+      phase_name: "Software Implementation and Testing"
+      baseline_name: "implementation-baseline"
+      baseline_trigger: "COD gate-check implementation-testing PASS"
+      cis_in_scope:
+        documents: [SOURCE_CODE, COMPTESTRPT]
+        annex_c_items: [18, 20]                   # item 18=source code; item 20=component test report
+        evidence_dirs:
+          - "phase-5-implementation-testing/evidence/static-analysis/"
+          - "phase-5-implementation-testing/evidence/coverage/"
+          - "phase-5-implementation-testing/evidence/test-logs/"
+          - "phase-5-implementation-testing/evidence/tool-qualification/"
+      ver_report:
+        required: true
+        report_key: "SOURCECODEVER"
+        annex_c_item: 19
+        note: "VER verifies source code and component test report; §7.5.4.8 and §7.5.4.10"
+      val_role: "2nd_check"
+      val_2nd_check:
+        applies_to_items: [18, 19, 20]
+        exempt_items: []
+      key_clauses: ["§6.2.4", "§7.5.4"]
+      pca_fca_required: false
+      critical_baseline: false
+
+    - gate: 6
+      phase: 6
+      phase_name: "Software Integration"
+      baseline_name: "integration-baseline"
+      baseline_trigger: "COD gate-check integration PASS"
+      cis_in_scope:
+        documents: [INTTESTRPT, HWINTTESTRPT]
+        annex_c_items: [21, 22]
+        evidence_dirs:
+          - "phase-6-integration/evidence/integration-test-logs/"
+          - "phase-6-integration/evidence/hw-integration-logs/"
+      ver_report:
+        required: true
+        report_key: null                          # No separately named VER report at Gate 6
+        annex_c_item: null
+        note: >
+          At Gate 6, VER performs an integration test completeness review. The formal
+          Software Integration Verification Report (INTVER, Annex C item 23) is produced
+          in Phase 7 per Annex C Table C.1. VER's Gate 6 sign-off is embedded in the
+          integration test evidence review, not a standalone report.
+        phase_7_report_key: "INTVER"              # Produced in Phase 7
+        phase_7_annex_c_item: 23
+      val_role: "2nd_check"
+      val_2nd_check:
+        applies_to_items: [21, 22]
+        exempt_items: []
+      key_clauses: ["§7.6.4"]
+      pca_fca_required: false
+      critical_baseline: false
+
+    - gate: 7
+      phase: 7
+      phase_name: "Overall Software Testing and Final Validation"
+      baseline_name: "release-baseline"
+      baseline_trigger: "COD gate-check validation PASS"
+      critical_baseline: true
+      critical_baseline_note: >
+        release-baseline is the official software release candidate.
+        §6.3.4.10 requires the Validation Report to explicitly state this baseline.
+        §9.1.4.3 requires it to remain reproducible for the entire operational lifetime.
+      cis_in_scope:
+        documents: [INTVER, OVERALLTESTRPT, VALRPT, TOOLSVALRPT, RELEASENOTE]
+        annex_c_items: [23, 24, 25, 26, 27]
+        toolsvalrpt_conditional: true             # Item 26 only if applicable tools used
+        evidence_dirs:
+          - "phase-7-validation/evidence/system-test-logs/"
+          - "phase-7-validation/evidence/validation-records/"
+      ver_report:
+        required: true
+        report_key: "INTVER"
+        annex_c_item: 23
+        note: "Software Integration Verification Report — produced by VER in Phase 7"
+      val_role: "formal_report"
+      val_formal_report:
+        reports:
+          - report_key: "VALRPT"
+            annex_c_item: 25
+            must_state_baseline: true             # §6.3.4.10 — explicit requirement
+            clause: "§6.3.4.10"
+          - report_key: "TOOLSVALRPT"
+            annex_c_item: 26
+            conditional: true
+        val_must_confirm_verification_complete: true   # §6.3.4.9
+        val_clause: "§6.3.4.9"
+      key_clauses: ["§6.3.4", "§9.1.4.2", "§9.1.4.3"]
+      pca_fca_required: false                     # EN 50128 does not use FCA/PCA terminology
+      normative_baseline_recording: "§9.1.4.2"   # Baseline SHALL be recorded under CM control before delivery
+      normative_reproducibility: "§9.1.4.3"      # Release SHALL be reproducible throughout baseline lifecycle
+
+    - gate: null
+      phase: 8
+      phase_name: "Software Assessment"
+      baseline_name: null
+      no_new_baseline: true
+      no_new_baseline_note: >
+        Phase 8 creates no new baseline. ASR reviews the release-baseline artefacts
+        from Phase 7. CM provides ASR read-only access and stores ASR records in
+        phase-8-assessment/evidence/assessor-records/.
+      asr_scope:
+        reviews_baseline: "release-baseline"      # Gate 7 baseline
+        asr_evidence_path: "phase-8-assessment/evidence/assessor-records/"
+        clause_scope:
+          - clause: "§6.4.4.10"
+            description: "Assessor assesses CM system and evidence of its use"
+          - clause: "§6.4.4.13"
+            description: "Assessor assesses V&V activities and supporting evidence"
+
+    - gate: 9
+      phase: 9
+      phase_name: "Software Deployment"
+      baseline_name: "deployment-baseline"
+      baseline_trigger: "COD gate-check deployment PASS"
+      cis_in_scope:
+        documents: [DEPLOYPLAN, DEPLOYMAN, RELEASENOTES, DEPLOYREC, DEPLOYVER]
+        annex_c_items: [36, 37, 38, 39, 40]
+        evidence_dirs:
+          - "phase-9-deployment/evidence/deployment-records/"
+      ver_report:
+        required: true
+        report_key: "DEPLOYVER"
+        annex_c_item: 40
+        note: "Deployment Verification Report — verifies deployed software matches approved baseline"
+      val_role: "2nd_check"
+      val_2nd_check:
+        applies_to_items: [36, 37, 38, 39]       # DEPLOYPLAN, DEPLOYMAN, RELEASENOTES, DEPLOYREC
+        exempt_items: [40]                        # DEPLOYVER has no VAL 2nd check (DELIVERABLES.md item 40 second_check: null)
+        exempt_reason: "DEPLOYVER is written by VER; VAL does not 2nd-check VER-authored reports at Gate 9"
+      key_clauses: ["§9.1.4.2", "§9.1.4.3"]
+      deployment_evidence_clause: "§9.1.4.13"    # Deployment Record gives evidence intended software loaded
+      pca_fca_required: false
+      critical_baseline: false
+
+    - gate: "per-cr"
+      phase: 10
+      phase_name: "Software Maintenance"
+      baseline_name: "per-cr-baseline"
+      baseline_trigger: "Each CCB-approved maintenance CR, after all affected gates re-pass"
+      recurring: true
+      cis_in_scope:
+        documents: [MAINTPLAN, CHANGERECRDS, MAINTREC, MAINTVER]
+        annex_c_items: [41, 42, 43, 44]
+        evidence_dirs:
+          - "phase-10-maintenance/evidence/maintenance-logs/"
+        note: "Scope depends on CR impact analysis; only affected CIs need re-baselining"
+      ver_report:
+        required: true
+        report_key: "MAINTVER"
+        annex_c_item: 44
+        note: "Software Maintenance Verification Report — covers changes in this maintenance cycle"
+      val_role: "2nd_check"
+      val_2nd_check:
+        applies_to_items: [41, 42, 43, 44]
+        exempt_items: []
+      key_clauses: ["§6.6.4.1", "§6.6.4.2", "§9.2.4"]
+      pca_fca_required: false
+      critical_baseline: false
+
+  # ── Diagram 2: Single Baseline Creation Procedure ────────────────────────────
+  # Generic 7-step procedure applied at every baseline creation event.
+  # Applies to all gates in the baselines[] list above (except gate: null / Phase 8).
+  # Pre-conditions must all be TRUE before Step 1 begins.
+  #
+  # Upstream WORKFLOW.md data is embedded here (option A) — agents do not need to
+  # cross-reference workflow.yaml to execute this procedure.
+  baseline_creation_procedure:
+
+    preconditions:
+      - id: "PRE-1"
+        check: "VER Verification Report produced for Phase N"
+        sil_condition: null                       # Required at all SIL levels
+      - id: "PRE-2"
+        check: "VER Verification Report VMGR-approved"
+        sil_condition: "sil >= 3"                 # VMGR approval only required SIL 3-4
+      - id: "PRE-3"
+        check: "VAL 2nd-check sign-off present (Phases 1-6, 9-10) OR VAL Validation Report present (Phase 7)"
+        sil_condition: null
+      - id: "PRE-4"
+        check: "COD gate-check PASS recorded in LIFECYCLE_STATE.md"
+        sil_condition: null
+
+    # RACI notation: A=Accountable/Authorizes, R=Responsible/Acts,
+    #                C=Consulted, I=Informed
+    # (standard RACI — not the legacy I=Initiates notation)
+    raci_legend:
+      A: "Accountable / Authorizes — owns the decision"
+      R: "Responsible / Acts — does the work"
+      C: "Consulted — input required before action"
+      I: "Informed — notified of outcome"
+
+    steps:
+
+      - id: "step-1"
+        name: "Authorization and notification"
+        raci: {cm: I, pm: R, ver: null, val: null, vmgr: null, cod: A, qua: null}
+        actors:
+          - actor: "cod"
+            action: "Authorizes baseline creation after gate-check PASS"
+            message: "Gate N passed; baseline to be created"
+            sends_to: "pm"
+          - actor: "pm"
+            action: "Notifies CM to prepare baseline"
+            message: "Phase N complete; please prepare baseline"
+            sends_to: "cm"
+        # Upstream WORKFLOW.md context (embedded from workflow.yaml authority section):
+        workflow_context:
+          authority: "COD is Accountable — authorizes baseline creation (WORKFLOW.md §authority)"
+          pm_role: "PM is Responsible — notifies CM per COD instruction; PM has no independent baseline authority"
+          vmgr_role: "VMGR already approved VER/VAL reports in Track B before this step (pre-condition PRE-2)"
+
+      - id: "step-2"
+        name: "CI presence and version control check"
+        raci: {cm: A, pm: null, ver: null, val: null, vmgr: null, cod: null, qua: null}
+        actor: "cm"
+        inputs:
+          - "document-registry.yaml — canonical CI paths for Gate N"
+          - "baselines[gate=N].cis_in_scope — documents and annex_c_items list"
+        checks:
+          - id: "S2-1"
+            check: "Each CI present at canonical path (query-location API)"
+            clause: "§6.6, D.48"
+          - id: "S2-2"
+            check: "Each CI at expected VCS commit / version"
+            clause: "§9.1.4.2"
+          - id: "S2-3"
+            check: "Evidence artefacts present at canonical evidence paths (evidence-path API)"
+            clause: "§6.2.4.8"
+          - id: "S2-4"
+            check: "File hashes recorded for all CIs and evidence artefacts"
+            clause: "D.48"
+        cm_scope_note: "CM does NOT judge whether CI content is correct — that is VER's role"
+        on_fail:
+          severity: "CRITICAL"
+          action: "CM raises CRITICAL violation; invokes PM via task tool"
+          resolution: "PM coordinates author to correct; CM re-validates"
+        on_pass: "proceed to step-3"
+
+      - id: "step-3"
+        name: "Required signed reports presence check"
+        raci: {cm: A, pm: null, ver: null, val: null, vmgr: null, cod: null, qua: null}
+        actor: "cm"
+        note: "CM checks presence only — reports were produced and approved earlier in Track B"
+        checks:
+          - id: "S3-1"
+            check: "VER Verification Report for Phase N is present and signed"
+            clause: "§6.2.4.8"
+            detail: "Results of each verification shall be retained in format defined/referenced in SVP"
+          - id: "S3-2"
+            check: "VER report documents identity and configuration of items verified"
+            clause: "§6.2.4.13(a)"
+          - id: "S3-3"
+            check: "VMGR approval recorded on VER report"
+            sil_condition: "sil >= 3"
+            clause: "Platform — WORKFLOW.md §authority.sil_34"
+          - id: "S3-4"
+            check: "VAL 2nd-check sign-off present"
+            applies_when: "phase != 7"
+            clause: "DELIVERABLES.md (per-item second_check assignments)"
+            exception: "Check baselines[gate=N].val_2nd_check.exempt_items — those items have no VAL 2nd check"
+          - id: "S3-5"
+            check: "VAL Validation Report present and explicitly states the baseline being validated"
+            applies_when: "phase == 7"
+            clause: "§6.3.4.10"
+            detail: "Validation Report shall fully state the software baseline that has been validated"
+          - id: "S3-6"
+            check: "VAL has confirmed verification process is complete (evidenced by VAL report content)"
+            applies_when: "phase == 7"
+            clause: "§6.3.4.9"
+            note: "CM checks for presence of this confirmation in the VAL report — CM does not re-perform the check"
+          - id: "S3-7"
+            check: "QUA template check passed on all reports"
+            clause: "§6.5.4"
+        cm_prohibitions:
+          - "CM does not re-verify requirements traceability (VER's job)"
+          - "CM does not judge whether test coverage is adequate (VER/TST)"
+          - "CM does not assess whether defects are safety-critical (SAF/VER)"
+          - "CM does not confirm validation strategy is sufficient (VAL)"
+        on_fail:
+          severity: "CRITICAL"
+          action: "CM raises CRITICAL violation; invokes PM via task tool"
+          resolution: "Process returns to appropriate Track B step per WORKFLOW.md"
+        on_pass: "proceed to step-4"
+
+      - id: "step-4"
+        name: "Build environment recording"
+        raci: {cm: A, pm: null, ver: null, val: null, vmgr: null, cod: null, qua: null}
+        actor: "cm"
+        records_in: "manifest.yaml (created in step-5)"
+        fields_to_record:
+          - field: "compiler_name_and_version"
+          - field: "compiler_flags_and_build_configuration"
+          - field: "static_analysis_tool_name_and_version"
+          - field: "coverage_tool_name_and_version"
+          - field: "os_and_build_host_information"
+        clauses:
+          - clause: "§9.1.4.3"
+            detail: "Release SHALL be reproducible — requires tool/environment recording"
+          - clause: "D.48"
+            detail: "SCM records every version of every significant item"
+        note: "For planning/requirements/design phases with no compiled artefacts, record N/A for tool fields"
+
+      - id: "step-5"
+        name: "Baseline manifest creation"
+        raci: {cm: A, pm: null, ver: null, val: null, vmgr: null, cod: null, qua: null}
+        actor: "cm"
+        output_path: "baselines/<baseline-name>/manifest.yaml"
+        manifest_required_fields:
+          - "baseline_name"
+          - "gate_number"
+          - "phase_name"
+          - "date_created"
+          - "cis: [{doc_key, filename, vcs_commit_hash, version}]"
+          - "evidence_artefacts: [{type, path, file_hash}]"
+          - "ver_report: {report_key, path, approval_status}"
+          - "val_report_or_2nd_check: {type, path, approval_status}"
+          - "qua_pass_records: [{document, passed}]"
+          - "build_environment: {from step-4}"
+          - "open_defects: [{defect_id, disposition}]"
+        manifest_note: "Open defect disposition is determined by VER; CM records the outcome only"
+        clause: "§9.1.4.2"
+        clause_detail: "Baseline SHALL be recorded and kept traceable under configuration management control"
+
+      - id: "step-6"
+        name: "Immutable VCS tag creation"
+        raci: {cm: A, pm: null, ver: null, val: null, vmgr: null, cod: null, qua: null}
+        actor: "cm"
+        tag_format: "<project>-gate<N>-<baseline-name>-<YYYYMMDD>"
+        tag_example: "myproject-gate5-implementation-baseline-20260324"
+        tag_protection:
+          force_push_disabled: true
+          deletion_requires: "CCB approval AND a new Change Record"
+          deletion_clause: "§9.1.4.2"
+          deletion_clause_detail: "Baseline shall remain traceable under CM control — deletion breaks traceability"
+        clauses:
+          - clause: "§9.1.4.2"
+            detail: "Baseline shall remain traceable under CM control"
+          - clause: "§9.1.4.3"
+            detail: "Release SHALL be reproducible from this tag"
+          - clause: "D.48"
+            detail: "Every version of every significant deliverable shall be recorded"
+
+      - id: "step-7"
+        name: "COD notification — baseline complete"
+        raci: {cm: R, pm: null, ver: null, val: null, vmgr: null, cod: I, qua: null}
+        actor: "cm"
+        sends_to: "cod"
+        message_fields:
+          - "Gate N baseline complete: <baseline-name>"
+          - "All CIs present: yes/no"
+          - "VER report present: yes/no"
+          - "VCS tag: <tag>"
+          - "Manifest: baselines/<baseline-name>/manifest.yaml"
+        cod_action: "COD records baseline reference in LIFECYCLE_STATE.md and confirms gate N closed"
+
+  # ── Change Request Baseline Path ─────────────────────────────────────────────
+  # Applies when a defect or change need is discovered in a CLOSED gate.
+  # This is the CM perspective on the CCB re-entry flow defined in WORKFLOW.md.
+  # UPSTREAM WORKFLOW.md DATA IS EMBEDDED HERE (option A):
+  #   These steps correspond to ccb_re_entry.steps CR1-CR8 in workflow.yaml.
+  #   The full authority structure and CCB composition are in workflow.yaml.
+  #   Embedding here makes this file self-contained for CM agent execution.
+  change_request_baseline_path:
+    description: >
+      There is no informal rework path for closed gates at SIL 3-4. Every backward
+      movement MUST go through CCB and re-run the full gate chain. CM manages the
+      branching, re-baselining, and archival aspects of this process.
+    normative_basis:
+      - clause: "§6.6.4.2"
+        detail: "ALL changes SHALL initiate a return to an appropriate lifecycle phase"
+      - clause: "§9.2.4"
+        detail: "Maintenance-phase changes governed by §9.2.4 (assessment of major/minor change and §9.2.4.11 Software Change Records)"
+      - clause: "§9.1.4.2"
+        detail: "Baseline shall remain traceable — superseded baselines are archived, never deleted"
+      - clause: "D.48"
+        detail: "Every version of every significant deliverable shall be recorded"
+
+    # These steps embed WORKFLOW.md ccb_re_entry (workflow.yaml §ccb_re_entry):
+    steps:
+      - id: "CR1"
+        actor: "pm"
+        action: "PM raises Change Request (CR)"
+        workflow_yaml_ref: "ccb_re_entry.steps[CR1]"
+
+      - id: "CR2"
+        actor: "ccb"
+        action: >
+          CCB meeting: PM chairs; REQ, SAF, DES, IMP, TST, VER, CM participate.
+          Impact analysis determines earliest affected phase.
+          Vote: APPROVED or REJECTED.
+        on_rejected: "CR closed; no CM action required"
+        on_approved: "proceed to CR3"
+        workflow_yaml_ref: "ccb_re_entry.steps[CR2]"
+
+      - id: "CR3"
+        actor: "cm"
+        action: "CM creates baseline BRANCH from the affected gate baseline"
+        detail: "Branch preserves the pre-CR baseline; work proceeds on the branch"
+        workflow_yaml_ref: "ccb_re_entry.steps[CR3]"
+
+      - id: "CR4"
+        actor: "cod"
+        action: "COD marks affected phases 're-entry-required' in LIFECYCLE_STATE.md"
+        workflow_yaml_ref: "ccb_re_entry.steps[CR4]"
+
+      - id: "CR5"
+        actor: "pm"
+        action: >
+          For each affected phase (forward order): PM re-executes phase via full
+          Track A + Track B loop (per_phase_loop or per_phase_phase7 as applicable).
+          Each phase produces a new VER report. VAL re-confirms if Phase 7 is affected.
+        normative_basis: "§6.6.4.2 — return to appropriate lifecycle phase"
+        workflow_yaml_ref: "ccb_re_entry.steps[CR5]"
+
+      - id: "CR6"
+        actor: "cod"
+        action: "All affected COD gates re-pass"
+        workflow_yaml_ref: "ccb_re_entry.steps[CR6]"
+
+      - id: "CR7"
+        actor: "cm"
+        action: "CM creates updated baseline (post-CR) using the standard 7-step procedure"
+        procedure_ref: "baseline_creation_procedure (this file)"
+        normative_basis: "§9.1.4.2 + D.48"
+        workflow_yaml_ref: "ccb_re_entry.steps[CR7]"
+
+      - id: "CR8"
+        actor: "cod"
+        action: "Lifecycle resumes from current (highest) phase"
+        workflow_yaml_ref: "ccb_re_entry.steps[CR8]"
+
+    archival_rule:
+      action: "CM archives superseded baseline — never deleted"
+      storage: "baselines/<superseded-baseline-name>/ — retained in VCS"
+      normative_basis: ["§9.1.4.2", "D.48"]
+      note: >
+        Superseded baselines must remain traceable. Deletion is prohibited.
+        Deletion requires CCB approval plus a new Change Record (same as a VCS tag deletion).
+
+  # ── Role Responsibilities Summary ────────────────────────────────────────────
+  # Structured form of the Role Responsibilities block from BASELINE_MANAGEMENT.md.
+  role_responsibilities:
+    - role: "ver"
+      what: "Verifies phase deliverables; produces Verification Report stating identity and configuration of items verified"
+      when: "During phase execution (Track B)"
+      clauses: ["§6.2.4.7", "§6.2.4.13"]
+    - role: "val"
+      what: "Checks verification is complete; Validation Report states the baseline validated; 2nd-check on other phases"
+      when: "Phase 7 (formal reports); all phases (2nd check)"
+      clauses: ["§6.3.4.9", "§6.3.4.10"]
+    - role: "vmgr"
+      what: "Approves VER and VAL reports"
+      when: "Track B (after VER/VAL produce reports)"
+      clauses: ["Platform — WORKFLOW.md §authority.sil_34"]
+      sil_condition: "sil >= 3"
+    - role: "qua"
+      what: "Template and compliance check on all reports"
+      when: "Track A and Track B"
+      clauses: ["§6.5.4"]
+    - role: "cm"
+      what: "Step 2: CI presence check; Step 3: signed reports presence check; Steps 4-6: build env, manifest, VCS tag"
+      when: "Baseline creation (after COD gate-check PASS)"
+      clauses: ["§6.6", "§6.2.4.8", "§6.3.4.10", "§9.1.4.2", "§9.1.4.3", "D.48"]
+    - role: "cod"
+      what: "Authorizes baseline creation after gate-check passes"
+      when: "Gate check"
+      clauses: ["Platform — WORKFLOW.md §authority"]

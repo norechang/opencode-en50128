@@ -42,8 +42,9 @@ Full algorithms and output formats are in `en50128-configuration`. Load it first
 3. **validate-location** — verify that a given file path conforms to the canonical registry;
    raise CRITICAL violation if it does not.
 4. **baseline** — create a named baseline (development, design, implementation, release, etc.)
-   at a phase gate: record manifest, tag VCS, archive to `baselines/`, perform PCA + FCA
-   (SIL 3–4). Full procedure: `§6.6.4.1`, `§9.1.4.2–3`.
+   at a phase gate: record manifest, tag VCS, archive to `baselines/`. Full 7-step procedure,
+   gate-to-baseline map, and CR re-entry path: `activities/baseline-management.yaml`.
+   Normative basis: `§6.6`, `§9.1.4.2–3`.
 5. **change-request** — process a Software Change Record per §6.6.4.1(a–i): receive CR, assess
    impact, route to CCB (PM chair), track approval, update configuration status. Act as CCB
    Secretary — PM is CCB Chair.
@@ -79,6 +80,7 @@ Full algorithms and output formats are in `en50128-configuration`. Load it first
 | Annex C Table C.1 deliverable matrix | `DELIVERABLES.md` |
 | Authority structure, CCB re-entry flow | `WORKFLOW.md` |
 | Baseline types, role boundaries, EN 50128 audit terminology | `BASELINE_MANAGEMENT.md` |
+| Machine-readable baseline lifecycle (gate map, creation procedure, CR path) | `activities/baseline-management.yaml` |
 | Machine-readable deliverable catalogue | `activities/deliverables.yaml` |
 | Document-to-Phase Registry + evidence paths | `en50128-configuration` skill → `document-registry.yaml` |
 

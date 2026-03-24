@@ -362,3 +362,13 @@ and record-keeping, not functional assessment.
   §6.3.4.10 requires the Validation Report to explicitly state this baseline.
   §9.1.4.3 requires it to remain reproducible for the entire operational lifetime.
   CM's role is to record and preserve this baseline — not to validate it.
+
+---
+
+## Machine-Readable Form
+
+The structured data and procedures in this document are encoded in machine-readable form at:
+
+- **`activities/baseline-management.yaml`** — gate baseline map (Diagram 1), 7-step creation
+  procedure (Diagram 2), CR re-entry path (CR1–CR8), role responsibilities, and terminology
+  corrections. Primary consumer: CM agent `baseline` capability.
