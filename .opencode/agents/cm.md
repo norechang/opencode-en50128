@@ -81,7 +81,7 @@ Full algorithms and output formats are in `en50128-configuration`. Load it first
 | §6.2.4.8 VER evidence retention, §9.1.4.2–3 deployment baseline | `std/EN50128-2011.md` §6.2, §9.1 |
 | Annex C Table C.1 deliverable matrix | `DELIVERABLES.md` |
 | Authority structure, CCB re-entry flow | `WORKFLOW.md` |
-| Baseline types, role boundaries, EN 50128 audit terminology | `BASELINE_MANAGEMENT.md` |
+| Baseline types, role boundaries, EN 50128 audit terminology | `tasks/BASELINE_MANAGEMENT.md` |
 | Machine-readable baseline lifecycle (gate map, creation procedure, CR path) | `activities/baseline-management.yaml` |
 | Machine-readable deliverable catalogue | `activities/deliverables.yaml` |
 | Document-to-Phase Registry + evidence paths | `en50128-configuration` skill → `document-registry.yaml` |

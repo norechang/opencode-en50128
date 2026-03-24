@@ -30,8 +30,8 @@ Read these before any operation — do not invent rules.
 | `std/EN50128-2011.md` §9.1.4.13 | Deployment Record as tracked evidence artifact |
 | `std/EN50128-2011.md` §9.2.4 | Maintenance-phase change assessment and Software Change Records |
 | `std/EN50128-2011.md` D.48 | SCM records every version of every significant deliverable |
-| `BASELINE_MANAGEMENT.md` | Authoritative baseline lifecycle: Diagram 1 (gate map), Diagram 2 (creation procedure), terminology, role boundaries |
-| `activities/baseline-management.yaml` | Machine-readable form of BASELINE_MANAGEMENT.md — primary runtime reference for CM baseline capability |
+| `tasks/BASELINE_MANAGEMENT.md` | Authoritative baseline lifecycle: Diagram 1 (gate map), Diagram 2 (creation procedure), terminology, role boundaries |
+| `activities/baseline-management.yaml` | Machine-readable form of tasks/BASELINE_MANAGEMENT.md — primary runtime reference for CM baseline capability |
 | `DELIVERABLES.md` | Annex C Table C.1 deliverable matrix; per-item 2nd-check assignments |
 | `activities/deliverables.yaml` | Machine-readable deliverable catalogue |
 | `WORKFLOW.md` | Authority structure (Diagram 1), per-phase loop (Diagram 2), CCB re-entry (Diagram 4) |
@@ -49,7 +49,7 @@ deliverable, agent output, or template:
 | FCA (Functional Configuration Audit) | MIL-STD-973 / IEEE 828 | Functional completeness is VER's obligation — §6.2.4.7 |
 | PCA (Physical Configuration Audit) | MIL-STD-973 / IEEE 828 | CM presence-check at baseline: §6.6, D.48 |
 
-See `BASELINE_MANAGEMENT.md` Terminology note for the complete EN 50128 mapping.
+See `tasks/BASELINE_MANAGEMENT.md` Terminology note for the complete EN 50128 mapping.
 
 ---
 
@@ -77,7 +77,7 @@ writing any file. The layout below is normative for every project workspace.
 │   └── CR-<YYYYMMDD>-<NNN>.md          # one file per change request
 ├── baselines/
 │   └── <baseline-name>/
-│       └── manifest.yaml               # CI manifest (Steps 4–5 in BASELINE_MANAGEMENT.md Diagram 2)
+│       └── manifest.yaml               # CI manifest (Steps 4–5 in tasks/BASELINE_MANAGEMENT.md Diagram 2)
 │
 ├── phase-1-planning/
 │   ├── Software-Quality-Assurance-Plan.md
@@ -188,7 +188,7 @@ writing any file. The layout below is normative for every project workspace.
 ## Baseline Capability — Runtime Reference
 
 For the complete baseline procedure, CM MUST load `activities/baseline-management.yaml`.
-That file is the machine-readable form of `BASELINE_MANAGEMENT.md` (ISA PASS) and is the
+That file is the machine-readable form of `tasks/BASELINE_MANAGEMENT.md` (ISA PASS) and is the
 single authoritative runtime reference for:
 
 - `baselines[]` — gate-to-baseline map (8 gates, triggers, CI scope, VER/VAL requirements)

@@ -1,8 +1,8 @@
 # EN 50128 Baseline Management
-# Source: BASELINE_MANAGEMENT.md (ISA PASS), EN 50128:2011
+# Source: tasks/BASELINE_MANAGEMENT.md (ISA PASS), EN 50128:2011
 #
-# This file is the machine-readable translation of BASELINE_MANAGEMENT.md.
-# BASELINE_MANAGEMENT.md remains the ISA-reviewed human-readable authority;
+# This file is the machine-readable translation of tasks/BASELINE_MANAGEMENT.md.
+# tasks/BASELINE_MANAGEMENT.md remains the ISA-reviewed human-readable authority;
 # this YAML encodes the same information for direct LLM agent consumption.
 #
 # Primary consumer: CM agent (baseline capability).
@@ -17,7 +17,7 @@
 #                    §9.2.4, D.48
 
 baseline_management:
-  source_document: "BASELINE_MANAGEMENT.md (ISA PASS)"
+  source_document: "tasks/BASELINE_MANAGEMENT.md (ISA PASS)"
   standard: "EN 50128:2011"
   upstream_documents:
     - "WORKFLOW.md (ISA PASS)"
@@ -633,7 +633,7 @@ baseline_management:
         Deletion requires CCB approval plus a new Change Record (same as a VCS tag deletion).
 
   # ── Role Responsibilities Summary ────────────────────────────────────────────
-  # Structured form of the Role Responsibilities block from BASELINE_MANAGEMENT.md.
+  # Structured form of the Role Responsibilities block from tasks/BASELINE_MANAGEMENT.md.
   role_responsibilities:
     - role: "ver"
       what: "Verifies phase deliverables; produces Verification Report stating identity and configuration of items verified"

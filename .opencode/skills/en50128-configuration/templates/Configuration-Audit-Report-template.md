@@ -5,7 +5,7 @@
 
 > **Note on terminology**: EN 50128:2011 does not define "FCA" or "PCA". Those terms belong to
 > MIL-STD-973 / IEEE 828 and MUST NOT appear in any EN 50128 deliverable. For the correct EN 50128
-> ownership mapping see `BASELINE_MANAGEMENT.md` Terminology note.
+> ownership mapping see `tasks/BASELINE_MANAGEMENT.md` Terminology note.
 
 ---
 
@@ -126,7 +126,7 @@ those reports document.
 
 | Report | Expected at This Gate | Present and Signed? | VMGR Approved? (SIL 3–4) |
 |--------|----------------------|--------------------|-----------------------------|
-| VER Verification Report | Yes — see BASELINE_MANAGEMENT.md Gate Quick Reference | [Y/N] | [Y/N/N/A] |
+| VER Verification Report | Yes — see tasks/BASELINE_MANAGEMENT.md Gate Quick Reference | [Y/N] | [Y/N/N/A] |
 | VER report states identity/configuration of items verified (§6.2.4.13(a)) | Confirm field present | [Y/N] | — |
 | VAL 2nd-check sign-off (non-Phase-7 gates) | See DELIVERABLES.md per-item | [Y/N] | — |
 | VAL Validation Report stating this baseline (Phase 7 only) (§6.3.4.10) | Phase 7 only | [Y/N/N/A] | — |
@@ -137,7 +137,7 @@ document. See DELIVERABLES.md.
 
 **Note on Gate 6**: The formal INTVER report (Annex C item 23) is produced in Phase 7, not Gate 6.
 At Gate 6, VER performs a review of integration test completeness; no separately named VER report
-covers this gate. See BASELINE_MANAGEMENT.md Diagram 1 Gate 6 note.
+covers this gate. See tasks/BASELINE_MANAGEMENT.md Diagram 1 Gate 6 note.
 
 **Note on Gate 9 DEPLOYVER**: Item 40 (DEPLOYVER) has no VAL 2nd check.
 See DELIVERABLES.md.
@@ -265,7 +265,7 @@ CRITICAL issues prevent baseline creation. CM invokes PM immediately via `task` 
 | **Overall Decision** | **[Baseline Created \| Blocked — CRITICAL issues open]** |
 
 **Baseline may only be created after COD gate-check PASS. CM does not independently authorize
-baseline creation.** (BASELINE_MANAGEMENT.md Diagram 2 Step 1; `activities/baseline-management.yaml`)
+baseline creation.** (tasks/BASELINE_MANAGEMENT.md Diagram 2 Step 1; `activities/baseline-management.yaml`)
 
 ### 5.2 Corrective Action Plan
 
@@ -326,4 +326,4 @@ Screenshots, tool logs, checksum verification outputs collected during audit.
 **Template Version**: 3.0  
 **EN 50128:2011 Compliance**: §6.6, §6.2.4.8, §6.2.4.13(a), §9.1.4.2–3, D.48  
 **Skill Owner**: Configuration Manager (`/cm`)  
-**Authoritative baseline procedure**: `BASELINE_MANAGEMENT.md` + `activities/baseline-management.yaml`
+**Authoritative baseline procedure**: `tasks/BASELINE_MANAGEMENT.md` + `activities/baseline-management.yaml`

@@ -29,7 +29,7 @@ in structured, LLM-consumable form.
 | `phase-8-assessment.yaml` | Phase 8: Assessment (mandatory SIL 1–4; SIL 0 exempt §6.4.1.2) | `LIFECYCLE.md §11` |
 | `phase-9-deployment.yaml` | Phase 9: Deployment activities, deliverables, workflow, transitions | `LIFECYCLE.md §12` |
 | `phase-10-maintenance.yaml` | Phase 10: Maintenance activities, deliverables, workflow, transitions | `LIFECYCLE.md §13` |
-| `baseline-management.yaml` | Machine-readable baseline lifecycle: 8 gate baselines (Diagram 1), 7-step creation procedure (Diagram 2), CR re-entry path, role boundaries, EN 50128 terminology corrections | `BASELINE_MANAGEMENT.md (ISA PASS)` |
+| `baseline-management.yaml` | Machine-readable baseline lifecycle: 8 gate baselines (Diagram 1), 7-step creation procedure (Diagram 2), CR re-entry path, role boundaries, EN 50128 terminology corrections | `tasks/BASELINE_MANAGEMENT.md (ISA PASS)` |
 
 ---
 
