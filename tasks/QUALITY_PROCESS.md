@@ -1,5 +1,6 @@
-# EN 50128 Quality Assurance — Workflow, Deliverable Touchpoints, and SIL Obligations
+# EN 50128 Quality Assurance Process — Workflow, Deliverable Touchpoints, and SIL Obligations
 
+> **Document**: `tasks/QUALITY_PROCESS.md`  
 > **Standard**: EN 50128:2011 Railway Software Standard  
 > **Scope**: QUA role across all lifecycle phases — tasks, triggers, outputs, deliverable touchpoints, two-track position, SIL-tiered obligations  
 > **Normative Basis**: §6.5 (Software Quality Assurance), Table A.9, §6.5.4.3, §6.5.4.14–17  
@@ -31,9 +32,12 @@ non-compliance, VER/VAL may resubmit once. If the resubmission also fails, PM/CO
 (process failure — training intervention required). Development deliverables allow up to 3 iterations
 before PM escalates.
 
-**Independence**: QUA SHALL NOT report to DES, IMP, TST, or Software Manager (§6.5.2). QUA reports
+**Independence**: QUA SHALL NOT report to DES, IMP, TST, or Software Manager. QUA reports
 to COD/PM directly. QUA decisions to reject deliverables CANNOT be overridden by the development
 team. At SIL 3–4 QUA MUST be a documented independent function.
+*(Platform governance policy — EN 50128:2011 does not define a normative QUA independence
+requirement. §6.5.2 is the Input Documents clause only. See ORGANIZATION.md Independence
+Reference Matrix, which records QUA independence as "No" at all SIL levels.)*
 
 ---
 
@@ -120,27 +124,31 @@ team. At SIL 3–4 QUA MUST be a documented independent function.
                   Component Test Report; VER produces Source Code VER Report
   QUA activities:
     [A] Template compliance: Item 18  Software Source Code and Supporting Documentation
-    [B] CODE REVIEW — most intensive QUA activity in lifecycle:
-        • MISRA C:2012 compliance (zero mandatory violations SIL 2+)
-        • Cyclomatic complexity ≤ 10 (SIL 3–4), ≤ 15 (SIL 2), ≤ 20 (SIL 0–1)
-        • Defensive programming patterns (NULL checks, range checks, overflow checks)
-        • No dynamic memory allocation (SIL 2+)
-        • No recursion (SIL 3–4)
-        • Fixed-width types (uint8_t, etc.) — mandatory SIL 2+
-        • Traceability comments (REQ-xxx, DES-yyy) present
-        Tools: cppcheck --addon=misra.json; lizard; gcov/lcov
-    [C] Template compliance: Item 19  Software Source Code Verification Report
-        (1-Pass Rule applies; no VAL 2nd check per Annex C — see deviation D6)
-    [D] Template compliance: Item 20  Software Component Test Report
-    [E] Traceability audit: VER checks T7, T12 (§7.5.4.10); QUA audits (SIL 3–4)
-    [F] Metrics collection (MANDATORY SIL 3–4 per Table A.9 Technique 8):
-        • Defect density (defects/KLOC)
-        • MISRA C violation counts
-        • Test coverage (statement, branch, condition)
-        • Cyclomatic complexity distribution
+        QUA checks FORMAT of the source code delivery package (document structure,
+        Document ID, required sections). QUA does NOT perform code inspection or
+        coding standards checking — that is VER's duty under §7.5.4.10.
+    [B] Template compliance + 1-Pass Rule: Item 19  Software Source Code Verification Report
+        VER performs the actual code review (§7.5.4.10): MISRA C compliance, coding
+        standards, cyclomatic complexity, correctness of implementation against SDS.
+        VER records findings in item 19. QUA then checks that item 19 is FORMAT-correct
+        before VMGR reviews it. 1-Pass Rule applies.
+        Note: Code review execution (MISRA checking, static analysis, complexity
+        measurement) belongs to VER (§7.5.4.10(c)) and IMP+TST — not to QUA.
+    [C] Template compliance: Item 20  Software Component Test Report
+    [D] Traceability audit: VER checks T7, T12 (§7.5.4.10); QUA audits (SIL 3–4)
+        QUA audits the EVIDENCE that VER performed traceability checking and that
+        the evidence is recorded and CM-controlled (§6.5.4.14–17, Table A.9 T7).
+        QUA does not independently re-check traceability links.
+    [E] QA process data recording (Table A.9 Technique 8 — D.12):
+        QUA records QA process data per the SQAP: NCR counts, gate pass/fail rates,
+        process audit findings, QUA review outcomes. QUA verifies that measurement
+        data required by T8 (coverage reports, defect counts, complexity distributions)
+        has been produced by IMP/TST/VER and is placed under CM control.
+        QUA does NOT run measurement tools (cppcheck, gcov, lizard) itself — those
+        are IMP/TST/VER responsibilities. QUA audits that the evidence exists.
+        SIL obligation: HR SIL 0–2; MANDATORY SIL 3–4 (Table A.9 T8).
   QUA output:     QUA Review Reports for items 18–20;
-                  Code Review Report(s);
-                  Quality Metrics Report;
+                  QA Process Data Record (SIL 3–4, Table A.9 T8);
                   Traceability Audit Report (SIL 3–4)
 
   PHASE 6 — INTEGRATION  (§7.6)
@@ -210,7 +218,8 @@ team. At SIL 3–4 QUA MUST be a documented independent function.
         (VER-authored; VAL 2nd check assigned — see deviation D4; 1-Pass Rule on VER report)
     [E] Process audit: Verify CCB change control procedures followed (MANDATORY SIL 3–4)
     [F] Traceability impact audit: Verify all downstream traceability links re-checked
-        for each CR scope (MANDATORY SIL 3–4 per §9.2.4.2)
+        for each CR scope (MANDATORY SIL 3–4 per §6.5.4.14–17, continuous traceability
+        obligation applicable through maintenance per §9.2.4)
   QUA output:     QUA Review Reports for items 41–44;
                   Process Audit Report (SIL 3–4)
 
@@ -324,7 +333,8 @@ team. At SIL 3–4 QUA MUST be a documented independent function.
  PHASE 5: IMPLEMENTATION & TESTING
 ─────────────────────────────────────────────────────────────────────────────────────────
  18  Software Source Code and Supporting Docs     IMP       [QUA]      VER      VAL
-     QUA also performs code review (MISRA C, complexity, defensive programming).
+      QUA checks FORMAT only. VER performs code review (§7.5.4.10: MISRA C,
+      coding standards, complexity, correctness). VER records findings in item 19.
 
  19  Software Source Code Verification Report     VER       [QUA-VER]  —        VAL
      1-Pass Rule applies. 2nd Check (VAL) is project addition — see deviation D6.
@@ -467,13 +477,10 @@ performs technical validation (that is VAL's role).
     ├── FAIL ──► PM notifies author; author fixes; resubmits
     │            └── re-check → FAIL again → PM escalates (max 3 iterations)
     │
-    └── PASS
-          │
-          ├── [Phase 5 only] QUA performs code review (MISRA C, complexity,
-          │   defensive programming) as a separate step after template PASS
-          │
-          ▼
-        PM marks deliverable QUA-ACCEPTED in LIFECYCLE_STATE.md
+     └── PASS
+           │
+           ▼
+         PM marks deliverable QUA-ACCEPTED in LIFECYCLE_STATE.md
           │
           ▼
         [repeat for each deliverable in the phase]
@@ -598,7 +605,8 @@ performs technical validation (that is VAL's role).
   │  COD CANNOT open a gate-check until QUA has passed ALL         │
   │  deliverables for that phase.                                  │
   │                                                                │
-  │  QUA reports to COD/PM — NOT to DES/IMP/TST (§6.5.2).         │
+  │  QUA reports to COD/PM — NOT to DES/IMP/TST (platform governance policy;
+  │  see ORGANIZATION.md — EN 50128:2011 §6.5.2 is Input Documents only).         │
   │  QUA decisions cannot be overridden by development team.       │
   └────────────────────────────────────────────────────────────────┘
 ```
@@ -677,15 +685,20 @@ obligation level. Sources: §6.5, Table A.9, §6.5.4.14–17, §6.5.1.1, §6.5.1
   TECHNIQUE 6 — Checklists  (D.7)
   SIL 0: R  |  SIL 1–2: HR  |  SIL 3–4: HR
  ───────────────────────────────────────────────────────────────────────────────────────
-  Lifecycle trigger: Each deliverable review; each code review; each audit
+  Lifecycle trigger: Each deliverable review; each audit
   Activity: Structured checklists for reviews, inspections, audits
   QUA role: Maintain and apply checklists for:
-            Phase 1–4:  Document review checklists (template compliance criteria)
-            Phase 5:    Code review checklist (MISRA C, complexity, defensive programming,
-                        error handling, traceability comments, safety requirements)
-            Phase 5–7:  Test review checklists (plan, specification, report coverage)
+            Phase 1–4:  Document template compliance checklists (Document ID,
+                        Document Control table, Approvals table, required sections)
+            Phase 5:    Template compliance checklists for items 18–20 only
+                        (source code delivery package format, VER report format,
+                        test report format). Code review checklists covering MISRA C
+                        compliance, cyclomatic complexity, defensive programming, and
+                        coding standards are VER tools under §7.5.4.10 — not QUA tools.
+            Phase 5–7:  Test report template compliance checklists (plan, specification,
+                        report format — format only, not test coverage adequacy)
             All phases: Process audit checklists
-  Phases active: All phases where QUA performs template or technical review
+  Phases active: All phases where QUA performs template compliance or process audit
   Output: Completed checklists included in QUA Review Reports
 
  ───────────────────────────────────────────────────────────────────────────────────────
@@ -772,8 +785,7 @@ obligation level. Sources: §6.5, Table A.9, §6.5.4.14–17, §6.5.1.1, §6.5.1
   2. Implement quality system compliant with EN ISO 9001 (T2, MANDATORY ALL SIL)
   3. Use company quality management system (T4, MANDATORY ALL SIL)
   4. Enforce software configuration management (T5, MANDATORY ALL SIL)
-  5. Perform code review on all code before acceptance (§6.5 general obligation)
-  6. Enforce quality gates — no phase transition without QUA approval
+  5. Enforce quality gates — no phase transition without QUA approval
 
   Below SIL 3–4, the SQAP MAY document a rationale for not applying HR/M+ techniques,
   per EN 50128:2011 Section 1 (SIL-appropriate application principle). The Safety
@@ -786,13 +798,19 @@ obligation level. Sources: §6.5, Table A.9, §6.5.4.14–17, §6.5.1.1, §6.5.1
 
 | ID | Item | Issue | Resolution |
 |----|------|-------|------------|
+| D1 | Item 5 (SVaP) | Annex C places SVaP in Phase 2; platform places it in Phase 1 alongside the other planning documents | Platform deviation; SVaP authorship (VAL) and self-certification conflict documented in SQAP |
+| D2 | Item 20 (Software Component Test Report) | Annex C places item 20 in Integration phase; platform places it in Phase 5 (Implementation & Testing) where it is produced | Platform deviation; document in SQAP |
+| D3 | Item 40 (Deployment Verification Report) | Annex C places item 40 in Maintenance phase; platform places it in Phase 9 (Deployment) where it is produced | Platform deviation; no VAL 2nd check per Annex C; document in SQAP |
+| D4 | Item 44 (Software Maintenance Verification Report) | Annex C places item 44 in Assessment phase; platform places it in Phase 10 (Maintenance) where it is produced | Platform deviation; VAL 2nd check is a project addition beyond Annex C; document in SQAP |
 | D6 | Item 19 (Source Code VER Report) | Annex C Table C.1: 2nd Check blank; this platform assigns VAL 2nd check | Project addition beyond Annex C; document in SQAP |
 | D7 | Item 44 (Maintenance VER Report) | Annex C Table C.1: 2nd Check may be blank | If blank in printed standard, platform assignment of VAL 2nd check is project addition; document in SQAP |
 | D8 | Item 1 (SQAP) | §6.5.4.3: "under responsibility of Verifier"; Annex C Written By: blank | Platform assigns QUA as author under VER direction; SQAP must document this role split |
 | — | Phase 8 QUA exemption | QUA has no track-A or track-B role; ASR is fully independent | Grounded in §5.1.2.5–5.1.2.7; document in SQAP that QUA scope excludes Phase 8 |
 | — | Table A.9 mandatory floor | T2, T4, T5 are MANDATORY at ALL SIL (including SIL 0) | No SIL-based waiver is available for these three techniques |
+| — | D5 | Not used — numbering gap preserved to maintain alignment with DELIVERABLES.md deviation register | N/A |
 
 ---
 
-*References: EN 50128:2011 §6.5, §6.5.2, §6.5.4.3, §6.5.4.5, §6.5.4.10, §6.5.4.11, §6.5.4.14–17, Table A.9, Annex C Table C.1*  
+*References: EN 50128:2011 §6.5, §6.5.4.3, §6.5.4.5, §6.5.4.10, §6.5.4.11, §6.5.4.14–17, §7.5.4.10, §9.2.4, Table A.9, Annex C Table C.1*  
+*(Note: §6.5.2 is the Input Documents clause only — it contains no independence or organisational authority requirement.)*  
 *Grounded in: `WORKFLOW.md`, `DELIVERABLES.md`, `LIFECYCLE.md`, `ORGANIZATION.md`, `TRACEABILITY.md`*
