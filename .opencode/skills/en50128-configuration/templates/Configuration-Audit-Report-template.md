@@ -82,7 +82,7 @@
 - [ ] Test specifications and reports
 - [ ] Verification reports
 - [ ] Validation reports
-- [ ] Safety documentation (Hazard Log, FMEA, FTA, Safety Case)
+- [ ] Safety documentation (Hazard Log, FMEA, FTA, Safety Case) — owned by SAF; CM audits presence and version control, not content
 - [ ] Planning documents (SQAP, SCMP, SVP, SVaP)
 - [ ] Interface specifications
 - [ ] Build scripts and makefiles
@@ -248,6 +248,10 @@ The following checklist items were evaluated during the audit:
 | Assessment Report (SIL 3-4) | DOC-AR-YYYY-NNN | [X.Y] | [X.Y] | [Pass/Fail] | [Issue description] |
 
 #### 3.1.7 Safety Documents
+
+Note: FMEA, FTA, and Safety Case are **owned by SAF** (Safety Engineer). CM audits their
+presence under configuration control and verifies version consistency — CM does NOT audit
+content correctness. Content correctness is audited by VER and assessed by ASR.
 
 | Document | Document ID | Expected Version | Actual Version | Status | Issues |
 |----------|-------------|-----------------|----------------|--------|--------|

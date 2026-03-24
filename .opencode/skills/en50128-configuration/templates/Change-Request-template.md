@@ -28,7 +28,11 @@
 ## APPROVALS
 
 **SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
-**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
+**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Project Manager
+
+Note: The Assessor (§6.4) reviews the overall lifecycle artifacts and signs the Software Assessment
+Report (Phase 8) — NOT individual CRs. Validator signs the Software Validation Report (Phase 7) —
+NOT individual CRs. Do not include Assessor or Validator in CR approval chains.
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
@@ -38,8 +42,6 @@
 | **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
 | **Project Manager** | [Name] | | YYYY-MM-DD |
 | **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
 
 ---
 
@@ -117,7 +119,7 @@
 
 **Recommended Approach:** [Selected alternative with rationale]
 
-### Safety Analysis (EN 50128 Section 6.4)
+### Safety Analysis (EN 50128 Section 6.3 / §7.1)
 
 **Safety Impact Assessment:**
 - [ ] No safety impact
@@ -375,8 +377,8 @@
 
 ## EN 50128 References
 
-- **Section 6.6:** Software Configuration Management
-- **Section 6.4:** Software Change Management
+- **Section 6.6:** Software Configuration Management (change control)
+- **Section 6.6:** Software Change Management (§6.6.4.1 nine aspects)
 - **Table A.9:** Software Configuration Management techniques
 - **Section 5.3.2.13:** Phase modification and change control
 

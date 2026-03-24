@@ -1,0 +1,461 @@
+# EN 50128 Configuration Manager — Document-to-Phase Registry
+# Source authority: activities/deliverables.yaml (Annex C Table C.1)
+#
+# CM uses this file to implement:
+#   - query-location: document_key → phase_dir + filename → canonical path
+#   - evidence-path:  evidence_type → phase_dir + evidence_subdir → canonical path
+#
+# All agents MUST call CM query-location before writing any document.
+# All evidence-producing agents (VER, TST, SAF) MUST call CM evidence-path before
+# storing any evidence artifact.
+#
+# Canonical path: {workspace_root}/{phase_dir}/{filename}
+# workspace_root is resolved from .workspace JSON → examples/<project_name>/
+
+# ── Document Registry ────────────────────────────────────────────────────────
+documents:
+
+  # Phase 1: Planning
+  - key: SQAP
+    annex_c_item: 1
+    document_name: "Software Quality Assurance Plan"
+    phase: 1
+    phase_dir: phase-1-planning
+    filename: Software-Quality-Assurance-Plan.md
+    written_by: qua
+
+  - key: SQAVR
+    annex_c_item: 2
+    document_name: "Software Quality Assurance Verification Report"
+    phase: 1
+    phase_dir: phase-1-planning
+    filename: reports/Software-Quality-Assurance-Verification-Report.md
+    written_by: ver
+
+  - key: SCMP
+    annex_c_item: 3
+    document_name: "Software Configuration Management Plan"
+    phase: 1
+    phase_dir: phase-1-planning
+    filename: Software-Configuration-Management-Plan.md
+    written_by: cm
+
+  - key: SVP
+    annex_c_item: 4
+    document_name: "Software Verification Plan"
+    phase: 1
+    phase_dir: phase-1-planning
+    filename: Software-Verification-Plan.md
+    written_by: ver
+
+  - key: SVaP
+    annex_c_item: 5
+    document_name: "Software Validation Plan"
+    phase: 1
+    phase_dir: phase-1-planning
+    filename: Software-Validation-Plan.md
+    written_by: val
+
+  # Phase 2: Requirements
+  - key: SRS
+    annex_c_item: 6
+    document_name: "Software Requirements Specification"
+    phase: 2
+    phase_dir: phase-2-requirements
+    filename: Software-Requirements-Specification.md
+    written_by: req
+    user_approval_required: true
+
+  - key: OTSTSPEC
+    annex_c_item: 7
+    document_name: "Overall Software Test Specification"
+    phase: 2
+    phase_dir: phase-2-requirements
+    filename: Overall-Software-Test-Specification.md
+    written_by: tst
+
+  - key: REQVER
+    annex_c_item: 8
+    document_name: "Software Requirements Verification Report"
+    phase: 2
+    phase_dir: phase-2-requirements
+    filename: reports/Software-Requirements-Verification-Report.md
+    written_by: ver
+
+  # Phase 3: Architecture and Design
+  - key: SAS
+    annex_c_item: 9
+    document_name: "Software Architecture Specification"
+    phase: 3
+    phase_dir: phase-3-architecture-design
+    filename: Software-Architecture-Specification.md
+    written_by: des
+
+  - key: SDS
+    annex_c_item: 10
+    document_name: "Software Design Specification"
+    phase: 3
+    phase_dir: phase-3-architecture-design
+    filename: Software-Design-Specification.md
+    written_by: des
+
+  - key: INTERFACES
+    annex_c_item: 11
+    document_name: "Software Interface Specifications"
+    phase: 3
+    phase_dir: phase-3-architecture-design
+    filename: Software-Interface-Specifications.md
+    written_by: des
+    notes: "PLURAL form per §7.3.3 item 3"
+
+  - key: INTTESTSPEC
+    annex_c_item: 12
+    document_name: "Software Integration Test Specification"
+    phase: 3
+    phase_dir: phase-3-architecture-design
+    filename: Software-Integration-Test-Specification.md
+    written_by: int
+
+  - key: HWINTTESTSPEC
+    annex_c_item: 13
+    document_name: "Software/Hardware Integration Test Specification"
+    phase: 3
+    phase_dir: phase-3-architecture-design
+    filename: Software-Hardware-Integration-Test-Specification.md
+    written_by: int
+
+  - key: ARCHDESIGNVER
+    annex_c_item: 14
+    document_name: "Software Architecture and Design Verification Report"
+    phase: 3
+    phase_dir: phase-3-architecture-design
+    filename: reports/Software-Architecture-and-Design-Verification-Report.md
+    written_by: ver
+
+  # Phase 4: Component Design
+  - key: COMPDESIGN
+    annex_c_item: 15
+    document_name: "Software Component Design Specification"
+    phase: 4
+    phase_dir: phase-4-component-design
+    filename: Software-Component-Design-Specification.md
+    written_by: des
+
+  - key: COMPTESTSPEC
+    annex_c_item: 16
+    document_name: "Software Component Test Specification"
+    phase: 4
+    phase_dir: phase-4-component-design
+    filename: Software-Component-Test-Specification.md
+    written_by: tst
+
+  - key: COMPDESIGNVER
+    annex_c_item: 17
+    document_name: "Software Component Design Verification Report"
+    phase: 4
+    phase_dir: phase-4-component-design
+    filename: reports/Software-Component-Design-Verification-Report.md
+    written_by: ver
+
+  # Phase 5: Implementation and Testing
+  - key: SOURCECODE
+    annex_c_item: 18
+    document_name: "Software Source Code and supporting documentation"
+    phase: 5
+    phase_dir: phase-5-implementation-testing
+    filename: src/
+    written_by: imp
+    notes: "Directory reference — individual source files live under src/"
+
+  - key: SOURCECODEVER
+    annex_c_item: 19
+    document_name: "Software Source Code Verification Report"
+    phase: 5
+    phase_dir: phase-5-implementation-testing
+    filename: Software-Source-Code-Verification-Report.md
+    written_by: ver
+
+  - key: COMPTESTRPT
+    annex_c_item: 20
+    document_name: "Software Component Test Report"
+    phase: 5
+    phase_dir: phase-5-implementation-testing
+    filename: Software-Component-Test-Report.md
+    written_by: tst
+    platform_deviation: "Phase 5 per §7.5.4.5; Annex C places in Integration phase. Document in SQAP."
+
+  # Phase 6: Integration
+  - key: INTTESTRPT
+    annex_c_item: 21
+    document_name: "Software Integration Test Report"
+    phase: 6
+    phase_dir: phase-6-integration
+    filename: Software-Integration-Test-Report.md
+    written_by: int
+
+  - key: HWINTTESTRPT
+    annex_c_item: 22
+    document_name: "Software/Hardware Integration Test Report"
+    phase: 6
+    phase_dir: phase-6-integration
+    filename: Software-Hardware-Integration-Test-Report.md
+    written_by: int
+
+  # Phase 7: Validation
+  - key: INTVER
+    annex_c_item: 23
+    document_name: "Software Integration Verification Report"
+    phase: 7
+    phase_dir: phase-7-validation
+    filename: Software-Integration-Verification-Report.md
+    written_by: ver
+
+  - key: OVERALLTESTRPT
+    annex_c_item: 24
+    document_name: "Overall Software Test Report"
+    phase: 7
+    phase_dir: phase-7-validation
+    filename: Overall-Software-Test-Report.md
+    written_by: tst
+
+  - key: VALRPT
+    annex_c_item: 25
+    document_name: "Software Validation Report"
+    phase: 7
+    phase_dir: phase-7-validation
+    filename: Software-Validation-Report.md
+    written_by: val
+
+  - key: TOOLSVALRPT
+    annex_c_item: 26
+    document_name: "Tools Validation Report"
+    phase: 7
+    phase_dir: phase-7-validation
+    filename: Tools-Validation-Report.md
+    written_by: val
+    conditional: "applicable only if tool qualification evidence required"
+
+  - key: RELEASENOTE
+    annex_c_item: 27
+    document_name: "Release Note"
+    phase: 7
+    phase_dir: phase-7-validation
+    filename: Release-Note.md
+    written_by: null
+    notes: "SINGULAR — distinct from 'Release Notes' (plural, item 38, Phase 9). Required by §7.7.4.12."
+
+  # Phase 8: Assessment
+  - key: ASSESSPLAN
+    annex_c_item: 45
+    document_name: "Software Assessment Plan"
+    phase: 8
+    phase_dir: phase-8-assessment
+    filename: Software-Assessment-Plan.md
+    written_by: asr
+
+  - key: ASSESSRPT
+    annex_c_item: 46
+    document_name: "Software Assessment Report"
+    phase: 8
+    phase_dir: phase-8-assessment
+    filename: Software-Assessment-Report.md
+    written_by: asr
+
+  # Phase 9: Deployment
+  - key: DEPLOYPLAN
+    annex_c_item: 36
+    document_name: "Software Release and Deployment Plan"
+    phase: 9
+    phase_dir: phase-9-deployment
+    filename: Software-Release-and-Deployment-Plan.md
+    written_by: pm
+
+  - key: DEPLOYMAN
+    annex_c_item: 37
+    document_name: "Software Deployment Manual"
+    phase: 9
+    phase_dir: phase-9-deployment
+    filename: Software-Deployment-Manual.md
+    written_by: pm
+
+  - key: RELEASENOTES
+    annex_c_item: 38
+    document_name: "Release Notes"
+    phase: 9
+    phase_dir: phase-9-deployment
+    filename: Release-Notes.md
+    written_by: pm
+    notes: "PLURAL — distinct from 'Release Note' (singular, item 27, Phase 7)"
+
+  - key: DEPLOYREC
+    annex_c_item: 39
+    document_name: "Deployment Records"
+    phase: 9
+    phase_dir: phase-9-deployment
+    filename: Deployment-Records.md
+    written_by: pm
+
+  - key: DEPLOYVER
+    annex_c_item: 40
+    document_name: "Deployment Verification Report"
+    phase: 9
+    phase_dir: phase-9-deployment
+    filename: Deployment-Verification-Report.md
+    written_by: ver
+    platform_deviation: "Phase 9 per §9.1; Annex C places under maintenance. Document in SQAP."
+
+  # Phase 10: Maintenance
+  - key: MAINTPLAN
+    annex_c_item: 41
+    document_name: "Software Maintenance Plan"
+    phase: 10
+    phase_dir: phase-10-maintenance
+    filename: Software-Maintenance-Plan.md
+    written_by: pm
+
+  - key: CHANGEREC
+    annex_c_item: 42
+    document_name: "Software Change Records"
+    phase: 10
+    phase_dir: phase-10-maintenance
+    filename: Software-Change-Records.md
+    written_by: pm
+    notes: "Standard has typo 'Software Chang Records' (§9.2.4) — correct name used here"
+
+  - key: MAINTREC
+    annex_c_item: 43
+    document_name: "Software Maintenance Records"
+    phase: 10
+    phase_dir: phase-10-maintenance
+    filename: Software-Maintenance-Records.md
+    written_by: pm
+
+  - key: MAINTVER
+    annex_c_item: 44
+    document_name: "Software Maintenance Verification Report"
+    phase: 10
+    phase_dir: phase-10-maintenance
+    filename: Software-Maintenance-Verification-Report.md
+    written_by: ver
+    platform_deviation: "Phase 10 per §9.2; Annex C places under assessment. Document in SQAP."
+
+  # CM-internal document (no Annex C item)
+  - key: LIFECYCLE_STATE
+    annex_c_item: null
+    document_name: "Lifecycle State"
+    phase: 0
+    phase_dir: "."
+    filename: LIFECYCLE_STATE.md
+    written_by: cod
+    notes: "COD-internal; CM tracks but does not own"
+
+# ── Evidence Registry ─────────────────────────────────────────────────────────
+# CM evidence-path capability maps evidence_type → phase_dir/evidence/subdir
+# §6.2.4.8: VER evidence retained in format defined/referenced in SVP
+# §9.1.4.13: Deployment Record as tracked evidence artifact
+
+evidence:
+
+  - evidence_type: static-analysis
+    description: "MISRA checker raw output, static analysis tool results (.xml/.json)"
+    phase: 5
+    phase_dir: phase-5-implementation-testing
+    evidence_subdir: evidence/static-analysis
+    produced_by: [ver, imp]
+    clause: "§6.2.4.8, Table A.19"
+
+  - evidence_type: coverage
+    description: "gcov/lcov data files, HTML coverage reports, MC/DC data"
+    phase: 5
+    phase_dir: phase-5-implementation-testing
+    evidence_subdir: evidence/coverage
+    produced_by: [tst, ver]
+    clause: "§6.2.4.8, Table A.21"
+
+  - evidence_type: unit-test-log
+    description: "Unity test framework execution logs, test result files"
+    phase: 5
+    phase_dir: phase-5-implementation-testing
+    evidence_subdir: evidence/test-logs
+    produced_by: [tst]
+    clause: "§6.2.4.8, §7.5.4.5"
+
+  - evidence_type: tool-qualification
+    description: "Tool qualification evidence per §7.4.4.14, tool validation records"
+    phase: 5
+    phase_dir: phase-5-implementation-testing
+    evidence_subdir: evidence/tool-qualification
+    produced_by: [val]
+    clause: "§7.4.4.14"
+
+  - evidence_type: design-analysis
+    description: "FMEA/FTA raw tool outputs, safety analysis worksheets"
+    phase: 3
+    phase_dir: phase-3-architecture-design
+    evidence_subdir: evidence/design-analysis
+    produced_by: [saf]
+    clause: "§7.3.4, Table A.8"
+
+  - evidence_type: design-review
+    description: "Design inspection checklists, peer review records"
+    phase: 4
+    phase_dir: phase-4-component-design
+    evidence_subdir: evidence/design-review
+    produced_by: [ver, des]
+    clause: "§6.2.4.8"
+
+  - evidence_type: integration-test-log
+    description: "Software integration test execution logs"
+    phase: 6
+    phase_dir: phase-6-integration
+    evidence_subdir: evidence/integration-test-logs
+    produced_by: [int, tst]
+    clause: "§6.2.4.8, §7.6.4"
+
+  - evidence_type: hw-integration-log
+    description: "Hardware/software integration test evidence"
+    phase: 6
+    phase_dir: phase-6-integration
+    evidence_subdir: evidence/hw-integration-logs
+    produced_by: [int]
+    clause: "§7.6.4"
+
+  - evidence_type: system-test-log
+    description: "System/acceptance test execution logs, VAL test records"
+    phase: 7
+    phase_dir: phase-7-validation
+    evidence_subdir: evidence/system-test-logs
+    produced_by: [val, tst]
+    clause: "§6.3.4, §7.7.4"
+
+  - evidence_type: validation-record
+    description: "VAL evidence records, acceptance test witness records"
+    phase: 7
+    phase_dir: phase-7-validation
+    evidence_subdir: evidence/validation-records
+    produced_by: [val]
+    clause: "§6.3.4"
+
+  - evidence_type: assessor-record
+    description: "ASR review notes, checklists, interview records (§6.4.4.10)"
+    phase: 8
+    phase_dir: phase-8-assessment
+    evidence_subdir: evidence/assessor-records
+    produced_by: [asr]
+    clause: "§6.4.4.10, §6.4.4.13"
+
+  - evidence_type: deployment-record
+    description: "Evidence that intended software has been loaded (§9.1.4.13)"
+    phase: 9
+    phase_dir: phase-9-deployment
+    evidence_subdir: evidence/deployment-records
+    produced_by: [pm, ver]
+    clause: "§9.1.4.13"
+
+  - evidence_type: maintenance-log
+    description: "Change execution records, regression test evidence"
+    phase: 10
+    phase_dir: phase-10-maintenance
+    evidence_subdir: evidence/maintenance-logs
+    produced_by: [imp, tst, ver]
+    clause: "§9.2"

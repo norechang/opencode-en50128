@@ -104,6 +104,7 @@ The platform is structured in three tiers:
 │  TIER 1 — Fundamental Documents (authoritative, ISA-reviewed) │
 │  AGENTS.md · LIFECYCLE.md · WORKFLOW.md · ORGANIZATION.md    │
 │  DELIVERABLES.md · TRACEABILITY.md · TOOLS.md                │
+│  BASELINE_MANAGEMENT.md                                       │
 ├──────────────────────────────────────────────────────────────┤
 │  TIER 2 — Machine-Readable YAML (activities/)                 │
 │  phase-N-*.yaml · workflow.yaml · deliverables.yaml          │
@@ -131,6 +132,7 @@ These files are the single source of truth for all platform rules. They are ISA-
 | [`DELIVERABLES.md`](DELIVERABLES.md) | Complete Annex C Table C.1 deliverable catalogue |
 | [`TRACEABILITY.md`](TRACEABILITY.md) | Traceability rules T1–T15, gate enforcement |
 | [`TOOLS.md`](TOOLS.md) | Tool catalogue, SIL requirements, T1/T2/T3 confidence levels |
+| [`BASELINE_MANAGEMENT.md`](BASELINE_MANAGEMENT.md) | Baseline management lifecycle diagrams, role responsibilities, EN 50128 terminology corrections |
 
 ### Machine-Readable YAML (`activities/`)
 
@@ -258,6 +260,7 @@ EN50128/
 ├── DELIVERABLES.md                    # Annex C Table C.1 deliverables          ← fundamental doc
 ├── TRACEABILITY.md                    # Traceability rules T1–T15               ← fundamental doc
 ├── TOOLS.md                           # Tool catalog (T1/T2/T3 confidence)      ← fundamental doc
+├── BASELINE_MANAGEMENT.md             # Baseline management diagrams, role boundaries ← fundamental doc
 ├── SETUP.md                           # Installation guide
 ├── CONTRIBUTING.md                    # Contribution guidelines
 ├── CHANGELOG.md                       # Version history
@@ -379,6 +382,7 @@ These are produced by System Engineering (EN 50126/50129) and consumed by Softwa
 | [`DELIVERABLES.md`](DELIVERABLES.md) | Annex C Table C.1 complete deliverable matrix |
 | [`TRACEABILITY.md`](TRACEABILITY.md) | Traceability rules T1–T15 |
 | [`TOOLS.md`](TOOLS.md) | Tool catalog with SIL requirements, confidence levels (T1/T2/T3) |
+| [`BASELINE_MANAGEMENT.md`](BASELINE_MANAGEMENT.md) | Baseline management diagrams, role boundaries, EN 50128 terminology |
 | [`SETUP.md`](SETUP.md) | Installation and environment setup |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Contribution guidelines |
 | [`CHANGELOG.md`](CHANGELOG.md) | Version history |
