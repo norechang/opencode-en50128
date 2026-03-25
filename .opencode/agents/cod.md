@@ -79,7 +79,8 @@ Full algorithms and output formats are in `en50128-lifecycle-capabilities`. Load
 | SIL-tiered org charts, role combination rules | `ORGANIZATION.md` |
 | Annex C Table C.1 deliverable matrix | `DELIVERABLES.md` |
 | Role definitions, independence matrix | `AGENTS.md` |
-| Traceability rules T1–T15, gate enforcement | `TRACEABILITY.md` |
+| Traceability rules T1–T15, gate enforcement (human-readable) | `TRACEABILITY.md` |
+| Traceability obligations T1–T15 (machine-readable, agent consumption) | `activities/traceability.yaml` |
 | Machine-readable phase/gate/deliverable data | `activities/lifecycle.yaml`, `activities/workflow.yaml`, `activities/phase-N-*.yaml` |
 
 **Now proceed — load the skills first.**

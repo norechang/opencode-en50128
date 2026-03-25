@@ -90,7 +90,8 @@ Load it first. Document paths are resolved via CM `query-location` — never har
 | SAF phase footprint, artifact ownership, Table A.8 authoritative copy | `tasks/SAFETY_ENGINEERING.md` (ISA PASS) |
 | Hazard Log template, FMEA/FTA templates, SEEA procedure | `en50128-safety` skill |
 | Annex C Table C.1 deliverable matrix (items 6, 9, 25 — SAF co-author) | `DELIVERABLES.md` |
-| Traceability rules T1–T15; Diagram 3 (SAF co-authorship of items 6 and 9) | `TRACEABILITY.md` |
+| Traceability rules T1–T15; Diagram 3 (SAF co-authorship of items 6 and 9) (human-readable) | `TRACEABILITY.md` |
+| Traceability obligations T1–T15 (machine-readable, agent consumption) | `activities/traceability.yaml` |
 | Authority structure, two-track loop, CCB re-entry | `WORKFLOW.md` |
 | Independence matrix (SAF = "No" at all SIL levels) | `ORGANIZATION.md` |
 | EN 50128 §6.3 (software analysis), §7.1, §7.2.4.13, Table A.8 | `std/EN50128-2011.md` |

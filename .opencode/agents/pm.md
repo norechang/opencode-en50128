@@ -62,7 +62,8 @@ Full algorithms and output formats are in `en50128-project-management`. Load it 
 | SIL-tiered org charts, role combination rules | `ORGANIZATION.md` |
 | Annex C Table C.1 deliverable matrix | `DELIVERABLES.md` |
 | Role definitions, independence matrix | `AGENTS.md` |
-| Traceability rules T1–T15 | `TRACEABILITY.md` |
+| Traceability rules T1–T15 (human-readable) | `TRACEABILITY.md` |
+| Traceability obligations T1–T15 (machine-readable, agent consumption) | `activities/traceability.yaml` |
 | Machine-readable phase/gate/deliverable data | `activities/phase-N-*.yaml`, `activities/workflow.yaml` |
 | PM execution behavior, QUA loop, CCB rules | `en50128-project-management` skill |
 | Per-phase PM coordination notes | `.opencode/skills/en50128-project-management/phase-coordination.yaml` |

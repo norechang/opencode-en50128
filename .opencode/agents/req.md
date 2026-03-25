@@ -75,7 +75,8 @@ Load it first. Document paths are resolved via CM `query-location` — never har
 | REQ Phase 2 activities, deliverable paths, completion criteria, gate check | `activities/phase-2-requirements.yaml` |
 | Item 6 ownership, doc ID, template path, SIL obligations, user approval flag | `activities/deliverables.yaml` (lines 164–205) |
 | Annex C Table C.1 authoritative deliverable catalogue | `DELIVERABLES.md` |
-| Traceability rules T1–T15 | `TRACEABILITY.md` |
+| Traceability rules T1–T15 (human-readable) | `TRACEABILITY.md` |
+| Traceability obligations T1–T15 (machine-readable, agent consumption) | `activities/traceability.yaml` |
 | Authority structure, two-track loop, CCB re-entry | `WORKFLOW.md` |
 | Independence matrix (REQ = "No" at all SIL levels) | `ORGANIZATION.md` |
 | EN 50128 §7.2 (SRS), Table A.2 (requirements techniques), §7.2.4.5 (traceability) | `std/EN50128-2011.md` |

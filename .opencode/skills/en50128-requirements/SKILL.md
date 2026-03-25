@@ -24,7 +24,8 @@ algorithm, quality rules, traceability rules, and defect remediation logic.
 | Phase 2 activities, deliverable paths, completion criteria | `activities/phase-2-requirements.yaml` |
 | Item 6 doc ID, template path, SIL obligations, user_approval flag | `activities/deliverables.yaml` lines 164–205 |
 | Annex C Table C.1 — full deliverable ownership catalogue | `DELIVERABLES.md` |
-| Traceability rules T1–T15 | `TRACEABILITY.md` |
+| Traceability rules T1–T15 (human-readable) | `TRACEABILITY.md` |
+| Traceability obligations T1–T15 (machine-readable, agent consumption) | `activities/traceability.yaml` |
 | Authority structure, two-track loop, rework path | `WORKFLOW.md` |
 | Independence matrix (REQ = No at all SIL levels) | `ORGANIZATION.md` |
 | §7.2 SRS requirements, Table A.2 techniques, §7.2.4.5 traceability | `std/EN50128-2011.md` |
@@ -138,7 +139,7 @@ Types: `FUN` (functional), `PERF` (performance), `INT` (interface), `SAFE` (safe
 
 ## 5. Traceability Rules
 
-Source of truth: `TRACEABILITY.md` (rules T1–T15). Summary for REQ:
+Source of truth: `activities/traceability.yaml` (machine-readable, T1–T15) and `TRACEABILITY.md` (human-readable diagrams). Summary for REQ:
 
 | SIL | Obligation | What to trace |
 |-----|-----------|---------------|
