@@ -1,7 +1,7 @@
 # Software Integration Verification Report
 
 **TEMPLATE VERSION**: 2.0  
-**REFERENCE**: EN 50128:2011 Section [X.Y]
+**REFERENCE**: EN 50128:2011 Section 6.2, Section 7.6
 
 ---
 
@@ -23,23 +23,19 @@
 
 | Version | Date | Author | Changes | Approved By |
 |---------|------|--------|---------|-------------|
-| 0.1 | YYYY-MM-DD | [Name] | Initial draft | - |
+| 0.1 | YYYY-MM-DD | VER | Initial draft | - |
 
 ## APPROVALS
 
-**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
-**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
+**SIL 0-2**: Author (VER), QUA, PM  
+**SIL 3-4**: Author (VER), QUA, VMGR (independent), PM
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Author** | [Name] | | YYYY-MM-DD |
-| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
-| **QA Manager** | [Name] | | YYYY-MM-DD |
-| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
-| **Project Manager** | [Name] | | YYYY-MM-DD |
-| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Author (VER)** | [Name] | | YYYY-MM-DD |
+| **QUA** | [Name] | | YYYY-MM-DD |
+| **VMGR** (SIL 3–4 only) | [Name] | | YYYY-MM-DD |
+| **PM** | [Name] | | YYYY-MM-DD |
 
 ---
 
@@ -101,15 +97,15 @@ This document reports the results of **Software Integration Verification** for [
 
 | Role | Name | Independence | Responsibilities |
 |------|------|--------------|------------------|
-| **Verifier** | [Name] | Independent (SIL 3-4) | Verification activities, report authoring |
-| **Quality Assurance** | [Name] | Independent | Document review, process compliance |
-| **V&V Manager** | [Name] | Independent (SIL 3-4) | V&V approval authority |
-| **Project Manager** | [Name] | - | Project approval |
+| **Verifier (VER)** | [Name] | Independent (SIL 3-4) | Verification activities, report authoring |
+| **QUA** | [Name] | Independent | Document review, process compliance |
+| **VMGR** | [Name] | Independent (SIL 3-4) | V&V approval authority |
+| **PM** | [Name] | – | Project approval |
 
-**SIL 3-4 Independence Requirements** (EN 50128 Section 5.3.5):
-- Verifier SHALL be independent from Integrator, Implementer, Designer, and Tester
-- Verifier SHALL NOT be Requirements Manager, Designer, Implementer, Integrator, Tester, or Validator
-- V&V Manager SHALL be independent from Project Manager
+**SIL 3-4 Independence Requirements** (EN 50128 §5.1.2.10i):
+- VER SHALL be independent from INT, IMP, DES, and TST
+- VER SHALL NOT be REQ, DES, IMP, INT, TST, or VAL for the same component
+- VMGR SHALL be independent from PM
 
 ---
 
@@ -173,9 +169,8 @@ This document reports the results of **Software Integration Verification** for [
 | Pass/fail criteria applied correctly | ✓ / ✗ | [Notes] |
 | Test evidence provided | ✓ / ✗ | [Notes] |
 | **Test Results** |
-| Interface test coverage ≥ 100% | ✓ / ✗ | [Actual coverage] |
+| Interface test coverage complete | ✓ / ✗ | [Actual coverage] |
 | All mandatory tests passed | ✓ / ✗ | [Notes] |
-| Pass rate acceptable (≥95% SIL 3-4) | ✓ / ✗ | [Actual pass rate] |
 | Performance requirements met | ✓ / ✗ | [Notes] |
 | **Defects** |
 | All defects documented | ✓ / ✗ | [Total defects] |
@@ -238,7 +233,7 @@ This document reports the results of **Software Integration Verification** for [
 | External interfaces | [N] | [M] | [M/N * 100]% |
 | **TOTAL** | [N] | [M] | [M/N * 100]% |
 
-**Target**: 100% interface coverage
+**Target**: 100% interface coverage (SIL 3–4: Interface Testing is Mandatory per Table A.6)
 
 **Untested Interfaces**: [List if any, with justification]
 
@@ -266,8 +261,6 @@ This document reports the results of **Software Integration Verification** for [
 
 **Static Analysis Result**: [PASS / ISSUES FOUND]
 
-**SIL 3-4**: Static analysis MANDATORY (EN 50128 Table A.5)
-
 ### 3.6 EN 50128 Technique Compliance Verification
 
 **Objective**: Verify EN 50128 integration techniques were applied
@@ -276,8 +269,10 @@ This document reports the results of **Software Integration Verification** for [
 
 | Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Applied | Evidence |
 |-----------|-------|---------|---------|---------|----------|
-| Functional and Black-Box Testing | HR | HR | HR | ✓ / ✗ | [Integration Test Report] |
-| Performance Testing | - | R | HR | ✓ / ✗ | [Integration Test Report] |
+| Functional and Black-Box Testing (HR) | HR | HR | HR | ✓ / ✗ | [Integration Test Report] |
+| Interface Testing (**M** SIL 3–4) | HR | HR | **M** | ✓ / ✗ | [Integration Test Report] |
+| Performance Testing (HR SIL 3–4) | – | R | HR | ✓ / ✗ | [Integration Test Report] |
+| Branch Coverage (**M** SIL 3–4) | R | HR | **M** | ✓ / ✗ | [Coverage Report] |
 
 **Technique Compliance Result**: [COMPLIANT / NON-COMPLIANT]
 
@@ -318,7 +313,6 @@ This document reports the results of **Software Integration Verification** for [
 |--------|-------|--------|--------|
 | Integration test specification completeness | [%] | 100% | [✓ / ✗] |
 | Integration test execution completeness | [%] | 100% | [✓ / ✗] |
-| Integration test pass rate | [%] | ≥95% (SIL 3-4) | [✓ / ✗] |
 | Architecture → test traceability | [%] | 100% | [✓ / ✗] |
 | Design → test traceability | [%] | 100% | [✓ / ✗] |
 | Interface coverage | [%] | 100% | [✓ / ✗] |
@@ -337,7 +331,7 @@ This document reports the results of **Software Integration Verification** for [
 |-------------|--------|----------|
 | Integration strategy defined | ✓ / ✗ | [Integration Test Specification] |
 | Integration testing performed | ✓ / ✗ | [Integration Test Report] |
-| Interface testing performed | ✓ / ✗ | [Integration Test Report] |
+| Interface testing performed (M SIL 3–4) | ✓ / ✗ | [Integration Test Report] |
 | Integration defects tracked | ✓ / ✗ | [Integration Test Report, defect list] |
 | Traceability maintained | ✓ / ✗ | [Traceability matrix] |
 
@@ -358,14 +352,14 @@ This document reports the results of **Software Integration Verification** for [
 
 ### 5.3 Independence Requirements (SIL 3-4)
 
-**EN 50128 Section 5.3.5 - Verifier Independence**:
+**EN 50128 §5.1.2.10i — VER Independence**:
 
 | Requirement | Status | Evidence |
 |-------------|--------|----------|
-| Verifier independent from Integrator | ✓ / ✗ | [Verifier: [Name], Integrator: [Name]] |
-| Verifier independent from Implementer | ✓ / ✗ | [Verifier: [Name], Implementer: [Name]] |
-| Verifier independent from Tester | ✓ / ✗ | [Verifier: [Name], Tester: [Name]] |
-| Verifier independent from Designer | ✓ / ✗ | [Verifier: [Name], Designer: [Name]] |
+| VER independent from INT | ✓ / ✗ | [VER: [Name], INT: [Name]] |
+| VER independent from IMP | ✓ / ✗ | [VER: [Name], IMP: [Name]] |
+| VER independent from TST | ✓ / ✗ | [VER: [Name], TST: [Name]] |
+| VER independent from DES | ✓ / ✗ | [VER: [Name], DES: [Name]] |
 
 **Independence Requirements Met**: [YES / NO] (SIL 3-4 MANDATORY)
 
@@ -404,19 +398,19 @@ This document reports the results of **Software Integration Verification** for [
 2. [Condition 2]
 3. [...]
 
-**Verifier Name**: [Name]
+**Verifier (VER) Name**: [Name]
 
 **Verifier Signature**: _________________ Date: _________
 
-### 6.3 V&V Manager Approval (SIL 3-4)
+### 6.3 VMGR Approval (SIL 3-4)
 
-**V&V Manager Decision**: [APPROVE / DO NOT APPROVE / CONDITIONAL APPROVAL]
+**VMGR Decision**: [APPROVE / DO NOT APPROVE / CONDITIONAL APPROVAL]
 
-**Rationale**: [V&V Manager justification]
+**Rationale**: [VMGR justification]
 
-**V&V Manager Name**: [Name]
+**VMGR Name**: [Name]
 
-**V&V Manager Signature**: _________________ Date: _________
+**VMGR Signature**: _________________ Date: _________
 
 ### 6.4 Project Manager Acknowledgment
 
@@ -494,8 +488,8 @@ This document reports the results of **Software Integration Verification** for [
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
-| 0.1 | YYYY-MM-DD | [Author] | Initial draft |
-| 1.0 | YYYY-MM-DD | [Author] | First release |
+| 0.1 | YYYY-MM-DD | VER | Initial draft |
+| 1.0 | YYYY-MM-DD | VER | First release |
 
 ---
 
