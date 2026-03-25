@@ -1,7 +1,9 @@
 # Software Integration Verification Report
 
 **TEMPLATE VERSION**: 2.0  
-**REFERENCE**: EN 50128:2011 Section 6.2, Section 7.6
+**REFERENCE**: EN 50128:2011 Section 6.2, Section 7.6  
+**Phase:** Phase 7 - Validation (Step B1 — Integration Verification, Annex C item 23)  
+**Doc ID Abbrev**: DOC-INTVER-YYYY-NNN
 
 ---
 
