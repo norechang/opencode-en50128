@@ -162,7 +162,8 @@ Each Annex C deliverable passes through up to three review stages before being a
 | 24 | Overall Software Test Report | TST | VER | VAL |
 | 25 | Software Validation Report | VAL | VER | — |
 | 26 | Tools Validation Report | VAL | VER | — |
-| 27 | Release Note (§7.7.4.12) | — | VER | VAL |
+| † | Software Validation Verification Report | VER | — | — |
+| 27 | Release Note (§7.7.4.12) ‡ | — | VER | VAL |
 | 36 | Software Release and Deployment Plan | PM | VER | VAL |
 | 37 | Software Deployment Manual | PM | VER | VAL |
 | 38 | Release Notes | PM | VER | VAL |
@@ -176,6 +177,10 @@ Each Annex C deliverable passes through up to three review stages before being a
 | 46 | Software Assessment Report | ASR | VER | — |
 
 > Full table with template paths: `DELIVERABLES.md`.
+
+> **‡ Item 27 (Release Note, Phase 7):** Authorship is unresolved in Annex C (footnote `a` = project-specific assignment). §7.7.4.12 mandates the Release Note's content but does not assign authorship; §9.1.4.4 assigns the deployment-phase Release Note to the Designer (item 38 context). Projects shall designate the Phase 7 Release Note author explicitly in the SQAP. The blank "Written By" field reflects this unresolved ambiguity, not a deliberate assignment gap. See `DELIVERABLES.md` Note 3.
+
+> **† Software Validation Verification Report:** Normatively required by §6.3.4.12 ("A Software Validation Verification Report shall be written, under the responsibility of the Verifier") and §6.3.4.13–6.3.4.14 (VER must verify the SVaP and the Software Validation Report; results recorded in this report). Not assigned an independent Annex C item number on this platform — produced as the output of VER's review of VAL reports in Phase 7 (Step B2). Must be explicitly named in the SVP (§6.2.4.2) and SQAP. Subject to Safety Authority confirmation of item numbering. A corresponding update to `DELIVERABLES.md` is required.
 
 ---
 
@@ -223,7 +228,7 @@ Each Annex C deliverable passes through up to three review stages before being a
 - COD routes ALL V&V work through VMGR — no direct COD→VER or COD→VAL.
 - COD CANNOT override VMGR V&V decisions.
 - PM has NO authority over VMGR, VER, VAL, or ASR.
-- VAL is the **release authority** — software shall not be released without VAL sign-off (§5.1.2.8, §6.3.4.16).
+- VAL is the **release authority** — software shall not be released without VAL agreement; VAL retains the explicit right to formally disagree and block release (§5.1.2.8, §6.3.4.16).
 - VER+VAL same person: only with ASR approval (§5.1.2.10(n)).
 
 ### SIL 1–2: Permissive Organization
@@ -260,7 +265,7 @@ Each Annex C deliverable passes through up to three review stages before being a
    ▼
  PM (orchestrates everything)
    ├──► REQ · DES · IMP · INT · TST · SAF · QUA · CM
-   ├──► VER  (may report to PM; may be same person as TST/INT — §5.1.2.12(b))
+    ├──► VER  (may report to PM; may be same person as INT/TST/VAL — §5.1.2.12(b))
    └──► VAL  (may report to PM; release authority — §6.3.4.16)
               ASR: waivable if ISO 9001 cert available (§6.4.1.2)
 ```
@@ -285,6 +290,12 @@ VMGR (V&V Manager) is a **platform-defined independent authority**, not an Annex
                  → Platform implements "reports to Validator" option
                    via a named VMGR authority, so VER team reports
                    to VMGR (not to PM).
+                 → PLATFORM EXTENSION: COD routes ALL V&V work
+                   through VMGR; no direct COD→VER or COD→VAL at
+                   SIL 3–4. This routing rule exceeds the literal
+                   text of §5.1.2.10(e) and is a platform
+                   architectural decision. It must be approved by
+                   the Safety Authority and documented in the SQAP.
 
  §5.1.2.10(f) — "The Validator shall not report to the Project Manager"
                  → VMGR sits on the independent side of the wall;
@@ -476,7 +487,7 @@ Phase 7 (§7.7 "Overall Software Testing / Final Validation") is the **only phas
     │     │ Reviews all phase evidence                                │
     │     │ Item 25: Software Validation Report                       │
     │     │ Item 26: Tools Validation Report (if applicable)          │
-    │     │ Item 27: Release Note (§7.7.4.12)                         │
+    │     │ Item 27: Release Note (§7.7.4.12) [authorship per SQAP — see Diagram 2 ‡]                         │
     │     │                                                           │
     │     ├── REJECT (evidence insufficient) ──► VMGR notifies COD   │
     │     │    COD notifies PM; PM coordinates rework                 │
@@ -489,8 +500,13 @@ Phase 7 (§7.7 "Overall Software Testing / Final Validation") is the **only phas
     │           └── PASS                                              │
     │                 │                                               │
     │                 ▼                                               │
-    │               VMGR reviews VAL reports                          │
-    │                 ├── REJECT ──► VAL reworks; QUA re-checks       │
+    │               VER produces Software Validation Verification     │
+    │               Report (§6.3.4.12–6.3.4.14 — mandatory output    │
+    │               recording VER's review of SVaP + Val. Report)    │
+    │                 │                                               │
+    │                 ▼                                               │
+    │               VMGR reviews VER report + VAL reports together    │
+    │                 ├── REJECT ──► VAL/VER reworks; QUA re-checks   │
     │                 └── APPROVE — VMGR FINAL V&V DECISION           │
     │                       │       (cannot be overridden by COD/PM)  │
     │                       ▼                                         │
@@ -544,7 +560,7 @@ Phase 7 (§7.7 "Overall Software Testing / Final Validation") is the **only phas
 | VER reports to VMGR | 3–4 | §5.1.2.10(e); platform |
 | VER/VAL shall not hold REQ/DES/IMP/INT/TST roles | 1–4 | §5.1.2.10(g–i), §5.1.2.11(h) |
 | REQ/DES/IMP shall not be TST/INT for same component | 0–4 | §5.1.2.12(d), §5.1.2.10(g–h) |
-| ASR is independent from ALL project roles including COD | 1–4 | §5.1.2.5–5.1.2.6, §6.4.1.1 |
+| ASR is independent from ALL project roles including COD | 1–4 | §5.1.2.5–5.1.2.6, §5.1.2.11(k) (SIL 1–2), §5.1.2.10(m) (SIL 3–4), §6.4.1.1 |
 | Software shall not be released without VAL sign-off | 0–4 | §5.1.2.8, §6.3.4.16 |
 | VER+VAL same person (SIL 3–4): only with ASR approval | 3–4 | §5.1.2.10(n) |
 | VER+VAL same person (SIL 1–2): permitted | 1–2 | §5.1.2.11(d) |

@@ -25,6 +25,7 @@ See `docs/USER-GUIDE.md` for complete usage instructions and the V-Model example
 - **`WORKFLOW.md`** - **FUNDAMENTAL REFERENCE** — agent interaction and phase re-entry workflows; COD/PM/VMGR authority structure, per-phase execution loop, CCB change request re-entry flow
 - **`tasks/QUALITY_PROCESS.md`** - **FUNDAMENTAL REFERENCE** — QUA role across all lifecycle phases; deliverable touchpoints (all 46 Annex C items), two-track gate positions, Table A.9 SIL-tiered obligations (ISA-passed)
 - **`tasks/SAFETY_ENGINEERING.md`** - **FUNDAMENTAL REFERENCE** — SAF role across all lifecycle phases; phase activities, cross-cutting artifacts (Hazard Log, FMEA/FTA), hazard-to-validation traceability chain, Table A.8 technique matrix, independence boundaries (ISA-passed)
+- **`tasks/VnV-PROCESS.md`** - **FUNDAMENTAL REFERENCE** — V&V process: lifecycle mapping (phases 1–10), deliverable review chain (all 46 Annex C items), role interaction models (SIL 0/1–2/3–4), VMGR platform extension, two-track execution loop, Phase 7 special flow (ISA-passed)
 - **`.opencode/agents/`** - Agent definition files (one per role) — full role specs, techniques, Annex B narratives, and combination rules
 - **`.opencode/skills/`** - Domain-specific skills loaded internally by agents
 - **`std/EN50128-2011.md`** - Full EN 50128 standard (LLM-friendly Markdown)

@@ -35,6 +35,7 @@
 | 7 | Validation | 24 | Overall Software Test Report | TST | VER | VAL | `validation/Overall-Software-Test-Report.yaml` |
 | 7 | Validation | 25 | Software Validation Report | VAL | VER | — | `validation/Software-Validation-Report.yaml` |
 | 7 | Validation | 26 | Tools Validation Report | VAL | VER | — | `validation/Tools-Validation-Report.yaml` |
+| 7 | Validation | † | Software Validation Verification Report | VER | — | — | — |
 | 7 | Validation | 27 | Release Note | — | VER | VAL | `deployment/Release-Notes.yaml` |
 | — | Systems Configured by Application Data/Algorithms | 28 | Application Requirements Specification | REQ | VER | VAL | `application/Application-Requirements-Specification.yaml` |
 | — | Systems Configured by Application Data/Algorithms | 29 | Application Preparation Plan | REQ or DES | VER | VAL | `application/Application-Preparation-Plan.yaml` |
@@ -76,6 +77,8 @@
    Both assignments constitute platform deviations from Annex C Table C.1's phase column, analogous to the item 20 deviation documented in Note 5. They must be documented in the project SQAP and are subject to Safety Authority review.
 
 7. **Item 5 (SVaP) Annex C Phase-Column Deviation**: Annex C Table C.1 places the Software Validation Plan (item 5) under the **"Software requirements"** lifecycle phase column. This platform assigns SVaP to **Phase 1: Planning**. This deviation is justified by §6.3.4.3 (SVaP shall be prepared on the basis of input documents, requiring early definition) and §5.3.2.4 (planning activities, including validation planning, shall be performed before the commencement of the relevant lifecycle phase). Early placement ensures the validation criteria are established before requirements elaboration begins. This constitutes a platform deviation from Annex C Table C.1's phase column; it must be documented in the project SQAP and is subject to Safety Authority review.
+
+8. **† Software Validation Verification Report (Phase 7 — no Annex C item number)**: Normatively required by §6.3.4.12 ("A Software Validation Verification Report shall be written, under the responsibility of the Verifier") and §6.3.4.13–6.3.4.14. Annex C Table C.1 does not assign this deliverable an explicit item number. This platform tracks it as item `†` in Phase 7, produced by VER as the output of reviewing the SVaP (§6.3.4.13) and the Software Validation Report (§6.3.4.14). It must be explicitly named in the SVP (§6.2.4.2) and SQAP. No template file is assigned on this platform pending Safety Authority confirmation of item numbering. See `tasks/VnV-PROCESS.md` Diagram 2 for process context.
 
 ---
 
