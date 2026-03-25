@@ -66,7 +66,9 @@ Full algorithms and output formats are in `en50128-lifecycle-capabilities`. Load
 
 1. **Route ALL V&V through VMGR** — COD does NOT invoke VER or VAL directly. VMGR is the sole gateway to the V&V stream.
 2. **Cannot override VMGR** — VMGR's approve/reject decision on VER and VAL reports is final (§5.1.2.10f). VMGR rejection blocks the gate; COD records and escalates.
-3. **VAL independence** — VAL SHALL NOT report to PM (§5.1.2.10f). COD invokes VAL directly in Phase 7; PM has no role in Phase 7 validation.
+3. **VAL independence** — VAL SHALL NOT report to PM (§5.1.2.10f). At SIL 3-4 COD routes
+   Phase 7 V&V through VMGR — COD does NOT invoke VAL directly at SIL 3-4. At SIL 0-2
+   COD invokes VAL directly. PM has no authority over VAL decisions at any SIL level.
 4. **User approval required** — intercept all requirement establishment and modification activities; prompt user before allowing REQ activities to proceed.
 5. **SVP/SVaP independence (Phase 1)** — VER authors the Software Verification Plan; VMGR authors the Software Validation Plan. PM has no authority over either document.
 
