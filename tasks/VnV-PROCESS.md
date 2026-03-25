@@ -56,7 +56,9 @@ PHASE   TRACK A deliverables (Written By)          TRACK B — VER output       
   │
   7     Overall SW Test Report (TST)                 Item 23: SW Integration VER      Item 25: SW Validation Report ★
   ★     [Validation phase — VAL produces             Report                           Item 26: Tools Validation Report
-        formal reports here only]                                                     Item 27: Release Note (§7.7.4.12)
+        formal reports here only]                    Item †:  SW Validation VER       Item 27: Release Note (§7.7.4.12)
+                                                     Report (§6.3.4.12–14;
+                                                     see Diagram 6)
   │
   8     SW Assessment Plan (ASR)                     Item 45/46 1st Check (VER)       (ASR-driven; VAL role is reviewer)
         SW Assessment Report (ASR)
@@ -180,7 +182,7 @@ Each Annex C deliverable passes through up to three review stages before being a
 
 > **‡ Item 27 (Release Note, Phase 7):** Authorship is unresolved in Annex C (footnote `a` = project-specific assignment). §7.7.4.12 mandates the Release Note's content but does not assign authorship; §9.1.4.4 assigns the deployment-phase Release Note to the Designer (item 38 context). Projects shall designate the Phase 7 Release Note author explicitly in the SQAP. The blank "Written By" field reflects this unresolved ambiguity, not a deliberate assignment gap. See `DELIVERABLES.md` Note 3.
 
-> **† Software Validation Verification Report:** Normatively required by §6.3.4.12 ("A Software Validation Verification Report shall be written, under the responsibility of the Verifier") and §6.3.4.13–6.3.4.14 (VER must verify the SVaP and the Software Validation Report; results recorded in this report). Not assigned an independent Annex C item number on this platform — produced as the output of VER's review of VAL reports in Phase 7 (Step B2). Must be explicitly named in the SVP (§6.2.4.2) and SQAP. Subject to Safety Authority confirmation of item numbering. A corresponding update to `DELIVERABLES.md` is required.
+> **† Software Validation Verification Report:** Normatively required by §6.3.4.12 ("A Software Validation Verification Report shall be written, under the responsibility of the Verifier") and §6.3.4.13–6.3.4.14 (VER must verify the SVaP and the Software Validation Report; results recorded in this report). Not assigned an independent Annex C item number on this platform — produced as the output of VER's review of VAL reports in Phase 7 (Step B2). Must be explicitly named in the SVP (§6.2.4.2) and SQAP. Subject to Safety Authority confirmation of item numbering. See `DELIVERABLES.md` Note 8.
 
 ---
 
@@ -528,9 +530,9 @@ Phase 7 (§7.7 "Overall Software Testing / Final Validation") is the **only phas
     ▼
   COD gate-check (Phase 7):
     ✓ Overall Software Test Report (item 24) QUA-passed
-     ✓ SW Integration VER Report (item 23) QUA-passed and VMGR-approved (SIL 3–4)
-     ✓ SW Validation Verification Report (item †) QUA-passed and VMGR-approved (SIL 3–4)
-     ✓ Software Validation Report (item 25) QUA-passed and VMGR-approved (SIL 3–4)
+    ✓ SW Integration VER Report (item 23) QUA-passed and VMGR-approved (SIL 3–4)
+    ✓ SW Validation Verification Report (item †) QUA-passed and VMGR-approved (SIL 3–4)
+    ✓ Software Validation Report (item 25) QUA-passed and VMGR-approved (SIL 3–4)
     ✓ Tools Validation Report (item 26, if applicable) QUA-passed
     ✓ Release Note (item 27) present
     ✓ SVaP validation criteria satisfied — §6.3.4.4–6.3.4.6
