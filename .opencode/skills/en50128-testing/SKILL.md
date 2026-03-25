@@ -10,676 +10,219 @@ metadata:
   test-framework: Unity
 ---
 
-## What I do
+# EN 50128 Testing Skill
 
-I provide comprehensive testing methodologies and coverage analysis for EN 50128 Sections 7.4, 7.5, 7.6:
-- Define coverage requirements by SIL (statement, branch, condition, MC/DC) per Table A.21
-- Provide unit test patterns for C using Unity framework
-- Guide integration testing strategies (bottom-up, top-down, sandwich)
-- Apply black-box and white-box testing techniques (boundary value, equivalence class)
-- Implement fault injection testing (HR SIL 3-4)
-- Generate coverage reports with gcov/lcov and validate against SIL targets
-- Ensure test traceability to requirements using `workspace.py trace`
-- Automate coverage validation with `tools/check_coverage.py`
+This skill provides the TST agent with authoritative reference data, test specification
+and report generation algorithms, Table A.5/A.21 technique tables, and defect remediation
+logic for software testing per EN 50128 §5.3.4, §7.4–7.7.
+**Load this skill before performing any TST activity.**
 
-## When to use me
+---
 
-Use this skill when:
-- **Writing unit tests** for C code modules (Section 7.4.4.8)
-- **Performing integration testing** of software components (Section 7.6)
-- **Analyzing code coverage** and validating against SIL requirements (Table A.21)
-- **Implementing fault injection tests** (HR SIL 3-4)
-- **Verifying test completeness** and traceability
-- **Generating test reports** (Component Test Report, Integration Test Report)
-- **Validating coverage targets** (100% statement/branch/condition for SIL 3-4)
+## 1. Authoritative Sources
 
-## Testing Techniques (EN 50128 Table A.5)
+| What you need | Where to find it |
+|---------------|-----------------|
+| Phase 2 activities, item 7 deliverable paths | `activities/phase-2-requirements.yaml` |
+| Phase 4 activities, item 16 deliverable paths | `activities/phase-4-component-design.yaml` |
+| Phase 5 activities, item 20 deliverable paths | `activities/phase-5-implementation-testing.yaml` |
+| Phase 7 activities, item 24 deliverable paths | `activities/phase-7-validation.yaml` |
+| Item 7/16/20/24 ownership, doc IDs, SIL obligations | `activities/deliverables.yaml` |
+| Annex C Table C.1 — full deliverable ownership catalogue | `DELIVERABLES.md` |
+| Traceability rules T1–T15 (human-readable) | `TRACEABILITY.md` |
+| Traceability obligations T1–T15 (machine-readable, agent consumption) | `activities/traceability.yaml` |
+| Authority structure, two-track loop, CCB re-entry | `WORKFLOW.md` |
+| Independence matrix (TST = HR at SIL 3–4) | `ORGANIZATION.md` |
+| §5.3.4, §7.4–7.7, Table A.5, A.13, A.21 | `std/EN50128-2011.md` |
+| Component Test Specification template | `templates/Component-Test-Specification-template.md` |
+| Component Test Report template | `templates/Component-Test-Report-template.md` |
+| Overall Software Test Specification template | `templates/Overall-Software-Test-Specification-template.md` |
+| Overall Software Test Report template | `templates/Overall-Software-Test-Report-template.md` |
+| Source code (TST input, item 18) | CM `query-location --doc source-code` |
+| Component Design Spec (item 15) | CM `query-location --doc component-design-spec` |
 
-**EN 50128 Sections 7.4, 7.5, 7.7, Table A.5** defines verification and testing techniques.
+---
 
-**Testing Techniques (subset of Table A.5):**
+## 2. TST Phase Footprint
 
-| # | TECHNIQUE/MEASURE | Ref | SIL 0 | SIL 1-2 | SIL 3-4 |
+| Annex C Item | Document | Owner | Phase |
+|---|---|---|---|
+| 7 | Overall Software Test Specification | **TST** | 2 |
+| 16 | Software Component Test Specification | **TST** | 4 |
+| 18 | Software Source Code | IMP | 5 |
+| 20 | Software Component Test Report | **TST** | 5 |
+| 21 | Software Integration Test Report | INT | 6 |
+| 22 | HW/SW Integration Test Report | INT | 6 |
+| 24 | Overall Software Test Report | **TST** | 7 |
+
+- TST independence: HR at SIL 3–4 (tester must be independent from implementer). See `ORGANIZATION.md`.
+- TST MUST NOT also act as VER (independence boundary — separate oversight roles).
+- TST MUST NOT contact QUA or VER directly — route all submissions through PM.
+
+---
+
+## 3. write-test-specs Algorithm (items 7 and 16)
+
+Follow these steps in order. Do not skip steps.
+
+1. **Invoke CM `query-location`** via `task` tool with `--doc component-test-spec` (item 16)
+   or `--doc overall-sw-test-spec` (item 7). Record the canonical path.
+
+2. **Read `.workspace`** to confirm active project name, SIL level, and base path.
+
+3. **Verify prerequisites**:
+   - Item 16 (Phase 4): locate Software Component Design Specification (item 15).
+   - Item 7 (Phase 2): locate SRS (item 6). If either prerequisite is missing, halt and report to PM.
+
+4. **Load the appropriate template** (`Component-Test-Specification-template.md` or
+   `Overall-Software-Test-Specification-template.md`). Instantiate it for the project.
+
+5. **Derive test cases** — for each requirement in scope:
+   - Normal-operation test case (happy path, verifiable output).
+   - Boundary-value test cases (min−1, min, min+1, max−1, max, max+1) — **M SIL 3–4**.
+   - Error-condition test cases (NULL inputs, invalid ranges, return-value errors).
+   - Safety-critical-path test cases where the requirement has a SIL designation.
+
+6. **Embed traceability** in every test case header:
+   ```
+   /* TC-[TYPE]-[NNN]: [short description]
+    * Tests: REQ-[ID]
+    * SIL: <level>
+    * Coverage target: [Statement|Branch|Compound Condition] per SVP/SQAP
+    */
+   ```
+
+7. **Specify coverage targets**: cite the SVP/SQAP project-defined target — do not
+   substitute a generic percentage. Apply Table A.21 technique obligations per SIL
+   (see Section 5 below).
+
+8. **Apply mandatory Table A.5 techniques** by SIL level (see Section 4 below).
+
+9. **Return** the completed specification document path and a traceability summary
+   (requirements covered, gaps) to PM.
+
+---
+
+## 4. execute-component-tests Algorithm (item 20)
+
+1. **Invoke CM `query-location`** via `task` tool with `--doc component-test-report`.
+   Record the canonical output path.
+
+2. **Verify item 18 (source code) exists**. Halt and report to PM if missing.
+
+3. **Build unit tests** with gcov instrumentation:
+   ```
+   gcc -fprofile-arcs -ftest-coverage -g -O0 -o <test_binary> <src>.c <test>.c unity.c
+   ```
+
+4. **Execute tests**. Capture Unity XML output (machine-readable — required per §7.6.4.5b).
+
+5. **Generate coverage data**:
+   ```
+   gcov <src>.c
+   lcov --capture --directory . --output-file coverage.info
+   genhtml coverage.info --output-directory coverage_html
+   gcovr --json --output coverage.json
+   ```
+
+6. **Verify coverage meets the project-defined target** from the SVP/SQAP.
+   Document any gaps with justification (required SIL 2+).
+
+7. **Load template** `Component-Test-Report-template.md`. Fill:
+   - Test execution summary (pass/fail counts, execution date, tester identity).
+   - Coverage metrics table (coverage type, target, actual, status).
+   - Defect list (reference to defect IDs in the project defect tracker).
+   - Evidence references (XML result file, coverage HTML/JSON paths).
+
+8. **Return** report path, pass/fail status, and coverage summary to PM.
+
+---
+
+## 5. Table A.5 Techniques (§7.4, §7.5, §7.7)
+
+| # | Technique/Measure | Ref | SIL 0 | SIL 1–2 | SIL 3–4 |
 |---|-------------------|-----|-------|---------|---------|
-| 3 | **Dynamic Analysis and Testing** | Table A.13 | - | HR | **M** |
-| 4 | **Test Coverage for Code** | Table A.21 | R | HR | **M** |
-| 5 | **Functional and Black-Box Testing** | Table A.14 | HR | HR | **M** |
-| 6 | **Performance Testing** | Table A.18 | - | HR | **M** |
-| 8 | Interface Testing | D.34 | HR | HR | HR |
-
-**Mandatory for SIL 3-4:**
-- Dynamic Analysis and Testing (3) - **MANDATORY**
-- Test Coverage for Code (4) - **MANDATORY** (see Table A.21 below)
-- Functional and Black-Box Testing (5) - **MANDATORY**
-- Performance Testing (6) - **MANDATORY**
-
-**Key Points:**
-- One or more techniques SHALL be selected per SIL level
-- Testing must be performed by independent team for SIL 3-4
-- Coverage requirements defined in Table A.21 below
-
-**Standard Reference:** `std/EN50128-2011.md` Sections 7.4, 7.5, 7.7, Table A.5
-
-## Test Coverage Requirements (EN 50128 Table A.21)
-
-**EN 50128 Annex A, Table A.21** defines mandatory coverage levels:
-
-| Coverage Type | SIL 0 | SIL 1-2 | SIL 3-4 |
-|---------------|-------|---------|---------|
-| **Statement Coverage** | HR | HR | **M** (100%) |
-| **Branch Coverage** | HR | **M** (100%) | **M** (100%) |
-| **Condition Coverage** | - | R | **M** (100%) |
-| **Data Flow Coverage** | - | R | HR |
-| **Path Coverage** | - | - | R |
-
-**Coverage Requirements by SIL:**
-- **SIL 0:** Statement (HR), Branch (HR)
-- **SIL 1-2:** Statement (HR), Branch (**M** - 100%), Condition (R)
-- **SIL 3-4:** Statement (**M** - 100%), Branch (**M** - 100%), Condition (**M** - 100%)
-
-**Key Points:**
-- **100% coverage required** for all mandatory coverage types
-- Coverage measured at component level AND integration level
-- Use gcov, lcov, Bullseye, or equivalent tools
-- Document any uncovered code with justification
-- Coverage reports SHALL be included in test reports
-
-**Standard Reference:** `std/EN50128-2011.md` Annex A, Table A.21
-
-## Coverage Requirements by SIL
-
-## Testing Techniques by SIL
-
-| Technique | SIL 0-1 | SIL 2 | SIL 3-4 |
-|-----------|---------|-------|---------|
-| Boundary Value Analysis | HR | HR | **M** |
-| Equivalence Partitioning | HR | HR | HR |
-| Control Flow Testing | HR | HR | **M** |
-| Data Flow Testing | R | HR | HR |
-| Fault Injection | R | HR | HR |
-| Robustness Testing | R | HR | **M** (SIL 4) |
-
-## Unity Test Framework Pattern
-
-```c
-// test_brake_controller.c
-#include "brake_controller.h"
-#include "unity.h"
-
-void setUp(void) {
-    brake_controller_init();
-}
-
-void tearDown(void) {
-    brake_controller_shutdown();
-}
-
-// TC-UNIT-001: Normal brake application
-void test_brake_normal_application(void) {
-    // Arrange
-    uint16_t speed = 100U;
-    uint8_t brake_level;
-    
-    // Act
-    error_t result = brake_controller_apply(speed, &brake_level);
-    
-    // Assert
-    TEST_ASSERT_EQUAL(SUCCESS, result);
-    TEST_ASSERT_TRUE(brake_level > 0U);
-    TEST_ASSERT_TRUE(brake_level <= MAX_BRAKE_LEVEL);
-}
-
-// TC-UNIT-002: NULL pointer handling
-void test_brake_null_pointer(void) {
-    error_t result = brake_controller_apply(100U, NULL);
-    TEST_ASSERT_EQUAL(ERROR_NULL_POINTER, result);
-}
-
-// TC-UNIT-003: Boundary value - minimum
-void test_brake_minimum_speed(void) {
-    uint8_t brake_level;
-    error_t result = brake_controller_apply(0U, &brake_level);
-    TEST_ASSERT_EQUAL(SUCCESS, result);
-    TEST_ASSERT_EQUAL(0U, brake_level);
-}
-
-// TC-UNIT-004: Boundary value - maximum
-void test_brake_maximum_speed(void) {
-    uint8_t brake_level;
-    error_t result = brake_controller_apply(MAX_SPEED, &brake_level);
-    TEST_ASSERT_EQUAL(SUCCESS, result);
-    TEST_ASSERT_EQUAL(MAX_BRAKE_LEVEL, brake_level);
-}
-
-// TC-UNIT-005: Invalid input
-void test_brake_speed_too_high(void) {
-    uint8_t brake_level;
-    error_t result = brake_controller_apply(MAX_SPEED + 1U, &brake_level);
-    TEST_ASSERT_EQUAL(ERROR_INVALID_SPEED, result);
-}
-
-int main(void) {
-    UNITY_BEGIN();
-    
-    RUN_TEST(test_brake_normal_application);
-    RUN_TEST(test_brake_null_pointer);
-    RUN_TEST(test_brake_minimum_speed);
-    RUN_TEST(test_brake_maximum_speed);
-    RUN_TEST(test_brake_speed_too_high);
-    
-    return UNITY_END();
-}
-```
-
-## Test Specification Template
-
-```markdown
-### Test Case: TC-[LEVEL]-[ID]
-
-**Requirement**: REQ-[ID]
-**SIL Level**: [0-4]
-**Test Type**: [Functional|Performance|Boundary|Fault|Robustness]
-**Priority**: [High|Medium|Low]
-
-**Objective**: Verify [what is being tested]
-
-**Preconditions**:
-- System initialized
-- [Other preconditions]
-
-**Test Data**:
-| Input | Expected Output | Expected Error |
-|-------|----------------|----------------|
-| value | result | status |
-
-**Test Steps**:
-1. Setup: [Initialization]
-2. Execute: [Function call]
-3. Verify: [Assertions]
-4. Cleanup: [Resource release]
-
-**Expected Result**: [Description]
-
-**Pass Criteria**:
-- All assertions pass
-- No memory leaks
-- Execution time < [limit]
-
-**Status**: [Pass|Fail|Blocked]
-```
-
-## Coverage Analysis with gcov/lcov
-
-### Build and Run with Coverage
-
-```bash
-# Compile with coverage flags
-gcc -fprofile-arcs -ftest-coverage -g -O0 \
-    -o test_brake \
-    brake_controller.c test_brake_controller.c unity.c
-
-# Run tests
-./test_brake
-
-# Generate coverage report
-gcov brake_controller.c
-
-# Generate HTML report
-lcov --capture --directory . --output-file coverage.info
-genhtml coverage.info --output-directory coverage_html
-```
-
-### Python Coverage Analysis Script
-
-```python
-#!/usr/bin/env python3
-"""
-Coverage analysis for EN 50128 compliance
-"""
-
-import subprocess
-import sys
-
-def analyze_coverage(source_file, sil_level):
-    """Check coverage against SIL requirements"""
-    
-    # Run gcov
-    result = subprocess.run(['gcov', source_file], 
-                          capture_output=True, text=True)
-    
-    # Parse coverage (simplified)
-    # In production, parse actual gcov output
-    
-    requirements = {
-        0: {'statement': 0, 'branch': 0},
-        1: {'statement': 80, 'branch': 70},
-        2: {'statement': 100, 'branch': 100},
-        3: {'statement': 100, 'branch': 100, 'condition': 100},
-        4: {'statement': 100, 'branch': 100, 'condition': 100}
-    }
-    
-    print(f"Coverage Analysis for SIL {sil_level}")
-    print(f"Required: {requirements[sil_level]}")
-    
-    return True
-
-if __name__ == "__main__":
-    analyze_coverage(sys.argv[1], int(sys.argv[2]))
-```
-
-## Boundary Value Testing
-
-```c
-void test_all_boundaries(void) {
-    // Test min-1, min, min+1, max-1, max, max+1
-    
-    test_cases_t cases[] = {
-        {MIN_VALUE - 1, ERROR_OUT_OF_RANGE},
-        {MIN_VALUE, SUCCESS},
-        {MIN_VALUE + 1, SUCCESS},
-        {MAX_VALUE - 1, SUCCESS},
-        {MAX_VALUE, SUCCESS},
-        {MAX_VALUE + 1, ERROR_OUT_OF_RANGE}
-    };
-    
-    for (size_t i = 0; i < ARRAY_SIZE(cases); i++) {
-        error_t result = function_under_test(cases[i].input);
-        TEST_ASSERT_EQUAL(cases[i].expected, result);
-    }
-}
-```
-
-## Fault Injection Testing
-
-```c
-typedef enum {
-    FAULT_NONE,
-    FAULT_NULL_POINTER,
-    FAULT_TIMEOUT,
-    FAULT_SENSOR_STUCK
-} fault_type_t;
-
-void inject_fault(const char* component, fault_type_t fault);
-
-void test_handle_sensor_fault(void) {
-    // Inject fault
-    inject_fault("speed_sensor", FAULT_SENSOR_STUCK);
-    
-    // System should detect and handle
-    system_tick();
-    
-    // Verify safe state
-    TEST_ASSERT_EQUAL(STATE_SAFE, system_get_state());
-}
-```
-
-## Integration Testing
-
-```c
-// test_integration_brake_sensor.c
-
-void test_brake_responds_to_speed(void) {
-    // Setup
-    speed_sensor_init();
-    brake_controller_init();
-    
-    // Simulate high speed
-    speed_sensor_set_value(250U);
-    
-    // Process
-    system_tick();
-    
-    // Verify brake applied
-    uint8_t brake_level = brake_controller_get_level();
-    TEST_ASSERT_TRUE(brake_level > 0U);
-}
-
-void test_emergency_on_sensor_failure(void) {
-    // Setup
-    speed_sensor_init();
-    brake_controller_init();
-    
-    // Inject sensor failure
-    speed_sensor_inject_fault(FAULT_DISCONNECTED);
-    
-    // Process
-    system_tick();
-    
-    // Verify safe state
-    TEST_ASSERT_EQUAL(STATE_SAFE, system_get_state());
-    TEST_ASSERT_TRUE(is_emergency_brake_active());
-}
-```
-
-## Python Test Harness
-
-```python
-#!/usr/bin/env python3
-"""
-Test harness for automated test execution
-"""
-
-import subprocess
-import json
-
-class TestHarness:
-    def __init__(self, sil_level):
-        self.sil_level = sil_level
-        self.results = []
-    
-    def run_unit_tests(self):
-        """Execute all unit tests"""
-        tests = self.discover_tests('tests/unit')
-        
-        for test in tests:
-            result = subprocess.run([test], capture_output=True)
-            self.results.append({
-                'test': test,
-                'status': 'PASS' if result.returncode == 0 else 'FAIL'
-            })
-    
-    def check_coverage(self):
-        """Verify coverage requirements"""
-        subprocess.run(['./analyze_coverage.py', 'src/', str(self.sil_level)])
-    
-    def generate_report(self):
-        """Generate test report"""
-        summary = {
-            'total': len(self.results),
-            'passed': sum(1 for r in self.results if r['status'] == 'PASS')
-        }
-        
-        with open('test_report.json', 'w') as f:
-            json.dump({'summary': summary, 'results': self.results}, f)
-```
-
-## Test Traceability Matrix
-
-| Requirement | Design | Code | Test Cases | Status |
-|-------------|--------|------|------------|--------|
-| REQ-FUNC-001 | DES-MOD-005 | brake.c | TC-UNIT-001, TC-UNIT-002 | PASS |
-| REQ-SAFE-010 | DES-SAFE-002 | emergency.c | TC-UNIT-006, TC-INT-002 | PASS |
-
-## Test Review Checklist
-
-- [ ] All requirements have test cases
-- [ ] Coverage targets achieved (per SIL)
-- [ ] All boundary values tested
-- [ ] Error conditions tested
-- [ ] Fault injection performed (SIL 3-4)
-- [ ] Performance requirements verified
-- [ ] Test results documented
-- [ ] Traceability maintained
-
-## Comprehensive Workflows
-
-This skill provides **3 comprehensive workflows** covering the complete testing lifecycle:
-
-### 1. Unit Testing Workflow (`workflows/unit-testing-workflow.md`)
-
-**EN 50128 Reference**: Section 7.4.4.8, Table A.5, Table A.21  
-**Coverage**: Unit test development, execution, and validation
-
-**Key Topics**:
-- Unit test structure (Unity framework)
-- Test types: Normal, boundary value, error handling, fault injection, robustness
-- Coverage measurement (statement, branch, condition)
-- Mock object creation for hardware abstraction
-- Defect management and regression testing
-- Automated test execution with CI/CD integration
-
-**Example Usage**:
-```bash
-# Build unit tests with coverage
-cd tests/unit
-make coverage
-
-# Run tests
-./test_brake_controller
-
-# Generate coverage report
-gcov ../../src/brake_controller.c
-lcov --capture --directory . --output-file coverage.info
-genhtml coverage.info --output-directory ../coverage
-
-# Validate coverage against SIL requirements
-python3 ../../tools/check_coverage.py --sil 3 --coverage coverage.json
-
-# Update traceability
-workspace.py trace create --from tests --to requirements \
-    --source-id TC-BRAKE-APPLY-001 --target-id REQ-FUNC-010
-
-workspace.py trace validate --phase testing --sil 3
-```
+| 1 | Formal Proof | D.29 | – | R | HR |
+| 2 | Probabilistic Testing | D.44 | – | R | R |
+| 3 | **Static Analysis** | A.19 | – | HR | **M** |
+| 4 | **Dynamic Analysis and Testing** | A.13 | – | HR | **M** |
+| 5 | **Test Coverage for Code** | A.21 | R | HR | **M** |
+| 6 | Metrics | D.37 | – | R | HR |
+| 7 | **Traceability** | D.58 | R | HR | **M** |
+| 8 | Software Error Effect Analysis | D.25 | – | R | HR |
+| 9 | **Functional/Black-Box Testing** | A.14 | HR | HR | **M** |
+| 10 | **Performance Testing** | A.18 | – | HR | **M** |
+| 11 | Interface Testing | D.34 | HR | HR | HR |
+| 12 | **Regression Testing** | D.46 | HR | HR | **M** |
+| 13 | **Boundary Value Analysis** | D.7 | R | HR | **M** |
+| 14 | Equivalence Classes | D.20 | R | HR | HR |
+| 15 | Error Guessing | D.21 | – | R | R |
+| 16 | Cause Consequence Diagrams | D.9 | – | R | HR |
+
+**Mandatory SIL 3–4**: items 4, 5, 7, 9, 10, 12, 13.
+**Static analysis (item 3)** is owned by VER — TST provides coverage evidence; VER owns the Static Analysis Report (item 19).
 
 ---
 
-### 2. Integration Testing Workflow (`workflows/integration-testing-workflow.md`)
+## 6. Table A.21 Coverage Techniques
 
-**EN 50128 Reference**: Section 7.6, Table A.6  
-**Coverage**: Component integration, HW/SW integration, interface testing
+| # | Coverage Type | SIL 0 | SIL 1 | SIL 2 | SIL 3–4 |
+|---|---------------|-------|-------|-------|---------|
+| 1 | **Statement Coverage** | HR | HR | HR | **M** |
+| 2 | **Branch Coverage** | HR | HR | **M** | **M** |
+| 3 | **Compound Condition Coverage** | – | R | R | HR |
+| 4 | Data Flow Coverage | – | R | R | HR |
+| 5 | Path Coverage | – | – | – | R |
 
-**Key Topics**:
-- Integration strategies: Bottom-up, top-down, sandwich
-- Interface testing (function calls, data structures, IPC)
-- Data flow and control flow testing
-- Resource sharing and concurrent access testing
-- Timing and performance testing (HR SIL 3-4)
-- Fault propagation testing
-- Hardware-in-the-loop (HIL) testing
-
-**Example Usage**:
-```bash
-# Build integration tests
-cd tests/integration
-make run
-
-# Execute integration tests
-./test_brake_speed_integration
-
-# Generate integration coverage
-make coverage
-
-# Combine unit + integration coverage
-lcov --add-tracefile ../unit/coverage.info \
-     --add-tracefile ./coverage.info \
-     --output-file ../combined_coverage.info
-
-# Analyze performance
-python3 ../../tools/analyze_performance.py \
-    --results test_results.log \
-    --output ../reports/performance_analysis.md
-```
+**Key normative facts**:
+- No percentage thresholds exist in EN 50128:2011 — Table A.21 Req.1 requires a quantified
+  measure to be defined per project in the SVP/SQAP. Write the project target in the
+  specification; do not claim a standard-mandated "100%".
+- "Compound Condition" (item 3) is the EN 50128 term. Never use "MC/DC" — that term is not
+  in EN 50128:2011. Compound Condition is HR (not M) for SIL 3–4.
+- Statement coverage is **M** at SIL 3–4; Branch coverage is **M** at SIL 2–4.
 
 ---
 
-### 3. Coverage Analysis Workflow (`workflows/coverage-analysis-workflow.md`)
+## 7. Defect Remediation (fix-defects)
 
-**EN 50128 Reference**: Table A.21 (Test Coverage for Code)  
-**Coverage**: Statement, branch, condition, MC/DC coverage analysis
+When PM routes QUA/VER findings to TST, apply this table:
 
-**Key Topics**:
-- Coverage types: Statement, branch, condition, MC/DC, data flow, path
-- Coverage measurement with gcov, lcov, gcovr
-- SIL-specific validation (100% coverage for SIL 3-4)
-- Uncovered code identification and justification
-- MC/DC analysis (HR SIL 3-4)
-- Automated coverage validation
-
-**Example Usage**:
-```bash
-# Compile with coverage instrumentation
-gcc -fprofile-arcs -ftest-coverage -g -O0 -o test_executable src/module.c test/test_module.c
-
-# Run tests
-./test_executable
-
-# Generate HTML coverage report
-lcov --capture --directory . --output-file coverage.info
-genhtml coverage.info --output-directory coverage_html
-
-# Validate coverage against SIL 3 requirements
-python3 tools/check_coverage.py \
-    --sil 3 \
-    --coverage coverage.json \
-    --threshold statement:100,branch:100,condition:100
-
-# Perform MC/DC analysis (SIL 3-4)
-python3 tools/mcdc/mcdc_analyzer.py \
-    --source src/module.c \
-    --coverage coverage.info \
-    --output evidence/mcdc/module_mcdc.json
-```
+| Finding Code | Description | Action | Confidence |
+|---|---|---|---|
+| `T001` | Test case missing for requirement | Add test case from SRS requirement | HIGH — auto-fix |
+| `T002` | Coverage gap — uncovered branch | Add test case targeting the uncovered branch | HIGH — auto-fix |
+| `T003` | Traceability header missing in test | Add `/* TC-...: Tests: REQ-... */` header | HIGH — auto-fix |
+| `T004` | Non-machine-readable result format | Convert to XML/JSON output | HIGH — auto-fix |
+| `T005` | Boundary value not tested | Add min−1, min, min+1, max−1, max, max+1 cases | HIGH — auto-fix |
+| `T006` | Coverage target not cited (SVP/SQAP) | Add reference to project-defined target | HIGH — auto-fix |
+| `T007` | Wrong coverage term ("MC/DC" used) | Replace with "Compound Condition" | HIGH — auto-fix |
+| `T008` | Algorithmic correctness of test assertions | Escalate to PM — requires REQ/DES review | LOW — escalate |
+| `T009` | Safety-critical path not tested | Escalate to PM — requires SAF input | LOW — escalate |
 
 ---
 
-## Coverage Requirements by SIL (Table A.21)
+## 8. Document Interactions
 
-**EN 50128 Table A.21** defines mandatory coverage levels:
-
-| Coverage Type | SIL 0 | SIL 1-2 | SIL 3-4 | Tool Support |
-|---------------|-------|---------|---------|--------------|
-| **Statement Coverage** | HR | HR | **M** (100%) | gcov, lcov, gcovr |
-| **Branch Coverage** | HR | **M** (100%) | **M** (100%) | gcov --branch-probabilities |
-| **Condition Coverage** | - | R | **M** (100%) | gcov + custom analysis |
-| **Data Flow Coverage** | - | R | HR | Manual analysis |
-| **MC/DC Coverage** | - | - | HR (100%) | tools/mcdc/mcdc_analyzer.py, Bullseye |
-| **Path Coverage** | - | - | R | Manual analysis |
-
-**Key Points**:
-- **SIL 0-1**: Statement (HR), Branch (HR) - Target 80%+
-- **SIL 2**: Branch (**MANDATORY** 100%), Statement (HR 95%+)
-- **SIL 3-4**: Statement + Branch + Condition (**ALL MANDATORY** 100%)
-- **MC/DC**: HIGHLY RECOMMENDED for SIL 3-4 (100% target)
-- **Uncovered code**: Requires documented justification for SIL 2+
-
-**Standard Reference**: `std/EN50128-2011.md` Annex A, Table A.21
-
----
-
-## Tool Integration
-
-### Coverage Tools (Working Implementations)
-
-**gcov** (Statement + Branch):
-```bash
-# Compile with coverage flags
-gcc -fprofile-arcs -ftest-coverage -g -O0 -o test src/module.c test/test_module.c
-
-# Run tests
-./test
-
-# Generate text coverage report
-gcov src/module.c
-
-# Output: module.c.gcov (line-by-line execution counts)
+```
+SRS (item 6, REQ) + SCDS (item 15, DES)
+  └─► TST reads → writes: Overall SW Test Spec (item 7) [TST owns, Phase 2]
+                           Component Test Spec (item 16)  [TST owns, Phase 4]
+                                │
+Source Code (item 18, IMP)      │
+  └─► TST reads →               │
+        executes item 16 → writes: Component Test Report (item 20) [TST owns, Phase 5]
+        executes item 12 → returns results to INT (INT writes item 21) [Phase 6]
+        executes item 7  → writes: Overall SW Test Report (item 24)   [TST owns, Phase 7]
+                                                                              │
+                                                                    VAL reads item 24
+                                                                    → produces release decision
 ```
 
-**lcov** (HTML Reports):
-```bash
-# Capture coverage data
-lcov --capture --directory . --output-file coverage.info
+**TST provides to**: PM (all deliverables and results for routing), INT (integration test
+execution results), VAL (system test execution results and item 24).
 
-# Filter system headers
-lcov --remove coverage.info '/usr/*' 'tests/*' --output-file coverage_filtered.info
+**TST receives from**: REQ (SRS item 6 for traceability), DES (SCDS item 15), IMP (source
+code item 18), INT (integration test specifications item 12), PM (task assignment, defect routing).
 
-# Generate HTML report
-genhtml coverage_filtered.info --output-directory coverage_html
-
-# View in browser
-firefox coverage_html/index.html &
-```
-
-**gcovr** (JSON/XML Reports):
-```bash
-# Generate machine-readable JSON report
-gcovr --json --output coverage.json
-
-# Generate Cobertura XML (for CI/CD)
-gcovr --xml --output coverage.xml
-```
-
-**Custom Validation** (SIL Requirements):
-```bash
-# Validate coverage against SIL 3 requirements
-python3 tools/check_coverage.py \
-    --sil 3 \
-    --coverage coverage.json \
-    --report evidence/coverage/validation_report.json
-
-# Output:
-# Statement Coverage: 100.0% [PASS]
-# Branch Coverage:    100.0% [PASS]
-# Condition Coverage: 100.0% [PASS]
-# Result: PASS - All coverage targets met
-```
-
----
-
-### Traceability Integration (Working Implementation)
-
-**Link Tests to Requirements**:
-```bash
-# Create traceability link
-workspace.py trace create \
-    --from tests \
-    --to requirements \
-    --source-id TC-BRAKE-APPLY-001 \
-    --target-id REQ-FUNC-010 \
-    --rationale "Unit test verifies normal brake application"
-
-# Validate traceability completeness
-workspace.py trace validate --phase testing --sil 3
-
-# Generate traceability report
-workspace.py trace report \
-    --from requirements \
-    --to tests \
-    --format markdown \
-    --output evidence/traceability/requirements_to_tests.md
-```
-
----
-
-## Test Templates
-
-The skill includes **4 comprehensive test templates** (already present):
-
-1. **Component Test Specification** (`templates/Component-Test-Specification-template.md`)
-   - Purpose: Define unit test cases before testing
-   - Content: Test cases, procedures, expected results, coverage targets
-   - Sections: Test organization, test cases, coverage analysis, traceability
-
-2. **Component Test Report** (`templates/Component-Test-Report-template.md`)
-   - Purpose: Document unit test execution results
-   - Content: Test results, coverage metrics, defects, evidence
-   - Approval: TST, QA, Verifier (SIL 3-4)
-
-3. **Overall Software Test Specification** (`templates/Overall-Software-Test-Specification-template.md`)
-   - Purpose: Define system-level test cases
-   - Content: System test procedures, validation test cases
-
-4. **Overall Software Test Report** (`templates/Overall-Software-Test-Report-template.md`)
-   - Purpose: Document system test execution
-   - Content: System test results, validation evidence
-
----
-
-## References
-- **EN 50128:2011**
-  - Section 7.4.4.8 - Component Testing
-  - Section 7.5 - Integration (Component and Hardware/Software Integration)
-  - Section 7.6 - Software Integration
-  - Table A.5 - Verification and Testing Techniques
-  - Table A.6 - Integration Techniques
-  - Table A.13 - Dynamic Analysis and Testing
-  - Table A.14 - Functional and Black-Box Testing
-  - Table A.18 - Performance Testing
-  - Table A.21 - Test Coverage for Code
-- **Standard Location**: `std/EN50128-2011.md`
-- **TOOLS.md**: Tool catalog (gcov, lcov, gcovr, Bullseye, Unity)
-- **Unity Test Framework**: https://github.com/ThrowTheSwitch/Unity
-- **Related Skills**: 
-  - `en50128-implementation` (code under test)
-  - `en50128-verification` (independent verification of test results)
-  - `en50128-integration` (integration activities)
+**TST does NOT contact**: QUA, VER, or VAL directly. All submissions go through PM.

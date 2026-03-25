@@ -27,19 +27,16 @@
 
 ## APPROVALS
 
-**SIL 0-2 Requirements**: Author, Technical Reviewer, QA Manager, Project Manager  
-**SIL 3-4 Requirements**: Author, Technical Reviewer (independent), QA Manager, Safety Manager, Independent Verifier, Independent Validator, Assessor, Project Manager
+**SIL 0-2**: Author (TST), QUA, VER, PM  
+**SIL 3-4**: Author (TST), QUA, VER (independent), VAL (independent), PM
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Author** | [Name] | | YYYY-MM-DD |
-| **Technical Reviewer** | [Name] | | YYYY-MM-DD |
-| **QA Manager** | [Name] | | YYYY-MM-DD |
-| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
-| **Project Manager** | [Name] | | YYYY-MM-DD |
-| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Assessor** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Author (TST)** | [Name] | | YYYY-MM-DD |
+| **QUA** | [Name] | | YYYY-MM-DD |
+| **VER** (SIL 3–4: independent) | [Name] | | YYYY-MM-DD |
+| **VAL** (SIL 3–4 only) | [Name] | | YYYY-MM-DD |
+| **PM** | [Name] | | YYYY-MM-DD |
 
 ---
 
@@ -570,7 +567,7 @@ make coverage
 | Date | Version | Author | Changes | Approval |
 |------|---------|--------|---------|----------|
 | YYYY-MM-DD | 0.1 | TST | Initial draft | - |
-| YYYY-MM-DD | 1.0 | TST | Approved version | QA Manager |
+| YYYY-MM-DD | 1.0 | TST | Approved version | QUA |
 
 ---
 
