@@ -9,7 +9,7 @@
 
 ## Overview
 
-This platform provides a complete EN 50128-compliant software development environment using OpenCode. It implements the full V-Model lifecycle with SIL-dependent phase gate enforcement, 14 specialized AI agents, and 18 domain-specific skill libraries.
+This platform provides a complete EN 50128-compliant software development environment using OpenCode. It implements the full V-Model lifecycle with SIL-dependent phase gate enforcement, 14 specialized AI agents, and 21 domain-specific skill libraries.
 
 **Primary use**: Develop safety-critical railway software in C (SIL 0-4) with full EN 50128:2011 compliance — from planning through deployment.
 
@@ -251,6 +251,8 @@ Five agents have been rewritten following a **thin shell** philosophy: agent and
 
 **SAF** rewrite: Safety Case removed (not in EN 50128); CCF corrected to HR (not Mandatory); Table A.8 fixed to 5 entries; `§6.3.4.16` release authority corrected to Validator; 4 workflow files and Safety-Case-template deleted; grounded in `tasks/SAFETY_ENGINEERING.md` and `activities/safety-process.yaml`.
 
+**Template audit (all 21 skills)**: All 45 document templates audited and remediated for EN 50128 compliance — correct Annex C Table C.1 approval chains, accurate §/Table references, standardised `[UpperCamelCase]` placeholders, and `DOC-[ABBREV]-[YYYY]-[NNN]` Document ID format. The `en50128-documentation` orphan skill was consolidated into owning skills (`en50128-quality`, `en50128-configuration`, `en50128-verification`, `en50128-validation`). Three new skills added: `en50128-deployment`, `en50128-maintenance`, `en50128-application`.
+
 ### In Progress
 
 The remaining 9 agent files (REQ, DES, IMP, TST, INT, VER, VAL, VMGR, and supporting raildev/doc-reviewer agents) are being rewritten using the same thin-shell approach. Until rewritten, they remain functional but may carry more prose than necessary.
@@ -343,7 +345,10 @@ EN50128/
 │       ├── en50128-integration/
 │       ├── en50128-verification/
 │       ├── en50128-validation/
-│       ├── en50128-documentation/
+│       ├── en50128-deployment/
+│       ├── en50128-maintenance/
+│       ├── en50128-application/
+│       ├── en50128-vmgr/
 │       └── en50128-tools/
 │
 ├── std/                               # EN 50128 Standards (LLM-friendly Markdown)
