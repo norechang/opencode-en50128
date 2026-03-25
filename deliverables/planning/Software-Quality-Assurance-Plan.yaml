@@ -17,7 +17,7 @@ first_check: "VER"
 second_check: "VAL"
 
 # ===== Template =====
-template_path: ".opencode/skills/en50128-documentation/templates/Software-Quality-Assurance-Plan-template.md"
+template_path: ".opencode/skills/en50128-quality/templates/Software-Quality-Assurance-Plan-template.md"
 template_exists: true
 
 # ===== SIL Requirements =====
