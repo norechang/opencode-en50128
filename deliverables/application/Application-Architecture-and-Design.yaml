@@ -18,7 +18,7 @@ second_check: "VAL"
 
 # ===== Template =====
 template_path: ".opencode/skills/en50128-design/templates/Application-Architecture-and-Design-template.md"
-template_exists: false
+template_exists: true
 
 # ===== SIL Requirements =====
 sil_requirements:

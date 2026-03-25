@@ -12,7 +12,7 @@ standard_section: "7.2.4.20"
 written_by: "VER"
 first_check: "NONE"
 second_check: "VAL"
-template_path: ".opencode/skills/en50128-requirements/templates/Software-Requirements-Verification-Report-template.md"
+template_path: ".opencode/skills/en50128-verification/report-templates/Software-Requirements-Verification-Report.md"
 template_exists: true
 
 # =============================================================================

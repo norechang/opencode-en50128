@@ -17,8 +17,9 @@ first_check: "VER"
 second_check: "VAL"
 
 # ===== Template =====
-template_path: ".opencode/skills/en50128-implementation/templates/Application-Source-Code-template.md"
-template_exists: false
+template_path: ".opencode/skills/en50128-implementation/templates/C-Module-Template.c"
+template_exists: true
+# Note: code deliverable — template is C-Module-Template.c / C-Header-Template.h, not a Markdown document
 
 # ===== SIL Requirements =====
 sil_requirements:

@@ -10,8 +10,8 @@ standard_section: "6.7.4.5"
 written_by: "VER"
 first_check: "VER"
 second_check: "NONE"
-template_path: ".opencode/skills/en50128-quality/templates/Tools-Validation-Report-template.md"
-template_exists: false
+template_path: ".opencode/skills/en50128-verification/report-templates/Tools-Validation-Report.md"
+template_exists: true
 
 sil_requirements:
   sil_0:

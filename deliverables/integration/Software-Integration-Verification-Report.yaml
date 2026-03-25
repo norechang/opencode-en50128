@@ -7,7 +7,7 @@ standard_section: "7.6.4.5"
 written_by: "VER"
 first_check: "QUA"
 second_check: "NONE"
-template_path: ".opencode/skills/en50128-integration/templates/Software-Integration-Verification-Report-template.md"
+template_path: ".opencode/skills/en50128-verification/report-templates/Software-Integration-Verification-Report.md"
 template_exists: true
 
 sil_requirements:

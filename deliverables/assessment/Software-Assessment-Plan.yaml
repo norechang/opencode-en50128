@@ -19,7 +19,7 @@ second_check: "NONE"
 
 # ===== Template =====
 template_path: ".opencode/skills/en50128-quality/templates/Software-Assessment-Plan-template.md"
-template_exists: false
+template_exists: true
 
 # ===== SIL Requirements =====
 sil_requirements:
