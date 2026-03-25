@@ -11,12 +11,12 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | DOC-SDM-[YYYY]-[NNN] |
-| **Version** | [X.Y] |
+| **Version** | [MAJOR.MINOR] |
 | **Date** | [YYYY-MM-DD] |
-| **Project** | [Project Name] |
+| **Project** | [ProjectName] |
 | **SIL Level** | [0 \| 1 \| 2 \| 3 \| 4] |
-| **Author** | [Name], PM/CM |
-| **Reviewer** | [Name], VER |
+| **Author** | [AuthorName], PM/CM |
+| **Reviewer** | [ReviewerName], VER |
 | **Status** | [Draft \| Approved \| Baseline] |
 
 ## DOCUMENT CONTROL

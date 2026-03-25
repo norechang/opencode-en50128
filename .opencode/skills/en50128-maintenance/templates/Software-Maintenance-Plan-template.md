@@ -11,13 +11,13 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | DOC-SMP-[YYYY]-[NNN] |
-| **Version** | [X.Y] |
+| **Version** | [MAJOR.MINOR] |
 | **Date** | [YYYY-MM-DD] |
-| **Project** | [Project Name] |
+| **Project** | [ProjectName] |
 | **SIL Level** | [0 \| 1 \| 2 \| 3 \| 4] |
-| **Author** | [Name], PM |
-| **Reviewer** | [Name], QUA |
-| **Approver** | [Name], COD |
+| **Author** | [AuthorName], PM |
+| **Reviewer** | [ReviewerName], QUA |
+| **Approver** | [ApproverName], COD |
 | **Status** | [Draft \| Approved \| Baseline] |
 
 ## DOCUMENT CONTROL

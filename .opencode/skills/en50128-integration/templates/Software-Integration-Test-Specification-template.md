@@ -1,7 +1,7 @@
 # Software Integration Test Specification
 
 **TEMPLATE VERSION**: 2.0  
-**REFERENCE**: EN 50128:2011 Section [X.Y]
+**REFERENCE**: EN 50128:2011 Section 7.6, 6.1.4.4, Table A.6
 
 ---
 
@@ -9,14 +9,14 @@
 
 | Field | Value |
 |-------|-------|
-| **Document ID** | [DOC-XXX-YYYY-NNN] |
-| **Version** | [X.Y] |
+| **Document ID** | DOC-INTTESTSPEC-[YYYY]-[NNN] |
+| **Version** | [MAJOR.MINOR] |
 | **Date** | [YYYY-MM-DD] |
-| **Project** | [Project Name] |
-| **SIL Level** | [0, 1, 2, 3, or 4] |
-| **Author** | [Name], [Role] |
-| **Reviewer** | [Name], [Role] |
-| **Approver** | [Name], [Role] |
+| **Project** | [ProjectName] |
+| **SIL Level** | [SIL 0/1/2/3/4] |
+| **Author** | [AuthorName], [Role] |
+| **Reviewer** | [ReviewerName], [Role] |
+| **Approver** | [ApproverName], [Role] |
 | **Status** | [Draft \| Review \| Approved \| Baseline] |
 
 ## DOCUMENT CONTROL
@@ -27,16 +27,18 @@
 
 ## APPROVALS
 
-**SIL 0-2**: Author (INT), QUA, VER, PM  
-**SIL 3-4**: Author (INT), QUA, VER (independent), VAL (independent), PM
+**EN 50128 Annex C Table C.1 Signature Chain**
 
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| **Author (INT)** | [Name] | | YYYY-MM-DD |
-| **QUA** | [Name] | | YYYY-MM-DD |
-| **VER** (SIL 3–4: independent) | [Name] | | YYYY-MM-DD |
-| **VAL** (SIL 3–4 only) | [Name] | | YYYY-MM-DD |
-| **PM** | [Name] | | YYYY-MM-DD |
+| Written By | 1st Check | 2nd Check | Date |
+|------------|-----------|-----------|------|
+| Software Integrator<br>Name: [Name]<br>Signature: _____________ | Software Verifier<br>Name: [Name]<br>Signature: _____________ | Quality Assurance Engineer<br>Name: [Name]<br>Signature: _____________ | [YYYY-MM-DD] |
+
+**Notes:**
+- **Written By**: Author responsible for document content (EN 50128 Annex C Table C.1 Column 2)
+- **1st Check**: First independent reviewer (EN 50128 Annex C Table C.1 Column 3)
+- **2nd Check**: Second independent reviewer (EN 50128 Annex C Table C.1 Column 4)
+- For SIL 3-4: Independence requirements apply per EN 50128 Section 6.2 (Verification) and 6.3 (Validation)
+- Signature authority per project SQAP and DELIVERABLES.md
 
 ---
 

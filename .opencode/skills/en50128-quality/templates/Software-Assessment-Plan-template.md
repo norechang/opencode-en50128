@@ -12,12 +12,12 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | DOC-SAP-[YYYY]-[NNN] |
-| **Version** | [X.Y] |
+| **Version** | [MAJOR.MINOR] |
 | **Date** | [YYYY-MM-DD] |
-| **Project** | [Project Name] |
+| **Project** | [ProjectName] |
 | **SIL Level** | [1 \| 2 \| 3 \| 4] |
-| **Author** | [Name], Assessor (ASR) |
-| **Reviewer** | [Name], VER |
+| **Author** | [AuthorName], Assessor (ASR) |
+| **Reviewer** | [ReviewerName], VER |
 | **Status** | [Draft \| Approved] |
 
 ## DOCUMENT CONTROL

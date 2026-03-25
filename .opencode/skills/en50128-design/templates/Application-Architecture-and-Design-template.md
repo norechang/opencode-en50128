@@ -11,12 +11,12 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | DOC-APP-ARCH-DESIGN-[YYYY]-[NNN] |
-| **Version** | [X.Y] |
+| **Version** | [MAJOR.MINOR] |
 | **Date** | [YYYY-MM-DD] |
 | **Project / Application** | [Application Name] |
 | **SIL Level** | [0 \| 1 \| 2 \| 3 \| 4] |
-| **Author** | [Name], DES |
-| **Reviewer** | [Name], VER |
+| **Author** | [AuthorName], DES |
+| **Reviewer** | [ReviewerName], VER |
 | **Approver (Second Check)** | [Name], VAL |
 | **Status** | [Draft \| Approved \| Baseline] |
 

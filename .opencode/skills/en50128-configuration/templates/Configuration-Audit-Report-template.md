@@ -14,15 +14,15 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | [DOC-CAR-YYYYMMDD-NNN] |
-| **Version** | [X.Y] |
+| **Version** | [MAJOR.MINOR] |
 | **Date** | [YYYY-MM-DD] |
-| **Project** | [Project Name] |
+| **Project** | [ProjectName] |
 | **SIL Level** | [0 \| 1 \| 2 \| 3 \| 4] |
 | **Audit Type** | [Baseline Audit \| Internal Process Audit \| Post-CR Audit] |
 | **Gate / Trigger** | [Gate N — `<baseline-name>` \| Internal audit — no gate \| Post-CR audit — CR-YYYYMMDD-NNN] |
-| **Author** | [Name], Configuration Manager |
-| **Reviewer** | [Name], [Role] |
-| **Approver** | [Name], Project Manager |
+| **Author** | [AuthorName], Configuration Manager |
+| **Reviewer** | [ReviewerName], [Role] |
+| **Approver** | [ApproverName], Project Manager |
 | **Status** | [Draft \| Review \| Approved] |
 
 **Permitted Audit Types:**

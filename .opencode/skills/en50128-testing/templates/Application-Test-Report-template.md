@@ -11,13 +11,13 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | DOC-APP-TEST-RPT-[YYYY]-[NNN] |
-| **Version** | [X.Y] |
+| **Version** | [MAJOR.MINOR] |
 | **Date** | [YYYY-MM-DD] |
 | **Project / Application** | [Application Name] |
 | **SIL Level** | [0 \| 1 \| 2 \| 3 \| 4] |
-| **Author** | [Name], TST |
-| **Reviewer** | [Name], VER |
-| **Approver** | [Name], PM |
+| **Author** | [AuthorName], TST |
+| **Reviewer** | [ReviewerName], VER |
+| **Approver** | [ApproverName], PM |
 | **Status** | [Draft \| Final] |
 
 ## DOCUMENT CONTROL

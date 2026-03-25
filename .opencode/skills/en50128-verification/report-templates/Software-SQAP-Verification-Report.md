@@ -20,15 +20,17 @@
 
 ## Approvals
 
-| Role | Name | Signature | Date | SIL Level |
-|------|------|-----------|------|-----------|
-| Verifier (VER) | [Name] | [Signature] | YYYY-MM-DD | [0/1/2/3/4] |
-| Quality Assurance (QUA) | [Name] | [Signature] | YYYY-MM-DD | [0/1/2/3/4] |
-| V&V Manager (VMGR) | [Name] | [Signature] | YYYY-MM-DD | [3/4 only] |
-| Project Manager (PM) | [Name] | [Signature] | YYYY-MM-DD | [0/1/2] |
+**EN 50128 Annex C Table C.1 Signature Chain**
 
-**Independence Declaration (SIL 3-4):**  
-Verifier [Name] declares independence from the SQAP author (QUA) and all development roles per EN 50128 Section 5.1.2.10i.
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| Written By: Software Verifier | [Name] | _____________ | YYYY-MM-DD |
+| 1st Check: Software Verifier | [Name] | _____________ | YYYY-MM-DD |
+| 2nd Check: Software Validator | [Name] | _____________ | YYYY-MM-DD |
+
+**Notes:**
+- Signature authority per EN 50128 Annex C Table C.1 and project SQAP
+- For SIL 3-4: Independence requirements apply per EN 50128 §6.2 (Verification) and §6.3 (Validation)
 
 ---
 

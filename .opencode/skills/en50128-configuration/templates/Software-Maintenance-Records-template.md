@@ -11,13 +11,19 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | DOC-SMR-[YYYY]-[NNN] |
-| **Version** | [X.Y] |
+| **Version** | [MAJOR.MINOR] |
 | **Date** | [YYYY-MM-DD] |
-| **Project** | [Project Name] |
+| **Project** | [ProjectName] |
 | **SIL Level** | [0 \| 1 \| 2 \| 3 \| 4] |
-| **Author** | [Name], CM |
-| **Reviewer** | [Name], QUA |
+| **Author** | [AuthorName], CM |
+| **Reviewer** | [ReviewerName], QUA |
 | **Status** | [Active — updated continuously] |
+
+## DOCUMENT CONTROL
+
+| Version | Date | Author | Changes | Approved By |
+|---------|------|--------|---------|-------------|
+| 1.0 | YYYY-MM-DD | [AuthorName] | Initial version | [ApproverName] |
 
 ---
 
@@ -101,6 +107,16 @@ Maintenance records shall be retained for the operational lifetime of the softwa
 
 **Archive location:** [Location / repository]  
 **Retention period:** [End date or "Until decommissioned + 10 years"]
+
+---
+
+## 7. References
+
+| Document ID | Title | Version |
+|-------------|-------|---------|
+| DOC-SCMP-YYYY-NNN | Software Configuration Management Plan | [Version] |
+| DOC-MAINTPLAN-YYYY-NNN | Software Maintenance Plan | [Version] |
+| STD-EN50128 | EN 50128:2011 §9.2 (Software Maintenance), §6.6 (Configuration Management) | — |
 
 ---
 

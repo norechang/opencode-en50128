@@ -11,12 +11,12 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | DOC-SCR-[YYYY]-[NNN] |
-| **Version** | [X.Y] |
+| **Version** | [MAJOR.MINOR] |
 | **Date** | [YYYY-MM-DD] |
-| **Project** | [Project Name] |
+| **Project** | [ProjectName] |
 | **SIL Level** | [0 \| 1 \| 2 \| 3 \| 4] |
-| **Author** | [Name], CM |
-| **Reviewer** | [Name], QUA |
+| **Author** | [AuthorName], CM |
+| **Reviewer** | [ReviewerName], QUA |
 | **Status** | [Open \| In Progress \| Closed \| Rejected] |
 
 ---

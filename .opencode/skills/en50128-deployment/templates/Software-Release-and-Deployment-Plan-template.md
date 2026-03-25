@@ -11,13 +11,13 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | DOC-DEPLOYPLAN-[YYYY]-[NNN] |
-| **Version** | [X.Y] |
+| **Version** | [MAJOR.MINOR] |
 | **Date** | [YYYY-MM-DD] |
-| **Project** | [Project Name] |
+| **Project** | [ProjectName] |
 | **SIL Level** | [0 \| 1 \| 2 \| 3 \| 4] |
-| **Author** | [Name], PM |
-| **Reviewer** | [Name], VER |
-| **Approver** | [Name], COD |
+| **Author** | [AuthorName], PM |
+| **Reviewer** | [ReviewerName], VER |
+| **Approver** | [ApproverName], COD |
 | **Status** | [Draft \| Approved \| Baseline] |
 
 ## DOCUMENT CONTROL

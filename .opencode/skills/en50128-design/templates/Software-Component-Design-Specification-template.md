@@ -13,15 +13,15 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | [DOC-015-SCDS-{COMPONENT}-NNN] |
-| **Version** | [X.Y] |
+| **Version** | [MAJOR.MINOR] |
 | **Date** | [YYYY-MM-DD] |
-| **Project** | [Project Name] |
+| **Project** | [ProjectName] |
 | **Component Name** | [Component Name] |
 | **Component ID** | [COMP-XXX] |
-| **SIL Level** | [0, 1, 2, 3, or 4] |
-| **Author** | [Name], Designer |
-| **Reviewer** | [Name], Verifier |
-| **Approver** | [Name], [Role] |
+| **SIL Level** | [SIL 0/1/2/3/4] |
+| **Author** | [AuthorName], Designer |
+| **Reviewer** | [ReviewerName], Verifier |
+| **Approver** | [ApproverName], [Role] |
 | **Status** | [Draft \| Review \| Approved \| Baseline] |
 
 ## DOCUMENT CONTROL
@@ -32,16 +32,18 @@
 
 ## APPROVALS
 
-**SIL 0–2**: Author (DES), QUA, VER, PM  
-**SIL 3–4**: Author (DES), QUA, VER (independent), VAL (independent), PM
+**EN 50128 Annex C Table C.1 Signature Chain**
 
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| **Author (DES)** | [Name] | | YYYY-MM-DD |
-| **QUA** | [Name] | | YYYY-MM-DD |
-| **VER** | [Name] | | YYYY-MM-DD |
-| **VAL** (SIL 3–4) | [Name] | | YYYY-MM-DD |
-| **PM** | [Name] | | YYYY-MM-DD |
+| Written By | 1st Check | 2nd Check | Date |
+|------------|-----------|-----------|------|
+| Software Designer<br>Name: [Name]<br>Signature: _____________ | Software Verifier<br>Name: [Name]<br>Signature: _____________ | Software Validator<br>Name: [Name]<br>Signature: _____________ | [YYYY-MM-DD] |
+
+**Notes:**
+- **Written By**: Author responsible for document content (EN 50128 Annex C Table C.1 Column 2)
+- **1st Check**: First independent reviewer (EN 50128 Annex C Table C.1 Column 3)
+- **2nd Check**: Second independent reviewer (EN 50128 Annex C Table C.1 Column 4)
+- For SIL 3-4: Independence requirements apply per EN 50128 Section 6.2 (Verification) and 6.3 (Validation)
+- Signature authority per project SQAP and DELIVERABLES.md
 
 ---
 

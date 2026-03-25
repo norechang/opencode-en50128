@@ -11,13 +11,13 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | DOC-APP-PREP-PLAN-[YYYY]-[NNN] |
-| **Version** | [X.Y] |
+| **Version** | [MAJOR.MINOR] |
 | **Date** | [YYYY-MM-DD] |
 | **Project / Application** | [Application Name] |
 | **SIL Level** | [0 \| 1 \| 2 \| 3 \| 4] |
-| **Author** | [Name], Application Developer |
-| **Reviewer** | [Name], VER |
-| **Approver** | [Name], PM |
+| **Author** | [AuthorName], Application Developer |
+| **Reviewer** | [ReviewerName], VER |
+| **Approver** | [ApproverName], PM |
 | **Status** | [Draft \| Approved \| Baseline] |
 
 ## DOCUMENT CONTROL

@@ -11,13 +11,13 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | DOC-RELEASENOTES-[YYYY]-[NNN] |
-| **Version** | [X.Y] |
+| **Version** | [MAJOR.MINOR] |
 | **Date** | [YYYY-MM-DD] |
-| **Project** | [Project Name] |
+| **Project** | [ProjectName] |
 | **Software Release** | [Release Version] |
 | **SIL Level** | [0 \| 1 \| 2 \| 3 \| 4] |
-| **Author** | [Name], PM/CM |
-| **Reviewer** | [Name], VER |
+| **Author** | [AuthorName], PM/CM |
+| **Reviewer** | [ReviewerName], VER |
 | **Status** | [Draft \| Final \| Baseline] |
 
 ## DOCUMENT CONTROL
