@@ -113,11 +113,11 @@ Each Annex C deliverable passes through up to three review stages before being a
   Test Report           Integration            evidence)
   item 24)              VER Report)
 
-  VAL             ──►   VER              ──►   (VMGR reviews      VMGR FINAL
-  (Validation           (reviews VAL           VAL reports        V&V DECISION
-  Reports               reports;               after VER          (SIL 3–4)
-  items 25–26)          no separate            review)
-                        VER report)
+  VAL             ──►   VER              ──►   VMGR reviews       VMGR FINAL
+  (Validation           (item †: SW            item † + VAL       V&V DECISION
+  Reports               Validation             reports together   (SIL 3–4)
+  items 25–26)          VER Report
+                        §6.3.4.12–14)
 
  ─────────────────────────────────────────────────────────────────────────────
 
@@ -500,14 +500,20 @@ Phase 7 (§7.7 "Overall Software Testing / Final Validation") is the **only phas
     │           └── PASS                                              │
     │                 │                                               │
     │                 ▼                                               │
-    │               VER produces Software Validation Verification     │
-    │               Report (§6.3.4.12–6.3.4.14 — mandatory output    │
-    │               recording VER's review of SVaP + Val. Report)    │
-    │                 │                                               │
-    │                 ▼                                               │
-    │               VMGR reviews VER report + VAL reports together    │
-    │                 ├── REJECT ──► VAL/VER reworks; QUA re-checks   │
-    │                 └── APPROVE — VMGR FINAL V&V DECISION           │
+     │               VER produces Software Validation Verification     │
+     │               Report (§6.3.4.12–6.3.4.14 — mandatory output    │
+     │               recording VER's review of SVaP + Val. Report)    │
+     │                 │                                               │
+     │                 ▼                                               │
+     │               QUA template check on VER Validation             │
+     │               Verification Report (item †)                     │
+     │                 ├── FAIL ──► VER re-issues (max 1 resubmission) │
+     │                 └── PASS                                        │
+     │                       │                                         │
+     │                       ▼                                         │
+     │               VMGR reviews VER report + VAL reports together    │
+     │                 ├── REJECT ──► VAL/VER reworks; QUA re-checks   │
+     │                 └── APPROVE — VMGR FINAL V&V DECISION           │
     │                       │       (cannot be overridden by COD/PM)  │
     │                       ▼                                         │
     │                     VMGR reports outcome to COD                 │
@@ -522,8 +528,9 @@ Phase 7 (§7.7 "Overall Software Testing / Final Validation") is the **only phas
     ▼
   COD gate-check (Phase 7):
     ✓ Overall Software Test Report (item 24) QUA-passed
-    ✓ SW Integration VER Report (item 23) QUA-passed and VMGR-approved (SIL 3–4)
-    ✓ Software Validation Report (item 25) QUA-passed and VMGR-approved (SIL 3–4)
+     ✓ SW Integration VER Report (item 23) QUA-passed and VMGR-approved (SIL 3–4)
+     ✓ SW Validation Verification Report (item †) QUA-passed and VMGR-approved (SIL 3–4)
+     ✓ Software Validation Report (item 25) QUA-passed and VMGR-approved (SIL 3–4)
     ✓ Tools Validation Report (item 26, if applicable) QUA-passed
     ✓ Release Note (item 27) present
     ✓ SVaP validation criteria satisfied — §6.3.4.4–6.3.4.6

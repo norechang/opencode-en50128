@@ -69,7 +69,8 @@ PM reports Track A complete to COD.
 
 **Track B (COD coordinates — independent V&V)**:
 - SIL 3–4: COD → VMGR → VER (verify) → QUA (VER report) → VMGR (approve VER report) →
-  COD → VAL (validate, via VMGR routing) → QUA (VAL report) → VMGR (approve VAL report) →
+  COD → VAL (validate, via VMGR routing) → QUA (VAL report) → VER (item †, §6.3.4.12) →
+  QUA (item †) → VMGR (reviews item † + VAL reports → Final V&V Decision) →
   VMGR ⇢ COD (V&V outcome — cannot be overridden)
 - SIL 0–2: COD → VER directly (no VMGR); VAL only for Phases 5 and 7
 

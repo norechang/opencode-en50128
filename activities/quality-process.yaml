@@ -1095,12 +1095,22 @@ quality_process:
             action: "QUA template compliance check — VAL report (1-Pass Rule)"
             one_pass_rule: true
             note: "Same format checks as VER report. QUA checks FORMAT; VMGR reviews technical content."
+          - step: "6b"
+            phase_7_only: true
+            actor: "ver"
+            action: "VER produces SW Validation Verification Report (item †, §6.3.4.12–6.3.4.14)"
+            note: "Mandatory; records VER's review of SVaP and Software Validation Report."
+          - step: "6c"
+            phase_7_only: true
+            actor: "qua"
+            action: "QUA template compliance check on item † (1-Pass Rule)"
+            one_pass_rule: true
           - step: 7
             phase_7_only: true
             condition: "PASS"
             actor: "vmgr"
-            action: "VMGR reviews VAL reports — technical content"
-            vmgr_reject_path: "VAL reworks; new report -> QUA re-checks"
+            action: "VMGR reviews VER Validation Verification Report (item †) and VAL reports together — technical content"
+            vmgr_reject_path: "VAL/VER reworks; QUA re-checks"
             vmgr_approve_path: "VMGR Final V&V Decision (cannot be overridden by COD or PM)"
           - step: 8
             phase_7_only: true
@@ -1122,6 +1132,7 @@ quality_process:
         - "All phase deliverables QUA-passed (Track A)"
         - "VER Verification Report QUA-passed and VMGR-approved (Track B, SIL 3-4) OR VER report QUA-passed and received directly (SIL 0-2)"
         - "VAL reports QUA-passed and VMGR-approved (Phase 7 only; SIL 3-4)"
+        - "SW Validation Verification Report (item †) QUA-passed and VMGR-approved (Phase 7 only; SIL 3-4)"
         - "Traceability complete (from VER Verification Report findings)"
         - "Zero critical open defects"
       on_pass: "COD authorizes next phase"

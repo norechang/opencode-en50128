@@ -13,9 +13,9 @@
 # existing YAML files. Content already encoded elsewhere is cross-referenced,
 # not duplicated:
 #
-#   activities/workflow.yaml    → two-track loop, Phase 7 flow (EXCEPT the
-#                                 SW Validation Verification Report step — see
-#                                 follow_up_required below), CCB re-entry,
+#   activities/workflow.yaml    → two-track loop, Phase 7 flow (including
+#                                 the SW Validation Verification Report step,
+#                                 ISA finding F-01 resolved), CCB re-entry,
 #                                 transition authority, independence constraints
 #                                 SIL 3–4
 #   activities/organization.yaml → role independence matrix, combination rules,
@@ -35,13 +35,6 @@
 #
 # Normative clauses: §5.1.2.4–5.1.2.14, §6.2.4.2, §6.3.4.2–6.3.4.16,
 #                    §6.4.1.1–6.4.4.1, §7.7, Annex C Table C.1
-#
-# FOLLOW-UP REQUIRED (workflow.yaml):
-#   activities/workflow.yaml per_phase_phase7.track_b.sil_34 does NOT yet include
-#   the SW Validation Verification Report step (§6.3.4.12–6.3.4.14) that was added
-#   as ISA finding F-01. This vnv-process.yaml encodes the corrected Phase 7 Track B
-#   SIL 3–4 flow (see phase7_corrected_track_b_sil_34 below). A corresponding
-#   update to workflow.yaml is required.
 
 vnv_process:
   source_document: "tasks/VnV-PROCESS.md (ISA PASS)"
@@ -485,10 +478,9 @@ vnv_process:
   phase7_corrected_track_b_sil_34:
     description: >
       Corrected Phase 7 Track B SIL 3–4 flow per ISA finding F-01.
-      Adds SW Validation Verification Report (item †, §6.3.4.12–6.3.4.14) after
-      QUA check on VAL reports and before VMGR final review.
-      workflow.yaml must be updated to reflect this step.
-    workflow_yaml_update_required: true
+      Adds SW Validation Verification Report (item †, §6.3.4.12–6.3.4.14) and
+      its QUA check after QUA check on VAL reports and before VMGR final review.
+      workflow.yaml has been updated to reflect this step (ISA F-01 resolved).
     steps:
       - id: "B0"
         action: "COD sends Phase 7 V&V request to VMGR"
@@ -525,6 +517,10 @@ vnv_process:
           and the Software Validation Report. Must be named in SVP (§6.2.4.2).
         normative_clause: "§6.3.4.12, §6.3.4.13, §6.3.4.14"
         report_item: "†"
+      - id: "B2_ver_validation_report_qua"
+        action: "QUA template check on VER Validation Verification Report (item †)"
+        on_fail: "VER re-issues (max 1 resubmission)"
+        on_pass: "proceed"
       - id: "B2_vmgr_final"
         action: "VMGR reviews VER report (item †) and VAL reports (items 25–26) together"
         on_reject: "VAL/VER reworks; QUA re-checks"
@@ -693,10 +689,3 @@ vnv_process:
         Subject to Safety Authority confirmation of item numbering.
         A corresponding update to DELIVERABLES.md is required.
       reference: "§6.3.4.12, §6.3.4.13, §6.3.4.14; ISA finding F-01"
-    - id: "D-07"
-      description: >
-        activities/workflow.yaml per_phase_phase7.track_b.sil_34 does not yet
-        include the SW Validation Verification Report step (item †). The corrected
-        flow is encoded in this file (phase7_corrected_track_b_sil_34). workflow.yaml
-        must be updated to reflect this correction.
-      reference: "ISA finding F-01; §6.3.4.12"

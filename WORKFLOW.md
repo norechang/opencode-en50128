@@ -161,8 +161,9 @@ COD gate-check:
 Phase 7 (§7.7 "Overall Software Testing / Final Validation") is the only phase where
 VAL authors formal Validation Reports (items 25 and 26 per DELIVERABLES.md).
 
-The VER Verification Report for this phase (item 23, Software Integration Verification
-Report) is also produced here per Annex C.
+Two VER deliverables are produced in this phase per Annex C: item 23 (Software
+Integration Verification Report, produced before VAL begins) and item † (SW
+Validation Verification Report, §6.3.4.12–6.3.4.14, produced after VAL completes).
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -222,15 +223,29 @@ COD receives Track A complete from PM
   │    │    → rework re-enters Track A; full B1–B2 loop repeats     │
   │    └── APPROVE                                                  │
   │          │                                                      │
-  │          ▼                                                      │
-  │        QUA template check on VAL reports                        │
-  │          ├── FAIL ──► VAL re-issues; QUA re-checks              │
-  │          └── PASS                                               │
-  │                │                                                │
-  │                ▼                                                │
-  │              VMGR reviews VAL reports                           │
-  │                ├── REJECT ──► VAL reworks; QUA re-checks        │
-  │                └── APPROVE — VMGR Final V&V Decision            │
+   │          ▼                                                      │
+   │        QUA template check on VAL reports                        │
+   │          ├── FAIL ──► VAL re-issues; QUA re-checks              │
+   │          └── PASS                                               │
+   │                │                                                │
+   │                ▼                                                │
+   │              VER produces Software Validation Verification      │
+   │              Report (item †, §6.3.4.12–6.3.4.14 — mandatory;   │
+   │              records VER's review of SVaP and the Software      │
+   │              Validation Report)                                 │
+   │                │                                                │
+   │                ▼                                                │
+   │              QUA template check on VER Validation Verification  │
+   │              Report (item †)                                    │
+   │                ├── FAIL ──► VER re-issues (max 1 resubmission)  │
+   │                └── PASS                                         │
+   │                      │                                          │
+   │                      ▼                                          │
+   │                    VMGR reviews VER report (item †) and VAL     │
+   │                    reports together                             │
+   │                      ├── REJECT ──► VAL/VER reworks; QUA       │
+   │                      │             re-checks                    │
+   │                      └── APPROVE — VMGR Final V&V Decision      │
   │                      │       (cannot be overridden)             │
   │                      ▼                                          │
   │                    VMGR reports V&V outcome to COD              │
@@ -249,6 +264,7 @@ COD receives Track A complete from PM
 COD gate-check (Phase 7):
   ✓ Overall Software Test Report (item 24) QUA-passed
   ✓ VER Integration Verification Report (item 23) QUA-passed and VMGR-approved (SIL 3–4)
+  ✓ SW Validation Verification Report (item †) QUA-passed and VMGR-approved (SIL 3–4)
   ✓ VAL Validation Report (item 25) QUA-passed and VMGR-approved (SIL 3–4)
   ✓ Tools Validation Report (item 26, if applicable) QUA-passed
   ✓ Release Note (item 27) present

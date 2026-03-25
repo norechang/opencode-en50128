@@ -4,7 +4,9 @@
 #
 # CRITICAL: This is the ONLY phase where VAL authors formal Validation Reports.
 # Phase 7 uses a SPECIALIZED two-track flow (see workflow.yaml per_phase_phase7).
-# The VER Integration Verification Report (item 23) is also produced here.
+# Two VER deliverables are produced here: item 23 (Software Integration Verification
+# Report, before VAL begins) and item † (SW Validation Verification Report,
+# §6.3.4.12–6.3.4.14, after VAL completes).
 # VAL produces Validation Reports (items 25, 26) and Release Note (§7.7.4.12).
 
 phase:
@@ -145,10 +147,12 @@ phase:
             QUA checks item 23; VMGR reviews item 23; VMGR approves.
           Step B2 (Validation): VMGR assigns VAL; VAL reviews all evidence,
             produces items 25, 26, and Release Note; QUA checks VAL reports;
-            VMGR reviews VAL reports; VMGR Final V&V Decision (cannot be overridden).
+            VER produces SW Validation Verification Report (item †,
+            §6.3.4.12–6.3.4.14); QUA checks item †; VMGR reviews item †
+            and VAL reports together; VMGR Final V&V Decision (cannot be overridden).
           VMGR reports V&V outcome to COD.
         vmgr_gateway: true
-        vv_steps: "B1 (VER) → VMGR review → B2 (VAL) → VMGR Final Decision"
+        vv_steps: "B1 (VER) → VMGR review → B2 (VAL) → QUA (VAL) → VER (item †) → QUA (item †) → VMGR Final Decision"
       sil_02:
         description: >
           COD invokes VER directly → VER produces item 23.
@@ -191,6 +195,7 @@ phase:
       - "Overall Software Test Report (item 24) QUA-passed"
       - "Software Integration Verification Report (item 23) QUA-passed"
       - "VMGR approved item 23 (SIL 3–4)"
+      - "SW Validation Verification Report (item †) QUA-passed and VMGR-approved (SIL 3–4)"
       - "Software Validation Report (item 25) QUA-passed"
       - "VMGR approved item 25 (SIL 3–4)"
       - "Tools Validation Report (item 26) QUA-passed (if applicable)"

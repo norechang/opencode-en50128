@@ -227,9 +227,21 @@ workflow:
             action: "QUA template check on VAL reports (items 25, 26)"
             on_fail: "VAL re-issues; QUA re-checks"
             on_pass: "proceed"
+          - id: "B2_ver_validation_report"
+            label: "SW Validation Verification Report (ISA F-01)"
+            action: >
+              VER produces Software Validation Verification Report (item †,
+              §6.3.4.12–6.3.4.14): mandatory output recording VER's review of SVaP
+              and the Software Validation Report. Must be named in SVP (§6.2.4.2).
+            normative_clause: "§6.3.4.12, §6.3.4.13, §6.3.4.14"
+            report_item: "†"
+          - id: "B2_ver_validation_report_qua"
+            action: "QUA template check on VER Validation Verification Report (item †)"
+            on_fail: "VER re-issues (max 1 resubmission)"
+            on_pass: "proceed"
           - id: "B2_vmgr_review"
-            action: "VMGR reviews VAL reports"
-            on_reject: "VAL reworks; QUA re-checks"
+            action: "VMGR reviews VER Validation Verification Report (item †) and VAL reports (items 25–26) together"
+            on_reject: "VAL/VER reworks; QUA re-checks"
             on_approve: "VMGR Final V&V Decision — cannot be overridden"
           - id: "B3"
             action: "VMGR reports V&V outcome to COD"
@@ -248,6 +260,7 @@ workflow:
       criteria:
         - "Overall Software Test Report (item 24) QUA-passed"
         - "VER Integration Verification Report (item 23) QUA-passed and VMGR-approved (SIL 3–4)"
+        - "SW Validation Verification Report (item †) QUA-passed and VMGR-approved (SIL 3–4)"
         - "VAL Validation Report (item 25) QUA-passed and VMGR-approved (SIL 3–4)"
         - "Tools Validation Report (item 26, if applicable) QUA-passed"
         - "Release Note (§7.7.4.12) present"
