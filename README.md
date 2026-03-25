@@ -2,7 +2,7 @@
 
 **AI-powered development platform for EN 50128:2011 compliant railway software**
 
-**Status**: Active Development — agent and skill rewrite in progress (see [Agent Rewrite Status](#agent-rewrite-status))
+**Status**: Active Development
 **Version**: 3.2.0
 
 ---
@@ -229,9 +229,9 @@ Use the **RailDev** tab for all EN 50128 development work.
 
 ## Agent Rewrite Status
 
-Five agents have been rewritten following a **thin shell** philosophy: agent and skill files reference authoritative sources (fundamental documents + `activities/` YAMLs) rather than duplicating them. This eliminates content drift and reduces context load.
+All subagent files have been rewritten following a **thin shell** philosophy: agent and skill files reference authoritative sources (fundamental documents + `activities/` YAMLs) rather than duplicating them. This eliminates content drift and reduces context load.
 
-### Completed
+### Completed — All 13 Subagents
 
 | Agent | Before | After | Reduction |
 |-------|--------|-------|-----------|
@@ -240,6 +240,18 @@ Five agents have been rewritten following a **thin shell** philosophy: agent and
 | **CM** (`cm.md` + skill) | ~2,400 lines | ~180 lines | 93% |
 | **QUA** (`qua.md` + skill + review-criteria/) | ~3,100 lines | ~310 lines | 90% |
 | **SAF** (`saf.md` + skill + templates + workflows) | ~4,200 lines | ~590 lines | 86% |
+| **REQ** (`req.md` + skill) | rewritten | thin shell | — |
+| **DES** (`des.md` + skill) | rewritten | thin shell | — |
+| **IMP** (`imp.md` + skill) | rewritten | thin shell | — |
+| **TST** (`tst.md` + skill) | rewritten | thin shell | — |
+| **INT** (`int.md` + skill) | rewritten | thin shell | — |
+| **VER** (`ver.md` + skill) | rewritten | thin shell | — |
+| **VAL** (`val.md` + skill) | rewritten | thin shell | — |
+| **VMGR** (`vmgr.md` + skill) | rewritten | thin shell | — |
+
+`doc-reviewer` is a standalone ISA audit agent (58 lines) — already minimal by design.
+
+`raildev` is the primary-mode orchestrator agent; it is not a subagent and the thin-shell rewrite pattern does not apply.
 
 **COD** skill files rewritten: `en50128-lifecycle-coordination`, `en50128-lifecycle-capabilities`, `en50128-lifecycle-phase-checklists`, `en50128-lifecycle-examples`. Ten obsolete workflow/template files deleted.
 
@@ -253,11 +265,7 @@ Five agents have been rewritten following a **thin shell** philosophy: agent and
 
 **Template audit (all 21 skills)**: All 45 document templates audited and remediated for EN 50128 compliance — correct Annex C Table C.1 approval chains, accurate §/Table references, standardised `[UpperCamelCase]` placeholders, and `DOC-[ABBREV]-[YYYY]-[NNN]` Document ID format. The `en50128-documentation` orphan skill was consolidated into owning skills (`en50128-quality`, `en50128-configuration`, `en50128-verification`, `en50128-validation`). Three new skills added: `en50128-deployment`, `en50128-maintenance`, `en50128-application`.
 
-### In Progress
-
-The remaining 9 agent files (REQ, DES, IMP, TST, INT, VER, VAL, VMGR, and supporting raildev/doc-reviewer agents) are being rewritten using the same thin-shell approach. Until rewritten, they remain functional but may carry more prose than necessary.
-
-**Rewrite principles:**
+**Thin-shell rewrite principles:**
 1. Agent file (`*.md`) is a boot script only (~70–100 lines): identity, skill load instruction, capabilities list, hard rules, reference table
 2. Primary skill (`SKILL.md`) is an authoritative-sources table + unique behavioral patterns only (~250–330 lines)
 3. All rules and data live in fundamental documents or `activities/` YAMLs — never duplicated in agent/skill files
