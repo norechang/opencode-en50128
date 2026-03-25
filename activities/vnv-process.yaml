@@ -1,0 +1,702 @@
+# EN 50128 V&V Process
+# Source: tasks/VnV-PROCESS.md (ISA PASS), EN 50128:2011
+#
+# This file is the machine-readable translation of tasks/VnV-PROCESS.md.
+# tasks/VnV-PROCESS.md remains the ISA-reviewed human-readable authority;
+# this YAML encodes the information unique to that document for direct LLM
+# agent consumption.
+#
+# Primary consumers: VER, VAL, VMGR, COD agents.
+# Also consumed by: PM (phase coordination), QUA (gate-check enforcement).
+#
+# CONTENT SCOPE — this file encodes ONLY the content that is NEW relative to
+# existing YAML files. Content already encoded elsewhere is cross-referenced,
+# not duplicated:
+#
+#   activities/workflow.yaml    → two-track loop, Phase 7 flow (EXCEPT the
+#                                 SW Validation Verification Report step — see
+#                                 follow_up_required below), CCB re-entry,
+#                                 transition authority, independence constraints
+#                                 SIL 3–4
+#   activities/organization.yaml → role independence matrix, combination rules,
+#                                   SIL-tiered org charts (Diagram 3)
+#   activities/deliverables.yaml → canonical per-item deliverable data
+#   activities/quality-process.yaml → QUA deliverable touchpoints (all 46 items)
+#
+# NEW content encoded here:
+#   1. Per-phase VER output mapping (Diagram 1) — which Annex C item is the
+#      VER report per phase, and which items VAL 2nd-checks
+#   2. Deliverable review chain variant definitions (Diagram 2 — three named patterns)
+#   3. Item † Software Validation Verification Report (ISA finding F-01)
+#   4. VMGR per-phase duties (Diagram 4)
+#   5. Updated Phase 7 B2 flow with SW Validation Verification Report step
+#   6. Full SIL-tiered independence constraints (SIL 0, 1–2, 3–4)
+#   7. VER+VAL combination rules by SIL tier
+#
+# Normative clauses: §5.1.2.4–5.1.2.14, §6.2.4.2, §6.3.4.2–6.3.4.16,
+#                    §6.4.1.1–6.4.4.1, §7.7, Annex C Table C.1
+#
+# FOLLOW-UP REQUIRED (workflow.yaml):
+#   activities/workflow.yaml per_phase_phase7.track_b.sil_34 does NOT yet include
+#   the SW Validation Verification Report step (§6.3.4.12–6.3.4.14) that was added
+#   as ISA finding F-01. This vnv-process.yaml encodes the corrected Phase 7 Track B
+#   SIL 3–4 flow (see phase7_corrected_track_b_sil_34 below). A corresponding
+#   update to workflow.yaml is required.
+
+vnv_process:
+  source_document: "tasks/VnV-PROCESS.md (ISA PASS)"
+  standard: "EN 50128:2011"
+  upstream_documents:
+    - "WORKFLOW.md (ISA PASS)"
+    - "DELIVERABLES.md (ISA PASS)"
+    - "ORGANIZATION.md (ISA PASS)"
+  clauses:
+    - "§5.1.2.4"
+    - "§5.1.2.5"
+    - "§5.1.2.6"
+    - "§5.1.2.7"
+    - "§5.1.2.8"
+    - "§5.1.2.10"
+    - "§5.1.2.11"
+    - "§5.1.2.12"
+    - "§5.1.2.14"
+    - "§6.2.4.2"
+    - "§6.3.4.2"
+    - "§6.3.4.4"
+    - "§6.3.4.6"
+    - "§6.3.4.12"
+    - "§6.3.4.13"
+    - "§6.3.4.14"
+    - "§6.3.4.16"
+    - "§6.4.1.1"
+    - "§6.4.1.2"
+    - "§6.4.4.1"
+    - "§7.7"
+    - "§7.7.4.12"
+    - "Annex C Table C.1"
+
+  # ── Diagram 1: Per-Phase VER Output Mapping ───────────────────────────────────
+  # For each phase: which Annex C item is the VER Verification Report, and which
+  # items VAL reviews as 2nd Check. VAL produces formal Validation Reports ONLY in
+  # Phase 7 (§7.7). In all other phases VAL is a 2nd Check reviewer only.
+  #
+  # Column key:
+  #   ver_report_item   — Annex C item number for the VER Verification Report for
+  #                       this phase. "-" means no separate VER report is produced
+  #                       in this phase (the item belongs to the next phase).
+  #   val_2nd_check_items — Annex C items that VAL reviews as 2nd Check in this phase.
+  #                         Empty list means VAL does not 2nd-check anything in this phase.
+  #   val_produces_report — true only in Phase 7.
+  #
+  # Key rules (VnV-PROCESS.md Diagram 1 notes):
+  #   - Item 23 (SW Integration Verification Report) belongs to Phase 7, not Phase 6.
+  #   - Item 20 (SW Component Test Report) belongs to Phase 5 on this platform.
+  #   - Item 4 (SVP) is written by VER — not PM.
+  #   - Item 5 (SVaP) is written by VAL — not PM.
+  #   - Items 45–46 (Assessment) are written by ASR — not PM.
+  per_phase_ver_output:
+
+    - phase: 1
+      phase_name: "Planning"
+      track_a_deliverables:
+        - item: 1
+          label: "Software Quality Assurance Plan"
+          writer: "qua"
+        - item: 3
+          label: "Software Configuration Management Plan"
+          writer: "cm"
+        - item: 4
+          label: "Software Verification Plan"
+          writer: "ver"
+        - item: 5
+          label: "Software Validation Plan"
+          writer: "val"
+      ver_report_item: 2
+      ver_report_label: "Software Quality Assurance Verification Report"
+      ver_note: >
+        VER reviews items 1, 3, 4, 5; VER does not self-check its own SVP (item 4).
+        Item 2 records the outcome of VER's review.
+      val_2nd_check_items: [1, 2, 3, 4, 5]
+      val_produces_report: false
+      val_note: "VAL reviews items 1–5 as 2nd Check; does not author a report."
+
+    - phase: 2
+      phase_name: "Requirements Specification"
+      track_a_deliverables:
+        - item: 6
+          label: "Software Requirements Specification"
+          writer: "req"
+        - item: 7
+          label: "Overall Software Test Specification"
+          writer: "tst"
+      ver_report_item: 8
+      ver_report_label: "Software Requirements Verification Report"
+      val_2nd_check_items: [6, 7, 8]
+      val_produces_report: false
+
+    - phase: 3
+      phase_name: "Architecture and Design"
+      track_a_deliverables:
+        - item: 9
+          label: "Software Architecture Specification"
+          writer: "des"
+        - item: 10
+          label: "Software Design Specification"
+          writer: "des"
+        - item: 11
+          label: "Software Interface Specifications"
+          writer: "des"
+        - item: 12
+          label: "Software Integration Test Specification"
+          writer: "int"
+        - item: 13
+          label: "Software/Hardware Integration Test Specification"
+          writer: "int"
+      ver_report_item: 14
+      ver_report_label: "Software Architecture and Design Verification Report"
+      val_2nd_check_items: [9, 10, 11, 12, 13, 14]
+      val_produces_report: false
+
+    - phase: 4
+      phase_name: "Component Design"
+      track_a_deliverables:
+        - item: 15
+          label: "Software Component Design Specification"
+          writer: "des"
+        - item: 16
+          label: "Software Component Test Specification"
+          writer: "tst"
+      ver_report_item: 17
+      ver_report_label: "Software Component Design Verification Report"
+      val_2nd_check_items: [15, 16]
+      val_note: "Item 17 has no 2nd Check (VAL does not review VER reports except in Phase 7)."
+      val_produces_report: false
+
+    - phase: 5
+      phase_name: "Implementation and Testing"
+      track_a_deliverables:
+        - item: 18
+          label: "Software Source Code and Supporting Documentation"
+          writer: "imp"
+        - item: 20
+          label: "Software Component Test Report"
+          writer: "tst"
+          note: "Item 20 belongs to Phase 5 on this platform (see DELIVERABLES.md Note 5)."
+      ver_report_item: 19
+      ver_report_label: "Software Source Code Verification Report"
+      val_2nd_check_items: [18, 20]
+      val_produces_report: false
+
+    - phase: 6
+      phase_name: "Integration"
+      track_a_deliverables:
+        - item: 21
+          label: "Software Integration Test Report"
+          writer: "int"
+        - item: 22
+          label: "Software/Hardware Integration Test Report"
+          writer: "int"
+      ver_report_item: null
+      ver_note: >
+        No separate VER report is produced at the close of Phase 6. Item 23
+        (SW Integration Verification Report) is produced in Phase 7, not Phase 6,
+        per Annex C Table C.1.
+      val_2nd_check_items: [21, 22]
+      val_produces_report: false
+
+    - phase: 7
+      phase_name: "Validation"
+      track_a_deliverables:
+        - item: 24
+          label: "Overall Software Test Report"
+          writer: "tst"
+      ver_report_item: 23
+      ver_report_label: "Software Integration Verification Report"
+      ver_note: >
+        Item 23 belongs to Phase 7 (not Phase 6). VER also produces item †
+        (Software Validation Verification Report) at the end of Phase 7 Track B
+        Step B2 — mandatory per §6.3.4.12–6.3.4.14. See item_platform_dagger below.
+      val_produces_report: true
+      val_report_items:
+        - item: 25
+          label: "Software Validation Report"
+        - item: 26
+          label: "Tools Validation Report"
+          condition: "if applicable"
+        - item: 27
+          label: "Release Note (§7.7.4.12)"
+          note: "Authorship unresolved per Annex C footnote 'a'; assign in SQAP. See DELIVERABLES.md Note 3."
+      val_note: "Phase 7 is the ONLY phase where VAL produces formal Validation Reports (§7.7)."
+
+    - phase: 8
+      phase_name: "Assessment"
+      track_a_deliverables:
+        - item: 45
+          label: "Software Assessment Plan"
+          writer: "asr"
+        - item: 46
+          label: "Software Assessment Report"
+          writer: "asr"
+      ver_report_item: null
+      ver_note: >
+        VER performs 1st Check on items 45–46 only (ASR-authored). VER does not
+        produce a separate Verification Report for Phase 8. ASR is fully
+        independent from VMGR; VMGR has no authority over ASR.
+      val_2nd_check_items: []
+      val_produces_report: false
+      val_note: "VAL role is reviewer only in Phase 8; ASR-driven flow."
+
+    - phase: 9
+      phase_name: "Deployment"
+      track_a_deliverables:
+        - item: 36
+          label: "Software Release and Deployment Plan"
+          writer: "pm"
+        - item: 37
+          label: "Software Deployment Manual"
+          writer: "pm"
+        - item: 38
+          label: "Release Notes"
+          writer: "pm"
+        - item: 39
+          label: "Deployment Records"
+          writer: "pm"
+      ver_report_item: 40
+      ver_report_label: "Deployment Verification Report"
+      val_2nd_check_items: [36, 37, 38, 39]
+      val_produces_report: false
+
+    - phase: 10
+      phase_name: "Maintenance"
+      track_a_deliverables:
+        - item: 41
+          label: "Software Maintenance Plan"
+          writer: "pm"
+        - item: 42
+          label: "Software Change Records"
+          writer: "pm"
+        - item: 43
+          label: "Software Maintenance Records"
+          writer: "pm"
+      ver_report_item: 44
+      ver_report_label: "Software Maintenance Verification Report"
+      val_2nd_check_items: [41, 42, 43]
+      val_produces_report: false
+
+  # ── Item † — Software Validation Verification Report (ISA finding F-01) ──────
+  # Normatively required by §6.3.4.12–6.3.4.14. Not in Annex C printed table.
+  # Added as ISA finding F-01; confirmed via tasks/VnV-PROCESS.md Diagram 2 note.
+  # A corresponding update to DELIVERABLES.md is required.
+  item_platform_dagger:
+    annex_c_item_platform: "†"
+    label: "Software Validation Verification Report"
+    normative_clause: "§6.3.4.12, §6.3.4.13, §6.3.4.14"
+    phase: 7
+    writer: "ver"
+    first_check: null
+    second_check: null
+    produced_at: "Phase 7 Track B Step B2 — after QUA check on VAL reports, before VMGR final review"
+    description: >
+      Mandatory output recording VER's review of the Software Validation Plan (SVaP)
+      and the Software Validation Report (§6.3.4.13–6.3.4.14). Must be explicitly
+      named in the SVP (§6.2.4.2) and SQAP. Subject to Safety Authority confirmation
+      of item numbering. Produced ONLY at SIL 3–4 (VMGR flow); at SIL 0–2 VER
+      reviews VAL reports but may capture the outcome in item 23 or a supplementary
+      note — project shall define in SQAP.
+    asr_note: "Item numbering subject to Safety Authority confirmation (§6.4.4.1)."
+    deliverables_update_required: true
+
+  # ── Diagram 2: Deliverable Review Chain Variant Definitions ──────────────────
+  # Three named chain patterns. Cross-references DELIVERABLES.md Annex C table
+  # for the per-item written_by / first_check / second_check assignments.
+  review_chain_variants:
+
+    standard_chain:
+      applies_to: "Phases 1–6, 9–10 (typical)"
+      description: >
+        Development agent authors deliverable. VER performs 1st Check (Verification
+        Report produced at phase close). VAL performs 2nd Check (no VAL report
+        produced). VMGR approves (SIL 3–4) or COD receives directly (SIL 0–2).
+      steps:
+        - role: "author"
+          roles_allowed: ["req", "des", "imp", "int", "tst", "qua", "cm", "pm"]
+          action: "Produces deliverable"
+        - role: "ver"
+          check_label: "1st Check"
+          action: "Verification review; VER Verification Report produced at phase close"
+          report_produced: true
+        - role: "val"
+          check_label: "2nd Check"
+          action: "Reviews deliverable content"
+          report_produced: false
+        - role: "acceptor"
+          sil_34: "vmgr"
+          sil_02: "cod"
+          action: "Approves (SIL 3–4: VMGR; SIL 0–2: COD)"
+
+    phase_7_chain:
+      applies_to: "Phase 7 (Validation phase)"
+      description: >
+        Two sub-chains run sequentially in Phase 7. First, TST-authored Overall SW
+        Test Report flows through VER (item 23) then to VAL for review. Second,
+        VAL-authored Validation Reports (items 25–26) are reviewed by VER (item †)
+        then by VMGR for final V&V decision.
+      sub_chains:
+        tst_authored:
+          label: "TST deliverable (item 24)"
+          steps:
+            - role: "tst"
+              action: "Produces Overall Software Test Report (item 24)"
+            - role: "ver"
+              check_label: "1st Check"
+              action: "Produces SW Integration Verification Report (item 23)"
+            - role: "val"
+              check_label: "2nd Check"
+              action: "Reviews test evidence as part of final validation"
+            - role: "acceptor"
+              sil_34: "vmgr"
+              sil_02: "cod"
+        val_authored:
+          label: "VAL deliverables (items 25–26)"
+          steps:
+            - role: "val"
+              action: "Produces Software Validation Report (item 25) and Tools Validation Report (item 26)"
+            - role: "ver"
+              check_label: "Review"
+              action: "Produces SW Validation Verification Report (item †) — §6.3.4.12–6.3.4.14"
+              report_produced: true
+              report_item: "†"
+            - role: "vmgr"
+              check_label: "Final V&V Decision"
+              action: "VMGR reviews VER report and VAL reports together; provides FINAL V&V DECISION"
+              note: "Cannot be overridden by COD or PM"
+
+    phase_8_chain:
+      applies_to: "Phase 8 (Assessment — ASR-authored)"
+      description: >
+        ASR authors items 45–46 with full independence. VER performs 1st Check only.
+        No 2nd Check — ASR has full independence; VMGR has no authority over ASR.
+      steps:
+        - role: "asr"
+          action: "Produces Software Assessment Plan (item 45) and Software Assessment Report (item 46)"
+        - role: "ver"
+          check_label: "1st Check"
+          action: "Technical review of ASR deliverables"
+          report_produced: false
+          note: "No separate VER Verification Report for Phase 8."
+        - role: "second_check"
+          action: "None — ASR has full independence"
+          second_check_required: false
+
+  # ── Diagram 4: VMGR Platform Extension ───────────────────────────────────────
+  # What VMGR does per phase (Diagram 4 of VnV-PROCESS.md).
+  # Authority structure and independence wall: see activities/workflow.yaml authority
+  # and activities/organization.yaml. Role interaction model (Diagram 3): see
+  # activities/organization.yaml.
+  vmgr_extension:
+
+    normative_basis:
+      - clause: "§5.1.2.10(e)"
+        text: >
+          "The Verifier ... can report to the Project Manager or to the Validator."
+          Platform implements the "reports to Validator" option via a named VMGR
+          authority, so VER team reports to VMGR (not PM). PLATFORM EXTENSION: COD
+          routes ALL V&V work through VMGR at SIL 3–4; no direct COD→VER or COD→VAL.
+          This routing rule exceeds the literal text of §5.1.2.10(e) and is a platform
+          architectural decision — must be approved by the Safety Authority and
+          documented in the SQAP.
+      - clause: "§5.1.2.10(f)"
+        text: >
+          "The Validator shall not report to the Project Manager." VMGR sits on the
+          independent side of the independence wall; it is the structural anchor that
+          prevents VAL from being managed by PM.
+      - clause: "§5.1.2.10(g–j)"
+        text: >
+          Mandatory independence wall (prohibitory "shall neither" clauses):
+          development roles shall not also be VER/VAL. VMGR enforces this wall
+          across the V&V stream.
+
+    platform_requirement: >
+      VMGR must be approved by the Safety Authority and documented in the SQAP
+      before use on any SIL 1–4 project. (ORGANIZATION.md — Platform Role Notice)
+
+    sil_activation:
+      - sil_level: "SIL 0"
+        vmgr_present: false
+        vv_routing: "COD → VER/VAL directly"
+        reference: "§5.1.2.12"
+      - sil_level: "SIL 1–2"
+        vmgr_present: false
+        vv_routing: "COD → VER/VAL directly; PM may oversee"
+        reference: "§5.1.2.11"
+      - sil_level: "SIL 3–4"
+        vmgr_present: true
+        vmgr_required: true
+        vv_routing: "COD → VMGR → VER/VAL only"
+        reference: "§5.1.2.10(e–f); platform"
+
+    per_phase_duties:
+      phases_standard:
+        applies_to: "Phases 1–6, 9–10"
+        duties:
+          - "Assigns VER to verify phase deliverables"
+          - "Reviews VER Verification Reports"
+          - "Approves or rejects VER output"
+          - "Reports V&V outcome to COD"
+
+      phase_7:
+        applies_to: "Phase 7 (Validation — special)"
+        duties:
+          - "Coordinates both VER and VAL sequentially (Step B1 then Step B2)"
+          - "Reviews VER Integration Verification Report (item 23)"
+          - "Coordinates VAL final validation"
+          - "Reviews VAL Validation Reports (items 25–26)"
+          - "Reviews SW Validation Verification Report (item †)"
+          - "Provides FINAL V&V DECISION — cannot be overridden by COD or PM"
+          - "Reports final V&V outcome to COD"
+
+      phase_8:
+        applies_to: "Phase 8 (Assessment)"
+        duties:
+          - "VER performs 1st Check on ASR deliverables (items 45–46) under VMGR"
+          - "ASR is fully independent from VMGR; VMGR has no authority over ASR"
+
+      all_phases:
+        duties:
+          - "VMGR cannot be bypassed at SIL 3–4"
+          - "VMGR does NOT report to COD or PM"
+          - "VMGR coordinates with COD (peer; no reporting relationship)"
+
+    vmgr_is_not:
+      - "An Annex B EN 50128 role — it is a platform extension"
+      - "A replacement for ASR (Assessor remains mandatory and independent)"
+      - "A 'manager' of VAL in the sense of directing VAL's decisions — VMGR coordinates; VAL holds release authority"
+      - "Overridable by COD or PM"
+
+  # ── Phase 7 Corrected Track B SIL 3–4 Flow (ISA Finding F-01) ───────────────
+  # This encodes the corrected Phase 7 Track B SIL 3–4 flow that includes the
+  # SW Validation Verification Report step (§6.3.4.12–6.3.4.14) added by ISA
+  # finding F-01. activities/workflow.yaml per_phase_phase7.track_b.sil_34 does
+  # NOT yet include this step. This encoding is authoritative; workflow.yaml
+  # must be updated to match.
+  #
+  # See: activities/workflow.yaml per_phase_phase7 for Track A, SIL 0–2 Track B,
+  # and Phase 7 gate-check criteria (not duplicated here).
+  phase7_corrected_track_b_sil_34:
+    description: >
+      Corrected Phase 7 Track B SIL 3–4 flow per ISA finding F-01.
+      Adds SW Validation Verification Report (item †, §6.3.4.12–6.3.4.14) after
+      QUA check on VAL reports and before VMGR final review.
+      workflow.yaml must be updated to reflect this step.
+    workflow_yaml_update_required: true
+    steps:
+      - id: "B0"
+        action: "COD sends Phase 7 V&V request to VMGR"
+      - id: "B1_verification"
+        label: "Step B1 — Verification"
+        action: "VMGR assigns VER; VER produces SW Integration Verification Report (Annex C item 23)"
+      - id: "B1_qua"
+        action: "QUA template check on VER report (item 23)"
+        on_fail: "VER re-issues"
+        on_pass: "proceed"
+      - id: "B1_vmgr_review"
+        action: "VMGR reviews VER report (item 23)"
+        on_reject: "VER reworks; QUA re-checks"
+        on_approve: "proceed to B2"
+      - id: "B2_validation"
+        label: "Step B2 — Validation"
+        action: >
+          VMGR assigns VAL; VAL performs final validation:
+          reviews all phase evidence;
+          produces Software Validation Report (item 25);
+          produces Tools Validation Report (item 26, if applicable);
+          produces Release Note (§7.7.4.12) [authorship per SQAP]
+        on_reject: "VMGR notifies COD; COD notifies PM; PM coordinates rework → full B1–B2 loop repeats"
+        on_approve: "proceed"
+      - id: "B2_qua"
+        action: "QUA template check on VAL reports (items 25, 26)"
+        on_fail: "VAL re-issues; QUA re-checks"
+        on_pass: "proceed"
+      - id: "B2_ver_validation_report"
+        label: "SW Validation Verification Report (ISA F-01 addition)"
+        action: >
+          VER produces Software Validation Verification Report (item †,
+          §6.3.4.12–6.3.4.14): mandatory output recording VER's review of SVaP
+          and the Software Validation Report. Must be named in SVP (§6.2.4.2).
+        normative_clause: "§6.3.4.12, §6.3.4.13, §6.3.4.14"
+        report_item: "†"
+      - id: "B2_vmgr_final"
+        action: "VMGR reviews VER report (item †) and VAL reports (items 25–26) together"
+        on_reject: "VAL/VER reworks; QUA re-checks"
+        on_approve: "VMGR FINAL V&V DECISION — cannot be overridden by COD or PM"
+      - id: "B3"
+        action: "VMGR reports V&V outcome to COD"
+
+  # ── Full SIL-Tiered Independence Constraints ──────────────────────────────────
+  # workflow.yaml encodes SIL 3–4 constraints only. This section encodes the
+  # complete SIL-tiered table from VnV-PROCESS.md (all SIL levels).
+  independence_constraints:
+
+    all_sil:
+      description: "Constraints that apply at ALL SIL levels (0–4)"
+      constraints:
+        - constraint: "Software shall not be released without VAL sign-off"
+          reference: "§5.1.2.8, §6.3.4.16"
+          sil: "0–4"
+        - constraint: "REQ/DES/IMP shall not be TST/INT for the same component"
+          reference: "§5.1.2.12(d), §5.1.2.10(g–h)"
+          sil: "0–4"
+        - constraint: "VER/VAL roles shall remain unchanged throughout project"
+          reference: "§5.1.2.14"
+          sil: "0–4"
+
+    sil_0:
+      description: "SIL 0 — minimal organization; most role combinations permitted"
+      constraints:
+        - constraint: "INT + TST + VER + VAL for same component may all be one person"
+          reference: "§5.1.2.12(b)"
+          sil: "0"
+        - constraint: "VER/VAL shall not be REQ/DES/IMP for the same component"
+          reference: "§5.1.2.12(e)"
+          sil: "0"
+        - constraint: "ASR waivable if ISO 9001 cert available"
+          reference: "§6.4.1.2"
+          sil: "0"
+
+    sil_12:
+      description: "SIL 1–2 — permissive organization; no VMGR required"
+      constraints:
+        - constraint: "VER and VAL MUST NOT hold REQ/DES/IMP/INT/TST roles — mandatory regardless of org structure"
+          reference: "§5.1.2.11(h)"
+          sil: "1–2"
+        - constraint: "VER+VAL may be same person"
+          reference: "§5.1.2.11(d)"
+          sil: "1–2"
+        - constraint: "ASR is mandatory; no ISO 9001 waiver at SIL 1–2"
+          reference: "§5.1.2.11(k), §6.4.1.1"
+          sil: "1–2"
+        - constraint: "ASR is independent from project; reports to Safety Authority"
+          reference: "§5.1.2.4, §5.1.2.11(k)"
+          sil: "1–2"
+        - constraint: "VER and VAL may report to PM (§5.1.2.11(e)); role-combination prohibition still mandatory"
+          reference: "§5.1.2.11(e), §5.1.2.11(h)"
+          sil: "1–2"
+
+    sil_34:
+      description: "SIL 3–4 — strict independence; VMGR required; all below are mandatory"
+      note: "Also encoded in activities/workflow.yaml independence_constraints_sil_34 — not duplicated here."
+      see: "activities/workflow.yaml#independence_constraints_sil_34"
+      constraints:
+        - constraint: "VAL shall not report to PM"
+          reference: "§5.1.2.10(f)"
+          sil: "3–4"
+        - constraint: "COD routes ALL V&V work through VMGR — no direct COD→VER or COD→VAL"
+          reference: "§5.1.2.10(e–f); platform"
+          sil: "3–4"
+        - constraint: "COD CANNOT override VMGR V&V decisions"
+          reference: "Platform rule; basis §5.1.2.10(e–f)"
+          sil: "3–4"
+        - constraint: "VMGR does NOT report to COD or PM"
+          reference: "§5.1.2.10(f); platform"
+          sil: "3–4"
+        - constraint: "VER reports to VMGR"
+          reference: "§5.1.2.10(e); platform"
+          sil: "3–4"
+        - constraint: "VER/VAL shall not hold REQ/DES/IMP/INT/TST roles"
+          reference: "§5.1.2.10(g–i)"
+          sil: "3–4"
+        - constraint: "VER+VAL same person: only with ASR approval"
+          reference: "§5.1.2.10(n)"
+          sil: "3–4"
+        - constraint: "ASR is independent from ALL project roles including COD"
+          reference: "§5.1.2.5–5.1.2.6, §5.1.2.10(m), §6.4.1.1, §6.4.4.1"
+          sil: "3–4"
+
+  # ── VER+VAL Combination Rules by SIL Tier ────────────────────────────────────
+  # Decision table for agents determining if VER+VAL role combination is permitted.
+  ver_val_combination_rules:
+    - sil_tier: "SIL 0"
+      combination_permitted: true
+      conditions: "INT+TST+VER+VAL for the same component may be one person"
+      reference: "§5.1.2.12(b)"
+      residual_prohibition: "VER/VAL shall not be REQ/DES/IMP for same component (§5.1.2.12(e))"
+    - sil_tier: "SIL 1–2"
+      combination_permitted: true
+      conditions: "VER+VAL may be the same person"
+      reference: "§5.1.2.11(d)"
+      residual_prohibition: "VER/VAL shall not hold REQ/DES/IMP/INT/TST roles (§5.1.2.11(h))"
+    - sil_tier: "SIL 3–4"
+      combination_permitted: false
+      conditions: "VER+VAL same person is NOT permitted without explicit ASR approval"
+      asr_approval_required: true
+      reference: "§5.1.2.10(n)"
+
+  # ── Cross-References to Other YAML Files ─────────────────────────────────────
+  # Content from VnV-PROCESS.md that is ALREADY encoded in other YAML files.
+  # Do not re-encode — use these cross-references to locate the canonical encoding.
+  cross_references:
+    - section: "Diagram 3 — Role Interaction Model (SIL 0 / 1–2 / 3–4 org charts)"
+      see: "activities/organization.yaml"
+    - section: "Diagram 5 — Two-Track Loop per Phase (complete encoding)"
+      see: "activities/workflow.yaml#per_phase_loop"
+    - section: "Phase 7 flow — Track A and SIL 0–2 Track B"
+      see: "activities/workflow.yaml#per_phase_phase7"
+      note: "SIL 3–4 Track B is corrected in this file (phase7_corrected_track_b_sil_34)"
+    - section: "Phase 7 gate-check criteria"
+      see: "activities/workflow.yaml#per_phase_phase7.gate_check"
+    - section: "CCB change request re-entry"
+      see: "activities/workflow.yaml#ccb_re_entry"
+    - section: "Phase Transition Authority Summary"
+      see: "activities/workflow.yaml#transition_authority"
+    - section: "Authority structure (COD / PM / VMGR hierarchy)"
+      see: "activities/workflow.yaml#authority"
+    - section: "QUA deliverable touchpoints (all 46 Annex C items)"
+      see: "activities/quality-process.yaml"
+    - section: "Canonical per-item deliverable data (writer, doc_id, template path)"
+      see: "activities/deliverables.yaml"
+
+  # ── Deviations and Platform Decisions ────────────────────────────────────────
+  deviations:
+    - id: "D-01"
+      description: >
+        Item 23 (SW Integration Verification Report) is assigned to Phase 7, not
+        Phase 6. Annex C Table C.1 is the normative basis. This corrects a common
+        misreading that places item 23 in Phase 6.
+      reference: "Annex C Table C.1"
+    - id: "D-02"
+      description: >
+        Item 20 (SW Component Test Report) is assigned to Phase 5 on this platform,
+        not Phase 7. See DELIVERABLES.md Note 5 for rationale.
+      reference: "DELIVERABLES.md Note 5"
+    - id: "D-03"
+      description: >
+        Item 4 (SVP) is written by VER, not PM. Item 5 (SVaP) is written by VAL,
+        not PM. Items 45–46 (Assessment) are written by ASR, not PM.
+      reference: "DELIVERABLES.md; VnV-PROCESS.md Diagram 1 notes"
+    - id: "D-04"
+      description: >
+        Item 27 (Release Note, Phase 7) authorship is unresolved in Annex C
+        (footnote 'a' = project-specific). Projects shall designate the Phase 7
+        Release Note author explicitly in the SQAP.
+      reference: "§7.7.4.12, DELIVERABLES.md Note 3"
+    - id: "D-05"
+      description: >
+        VMGR is a platform-defined role not present in EN 50128:2011 Annex B.
+        Its use at SIL 1–4 must be approved by the Safety Authority and
+        documented in the SQAP.
+      reference: "ORGANIZATION.md Platform Role Notice; §5.1.2.10(e–f)"
+    - id: "D-06"
+      description: >
+        Item † (SW Validation Verification Report) is not assigned an independent
+        Annex C item number in the printed standard. It is produced as the output
+        of VER's review of VAL reports in Phase 7 Step B2 per §6.3.4.12.
+        Subject to Safety Authority confirmation of item numbering.
+        A corresponding update to DELIVERABLES.md is required.
+      reference: "§6.3.4.12, §6.3.4.13, §6.3.4.14; ISA finding F-01"
+    - id: "D-07"
+      description: >
+        activities/workflow.yaml per_phase_phase7.track_b.sil_34 does not yet
+        include the SW Validation Verification Report step (item †). The corrected
+        flow is encoded in this file (phase7_corrected_track_b_sil_34). workflow.yaml
+        must be updated to reflect this correction.
+      reference: "ISA finding F-01; §6.3.4.12"
