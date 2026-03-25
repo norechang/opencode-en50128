@@ -32,17 +32,16 @@
 
 ## APPROVALS
 
-**SIL 0-2 Requirements**: Author (DES), Technical Reviewer (VER), QA Manager  
-**SIL 3-4 Requirements**: Author (DES), Independent Verifier (VER), Independent Validator (VAL), QA Manager, Safety Manager
+**SIL 0–2**: Author (DES), QUA, VER, PM  
+**SIL 3–4**: Author (DES), QUA, VER (independent), VAL (independent), PM
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Author (Designer)** | [Name] | | YYYY-MM-DD |
-| **Technical Reviewer (Verifier)** | [Name] | | YYYY-MM-DD |
-| **QA Manager** | [Name] | | YYYY-MM-DD |
-| **Safety Manager** (SIL 2+) | [Name] | | YYYY-MM-DD |
-| **Independent Verifier** (SIL 3-4) | [Name] | | YYYY-MM-DD |
-| **Independent Validator** (SIL 3-4) | [Name] | | YYYY-MM-DD |
+| **Author (DES)** | [Name] | | YYYY-MM-DD |
+| **QUA** | [Name] | | YYYY-MM-DD |
+| **VER** | [Name] | | YYYY-MM-DD |
+| **VAL** (SIL 3–4) | [Name] | | YYYY-MM-DD |
+| **PM** | [Name] | | YYYY-MM-DD |
 
 ---
 
