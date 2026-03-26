@@ -1,0 +1,34 @@
+# Cppcheck — Static Analysis
+# EN 50128 Tool Catalog Entry
+
+id: cppcheck
+name: Cppcheck Static Analyzer
+origin: third_party
+category: static_analysis
+tcl: T2
+version: "2.13.0"
+location: "system (/usr/bin/cppcheck)"
+en50128_ref: "Table A.19 (Static Analysis — mandatory SIL 3-4), Section 6.7.4.3"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: mandatory
+  sil_2: mandatory
+  sil_3: mandatory
+  sil_4: mandatory
+agents: [VER, IMP, QUA, DES]
+key_flags:
+  sil_3: "--enable=all --xml --xml-version=2 --addon=misra.py --suppress=missingIncludeSystem"
+  sil_2: "--enable=all --xml --xml-version=2"
+  sil_1: "--enable=warning,error"
+qualification_status:
+  status: to_be_provided
+  notes: >
+    T2 tool: static analysis output is reviewed by VER agent; findings addressed by IMP.
+    Validation test suite required: positive cases (clean code), negative cases
+    (null pointer, buffer overflow, uninitialized variable, MISRA violations),
+    boundary cases. Minimum 20 tests for SIL 3-4. Formal report mandatory for SIL 3-4.
+    Required before ISA evaluation.
+  evidence_path: "deliverables/tools/Cppcheck-Tool-Validation-Report.md"
+  template_path: "deliverables/tools/Tool-Validation-Report-template.md"
+  supplier_evidence: null
+  validation_suite_path: "tools/tool-validation/cppcheck/"

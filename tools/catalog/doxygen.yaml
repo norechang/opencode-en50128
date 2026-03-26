@@ -1,0 +1,32 @@
+# Doxygen — Documentation Generator
+# EN 50128 Tool Catalog Entry
+
+id: doxygen
+name: Doxygen Documentation Generator
+origin: third_party
+category: documentation
+tcl: T1
+version: "1.x"
+location: "system (/usr/bin/doxygen) — optional"
+en50128_ref: "Section 7.1 (Documentation), Section 6.7.4.2"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: recommended
+  sil_2: recommended
+  sil_3: recommended
+  sil_4: recommended
+agents: [IMP, DES, COD]
+key_flags:
+  generate: "doxygen Doxyfile"
+  view:     "xdg-open docs/html/index.html"
+installation: "sudo apt-get install doxygen graphviz"
+qualification_status:
+  status: not_required
+  notes: >
+    T1 tool: Doxygen generates documentation from source code comments. Output
+    (HTML/PDF documentation) is reviewed by human agents before use. Documentation
+    is not an automated safety output; it is read and verified by developers and
+    reviewers. No formal qualification required per EN 50128 Section 6.7.4.2.
+  evidence_path: null
+  supplier_evidence: null
+  validation_suite_path: null

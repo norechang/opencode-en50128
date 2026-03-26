@@ -1,0 +1,34 @@
+# Valgrind — Dynamic Memory Analysis
+# EN 50128 Tool Catalog Entry
+
+id: valgrind
+name: Valgrind Memory Analyzer
+origin: third_party
+category: dynamic_analysis
+tcl: T1
+version: "3.21.0"
+location: "system (/usr/bin/valgrind)"
+en50128_ref: "Table A.13 (Dynamic Analysis and Testing — mandatory SIL 3-4), Section 6.7.4.2"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: recommended
+  sil_2: highly_recommended
+  sil_3: highly_recommended
+  sil_4: highly_recommended
+agents: [TST, VER, INT]
+key_flags:
+  standard: "--leak-check=full --show-leak-kinds=all --track-origins=yes"
+  xml:      "--xml=yes --xml-file=valgrind_report.xml --leak-check=full"
+  sil_3:    "--leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1"
+qualification_status:
+  status: not_required
+  notes: >
+    T1 tool: Valgrind output (memory error reports) is reviewed by TST/VER agents
+    and cross-referenced with test results. All reported errors must be investigated
+    and resolved before sign-off; the verdict is human-confirmed, not automatically
+    accepted. No formal qualification required per EN 50128 Section 6.7.4.2.
+    Classification rationale: human review of all output constitutes independent
+    verification. Note: not available on macOS — use Xcode Instruments as alternative.
+  evidence_path: null
+  supplier_evidence: null
+  validation_suite_path: null

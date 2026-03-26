@@ -1,0 +1,40 @@
+# Workspace Manager — Platform-Developed Tool
+# EN 50128 Tool Catalog Entry
+
+id: workspace
+name: Workspace Manager (workspace.py)
+origin: platform_developed
+category: project_management
+tcl: T1
+version: "1.0"
+location: "tools/workspace.py"
+en50128_ref: "Section 5.3 (Lifecycle), Platform Extension, Section 6.7.4.2"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: recommended
+  sil_2: recommended
+  sil_3: recommended
+  sil_4: recommended
+agents: [COD, PM, ALL]
+key_flags:
+  list:     "python3 tools/workspace.py list"
+  switch:   "python3 tools/workspace.py switch <project>"
+  create:   "python3 tools/workspace.py create <name> --sil <level>"
+  status:   "python3 tools/workspace.py status"
+  wf_submit:   "python3 tools/workspace.py wf submit <deliverable> <file>"
+  wf_approve:  "python3 tools/workspace.py wf approve <deliverable>"
+  trace:       "python3 tools/workspace.py trace add <src_id> <dst_id>"
+  trace_report: "python3 tools/workspace.py trace report"
+qualification_status:
+  status: not_required
+  notes: >
+    T1 tool (platform-developed): workspace.py manages project context, workflow
+    state, and traceability links. Its output (workspace state, workflow records,
+    trace links) is reviewed by COD, PM, and CM agents. No automated safety output
+    is produced without human review. Classification rationale: all outputs subject
+    to human verification; the tool does not produce safety evidence autonomously.
+    As a platform-developed tool, no supplier evidence is available — the T1
+    classification depends on maintaining human review of all workspace operations.
+  evidence_path: null
+  supplier_evidence: null
+  validation_suite_path: null

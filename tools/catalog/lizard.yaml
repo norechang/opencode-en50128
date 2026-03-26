@@ -1,0 +1,39 @@
+# Lizard — Cyclomatic Complexity Analyzer
+# EN 50128 Tool Catalog Entry
+
+id: lizard
+name: Lizard Complexity Analyzer
+origin: third_party
+category: complexity_analysis
+tcl: T2
+version: "1.17.x"
+location: "python venv (lizard)"
+en50128_ref: "Table A.19 (Static Analysis — CCN measurement), Section 6.7.4.3"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: recommended
+  sil_2: highly_recommended
+  sil_3: mandatory
+  sil_4: mandatory
+agents: [VER, DES, IMP, QUA]
+key_flags:
+  sil_3: "lizard src/ --CCN 10 --Threshold ccn=10"
+  sil_2: "lizard src/ --CCN 15 --Threshold ccn=15"
+  sil_1: "lizard src/ --CCN 20"
+complexity_limits:
+  sil_0_1: 20
+  sil_2: 15
+  sil_3_4: 10
+qualification_status:
+  status: to_be_provided
+  notes: >
+    T2 tool: complexity metric output used directly to enforce SIL gate criteria
+    (CCN ≤ 10 for SIL 3-4). While metrics are verifiable by manual code inspection,
+    classification as T2 is appropriate because the tool verdict directly gates
+    phase progression. Validation test suite required covering: simple functions,
+    complex nested conditions, loop constructs, boundary cases at CCN threshold.
+    Required before ISA evaluation.
+  evidence_path: "deliverables/tools/Lizard-Tool-Validation-Report.md"
+  template_path: "deliverables/tools/Tool-Validation-Report-template.md"
+  supplier_evidence: null
+  validation_suite_path: "tools/tool-validation/lizard/"

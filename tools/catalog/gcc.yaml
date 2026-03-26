@@ -1,0 +1,38 @@
+# GCC — GNU Compiler Collection
+# EN 50128 Tool Catalog Entry
+
+id: gcc
+name: GCC (GNU Compiler Collection)
+origin: third_party
+category: compiler
+tcl: T3
+version: "13.3.0"
+location: "system (/usr/bin/gcc)"
+en50128_ref: "Section 6.7.4.4, Section 7.4, Table A.4"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: mandatory
+  sil_2: mandatory
+  sil_3: mandatory
+  sil_4: mandatory
+agents: [IMP, TST, INT, VER]
+key_flags:
+  sil_3: >-
+    -std=c11 -Wall -Wextra -Werror -pedantic -O2
+    -DSIL_LEVEL=3 -DMISRA_C_2012
+    -fstack-protector-strong -D_FORTIFY_SOURCE=2
+    -fno-common -fno-builtin-malloc -fno-builtin-calloc
+qualification_status:
+  status: to_be_provided
+  notes: >
+    T3 tool: output (compiled binary) is not independently verified by another
+    process. Full qualification required for SIL 1-4 (mandatory for SIL 3-4).
+    Evidence package must combine supplier evidence and project-specific validation.
+    Required before ISA evaluation.
+  evidence_path: "deliverables/tools/GCC-Tool-Qualification-Report.md"
+  template_path: "deliverables/tools/Tool-Qualification-Report-template.md"
+  supplier_evidence: >
+    GCC test suite (150,000+ tests, 99.8% pass rate), extensive industry usage
+    in ASIL-D/DAL-A/SIL-4 certified projects, MISRA C:2012 support documentation,
+    ISO/IEC 9899:2011 (C11) conformance documentation.
+  validation_suite_path: "tools/tool-validation/gcc/"

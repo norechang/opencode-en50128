@@ -1,0 +1,36 @@
+# MISRA C Checker Wrapper — Platform-Developed Tool
+# EN 50128 Tool Catalog Entry
+
+id: misra-checker
+name: MISRA C Checker Wrapper (check_misra.py)
+origin: platform_developed
+category: misra_compliance
+tcl: T2
+version: "1.0"
+location: "tools/static-analysis/check_misra.py"
+en50128_ref: "Table A.19 (Static Analysis — HR SIL 3-4), Section 6.7.4.3"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: recommended
+  sil_2: highly_recommended
+  sil_3: highly_recommended
+  sil_4: highly_recommended
+agents: [VER, IMP, QUA]
+key_flags:
+  run: "python3 tools/static-analysis/check_misra.py --src src/ --project <name>"
+qualification_status:
+  status: to_be_provided
+  notes: >
+    T2 tool (platform-developed): wraps Cppcheck with MISRA addon. The wrapper
+    output (MISRA compliance report, pass/fail verdict) is used directly in
+    verification decisions. As a platform-developed tool, NO supplier evidence is
+    available — the project must produce ALL qualification/validation evidence.
+    Validation test suite required: verify correct invocation of Cppcheck MISRA
+    addon, correct pass/fail verdict generation, correct report formatting,
+    correct handling of cppcheck failures. Note: Cppcheck itself also requires
+    separate validation (see cppcheck.yaml). Both must be validated independently.
+    Required before ISA evaluation.
+  evidence_path: "deliverables/tools/MisraChecker-Tool-Validation-Report.md"
+  template_path: "deliverables/tools/Tool-Validation-Report-template.md"
+  supplier_evidence: null
+  validation_suite_path: "tools/tool-validation/check-misra/"

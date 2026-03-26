@@ -1,0 +1,39 @@
+# Unity — C Unit Test Framework
+# EN 50128 Tool Catalog Entry
+
+id: unity
+name: Unity C Unit Test Framework
+origin: third_party
+category: test_framework
+tcl: T2
+version: "2.5.x"
+location: "project vendor directory (unity/src/)"
+en50128_ref: "Table A.5 (Verification and Testing), Table A.13 (Dynamic Analysis), Section 6.7.4.3"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: highly_recommended
+  sil_2: highly_recommended
+  sil_3: mandatory
+  sil_4: mandatory
+agents: [TST, IMP, INT]
+key_flags:
+  compile: "gcc -I unity/src unity/src/unity.c test_module.c module.c -o test_module"
+  run:     "./test_module"
+  make:    "make test"
+qualification_status:
+  status: to_be_provided
+  notes: >
+    T2 tool: test framework output (PASS/FAIL verdicts, assertion messages) is used
+    directly to determine test outcomes which feed into phase gate decisions and
+    verification reports. No independent process verifies Unity's own assertion
+    logic. Validation test suite required: verify PASS verdict on passing tests,
+    FAIL verdict on failing tests, correct failure message format, edge cases
+    (null assertions, string comparisons, numeric comparisons). Required before
+    ISA evaluation.
+  evidence_path: "deliverables/tools/Unity-Tool-Validation-Report.md"
+  template_path: "deliverables/tools/Tool-Validation-Report-template.md"
+  supplier_evidence: >
+    Unity is a widely-used, open-source C unit test framework specifically designed
+    for embedded and safety-critical software. Maintained by ThrowTheSwitch.org.
+    Extensive community validation and usage in safety-critical contexts.
+  validation_suite_path: "tools/tool-validation/unity/"

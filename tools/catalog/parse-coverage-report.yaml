@@ -1,0 +1,36 @@
+# Coverage Report Parser — Platform-Developed Tool
+# EN 50128 Tool Catalog Entry
+
+id: parse-coverage-report
+name: Coverage Report Parser (parse_coverage_report.py)
+origin: platform_developed
+category: coverage_analysis
+tcl: T2
+version: "1.0"
+location: "tools/scripts/parse_coverage_report.py"
+en50128_ref: "Table A.21 (Test Coverage for Code), Section 6.7.4.3"
+mandatory_by_sil:
+  sil_0: not_applicable
+  sil_1: recommended
+  sil_2: mandatory
+  sil_3: mandatory
+  sil_4: mandatory
+agents: [TST, VER]
+key_flags:
+  run: "python3 tools/scripts/parse_coverage_report.py <coverage.info> --sil <level> --output <report.md>"
+  exit_codes: "0 = PASS, 1 = FAIL"
+qualification_status:
+  status: to_be_provided
+  notes: >
+    T2 tool (platform-developed): coverage verdicts (PASS/FAIL against Table A.21
+    thresholds) are used directly in SIL phase gate decisions with no independent
+    verification of the parser's own calculation. As a platform-developed tool,
+    NO supplier evidence is available — the project must produce ALL validation
+    evidence. Validation test suite required: verify statement/branch/condition
+    coverage calculations against known reference lcov files, verify threshold
+    enforcement by SIL level, verify correct exit codes, verify uncovered-code
+    reporting. Required before ISA evaluation.
+  evidence_path: "deliverables/tools/ParseCoverageReport-Tool-Validation-Report.md"
+  template_path: "deliverables/tools/Tool-Validation-Report-template.md"
+  supplier_evidence: null
+  validation_suite_path: "tools/tool-validation/parse-coverage-report/"

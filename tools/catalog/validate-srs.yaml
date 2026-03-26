@@ -1,0 +1,43 @@
+# SRS Template Validator — Platform-Developed Tool
+# EN 50128 Tool Catalog Entry
+
+id: validate-srs
+name: SRS Template Validator (validate_srs_template.py)
+origin: platform_developed
+category: document_validation
+tcl: T2
+version: "1.0"
+location: "tools/scripts/validate_srs_template.py"
+en50128_ref: "Section 7.2 (Software Requirements Specification), Table A.2, Section 6.7.4.3"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: recommended
+  sil_2: highly_recommended
+  sil_3: highly_recommended
+  sil_4: highly_recommended
+agents: [REQ, QUA, VER]
+key_flags:
+  run: "python3 tools/scripts/validate_srs_template.py <srs.md> --sil <level>"
+validation_checks:
+  - "Document ID format: DOC-REQ-YYYY-NNN"
+  - "Standard header required fields"
+  - "Document Control version history table"
+  - "SIL-specific approvers (4 for SIL 0-1, 5 for SIL 2, 8 for SIL 3-4)"
+  - "Required sections (Introduction, General Description, Functional Requirements, etc.)"
+  - "Requirements format validation (SHALL/SHOULD/MAY keywords)"
+  - "Requirements ID format: REQ-XXX-NNN or SWREQ-NNN"
+  - "Traceability references to System Requirements and Hazard Log"
+qualification_status:
+  status: to_be_provided
+  notes: >
+    T2 tool (platform-developed): PASS/FAIL verdict affects whether SRS documents
+    are accepted through the QUA check gate. As a platform-developed tool,
+    NO supplier evidence is available — the project must produce ALL validation
+    evidence. Validation test suite required: verify correct PASS on a compliant
+    SRS, verify correct FAIL for each validation check category independently,
+    verify SIL-appropriate approver count enforcement, verify requirements format
+    checking. Required before ISA evaluation.
+  evidence_path: "deliverables/tools/ValidateSRS-Tool-Validation-Report.md"
+  template_path: "deliverables/tools/Tool-Validation-Report-template.md"
+  supplier_evidence: null
+  validation_suite_path: "tools/tool-validation/validate-srs/"

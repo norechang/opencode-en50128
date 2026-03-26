@@ -1,0 +1,41 @@
+# Workflow Manager — Platform-Developed Tool
+# EN 50128 Tool Catalog Entry
+
+id: workflow-manager
+name: Workflow Manager (workflow_manager.py)
+origin: platform_developed
+category: lifecycle_enforcement
+tcl: T1
+version: "1.0"
+location: "tools/workflow_manager.py"
+en50128_ref: "Section 5.3 (Lifecycle), Annex C Table C.1, Section 6.7.4.2"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: recommended
+  sil_2: highly_recommended
+  sil_3: highly_recommended
+  sil_4: highly_recommended
+agents: [COD, PM, VER, ALL]
+key_flags:
+  gate_check: "python3 tools/workflow_manager.py gate-check phase-<N> --sil <level> --project-dir ."
+  status:     "python3 tools/workflow_manager.py status --project-dir ."
+  approvals:  "python3 tools/workflow_manager.py approvals phase-<N> --sil <level>"
+key_capabilities:
+  - "PHASE_APPROVAL_CHAINS — defines required approvals per phase per SIL"
+  - "GateChecker — validates gate criteria before authorising phase transition"
+  - "SIL-dependent enforcement: Advisory (SIL 0-1), Semi-strict (SIL 2), Strict/blocking (SIL 3-4)"
+  - "5 gate criteria: deliverables complete, quality met, traceability complete, reviews obtained, baselines established"
+qualification_status:
+  status: not_required
+  notes: >
+    T1 tool (platform-developed): workflow_manager.py enforces lifecycle gate
+    criteria, but COD and PM agents independently verify gate readiness before
+    accepting any transition. The tool's gate check result is one input to the
+    human-led phase gate decision — it does not autonomously authorise transitions.
+    Classification rationale: human lifecycle authority (COD) validates all gate
+    decisions; tool output is a decision-support aid, not a binding automated verdict.
+    As a platform-developed tool, no supplier evidence is available — the T1
+    classification depends on maintaining COD human oversight of all gate decisions.
+  evidence_path: null
+  supplier_evidence: null
+  validation_suite_path: null

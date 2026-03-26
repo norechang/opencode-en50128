@@ -1,0 +1,44 @@
+# Tool Validation Scripts — Platform-Developed Tools
+# EN 50128 Tool Catalog Entry
+
+id: tool-validation-scripts
+name: Tool Validation Scripts (check-tool-versions.sh, run-all-validations.sh)
+origin: platform_developed
+category: tool_qualification
+tcl: T1
+version: "1.0"
+location:
+  version_check: "tools/tool-validation/check-tool-versions.sh"
+  run_all:       "tools/tool-validation/run-all-validations.sh"
+en50128_ref: "Section 6.7 (Software Tools and their Validation), Section 6.7.4.2"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: recommended
+  sil_2: mandatory
+  sil_3: mandatory
+  sil_4: mandatory
+agents: [QUA, VER, COD, CM]
+key_flags:
+  check_versions: "bash tools/tool-validation/check-tool-versions.sh"
+  run_all:        "bash tools/tool-validation/run-all-validations.sh"
+scripts:
+  check_tool_versions:
+    purpose: "Verifies installed tool versions match the baselined versions in SCMP"
+    checks: [gcc 13.3.0, cppcheck 2.13.0, lizard 1.17]
+  run_all_validations:
+    purpose: "Iterates over validation subdirectories and reports pass/fail per tool"
+    exit_code: "Non-zero if any validation suite fails"
+qualification_status:
+  status: not_required
+  notes: >
+    T1 tools (platform-developed): the validation scripts themselves are reviewed
+    by QUA/VER agents. Their output (version check results, validation suite
+    pass/fail) is verified by human review before any compliance claim is made.
+    Classification rationale: output is human-reviewed; scripts are simple and
+    inspectable; they do not produce safety evidence autonomously.
+    These scripts are the runners that execute the T2 tool validation suites;
+    they are not themselves T2 because their output is the suite results, which
+    are then reviewed by humans.
+  evidence_path: null
+  supplier_evidence: null
+  validation_suite_path: null

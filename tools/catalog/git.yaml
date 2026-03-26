@@ -1,0 +1,35 @@
+# Git — Version Control System
+# EN 50128 Tool Catalog Entry
+
+id: git
+name: Git Version Control System
+origin: third_party
+category: configuration_management
+tcl: T1
+version: "2.43.0"
+location: "system (/usr/bin/git)"
+en50128_ref: "Table A.9 (Software Configuration Management — mandatory all SILs), Section 6.6"
+mandatory_by_sil:
+  sil_0: mandatory
+  sil_1: mandatory
+  sil_2: mandatory
+  sil_3: mandatory
+  sil_4: mandatory
+agents: [CM, COD, PM, ALL]
+key_flags:
+  baseline:    "git tag -a Baseline-<N> -m '<description>'"
+  log:         "git log --oneline --graph"
+  branch:      "git checkout -b feature/<name>"
+  verify:      "git log --format='%H %s' | head -20"
+qualification_status:
+  status: not_required
+  notes: >
+    T1 tool: Git output (commit history, diffs, tags, branches) is reviewed by
+    CM and COD agents. Repository state is verifiable by human inspection at any
+    time. No formal qualification required per EN 50128 Section 6.7.4.2.
+    Classification rationale: all version control operations produce human-readable
+    artefacts subject to review; the VCS does not generate safety outputs directly.
+    Note: Git configuration (hooks, branch protection) must be documented in SCMP.
+  evidence_path: null
+  supplier_evidence: null
+  validation_suite_path: null

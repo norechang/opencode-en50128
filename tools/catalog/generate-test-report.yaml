@@ -1,0 +1,39 @@
+# Generate Test Report — Platform-Developed Tool
+# EN 50128 Tool Catalog Entry
+
+id: generate-test-report
+name: Test Report Generator (generate_test_report.py)
+origin: platform_developed
+category: reporting
+tcl: T1
+version: "1.0"
+location: "tools/scripts/generate_test_report.py"
+en50128_ref: "Section 7.4, Section 7.5, Annex C (test report deliverable), Section 6.7.4.2"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: recommended
+  sil_2: recommended
+  sil_3: recommended
+  sil_4: recommended
+agents: [TST, VER, QUA]
+key_flags:
+  run: >-
+    python3 tools/scripts/generate_test_report.py <test-results.xml>
+    --template <template.md> --output <report.md>
+    --coverage <coverage.info> --sil <level>
+    --project <name> --doc-id <id> --version <ver> --author <name>
+qualification_status:
+  status: not_required
+  notes: >
+    T1 tool (platform-developed): generates EN 50128 test report documents from
+    JUnit XML and lcov coverage data. Generated reports are reviewed and approved
+    by TST, VER, and QUA agents before being accepted as deliverables. No automated
+    acceptance — the generated report is a draft requiring human sign-off.
+    Classification rationale: all generated content is reviewed; the report cannot
+    be submitted for approval without human review (QUA template check, VER
+    verification sign-off). As a platform-developed tool, no supplier evidence is
+    available — T1 classification depends on maintaining mandatory human review
+    before report acceptance.
+  evidence_path: null
+  supplier_evidence: null
+  validation_suite_path: null

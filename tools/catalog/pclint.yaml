@@ -1,0 +1,41 @@
+# PC-lint Plus — MISRA C Compliance Checker
+# EN 50128 Tool Catalog Entry
+
+id: pclint
+name: PC-lint Plus (MISRA C Checker)
+origin: third_party
+category: misra_compliance
+tcl: T2
+version: "2.0+"
+location: "commercial — not installed by default"
+en50128_ref: "Table A.19 (Static Analysis — HR SIL 3-4), Section 6.7.4.3"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: recommended
+  sil_2: highly_recommended
+  sil_3: highly_recommended
+  sil_4: highly_recommended
+agents: [VER, IMP, QUA]
+key_flags:
+  check:  "pclint64 -i config/pclint-config.lnt src/*.c"
+  report: "pclint64 -i config/pclint-config.lnt -html > misra_report.html src/*.c"
+alternative: >
+  Cppcheck with MISRA addon (free, included — see cppcheck.yaml).
+  PC-lint Plus provides more comprehensive MISRA C:2012 coverage.
+license: "Commercial — contact Gimpel Software"
+url: "https://pclintplus.com/"
+qualification_status:
+  status: to_be_provided
+  notes: >
+    T2 tool: MISRA compliance output used directly in SIL gate decisions.
+    Validation test suite required: verify that known MISRA violations are detected,
+    that compliant code is not falsely flagged, and that suppression mechanism works
+    correctly. Formal report mandatory for SIL 3-4. If using Cppcheck as alternative,
+    see cppcheck.yaml for qualification requirements. Required before ISA evaluation.
+  evidence_path: "deliverables/tools/PClint-Tool-Validation-Report.md"
+  template_path: "deliverables/tools/Tool-Validation-Report-template.md"
+  supplier_evidence: >
+    Gimpel Software provides supplier qualification documentation. PC-lint Plus is
+    widely used in automotive (ISO 26262), avionics (DO-178C), and railway (EN 50128)
+    safety-critical software development.
+  validation_suite_path: "tools/tool-validation/pclint/"

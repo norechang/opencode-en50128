@@ -1,0 +1,34 @@
+# Clang Static Analyzer
+# EN 50128 Tool Catalog Entry
+
+id: clang
+name: Clang Static Analyzer
+origin: third_party
+category: static_analysis
+tcl: T2
+version: "18.x"
+location: "system (/usr/bin/clang, /usr/bin/scan-build)"
+en50128_ref: "Table A.19 (Static Analysis — mandatory SIL 3-4), Section 6.7.4.3"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: recommended
+  sil_2: highly_recommended
+  sil_3: mandatory
+  sil_4: mandatory
+agents: [VER, IMP, QUA]
+key_flags:
+  sil_3: "scan-build -o analysis_results make | clang --analyze -Xanalyzer -analyzer-output=text"
+  sil_2: "scan-build make"
+qualification_status:
+  status: to_be_provided
+  notes: >
+    T2 tool: static analysis output reviewed by VER agent. Used as second independent
+    static analyzer alongside Cppcheck (both mandatory for SIL 3-4 — multiple
+    analyzers required per Table A.19 interpretation). Validation test suite
+    required covering: dead code, use-after-free, null dereference, memory leaks,
+    API misuse. Formal report mandatory for SIL 3-4.
+    Required before ISA evaluation.
+  evidence_path: "deliverables/tools/Clang-Tool-Validation-Report.md"
+  template_path: "deliverables/tools/Tool-Validation-Report-template.md"
+  supplier_evidence: null
+  validation_suite_path: "tools/tool-validation/clang/"

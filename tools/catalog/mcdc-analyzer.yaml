@@ -1,0 +1,43 @@
+# MC/DC Analyzer — Platform-Developed Tool
+# EN 50128 Tool Catalog Entry
+
+id: mcdc-analyzer
+name: MC/DC Analyzer (mcdc_analyzer.py)
+origin: platform_developed
+category: coverage_analysis
+tcl: T1
+version: "1.0"
+location: "tools/mcdc/mcdc_analyzer.py"
+en50128_ref: "Table A.21 (MC/DC coverage — mandatory SIL 3-4), Section 6.7.4.2"
+mandatory_by_sil:
+  sil_0: not_applicable
+  sil_1: not_applicable
+  sil_2: recommended
+  sil_3: mandatory
+  sil_4: mandatory
+agents: [TST, VER, VAL]
+key_flags:
+  analyze: >-
+    python3 tools/mcdc/mcdc_analyzer.py analyze
+    -I <src_dir> --sil 3 --project <name>
+    --format all -o docs/reports/MC-DC-Analysis.md src/**/*.c
+  report: >-
+    python3 tools/mcdc/mcdc_analyzer.py report
+    --vectors docs/reports/MC-DC-Vectors.json
+    --results test/results/test-results.json
+    --sil 3 --project <name> -o docs/reports/MC-DC-Coverage-Evidence.md
+qualification_status:
+  status: not_required
+  notes: >
+    T1 tool (platform-developed): MC/DC analysis output (test vectors, coverage
+    reports, evidence documents) is reviewed by TST and VER agents. The tool's
+    output is used to guide test case writing, not to produce an automated
+    pass/fail verdict without review. All MC/DC test vectors are manually confirmed
+    to exercise the identified conditions before being accepted.
+    Classification rationale: independent human verification of all outputs;
+    no qualification required per EN 50128 Section 6.7.4.2.
+    As a platform-developed tool, no supplier evidence is available; the T1
+    classification depends entirely on maintaining the independent review practice.
+  evidence_path: null
+  supplier_evidence: null
+  validation_suite_path: null

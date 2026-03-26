@@ -1,0 +1,46 @@
+# SAS/SDS Template Validator — Platform-Developed Tool
+# EN 50128 Tool Catalog Entry
+
+id: validate-sas-sds
+name: SAS/SDS Template Validator (validate_sas_sds_template.py)
+origin: platform_developed
+category: document_validation
+tcl: T2
+version: "1.0"
+location: "tools/scripts/validate_sas_sds_template.py"
+en50128_ref: "Section 7.3 (Software Architecture), Section 7.4 (Software Design), Tables A.3/A.4, Section 6.7.4.3"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: recommended
+  sil_2: highly_recommended
+  sil_3: highly_recommended
+  sil_4: highly_recommended
+agents: [DES, QUA, VER]
+key_flags:
+  run_sas: "python3 tools/scripts/validate_sas_sds_template.py <sas.md> --type sas --sil <level>"
+  run_sds: "python3 tools/scripts/validate_sas_sds_template.py <sds.md> --type sds --sil <level>"
+validation_checks:
+  - "Document ID format: DOC-DES-YYYY-NNN or DOC-DES-SAS/SDS-NNN"
+  - "Standard header fields"
+  - "Document Control version history table"
+  - "SIL-specific approvers in Approvals section"
+  - "Required sections (document-type-specific for SAS vs. SDS)"
+  - "Architecture diagrams present (SAS only)"
+  - "Modular approach documented (SIL 2+ mandatory)"
+  - "Interface specifications present"
+  - "Traceability to SRS"
+  - "Design constraints documented (MISRA C, static allocation, complexity limits)"
+qualification_status:
+  status: to_be_provided
+  notes: >
+    T2 tool (platform-developed): PASS/FAIL verdict affects whether SAS/SDS documents
+    are accepted through the QUA check gate. As a platform-developed tool,
+    NO supplier evidence is available — the project must produce ALL validation
+    evidence. Validation test suite required: verify correct PASS on compliant SAS
+    and SDS documents, verify correct FAIL for each of the 10 validation check
+    categories independently, verify document-type-specific checks (SAS vs SDS
+    differ), verify SIL-appropriate enforcement. Required before ISA evaluation.
+  evidence_path: "deliverables/tools/ValidateSASSDS-Tool-Validation-Report.md"
+  template_path: "deliverables/tools/Tool-Validation-Report-template.md"
+  supplier_evidence: null
+  validation_suite_path: "tools/tool-validation/validate-sas-sds/"

@@ -1,0 +1,50 @@
+# QEMU — ARM System Emulator
+# EN 50128 Tool Catalog Entry
+
+id: qemu
+name: QEMU ARM System Emulator
+origin: third_party
+category: hardware_emulation
+tcl_by_usage:
+  functional_testing: T1
+  performance_timing:  T2
+version: "8.2.2"
+location: "system (/usr/bin/qemu-system-arm)"
+en50128_ref: "Table A.6 (Integration Testing — HR SIL 3-4), Section 7.6 (SW/HW Integration)"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: recommended
+  sil_2: highly_recommended
+  sil_3: highly_recommended
+  sil_4: highly_recommended
+agents: [TST, INT, VAL, VER]
+supported_boards:
+  - netduinoplus2    # Cortex-M4
+  - olimex-stm32-h405  # Cortex-M4
+  - netduino2        # Cortex-M3
+  - stm32vldiscovery # Cortex-M3
+key_flags:
+  cortex_m4: "qemu-system-arm -M netduinoplus2 -cpu cortex-m4 -kernel build/<fw>.elf -nographic -serial stdio"
+  olimex:    "qemu-system-arm -M olimex-stm32-h405 -cpu cortex-m4 -kernel build/<fw>.elf -nographic -monitor none -serial stdio"
+known_limitations:
+  - "Timing accuracy: WCET values are estimates, NOT measurements on real hardware"
+  - "Peripheral emulation: GPIO, ADC, PWM, CAN behaviour approximated (not hardware-exact)"
+  - "Interrupt timing: may differ from actual hardware"
+  - "Fault behaviour: cannot emulate hardware faults (stuck pins, ADC failures, EMI)"
+  - "Physical hardware validation required before operational deployment (SIL 3-4 mandatory)"
+qualification_status:
+  status: to_be_provided
+  notes: >
+    TCL varies by usage: T1 for functional/logic testing (output verified by test
+    assertions); T2 for performance/timing estimates (no independent verification of
+    timing accuracy). For T2 usage: validation required to document known limitations,
+    cross-check timing against static WCET analysis, and bound the simulation error.
+    Simulation limitations MUST be documented in all test/integration reports.
+    EN 50128 Section 7.6.4.9: report must disclose simulation environment and
+    acknowledge limitations. Required before ISA evaluation (T2 usage only).
+  evidence_path: "deliverables/tools/QEMU-Tool-Validation-Report.md"
+  template_path: "deliverables/tools/Tool-Validation-Report-template.md"
+  supplier_evidence: >
+    QEMU is an open-source, widely-used system emulator. Version 8.2.2.
+    GPL v2+ licensed. Extensive industry use in embedded software development.
+  validation_suite_path: "tools/tool-validation/qemu/"

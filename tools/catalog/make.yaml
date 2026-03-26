@@ -1,0 +1,34 @@
+# GNU Make — Build Automation
+# EN 50128 Tool Catalog Entry
+
+id: make
+name: GNU Make
+origin: third_party
+category: build_system
+tcl: T2
+version: "4.3"
+location: "system (/usr/bin/make)"
+en50128_ref: "Section 6.6, Section 6.7.4.3"
+mandatory_by_sil:
+  sil_0: recommended
+  sil_1: mandatory
+  sil_2: mandatory
+  sil_3: mandatory
+  sil_4: mandatory
+agents: [IMP, TST, VER, INT]
+key_flags:
+  sil_3: "make all | make test | make coverage | make verify"
+qualification_status:
+  status: to_be_provided
+  notes: >
+    T2 tool: build output is subsequently verified by static analysis and testing,
+    providing independent verification of correct compilation. Validation test suite
+    required for SIL 1-4. Formal report mandatory for SIL 3-4.
+    Required before ISA evaluation.
+  evidence_path: "deliverables/tools/Make-Tool-Validation-Report.md"
+  template_path: "deliverables/tools/Tool-Validation-Report-template.md"
+  supplier_evidence: >
+    GNU Make is an established open-source build tool with decades of use in
+    safety-critical software development environments. Version controlled,
+    well-documented, deterministic behaviour.
+  validation_suite_path: "tools/tool-validation/make/"

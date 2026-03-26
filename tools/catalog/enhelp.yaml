@@ -1,0 +1,34 @@
+# EN50128 Help System — Platform-Developed Tool
+# EN 50128 Tool Catalog Entry
+
+id: enhelp
+name: EN50128 Help System (enhelp.py)
+origin: platform_developed
+category: documentation
+tcl: T1
+version: "1.0"
+location: "tools/enhelp.py"
+en50128_ref: "Section 6.7.4.2, Platform Extension"
+mandatory_by_sil:
+  sil_0: not_applicable
+  sil_1: not_applicable
+  sil_2: not_applicable
+  sil_3: not_applicable
+  sil_4: not_applicable
+agents: [ALL]
+key_flags:
+  list:   "python3 tools/enhelp.py"
+  lookup: "python3 tools/enhelp.py <command>"
+  search: "python3 tools/enhelp.py --search '<topic>'"
+qualification_status:
+  status: not_required
+  notes: >
+    T1 tool (platform-developed): enhelp.py provides command reference lookup and
+    onboarding information. Output is informational only — not safety evidence, not
+    used in any compliance determination. No qualification required per EN 50128
+    Section 6.7.4.2. As a platform-developed tool, no supplier evidence is
+    available; the T1 classification is straightforward given the informational-only
+    nature of the tool.
+  evidence_path: null
+  supplier_evidence: null
+  validation_suite_path: null
