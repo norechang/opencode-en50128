@@ -2,7 +2,7 @@
 
 > **Document ID**: TOOLS-POL-001
 > **Version**: 1.3
-> **Status**: Draft — Pending ISA Review
+> **Status**: ISA PASS — Approved for Phase 8 Assessment Package
 > **Standard**: EN 50128:2011 Railway Software Standard
 > **Scope**: Normative policy for software tool classification (TCL), qualification obligations,
 > tool category requirements by SIL, and tool management across the lifecycle.
@@ -13,7 +13,7 @@
 > **Authored by**: COD (Lifecycle Coordinator)
 > **Reviewed by**: VER (Verifier), QUA (Quality Assurance)
 > **Approved by**: PM (Project Manager) — pending
-> **ISA Review**: Pending Phase 8
+> **ISA Review**: PASS — Round 4 (2026-03-26) — all 15 findings closed (F1–F9, NF1–NF5, OB1)
 
 | Version | Date | Author Role | Change Summary |
 |---------|------|-------------|----------------|
