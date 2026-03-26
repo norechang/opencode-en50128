@@ -12,7 +12,7 @@ standard_section: "7.4.4.7"
 written_by: "TST"
 first_check: "VER"
 second_check: "VAL"
-template_path: ".opencode/skills/en50128-testing/templates/Component-Test-Specification-template.md"
+template_path: "deliverables/component-design/Component-Test-Specification-template.md"
 template_exists: true
 
 # =============================================================================

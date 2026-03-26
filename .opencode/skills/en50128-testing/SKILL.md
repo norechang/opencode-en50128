@@ -34,10 +34,10 @@ logic for software testing per EN 50128 §5.3.4, §7.4–7.7.
 | Authority structure, two-track loop, CCB re-entry | `WORKFLOW.md` |
 | Independence matrix (TST = HR at SIL 3–4) | `ORGANIZATION.md` |
 | §5.3.4, §7.4–7.7, Table A.5, A.13, A.21 | `std/EN50128-2011.md` |
-| Component Test Specification template | `templates/Component-Test-Specification-template.md` |
-| Component Test Report template | `templates/Component-Test-Report-template.md` |
-| Overall Software Test Specification template | `templates/Overall-Software-Test-Specification-template.md` |
-| Overall Software Test Report template | `templates/Overall-Software-Test-Report-template.md` |
+| Component Test Specification template | `deliverables/component-design/Component-Test-Specification-template.md` |
+| Component Test Report template | `deliverables/implementation/Component-Test-Report-template.md` |
+| Overall Software Test Specification template | `deliverables/requirements/Overall-Software-Test-Specification-template.md` |
+| Overall Software Test Report template | `deliverables/validation/Overall-Software-Test-Report-template.md` |
 | Source code (TST input, item 18) | CM `query-location --doc source-code` |
 | Component Design Spec (item 15) | CM `query-location --doc component-design-spec` |
 

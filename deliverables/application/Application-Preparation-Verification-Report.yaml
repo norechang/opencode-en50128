@@ -17,7 +17,7 @@ first_check: "NONE"
 second_check: "NONE"
 
 # ===== Template =====
-template_path: ".opencode/skills/en50128-verification/report-templates/Application-Preparation-Verification-Report.md"
+template_path: "deliverables/application/Application-Preparation-Verification-Report.md"
 template_exists: true
 
 # ===== SIL Requirements =====

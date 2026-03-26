@@ -7,7 +7,7 @@ standard_section: "7.5.4.6"
 written_by: "TST"
 first_check: "VER"
 second_check: "QUA"
-template_path: ".opencode/skills/en50128-testing/templates/Component-Test-Report-template.md"
+template_path: "deliverables/implementation/Component-Test-Report-template.md"
 template_exists: true
 
 sil_requirements:

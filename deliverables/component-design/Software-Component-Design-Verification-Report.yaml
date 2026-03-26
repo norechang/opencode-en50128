@@ -10,7 +10,7 @@ standard_section: "7.4.4.11"
 written_by: "VER"
 first_check: "NONE"
 second_check: "VAL"
-template_path: ".opencode/skills/en50128-verification/report-templates/Software-Component-Design-Verification-Report.md"
+template_path: "deliverables/component-design/Software-Component-Design-Verification-Report.md"
 template_exists: true
 
 sil_requirements:

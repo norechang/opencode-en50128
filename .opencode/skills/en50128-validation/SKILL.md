@@ -204,16 +204,16 @@ Per EN 50128 §5.1.2.8, VAL gives agreement/disagreement for software release.
 
 ## 9. Report Templates Directory
 
-Use the Markdown templates in `report-templates/` when authoring VAL deliverables.
+Use the Markdown templates in `deliverables/` when authoring VAL deliverables.
 The `deliverables/` YAML files are machine-readable requirement specs (SIL criteria,
 evidence requirements, verification criteria) — they complement but do not replace
 the Markdown templates.
 
 | Annex C Item | Markdown Template | Requirements Spec (YAML) |
 |-------------|-------------------|--------------------------|
-| 5 — Software Validation Plan | `report-templates/Software-Validation-Plan.md` | `deliverables/planning/Software-Validation-Plan.yaml` |
-| 25 — Software Validation Report | `report-templates/Software-Validation-Report.md` | `deliverables/validation/Software-Validation-Report.yaml` |
-| 26 — Tools Validation Report | `report-templates/Tools-Validation-Report.md` | `deliverables/validation/Tools-Validation-Report.yaml` |
+| 5 — Software Validation Plan | `deliverables/planning/Software-Validation-Plan-template.md` | `deliverables/planning/Software-Validation-Plan.yaml` |
+| 25 — Software Validation Report | `deliverables/validation/Software-Validation-Report.md` | `deliverables/validation/Software-Validation-Report.yaml` |
+| 26 — Tools Validation Report | `deliverables/validation/Tools-Validation-Report.md` | `deliverables/validation/Tools-Validation-Report.yaml` |
 | 27 — Release Note | *(assign in SQAP; no platform template — §7.7.4.12)* | `deliverables/deployment/Release-Notes.yaml` |
 
 ---

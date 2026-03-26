@@ -17,7 +17,7 @@ first_check: "VER"
 second_check: "VAL"
 
 # ===== Template =====
-template_path: ".opencode/skills/en50128-application/templates/Application-Requirements-Specification-template.md"
+template_path: "deliverables/application/Application-Requirements-Specification-template.md"
 template_exists: true
 
 # ===== SIL Requirements =====

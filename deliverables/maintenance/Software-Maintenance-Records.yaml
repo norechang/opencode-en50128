@@ -17,7 +17,7 @@ first_check: "QUA"
 second_check: "VAL"
 
 # ===== Template =====
-template_path: ".opencode/skills/en50128-configuration/templates/Software-Maintenance-Records-template.md"
+template_path: "deliverables/maintenance/Software-Maintenance-Records-template.md"
 template_exists: true
 
 # ===== SIL Requirements =====

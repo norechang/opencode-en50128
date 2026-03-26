@@ -17,7 +17,7 @@ first_check: "VER"
 second_check: "VAL"
 
 # ===== Template =====
-template_path: ".opencode/skills/en50128-testing/templates/Overall-Software-Test-Report-template.md"
+template_path: "deliverables/validation/Overall-Software-Test-Report-template.md"
 template_exists: true
 
 # ===== SIL Requirements =====

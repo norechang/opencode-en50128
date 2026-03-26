@@ -264,7 +264,7 @@ jobs:
 
 ### Tool Qualification Report Template
 
-**File**: `.opencode/skills/en50128-tools/templates/Tool-Qualification-Report-template.md`  
+**File**: `deliverables/tools/Tool-Qualification-Report-template.md`  
 **Purpose**: Document tool qualification evidence for T3 tools (compilers, linkers)  
 **Mandatory For**: SIL 1-4 (T3 tools)
 
@@ -284,7 +284,7 @@ jobs:
 
 ```bash
 # Create GCC Qualification Report from template
-cp .opencode/skills/en50128-tools/templates/Tool-Qualification-Report-template.md \
+cp deliverables/tools/Tool-Qualification-Report-template.md \
    docs/tool-qualification/GCC-Qualification-Report.md
 
 # Fill in template sections
@@ -301,7 +301,7 @@ python3 tools/workspace.py wf submit \
 
 ### Tool Validation Report Template
 
-**File**: `.opencode/skills/en50128-tools/templates/Tool-Validation-Report-template.md`  
+**File**: `deliverables/tools/Tool-Validation-Report-template.md`  
 **Purpose**: Document tool validation evidence for T2 tools (static analyzers, coverage tools)  
 **Mandatory For**: SIL 3-4 (T2 tools)
 
@@ -319,7 +319,7 @@ python3 tools/workspace.py wf submit \
 
 ```bash
 # Create Cppcheck Validation Report from template
-cp .opencode/skills/en50128-tools/templates/Tool-Validation-Report-template.md \
+cp deliverables/tools/Tool-Validation-Report-template.md \
    docs/tool-qualification/Cppcheck-Validation-Report.md
 
 # Fill in template sections
@@ -416,7 +416,7 @@ gcc -std=c11 -Wall -Wextra -Werror -O2 \
 # Expected: "All GCC validation tests PASSED"
 
 # Step 4: Create Tool Qualification Report
-cp .opencode/skills/en50128-tools/templates/Tool-Qualification-Report-template.md \
+cp deliverables/tools/Tool-Qualification-Report-template.md \
    docs/tool-qualification/GCC-Qualification-Report.md
 vim docs/tool-qualification/GCC-Qualification-Report.md
 
@@ -463,7 +463,7 @@ cat validation-results.txt
 # Expected: "All validation tests PASSED"
 
 # Step 4: Create Tool Validation Report
-cp .opencode/skills/en50128-tools/templates/Tool-Validation-Report-template.md \
+cp deliverables/tools/Tool-Validation-Report-template.md \
    docs/tool-qualification/Cppcheck-Validation-Report.md
 vim docs/tool-qualification/Cppcheck-Validation-Report.md
 

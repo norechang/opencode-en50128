@@ -17,7 +17,7 @@ first_check: "VER"
 second_check: "VAL"
 
 # ===== Template =====
-template_path: ".opencode/skills/en50128-deployment/templates/Software-Release-and-Deployment-Plan-template.md"
+template_path: "deliverables/deployment/Software-Release-and-Deployment-Plan-template.md"
 template_exists: true
 
 # ===== SIL Requirements =====

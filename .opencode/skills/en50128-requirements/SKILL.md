@@ -29,7 +29,7 @@ algorithm, quality rules, traceability rules, and defect remediation logic.
 | Authority structure, two-track loop, rework path | `WORKFLOW.md` |
 | Independence matrix (REQ = No at all SIL levels) | `ORGANIZATION.md` |
 | §7.2 SRS requirements, Table A.2 techniques, §7.2.4.5 traceability | `std/EN50128-2011.md` |
-| SRS template (primary artifact for item 6) | `templates/Software-Requirements-Specification-template.md` |
+| SRS template (primary artifact for item 6) | `deliverables/requirements/Software-Requirements-Specification-template.md` |
 | SAF phase footprint, Hazard Log ownership | `tasks/SAFETY_ENGINEERING.md` |
 | Canonical document paths at runtime | CM `query-location` |
 
@@ -68,7 +68,7 @@ Follow these 15 steps in order. Do not skip steps.
    - System Safety Requirements Specification
    If any are missing, halt and report to PM with the specific missing document(s).
 
-4. **Load the SRS template** from `templates/Software-Requirements-Specification-template.md`.
+4. **Load the SRS template** from `deliverables/requirements/Software-Requirements-Specification-template.md`.
    Fill the Document Control block (doc ID = `DOC-SRS-YYYY-001`, version = `0.1 DRAFT`).
 
 5. **Fill the Approvals table** using project SIL level to determine required signatories:

@@ -12,7 +12,7 @@ standard_section: "6.2.4"
 written_by: "VER"
 first_check: "NONE"  # No first check for planning documents
 second_check: "VAL"
-template_path: ".opencode/skills/en50128-verification/report-templates/Software-Verification-Plan-template.md"
+template_path: "deliverables/planning/Software-Verification-Plan-template.md"
 template_exists: true
 
 # =============================================================================

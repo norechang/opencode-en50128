@@ -293,7 +293,7 @@ Produced at each phase gate; archived under CM control.
 ## 10. QUA Review Report Output
 
 **Document ID**: `QUA-REVIEW-[YYYY]-[NNN]`  
-**Template**: `templates/QA-Review-Report-template.md`  
+**Template**: `deliverables/quality/QA-Review-Report-template.md`  
 **Canonical path**: obtain from CM `query-location --doc QUAREPORT`
 
 The review report records:

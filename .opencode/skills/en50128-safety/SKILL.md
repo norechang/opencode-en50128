@@ -50,9 +50,9 @@ Full phase activity map: `tasks/SAFETY_ENGINEERING.md` Section 1.
 | System-level FMEA/FTA/HAZOP sources | `std/EN 50126-1-2017.md` §6.3, D.27, D.30, D.32 |
 | CCF = HR SIL 3–4; Tolerable Hazard Rates | `std/EN 50126-2-2017.md` §10 Table 8, Table F.2 item 11 |
 | Step-by-step analysis procedures | `workflows/safety-analysis-procedures.md` |
-| Hazard Log template | `templates/Hazard-Log-template.md` |
-| FMEA Report template | `templates/FMEA-template.md` |
-| FTA Report template | `templates/FTA-template.md` |
+| Hazard Log template | `deliverables/safety/Hazard-Log-template.md` |
+| FMEA Report template | `deliverables/safety/FMEA-template.md` |
+| FTA Report template | `deliverables/safety/FTA-template.md` |
 | Canonical document paths | CM `query-location` |
 
 ---
@@ -84,7 +84,7 @@ Algorithm:
    a. For each software-relevant hazard: identify fault modes
       (NULL pointer, overflow, state machine stuck-at, uninitialized variable)
    b. Record fault → effect → safeguard in Hazard Log SEEA section
-6. Write Hazard Log to canonical path using templates/Hazard-Log-template.md
+6. Write Hazard Log to canonical path using deliverables/safety/Hazard-Log-template.md
 7. Report to PM: Hazard Log created; REQ-SAFE-xxx list provided to REQ
 ```
 
@@ -114,7 +114,7 @@ Algorithm — FMEA (bottom-up):
       - Detection (1–10, inverse: 1 = always detected, 10 = undetectable)
       - RPN = Severity × Occurrence × Detection
       - Recommended action if RPN ≥ threshold (project-defined, typically ≥ 100)
-4. Write FMEA Report using templates/FMEA-template.md
+4. Write FMEA Report using deliverables/safety/FMEA-template.md
 5. Update Hazard Log: link failure modes to HAZ-xxx entries; update mitigations
 
 Algorithm — FTA (top-down, for hazards with severity ≥ 8):
@@ -130,7 +130,7 @@ Algorithm — FTA (top-down, for hazards with severity ≥ 8):
       - NOT Mandatory; include if project SQAP selects it
       - Typical CCF causes: common design faults, shared HW platform, EMI, common power
    f. Calculate top-event probability if quantitative data available
-3. Write FTA Report using templates/FTA-template.md
+3. Write FTA Report using deliverables/safety/FTA-template.md
 4. Update Hazard Log: add FTA findings; update residual risk and mitigation entries
 ```
 

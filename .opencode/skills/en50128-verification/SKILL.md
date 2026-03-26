@@ -84,7 +84,7 @@ When PM or COD requests VER to author a Verification Report for a phase:
    d. Apply evidence_requirements[].verification_criteria
    e. Record PASS / FAIL / OBSERVATION per criterion
 4. If SIL 3-4: confirm verifier independence from all development roles
-5. Select report template from report-templates/ (Section 10 table)
+ 5. Select report template from deliverables/<phase>/ (Section 10 table)
 6. Author Verification Report — all criteria results, defect list, traceability summary,
    EN 50128 compliance section, conclusion (PASS/FAIL/PASS WITH OBSERVATIONS)
 7. Write report to docs/<phase>/<DocID>.md
@@ -216,16 +216,16 @@ a project-defined acceptance criterion documented in the SVP.
 
 | Item | Template File | Location |
 |------|--------------|----------|
-| 2 | Software-SQAP-Verification-Report.md | `report-templates/` |
+| 2 | Software-SQAP-Verification-Report.md | `deliverables/planning/` |
 | 4 | *(SVP — not a report template; author per §6.2.4.2)* | — |
-| 8 | Software-Requirements-Verification-Report.md | `report-templates/` |
-| 14 | Software-Architecture-Design-Verification-Report.md | `report-templates/` |
-| 17 | Software-Component-Design-Verification-Report.md | `report-templates/` |
-| 19 | Software-Source-Code-Verification-Report.md | `report-templates/` |
-| 23 | Software-Integration-Verification-Report.md | `report-templates/` |
-| † | Software-Validation-Verification-Report.md | `report-templates/` |
-| 40 | Software-Deployment-Verification-Report.md | `report-templates/` |
-| 44 | Software-Maintenance-Verification-Report.md | `report-templates/` |
+| 8 | Software-Requirements-Verification-Report.md | `deliverables/requirements/` |
+| 14 | Software-Architecture-Design-Verification-Report.md | `deliverables/architecture/` |
+| 17 | Software-Component-Design-Verification-Report.md | `deliverables/component-design/` |
+| 19 | Software-Source-Code-Verification-Report.md | `deliverables/implementation/` |
+| 23 | Software-Integration-Verification-Report.md | `deliverables/integration/` |
+| † | Software-Validation-Verification-Report.md | `deliverables/validation/` |
+| 40 | Software-Deployment-Verification-Report.md | `deliverables/deployment/` |
+| 44 | Software-Maintenance-Verification-Report.md | `deliverables/maintenance/` |
 
 ---
 

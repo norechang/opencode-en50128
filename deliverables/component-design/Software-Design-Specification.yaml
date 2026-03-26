@@ -17,7 +17,7 @@ first_check: "VER"
 second_check: "VAL"
 
 # ===== Template =====
-template_path: ".opencode/skills/en50128-design/templates/Software-Design-Specification-template.md"
+template_path: "deliverables/component-design/Software-Design-Specification-template.md"
 template_exists: true
 
 # ===== SIL Requirements =====

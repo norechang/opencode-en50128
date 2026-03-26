@@ -17,7 +17,7 @@ first_check: "VER"
 second_check: "VAL"
 
 # ===== Template =====
-template_path: ".opencode/skills/en50128-verification/report-templates/Software-SQAP-Verification-Report.md"
+template_path: "deliverables/planning/Software-SQAP-Verification-Report.md"
 template_exists: true
 
 # ===== SIL Requirements =====

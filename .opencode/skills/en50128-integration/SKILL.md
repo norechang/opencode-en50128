@@ -31,10 +31,10 @@ remediation logic for software integration per EN 50128 §5.3.6 and §7.6.
 | Authority structure, two-track loop, CCB re-entry | `WORKFLOW.md` |
 | Independence matrix (INT = No at all SIL levels) | `ORGANIZATION.md` |
 | §5.3.6, §7.6, Table A.6 integration requirements | `std/EN50128-2011.md` |
-| SW Integration Test Specification template | `templates/Software-Integration-Test-Specification-template.md` |
-| SW Integration Test Report template | `templates/Software-Integration-Test-Report-template.md` |
-| HW/SW Integration Test Specification template | `templates/Hardware-Software-Integration-Test-Specification-template.md` |
-| HW/SW Integration Test Report template | `templates/Hardware-Software-Integration-Test-Report-template.md` |
+| SW Integration Test Specification template | `deliverables/integration/Software-Integration-Test-Specification-template.md` |
+| SW Integration Test Report template | `deliverables/integration/Software-Integration-Test-Report-template.md` |
+| HW/SW Integration Test Specification template | `deliverables/architecture/Hardware-Software-Integration-Test-Specification-template.md` |
+| HW/SW Integration Test Report template | `deliverables/integration/Hardware-Software-Integration-Test-Report-template.md` |
 | Software Architecture Specification (item 9) | CM `query-location --doc sas` |
 | Software Design Specification (item 10) | CM `query-location --doc sds` |
 

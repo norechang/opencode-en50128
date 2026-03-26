@@ -12,7 +12,7 @@ standard_section: "7.3.4.18"
 written_by: "DES"
 first_check: "VER"
 second_check: "VAL"
-template_path: ".opencode/skills/en50128-design/templates/Software-Interface-Specifications-template.md"
+template_path: "deliverables/architecture/Software-Interface-Specifications-template.md"
 template_exists: true
 
 # =============================================================================

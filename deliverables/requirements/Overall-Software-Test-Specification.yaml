@@ -12,7 +12,7 @@ standard_section: "7.2.4.16"
 written_by: "TST"
 first_check: "VER"
 second_check: "VAL"
-template_path: ".opencode/skills/en50128-testing/templates/Overall-Software-Test-Specification-template.md"
+template_path: "deliverables/requirements/Overall-Software-Test-Specification-template.md"
 template_exists: true
 
 # =============================================================================

@@ -10,7 +10,7 @@ standard_section: "7.6.4.11"
 written_by: "INT"
 first_check: "VER"
 second_check: "VAL"
-template_path: ".opencode/skills/en50128-integration/templates/Hardware-Software-Integration-Test-Report-template.md"
+template_path: "deliverables/integration/Hardware-Software-Integration-Test-Report-template.md"
 template_exists: true
 
 sil_requirements:

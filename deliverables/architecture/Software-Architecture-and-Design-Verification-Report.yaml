@@ -12,7 +12,7 @@ standard_section: "7.3.4.20"
 written_by: "VER"
 first_check: "NONE"
 second_check: "VAL"
-template_path: ".opencode/skills/en50128-verification/report-templates/Software-Architecture-Design-Verification-Report.md"
+template_path: "deliverables/architecture/Software-Architecture-Design-Verification-Report.md"
 template_exists: true
 
 # =============================================================================

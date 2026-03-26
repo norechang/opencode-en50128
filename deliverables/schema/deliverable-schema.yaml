@@ -97,8 +97,8 @@ properties:
     pattern: "^\\..*\\.md$"
     description: "Relative path to Markdown template file (starting with .)"
     examples:
-      - ".opencode/skills/en50128-requirements/templates/Software-Requirements-Specification-template.md"
-      - ".opencode/skills/en50128-design/templates/Software-Architecture-Specification-template.md"
+      - "deliverables/requirements/Software-Requirements-Specification-template.md"
+      - "deliverables/architecture/Software-Architecture-Specification-template.md"
   
   template_exists:
     type: boolean

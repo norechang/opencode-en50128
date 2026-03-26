@@ -18,7 +18,7 @@ first_check: "VER"
 second_check: "NONE"
 
 # ===== Template =====
-template_path: ".opencode/skills/en50128-quality/templates/Software-Assessment-Plan-template.md"
+template_path: "deliverables/assessment/Software-Assessment-Plan-template.md"
 template_exists: true
 
 # ===== SIL Requirements =====

@@ -7,7 +7,7 @@ standard_section: "7.6.4.3"
 written_by: "INT"
 first_check: "VER"
 second_check: "QUA"
-template_path: ".opencode/skills/en50128-integration/templates/Software-Integration-Test-Specification-template.md"
+template_path: "deliverables/integration/Software-Integration-Test-Specification-template.md"
 template_exists: true
 
 sil_requirements:
