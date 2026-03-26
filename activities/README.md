@@ -18,6 +18,8 @@ Each YAML file answers specific questions an agent needs to act:
 | What deliverables are required, who writes them, who checks them? | `deliverables.yaml` |
 | Which agent maps to which EN 50128 role? | `roles.yaml` |
 | What exactly happens in Phase N? | `phase-N-*.yaml` |
+| How is the V&V process structured across all phases? | `vnv-process.yaml` |
+| How are tools classified (T1/T2/T3) and qualified? | `tool-management.yaml` |
 
 ---
 
@@ -36,6 +38,8 @@ Each YAML file answers specific questions an agent needs to act:
 | `baseline-management.yaml` | Baseline lifecycle, 8 gate baselines, 7-step creation procedure, CR re-entry path; source: `tasks/BASELINE_MANAGEMENT.md` |
 | `quality-process.yaml` | QUA process: per-phase activities, all 46 Annex C touchpoints, two-track gate positions, Table A.9; source: `tasks/QUALITY_PROCESS.md` |
 | `safety-process.yaml` | SAF process: phase activity map, cross-cutting artifacts, Table A.8 (5 entries), EN 50126 companion techniques; source: `tasks/SAFETY_ENGINEERING.md` |
+| `vnv-process.yaml` | V&V process: lifecycle mapping (Phases 1–10), deliverable review chain (all 46 Annex C items), role interaction models (SIL 0/1–2/3–4), VMGR platform extension, two-track execution loop, Phase 7 special flow; source: `tasks/VnV-PROCESS.md` |
+| `tool-management.yaml` | Tool management process: T1/T2/T3 classification decision tree (§3.1.42–§3.1.44), per-SIL qualification requirements, tool catalog integration, §6.7.4.5 T3 validation documentation; source: `TOOLS.md` (ISA PASS v1.3) |
 
 ### Phase Files
 
@@ -123,6 +127,8 @@ WORKFLOW.md         ← human-readable authority & workflow reference (ISA PASS)
 ORGANIZATION.md     ← human-readable organization reference (ISA PASS)
 DELIVERABLES.md     ← human-readable Annex C catalogue (ISA PASS)
 AGENTS.md           ← human-readable agent role reference (ISA PASS)
+TOOLS.md            ← tool catalogue, T1/T2/T3 classification (ISA PASS v1.3)
+tasks/VnV-PROCESS.md ← V&V process reference (ISA PASS)
 ```
 
 The markdown documents are the normative human reference. The YAML files are derived from them and must remain consistent. **Do not modify the ISA-passed markdown documents.** If a discrepancy is found between a YAML file and its source markdown, the markdown is authoritative.
@@ -135,13 +141,14 @@ The markdown documents are the normative human reference. The YAML files are der
 |-------|---------------|
 | **COD** | `lifecycle.yaml`, `workflow.yaml`, all `phase-N-*.yaml` (transitions + gate_check) |
 | **PM** | `phase-N-*.yaml` (activities), `deliverables.yaml`, `roles.yaml` |
-| **VMGR** | `workflow.yaml` (V&V routing), `phase-N-*.yaml` (verification + validation blocks) |
-| **VER** | `phase-N-*.yaml` (verification criteria), `deliverables.yaml` |
-| **VAL** | `phase-7-validation.yaml` (produces reports), all phases (2nd Check role) |
+| **VMGR** | `workflow.yaml` (V&V routing), `vnv-process.yaml`, `phase-N-*.yaml` (verification + validation blocks) |
+| **VER** | `phase-N-*.yaml` (verification criteria), `deliverables.yaml`, `vnv-process.yaml` |
+| **VAL** | `phase-7-validation.yaml` (produces reports), all phases (2nd Check role), `vnv-process.yaml` |
 | **QUA** | `deliverables.yaml` (template paths, doc IDs), `phase-N-*.yaml` (qua_required flags), `quality-process.yaml` |
 | **CM** | `deliverables.yaml` (all 46 items for baseline management), `baseline-management.yaml` |
 | **SAF** | `safety-process.yaml` (phase activity map, Table A.8, artifact list), `phase-N-*.yaml` (SAF activities) |
 | **ASR** | `phase-8-assessment.yaml`, `deliverables.yaml` (all items for review) |
+| **IMP/VER/QUA** | `tool-management.yaml` (T1/T2/T3 classification, qualification workflow) |
 
 ---
 

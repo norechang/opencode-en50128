@@ -105,12 +105,12 @@ The platform is structured in three tiers:
 │  AGENTS.md · LIFECYCLE.md · WORKFLOW.md · ORGANIZATION.md    │
 │  DELIVERABLES.md · TRACEABILITY.md · TOOLS.md                │
 │  tasks/BASELINE_MANAGEMENT.md · tasks/QUALITY_PROCESS.md     │
-│  tasks/SAFETY_ENGINEERING.md                                 │
+│  tasks/SAFETY_ENGINEERING.md · tasks/VnV-PROCESS.md          │
 ├──────────────────────────────────────────────────────────────┤
 │  TIER 2 — Machine-Readable YAML (activities/)                 │
 │  phase-N-*.yaml · workflow.yaml · deliverables.yaml          │
 │  roles.yaml · organization.yaml · lifecycle.yaml             │
-│  traceability.yaml                                           │
+│  traceability.yaml · vnv-process.yaml · tool-management.yaml │
 ├──────────────────────────────────────────────────────────────┤
 │  TIER 3 — Agent & Skill Shells (.opencode/)                   │
 │  Thin behavioral files that reference Tiers 1 & 2.           │
@@ -136,6 +136,7 @@ These files are the single source of truth for all platform rules. They are ISA-
 | [`tasks/BASELINE_MANAGEMENT.md`](tasks/BASELINE_MANAGEMENT.md) | Baseline management lifecycle diagrams, role responsibilities, EN 50128 terminology corrections |
 | [`tasks/QUALITY_PROCESS.md`](tasks/QUALITY_PROCESS.md) | QUA workflow, deliverable touchpoints (all 46 Annex C items), two-track gate positions, Table A.9 SIL-tiered obligations |
 | [`tasks/SAFETY_ENGINEERING.md`](tasks/SAFETY_ENGINEERING.md) | SAF role phase activities, cross-cutting artifacts, hazard-to-validation traceability chain, Table A.8 technique matrix |
+| [`tasks/VnV-PROCESS.md`](tasks/VnV-PROCESS.md) | V&V process lifecycle mapping (Phases 1–10), deliverable review chain (all 46 Annex C items), role interaction models, VMGR platform extension |
 
 ### Machine-Readable YAML (`activities/`)
 
@@ -154,6 +155,8 @@ The `activities/` directory provides machine-readable representations of the lif
 | `baseline-management.yaml` | Baseline lifecycle, 8 gate baselines, 7-step creation procedure, CR re-entry path |
 | `quality-process.yaml` | QUA process: per-phase activities, all 46 Annex C touchpoints, two-track gate positions, Table A.9 |
 | `safety-process.yaml` | SAF process: phase activity map, cross-cutting artifacts, Table A.8 (5 entries), EN 50126 companion techniques |
+| `vnv-process.yaml` | V&V process: VER/VAL/VMGR lifecycle mapping (Phases 1–10), role interactions by SIL, Phase 7 special flow |
+| `tool-management.yaml` | Tool management: T1/T2/T3 classification (§3.1.42–§3.1.44), qualification workflow, §6.7 obligations |
 
 ### OpenCode Tabs
 
@@ -285,10 +288,11 @@ EN50128/
 ├── DELIVERABLES.md                    # Annex C Table C.1 deliverables          ← fundamental doc
 ├── TRACEABILITY.md                    # Traceability rules T1–T15               ← fundamental doc
 ├── TOOLS.md                           # Tool catalog (T1/T2/T3 confidence)      ← fundamental doc
-├── tasks/
-│   ├── BASELINE_MANAGEMENT.md         # Baseline management diagrams, role boundaries ← fundamental doc
-│   ├── QUALITY_PROCESS.md             # QUA workflow, deliverable touchpoints, SIL obligations ← fundamental doc
-│   └── SAFETY_ENGINEERING.md          # SAF phase activities, artifacts, Table A.8 matrix ← fundamental doc
+│   ├── tasks/
+│   │   ├── BASELINE_MANAGEMENT.md         # Baseline management diagrams, role boundaries ← fundamental doc
+│   │   ├── QUALITY_PROCESS.md             # QUA workflow, deliverable touchpoints, SIL obligations ← fundamental doc
+│   │   ├── SAFETY_ENGINEERING.md          # SAF phase activities, artifacts, Table A.8 matrix ← fundamental doc
+│   │   └── VnV-PROCESS.md                 # V&V process lifecycle mapping, role interactions ← fundamental doc
 ├── SETUP.md                           # Installation guide
 ├── CONTRIBUTING.md                    # Contribution guidelines
 ├── CHANGELOG.md                       # Version history
@@ -313,7 +317,9 @@ EN50128/
 │   ├── traceability.yaml             # Traceability rules T1–T15
 │   ├── baseline-management.yaml      # Baseline lifecycle, 8 gate baselines, CR re-entry
 │   ├── quality-process.yaml          # QUA process, all 46 Annex C touchpoints, Table A.9
-│   └── safety-process.yaml           # SAF process, Table A.8 (5 entries), phase map
+│   ├── safety-process.yaml           # SAF process, Table A.8 (5 entries), phase map
+│   ├── vnv-process.yaml              # V&V process, VER/VAL/VMGR lifecycle mapping
+│   └── tool-management.yaml          # Tool management, T1/T2/T3 classification, §6.7
 │
 ├── .opencode/
 │   ├── agents/                        # 14 agent definition files (thin boot scripts)
@@ -427,6 +433,7 @@ These are produced by System Engineering (EN 50126/50129) and consumed by Softwa
 | [`tasks/BASELINE_MANAGEMENT.md`](tasks/BASELINE_MANAGEMENT.md) | Baseline management diagrams, role boundaries, EN 50128 terminology |
 | [`tasks/QUALITY_PROCESS.md`](tasks/QUALITY_PROCESS.md) | QUA workflow, deliverable touchpoints, Table A.9 SIL obligations |
 | [`tasks/SAFETY_ENGINEERING.md`](tasks/SAFETY_ENGINEERING.md) | SAF phase activities, artifacts, hazard traceability chain, Table A.8 |
+| [`tasks/VnV-PROCESS.md`](tasks/VnV-PROCESS.md) | V&V process lifecycle mapping, role interactions, VMGR platform extension |
 | [`SETUP.md`](SETUP.md) | Installation and environment setup |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Contribution guidelines |
 | [`CHANGELOG.md`](CHANGELOG.md) | Version history |

@@ -32,6 +32,8 @@ in structured, LLM-consumable form.
 | `baseline-management.yaml` | Machine-readable baseline lifecycle: 8 gate baselines (Diagram 1), 7-step creation procedure (Diagram 2), CR re-entry path, role boundaries, EN 50128 terminology corrections | `tasks/BASELINE_MANAGEMENT.md (ISA PASS)` |
 | `quality-process.yaml` | Machine-readable QUA process: per-phase activities (Diagram 1), deliverable touchpoints for all 46 Annex C items with `qua_check_type`/`one_pass_rule` fields (Diagram 2), two-track workflow gate positions (Diagram 3), Table A.9 SIL-tiered obligations T1–T8 with phase mapping (Diagram 4), mandatory baseline, deviation register D1–D8 | `tasks/QUALITY_PROCESS.md (ISA PASS)` |
 | `safety-process.yaml` | Machine-readable SAF process: terminology corrections, system inputs (Phase 0 platform extension), per-phase SAF activity map (Phases 1–10), cross-cutting artifacts (Hazard Log, FMEA/FTA reports), Annex C contributions (items 6, 9, 25), `saf_does_not_own[]` (Safety Case, items 45/46, release authority), hazard-to-validation traceability thread (8 steps forward + backward chain), Table A.8 (exactly 5 entries), EN 50126 companion techniques (FMEA/FTA/HAZOP/CCF/Markov with `not_in_table_a8: true`), SAF independence boundaries | `tasks/SAFETY_ENGINEERING.md (ISA PASS)` |
+| `vnv-process.yaml` | Machine-readable V&V process: lifecycle mapping for VER/VAL/VMGR across Phases 1–10, deliverable review chain (all 46 Annex C items), role interaction models by SIL tier (0/1–2/3–4), VMGR platform extension rules, two-track execution loop, Phase 7 special flow (VAL authors reports, COD invokes VAL independently) | `tasks/VnV-PROCESS.md (ISA PASS)` |
+| `tool-management.yaml` | Machine-readable tool management process: T1/T2/T3 classification decision tree grounded in §3.1.42–§3.1.44, per-SIL qualification requirements (Table 1 / §6.7.4.12), §6.7.4.5 T3 validation documentation structure, §6.7.4.4 Note 2 project policy extension for T2, §6.7.4.11 version-change obligations, tool catalog integration, `to_be_provided_tracker` | `TOOLS.md (ISA PASS v1.3)` |
 
 ---
 
@@ -167,8 +169,11 @@ Phase files reference other files by key:
 - EN 50128:2011 Section 5.3 (Lifecycle)
 - EN 50128:2011 Section 5.1.2.10 (Independence wall, SIL 3–4)
 - EN 50128:2011 Annex C Table C.1 (Document Control Summary)
+- EN 50128:2011 §6.7 and §3.1.42–§3.1.44 (Tool classification and qualification)
 - `LIFECYCLE.md` v1.9 (ISA PASS)
 - `WORKFLOW.md` (ISA PASS)
 - `ORGANIZATION.md` (ISA PASS)
 - `DELIVERABLES.md` (ISA PASS)
 - `AGENTS.md` (ISA PASS)
+- `TOOLS.md` v1.3 (ISA PASS)
+- `tasks/VnV-PROCESS.md` (ISA PASS)
