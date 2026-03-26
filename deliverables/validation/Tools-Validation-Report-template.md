@@ -59,7 +59,7 @@ without detection.
 | Class | Definition | Validation Requirement |
 |-------|-----------|----------------------|
 | **T1** | No influence on executable code (e.g., text editors, version control) | None required |
-| **T2** | Supports testing or verification; incorrect output detectable by other means (e.g., test frameworks, coverage tools) | HR for SIL 1–4 |
+| **T2** | Supports testing or verification; incorrect output detectable by other means (e.g., test frameworks, coverage tools) | Normative minimum: §6.7.4.3 (spec/manual) + §6.7.4.10/§6.7.4.11 (CM). A §6.7.4.5-format TVR is a project policy extension per §6.7.4.4 Note 2 (HR where adopted by policy for SIL 1–4) |
 | **T3** | Generates or translates executable code; output errors may propagate undetected (e.g., compilers, linkers, code generators) | Evidence mandatory SIL 3-4 (§6.7.4.4) |
 
 ---
@@ -124,7 +124,10 @@ untested branches for critical safety functions.
 
 ## 4. Tool Validation Activities (§6.7.4.5)
 
-For each T3 tool (and T2 tools selected for validation), document validation activities.
+For each T3 tool, document validation activities. T2 tools do not have a §6.7.4.5 normative
+obligation; if a §6.7.4.5-format record is produced for a T2 tool it is done as a project
+policy extension per §6.7.4.4 Note 2, not as a §6.7.4.5 requirement. Label any such T2
+entries clearly as "T2 — Project Policy Extension (§6.7.4.4 Note 2)".
 
 ### 4.1 TOOL-003 — [Compiler name] (T3)
 

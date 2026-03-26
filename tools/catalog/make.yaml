@@ -21,10 +21,20 @@ key_flags:
 qualification_status:
   status: to_be_provided
   notes: >
-    T2 tool: build output is subsequently verified by static analysis and testing,
-    providing independent verification of correct compilation. Validation test suite
-    required for SIL 1-4. Formal report mandatory for SIL 3-4.
-    Required before ISA evaluation.
+    T2 tool (current classification — see T3 evaluation note below): build output is
+    subsequently verified by static analysis and testing, providing an independent
+    check of correct compilation. Validation test suite required for SIL 1-4.
+    Normative T2 minimum: §6.7.4.3 (obtain spec/manual) + §6.7.4.10/§6.7.4.11
+    (CM/version control). A Tool Validation Report in §6.7.4.5 format is produced
+    as a project policy extension per §6.7.4.4 Note 2 (not a §6.7.4.5 normative
+    obligation for T2 tools). Project policy mandates TVR at SIL 3-4.
+    T3 EVALUATION NOTE (TOOLS.md Section 3): Build systems must be individually
+    evaluated for T3 classification. If Makefile rules or variables directly
+    configure compilation flags (e.g., -DSIL_LEVEL, -O2) or link scripts that
+    propagate unchecked into the executable, those aspects may satisfy §3.1.44
+    ("generates outputs which can directly or indirectly contribute to the
+    executable code") and require T3 qualification. Document evaluation outcome
+    before ISA review. Required before ISA evaluation.
   evidence_path: "deliverables/tools/Make-Tool-Validation-Report.md"
   template_path: "deliverables/tools/Tool-Validation-Report-template.md"
   supplier_evidence: >

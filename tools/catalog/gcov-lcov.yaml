@@ -36,8 +36,11 @@ qualification_status:
     gate decisions. No independent verification of the coverage measurement itself.
     Validation test suite required for gcov and lcov separately, covering:
     instrumented vs uninstrumented comparison, branch coverage accuracy, function
-    coverage, known-coverage reference programs. Formal report mandatory for SIL 3-4.
-    Required before ISA evaluation.
+    coverage, known-coverage reference programs. Normative T2 minimum: §6.7.4.3
+    (obtain spec/manual) + §6.7.4.10/§6.7.4.11 (CM/version control). A Tool
+    Validation Report in §6.7.4.5 format is produced as a project policy extension
+    per §6.7.4.4 Note 2 (not a §6.7.4.5 normative obligation for T2 tools).
+    Project policy mandates TVR at SIL 3-4. Required before ISA evaluation.
   evidence_path: "deliverables/tools/GcovLcov-Tool-Validation-Report.md"
   template_path: "deliverables/tools/Tool-Validation-Report-template.md"
   supplier_evidence: null

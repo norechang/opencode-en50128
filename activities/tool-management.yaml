@@ -54,31 +54,45 @@ tool_management:
 
     T2:
       label: "Validation required"
-      en50128_ref: "§6.7.4.3"
+      en50128_ref: "§6.7.4.3, §6.7.4.10, §6.7.4.11"
       description: >
-        Tool output is used directly but is verified by at least one other
-        independent tool or process. A validation test suite is required to
-        demonstrate the tool behaves correctly for the specific use cases.
+        Tool supports test or verification of the design or executable code, where
+        errors in the tool can fail to reveal defects but cannot directly create
+        errors in the executable software (§3.1.43). Normative T2 obligations are:
+        tool specification or manual (§6.7.4.3) and configuration management /
+        version control (§6.7.4.10, §6.7.4.11).
       qualification_required: true
-      report_type: "Tool Validation Report (TVR)"
+      report_type: "Tool Validation Report (TVR) — project policy extension per §6.7.4.4 Note 2"
       report_template: "deliverables/tools/Tool-Validation-Report-template.md"
-      minimum_test_count:
-        sil_1_2: 10
-        sil_3_4: 20
-      examples: [gcc-make-actually-T3, cppcheck, clang, lizard, gcov-lcov, unity,
-                 pclint, misra-checker, parse-coverage-report, validate-srs,
-                 validate-sas-sds]
+      # NOTE: EN 50128 §6.7.4.5 is a T3-only normative obligation (Table 1).
+      # §6.7.4.4 Note 2 states: "The evidence listed for T3 may also be used for T2 tools
+      # in judging the correctness of their results." This is permissive guidance.
+      # Project policy CHOOSES to produce TVRs in §6.7.4.5 format for T2 tools at SIL 2+
+      # as a project-policy extension — this exceeds the normative minimum.
+      # No minimum_test_count is specified by EN 50128; test coverage is determined
+      # by the validation plan for each specific tool.
+      examples: [cppcheck, clang, lizard, gcov-lcov, unity, pclint, misra-checker,
+                 parse-coverage-report, validate-srs, validate-sas-sds]
       minimum_evidence: >
-        Validation test suite (positive, negative, boundary, regression cases).
-        Tool Validation Report (TVR) with QUA + VER + PM sign-off.
-        For SIL 3-4: formal report is MANDATORY.
+        Normative minimum (all T2 tools, all SILs where T2 applies):
+          - Tool specification or manual defining behaviour and constraints (§6.7.4.3)
+          - Justified version recorded in CM baseline (§6.7.4.10)
+          - Version-change re-justification on any tool update (§6.7.4.11)
+        Project policy extension (§6.7.4.4 Note 2 — not a normative §6.7.4.5 mandate):
+          - Validation test suite (positive, negative, boundary, regression cases)
+          - Tool Validation Report (TVR) with QUA + VER + PM sign-off
+          - Produced for all T2 tools at SIL 2+; HR at SIL 1
 
     T3:
       label: "Full qualification required"
-      en50128_ref: "§6.7.4.4"
+      en50128_ref: "§6.7.4.4, §6.7.4.5"
       description: >
-        Tool output is not verified by any other independent means. Errors in the
-        tool directly affect software safety without opportunity for detection.
+        Tool generates outputs which can directly or indirectly contribute to the
+        executable code (including data) of the safety-related system (§3.1.44).
+        Full qualification evidence required per §6.7.4.4 (and §6.7.4.5 or
+        §6.7.4.6 as applicable). §6.7.4.5 is the normative T3 validation
+        documentation requirement (Table 1); §6.7.4.6 provides compensating
+        measures where §6.7.4.4 evidence cannot be obtained.
       qualification_required: true
       report_type: "Tool Qualification Report (TQR)"
       report_template: "deliverables/tools/Tool-Qualification-Report-template.md"
@@ -232,24 +246,44 @@ tool_management:
 
   # ── Tool Classification Decision Tree ─────────────────────────────────────────
   tool_classification_decision_tree:
-    description: "Use this algorithm to classify any tool as T1, T2, or T3."
+    description: >
+      Use this algorithm to classify any tool as T1, T2, or T3.
+      Based on EN 50128:2011 §3.1.42–§3.1.44 definitions and §6.7.4.12 Table 1.
+      When in doubt, assign the higher TCL. Downgrading from T3 requires
+      documented justification (§6.7.4.2).
     steps:
       - step: 1
-        question: "Is the tool output verified by human review or an independent tool/process before use?"
-        yes: "→ T1 (no qualification required). Document the verification method."
-        no:  "→ proceed to step 2"
+        question: >
+          Does the tool generate outputs which can directly or indirectly
+          contribute to the executable code (including data) of the
+          safety-related system? (§3.1.44 T3 criterion)
+        yes: "→ proceed to step 2 — tool is T3 or T2"
+        no:  "→ T1 (§3.1.42). No qualification required. Document classification rationale."
       - step: 2
-        question: "Is the tool output used directly in the project (not just informational)?"
-        no:  "→ T1 (informational-only output)"
-        yes: "→ proceed to step 3"
-      - step: 3
-        question: "Is the tool output independently verified by another tool or process?"
-        yes: "→ T2 (validation required)"
-        no:  "→ T3 (full qualification required)"
+        question: >
+          Does the tool generate outputs which can DIRECTLY OR INDIRECTLY
+          CONTRIBUTE TO the executable code (including data) of the
+          safety-related system? (§3.1.44 T3 criterion — same test as step 1, now
+          applied to distinguish T3 from T2)
+          OR does the tool support test/verification of the design or executable
+          code where errors can fail to reveal defects but CANNOT DIRECTLY CREATE
+          errors in the executable software? (§3.1.43 T2 criterion)
+        t3_yes: >
+          → T3: tool output directly or indirectly contributes to executable code.
+          Full qualification evidence required (§6.7.4.4, §6.7.4.5 or §6.7.4.6).
+        t2_yes: >
+          → T2: tool supports test/verification; errors fail to reveal defects but
+          cannot directly create errors in executable software (§3.1.43).
+          Normative obligations: §6.7.4.3 (spec/manual) + §6.7.4.10/§6.7.4.11 (CM).
+        neither: >
+          → Re-examine. If in doubt assign T3. Document the re-examination rationale.
     note: >
-      For platform-developed tools claiming T1: the independent verification method
+      For platform-developed tools claiming T1: the independent review method
       MUST be explicitly documented in the catalog entry. The ISA will scrutinise
       T1 claims where tool output influences safety decisions.
+      Build systems (e.g. make) that invoke T3 translators with configuration
+      parameters affecting executable output must be individually evaluated
+      per TOOLS.md Section 3 — such a tool may itself qualify as T3.
 
   # ── SIL-Specific Tool Requirements ────────────────────────────────────────────
   sil_tool_requirements:
@@ -280,9 +314,10 @@ tool_management:
 
     sil_3:
       tool_classification: mandatory
-      t2_validation: mandatory
+      t2_normative_minimum: mandatory          # §6.7.4.3 spec/manual + §6.7.4.10/11 CM
+      t2_tvr_project_policy: mandatory         # project policy per §6.7.4.4 Note 2 — exceeds normative minimum
       t3_qualification: mandatory
-      report_required: mandatory
+      report_required: mandatory               # TQR mandatory for T3 (§6.7.4.5 normative); TVR mandatory by project policy for T2
       version_control: mandatory
       validation_suite: mandatory
       multiple_static_analyzers: mandatory  # Cppcheck AND Clang
@@ -293,9 +328,10 @@ tool_management:
 
     sil_4:
       tool_classification: mandatory
-      t2_validation: mandatory
+      t2_normative_minimum: mandatory          # §6.7.4.3 spec/manual + §6.7.4.10/11 CM
+      t2_tvr_project_policy: mandatory         # project policy per §6.7.4.4 Note 2 — exceeds normative minimum
       t3_qualification: mandatory
-      report_required: mandatory
+      report_required: mandatory               # TQR mandatory for T3 (§6.7.4.5 normative); TVR mandatory by project policy for T2
       version_control: mandatory
       validation_suite: mandatory
       multiple_static_analyzers: mandatory
@@ -493,6 +529,12 @@ tool_management:
         report: "deliverables/tools/Make-Tool-Validation-Report.md"
         validation_suite: "tools/tool-validation/make/"
         status: to_be_provided
+        tcl_evaluation_note: >
+          TOOLS.md Section 3 (build automation note) requires individual evaluation:
+          if make's Makefile configuration parameters directly affect compiler flags
+          or linker inputs that propagate undetected into the compiled output, make
+          may itself qualify as T3. Project MUST document the evaluation outcome and
+          justify T2 assignment with explicit rationale before ISA evaluation.
 
       - id: cppcheck
         tcl: T2

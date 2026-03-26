@@ -189,6 +189,11 @@ All gaps MUST be resolved before Phase 8 (ISA evaluation).
 
 ### Running a T2 validation suite (VER, QUA)
 ```
+NOTE: A T2 TVR in §6.7.4.5 format is produced as a PROJECT POLICY EXTENSION
+under §6.7.4.4 Note 2 — it is NOT a normative §6.7.4.5 obligation for T2 tools.
+The normative T2 minimum is §6.7.4.3 (spec/manual) + §6.7.4.10/§6.7.4.11 (CM).
+Record this distinction in the TVR document header.
+
 1. Read tools/tool-validation/<tool-id>/VALIDATION-PLAN.md
 2. Execute all test cases in tools/tool-validation/<tool-id>/
 3. Document results in the TVR using:
@@ -218,12 +223,24 @@ phase-by-phase process (responsible roles, outputs, and gate criteria per phase)
 ## 5 — Key Policy Points (from TOOLS.md)
 
 - **T1**: no qualification doc required — record independent review method in catalog entry
-- **T2**: validation test suite + report mandatory at SIL 3–4; HR at SIL 1–2
-- **T3**: full qualification evidence + report mandatory at SIL 1–4
+- **T2 normative minimum** (§6.7.4.3, §6.7.4.10, §6.7.4.11): tool specification or manual +
+  justified version lock + version-change re-justification. These apply at all SILs once T2.
+- **T2 project policy extension** (§6.7.4.4 Note 2 — permissive, not a §6.7.4.5 mandate):
+  validation test suite + Tool Validation Report (TVR) in §6.7.4.5 format. Project policy
+  makes this mandatory at SIL 2+; HR at SIL 1. The TVR exceeds the normative minimum.
+  §6.7.4.5 is **T3-only** as a normative obligation (Table 1).
+- **T3**: full qualification evidence (§6.7.4.4) + report per §6.7.4.5 mandatory at SIL 1–4.
+  §6.7.4.5 lists the seven normative items: (a) validation activities, (b) manual version,
+  (c) functions validated, (d) tools/equipment used, (e) results, (f) test cases, (g) discrepancies.
+- **T3 classification test**: Does the tool generate outputs which can *directly or indirectly
+  contribute to the executable code (including data)* of the safety-related system? (§3.1.44)
+- **Build systems** (e.g. make): individually evaluate for T3 per TOOLS.md Section 3 — if
+  Makefile configuration propagates undetected into compiled output, tool may be T3.
 - **Platform-developed T2 tools**: project produces all evidence; no supplier evidence available
 - **Two independent static analyzers** (both `cppcheck` AND `clang`): mandatory SIL 3–4
 - **`to_be_provided`**: must be closed before ISA evaluation; COD tracks closure at gate checks
-- **Version lock**: T2/T3 tool version changes require a CCB change request
+- **Version lock**: T2/T3 tool version changes require a CCB change request (§6.7.4.11 is an
+  unconditional SHALL for all T2/T3 tool version changes regardless of SIL)
 
 Full policy → `TOOLS.md`
 Full SIL matrix → `TOOLS.md §Section 5`

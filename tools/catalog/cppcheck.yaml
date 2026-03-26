@@ -26,8 +26,11 @@ qualification_status:
     T2 tool: static analysis output is reviewed by VER agent; findings addressed by IMP.
     Validation test suite required: positive cases (clean code), negative cases
     (null pointer, buffer overflow, uninitialized variable, MISRA violations),
-    boundary cases. Minimum 20 tests for SIL 3-4. Formal report mandatory for SIL 3-4.
-    Required before ISA evaluation.
+    boundary cases. Normative T2 minimum: §6.7.4.3 (obtain spec/manual) +
+    §6.7.4.10/§6.7.4.11 (CM/version control). A Tool Validation Report in
+    §6.7.4.5 format is produced as a project policy extension per §6.7.4.4 Note 2
+    (not a §6.7.4.5 normative obligation for T2 tools). Project policy mandates
+    TVR at SIL 3-4. Required before ISA evaluation.
   evidence_path: "deliverables/tools/Cppcheck-Tool-Validation-Report.md"
   template_path: "deliverables/tools/Tool-Validation-Report-template.md"
   supplier_evidence: null

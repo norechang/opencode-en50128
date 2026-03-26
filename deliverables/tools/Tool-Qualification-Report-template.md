@@ -37,7 +37,7 @@
 - **Purpose**: [What does the tool do?]
 - **Output**: [What does the tool produce? (e.g., machine code, executables)]
 - **Usage**: [How is the output used? (e.g., executed directly on target system)]
-- **Verification**: [Is the output verified by other means? (e.g., NO - code not independently verified)]
+- **Verification**: [Does the tool generate outputs that directly or indirectly contribute to the executable code (§3.1.44)? (e.g., YES — compiler output IS the executable code; no independent post-compilation verification can detect all code-generation errors)]
 - **Impact of tool error**:
   - [What happens if the tool has a bug?]
   - [Example: Incorrect code generation → software safety failure]

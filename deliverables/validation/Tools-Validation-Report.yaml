@@ -6,7 +6,7 @@ number: 27
 name: "Tools Validation Report"
 abbreviation: "Tools Val Report"
 phase: "validation"
-standard_section: "6.7.4.5"
+standard_section: "6.7.3, 6.7.4.2-6.7.4.11"
 written_by: "VAL"
 first_check: "VER"
 second_check: "NONE"
@@ -94,8 +94,10 @@ evidence_requirements:
     automation_level: "semi-automatic"
     collect_on_agent_action: "validate-tools"
     verification_criteria:
-      - "All required sections present per 6.7.4.5"
-      - "All T2 and T3 tools validated (or alternative evidence)"
+      - "All required T3 sections present per 6.7.4.5 (T3 normative obligation, Table 1)"
+      - "All T3 tools: evidence per 6.7.4.4 (validation or alternative) documented"
+      - "All T2 tools: normative minimum documented (6.7.4.3 spec/manual + 6.7.4.10/11 CM)"
+      - "T2 TVRs (project policy extension per 6.7.4.4 Note 2): if produced, in 6.7.4.5 format"
       - "Validation activities recorded"
       - "Tool versions documented"
       - "Validation results documented"
@@ -264,32 +266,47 @@ en50128_references:
     description: "Deliverable #27 (numbering conflict - actually #26 in table)"
 
 notes: |
-  **Purpose**: Documents validation of software tools to ensure tool failures
+  **Purpose**: Documents qualification of software tools to ensure tool failures
   do not adversely affect software safety. Tools are classified as T1, T2, or T3.
 
-  **Tool Classifications** (EN 50128 Section 3.1):
-  - **T1**: No influence on executable code (e.g., text editors, version control)
-    → No validation required
-  - **T2**: Facilitates testing and verification (e.g., test harness, coverage tools)
-    → Validation highly recommended, may use tool incorrectly
-  - **T3**: Generates/translates executable code (e.g., compilers, code generators)
-    → Evidence MANDATORY for SIL 3+ (validation or alternative per 6.7.4.4)
+  **Tool Classifications** (EN 50128 §3.1.42–§3.1.44):
+  - **T1**: Generates no outputs which can directly or indirectly contribute to the
+    executable code (including data) of the software (§3.1.42)
+    → No qualification required
+  - **T2**: Supports test or verification of the design or executable code, where
+    errors in the tool can fail to reveal defects but cannot directly create errors
+    in the executable software (§3.1.43)
+    → Normative minimum: tool specification/manual (§6.7.4.3) + version control
+      (§6.7.4.10/§6.7.4.11). Project policy extension (§6.7.4.4 Note 2):
+      validation test suite + TVR in §6.7.4.5 format — permissive, not mandatory.
+  - **T3**: Generates outputs which can directly or indirectly contribute to the
+    executable code (including data) of the safety-related system (§3.1.44)
+    → Evidence MANDATORY per §6.7.4.4; documentation per §6.7.4.5 (Table 1)
+      (seven items: a–g). §6.7.4.6 as fallback where §6.7.4.4 evidence unavailable.
+
+  **T2 Obligations — Normative vs. Project Policy**:
+  §6.7.4.5 is a T3-only normative obligation (Table 1). §6.7.4.4 Note 2 states:
+  "The evidence listed for T3 may also be used for T2 tools in judging the
+  correctness of their results." This is permissive guidance. Where this project
+  produces TVRs for T2 tools, this exceeds the normative minimum and is documented
+  as a project policy extension, not a §6.7.4.5 obligation.
 
   **Example Tool Classifications**:
   - **T1**: git, vim, Doxygen (documentation generator)
   - **T2**: gcov, lcov, cppcheck, valgrind, Unity (test framework)
   - **T3**: gcc (compiler), linker, code generators
 
-  **Alternative Evidence for T3 Tools** (6.7.4.4):
-  Instead of tool validation, T3 tools may use:
+  **Alternative Evidence for T3 Tools** (§6.7.4.4):
+  Instead of tool validation per §6.7.4.5, T3 tools may use:
   a) History of successful use in similar environments
   b) Tool validation (this deliverable)
   c) Diverse redundant code to detect tool-introduced faults
   d) Compliance with SIL requirements
   e) Other appropriate methods
+  Where none of the above is available: §6.7.4.6 compensating measures apply.
 
-  **Validation Activities** (6.7.4.5):
-  For each T3 tool validated, document:
+  **T3 Validation Documentation** (§6.7.4.5 — normative for T3, Table 1):
+  For each T3 tool validated, document all seven items:
   a) Validation activities performed
   b) Tool manual version
   c) Tool functions validated
@@ -300,28 +317,30 @@ notes: |
 
   **SIL-Specific Requirements**:
   - **SIL 0**: Tool validation recommended for T3
-  - **SIL 1-2**: Tool validation HIGHLY RECOMMENDED for T3
-  - **SIL 3-4**: Evidence MANDATORY for T3 (validation or alternative per 6.7.4.4)
+  - **SIL 1–2**: Tool validation HIGHLY RECOMMENDED for T3
+  - **SIL 3–4**: Evidence MANDATORY for T3 (§6.7.4.4 + §6.7.4.5 or §6.7.4.6)
 
   **Workflow**:
   1. VER creates inventory of all tools used in project
-  2. VER classifies tools as T1/T2/T3
-  3. VER justifies T2/T3 classifications (6.7.4.2)
-  4. VER obtains tool manuals/specifications (6.7.4.3)
-  5. For each T3 tool: VER performs validation OR collects alternative evidence
-  6. VER documents validation activities (6.7.4.5)
-  7. VER documents validation results
-  8. CM ensures tool version control (6.7.4.10-11)
-  9. VER creates Tools Validation Report
+  2. VER classifies tools as T1/T2/T3 using §3.1.42–§3.1.44 definitions
+  3. VER justifies T2/T3 classifications (§6.7.4.2)
+  4. VER obtains tool manuals/specifications (§6.7.4.3)
+  5. For each T3 tool: VER performs validation (§6.7.4.5) OR collects
+     alternative evidence (§6.7.4.4) OR applies §6.7.4.6 compensating measures
+  6. For each T2 tool: VER confirms spec/manual and version control (normative
+     minimum). If project policy mandates TVR: produce in §6.7.4.5 format
+     with label as project policy extension per §6.7.4.4 Note 2.
+  7. CM ensures tool version control (§6.7.4.10–§6.7.4.11)
+  8. VER creates Tools Validation Report
 
   **Common Tools in Railway Software**:
-  - **Compiler (T3)**: gcc - MANDATORY validation or alternative evidence (SIL 3+)
-  - **Coverage (T2)**: gcov/lcov - validation highly recommended
-  - **Static Analysis (T2)**: cppcheck, PC-lint - validation highly recommended
-  - **Test Framework (T2)**: Unity, CUnit - validation highly recommended
-  - **Version Control (T1)**: git - no validation required
+  - **Compiler (T3)**: gcc — MANDATORY evidence (§6.7.4.4/§6.7.4.5 or §6.7.4.6, SIL 3+)
+  - **Coverage (T2)**: gcov/lcov — validation recommended (project policy: HR at SIL 2+)
+  - **Static Analysis (T2)**: cppcheck, PC-lint — validation recommended (project policy)
+  - **Test Framework (T2)**: Unity, CUnit — validation recommended (project policy)
+  - **Version Control (T1)**: git — no validation required
 
-  **Compiler Validation Example** (6.7.4.6 Note 2):
+  **Compiler Validation Example** (§6.7.4.6 Note 2):
   For non-trusted compiler (T3), fitness for purpose justified by:
   - High test coverage of object code
   - Checks/analyses detect compiler-introduced errors

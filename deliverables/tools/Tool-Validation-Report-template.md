@@ -29,6 +29,13 @@
 
 **Classification**: T2 - Validation Required
 
+> **NOTE (normative basis):** A T2 Tool Validation Report in §6.7.4.5 format exceeds the
+> normative minimum for T2. The normative minimum for T2 is §6.7.4.3 (obtain tool spec/manual)
+> + §6.7.4.10/§6.7.4.11 (CM/version control). Producing a §6.7.4.5-structured TVR for T2 tools
+> is a **project policy extension** permitted by §6.7.4.4 Note 2 ("evidence listed for T3 may
+> also be used for T2 tools in judging the correctness of their results") — it is **not** a
+> §6.7.4.5 normative obligation. Refer to TOOLS.md Section 4 for policy applicability.
+
 **Justification**:
 
 [Provide detailed justification for T2 classification]
