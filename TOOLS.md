@@ -1,7 +1,7 @@
 # EN 50128 Software Tools — Classification, Qualification, and Management Policy
 
 > **Document ID**: TOOLS-POL-001
-> **Version**: 1.2
+> **Version**: 1.3
 > **Status**: Draft — Pending ISA Review
 > **Standard**: EN 50128:2011 Railway Software Standard
 > **Scope**: Normative policy for software tool classification (TCL), qualification obligations,
@@ -20,6 +20,7 @@
 | 1.0 | 2026-03-26 | COD | Initial release as fundamental policy document |
 | 1.1 | 2026-03-26 | COD | ISA review findings F1–F9 resolved (CONDITIONAL PASS → rework) |
 | 1.2 | 2026-03-26 | COD | ISA re-review findings NF1–NF3 resolved: NF1 (Major) — corrected §6.7.4.5 T2 attribution in Section 4 Phase 4 box and Section 5 SIL matrix; NF2 (Minor) — rewrote T3 branch of decision tree using exact §3.1.44 output-contribution language; NF3 (Minor) — added §6.7.4.11 uniform-SHALL note to Version-change re-justification row |
+| 1.3 | 2026-03-26 | COD | ISA Round 3 findings NF4–NF5 resolved and OB1 addressed: NF4 (Major) — corrected T2 bullet in Section 1 TCL Assignment Obligations to accurately reflect normative minimum (§6.7.4.3/§6.7.4.10/§6.7.4.11) vs. permissive §6.7.4.4 Note 2 extension; NF5 (Minor) — replaced unsupported 'cannot be independently verified' clause in Section 6 translator paragraph with normatively accurate §3.1.44/§6.7.4.4–6 text; OB1 — replaced '(ASR)' with '(ISA)' in Section 7 |
 
 All agents MUST consult this document before selecting, invoking, or reporting on any tool.
 Specific tool instances, versions, invocation flags, and qualification evidence are recorded in
@@ -117,7 +118,12 @@ The following definitions are verbatim from EN 50128:2011 §3.1.42–§3.1.44.
   ensures any tool failure remains detectable — this is required by the §6.7.1.1 objective,
   which applies to all tool classes including T1. If no such measure can be identified, the
   tool must be re-evaluated for T2 or T3 classification.
-- **T2**: Validation test suite and validation report required (§6.7.4.3, §6.7.4.10, §6.7.4.11).
+- **T2**: Normative obligations (§6.7.4.3, §6.7.4.10, §6.7.4.11): tool specification or manual
+  defining behaviour and constraints; justified version lock; version-change re-justification.
+  A validation test suite and evidence record in §6.7.4.5 format MAY be produced as a project
+  policy choice under §6.7.4.4 Note 2 ("the evidence listed for T3 may also be used for T2
+  tools in judging the correctness of their results") — this is permissive guidance, NOT a
+  normative T2 mandate.
   - Tool SHALL have a specification or manual defining behaviour and constraints.
   - Configuration management SHALL ensure only justified versions are used.
   - Each new version SHALL be re-justified.
@@ -444,14 +450,15 @@ combined-set argument (obligation 2). The two obligations are complementary, not
 Where automatic code generation or similar automatic translation takes place, the suitability
 of the translator for safety-related software SHALL be evaluated at the point in the
 development lifecycle where development support tools are selected (Phase 3 or Phase 5 as
-applicable). Translators are T3 by definition — they produce executable software output that
-cannot be independently verified by a separate tool alone.
+applicable). Translators are T3 by definition — they generate outputs which can directly or
+indirectly contribute to the executable code of the safety-related system (§3.1.44). Full T3
+qualification obligations apply (§6.7.4.4, §6.7.4.5 or §6.7.4.6).
 
 ---
 
 ## Section 7 — ISA Evaluation Obligations {#section-7}
 
-The Independent Safety Assessor (ASR) will examine tool qualification evidence as part of the
+The Independent Safety Assessor (ISA) will examine tool qualification evidence as part of the
 Phase 8 assessment. The ISA's review scope includes:
 
 ```
