@@ -1,0 +1,578 @@
+# EN 50128 Tool Management Process
+# EN 50128 Reference: Section 6.7 — Software Tools and Their Validation
+#
+# This file is the machine-readable encoding of tool selection, qualification,
+# and management workflows for EN 50128-compliant railway software development.
+# It translates the content previously held in:
+#   .opencode/skills/en50128-tools/workflows/tool-qualification-workflow.md
+#   .opencode/skills/en50128-tools/workflows/tool-selection-usage-workflow.md
+#
+# TOOLS.md is the authoritative fundamental document for tool POLICY (TCL
+# classification rules, 3rd-party vs. platform-developed distinction, ISA
+# requirements). This YAML encodes the OPERATIONAL workflows for agent consumption.
+#
+# Per-tool metadata is in: tools/catalog/<tool-id>.yaml
+# Validation suite stubs:  tools/tool-validation/<tool-id>/
+# Report templates:        deliverables/tools/
+#
+# Primary consumers: all agents (IMP, TST, VER, INT, VAL, QUA, CM, COD, PM)
+# Normative clauses: §6.7, §6.7.4.2, §6.7.4.3, §6.7.4.4, Table A.4, Table A.19,
+#                    Table A.21, Annex C Table C.1
+
+tool_management:
+  source_document: "TOOLS.md"
+  standard: "EN 50128:2011"
+  clauses:
+    - "§6.7"
+    - "§6.7.4.2"
+    - "§6.7.4.3"
+    - "§6.7.4.4"
+    - "Table A.4"
+    - "Table A.19"
+    - "Table A.21"
+    - "Annex C Table C.1"
+  catalog_path: "tools/catalog/"
+  report_templates:
+    qualification: "deliverables/tools/Tool-Qualification-Report-template.md"
+    validation:    "deliverables/tools/Tool-Validation-Report-template.md"
+
+  # ── Tool Confidence Levels (TCL) ─────────────────────────────────────────────
+  tool_confidence_levels:
+    T1:
+      label: "No qualification required"
+      en50128_ref: "§6.7.4.2"
+      description: >
+        Tool output is verified by human review or by an independent tool/process
+        before being used. Errors in the tool itself cannot propagate undetected.
+      qualification_required: false
+      examples: [valgrind, git, mcdc-analyzer, workspace, enhelp, workflow-manager,
+                 generate-test-report, tool-validation-scripts, splint, doxygen]
+      minimum_evidence: >
+        Document the classification rationale in the tool catalog entry
+        (tools/catalog/<id>.yaml). Record which agent role verifies the output
+        and how. No formal report required.
+
+    T2:
+      label: "Validation required"
+      en50128_ref: "§6.7.4.3"
+      description: >
+        Tool output is used directly but is verified by at least one other
+        independent tool or process. A validation test suite is required to
+        demonstrate the tool behaves correctly for the specific use cases.
+      qualification_required: true
+      report_type: "Tool Validation Report (TVR)"
+      report_template: "deliverables/tools/Tool-Validation-Report-template.md"
+      minimum_test_count:
+        sil_1_2: 10
+        sil_3_4: 20
+      examples: [gcc-make-actually-T3, cppcheck, clang, lizard, gcov-lcov, unity,
+                 pclint, misra-checker, parse-coverage-report, validate-srs,
+                 validate-sas-sds]
+      minimum_evidence: >
+        Validation test suite (positive, negative, boundary, regression cases).
+        Tool Validation Report (TVR) with QUA + VER + PM sign-off.
+        For SIL 3-4: formal report is MANDATORY.
+
+    T3:
+      label: "Full qualification required"
+      en50128_ref: "§6.7.4.4"
+      description: >
+        Tool output is not verified by any other independent means. Errors in the
+        tool directly affect software safety without opportunity for detection.
+      qualification_required: true
+      report_type: "Tool Qualification Report (TQR)"
+      report_template: "deliverables/tools/Tool-Qualification-Report-template.md"
+      examples: [gcc, make]
+      minimum_evidence: >
+        For third-party T3 tools: supplier qualification evidence (test suite,
+        certification, industry usage in safety-critical domains) PLUS project-
+        specific validation (test programs, comparison testing if applicable).
+        For SIL 3-4: assembly code review of critical outputs.
+        Tool Qualification Report (TQR) with QUA + VER + PM sign-off.
+        Formal report MANDATORY for SIL 1-4.
+
+  # ── 3rd-Party vs. Platform-Developed Tool Distinction ────────────────────────
+  tool_origin:
+    third_party:
+      description: >
+        Tools obtained from external suppliers (open-source or commercial).
+        Supplier qualification evidence may exist (test suite results, industry
+        usage records, certifications) and supplements project-specific validation.
+      qualification_approach: >
+        Combine supplier evidence with project-specific validation test suite.
+        Document both in the Tool Qualification/Validation Report.
+      supplier_evidence_sources:
+        - "Supplier's own test suite results (e.g. GCC 150k+ test suite)"
+        - "Certification records (e.g. ISO/IEC 9899 conformance)"
+        - "Evidence of use in equivalent safety-critical projects (ASIL-D, DO-178C, SIL-4)"
+        - "Industry body endorsements"
+      examples: [gcc, make, cppcheck, clang, lizard, gcov-lcov, valgrind, git,
+                 unity, qemu, pclint, splint, doxygen]
+
+    platform_developed:
+      description: >
+        Tools developed within the project platform (Python scripts, shell scripts).
+        NO supplier evidence exists — the project must produce ALL qualification
+        and validation evidence from scratch.
+      qualification_approach: >
+        Project must design and execute a complete validation test suite.
+        Evidence package is entirely project-produced.
+        T1 classification is only defensible if output is verified by human review
+        of every artefact produced by the tool.
+      isa_note: >
+        The ISA will specifically examine qualification/validation evidence for
+        platform-developed tools. A 'to_be_provided' status is acceptable during
+        development but MUST be resolved before submitting to ISA evaluation.
+        ISA may challenge T1 classifications for platform-developed tools whose
+        output influences safety decisions — ensure rationale is explicitly documented.
+      current_t2_tools_requiring_evidence:
+        - id: misra-checker
+          validation_suite: "tools/tool-validation/check-misra/"
+          report: "deliverables/tools/MisraChecker-Tool-Validation-Report.md"
+        - id: parse-coverage-report
+          validation_suite: "tools/tool-validation/parse-coverage-report/"
+          report: "deliverables/tools/ParseCoverageReport-Tool-Validation-Report.md"
+        - id: validate-srs
+          validation_suite: "tools/tool-validation/validate-srs/"
+          report: "deliverables/tools/ValidateSRS-Tool-Validation-Report.md"
+        - id: validate-sas-sds
+          validation_suite: "tools/tool-validation/validate-sas-sds/"
+          report: "deliverables/tools/ValidateSASSDS-Tool-Validation-Report.md"
+      examples: [mcdc-analyzer, workspace, enhelp, misra-checker, workflow-manager,
+                 generate-test-report, parse-coverage-report, validate-srs,
+                 validate-sas-sds, tool-validation-scripts]
+
+  # ── Qualification Status Values ────────────────────────────────────────────────
+  qualification_status_values:
+    not_required:
+      description: "T1 tool — no qualification required. Rationale documented in catalog."
+    validated:
+      description: "T2 tool — validation test suite complete, TVR approved by QUA+VER+PM."
+    qualified:
+      description: "T3 tool — full qualification evidence assembled, TQR approved by QUA+VER+PM."
+    to_be_provided:
+      description: >
+        Qualification/validation evidence not yet produced. Acceptable during
+        development lifecycle. MUST be resolved before ISA evaluation.
+        Action: complete validation suite in tools/tool-validation/<id>/,
+        complete report using appropriate deliverables/tools/ template,
+        obtain QUA + VER + PM sign-off, update catalog entry status.
+
+  # ── 6-Phase Tool Qualification Process ───────────────────────────────────────
+  tool_qualification_process:
+    description: >
+      Standard 6-phase process for qualifying or validating a tool per EN 50128 §6.7.
+      Execute this process for each T2 and T3 tool used in a SIL 1-4 project.
+      Initiated during Phase 1 (Planning) or no later than Phase 5 (Implementation).
+
+    phases:
+      - phase: 1
+        name: "Tool Identification"
+        activity: >
+          Build the complete tool list from TOOLS.md master catalog table and
+          tools/catalog/*.yaml. For each tool: note the TCL, mandatory_by_sil,
+          and qualification_status. Produce the project-specific tool list in the SQAP.
+        responsible: [QUA, PM]
+        output: "Project tool list in SQAP (Section: Tools)"
+
+      - phase: 2
+        name: "Tool Classification"
+        activity: >
+          Confirm the TCL classification (T1/T2/T3) for each tool in the project
+          context. Review tools/catalog/<id>.yaml qualification_status.notes for
+          rationale. QUA must review and sign off all classifications.
+          Flag any classification disputes to COD for resolution.
+        responsible: [QUA, VER]
+        gate: "QUA sign-off on all TCL classifications"
+
+      - phase: 3
+        name: "Qualification / Validation"
+        activity: >
+          For T3 tools: assemble supplier evidence + execute project-specific
+          validation test suite. For T2 tools: execute or create validation test
+          suite per VALIDATION-PLAN.md in tools/tool-validation/<id>/.
+          For platform-developed tools: create and execute all test cases from
+          scratch (no supplier evidence available).
+        responsible: [VER, QUA]
+        gate: "All required tests executed and results documented"
+
+      - phase: 4
+        name: "Tool Qualification / Validation Report"
+        activity: >
+          Complete the formal report using the appropriate template:
+          T3: deliverables/tools/Tool-Qualification-Report-template.md
+          T2: deliverables/tools/Tool-Validation-Report-template.md
+          Submit via workspace.py wf submit <report-file>.
+          Mandatory for SIL 3-4; highly recommended for SIL 1-2.
+        responsible: [VER]
+        reviewers: [QUA, PM]
+        gate: "Report approved by QUA + VER + PM"
+
+      - phase: 5
+        name: "Baseline and CM"
+        activity: >
+          Lock exact tool versions (including Python package versions) in the SCMP.
+          Record SHA256 checksums for downloaded tool binaries.
+          Tag the baseline in Git: workspace.py wf baseline <tool-id>.
+          For SIL 3-4: tool version updates require a Change Request through CCB.
+        responsible: [CM]
+        gate: "Tool versions baselined in SCMP, Git tag created"
+
+      - phase: 6
+        name: "Ongoing Management"
+        activity: >
+          Monitor tool vendor security advisories and bug reports.
+          Run tools/tool-validation/check-tool-versions.sh on each build to verify
+          installed versions match baseline.
+          Any tool version change: raise CR through CCB, re-execute relevant
+          validation test cases, update report, re-obtain sign-off.
+          QUA audits tool qualification status at each phase gate.
+        responsible: [CM, QUA]
+        frequency: "Each build (automated) + each phase gate (QUA audit)"
+
+  # ── Tool Classification Decision Tree ─────────────────────────────────────────
+  tool_classification_decision_tree:
+    description: "Use this algorithm to classify any tool as T1, T2, or T3."
+    steps:
+      - step: 1
+        question: "Is the tool output verified by human review or an independent tool/process before use?"
+        yes: "→ T1 (no qualification required). Document the verification method."
+        no:  "→ proceed to step 2"
+      - step: 2
+        question: "Is the tool output used directly in the project (not just informational)?"
+        no:  "→ T1 (informational-only output)"
+        yes: "→ proceed to step 3"
+      - step: 3
+        question: "Is the tool output independently verified by another tool or process?"
+        yes: "→ T2 (validation required)"
+        no:  "→ T3 (full qualification required)"
+    note: >
+      For platform-developed tools claiming T1: the independent verification method
+      MUST be explicitly documented in the catalog entry. The ISA will scrutinise
+      T1 claims where tool output influences safety decisions.
+
+  # ── SIL-Specific Tool Requirements ────────────────────────────────────────────
+  sil_tool_requirements:
+    sil_0:
+      tool_classification: recommended
+      t2_validation: recommended
+      t3_qualification: recommended
+      report_required: false
+      version_control: highly_recommended
+      validation_suite: not_required
+
+    sil_1:
+      tool_classification: mandatory
+      t2_validation: mandatory
+      t3_qualification: mandatory
+      report_required: highly_recommended
+      version_control: highly_recommended
+      validation_suite: recommended
+
+    sil_2:
+      tool_classification: mandatory
+      t2_validation: mandatory
+      t3_qualification: mandatory
+      report_required: highly_recommended
+      version_control: mandatory
+      validation_suite: highly_recommended
+      branch_coverage: mandatory
+
+    sil_3:
+      tool_classification: mandatory
+      t2_validation: mandatory
+      t3_qualification: mandatory
+      report_required: mandatory
+      version_control: mandatory
+      validation_suite: mandatory
+      multiple_static_analyzers: mandatory  # Cppcheck AND Clang
+      tool_version_lock: mandatory          # updates require CR + re-validation
+      ci_version_check: mandatory
+      branch_coverage: mandatory
+      condition_coverage: mandatory
+
+    sil_4:
+      tool_classification: mandatory
+      t2_validation: mandatory
+      t3_qualification: mandatory
+      report_required: mandatory
+      version_control: mandatory
+      validation_suite: mandatory
+      multiple_static_analyzers: mandatory
+      tool_version_lock: mandatory
+      ci_version_check: mandatory
+      branch_coverage: mandatory
+      condition_coverage: mandatory
+
+  # ── Agent Tool Selection ───────────────────────────────────────────────────────
+  agent_tool_selection:
+    description: >
+      Primary tool assignments by agent role. Agents MUST use mandatory tools for
+      their SIL level. See tools/catalog/<id>.yaml for key_flags and full details.
+
+    REQ:
+      primary: [workspace, git]
+      validation: [validate-srs]
+      traceability: [workspace]
+      optional: [enhelp]
+
+    DES:
+      primary: [workspace, git]
+      validation: [validate-sas-sds]
+      optional: [doxygen, enhelp]
+
+    IMP:
+      primary: [gcc, make, git]
+      static_analysis: [cppcheck, misra-checker]
+      testing: [unity]
+      coverage: [gcov-lcov]
+      optional: [valgrind, splint]
+
+    TST:
+      primary: [unity, gcov-lcov, make, git]
+      coverage_analysis: [parse-coverage-report, mcdc-analyzer]
+      reporting: [generate-test-report]
+      optional: [valgrind]
+
+    VER:
+      static_analysis: [cppcheck, clang, lizard]  # all mandatory SIL 3-4
+      coverage: [gcov-lcov, parse-coverage-report]
+      misra: [misra-checker, pclint]
+      memory: [valgrind]
+      traceability: [workspace]
+      optional: [splint]
+
+    INT:
+      primary: [gcc, make, unity, git]
+      memory: [valgrind]
+      hardware: [qemu]
+
+    VAL:
+      primary: [unity, gcov-lcov, git]
+      hardware: [qemu]
+      traceability: [workspace]
+
+    SAF:
+      primary: [workspace, git]
+      optional: [enhelp]
+
+    QUA:
+      document_validation: [validate-srs, validate-sas-sds]
+      tool_qualification: [tool-validation-scripts]
+      traceability: [workspace]
+      static_analysis: [cppcheck, lizard]
+
+    CM:
+      primary: [git, workspace]
+      version_check: [tool-validation-scripts]
+
+    COD:
+      lifecycle: [workspace, workflow-manager]
+      traceability: [workspace]
+      all_tools_oversight: true
+
+    PM:
+      primary: [workspace, workflow-manager, git]
+      reporting: [generate-test-report]
+
+  # ── Tool Usage Patterns ────────────────────────────────────────────────────────
+  usage_patterns:
+    description: >
+      Standard invocation patterns by task category. See tools/catalog/<id>.yaml
+      for complete key_flags per tool.
+
+    compilation_sil3:
+      tool: gcc
+      flags: >-
+        -std=c11 -Wall -Wextra -Werror -pedantic -O2
+        -DSIL_LEVEL=3 -DMISRA_C_2012
+        -fstack-protector-strong -D_FORTIFY_SOURCE=2
+        -fno-common -fno-builtin-malloc -fno-builtin-calloc
+      note: "Always build with coverage flags for test builds: -fprofile-arcs -ftest-coverage"
+
+    static_analysis_sil3:
+      tools: [cppcheck, clang]
+      note: "Both MANDATORY for SIL 3-4. Run both and document both results in VR."
+      cppcheck: "cppcheck --enable=all --xml --xml-version=2 --addon=misra.py src/ 2> cppcheck.xml"
+      clang: "scan-build -o analysis_results make"
+      misra: "python3 tools/static-analysis/check_misra.py --src src/ --project <name>"
+
+    complexity_check_sil3:
+      tool: lizard
+      command: "lizard src/ --CCN 10 --Threshold ccn=10"
+      threshold: 10
+      note: "Fail build if any function exceeds CCN=10 for SIL 3-4"
+
+    coverage_measurement:
+      tools: [gcov-lcov]
+      steps:
+        - compile: "gcc -fprofile-arcs -ftest-coverage ..."
+        - run_tests: "make test"
+        - capture: "lcov --capture --directory . --output-file coverage.info"
+        - filter: "lcov --remove coverage.info '*/test/*' '*/unity/*' --output-file coverage.info"
+        - html: "genhtml coverage.info --output-directory coverage_html"
+        - verify: "python3 tools/scripts/parse_coverage_report.py coverage.info --sil 3 --output coverage-report.md"
+
+    mcdc_analysis:
+      tool: mcdc-analyzer
+      steps:
+        - analyze: "python3 tools/mcdc/mcdc_analyzer.py analyze -I src/ --sil 3 --project <name> --format all -o docs/reports/MC-DC-Analysis.md src/**/*.c"
+        - report: "python3 tools/mcdc/mcdc_analyzer.py report --vectors docs/reports/MC-DC-Vectors.json --results test/results/test-results.json --sil 3 --project <name> -o docs/reports/MC-DC-Coverage-Evidence.md"
+
+    memory_analysis:
+      tool: valgrind
+      command: "valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 ./test_executable"
+      note: "Exit code 1 on any error. Zero memory errors required before sign-off."
+
+    traceability:
+      tool: workspace
+      commands:
+        add_link:   "python3 tools/workspace.py trace add <src_id> <dst_id>"
+        validate:   "python3 tools/workspace.py trace validate"
+        report:     "python3 tools/workspace.py trace report"
+
+    version_verification:
+      tool: tool-validation-scripts
+      command: "bash tools/tool-validation/check-tool-versions.sh"
+      when: "Before every build in CI/CD; at every phase gate (QUA audit)"
+
+    workflow_submission:
+      tool: workspace
+      submit:  "python3 tools/workspace.py wf submit <deliverable-id> <file-path>"
+      approve: "python3 tools/workspace.py wf approve <deliverable-id>"
+      status:  "python3 tools/workspace.py wf status"
+
+  # ── 6-Step Agent Tool Usage Protocol ──────────────────────────────────────────
+  agent_usage_protocol:
+    description: >
+      All agents MUST follow this 6-step protocol before and during tool use.
+      See TOOLS.md §Agent Tool Usage Protocol for the authoritative version.
+
+    steps:
+      - step: 1
+        name: "Identify task requirements"
+        action: "Determine the task (static analysis, coverage, etc.), the SIL level, and which EN 50128 table applies."
+
+      - step: 2
+        name: "Consult tool catalog"
+        action: "Read TOOLS.md master catalog table and tools/catalog/<id>.yaml for candidate tools. Check TCL and mandatory_by_sil."
+
+      - step: 3
+        name: "Verify tool availability"
+        action: "which <tool> to confirm installation. Verify version matches SCMP baseline. Check qualification_status — do not use a T2/T3 tool whose status is to_be_provided without recording a deviation."
+
+      - step: 4
+        name: "Select most effective tool"
+        action: "Prefer mandatory tools. Use multiple tools for thoroughness (SIL 3+). Consider output format (XML/JSON for automation)."
+
+      - step: 5
+        name: "Execute with SIL-appropriate flags"
+        action: "Use key_flags from tools/catalog/<id>.yaml. Document exact invocation command in deliverable."
+
+      - step: 6
+        name: "Verify and document results"
+        action: "T1: review output. T2: cross-reference with other tools. T3: verify qualification evidence present. Record tool version, invocation, and results in deliverable."
+
+  # ── To-Be-Provided Tracker ─────────────────────────────────────────────────────
+  to_be_provided_tracker:
+    description: >
+      All tools with qualification_status.status = to_be_provided.
+      These must be resolved before ISA evaluation. Track completion here.
+
+    tools:
+      - id: gcc
+        tcl: T3
+        origin: third_party
+        report: "deliverables/tools/GCC-Tool-Qualification-Report.md"
+        validation_suite: "tools/tool-validation/gcc/"
+        status: to_be_provided
+
+      - id: make
+        tcl: T2
+        origin: third_party
+        report: "deliverables/tools/Make-Tool-Validation-Report.md"
+        validation_suite: "tools/tool-validation/make/"
+        status: to_be_provided
+
+      - id: cppcheck
+        tcl: T2
+        origin: third_party
+        report: "deliverables/tools/Cppcheck-Tool-Validation-Report.md"
+        validation_suite: "tools/tool-validation/cppcheck/"
+        status: to_be_provided
+
+      - id: clang
+        tcl: T2
+        origin: third_party
+        report: "deliverables/tools/Clang-Tool-Validation-Report.md"
+        validation_suite: "tools/tool-validation/clang/"
+        status: to_be_provided
+
+      - id: lizard
+        tcl: T2
+        origin: third_party
+        report: "deliverables/tools/Lizard-Tool-Validation-Report.md"
+        validation_suite: "tools/tool-validation/lizard/"
+        status: to_be_provided
+
+      - id: gcov-lcov
+        tcl: T2
+        origin: third_party
+        report: "deliverables/tools/GcovLcov-Tool-Validation-Report.md"
+        validation_suite: "tools/tool-validation/gcov/"
+        status: to_be_provided
+
+      - id: unity
+        tcl: T2
+        origin: third_party
+        report: "deliverables/tools/Unity-Tool-Validation-Report.md"
+        validation_suite: "tools/tool-validation/unity/"
+        status: to_be_provided
+
+      - id: qemu
+        tcl: T2
+        origin: third_party
+        report: "deliverables/tools/QEMU-Tool-Validation-Report.md"
+        validation_suite: "tools/tool-validation/qemu/"
+        status: to_be_provided
+        note: "T2 for timing/performance usage only. T1 for functional testing — not required."
+
+      - id: pclint
+        tcl: T2
+        origin: third_party
+        report: "deliverables/tools/PClint-Tool-Validation-Report.md"
+        validation_suite: "tools/tool-validation/pclint/"
+        status: to_be_provided
+        note: "Only required if PC-lint Plus is used. Cppcheck+MISRA addon is the free alternative."
+
+      - id: misra-checker
+        tcl: T2
+        origin: platform_developed
+        report: "deliverables/tools/MisraChecker-Tool-Validation-Report.md"
+        validation_suite: "tools/tool-validation/check-misra/"
+        validation_plan: "tools/tool-validation/check-misra/VALIDATION-PLAN.md"
+        status: to_be_provided
+
+      - id: parse-coverage-report
+        tcl: T2
+        origin: platform_developed
+        report: "deliverables/tools/ParseCoverageReport-Tool-Validation-Report.md"
+        validation_suite: "tools/tool-validation/parse-coverage-report/"
+        validation_plan: "tools/tool-validation/parse-coverage-report/VALIDATION-PLAN.md"
+        status: to_be_provided
+
+      - id: validate-srs
+        tcl: T2
+        origin: platform_developed
+        report: "deliverables/tools/ValidateSRS-Tool-Validation-Report.md"
+        validation_suite: "tools/tool-validation/validate-srs/"
+        validation_plan: "tools/tool-validation/validate-srs/VALIDATION-PLAN.md"
+        status: to_be_provided
+
+      - id: validate-sas-sds
+        tcl: T2
+        origin: platform_developed
+        report: "deliverables/tools/ValidateSASSDS-Tool-Validation-Report.md"
+        validation_suite: "tools/tool-validation/validate-sas-sds/"
+        validation_plan: "tools/tool-validation/validate-sas-sds/VALIDATION-PLAN.md"
+        status: to_be_provided
