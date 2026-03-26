@@ -5,56 +5,69 @@
 
 ---
 
-## Authoritative Sources
+## Authoritative Source
 
-Load these documents to answer any question about tool selection, classification,
-qualification, or usage:
+All tool policy — TCL classification, qualification obligations, tool category requirements,
+SIL matrix, ISA obligations — is defined in:
 
-| Source | Contents |
-|--------|----------|
-| `TOOLS.md` | TCL classification policy, master tool catalog table, SIL requirements, agent responsibility matrix, agent usage protocol |
-| `activities/tool-management.yaml` | Qualification process (6 phases), 3rd-party vs. platform-developed distinction, ISA requirements, tool classification decision tree, per-agent tool selection, usage patterns, to-be-provided tracker |
-| `tools/catalog/<tool-id>.yaml` | Per-tool: origin, TCL, version, location, mandatory_by_sil, key_flags, qualification_status, evidence paths |
-| `tools/tool-validation/<tool-id>/` | Validation suite stubs (README + VALIDATION-PLAN.md) for platform-developed T2 tools |
-| `deliverables/tools/` | Tool Qualification Report template (T3), Tool Validation Report template (T2) |
+| Document | Contents |
+|----------|----------|
+| `TOOLS.md` | TCL classification policy and decision tree, third-party vs. platform-developed policy, tool category framework (categories not instances), qualification process diagram, SIL requirements matrix, tool management obligations, ISA evaluation scope |
+
+Specific tool instances, versions, invocation flags, qualification status, and evidence paths
+are recorded in downstream operational documents derived from `TOOLS.md`.
 
 ---
 
 ## Key Policy Points
 
-### TCL Classification (§6.7)
-- **T1**: output verified by human or independent process → no qualification required
-- **T2**: output used directly, verified by another tool/process → validation test suite + report
-- **T3**: output not verified by other means → full qualification evidence + report
+### TCL Classification (§6.7, Table 1)
 
-### 3rd-Party vs. Platform-Developed (critical for ISA)
-- **3rd-party tools**: supplement project validation with supplier evidence (test suite, certifications, industry usage in safety-critical projects)
-- **Platform-developed tools**: NO supplier evidence — project must produce ALL evidence from scratch; T1 classification requires documented independent review of every output; T2 requires a project-authored validation test suite
-- **`to_be_provided`**: acceptable during development; **mandatory to resolve before ISA evaluation**
+- **T1**: Output verified by independent human review or independent process → no formal
+  qualification document required. Record basis for T1 assignment.
+- **T2**: Output used directly in the project; errors detected by an independent process
+  → validation test suite + validation report required (§6.7.4.3, §6.7.4.10, §6.7.4.11).
+- **T3**: Output cannot be independently verified by other means → full qualification
+  evidence + report required (§6.7.4.4, §6.7.4.5).
 
-### Mandatory Tools for SIL 3-4
-- Compiler: GCC (T3, qualified)
-- Static analysis: Cppcheck AND Clang (both mandatory)
-- Complexity: Lizard (CCN ≤ 10 mandatory)
-- Coverage: gcov + lcov (statement + branch + condition mandatory)
-- MC/DC: mcdc_analyzer.py (T1, mandatory)
-- Version control: Git (T1, mandatory all SILs)
-- Test framework: Unity (T2, mandatory)
+When in doubt, assign the higher TCL. Downgrading requires documented justification (§6.7.4.2).
 
-### Platform-Developed T2 Tools — Validation Required Before ISA
-| Tool | Validation Plan |
-|------|----------------|
-| `check_misra.py` | `tools/tool-validation/check-misra/VALIDATION-PLAN.md` |
-| `parse_coverage_report.py` | `tools/tool-validation/parse-coverage-report/VALIDATION-PLAN.md` |
-| `validate_srs_template.py` | `tools/tool-validation/validate-srs/VALIDATION-PLAN.md` |
-| `validate_sas_sds_template.py` | `tools/tool-validation/validate-sas-sds/VALIDATION-PLAN.md` |
+### Third-Party vs. Platform-Developed (critical for ISA)
 
----
+- **Third-party tools**: project-specific validation supplements supplier evidence
+  (certifications, history of use in safety-critical domains, test suite results).
+- **Platform-developed tools**: project produces ALL evidence from scratch.
+  T1 classification requires documented independent review of every tool output.
+  T2 classification requires a project-authored validation test suite.
+- **`to_be_provided`**: acceptable during development; MUST be resolved before ISA evaluation.
 
-## Quick Tool Lookup
+### Tool Category Obligations by SIL
 
-Find any tool by ID in `tools/catalog/`. Current catalog IDs:
+Use the tool category framework in `TOOLS.md` Section 3 to determine the minimum TCL and
+mandatory-from-SIL for each category:
 
-**Third-party**: `gcc` · `make` · `cppcheck` · `clang` · `lizard` · `gcov-lcov` · `valgrind` · `git` · `unity` · `qemu` · `pclint` · `splint` · `doxygen`
+- **Compiler / Linker / Assembler** → T3, mandatory SIL 1+
+- **Static analysis** → T2, HR from SIL 2, M from SIL 3–4 (two independent tools mandatory at SIL 3–4)
+- **Complexity analysis** → T2, M from SIL 3–4
+- **Code coverage measurement** → T2, HR from SIL 2+
+- **MC/DC coverage analysis** → T1 minimum, HR from SIL 3–4
+- **Test execution framework** → T2, mandatory SIL 1+
+- **MISRA C compliance checker** → T2, M from SIL 2+
+- **Version control / CM** → T1, mandatory all SIL
+- **Build automation** → T2, mandatory SIL 1+
 
-**Platform-developed**: `mcdc-analyzer` · `workspace` · `enhelp` · `misra-checker` · `workflow-manager` · `generate-test-report` · `parse-coverage-report` · `validate-srs` · `validate-sas-sds` · `tool-validation-scripts`
+### SIL Requirements Summary
+
+| Obligation | SIL 1 | SIL 2 | SIL 3–4 |
+|------------|-------|-------|---------|
+| Assign TCL to every tool | **M** | **M** | **M** |
+| T2 validation test suite | R | HR | **M** |
+| T3 qualification report | HR | HR | **M** |
+| Tool version lock (CM) | R | **M** | **M** |
+| Tools Validation Report (Annex C item 26) | HR | HR | **M** |
+
+### ISA Evaluation
+
+The ISA will examine: TCL classification justification, T3 conformance evidence, platform-
+developed tool validation test suites, version lock compliance, and resolution of all
+`to_be_provided` gaps. See `TOOLS.md` Section 7 for the full ISA evaluation scope.
