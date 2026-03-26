@@ -1,7 +1,7 @@
 # EN 50128 Software Tools — Classification, Qualification, and Management Policy
 
 > **Document ID**: TOOLS-POL-001
-> **Version**: 1.1
+> **Version**: 1.2
 > **Status**: Draft — Pending ISA Review
 > **Standard**: EN 50128:2011 Railway Software Standard
 > **Scope**: Normative policy for software tool classification (TCL), qualification obligations,
@@ -19,6 +19,7 @@
 |---------|------|-------------|----------------|
 | 1.0 | 2026-03-26 | COD | Initial release as fundamental policy document |
 | 1.1 | 2026-03-26 | COD | ISA review findings F1–F9 resolved (CONDITIONAL PASS → rework) |
+| 1.2 | 2026-03-26 | COD | ISA re-review findings NF1–NF3 resolved: NF1 (Major) — corrected §6.7.4.5 T2 attribution in Section 4 Phase 4 box and Section 5 SIL matrix; NF2 (Minor) — rewrote T3 branch of decision tree using exact §3.1.44 output-contribution language; NF3 (Minor) — added §6.7.4.11 uniform-SHALL note to Version-change re-justification row |
 
 All agents MUST consult this document before selecting, invoking, or reporting on any tool.
 Specific tool instances, versions, invocation flags, and qualification evidence are recorded in
@@ -85,21 +86,23 @@ The following definitions are verbatim from EN 50128:2011 §3.1.42–§3.1.44.
   │           code directly or indirectly. No qualification required.
   │           Record the basis for T1 assignment (see §6.7.1.1 note).
   │
-  └── YES ──► Can errors in the tool DIRECTLY CREATE errors in the
-              executable software? (§3.1.44 T3 test)
-              │
-              ├── YES ──► T3 (full qualification evidence required)
-              │           Tool output directly or indirectly contributes
-              │           to executable code and errors are not reliably
-              │           detected by independent verification.
-              │
-              └── NO  ──► Does the tool support test or verification of
-                          the design or executable code, where errors
-                          can FAIL TO REVEAL DEFECTS? (§3.1.43 T2 test)
-                          │
-                          ├── YES ──► T2 (validation test suite + report)
-                          │
-                          └── NO  ──► Re-examine: if in doubt → T3
+   └── YES ──► Does the tool generate outputs which can DIRECTLY OR
+               INDIRECTLY CONTRIBUTE TO the executable code (including
+               data) of the safety-related system? (§3.1.44 T3 criterion)
+               │
+               ├── YES ──► T3 (full qualification evidence required)
+               │           Tool generates outputs contributing to
+               │           executable code directly or indirectly.
+               │
+               └── NO  ──► Does the tool support test or verification of
+                           the design or executable code, where errors in
+                           the tool can fail to reveal defects but CANNOT
+                           DIRECTLY CREATE errors in the executable
+                           software? (§3.1.43 T2 criterion)
+                           │
+                           ├── YES ──► T2 (validation test suite + report)
+                           │
+                           └── NO  ──► Re-examine: if in doubt → T3
 
   KEY PRINCIPLE: When in doubt, assign the higher TCL.
   Downgrading from T3 to T2 or T1 REQUIRES documented justification (§6.7.4.2).
@@ -293,9 +296,10 @@ It is activated at the phase where each tool is first introduced.
   └────────────────────────────────────────────────────────────────────────┘
                               │
                               ▼
-  PHASE 4 — Tool Validation Report (T2 and T3)
+  PHASE 4 — Tool Validation Report
   ┌────────────────────────────────────────────────────────────────────────┐
-  │ Report SHALL contain (§6.7.4.5):                                      │
+  │ T3 TOOLS — normative obligation (§6.7.4.5):                          │
+  │   Report SHALL contain all seven items from §6.7.4.5:                │
   │   a) Record of validation activities                                  │
   │   b) Version of tool manual used                                      │
   │   c) Tool functions validated                                         │
@@ -303,9 +307,21 @@ It is activated at the phase where each tool is first introduced.
   │   e) Results — pass or fail with reasons                             │
   │   f) Test cases and results for subsequent analysis                   │
   │   g) Discrepancies between expected and actual results               │
+  │   Additionally document the selected evidence path (§6.7.4.4a–e)    │
+  │   and any compensating measures (§6.7.4.6).                          │
+  └────────────────────────────────────────────────────────────────────────┘
+  ┌────────────────────────────────────────────────────────────────────────┐
+  │ T2 TOOLS — normative minimum (§6.7.4.3, §6.7.4.10, §6.7.4.11):      │
+  │   The normative T2 obligations are: tool specification or manual      │
+  │   (§6.7.4.3) and configuration management / version control          │
+  │   (§6.7.4.10, §6.7.4.11). §6.7.4.5 is NOT a normative T2 mandate.   │
   │                                                                        │
-  │ For T3: additionally document the selected evidence path              │
-  │   (§6.7.4.4a–e) and any compensating measures (§6.7.4.6)             │
+  │   §6.7.4.4 Note 2 states: "The evidence listed for T3 may also be    │
+  │   used for T2 tools in judging the correctness of their results."     │
+  │   This is permissive guidance, not a T2 obligation. Where a project   │
+  │   chooses to produce a T2 tool evidence record in §6.7.4.5 format,   │
+  │   this EXCEEDS the normative minimum and SHALL be documented as a     │
+  │   project policy choice (not a §6.7.4.5 obligation).                 │
   └────────────────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -350,11 +366,12 @@ Derived from EN 50128 §6.7 and Annex A Tables A.5, A.13, A.19, A.21.
 | Assign TCL to every tool used | §6.7.4.1 | R | **M** | **M** | **M** | **M** |
 | T2/T3 tool: specification or manual | §6.7.4.3 (uniform — not SIL-graduated) | R | **M** | **M** | **M** | **M** |
 | T2 tool: validation test suite | §6.7.4.3 + §6.7.4.4 Note 2 | — | R | HR | **M** | **M** |
-| T2 tool: validation report | §6.7.4.5 | — | R | HR | **M** | **M** |
+| T2 tool: validation report | §6.7.4.4 Note 2 (project policy extension — not a normative §6.7.4.5 obligation for T2) | — | R | HR | **M** | **M** |
 | T3 tool: conformance evidence | §6.7.4.4 | R | **M** | **M** | **M** | **M** |
 | T3 tool: qualification report | §6.7.4.5 (uniform — not SIL-graduated) | — | **M** | **M** | **M** | **M** |
 | Tool version lock (CM, §6.7.4.10) | §6.7.4.10 | R | R | **M** | **M** | **M** |
 | Version-change re-justification | §6.7.4.11 | — | R | **M** | **M** | **M** |
+| | *Note: §6.7.4.11 is an unconditional "shall" for T2/T3 tools at ALL SILs when a version change occurs (Table 1). The "R" entry at SIL 1 and "—" at SIL 0 reflect project policy priority sequencing, NOT a waiver of the §6.7.4.11 obligation. Any T2/T3 tool version change at any SIL requires re-justification.* | | | | | |
 | Multiple independent static analyzers | Table A.19 | — | — | HR | **M** | **M** |
 | Compiler output independently verified | §6.7.4.6 (fallback), §6.7.4.4 | R | R | HR | **M** | **M** |
 | Tools Validation Report (Annex C item 26) | §6.7.3 (when T3 tools used) | — | HR | HR | **M** | **M** |
