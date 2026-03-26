@@ -92,7 +92,7 @@ writing any file. The layout below is normative for every project workspace.
 │   ├── Software-Requirements-Specification.md
 │   ├── Overall-Software-Test-Specification.md
 │   ├── reports/
-│   │   └── Software-Requirements-Verification-Report.md
+│   │   └── Software-Requirements-Verification-Report-template.md
 │   └── evidence/                       # no evidence artifacts in Phase 2
 │
 ├── phase-3-architecture-design/
@@ -110,13 +110,13 @@ writing any file. The layout below is normative for every project workspace.
 │   ├── Software-Component-Design-Specification.md
 │   ├── Software-Component-Test-Specification.md
 │   ├── reports/
-│   │   └── Software-Component-Design-Verification-Report.md
+│   │   └── Software-Component-Design-Verification-Report-template.md
 │   └── evidence/
 │       └── design-review/              # design inspection records, checklists
 │
 ├── phase-5-implementation-testing/
 │   ├── src/                            # source code tree (IMP-owned)
-│   ├── Software-Source-Code-Verification-Report.md
+│   ├── Software-Source-Code-Verification-Report-template.md
 │   ├── Software-Component-Test-Report.md
 │   └── evidence/
 │       ├── static-analysis/            # MISRA checker raw output (.xml/.json)
@@ -132,10 +132,10 @@ writing any file. The layout below is normative for every project workspace.
 │       └── hw-integration-logs/        # hardware integration evidence
 │
 ├── phase-7-validation/
-│   ├── Software-Integration-Verification-Report.md
+│   ├── Software-Integration-Verification-Report-template.md
 │   ├── Overall-Software-Test-Report.md
-│   ├── Software-Validation-Report.md
-│   ├── Tools-Validation-Report.md
+│   ├── Software-Validation-Report-template.md
+│   ├── Tools-Validation-Report-template.md
 │   ├── Release-Note.md
 │   └── evidence/
 │       ├── system-test-logs/           # system/acceptance test execution logs
@@ -160,7 +160,7 @@ writing any file. The layout below is normative for every project workspace.
     ├── Software-Maintenance-Plan.md
     ├── Software-Change-Records.md
     ├── Software-Maintenance-Records.md
-    ├── Software-Maintenance-Verification-Report.md
+    ├── Software-Maintenance-Verification-Report-template.md
     └── evidence/
         └── maintenance-logs/           # change execution records
 ```

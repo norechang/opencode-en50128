@@ -17,7 +17,7 @@ first_check: "QUA"
 second_check: "VAL"
 
 # ===== Template =====
-template_path: "deliverables/implementation/Software-Source-Code-Verification-Report.md"
+template_path: "deliverables/implementation/Software-Source-Code-Verification-Report-template.md"
 template_exists: true
 
 # ===== SIL Requirements =====

@@ -7,7 +7,7 @@ standard_section: "7.6.4.5"
 written_by: "VER"
 first_check: "QUA"
 second_check: "NONE"
-template_path: "deliverables/integration/Software-Integration-Verification-Report.md"
+template_path: "deliverables/integration/Software-Integration-Verification-Report-template.md"
 template_exists: true
 
 sil_requirements:
@@ -149,7 +149,7 @@ evidence_requirements:
     mandatory_sil: 0
     source: "VER agent"
     format: "Structured checklist in markdown with status, notes for each item"
-    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 3.1"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report-template.md Section 3.1"
     automation_level: "semi-automatic"
     collect_on_agent_action: "/ver review-integration-test-spec"
     verification_criteria:
@@ -164,7 +164,7 @@ evidence_requirements:
     mandatory_sil: 0
     source: "VER agent"
     format: "Structured checklist in markdown with status, notes for each item"
-    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 3.2"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report-template.md Section 3.2"
     automation_level: "semi-automatic"
     collect_on_agent_action: "/ver review-integration-test-report"
     verification_criteria:
@@ -179,7 +179,7 @@ evidence_requirements:
     mandatory_sil: 1
     source: "VER agent, CM agent"
     format: "Structured tables with forward and reverse traceability analysis"
-    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 3.3"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report-template.md Section 3.3"
     automation_level: "automatic"
     collect_on_agent_action: "/cm verify-integration-traceability"
     verification_criteria:
@@ -193,7 +193,7 @@ evidence_requirements:
     mandatory_sil: 1
     source: "VER agent, CM agent"
     format: "Structured table with interface type, total, tested, coverage percentage"
-    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 3.4"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report-template.md Section 3.4"
     automation_level: "automatic"
     collect_on_agent_action: "/ver verify-interface-coverage"
     verification_criteria:
@@ -207,7 +207,7 @@ evidence_requirements:
     mandatory_sil: 2
     source: "VER agent, cppcheck, PC-lint"
     format: "Structured table with issue type, count, severity, resolution status"
-    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 3.5"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report-template.md Section 3.5"
     automation_level: "automatic"
     collect_on_agent_action: "/ver analyze-integration-code"
     verification_criteria:
@@ -221,7 +221,7 @@ evidence_requirements:
     mandatory_sil: 0
     source: "VER agent"
     format: "Structured table with technique, recommendation level, applied status, evidence"
-    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 3.6"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report-template.md Section 3.6"
     automation_level: "manual"
     collect_on_agent_action: "/ver verify-en50128-compliance"
     verification_criteria:
@@ -235,7 +235,7 @@ evidence_requirements:
     mandatory_sil: 0
     source: "VER agent"
     format: "Structured table with issue ID, severity, description, activity, status, resolution"
-    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 4.2"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report-template.md Section 4.2"
     automation_level: "semi-automatic"
     collect_on_agent_action: "/ver log-verification-issue"
     verification_criteria:
@@ -249,7 +249,7 @@ evidence_requirements:
     mandatory_sil: 0
     source: "VER agent"
     format: "Structured table with metric, value, target, status"
-    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 4.3"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report-template.md Section 4.3"
     automation_level: "automatic"
     collect_on_agent_action: "/ver calculate-verification-metrics"
     verification_criteria:
@@ -263,7 +263,7 @@ evidence_requirements:
     mandatory_sil: 0
     source: "VER agent"
     format: "Structured tables with requirements, status, evidence"
-    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 5"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report-template.md Section 5"
     automation_level: "manual"
     collect_on_agent_action: "/ver assess-en50128-compliance"
     verification_criteria:
@@ -277,7 +277,7 @@ evidence_requirements:
     mandatory_sil: 3
     source: "VER agent, QUA agent"
     format: "Structured table with independence requirements, status, evidence"
-    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 5.3"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report-template.md Section 5.3"
     automation_level: "manual"
     collect_on_agent_action: "/ver verify-independence"
     verification_criteria:
@@ -291,7 +291,7 @@ evidence_requirements:
     mandatory_sil: 0
     source: "VER agent"
     format: "Structured section with decision, rationale, conditions (if any)"
-    storage_path: "deliverables/integration/Software-Integration-Verification-Report.md Section 6"
+    storage_path: "deliverables/integration/Software-Integration-Verification-Report-template.md Section 6"
     automation_level: "manual"
     collect_on_agent_action: "/ver make-verification-decision"
     verification_criteria:

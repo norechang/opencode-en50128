@@ -17,7 +17,7 @@ first_check: "NONE"
 second_check: "VAL"
 
 # ===== Template =====
-template_path: "deliverables/application/Application-Data-Algorithms-Verification-Report.md"
+template_path: "deliverables/application/Application-Data-Algorithms-Verification-Report-template.md"
 template_exists: true
 
 # ===== SIL Requirements =====

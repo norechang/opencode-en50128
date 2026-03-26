@@ -17,7 +17,7 @@ first_check: "NONE"
 second_check: "NONE"
 
 # ===== Template =====
-template_path: "deliverables/deployment/Software-Deployment-Verification-Report.md"
+template_path: "deliverables/deployment/Software-Deployment-Verification-Report-template.md"
 template_exists: true
 
 # ===== SIL Requirements =====

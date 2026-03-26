@@ -12,7 +12,7 @@ standard_section: "7.2.4.20"
 written_by: "VER"
 first_check: "NONE"
 second_check: "VAL"
-template_path: "deliverables/requirements/Software-Requirements-Verification-Report.md"
+template_path: "deliverables/requirements/Software-Requirements-Verification-Report-template.md"
 template_exists: true
 
 # =============================================================================

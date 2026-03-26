@@ -212,8 +212,8 @@ the Markdown templates.
 | Annex C Item | Markdown Template | Requirements Spec (YAML) |
 |-------------|-------------------|--------------------------|
 | 5 — Software Validation Plan | `deliverables/planning/Software-Validation-Plan-template.md` | `deliverables/planning/Software-Validation-Plan.yaml` |
-| 25 — Software Validation Report | `deliverables/validation/Software-Validation-Report.md` | `deliverables/validation/Software-Validation-Report.yaml` |
-| 26 — Tools Validation Report | `deliverables/validation/Tools-Validation-Report.md` | `deliverables/validation/Tools-Validation-Report.yaml` |
+| 25 — Software Validation Report | `deliverables/validation/Software-Validation-Report-template.md` | `deliverables/validation/Software-Validation-Report.yaml` |
+| 26 — Tools Validation Report | `deliverables/validation/Tools-Validation-Report-template.md` | `deliverables/validation/Tools-Validation-Report.yaml` |
 | 27 — Release Note | *(assign in SQAP; no platform template — §7.7.4.12)* | `deliverables/deployment/Release-Notes.yaml` |
 
 ---

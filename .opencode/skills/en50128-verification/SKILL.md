@@ -216,16 +216,16 @@ a project-defined acceptance criterion documented in the SVP.
 
 | Item | Template File | Location |
 |------|--------------|----------|
-| 2 | Software-SQAP-Verification-Report.md | `deliverables/planning/` |
+| 2 | Software-SQAP-Verification-Report-template.md | `deliverables/planning/` |
 | 4 | *(SVP — not a report template; author per §6.2.4.2)* | — |
-| 8 | Software-Requirements-Verification-Report.md | `deliverables/requirements/` |
-| 14 | Software-Architecture-Design-Verification-Report.md | `deliverables/architecture/` |
-| 17 | Software-Component-Design-Verification-Report.md | `deliverables/component-design/` |
-| 19 | Software-Source-Code-Verification-Report.md | `deliverables/implementation/` |
-| 23 | Software-Integration-Verification-Report.md | `deliverables/integration/` |
-| † | Software-Validation-Verification-Report.md | `deliverables/validation/` |
-| 40 | Software-Deployment-Verification-Report.md | `deliverables/deployment/` |
-| 44 | Software-Maintenance-Verification-Report.md | `deliverables/maintenance/` |
+| 8 | Software-Requirements-Verification-Report-template.md | `deliverables/requirements/` |
+| 14 | Software-Architecture-Design-Verification-Report-template.md | `deliverables/architecture/` |
+| 17 | Software-Component-Design-Verification-Report-template.md | `deliverables/component-design/` |
+| 19 | Software-Source-Code-Verification-Report-template.md | `deliverables/implementation/` |
+| 23 | Software-Integration-Verification-Report-template.md | `deliverables/integration/` |
+| † | Software-Validation-Verification-Report-template.md | `deliverables/validation/` |
+| 40 | Software-Deployment-Verification-Report-template.md | `deliverables/deployment/` |
+| 44 | Software-Maintenance-Verification-Report-template.md | `deliverables/maintenance/` |
 
 ---
 

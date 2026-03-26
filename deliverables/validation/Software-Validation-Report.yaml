@@ -17,7 +17,7 @@ first_check: "VER"
 second_check: "QUA"
 
 # ===== Template =====
-template_path: "deliverables/validation/Software-Validation-Report.md"
+template_path: "deliverables/validation/Software-Validation-Report-template.md"
 template_exists: true
 
 # ===== SIL Requirements =====

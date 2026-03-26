@@ -17,7 +17,7 @@ first_check: "QUA"
 second_check: "VAL"
 
 # ===== Template =====
-template_path: "deliverables/maintenance/Software-Maintenance-Verification-Report.md"
+template_path: "deliverables/maintenance/Software-Maintenance-Verification-Report-template.md"
 template_exists: true
 
 # ===== SIL Requirements =====
