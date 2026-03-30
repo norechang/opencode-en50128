@@ -1,7 +1,15 @@
-# EN 50128 V&V Manager Skill
 ---
 name: en50128-vmgr
+description: V&V Manager coordination and independent V&V authority for SIL 3-4 EN 50128 projects
+license: Proprietary
+compatibility: opencode
+metadata:
+  standard: EN 50128:2011
+  domain: railway-software
+  role: vv-manager
 ---
+
+# EN 50128 V&V Manager Skill
 
 **Role**: V&V Manager (VMGR)  
 **Standard**: EN 50128:2011 §5.1.2.10(e–f), §6.3.4.12–14  
@@ -283,25 +291,41 @@ Reference: `en50128-lifecycle-tool-integration` skill → workspace.py command r
 
 ```bash
 # VMGR approves a VER Verification Report (standard phases)
-python3 workspace.py wf review --item <annex_c_item> --role VMGR --approve \
+python3 tools/workspace.py wf review <DOCUMENT_ID> \
+  --role VMGR \
+  --name '<VMGR Name>' \
+  --approve \
   --comment "VER report technically adequate; all SIL criteria met"
 
 # VMGR rejects a VER Verification Report
-python3 workspace.py wf review --item <annex_c_item> --role VMGR --reject \
+python3 tools/workspace.py wf review <DOCUMENT_ID> \
+  --role VMGR \
+  --name '<VMGR Name>' \
+  --reject \
   --comment "<finding summary — specific criteria not met>"
 
 # VMGR approves VAL reports (Phase 7)
-python3 workspace.py wf review --item 25 --role VMGR --approve \
+python3 tools/workspace.py wf review <DOC-VALRPT-ID> \
+  --role VMGR \
+  --name '<VMGR Name>' \
+  --approve \
   --comment "VAL report adequate; all SRS requirements validated"
 
 # VMGR approves item † (Phase 7)
-python3 workspace.py wf review --item dagger --role VMGR --approve \
+python3 tools/workspace.py wf review <DOC-VALVER-ID> \
+  --role VMGR \
+  --name '<VMGR Name>' \
+  --approve \
   --comment "Item † reviewed; VER conclusion consistent with VAL evidence"
 
 # VMGR issues Final V&V Decision (Phase 7 — after all three approved)
-python3 workspace.py wf final-vv-decision --role VMGR --approve \
-  --comment "Items 23, 25, 26, † all approved; Final V&V Decision GRANTED"
+# There is no dedicated wf subcommand for the Final V&V Decision.
+# Record it as a final approval of item †, then write the structured
+# VMGR Final V&V Decision block (Section 9 format) directly into
+# LIFECYCLE_STATE.md via COD.
+python3 tools/workspace.py wf approve <DOC-VALVER-ID>
 ```
 
-Invoke CM `query-location --doc VMGR-OUTCOME` for the canonical path before writing
-any VMGR outcome record to disk.
+After all Phase 7 approvals are recorded, VMGR writes the structured Final V&V
+Decision record (Section 9 format) and sends it to COD for entry into
+`LIFECYCLE_STATE.md`.

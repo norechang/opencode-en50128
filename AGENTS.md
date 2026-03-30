@@ -2,6 +2,32 @@
 
 This document defines role-based agents for EN 50128 railway software development. Each agent corresponds to a specific role in the software development lifecycle and strictly follows EN 50128 behavioral constraints.
 
+## Path Root Conventions
+
+All agents and skills use two root anchors for file paths. Every path in agent and skill
+files that is not absolute MUST be prefixed with one of these labels:
+
+| Label | Resolves to | Examples |
+|-------|-------------|---------|
+| `[PROJECT_ROOT]` | Repository root — the directory containing `.workspace`, `AGENTS.md`, `deliverables/`, `activities/`, `examples/`, `tasks/`, `std/` | `[PROJECT_ROOT] deliverables/safety/Hazard-Log-template.md` |
+| `[SKILL_ROOT]` | The skill's own directory — `.opencode/skills/<skill-name>/` (the folder containing the loaded `SKILL.md`) | `[SKILL_ROOT] workflows/safety-analysis-procedures.md` |
+
+**Rule for skill and agent authors**: any file path that could be mistaken for either root
+MUST carry the appropriate `[PROJECT_ROOT]` or `[SKILL_ROOT]` prefix. Bare relative paths
+are forbidden in skill and agent files.
+
+**Examples**:
+```
+[PROJECT_ROOT] deliverables/requirements/Software-Requirements-Specification-template.md
+[PROJECT_ROOT] activities/phase-2-requirements.yaml
+[PROJECT_ROOT] std/EN50128-2011.md
+[SKILL_ROOT] workflows/safety-analysis-procedures.md
+[SKILL_ROOT] resources/misra-c-coding-patterns.md
+[SKILL_ROOT] review-criteria/generic-format-checker.yaml
+```
+
+---
+
 ## Agent Invocation Syntax
 
 User-facing agents are invoked using the `@agent` syntax in OpenCode:

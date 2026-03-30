@@ -1,6 +1,6 @@
 ---
 name: en50128-lifecycle-tool-integration
-description: workspace.py trace/wf command reference, Python automation scripts, EN 50128 coverage table, and statistics for COD lifecycle coordination
+description: workspace.py trace/wf command reference, EN 50128 coverage table, and statistics for COD lifecycle coordination
 license: Proprietary
 compatibility: opencode
 metadata:
@@ -12,125 +12,189 @@ metadata:
 # COD Tool Integration Reference
 
 **Load trigger**: Load this skill when executing any `workspace.py trace` or `workspace.py wf`
-command, when running Python automation scripts, or when reviewing EN 50128 coverage statistics.
+command, or when reviewing EN 50128 coverage statistics.
+
+**Canonical invocation**: `python3 tools/workspace.py <command>` from `[PROJECT_ROOT]`.
 
 ---
 
 ## Traceability Commands (`workspace.py trace`)
 
-**RTM Initialization**:
+**Create a traceability link**:
 ```bash
-workspace.py trace init --project <name> --sil <0-4>
+python3 tools/workspace.py trace create \
+  --from <SOURCE_ID> \
+  --to <TARGET_ID>
 ```
 
-**Add Requirements**:
+**Validate traceability** (gap detection):
 ```bash
-workspace.py trace add-requirement \
-  --req-id REQ-XXX-NNN \
-  --description "Requirement text" \
-  --sil <0-4>
-```
+python3 tools/workspace.py trace validate --sil <0-4>
 
-**Link Artifacts** (bidirectional):
-```bash
-# System Req → Software Req
-workspace.py trace link \
-  --from SYSTEM-REQ-010 \
-  --to REQ-XXX-001 \
-  --type requirements
-
-# Software Req → Design
-workspace.py trace link \
-  --from REQ-XXX-001 \
-  --to DES-XXX-010 \
-  --type design
-
-# Design → Implementation
-workspace.py trace link \
-  --from DES-XXX-010 \
-  --to src/module.c:50 \
-  --type implementation
-
-# Implementation → Unit Test
-workspace.py trace link \
-  --from src/module.c:50 \
-  --to TEST-XXX-050 \
-  --type unit_test
-
-# Unit Test → Integration Test
-workspace.py trace link \
-  --from TEST-XXX-050 \
-  --to TEST-INT-100 \
-  --type integration_test
-
-# Integration Test → System Test
-workspace.py trace link \
-  --from TEST-INT-100 \
-  --to TEST-SYS-200 \
-  --type system_test
-
-# System Test → Validation Result
-workspace.py trace link \
-  --from TEST-SYS-200 \
-  --to VALIDATION-RESULT-001 \
-  --type validation
-```
-
-**Validate Traceability** (gap detection):
-```bash
-workspace.py trace validate --sil <0-4>
+# With optional phase filter:
+python3 tools/workspace.py trace validate --sil <0-4> --phase <phase>
 
 # Output includes:
 # - Forward coverage % (requirements → implementation)
 # - Backward coverage % (implementation → requirements)
-# - Gap detection (6 types)
+# - Gap detection
 # - SIL compliance (PASS/FAIL)
+```
+
+**Check for traceability gaps**:
+```bash
+python3 tools/workspace.py trace check-gaps --sil <0-4>
+
+# With optional phase filter:
+python3 tools/workspace.py trace check-gaps --sil <0-4> --phase <phase>
 ```
 
 **Generate RTM Reports**:
 ```bash
 # Markdown report
-workspace.py trace report \
+python3 tools/workspace.py trace report \
+  --from <SOURCE_TYPE> \
+  --to <TARGET_TYPE> \
   --format markdown \
   --output docs/traceability/rtm.md
 
-# PDF report
-workspace.py trace report \
-  --format pdf \
-  --output docs/traceability/rtm.pdf
+# CSV report
+python3 tools/workspace.py trace report \
+  --from <SOURCE_TYPE> \
+  --to <TARGET_TYPE> \
+  --format csv \
+  --output docs/traceability/rtm.csv
 
-# HTML report (interactive)
-workspace.py trace report \
-  --format html \
-  --output docs/traceability/rtm.html
 ```
+Note: supported formats are markdown, csv, and json.
+      HTML is not supported by the traceability tool.
 
 **RTM Queries**:
 ```bash
-# Find all design elements for a requirement
-workspace.py trace query \
-  --from REQ-XXX-001 \
-  --target-type design
+# Forward query from a source artifact
+python3 tools/workspace.py trace query \
+  --source <SOURCE_ID> \
+  --direction forward
 
-# Find all tests for a requirement
-workspace.py trace query \
-  --from REQ-XXX-001 \
-  --target-type test
+# Backward query (upstream traceability)
+python3 tools/workspace.py trace query \
+  --source <SOURCE_ID> \
+  --direction backward
 
-# Find upstream requirements for code
-workspace.py trace query \
-  --from src/module.c:50 \
-  --direction backward \
-  --target-type requirement
+# Query both directions
+python3 tools/workspace.py trace query \
+  --source <SOURCE_ID> \
+  --direction both
 ```
 
-**RTM Audit**:
+**Import / Export traceability data**:
 ```bash
-workspace.py trace audit \
-  --sil <0-4> \
-  --auditor VER \
-  --output docs/verification/rtm_audit_report.md
+# Import from CSV
+python3 tools/workspace.py trace import \
+  --file <PATH> \
+  --type <TYPE> \
+  --format csv
+
+# Export matrix
+python3 tools/workspace.py trace export \
+  --matrix <NAME|all> \
+  --format csv \
+  --output <PATH>
 ```
+
+**Extract traceability items from a document**:
+```bash
+python3 tools/workspace.py trace extract \
+  --document <PATH> \
+  --type <TYPE>
+```
+
+**Visualize traceability**:
+```bash
+python3 tools/workspace.py trace visualize \
+  --from <TYPE> \
+  --to <TYPE> \
+  --format mermaid \
+  --output <PATH>
+```
+
+**Sync traceability matrix**:
+```bash
+python3 tools/workspace.py trace sync --matrix <NAME|all>
+```
+
+**Normative T-rule gate check** (reads `activities/traceability.yaml`):
+```bash
+# Check all T-rules applicable up to and including <phase>.
+# Exits 0 = all rules PASS; 1 = one or more FAIL.
+# Valid phases: planning | requirements | design | component-design |
+#               implementation-testing | integration | validation
+python3 tools/workspace.py trace gate-check \
+    --phase <phase> \
+    --sil <0-4>
+
+# Example — Phase 2 (requirements) gate check at SIL 3:
+python3 tools/workspace.py trace gate-check --phase requirements --sil 3
+
+# Output includes per-rule PASS/FAIL with normative clause citations
+# and a summary line.  T14 (100% coverage SIL 3-4) is reported as a
+# PASS note showing the threshold applied.  T15 (VER process obligation)
+# is reported as a Process Note — no matrix to check.
+```
+
+**Mark a traceability link as role-verified**:
+```bash
+python3 tools/workspace.py trace verify-link \
+    --matrix <MATRIX_NAME> \
+    --source <SOURCE_ID> \
+    --target <TARGET_ID> \
+    --name '<Reviewer Name or Role>'
+# Optional: --date YYYY-MM-DD  (defaults to today)
+# Writes verified=true, verified_by, verified_date back to the CSV
+# and regenerates the JSON/MD sidecar files.
+```
+
+---
+
+## Matrix Naming Convention
+
+All traceability matrix CSVs live under `evidence/traceability/` and follow:
+
+```
+doc<FROM>_to_doc<TO>.csv
+```
+
+where `<FROM>` and `<TO>` are Annex C document numbers or system-document
+identifiers (S1–S4).  Examples:
+
+| T-Rule | Matrix file | Description |
+|--------|-------------|-------------|
+| T1 | `docS1_to_doc6.csv` | System Requirements → SRS |
+| T2 | `docS4_to_doc6.csv` | Safety Plan → SRS |
+| T3 | `doc6_to_doc9.csv` | SRS → Architecture |
+| T4 | `doc9_to_doc6.csv` | Architecture → SRS (backward) |
+| T5a | `doc10_to_doc9.csv` | Design Spec → Architecture |
+| T5b | `doc10_to_doc6.csv` | Design Spec → SRS |
+| T5c | `doc10_to_doc11.csv` | Design Spec → Interface Spec |
+| T6 | `doc15_to_doc10.csv` | Component Design → Design Spec |
+| T7 | `doc18_to_doc15.csv` | Source Code → Component Design |
+| T8 | `doc7_to_doc6.csv` | Overall Test Spec → SRS |
+| T9 | `doc6_to_doc7.csv` | SRS → Overall Test Spec (backward) |
+| T10a | `doc12_to_doc6.csv` etc. | Integration Test Spec → SRS/Arch/Design/Interface |
+| T11 | `doc16_to_doc15.csv` | Component Test Spec → Component Design |
+| T12a | `doc20_to_doc16.csv` | Component Test Report → Component Test Spec |
+| T13 | `doc25_to_doc6.csv` | Validation Report → SRS |
+
+---
+
+## Tool Limitations
+
+| Command | Scope | Notes |
+|---------|-------|-------|
+| `trace validate --sil N` | Per-matrix gap detection | Does NOT check T1–T15 normative rules; use for individual matrix completeness |
+| `trace check-gaps --sil N` | Per-matrix gap listing | Same scope limitation as `validate` |
+| `trace gate-check --phase P --sil N` | T1–T15 normative rules | Primary phase gate command; cumulative (all rules up to phase P) |
+| `trace verify-link` | Single link sign-off | Marks one (source, target) pair verified in named matrix CSV |
 
 ---
 
@@ -138,128 +202,111 @@ workspace.py trace audit \
 
 **Document Submission**:
 ```bash
-workspace.py wf submit-document \
-  --document-id SRS-v1.0 \
-  --title "Software Requirements Specification v1.0" \
-  --phase requirements \
-  --author "REQ Agent" \
-  --status "Submitted for Review"
+python3 tools/workspace.py wf submit <DOCUMENT_ID> \
+  --path <path-to-document> \
+  --author-role <ROLE> \
+  --author-name '<Name>' \
+  --sil <0-4>
 ```
 
-**Document Approval Workflow**:
+**Document Review** (record a review decision):
 ```bash
-# List pending approvals
-workspace.py wf list-pending
+# Approve
+python3 tools/workspace.py wf review <DOCUMENT_ID> \
+  --role <ROLE> \
+  --name '<Name>' \
+  --approve \
+  --comment "Review findings / rationale"
 
-# Approve document (QUA review)
-workspace.py wf approve-document \
-  --document-id SRS-v1.0 \
-  --approver "QUA Agent" \
-  --comment "Template compliance verified"
-
-# Approve document (VER review)
-workspace.py wf approve-document \
-  --document-id SRS-v1.0 \
-  --approver "VER Agent" \
-  --comment "Requirements traceability complete"
-
-# Check approval status
-workspace.py wf status --document-id SRS-v1.0
-
-# Output:
-# Document: SRS-v1.0
-# Status: APPROVED (2/2 approvals)
-# Approvals:
-#   - QUA Agent (2026-03-10): Template compliance verified
-#   - VER Agent (2026-03-11): Requirements traceability complete
+# Reject
+python3 tools/workspace.py wf review <DOCUMENT_ID> \
+  --role <ROLE> \
+  --name '<Name>' \
+  --reject \
+  --comment "<finding summary>"
 ```
 
-**Gate Check Workflow**:
+**Document Approval** (final approve after all reviews):
 ```bash
-# Submit gate check request
-workspace.py wf request-gate-check \
-  --phase requirements \
-  --requestor "REQ Agent"
+python3 tools/workspace.py wf approve <DOCUMENT_ID>
 
-# COD performs gate check
-@cod gate-check requirements
-
-# Record gate decision
-workspace.py wf record-gate-decision \
-  --phase requirements \
-  --decision PASS \
-  --decision-date 2026-03-12 \
-  --notes "All criteria met, proceed to design"
+# Force approve (use with caution):
+python3 tools/workspace.py wf approve <DOCUMENT_ID> --force
 ```
 
-**Iteration Workflow**:
+**Check Workflow Status**:
 ```bash
-# Submit change request
-workspace.py wf submit-cr \
-  --cr-id CR-PROJ-0001 \
-  --category requirements_change \
-  --requestor "VAL Agent"
+# All documents
+python3 tools/workspace.py wf status --all --format markdown
 
-# Track CR approval
-workspace.py wf approve-cr \
-  --cr-id CR-PROJ-0001 \
-  --approver "CCB"
+# Specific document
+python3 tools/workspace.py wf status --document <DOCUMENT_ID>
 
-# Track iteration progress
-workspace.py wf update-iteration \
-  --iteration-id ITER-001 \
-  --artifact-updated REQ-PROJ-025 \
-  --action added
+# Filter by phase
+python3 tools/workspace.py wf status --phase <PHASE> --format markdown
 
-# Close iteration
-workspace.py wf close-iteration \
-  --iteration-id ITER-001 \
-  --status COMPLETE
+# Show approval details
+python3 tools/workspace.py wf status --document <DOCUMENT_ID> --approvals
+```
+
+**Document Workflow History**:
+```bash
+python3 tools/workspace.py wf history <DOCUMENT_ID>
+
+# JSON output (structured):
+python3 tools/workspace.py wf history <DOCUMENT_ID> --format json
+
+# NOTE: --format timeline is accepted by argparse but NOT implemented in
+# workflow_manager.py; it silently falls through to plain-text output.
+# Use --format json or omit --format for reliable results.
 ```
 
 **Baseline Management**:
 ```bash
-# Create baseline
-workspace.py wf create-baseline \
-  --baseline-id v1.0.0 \
-  --phase requirements \
-  --date 2026-03-12
+# Create a baseline (--tag is required)
+python3 tools/workspace.py wf baseline \
+  --tag <TAG> \
+  --phase <PHASE> \
+  --message "<message>"
 
-# Query baseline
-workspace.py wf query-baseline \
-  --baseline-id v1.0.0
+# Baseline a specific document
+python3 tools/workspace.py wf baseline \
+  --tag <TAG> \
+  --document <DOCUMENT_ID>
+```
 
-# Output:
-# Baseline: v1.0.0
-# Phase: Requirements
-# Date: 2026-03-12
-# Deliverables:
-#   - SRS-v1.0 (APPROVED)
-#   - Traceability Matrix v1.0 (100% coverage)
+**Gate Check**:
+```bash
+# Run gate check for a lifecycle phase
+python3 tools/workspace.py wf gate-check --phase <1-8>
+
+# With SIL filter:
+python3 tools/workspace.py wf gate-check --phase <1-8> --sil <0-4>
+
+# JSON output:
+python3 tools/workspace.py wf gate-check --phase <1-8> --format json
 ```
 
 ---
 
-## Python Automation Scripts
+## Workspace Commands
 
-All workflows include Python automation scripts for efficiency and consistency:
+```bash
+# List all workspaces
+python3 tools/workspace.py list
 
-### Phase Gate Management
-- **`tools/gate_checker.py`** (~400 lines) - Automated phase gate validation with SIL-specific criteria
+# Show active workspace
+python3 tools/workspace.py status
 
-### V-Model Orchestration
-- **`tools/phase_transition_checker.py`** (~200 lines) - Validates phase transition readiness
-- **`tools/agent_status_tracker.py`** (~150 lines) - Tracks agent activity and deliverable status
-- **`tools/lifecycle_state_manager.py`** (~150 lines) - Manages LIFECYCLE_STATE.md updates
+# Create a new workspace
+python3 tools/workspace.py create <project_name> --sil <0-4>
 
-### Traceability and RTM
-- **`tools/rtm_gap_detector.py`** (~250 lines) - Detects 6 types of traceability gaps with detailed reporting
+# Switch to a workspace
+python3 tools/workspace.py switch <project_name>
 
-### Iteration and Change Management
-- **`tools/cr_impact_analyzer.py`** (~250 lines) - Analyzes CR impact on downstream artifacts and estimates effort
-- **`tools/regression_test_selector.py`** (~200 lines) - Selects regression tests based on SIL level and changed artifacts
-
-**Total Automation**: ~1,600 lines of Python scripts for lifecycle coordination
+# Archive a workspace
+python3 tools/workspace.py archive <project_name>
+```
 
 ---
 
@@ -286,29 +333,11 @@ This skill set provides complete coverage of EN 50128 lifecycle management requi
 | 10 | Traceability | R | HR | **M** | **RTM Management Workflow** |
 
 **Key Requirements Covered**:
-- **V-Model Structure** (Section 5.3): Highly recommended per §5.3, Figures 3–4; alternative models permissible per §5.3.2.14; implemented in V-Model Orchestration Workflow
-- **Iterations** (Section 5.3.2.2): "The lifecycle model shall take into account the possibility of iterations in and between phases" - implemented in Iteration and Change Management Workflow
-- **Phase Planning** (Section 5.3.2.5): "All activities to be performed during a phase shall be defined and planned prior to commencement" - implemented in V-Model Orchestration Workflow (phase initialization)
-- **Traceability** (Section 5.3.2.7): "For each document, traceability shall be provided" - implemented in RTM Management Workflow (bidirectional traceability with 100% coverage SIL 3-4)
-- **Document Control** (Annex C Table C.1): Phase-to-document mapping for all 8 phases - implemented in Phase Gate Management Workflow
-
----
-
-## Statistics
-
-**Total Content**:
-- **Workflows**: 4 comprehensive workflows
-- **Total Lines**: ~12,000 lines (Gate: 2,319, Orchestration: 1,507, RTM: 1,481, Iteration: 1,543)
-- **Total Pages**: ~300 pages (assuming 40 lines/page)
-- **Python Scripts**: 7 automation scripts (~1,600 lines total)
-- **Tool Commands**: 60+ `workspace.py trace` and `workspace.py wf` examples
-- **Complete Examples**: 30+ complete lifecycle scenarios (SIL 0, 2, 3, 4)
-
-**Workflow Sizes**:
-1. Phase Gate Management: 2,319 lines (~93 pages)
-2. V-Model Orchestration: 1,507 lines (~60 pages)
-3. Traceability and RTM: 1,481 lines (~59 pages)
-4. Iteration and Change Management: 1,543 lines (~62 pages)
+- **V-Model Structure** (Section 5.3): Highly recommended per §5.3, Figures 3–4; alternative models permissible per §5.3.2.14
+- **Iterations** (Section 5.3.2.2): "The lifecycle model shall take into account the possibility of iterations in and between phases"
+- **Phase Planning** (Section 5.3.2.5): "All activities to be performed during a phase shall be defined and planned prior to commencement"
+- **Traceability** (Section 5.3.2.7): "For each document, traceability shall be provided" — bidirectional traceability with 100% coverage SIL 3-4
+- **Document Control** (Annex C Table C.1): Phase-to-document mapping for all 8 phases
 
 ---
 

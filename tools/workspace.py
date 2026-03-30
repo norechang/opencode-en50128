@@ -50,9 +50,11 @@ class WorkspaceManager:
             return data
 
     def _save_workspace_data(self, data: Dict):
-        """Save workspace data to .workspace file."""
-        with open(WORKSPACE_FILE, 'w') as f:
+        """Save workspace data to .workspace file (atomic write)."""
+        tmp_path = Path(str(WORKSPACE_FILE) + ".tmp")
+        with open(tmp_path, 'w') as f:
             json.dump(data, f, indent=2)
+        os.replace(tmp_path, WORKSPACE_FILE)
 
     def _discover_workspaces(self) -> Dict:
         """Discover workspaces by scanning examples/ directory."""
@@ -105,10 +107,18 @@ class WorkspaceManager:
                     parts = line.split('|')
                     if len(parts) >= 3:
                         sil_str = parts[2].strip()
+                        # LIFECYCLE_STATE.md stores "SIL 3" not just "3" —
+                        # strip the optional "SIL " prefix before conversion.
+                        sil_numeric = sil_str.upper().removeprefix("SIL").strip()
                         try:
-                            info['sil'] = int(sil_str)
+                            info['sil'] = int(sil_numeric)
                         except ValueError:
-                            info['sil'] = 3  # Default
+                            print(
+                                f"Warning: Could not parse SIL level from {filepath} "
+                                f"(got '{sil_str}'); defaulting to 0.",
+                                file=sys.stderr,
+                            )
+                            info['sil'] = 0
 
                 # Extract current phase
                 if '| **Current Phase**' in line:
@@ -133,7 +143,7 @@ class WorkspaceManager:
             return info if info else None
 
         except Exception as e:
-            print(f"Warning: Could not parse {filepath}: {e}")
+            print(f"Warning: Could not parse {filepath}: {e}", file=sys.stderr)
             return None
 
     def list_workspaces(self):
@@ -142,8 +152,8 @@ class WorkspaceManager:
         active = self.workspace_data.get('active_workspace')
 
         if not workspaces:
-            print("No workspaces found.")
-            print(f"\nCreate a new workspace: workspace.py create <project_name> --sil <0-4>")
+            print("No workspaces found.", file=sys.stderr)
+            print(f"\nCreate a new workspace: workspace.py create <project_name> --sil <0-4>", file=sys.stderr)
             return
 
         print("=" * 80)
@@ -184,8 +194,8 @@ class WorkspaceManager:
         workspaces = self.workspace_data.get('workspaces', {})
 
         if not active or active not in workspaces:
-            print("Error: No active workspace.")
-            print("Run: workspace.py list")
+            print("Error: No active workspace.", file=sys.stderr)
+            print("Run: workspace.py list", file=sys.stderr)
             return
 
         info = workspaces[active]
@@ -236,37 +246,53 @@ class WorkspaceManager:
                         if row_count >= 3:
                             break
         except Exception as e:
-            print(f"  (Could not read activity: {e})")
+            print(f"  (Could not read activity: {e})", file=sys.stderr)
 
     def _show_next_steps(self, info: Dict):
         """Show recommended next steps based on current phase."""
         phase = info.get('current_phase', '').lower()
-        
-        if 'planning' in phase or 'initialization' in phase:
+
+        if 'initialization' in phase:
+            print("  1. Initialize lifecycle: @cod plan --sil <N> --project <name>")
+            print("  2. Run: @pm execute-phase 1")
+        elif 'planning' in phase:
             print("  1. Complete planning documents (SQAP, SCMP, SVP, SVaP)")
-            print("  2. Run: /cod gate-check planning")
+            print("  2. Run: @cod gate-check planning")
         elif 'requirements' in phase:
             print("  1. Complete Software Requirements Specification")
             print("  2. Update Requirements Traceability Matrix")
-            print("  3. Run: /cod gate-check requirements")
-        elif 'architecture' in phase or 'design' in phase:
+            print("  3. Run: @cod gate-check requirements")
+        elif 'component' in phase:
+            print("  1. Complete Software Component Design Specification")
+            print("  2. Complete Software Component Test Specification")
+            print("  3. Run: @cod gate-check component-design")
+        elif 'architecture' in phase:
             print("  1. Complete Software Architecture Specification")
             print("  2. Complete Software Design Specification")
-            print("  3. Run: /cod gate-check architecture-design")
+            print("  3. Run: @cod gate-check design")
         elif 'implementation' in phase:
-            print("  1. Implement source code")
-            print("  2. Run unit tests")
-            print("  3. Run: /cod gate-check implementation")
+            print("  1. Implement source code (MISRA C)")
+            print("  2. Run unit tests and measure coverage")
+            print("  3. Run: @cod gate-check implementation-testing")
         elif 'integration' in phase:
             print("  1. Run integration tests")
             print("  2. Review integration test results")
-            print("  3. Run: /cod gate-check integration")
+            print("  3. Run: @cod gate-check integration")
         elif 'validation' in phase:
             print("  1. Run validation tests")
             print("  2. Prepare for independent assessment")
-            print("  3. Run: /cod gate-check validation")
+            print("  3. Run: @cod gate-check validation")
+        elif 'assessment' in phase:
+            print("  1. Compile artifact package for external assessor")
+            print("  2. Run: @cod gate-check assessment")
+        elif 'deployment' in phase:
+            print("  1. Prepare release and deployment plan")
+            print("  2. Run: @cod gate-check deployment")
+        elif 'maintenance' in phase:
+            print("  1. Track change requests via CCB")
+            print("  2. Apply maintenance records")
         else:
-            print("  Run: /cod status (for detailed lifecycle state)")
+            print("  Run: @cod status  (for detailed lifecycle state)")
 
     def switch_workspace(self, target_name: str):
         """Switch to a different workspace."""
@@ -274,10 +300,10 @@ class WorkspaceManager:
         current_active = self.workspace_data.get('active_workspace')
 
         if target_name not in workspaces:
-            print(f"Error: Workspace '{target_name}' not found.")
-            print("\nAvailable workspaces:")
+            print(f"Error: Workspace '{target_name}' not found.", file=sys.stderr)
+            print("\nAvailable workspaces:", file=sys.stderr)
             for name in workspaces.keys():
-                print(f"  - {name}")
+                print(f"  - {name}", file=sys.stderr)
             return False
 
         if target_name == current_active:
@@ -313,7 +339,7 @@ class WorkspaceManager:
         self._show_next_steps(target_info)
         print()
         print("Available commands:")
-        print("  /cod status           - View detailed lifecycle state")
+        print("  @cod status           - View detailed lifecycle state")
         print("  workspace.py status   - Show workspace status")
         print()
 
@@ -324,16 +350,16 @@ class WorkspaceManager:
         workspaces = self.workspace_data.get('workspaces', {})
 
         if project_name in workspaces:
-            print(f"Error: Workspace '{project_name}' already exists.")
+            print(f"Error: Workspace '{project_name}' already exists.", file=sys.stderr)
             return False
 
         if not (0 <= sil <= 4):
-            print(f"Error: SIL level must be 0-4 (got {sil}).")
+            print(f"Error: SIL level must be 0-4 (got {sil}).", file=sys.stderr)
             return False
 
         project_path = EXAMPLES_DIR / project_name
         if project_path.exists():
-            print(f"Error: Directory {project_path} already exists.")
+            print(f"Error: Directory {project_path} already exists.", file=sys.stderr)
             return False
 
         print(f"Creating new workspace: {project_name} (SIL {sil})...")
@@ -378,7 +404,7 @@ class WorkspaceManager:
         print()
         print("Next steps:")
         print(f"  1. Switch to workspace: workspace.py switch {project_name}")
-        print(f"  2. Initialize lifecycle: /cod plan --sil {sil} --project {project_name}")
+        print(f"  2. Initialize lifecycle: @cod plan --sil {sil} --project {project_name}")
         print()
 
         return True
@@ -426,7 +452,7 @@ class WorkspaceManager:
 
 ## Next Steps
 
-1. Run `/cod plan --sil {sil} --project {project_name}` to initialize lifecycle
+1. Run `@cod plan --sil {sil} --project {project_name}` to initialize lifecycle
 2. Create planning documents (SQAP, SCMP, SVP, SVaP)
 3. Review EN 50128 requirements for SIL {sil}
 
@@ -489,19 +515,19 @@ See `LIFECYCLE_STATE.md` for detailed lifecycle state.
 ### 1. Initialize Lifecycle
 
 ```bash
-/cod plan --sil {sil} --project {project_name}
+@cod plan --sil {sil} --project {project_name}
 ```
 
 ### 2. Create Planning Documents
 
 ```bash
-/pm create-plans
+@pm execute-phase 1
 ```
 
 ### 3. Define Requirements
 
 ```bash
-/req
+@pm execute-phase 2
 ```
 
 ---
@@ -539,19 +565,19 @@ This project follows EN 50128:2011 SIL {sil} requirements.
 - Code reviews recommended"""
         elif sil == 2:
             return """- MISRA C:2012 compliance mandatory
-- 100% statement + branch coverage
+- Branch coverage highly recommended (no mandatory percentage threshold)
 - Static memory allocation only
 - Code reviews mandatory"""
         elif sil == 3:
             return """- MISRA C:2012 compliance mandatory (zero mandatory violations)
-- 100% statement, branch, and MC/DC coverage
+- Branch + compound condition coverage highly recommended (no mandatory percentage threshold)
 - Static memory allocation only (no malloc/free)
 - Cyclomatic complexity ≤ 10
 - Independent verification required
 - Code reviews mandatory"""
         elif sil == 4:
             return """- MISRA C:2012 compliance mandatory (zero violations)
-- 100% statement, branch, and MC/DC coverage
+- Branch + compound condition coverage highly recommended (no mandatory percentage threshold)
 - Formal methods highly recommended
 - Static memory allocation only
 - Cyclomatic complexity ≤ 10
@@ -567,12 +593,12 @@ This project follows EN 50128:2011 SIL {sil} requirements.
         active = self.workspace_data.get('active_workspace')
 
         if project_name not in workspaces:
-            print(f"Error: Workspace '{project_name}' not found.")
+            print(f"Error: Workspace '{project_name}' not found.", file=sys.stderr)
             return False
 
         if project_name == active:
-            print(f"Error: Cannot archive active workspace '{project_name}'.")
-            print("Switch to another workspace first: workspace.py switch <other_project>")
+            print(f"Error: Cannot archive active workspace '{project_name}'.", file=sys.stderr)
+            print("Switch to another workspace first: workspace.py switch <other_project>", file=sys.stderr)
             return False
 
         print(f"Archiving workspace: {project_name}...")
@@ -586,7 +612,7 @@ This project follows EN 50128:2011 SIL {sil} requirements.
         archive_path = ARCHIVED_DIR / project_name
 
         if archive_path.exists():
-            print(f"Error: Archive destination {archive_path} already exists.")
+            print(f"Error: Archive destination {archive_path} already exists.", file=sys.stderr)
             return False
 
         project_path.rename(archive_path)
@@ -606,11 +632,30 @@ This project follows EN 50128:2011 SIL {sil} requirements.
         return True
 
 
+def _active_project_path(manager: "WorkspaceManager") -> Path:
+    """
+    Return the absolute path to the active project workspace directory.
+
+    Falls back to PLATFORM_ROOT if no workspace is active or its path cannot
+    be resolved — this keeps subtool invocations working even in a bare-repo
+    context where no workspace has been created yet.
+    """
+    active = manager.workspace_data.get('active_workspace')
+    workspaces = manager.workspace_data.get('workspaces', {})
+    if active and active in workspaces:
+        rel = workspaces[active].get('path', '')
+        if rel:
+            candidate = PLATFORM_ROOT / rel
+            if candidate.is_dir():
+                return candidate
+    return PLATFORM_ROOT
+
+
 def main():
     """Main entry point."""
     manager = WorkspaceManager()
 
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 2 or sys.argv[1] in ('-h', '--help'):
         print("Usage: workspace.py <command> [options]")
         print()
         print("Workspace Commands:")
@@ -632,6 +677,7 @@ def main():
         print("    extract      - Auto-extract from documents")
         print("    visualize    - Generate visualizations")
         print("    sync         - Synchronize formats")
+        print("    gate-check   - Normative T-rule gate check")
         print()
         print("Workflow Commands:")
         print("  wf <subcommand> [options]         - Workflow management")
@@ -641,6 +687,7 @@ def main():
         print("    baseline     - Create baseline")
         print("    status       - Generate status report")
         print("    history      - Show workflow history")
+        print("    gate-check   - Phase gate compliance check")
         print()
         print("Examples:")
         print("  workspace.py list")
@@ -650,7 +697,7 @@ def main():
         print("  workspace.py trace validate --phase design --sil 3")
         print("  workspace.py wf submit DOC-SRS-2026-001 --path docs/SRS.md --author-role REQ --author-name 'Jane Doe' --sil 3")
         print("  workspace.py wf status --all --format markdown")
-        sys.exit(1)
+        sys.exit(0 if (len(sys.argv) >= 2 and sys.argv[1] in ('-h', '--help')) else 1)
 
     command = sys.argv[1]
 
@@ -664,7 +711,8 @@ def main():
             print("Usage: workspace.py switch <project_name>")
             sys.exit(1)
         project_name = sys.argv[2]
-        manager.switch_workspace(project_name)
+        if not manager.switch_workspace(project_name):
+            sys.exit(1)
     elif command == "create":
         if len(sys.argv) < 5 or sys.argv[3] != "--sil":
             print("Error: Invalid arguments.")
@@ -676,25 +724,32 @@ def main():
         except ValueError:
             print(f"Error: SIL level must be an integer (0-4).")
             sys.exit(1)
-        manager.create_workspace(project_name, sil)
+        if not manager.create_workspace(project_name, sil):
+            sys.exit(1)
     elif command == "archive":
         if len(sys.argv) < 3:
             print("Error: Missing project name.")
             print("Usage: workspace.py archive <project_name>")
             sys.exit(1)
         project_name = sys.argv[2]
-        manager.archive_workspace(project_name)
+        if not manager.archive_workspace(project_name):
+            sys.exit(1)
     elif command == "trace":
-        # Delegate to traceability_manager.py
+        # Delegate to traceability_manager.py, running inside the active project dir
+        # so that bare-path opens (LIFECYCLE_STATE.md, evidence/traceability/, etc.)
+        # resolve to the correct workspace rather than PLATFORM_ROOT.
         tool_path = PLATFORM_ROOT / "tools" / "traceability_manager.py"
+        project_cwd = _active_project_path(manager)
         args = ["python3", str(tool_path)] + sys.argv[2:]
-        result = subprocess.run(args)
+        result = subprocess.run(args, cwd=str(project_cwd))
         sys.exit(result.returncode)
     elif command == "wf" or command == "workflow":
-        # Delegate to workflow_manager.py
+        # Delegate to workflow_manager.py, running inside the active project dir
+        # so that LIFECYCLE_STATE.md and .workflow/ resolve to the correct workspace.
         tool_path = PLATFORM_ROOT / "tools" / "workflow_manager.py"
+        project_cwd = _active_project_path(manager)
         args = ["python3", str(tool_path)] + sys.argv[2:]
-        result = subprocess.run(args)
+        result = subprocess.run(args, cwd=str(project_cwd))
         sys.exit(result.returncode)
     else:
         print(f"Error: Unknown command '{command}'.")

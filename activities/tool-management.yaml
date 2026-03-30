@@ -216,7 +216,9 @@ tool_management:
           Complete the formal report using the appropriate template:
           T3: deliverables/tools/Tool-Qualification-Report-template.md
           T2: deliverables/tools/Tool-Validation-Report-template.md
-          Submit via workspace.py wf submit <report-file>.
+          Submit the completed report via the workflow:
+            python3 tools/workspace.py wf submit <DOC-TVR-ID>
+              --path <report-file> --author-role VER --author-name '<Name>'
           Mandatory for SIL 3-4; highly recommended for SIL 1-2.
         responsible: [VER]
         reviewers: [QUA, PM]
@@ -227,7 +229,8 @@ tool_management:
         activity: >
           Lock exact tool versions (including Python package versions) in the SCMP.
           Record SHA256 checksums for downloaded tool binaries.
-          Tag the baseline in Git: workspace.py wf baseline <tool-id>.
+          Tag the baseline in Git:
+            python3 tools/workspace.py wf baseline --tag <TAG> --document <tool-id>
           For SIL 3-4: tool version updates require a Change Request through CCB.
         responsible: [CM]
         gate: "Tool versions baselined in SCMP, Git tag created"
@@ -474,9 +477,9 @@ tool_management:
 
     workflow_submission:
       tool: workspace
-      submit:  "python3 tools/workspace.py wf submit <deliverable-id> <file-path>"
+      submit:  "python3 tools/workspace.py wf submit <deliverable-id> --path <file-path> --author-role <ROLE> --author-name '<Name>'"
       approve: "python3 tools/workspace.py wf approve <deliverable-id>"
-      status:  "python3 tools/workspace.py wf status"
+      status:  "python3 tools/workspace.py wf status --all"
 
   # ── 6-Step Agent Tool Usage Protocol ──────────────────────────────────────────
   agent_usage_protocol:

@@ -1,7 +1,15 @@
-# EN 50128 Verification Skill
 ---
 name: en50128-verification
+description: Software verification with static analysis and coverage for EN 50128 railway software per Section 6.2
+license: Proprietary
+compatibility: opencode
+metadata:
+  standard: EN 50128:2011
+  domain: railway-software
+  role: verifier
 ---
+
+# EN 50128 Verification Skill
 
 **Role**: Verifier (VER)  
 **Standard**: EN 50128:2011 §6.2, Tables A.5, A.19, A.21  
@@ -16,7 +24,7 @@ VER operates in two modes in the EN 50128 V-Model lifecycle:
 
 **Author mode** (primary): VER authors a Verification Report for each phase by reviewing
 all Track A deliverables produced in that phase, applying criteria from
-`deliverables/<phase>/<DeliverableName>.yaml`, and recording findings.
+`[PROJECT_ROOT] deliverables/<phase>/<DeliverableName>.yaml`, and recording findings.
 
 **1st-Check mode** (secondary): VER performs 1st Check on ASR-authored items 45–46 in
 Phase 8 only. No VER report is produced for Phase 8 — the check is recorded in-line.
@@ -82,12 +90,12 @@ When PM or COD requests VER to author a Verification Report for a phase:
 2. Read activities/vnv-process.yaml → identify ver_report_item for this phase
 3. For each track_a_deliverable in this phase:
    a. Resolve canonical path via CM query-location
-   b. Read deliverables/<phase>/<DeliverableName>.yaml
+    b. Read [PROJECT_ROOT] deliverables/<phase>/<DeliverableName>.yaml
    c. Apply sil_requirements[sil_level].additional_requirements
    d. Apply evidence_requirements[].verification_criteria
    e. Record PASS / FAIL / OBSERVATION per criterion
 4. If SIL 3-4: confirm verifier independence from all development roles
- 5. Select report template from deliverables/<phase>/ (Section 10 table)
+ 5. Select report template from [PROJECT_ROOT] deliverables/<phase>/ (Section 10 table)
 6. Author Verification Report — all criteria results, defect list, traceability summary,
    EN 50128 compliance section, conclusion (PASS/FAIL/PASS WITH OBSERVATIONS)
 7. Write report to docs/<phase>/<DocID>.md
@@ -106,7 +114,7 @@ Phase 7 runs two sequential sub-chains. The full definition is in
 
 **Step B1 — SW Integration Verification Report (item 23)**:
 - Input: TST-authored Overall SW Test Report (item 24) + integration test results (items 21-22)
-- VER applies `deliverables/integration/Software-Integration-Verification-Report.yaml` criteria
+- VER applies `[PROJECT_ROOT] deliverables/integration/Software-Integration-Verification-Report.yaml` criteria
 - VER authors item 23
 - Item 23 goes QUA → VMGR
 
@@ -144,7 +152,7 @@ VER authors the Software Verification Plan at Phase 1 per §6.2.4.2.
 3. List of deliverables VER will review (all Annex C items subject to VER 1st Check)
 4. Explicitly name item † (SW Validation Verification Report) per §6.3.4.12
 5. Verification techniques per SIL level (Table A.5, A.19, A.21)
-6. Verification criteria sources (reference `deliverables/<phase>/*.yaml`)
+6. Verification criteria sources (reference `[PROJECT_ROOT] deliverables/<phase>/*.yaml`)
 7. Verification schedule (linked to phase gates)
 8. Defect severity definitions and escalation rules
 
@@ -219,34 +227,105 @@ a project-defined acceptance criterion documented in the SVP.
 
 | Item | Template File | Location |
 |------|--------------|----------|
-| 2 | Software-SQAP-Verification-Report-template.md | `deliverables/planning/` |
+| 2 | Software-SQAP-Verification-Report-template.md | `[PROJECT_ROOT] deliverables/planning/` |
 | 4 | *(SVP — not a report template; author per §6.2.4.2)* | — |
-| 8 | Software-Requirements-Verification-Report-template.md | `deliverables/requirements/` |
-| 14 | Software-Architecture-Design-Verification-Report-template.md | `deliverables/architecture/` |
-| 17 | Software-Component-Design-Verification-Report-template.md | `deliverables/component-design/` |
-| 19 | Software-Source-Code-Verification-Report-template.md | `deliverables/implementation/` |
-| 23 | Software-Integration-Verification-Report-template.md | `deliverables/integration/` |
-| † | Software-Validation-Verification-Report-template.md | `deliverables/validation/` |
-| 40 | Software-Deployment-Verification-Report-template.md | `deliverables/deployment/` |
-| 44 | Software-Maintenance-Verification-Report-template.md | `deliverables/maintenance/` |
+| 8 | Software-Requirements-Verification-Report-template.md | `[PROJECT_ROOT] deliverables/requirements/` |
+| 14 | Software-Architecture-Design-Verification-Report-template.md | `[PROJECT_ROOT] deliverables/architecture/` |
+| 17 | Software-Component-Design-Verification-Report-template.md | `[PROJECT_ROOT] deliverables/component-design/` |
+| 19 | Software-Source-Code-Verification-Report-template.md | `[PROJECT_ROOT] deliverables/implementation/` |
+| 23 | Software-Integration-Verification-Report-template.md | `[PROJECT_ROOT] deliverables/integration/` |
+| † | Software-Validation-Verification-Report-template.md | `[PROJECT_ROOT] deliverables/validation/` |
+| 40 | Software-Deployment-Verification-Report-template.md | `[PROJECT_ROOT] deliverables/deployment/` |
+| 44 | Software-Maintenance-Verification-Report-template.md | `[PROJECT_ROOT] deliverables/maintenance/` |
 
 ---
 
 ## 11. Tool Integration
 
-VER uses `workspace.py wf` commands from `activities/workflow.yaml`:
+### Traceability gate check (T1–T15 normative rules)
+
+VER SHALL run `trace gate-check` at each phase gate to confirm T1–T15 coverage before
+recording findings in the Verification Report. This command reads
+`activities/traceability.yaml` and checks each applicable rule against the matrix CSV
+files in `evidence/traceability/` (see Matrix Naming Convention below).
 
 ```bash
-# Record VER review result (1st Check)
-python3 workspace.py wf review --item <annex_c_item> --result PASS|FAIL \
-  --reviewer VER --report <path-to-ver-report>
+# Check all T1–T15 rules applicable up to and including this phase (SIL 3 example)
+python3 tools/workspace.py trace gate-check \
+  --phase <requirements|design|component-design|implementation-testing|integration|validation> \
+  --sil <0-4>
 
-# Submit VER report for QUA format-gate check
-python3 workspace.py wf submit --item <annex_c_item> --doc <path>
-
-# Log defect found during verification
-python3 workspace.py wf log-defect --ncr <DEF-ID> --severity MINOR|MAJOR|CRITICAL \
-  --item <annex_c_item> --description "<description>"
+# Exit code 0 = PASS (all rules met); exit code 1 = FAIL (gate BLOCKED)
+# Per-rule PASS/FAIL with normative clause citations is printed to stdout.
 ```
+
+**Important — T15**: `gate-check` outputs a process note for T15 reminding VER that
+T15 is a process obligation (VER records findings in the Verification Report). The tool
+confirms matrix CSV coverage only; it does NOT verify the narrative content of VER reports.
+
+### Matrix naming convention
+
+Matrix CSV files must follow the document-ID convention for the tool's `--phase` filter
+and `gate-check` to find them:
+
+```
+evidence/traceability/doc<from>_to_doc<to>.csv
+```
+
+Examples (derived from T1–T15 in `TRACEABILITY.md §9`):
+
+| Rule | Matrix name |
+|------|-------------|
+| T1: S1 → [6] | `docS1_to_doc6.csv` |
+| T2: S4 → [6] | `docS4_to_doc6.csv` |
+| T3: [6] → [9] | `doc6_to_doc9.csv` |
+| T7: [18] → [15] | `doc18_to_doc15.csv` |
+| T13: [25] → [6] | `doc25_to_doc6.csv` |
+
+Use `python3 tools/workspace.py trace create --from <FROM> --to <TO>` to scaffold new
+matrices, where `<FROM>` and `<TO>` match the document-ID convention above.
+
+### Marking links as VER-verified
+
+After reviewing a traceability matrix, VER SHALL mark accepted links as verified:
+
+```bash
+python3 tools/workspace.py trace verify-link \
+  --matrix doc6_to_doc9 \
+  --source <SOURCE_ID> \
+  --target <TARGET_ID> \
+  --by "VER" \
+  --date <YYYY-MM-DD>
+```
+
+Unverified links cause `check-gaps --sil 3` warnings; verified links suppress them.
+
+### Workflow commands
+
+```bash
+# Submit VER report for QUA format-gate check
+python3 tools/workspace.py wf submit <DOCUMENT_ID> \
+  --path <path-to-ver-report> \
+  --author-role VER \
+  --author-name '<VER Name>' \
+  --sil <0-4>
+
+# Record VER review decision (approve — 1st Check PASS)
+python3 tools/workspace.py wf review <DOCUMENT_ID> \
+  --role VER \
+  --name '<VER Name>' \
+  --approve \
+  --comment "Verification criteria met; no critical defects found"
+
+# Record VER review decision (reject — 1st Check FAIL)
+python3 tools/workspace.py wf review <DOCUMENT_ID> \
+  --role VER \
+  --name '<VER Name>' \
+  --reject \
+  --comment "<defect summary — list specific criteria failures>"
+```
+
+Defects found during verification are recorded in the VER Verification Report itself
+(defect list section). Escalate CRITICAL defects to PM via NCR per SQAP procedure.
 
 Reference: `en50128-lifecycle-tool-integration` skill → workspace.py command reference.

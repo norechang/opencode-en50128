@@ -1,7 +1,15 @@
-# EN 50128 Safety Engineering Skill
 ---
 name: en50128-safety
+description: Safety analysis and hazard management for EN 50128 railway software per Section 7.1 and EN 50126
+license: Proprietary
+compatibility: opencode
+metadata:
+  standard: EN 50128:2011
+  domain: railway-software
+  role: safety-engineer
 ---
+
+# EN 50128 Safety Engineering Skill
 
 **Role**: Safety Engineer (SAF)  
 **Standard**: EN 50128:2011 §6.3, §7.1, Table A.8  
@@ -52,10 +60,10 @@ Full phase activity map: `tasks/SAFETY_ENGINEERING.md` Section 1.
 | EN 50128 §6.3, §7.1, §7.2.4.13, §7.7.4.8, Table A.8 | `std/EN50128-2011.md` |
 | System-level FMEA/FTA/HAZOP sources | `std/EN 50126-1-2017.md` §6.3, D.27, D.30, D.32 |
 | CCF = HR SIL 3–4; Tolerable Hazard Rates | `std/EN 50126-2-2017.md` §10 Table 8, Table F.2 item 11 |
-| Step-by-step analysis procedures | `workflows/safety-analysis-procedures.md` |
-| Hazard Log template | `deliverables/safety/Hazard-Log-template.md` |
-| FMEA Report template | `deliverables/safety/FMEA-template.md` |
-| FTA Report template | `deliverables/safety/FTA-template.md` |
+| Step-by-step analysis procedures | `[SKILL_ROOT] workflows/safety-analysis-procedures.md` |
+| Hazard Log template | `[PROJECT_ROOT] deliverables/safety/Hazard-Log-template.md` |
+| FMEA Report template | `[PROJECT_ROOT] deliverables/safety/FMEA-template.md` |
+| FTA Report template | `[PROJECT_ROOT] deliverables/safety/FTA-template.md` |
 | Canonical document paths | CM `query-location` |
 
 ---
@@ -87,7 +95,7 @@ Algorithm:
    a. For each software-relevant hazard: identify fault modes
       (NULL pointer, overflow, state machine stuck-at, uninitialized variable)
    b. Record fault → effect → safeguard in Hazard Log SEEA section
-6. Write Hazard Log to canonical path using deliverables/safety/Hazard-Log-template.md
+6. Write Hazard Log to canonical path using [PROJECT_ROOT] deliverables/safety/Hazard-Log-template.md
 7. Report to PM: Hazard Log created; REQ-SAFE-xxx list provided to REQ
 ```
 
@@ -117,7 +125,7 @@ Algorithm — FMEA (bottom-up):
       - Detection (1–10, inverse: 1 = always detected, 10 = undetectable)
       - RPN = Severity × Occurrence × Detection
       - Recommended action if RPN ≥ threshold (project-defined, typically ≥ 100)
-4. Write FMEA Report using deliverables/safety/FMEA-template.md
+4. Write FMEA Report using [PROJECT_ROOT] deliverables/safety/FMEA-template.md
 5. Update Hazard Log: link failure modes to HAZ-xxx entries; update mitigations
 
 Algorithm — FTA (top-down, for hazards with severity ≥ 8):
@@ -133,7 +141,7 @@ Algorithm — FTA (top-down, for hazards with severity ≥ 8):
       - NOT Mandatory; include if project SQAP selects it
       - Typical CCF causes: common design faults, shared HW platform, EMI, common power
    f. Calculate top-event probability if quantitative data available
-3. Write FTA Report using deliverables/safety/FTA-template.md
+3. Write FTA Report using [PROJECT_ROOT] deliverables/safety/FTA-template.md
 4. Update Hazard Log: add FTA findings; update residual risk and mitigation entries
 ```
 
@@ -307,22 +315,40 @@ Never hard-code file paths.
 
 ## 12. Tool Integration
 
-SAF uses `workspace.py` commands for artifact registration and status updates:
+SAF uses `workspace.py` commands for artifact submission, baselining, and traceability:
 
 ```bash
-# Register a new cross-cutting artifact with CM
-python3 workspace.py cm register --id DOC-HAZLOG-2026-001 --type HAZLOG \
-  --path <canonical-path> --phase 2
+# Submit a new cross-cutting artifact (Hazard Log, FMEA, FTA) to the workflow
+python3 tools/workspace.py wf submit <DOCUMENT_ID> \
+  --path <canonical-path> \
+  --author-role SAF \
+  --author-name '<SAF Name>' \
+  --sil <0-4>
 
-# Update Hazard Log baseline after Phase 3 update
-python3 workspace.py cm baseline --id DOC-HAZLOG-2026-001 --phase 3 \
-  --label "Phase3-FMEA-update"
+# Create a baseline after a significant update — use ONE of the two forms below.
+# NOTE: --document and --phase are mutually exclusive; if both are supplied
+# --document silently wins and --phase is ignored.
+#
+# To baseline a single safety artifact:
+python3 tools/workspace.py wf baseline \
+  --tag <TAG> \
+  --document <DOCUMENT_ID> \
+  --message "Phase3-FMEA-update"
+#
+# To baseline all approved artifacts for a phase:
+python3 tools/workspace.py wf baseline \
+  --tag <TAG> \
+  --phase <PHASE> \
+  --message "Phase3-FMEA-update"
 
-# Query canonical path for an artifact
-python3 workspace.py cm query-location --doc HAZLOG
+# Check workflow status for a safety artifact
+python3 tools/workspace.py wf status --document <DOCUMENT_ID> --approvals
 
-# Update hazard status (bulk update after Phase 7 closure check)
-python3 workspace.py wf update-safety --hazlog <path> --phase 7
+# Validate hazard-to-safety-requirement traceability
+python3 tools/workspace.py trace validate --sil <0-4>
+
+# Check for traceability gaps (hazard → safety requirement chain)
+python3 tools/workspace.py trace check-gaps --sil <0-4>
 ```
 
 Reference: `en50128-lifecycle-tool-integration` skill → workspace.py command reference.

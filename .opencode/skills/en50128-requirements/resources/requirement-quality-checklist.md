@@ -383,8 +383,17 @@ Consistency: "speed" used consistently
 - Software Requirements → Test Cases (forward)
 
 **Verification**:
-- Use traceability validation tool: `workspace.py trace validate --phase requirements`
-- Use gap detection tool: `workspace.py trace check-gaps --phase requirements`
+- Phase gate check (T1–T15 normative rules, cumulative through requirements phase):
+  ```bash
+  python3 tools/workspace.py trace gate-check --phase requirements --sil <level>
+  ```
+  Exits 0 = all applicable T-rules PASS; 1 = one or more FAIL.
+  Reports per-rule PASS/FAIL with normative clause citations.
+- Per-matrix gap detection (individual matrix only; does not check T-rules):
+  ```bash
+  python3 tools/workspace.py trace validate --sil <level>
+  python3 tools/workspace.py trace check-gaps --sil <level>
+  ```
 - Manual inspection of traceability matrices
 
 **Action if NO**: Establish traceability links, fix broken links, identify orphan requirements.
@@ -482,11 +491,23 @@ Consistency: "speed" used consistently
 
 ## Tools
 
-**Validation Tools**:
-- `tools/requirement-validator.py` - Validate requirement format and basic quality
-- `workspace.py trace validate` - Check traceability completeness
-- `workspace.py trace check-gaps` - Find missing traceability links
-- `workspace.py trace report` - Generate traceability reports
+**Traceability Gate Check** (normative T-rule check — primary command):
+```bash
+# Checks all T-rules applicable up to and including the requirements phase.
+# Matrix naming convention: evidence/traceability/doc<FROM>_to_doc<TO>.csv
+python3 tools/workspace.py trace gate-check --phase requirements --sil <level>
+```
+
+**Per-Matrix Gap Detection** (individual matrix completeness only):
+```bash
+python3 tools/workspace.py trace validate --sil <level>
+python3 tools/workspace.py trace check-gaps --sil <level>
+```
+
+**Traceability Reports**:
+```bash
+python3 tools/workspace.py trace report --from <SOURCE> --to <TARGET> --format markdown --output <PATH>
+```
 
 **Manual Review**:
 - Use this checklist for each requirement

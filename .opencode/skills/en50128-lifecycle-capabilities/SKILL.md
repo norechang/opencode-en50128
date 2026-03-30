@@ -93,7 +93,7 @@ Next Steps:
 ```
 1. Read .workspace and LIFECYCLE_STATE.md
 2. Run deterministic approval-chain tool (mandatory first step):
-     python3 tools/workflow_manager.py gate-check --phase <N> --sil <SIL>
+     python3 tools/workspace.py wf gate-check --phase <N> --sil <SIL>
    - Exit 1 at SIL 3–4 → BLOCK immediately; report violations to PM
    - Exit 1 at SIL 0–2 → record as warning; request justification
 3. Load en50128-lifecycle-phase-checklists skill
