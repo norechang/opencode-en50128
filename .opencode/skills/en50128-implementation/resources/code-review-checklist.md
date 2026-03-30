@@ -422,13 +422,22 @@ Cppcheck 2.13.0
 
 **Traceability Verification**:
 ```bash
-# Verify traceability completeness
-workspace.py trace check-gaps --phase implementation --sil 3
+# Normative T-rule gate check — primary command for phase gate compliance.
+# Checks all T-rules applicable up to and including the implementation-testing phase
+# (includes T7: source code → component design, T6, T5a/b/c, T3, T4, T1, T2).
+# Exits 0 = all PASS; 1 = one or more FAIL.
+# Matrix naming convention: evidence/traceability/doc<FROM>_to_doc<TO>.csv
+python3 tools/workspace.py trace gate-check \
+    --phase implementation-testing \
+    --sil 3
+
+# Per-matrix gap detection (individual matrix only; does not check T-rules):
+python3 tools/workspace.py trace check-gaps --sil 3
 
 # Query traceability for specific module
-workspace.py trace query --source DOC-10:MOD-001 --direction forward
+python3 tools/workspace.py trace query --source DOC-10:MOD-001 --direction forward
 
-# Expected output: 100% traceability coverage (SIL 3-4)
+# Expected gate-check output: all T-rules PASS with 100% coverage (SIL 3-4)
 ```
 
 **Review Notes**:
@@ -641,42 +650,54 @@ Final Approval:        [Date]
 
 ## Appendix C: Workflow Manager Integration
 
-**Initiate Code Review**:
-```bash
-# Author initiates self-review
-workflow-mgr code-review start --module sensor_manager --author "John Doe"
+**Note**: `workflow-mgr` and `code-review` subcommands do not exist in this platform.
+Use `python3 tools/workspace.py wf` with the document ID for the source code module
+(e.g., `DOC-SRC-YYYY-NNN`) or the implementation review record (e.g., `DOC-UTR-YYYY-001`).
 
-# Workflow Manager generates checklist file: reviews/sensor_manager_self_review.md
+**Author submits implementation artifact for review**:
+```bash
+python3 tools/workspace.py wf submit <DOC-SRC-ID> \
+  --path src/<module>.c \
+  --author-role IMP \
+  --author-name "John Doe" \
+  --sil <level>
 ```
 
-**Submit for Peer Review**:
+**Peer reviewer records approval**:
 ```bash
-# Author submits after self-review complete
-workflow-mgr code-review submit --module sensor_manager --reviewer "Jane Smith"
+python3 tools/workspace.py wf review <DOC-SRC-ID> \
+  --role PEER \
+  --name "Jane Smith" \
+  --approve \
+  --comment "Peer review passed — no critical findings"
 ```
 
-**Complete Peer Review**:
+**QUA reviewer records approval**:
 ```bash
-# Peer reviewer completes review
-workflow-mgr code-review complete --module sensor_manager --status approved
+python3 tools/workspace.py wf review <DOC-SRC-ID> \
+  --role QUA \
+  --name "QA Lead" \
+  --approve \
+  --comment "QUA review passed — MISRA static analysis clean"
 ```
 
-**QUA Review**:
+**VER reviewer records approval (SIL 3-4, independent)**:
 ```bash
-# QUA reviewer performs review
-workflow-mgr code-review qua --module sensor_manager --qa-reviewer "QA Lead"
+python3 tools/workspace.py wf review <DOC-SRC-ID> \
+  --role VER \
+  --name "Verifier Name" \
+  --approve \
+  --comment "Independent VER review passed — coverage 100%"
 ```
 
-**VER Review (SIL 3-4)**:
+**Final approval after all reviews**:
 ```bash
-# Independent verifier performs review
-workflow-mgr code-review ver --module sensor_manager --verifier "Verifier Name"
+python3 tools/workspace.py wf approve <DOC-SRC-ID>
 ```
 
-**Generate Review Report**:
+**Check review status**:
 ```bash
-# Generate final review report
-workflow-mgr code-review report --module sensor_manager --output reviews/sensor_manager_review_report.md
+python3 tools/workspace.py wf status --document <DOC-SRC-ID> --approvals
 ```
 
 ---

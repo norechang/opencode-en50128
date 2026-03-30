@@ -31,8 +31,8 @@ implementation per EN 50128 §7.5 and Table A.4.
 | Authority structure, two-track loop, CCB re-entry | `WORKFLOW.md` |
 | Independence matrix (IMP = No at all SIL levels) | `ORGANIZATION.md` |
 | §7.5 implementation requirements, Table A.4 techniques | `std/EN50128-2011.md` |
-| C header template (.h stub) | `deliverables/implementation/C-Header-Template.h` |
-| C module template (.c stub) | `deliverables/implementation/C-Module-Template.c` |
+| C header template (.h stub) | `[PROJECT_ROOT] deliverables/implementation/C-Header-Template.h` |
+| C module template (.c stub) | `[PROJECT_ROOT] deliverables/implementation/C-Module-Template.c` |
 | MISRA C:2012 patterns (all 178 rules + 16 directives) | `resources/misra-c-coding-patterns.md` |
 | Unit testing patterns (Unity framework, mocking, coverage) | `resources/unit-testing-patterns.md` |
 | Code review checklist (124 items, 11 categories) | `resources/code-review-checklist.md` |
@@ -70,7 +70,7 @@ Follow these steps in order. Do not skip steps.
 3. **Verify Phase 5 prerequisites**: locate the Software Component Design Specification
    (item 15). If missing, halt and report to PM.
 
-4. **Load templates** `deliverables/implementation/C-Header-Template.h` and `deliverables/implementation/C-Module-Template.c`
+ 4. **Load templates** `[PROJECT_ROOT] deliverables/implementation/C-Header-Template.h` and `[PROJECT_ROOT] deliverables/implementation/C-Module-Template.c`
    as stubs. For each component in the SCDS:
    - Create `<component>.h` — public interface only (types, function declarations).
    - Create `<component>.c` — implementation with file-header traceability block.

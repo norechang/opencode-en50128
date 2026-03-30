@@ -1,3 +1,14 @@
+---
+name: en50128-quality
+description: Software quality assurance techniques and auditing for EN 50128 railway software
+license: Proprietary
+compatibility: opencode
+metadata:
+  standard: EN 50128:2011
+  domain: railway-software
+  role: quality-assurance
+---
+
 # EN 50128 Quality Assurance Skill
 
 **Role**: Quality Assurance Engineer (QUA)  
@@ -73,8 +84,8 @@ When PM submits a deliverable for QUA review:
 1. Read .workspace → resolve workspace root
 2. Invoke CM query-location to confirm canonical path of deliverable
 3. Read deliverable at canonical path
-4. Identify document type → load generic-format-checker.yaml
-5. Identify sections supplement → load review-criteria/sections/<doc-key>-sections.yaml
+4. Identify document type → load [SKILL_ROOT] review-criteria/generic-format-checker.yaml
+5. Identify sections supplement → load [SKILL_ROOT] review-criteria/sections/<doc-key>-sections.yaml
 6. Apply generic checks (Document ID, Document Control, Approvals)
 7. Apply sections check (all required sections present?)
 8. Collect all failures
@@ -100,7 +111,7 @@ count per item.
 
 ## 4. Generic Format Checker
 
-**File**: `review-criteria/generic-format-checker.yaml`
+**File**: `[SKILL_ROOT] review-criteria/generic-format-checker.yaml`
 
 The generic checker is parameterized by `doc_abbreviation` (e.g. `SQAP`, `SRS`) and
 `sil_level` (0–4). It enforces three universal rules:
@@ -141,7 +152,7 @@ Severity: error.
 
 ## 5. Sections Supplement
 
-**Directory**: `review-criteria/sections/`
+**Directory**: `[SKILL_ROOT] review-criteria/sections/`
 
 Each file lists the mandatory section headings for one document type. The generic checker
 loads the appropriate supplement based on document type and checks that every listed
@@ -293,7 +304,7 @@ Produced at each phase gate; archived under CM control.
 ## 10. QUA Review Report Output
 
 **Document ID**: `QUA-REVIEW-[YYYY]-[NNN]`  
-**Template**: `deliverables/quality/QA-Review-Report-template.md`  
+**Template**: `[PROJECT_ROOT] deliverables/quality/QA-Review-Report-template.md`  
 **Canonical path**: obtain from CM `query-location --doc QUAREPORT`
 
 The review report records:
@@ -315,15 +326,28 @@ QUA uses `workspace.py wf` commands from `activities/workflow.yaml`:
 
 ```bash
 # Submit deliverable for QUA review (called by PM)
-python3 workspace.py wf submit --item <annex_c_item> --doc <path>
+python3 tools/workspace.py wf submit <DOCUMENT_ID> \
+  --path <path-to-document> \
+  --author-role <AUTHOR_ROLE> \
+  --author-name '<Author Name>' \
+  --sil <0-4>
 
-# Log QUA review result
-python3 workspace.py wf review --item <annex_c_item> --result PASS|FAIL \
-  --reviewer QUA --report <path-to-qua-review-report>
+# Log QUA review result — PASS
+python3 tools/workspace.py wf review <DOCUMENT_ID> \
+  --role QUA \
+  --name '<QUA Name>' \
+  --approve \
+  --comment "Format-gate PASS: all GF-001/GF-002/GF-003 and sections checks passed"
 
-# Log NCR
-python3 workspace.py wf log-defect --ncr <NCR-ID> --severity MINOR|MAJOR|CRITICAL \
-  --item <annex_c_item> --description "<description>"
+# Log QUA review result — FAIL
+python3 tools/workspace.py wf review <DOCUMENT_ID> \
+  --role QUA \
+  --name '<QUA Name>' \
+  --reject \
+  --comment "<list of format defects found>"
 ```
+
+NCRs raised by QUA are written as NCR records in the QUA Review Report and reported to
+PM. NCR format and escalation rules are defined in Section 8 of this skill.
 
 Reference: `en50128-lifecycle-tool-integration` skill → workspace.py command reference.

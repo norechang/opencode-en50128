@@ -122,11 +122,19 @@ MISRA C:2012 contains **178 rules** and **16 directives** organized into 23 cate
 - **Polyspace** (MathWorks) - T2 confidence, commercial
 - **LDRA Testbed** - T3 confidence (qualified), commercial
 
-**Workflow Manager Command**:
+**MISRA C Compliance Check** (static analysis — use one of the qualified tools above):
 ```bash
-# Check MISRA C:2012 compliance
-workflow-mgr verify-misra --module <module> --sil [0-4]
+# Cppcheck with MISRA C:2012 addon (T1/T2 confidence)
+cppcheck --addon=misra --enable=all src/<module>.c 2> cppcheck_misra.txt
+
+# Submit MISRA analysis report as a workflow artifact
+python3 tools/workspace.py wf submit <DOC-MISRA-ID> \
+    --path cppcheck_misra.txt \
+    --author-role IMP \
+    --author-name '<Name>' \
+    --sil <level>
 ```
+Note: `workflow-mgr verify-misra` does not exist in this platform.
 
 ---
 
@@ -1690,12 +1698,21 @@ volatile uint32_t* const p_control = (volatile uint32_t*)0x40000000UL;
 5. **CCB Approval**: Change Control Board approves deviation
 6. **Traceability**: Link deviation to requirement, test, verification report
 
-**Workflow Manager Command**:
+**Deviation Registration**:
+
+No dedicated `register-deviation` subcommand exists in this platform.
+Document the deviation in a Deviation Log file and submit it via the workflow:
 ```bash
-# Register deviation
-workflow-mgr register-deviation --rule 11.4 --file hardware_abstraction.c --line 45 \
-    --rationale "Hardware register access" --approved-by "John Doe"
+# Submit deviation log as a versioned workflow artifact
+python3 tools/workspace.py wf submit <DOC-DEVIATION-ID> \
+    --path deviations/<module>_misra_deviations.md \
+    --author-role IMP \
+    --author-name '<Name>' \
+    --sil <level>
 ```
+The Deviation Log must include: rule number, file, line, rationale, risk assessment,
+compensating measures, and approver name — all items that `register-deviation` was
+intended to capture.
 
 ### 11.5 Example Deviations by Category
 
@@ -1827,11 +1844,15 @@ gcc -std=c99 -Wall -Wextra -Werror -Wconversion -Wsign-conversion -pedantic src/
 pclp64 --misra3 --xml=output.xml src/module.c
 ```
 
-**Workflow Manager** (Project Tool):
+**MISRA Compliance Verification** (run the qualified static analysis tool directly):
 ```bash
-# Complete MISRA verification workflow
-workflow-mgr verify-misra --module sensor_manager --sil 3
+# Cppcheck MISRA C:2012 full check
+cppcheck --addon=misra --enable=all --xml src/sensor_manager.c 2> misra_report.xml
+
+# PC-lint Plus full check (if available)
+pclp64 --misra3 --xml=output.xml src/sensor_manager.c
 ```
+Note: `workflow-mgr verify-misra` does not exist in this platform.
 
 ### 12.4 Documentation References
 

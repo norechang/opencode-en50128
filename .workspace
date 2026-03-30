@@ -30,10 +30,10 @@
     "TDC": {
       "path": "examples/TDC",
       "sil": 3,
-      "current_phase": "Phase 1 — Planning ✅ COMPLETE (Gate PASSED)",
-      "completion": 22,
+      "current_phase": "Phase 2 — Requirements ⏳ IN PROGRESS (Track A complete; Track B VER approved, awaiting VAL)",
+      "completion": 33,
       "created": "2026-03-27T10:50:00.000000",
-      "last_accessed": "2026-03-30T12:00:00.000000",
+      "last_accessed": "2026-03-30T14:00:00.000000",
       "status": "active",
       "cod_mode": "Strict Gatekeeper",
       "lifecycle_model": "V-Model",

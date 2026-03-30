@@ -644,9 +644,9 @@ cppcheck --enable=all --xml --xml-version=2 src/ 2> cppcheck_report.xml
 
 **Command**:
 ```bash
-workspace.py workflow status --document DOC-9  # Architecture
-workspace.py workflow status --document DOC-10 # Design
-workspace.py workflow status --document DOC-11 # Interfaces
+python3 tools/workspace.py wf status --document DOC-9  # Architecture
+python3 tools/workspace.py wf status --document DOC-10 # Design
+python3 tools/workspace.py wf status --document DOC-11 # Interfaces
 ```
 
 **Expected Results**:
@@ -669,7 +669,11 @@ workspace.py workflow status --document DOC-11 # Interfaces
 
 **Command**:
 ```bash
-workspace.py workflow submit DOC-9 --for-review --reviewers PEER,QUA,VER,VAL,PM
+python3 tools/workspace.py wf submit DOC-9 \
+  --path <path-to-document> \
+  --author-role DES \
+  --author-name '<Author Name>' \
+  --sil <level>
 ```
 
 ### 11.2 Peer Review (PEER)
@@ -684,7 +688,7 @@ workspace.py workflow submit DOC-9 --for-review --reviewers PEER,QUA,VER,VAL,PM
 
 **Command**:
 ```bash
-workspace.py workflow review DOC-9 --role PEER --approve --comments "Design looks good, minor comments on Section 3.2"
+python3 tools/workspace.py wf review DOC-9 --role PEER --name '<Peer Name>' --approve --comment "Design looks good, minor comments on Section 3.2"
 ```
 
 **Review Report Template**:
@@ -728,7 +732,7 @@ APPROVE with minor revisions
 
 **Command**:
 ```bash
-workspace.py workflow review DOC-9 --role QUA --approve
+python3 tools/workspace.py wf review DOC-9 --role QUA --name '<QUA Name>' --approve
 ```
 
 ### 11.4 Safety Review (SAFETY_MGR, SIL 3-4)
@@ -743,7 +747,7 @@ workspace.py workflow review DOC-9 --role QUA --approve
 
 **Command**:
 ```bash
-workspace.py workflow review DOC-9 --role SAFETY_MGR --approve
+python3 tools/workspace.py wf review DOC-9 --role SAFETY_MGR --name '<Safety Manager Name>' --approve
 ```
 
 ### 11.5 Verification Review (VER, SIL 3-4)
@@ -758,7 +762,7 @@ workspace.py workflow review DOC-9 --role SAFETY_MGR --approve
 
 **Command**:
 ```bash
-workspace.py workflow review DOC-9 --role VER --approve
+python3 tools/workspace.py wf review DOC-9 --role VER --name '<Verifier Name>' --approve
 ```
 
 ### 11.6 Validation Review (VAL, SIL 3-4)
@@ -773,7 +777,7 @@ workspace.py workflow review DOC-9 --role VER --approve
 
 **Command**:
 ```bash
-workspace.py workflow review DOC-9 --role VAL --approve
+python3 tools/workspace.py wf review DOC-9 --role VAL --name '<Validator Name>' --approve
 ```
 
 ### 11.7 Management Review (PM)
@@ -788,7 +792,7 @@ workspace.py workflow review DOC-9 --role VAL --approve
 
 **Command**:
 ```bash
-workspace.py workflow review DOC-9 --role PM --approve
+python3 tools/workspace.py wf review DOC-9 --role PM --name '<PM Name>' --approve
 ```
 
 ### 11.8 Rework Process
@@ -801,7 +805,11 @@ workspace.py workflow review DOC-9 --role PM --approve
 
 **Command**:
 ```bash
-workspace.py workflow resubmit DOC-9 --version 1.1 --changes "Addressed PEER and QUA findings"
+python3 tools/workspace.py wf submit DOC-9 \
+  --path <updated-document-path> \
+  --author-role DES \
+  --author-name '<Author Name>' \
+  --sil <level>
 ```
 
 ### 11.9 Baseline and Approval
@@ -814,7 +822,7 @@ workspace.py workflow resubmit DOC-9 --version 1.1 --changes "Addressed PEER and
 
 **Command**:
 ```bash
-workspace.py workflow baseline DOC-9 --version 1.0
+python3 tools/workspace.py wf baseline --tag v1.0 --document DOC-9
 ```
 
 ---

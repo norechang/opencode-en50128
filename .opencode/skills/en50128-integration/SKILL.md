@@ -31,10 +31,10 @@ remediation logic for software integration per EN 50128 §5.3.6 and §7.6.
 | Authority structure, two-track loop, CCB re-entry | `WORKFLOW.md` |
 | Independence matrix (INT = No at all SIL levels) | `ORGANIZATION.md` |
 | §5.3.6, §7.6, Table A.6 integration requirements | `std/EN50128-2011.md` |
-| SW Integration Test Specification template | `deliverables/integration/Software-Integration-Test-Specification-template.md` |
-| SW Integration Test Report template | `deliverables/integration/Software-Integration-Test-Report-template.md` |
-| HW/SW Integration Test Specification template | `deliverables/architecture/Hardware-Software-Integration-Test-Specification-template.md` |
-| HW/SW Integration Test Report template | `deliverables/integration/Hardware-Software-Integration-Test-Report-template.md` |
+| SW Integration Test Specification template | `[PROJECT_ROOT] deliverables/integration/Software-Integration-Test-Specification-template.md` |
+| SW Integration Test Report template | `[PROJECT_ROOT] deliverables/integration/Software-Integration-Test-Report-template.md` |
+| HW/SW Integration Test Specification template | `[PROJECT_ROOT] deliverables/architecture/Hardware-Software-Integration-Test-Specification-template.md` |
+| HW/SW Integration Test Report template | `[PROJECT_ROOT] deliverables/integration/Hardware-Software-Integration-Test-Report-template.md` |
 | Software Architecture Specification (item 9) | CM `query-location --doc sas` |
 | Software Design Specification (item 10) | CM `query-location --doc sds` |
 
@@ -75,7 +75,7 @@ Follow these steps in order. Do not skip steps.
    - **Sandwich**: combine both directions; recommended when both H/W and S/W risks exist.
    Document the rationale for the chosen strategy in Section 2 of the specification.
 
-5. **Load template** `Software-Integration-Test-Specification-template.md`. Instantiate
+ 5. **Load template** `Software-Integration-Test-Specification-template.md` from `[PROJECT_ROOT] deliverables/integration/`. Instantiate
    for the project. For each interface in the SAS/SDS:
 
    a. Create an interface test case:
@@ -91,8 +91,8 @@ Follow these steps in order. Do not skip steps.
 
 6. **Apply Table A.6 mandatory and HR techniques** by SIL level (see Section 5 below).
 
-7. **Produce item 13** (HW/SW Integration Test Specification) using template
-   `Hardware-Software-Integration-Test-Specification-template.md` — covers target
+ 7. **Produce item 13** (HW/SW Integration Test Specification) using template
+    `[PROJECT_ROOT] deliverables/architecture/Hardware-Software-Integration-Test-Specification-template.md` — covers target
    hardware interaction, memory-mapped I/O interfaces, timing under hardware load.
 
 8. **Return** specification document paths and traceability summary to PM.
@@ -111,7 +111,7 @@ TST results.
 2. **Read TST results** from the XML/JSON file provided by PM. Verify the file is present
    and non-empty. If results are missing, halt and report to PM.
 
-3. **Load template** `Software-Integration-Test-Report-template.md`. Populate:
+ 3. **Load template** `Software-Integration-Test-Report-template.md` from `[PROJECT_ROOT] deliverables/integration/`. Populate:
    - Executive summary: test period, overall PASS/FAIL verdict.
    - Component identity table: name, version, git commit SHA, configuration baseline.
    - Test results table: test case ID, result (PASS/FAIL), actual vs expected, date.
@@ -123,7 +123,7 @@ TST results.
 4. **State whether exit criteria are met**. If not met, document failure circumstances
    explicitly per §7.6.4.5c.
 
-5. **Produce item 22** from template `Hardware-Software-Integration-Test-Report-template.md`
+ 5. **Produce item 22** from template `[PROJECT_ROOT] deliverables/integration/Hardware-Software-Integration-Test-Report-template.md`
    using the HW/SW test results subset from TST.
 
 6. **Return** report paths and verdict to PM.

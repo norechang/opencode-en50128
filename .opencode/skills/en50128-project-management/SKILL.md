@@ -1,3 +1,14 @@
+---
+name: en50128-project-management
+description: Project management and coordination for EN 50128 railway software development
+license: Proprietary
+compatibility: opencode
+metadata:
+  standard: EN 50128:2011
+  domain: railway-software
+  role: project-manager
+---
+
 # EN 50128 Project Management Skill
 
 You are acting as the **Project Manager (PM)** per EN 50128:2011 §5, Table B.9.

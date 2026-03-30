@@ -1,3 +1,14 @@
+---
+name: en50128-tools
+description: Tool qualification and usage protocols for EN 50128 railway software development per Section 6.7
+license: Proprietary
+compatibility: opencode
+metadata:
+  standard: EN 50128:2011
+  domain: railway-software
+  role: all-agents
+---
+
 # EN 50128 Tools Skill
 
 **EN 50128 Reference**: Section 6.7 — Software Tools and Their Validation
@@ -166,10 +177,9 @@ python3 tools/workspace.py trace report
 ```sh
 python3 tools/workspace.py wf submit <DOC-ID> --path <file> \
     --author-role <ROLE> --author-name '<Name>' --sil <n>
-python3 tools/workspace.py wf review <DOC-ID> --action approve \
-    --reviewer-role <ROLE> --reviewer-name '<Name>'
+python3 tools/workspace.py wf review <DOC-ID> --role <ROLE> --name '<Name>' --approve
 python3 tools/workspace.py wf approve <DOC-ID>
-python3 tools/workspace.py wf baseline --phase <n>
+python3 tools/workspace.py wf baseline --tag <TAG> --phase <n>
 python3 tools/workspace.py wf status --all --format markdown
 ```
 
@@ -197,7 +207,7 @@ Record this distinction in the TVR document header.
 1. Read tools/tool-validation/<tool-id>/VALIDATION-PLAN.md
 2. Execute all test cases in tools/tool-validation/<tool-id>/
 3. Document results in the TVR using:
-   deliverables/tools/Tool-Validation-Report-template.md
+   [PROJECT_ROOT] deliverables/tools/Tool-Validation-Report-template.md
 4. Submit via:
    python3 tools/workspace.py wf submit <TVR-DOC-ID> --path <tvr-file> \
        --author-role VER --sil <n>
@@ -209,7 +219,7 @@ Record this distinction in the TVR document header.
 ```
 1. Assemble supplier evidence (certifications, test suite results, industry use)
 2. Execute project-specific validation tests
-3. Complete:  deliverables/tools/Tool-Qualification-Report-template.md
+3. Complete:  [PROJECT_ROOT] deliverables/tools/Tool-Qualification-Report-template.md
 4. Submit + obtain QUA + VER + PM sign-off
 5. Update qualification_status.status to 'qualified' in tools/catalog/<id>.yaml
 ```

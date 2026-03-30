@@ -19,80 +19,58 @@ Commands:
     extract      Auto-extract traceability from documents
     visualize    Generate traceability visualizations
     sync         Synchronize CSV/JSON/Markdown formats
+    gate-check   Check T1-T15 normative rules for a lifecycle phase gate
+    verify-link  Mark a traceability link as VER-verified in a matrix CSV
 
 EN 50128 Compliance:
     - SIL 3-4: 100% traceability MANDATORY (Table A.9, Technique 7)
     - SIL 1-2: Traceability Highly Recommended
     - SIL 0: Traceability Recommended
 
-Version: 1.0
-Date: 2026-03-13
+Matrix Naming Convention:
+    CSV files stored in evidence/traceability/ are named using the
+    document-ID convention derived from TRACEABILITY.md Section 9 (T1-T15):
+        doc<from>_to_doc<to>.csv
+    Examples:
+        docS1_to_doc6.csv   (T1: S1 system requirements -> SRS [6])
+        docS4_to_doc6.csv   (T2: S4 safety requirements -> SRS [6])
+        doc6_to_doc9.csv    (T3: SRS [6] -> SAS [9])
+        doc9_to_doc6.csv    (T4: SAS [9] -> SRS [6])
+        doc10_to_doc9.csv   (T5a: SDS [10] -> SAS [9])
+        doc10_to_doc6.csv   (T5b: SDS [10] -> SRS [6])
+        doc10_to_doc11.csv  (T5c: SDS [10] -> Interface Specs [11])
+        doc15_to_doc10.csv  (T6: Component Design [15] -> SDS [10])
+        doc18_to_doc15.csv  (T7: Source Code [18] -> Component Design [15])
+        doc7_to_doc6.csv    (T8: Overall Test Spec [7] -> SRS [6])
+        doc6_to_doc7.csv    (T9: SRS [6] -> Overall Test Spec [7])
+        doc12_to_doc6.csv   (T10a: Integration Test Spec [12] -> SRS/SAS/SDS/IS)
+        doc13_to_doc6.csv   (T10b: HW/SW Integration Test Spec [13] -> S1+S2+SRS+SAS+SDS)
+        doc16_to_doc15.csv  (T11: Component Test Spec [16] -> Component Design [15])
+        doc20_to_doc16.csv  (T12a: Component Test Report [20] -> Component Test Spec [16])
+        doc21_to_doc12.csv  (T12b: Integration Test Report [21] -> Integration Test Spec [12])
+        doc22_to_doc13.csv  (T12c: HW/SW Test Report [22] -> HW/SW Test Spec [13])
+        doc24_to_doc7.csv   (T12d: Overall Test Report [24] -> Overall Test Spec [7])
+        doc25_to_doc6.csv   (T13: Validation Report [25] -> SRS [6])
+
+Version: 1.1
+Date: 2026-03-30
 """
 
 import argparse
 import csv
+import io
 import json
 import os
 import re
 import sys
 from dataclasses import dataclass, asdict, field
 from datetime import datetime
-from enum import Enum
 from pathlib import Path
 from typing import List, Dict, Optional, Set, Tuple
 
 # ============================================================================
 # Data Models
 # ============================================================================
-
-class ArtifactType(Enum):
-    """EN 50128 artifact types for traceability."""
-    
-    # Requirements
-    SYSTEM_REQUIREMENT = "system_requirement"
-    SOFTWARE_REQUIREMENT = "software_requirement"
-    SAFETY_REQUIREMENT = "safety_requirement"
-    INTERFACE_REQUIREMENT = "interface_requirement"
-    
-    # Design
-    ARCHITECTURE_COMPONENT = "architecture_component"
-    DESIGN_COMPONENT = "design_component"
-    INTERFACE_SPECIFICATION = "interface_specification"
-    
-    # Implementation
-    SOURCE_FILE = "source_file"
-    FUNCTION = "function"
-    MODULE = "module"
-    
-    # Testing
-    TEST_CASE = "test_case"
-    TEST_PROCEDURE = "test_procedure"
-    TEST_RESULT = "test_result"
-    
-    # Verification
-    VERIFICATION_RECORD = "verification_record"
-    REVIEW_RECORD = "review_record"
-    
-    # Safety
-    HAZARD = "hazard"
-    SAFETY_MECHANISM = "safety_mechanism"
-    
-    # Other
-    DELIVERABLE = "deliverable"
-    CHANGE_REQUEST = "change_request"
-
-class LinkType(Enum):
-    """Types of traceability links."""
-    
-    ALLOCATED_TO = "allocated_to"        # Requirement → Architecture
-    IMPLEMENTS = "implements"             # Design → Code
-    TESTS = "tests"                       # Test → Requirement
-    VERIFIES = "verifies"                 # Verification → Requirement
-    DERIVES_FROM = "derives_from"         # SW Req → System Req
-    REFINES = "refines"                   # Design → Architecture
-    SATISFIES = "satisfies"               # Code → Design
-    MITIGATES = "mitigates"               # Safety Mechanism → Hazard
-    DEPENDS_ON = "depends_on"             # Generic dependency
 
 @dataclass
 class TraceabilityLink:
@@ -199,7 +177,7 @@ class TraceabilityManager:
         try:
             with open("LIFECYCLE_STATE.md", "r") as f:
                 content = f.read()
-                match = re.search(r'\*\*Project\*\*:\s*(.+)', content)
+                match = re.search(r'\|\s*\*\*Project Name\*\*\s*\|\s*(.+?)\s*\|', content)
                 if match:
                     return match.group(1).strip()
         except FileNotFoundError:
@@ -230,7 +208,15 @@ class TraceabilityManager:
         # Load from .traceability.yaml if exists
         config_path = Path(".traceability.yaml")
         if config_path.exists():
-            import yaml
+            try:
+                import yaml
+            except ImportError:
+                print(
+                    "Warning: pyyaml not installed; .traceability.yaml will not be loaded. "
+                    "Install it with: pip install pyyaml",
+                    file=sys.stderr,
+                )
+                return config
             with open(config_path) as f:
                 user_config = yaml.safe_load(f)
                 config.update(user_config)
@@ -344,6 +330,10 @@ class TraceabilityManager:
                 "pass": False,
                 "error": "Matrix file not found",
                 "coverage": 0.0,
+                "threshold": self.config["sil_thresholds"][sil],
+                "total_sources": 0,
+                "traced_sources": 0,
+                "untraceable_sources": 0,
             }
         
         # Load matrix
@@ -372,32 +362,118 @@ class TraceabilityManager:
         }
     
     def _get_phase_matrices(self, phase: str) -> List[str]:
-        """Get required traceability matrices for a lifecycle phase."""
+        """Get required traceability matrices for a lifecycle phase.
+
+        Matrix names follow the document-ID convention:
+            doc<from>_to_doc<to>
+        where <from> and <to> are Annex C item numbers (integers) or
+        system document identifiers (S1, S2, S3, S4).
+
+        This convention is derived from the T1-T15 rules in
+        activities/traceability.yaml (TRACEABILITY.md Section 9).
+        """
+        # Rules by phase (cumulative — later phases include all prior matrices
+        # that must still be valid at that gate).
         phase_matrices = {
+            # Phase 2 (requirements): T1, T2, T8, T9
             "requirements": [
-                "system_requirements_to_software_requirements",
-                "software_requirements_to_tests",
+                "docS1_to_doc6",    # T1: S1 -> SRS [6]
+                "docS4_to_doc6",    # T2: S4 -> SRS [6]
+                "doc7_to_doc6",     # T8: Overall Test Spec [7] -> SRS [6]
+                "doc6_to_doc7",     # T9: SRS [6] -> Overall Test Spec [7]
             ],
+            # Phase 3 (design): + T3, T4, T5a, T5b, T5c, T10a, T10b
             "design": [
-                "system_requirements_to_software_requirements",
-                "software_requirements_to_architecture",
-                "architecture_to_design",
-                "software_requirements_to_tests",
+                "docS1_to_doc6",    # T1
+                "docS4_to_doc6",    # T2
+                "doc6_to_doc9",     # T3: SRS [6] -> SAS [9]
+                "doc9_to_doc6",     # T4: SAS [9] -> SRS [6]
+                "doc10_to_doc9",    # T5a: SDS [10] -> SAS [9]
+                "doc10_to_doc6",    # T5b: SDS [10] -> SRS [6]
+                "doc10_to_doc11",   # T5c: SDS [10] -> Interface Specs [11]
+                "doc7_to_doc6",     # T8
+                "doc6_to_doc7",     # T9
+                "doc12_to_doc6",    # T10a: Integration Test Spec [12] -> SRS [6]
+                "doc13_to_doc6",    # T10b: HW/SW Integration Test Spec [13] -> SRS [6]
             ],
-            "implementation": [
-                "design_to_code",
-                "code_to_unit_tests",
+            # Phase 4 (component-design): + T6, T11
+            "component-design": [
+                "docS1_to_doc6",
+                "docS4_to_doc6",
+                "doc6_to_doc9",
+                "doc9_to_doc6",
+                "doc10_to_doc9",
+                "doc10_to_doc6",
+                "doc10_to_doc11",
+                "doc15_to_doc10",   # T6: Component Design [15] -> SDS [10]
+                "doc7_to_doc6",
+                "doc6_to_doc7",
+                "doc12_to_doc6",
+                "doc13_to_doc6",
+                "doc16_to_doc15",   # T11: Component Test Spec [16] -> Component Design [15]
             ],
+            # Phase 5 (implementation-testing): + T7, T12a
+            "implementation-testing": [
+                "docS1_to_doc6",
+                "docS4_to_doc6",
+                "doc6_to_doc9",
+                "doc9_to_doc6",
+                "doc10_to_doc9",
+                "doc10_to_doc6",
+                "doc10_to_doc11",
+                "doc15_to_doc10",
+                "doc18_to_doc15",   # T7: Source Code [18] -> Component Design [15]
+                "doc7_to_doc6",
+                "doc6_to_doc7",
+                "doc12_to_doc6",
+                "doc13_to_doc6",
+                "doc16_to_doc15",
+                "doc20_to_doc16",   # T12a: Component Test Report [20] -> Test Spec [16]
+            ],
+            # Phase 6 (integration): + T10a/T10b reports, T12b, T12c
             "integration": [
-                "architecture_to_integration_tests",
-                "design_to_integration_tests",
+                "docS1_to_doc6",
+                "docS4_to_doc6",
+                "doc6_to_doc9",
+                "doc9_to_doc6",
+                "doc10_to_doc9",
+                "doc10_to_doc6",
+                "doc10_to_doc11",
+                "doc15_to_doc10",
+                "doc18_to_doc15",
+                "doc7_to_doc6",
+                "doc6_to_doc7",
+                "doc12_to_doc6",
+                "doc13_to_doc6",
+                "doc16_to_doc15",
+                "doc20_to_doc16",
+                "doc21_to_doc12",   # T12b: Integration Test Report [21] -> Test Spec [12]
+                "doc22_to_doc13",   # T12c: HW/SW Test Report [22] -> HW/SW Test Spec [13]
             ],
+            # Phase 7 (validation): + T12d, T13
             "validation": [
-                "software_requirements_to_validation_tests",
-                "code_to_validation_tests",
+                "docS1_to_doc6",
+                "docS4_to_doc6",
+                "doc6_to_doc9",
+                "doc9_to_doc6",
+                "doc10_to_doc9",
+                "doc10_to_doc6",
+                "doc10_to_doc11",
+                "doc15_to_doc10",
+                "doc18_to_doc15",
+                "doc7_to_doc6",
+                "doc6_to_doc7",
+                "doc12_to_doc6",
+                "doc13_to_doc6",
+                "doc16_to_doc15",
+                "doc20_to_doc16",
+                "doc21_to_doc12",
+                "doc22_to_doc13",
+                "doc24_to_doc7",    # T12d: Overall Test Report [24] -> Overall Test Spec [7]
+                "doc25_to_doc6",    # T13: Validation Report [25] -> SRS [6]
             ],
         }
-        
+
         return phase_matrices.get(phase, [])
     
     def _print_validation_results(self, results: Dict):
@@ -542,15 +618,340 @@ class TraceabilityManager:
                         "link": f"{link.source_id} → {link.target_id}",
                     })
         
-        # Identify orphans
-        gaps["orphan_sources"] = list(all_sources - traced_sources)
-        gaps["orphan_targets"] = list(all_targets - traced_targets)
+        # Identify orphans (exclude empty-string entries that arise from links with no target)
+        gaps["orphan_sources"] = list((all_sources - traced_sources) - {""})
+        gaps["orphan_targets"] = list((all_targets - traced_targets) - {""})
         
         # Print results
         self._print_gap_analysis(gaps, sil)
         
         return gaps
-    
+
+    # ========================================================================
+    # Command: gate-check
+    # ========================================================================
+
+    def gate_check(self, phase: str, sil: int) -> Dict:
+        """
+        Check EN 50128 T1-T15 normative traceability rules for a lifecycle phase gate.
+
+        Reads activities/traceability.yaml to determine which T1-T15 rules apply
+        to the requested phase, then verifies that a matrix CSV named according to
+        the document-ID convention (doc<from>_to_doc<to>) exists for each rule and
+        meets the SIL coverage threshold.
+
+        Args:
+            phase: Lifecycle phase name (planning, requirements, design,
+                   component-design, implementation-testing, integration, validation)
+            sil: SIL level (0-4)
+
+        Returns:
+            Dict with per-rule PASS/FAIL results and overall gate status.
+            Exits with code 1 if any rule fails (suitable for CI integration).
+        """
+        # Rules applicable per phase (earliest phase at which the rule is first checked)
+        # T15 is meta (VER process obligation) — not a matrix check; included as reminder.
+        RULE_FIRST_PHASE = {
+            "T1":   "requirements",
+            "T2":   "requirements",
+            "T8":   "requirements",
+            "T9":   "requirements",
+            "T3":   "design",
+            "T4":   "design",
+            "T5a":  "design",
+            "T5b":  "design",
+            "T5c":  "design",
+            "T10a": "design",
+            "T10b": "design",
+            "T6":   "component-design",
+            "T11":  "component-design",
+            "T7":   "implementation-testing",
+            "T12":  "integration",       # reports T12a..T12d checked progressively
+            "T13":  "validation",
+            "T14":  "validation",
+            "T15":  "requirements",      # process check — not a matrix
+        }
+
+        PHASE_ORDER = [
+            "planning",
+            "requirements",
+            "design",
+            "component-design",
+            "implementation-testing",
+            "integration",
+            "validation",
+        ]
+
+        # Normalise phase name
+        phase_norm = phase.lower().replace(" ", "-")
+        if phase_norm not in PHASE_ORDER:
+            print(f"✗ Unknown phase: {phase}")
+            print(f"  Valid phases: {', '.join(PHASE_ORDER)}")
+            return {"overall_pass": False, "error": f"Unknown phase: {phase}"}
+
+        phase_idx = PHASE_ORDER.index(phase_norm)
+
+        # Load traceability spec from YAML
+        rules_spec = self._load_traceability_rules()
+
+        # Determine which rules apply up to and including this phase
+        applicable_rules = [
+            rid for rid, first in RULE_FIRST_PHASE.items()
+            if first in PHASE_ORDER and PHASE_ORDER.index(first) <= phase_idx
+        ]
+        # T15 is a process note — skip matrix check for it
+        matrix_rules = [rid for rid in applicable_rules if rid != "T15"]
+
+        results = {
+            "project": self.project,
+            "phase": phase_norm,
+            "sil": sil,
+            "threshold": self.config["sil_thresholds"][sil],
+            "rules": [],
+            "process_notes": [],
+            "overall_pass": True,
+        }
+
+        # Map each rule to its matrix name(s) and check them
+        RULE_MATRICES = {
+            "T1":   [("docS1_to_doc6",  "S1 → [6]")],
+            "T2":   [("docS4_to_doc6",  "S4 → [6]")],
+            "T3":   [("doc6_to_doc9",   "[6] → [9]")],
+            "T4":   [("doc9_to_doc6",   "[9] → [6]")],
+            "T5a":  [("doc10_to_doc9",  "[10] → [9]")],
+            "T5b":  [("doc10_to_doc6",  "[10] → [6]")],
+            "T5c":  [("doc10_to_doc11", "[10] → [11]")],
+            "T6":   [("doc15_to_doc10", "[15] → [10]")],
+            "T7":   [("doc18_to_doc15", "[18] → [15]")],
+            "T8":   [("doc7_to_doc6",   "[7] → [6]")],
+            "T9":   [("doc6_to_doc7",   "[6] → [7]")],
+            "T10a": [("doc12_to_doc6",  "[12] → [6]"),
+                     ("doc12_to_doc9",  "[12] → [9]"),
+                     ("doc12_to_doc10", "[12] → [10]"),
+                     ("doc12_to_doc11", "[12] → [11]")],
+            "T10b": [("doc13_to_doc6",  "[13] → [6]"),
+                     ("doc13_to_doc9",  "[13] → [9]"),
+                     ("doc13_to_doc10", "[13] → [10]"),
+                     ("doc13_to_docS1", "[13] → S1"),
+                     ("doc13_to_docS2", "[13] → S2")],
+            "T11":  [("doc16_to_doc15", "[16] → [15]")],
+            "T12":  [("doc20_to_doc16", "[20] → [16]"),
+                     ("doc21_to_doc12", "[21] → [12]"),
+                     ("doc22_to_doc13", "[22] → [13]"),
+                     ("doc24_to_doc7",  "[24] → [7]")],
+            "T13":  [("doc25_to_doc6",  "[25] → [6]")],
+            "T14":  [],   # Covered by SIL threshold in each matrix check
+        }
+
+        for rule_id in sorted(matrix_rules, key=lambda r: (RULE_FIRST_PHASE.get(r, "z"), r)):
+            rule_spec = rules_spec.get(rule_id, {})
+            rule_text = rule_spec.get("rule", "(see TRACEABILITY.md Section 9)").strip()
+            clause = rule_spec.get("normative_clause", "")
+            scope = rule_spec.get("scope", "")
+            matrices = RULE_MATRICES.get(rule_id, [])
+
+            if rule_id == "T14":
+                # T14 is satisfied by the SIL thresholds applied in every other rule
+                rule_result = {
+                    "rule_id": rule_id,
+                    "scope": scope,
+                    "normative_clause": clause,
+                    "rule_text": rule_text,
+                    "pass": True,
+                    "note": (
+                        f"SIL {sil} threshold ({self.config['sil_thresholds'][sil]*100:.0f}%) "
+                        "applied to all matrix checks above."
+                    ),
+                    "matrices": [],
+                }
+                results["rules"].append(rule_result)
+                continue
+
+            matrix_checks = []
+            rule_pass = True
+
+            for matrix_name, link_scope in matrices:
+                check = self._validate_matrix(matrix_name, sil)
+                check["link_scope"] = link_scope
+                matrix_checks.append(check)
+                if not check["pass"]:
+                    rule_pass = False
+
+            rule_result = {
+                "rule_id": rule_id,
+                "scope": scope,
+                "normative_clause": clause,
+                "rule_text": rule_text,
+                "pass": rule_pass,
+                "matrices": matrix_checks,
+            }
+            results["rules"].append(rule_result)
+            if not rule_pass:
+                results["overall_pass"] = False
+
+        # T15 process note
+        if "T15" in applicable_rules:
+            t15_spec = rules_spec.get("T15", {})
+            results["process_notes"].append({
+                "rule_id": "T15",
+                "normative_clause": t15_spec.get("normative_clause", ""),
+                "note": (
+                    "T15 is a VER process obligation (not a matrix check). "
+                    "VER must record traceability completeness findings in the "
+                    "Verification Report. COD reads that report and blocks the gate "
+                    "if gaps are found. This tool confirms matrix coverage only."
+                ),
+            })
+
+        self._print_gate_check_results(results)
+        return results
+
+    def _load_traceability_rules(self) -> Dict:
+        """
+        Load T1-T15 rule specifications from activities/traceability.yaml.
+
+        Returns a dict keyed by rule ID (T1, T2, ..., T15) with fields:
+            rule, scope, normative_clause, document_chain.
+
+        Falls back to an empty dict if the YAML file is not found or pyyaml
+        is not installed, so gate-check still functions (with reduced detail).
+        """
+        yaml_path = Path("activities/traceability.yaml")
+        if not yaml_path.exists():
+            return {}
+
+        try:
+            import yaml
+        except ImportError:
+            print(
+                "Warning: pyyaml not installed; T1-T15 rule descriptions will be "
+                "unavailable (gate-check still functions but shows generic text). "
+                "Install it with: pip install pyyaml",
+                file=sys.stderr,
+            )
+            return {}
+
+        with open(yaml_path) as f:
+            data = yaml.safe_load(f)
+
+        rules = {}
+        for entry in data.get("traceability", {}).get("traceability_rules", []):
+            rid = entry.get("id")
+            if rid:
+                rules[rid] = entry
+        return rules
+
+    def _print_gate_check_results(self, results: Dict):
+        """Print gate-check results to console."""
+        threshold_pct = results["threshold"] * 100
+        print(f"\n{'='*72}")
+        print(f"EN 50128 Traceability Gate Check — Phase: {results['phase'].upper()}")
+        print(f"{'='*72}")
+        print(f"Project:   {results['project']}")
+        print(f"SIL Level: {results['sil']}")
+        print(f"Threshold: {threshold_pct:.0f}%")
+        print(f"{'='*72}\n")
+
+        for rule in results["rules"]:
+            status = "PASS" if rule["pass"] else "FAIL"
+            status_sym = "✓" if rule["pass"] else "✗"
+            print(f"{status_sym} {rule['rule_id']:5s}  [{status}]  {rule['scope']}")
+            print(f"         {rule['normative_clause']}")
+
+            note = rule.get("note")
+            if note:
+                print(f"         Note: {note}")
+
+            for m in rule.get("matrices", []):
+                m_status = "✓" if m["pass"] else "✗"
+                if "error" in m:
+                    print(f"           {m_status} {m['name']:45s}  MISSING (matrix CSV not found)")
+                else:
+                    cov_pct = m["coverage"] * 100
+                    print(
+                        f"           {m_status} {m['name']:45s}  "
+                        f"{cov_pct:.1f}%  ({m['traced_sources']}/{m['total_sources']})"
+                    )
+            print()
+
+        if results["process_notes"]:
+            print(f"{'─'*72}")
+            print("Process Notes (not matrix checks):")
+            for note in results["process_notes"]:
+                print(f"  [{note['rule_id']}]  {note['normative_clause']}")
+                print(f"        {note['note']}")
+            print()
+
+        print(f"{'='*72}")
+        overall_sym = "✓" if results["overall_pass"] else "✗"
+        overall_status = "PASS — gate may proceed" if results["overall_pass"] else "FAIL — gate BLOCKED"
+        print(f"Overall: {overall_sym} {overall_status}")
+        print(f"{'='*72}\n")
+
+    # ========================================================================
+    # Command: verify-link
+    # ========================================================================
+
+    def verify_link(
+        self,
+        matrix_name: str,
+        source_id: str,
+        target_id: str,
+        verified_by: str,
+        verified_date: str = None,
+    ) -> bool:
+        """
+        Mark a traceability link as VER-verified in a matrix CSV.
+
+        Sets verified=true, verified_by, and verified_date on the matching
+        (source_id, target_id) row.  Persists to CSV and regenerates JSON/MD.
+
+        Args:
+            matrix_name: Matrix file stem (e.g., "doc6_to_doc9")
+            source_id: Source artifact ID to match
+            target_id: Target artifact ID to match
+            verified_by: VER reviewer identifier (name or role)
+            verified_date: ISO date string (defaults to today)
+
+        Returns:
+            True if the link was found and updated, False otherwise.
+        """
+        if verified_date is None:
+            verified_date = datetime.now().strftime("%Y-%m-%d")
+
+        csv_path = self.evidence_dir / f"{matrix_name}.csv"
+        if not csv_path.exists():
+            print(f"✗ Matrix not found: {matrix_name}", file=sys.stderr)
+            return False
+
+        matrix = self._read_csv(str(csv_path))
+        matched = False
+
+        for link in matrix.links:
+            if link.source_id == source_id and link.target_id == target_id:
+                link.verified = True
+                link.verified_by = verified_by
+                link.verified_date = verified_date
+                link.modified_date = datetime.now().isoformat()
+                matched = True
+
+        if not matched:
+            print(
+                f"✗ Link not found: {source_id} → {target_id} in {matrix_name}",
+                file=sys.stderr,
+            )
+            return False
+
+        self._write_csv(matrix)
+        self._write_json(matrix)
+        self._write_markdown(matrix)
+
+        print(f"✓ Verified link: {source_id} → {target_id}")
+        print(f"  Matrix:      {matrix_name}")
+        print(f"  Verified by: {verified_by}")
+        print(f"  Date:        {verified_date}")
+        return True
+
     def _print_gap_analysis(self, gaps: Dict, sil: int):
         """Print gap analysis to console."""
         print(f"\n{'='*70}")
@@ -594,57 +995,103 @@ class TraceabilityManager:
         Args:
             source_type: Source artifact type
             target_types: List of target artifact types
-            format: Output format (markdown, csv, json, html)
+            format: Output format (markdown, csv, json)
             output: Output file path
         
         Returns:
             Report content as string
         """
-        report_lines = []
-        
-        # Header
-        report_lines.append(f"# Traceability Report: {source_type}")
-        report_lines.append(f"\n**Project**: {self.project}")
-        report_lines.append(f"**Date**: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
-        report_lines.append(f"\n---\n")
-        
-        # For each target type
+        # Collect data for all requested matrices
+        matrix_data = []
         for target_type in target_types:
             matrix_name = f"{source_type}_to_{target_type}"
             csv_path = self.evidence_dir / f"{matrix_name}.csv"
-            
-            if not csv_path.exists():
-                report_lines.append(f"\n## {source_type} → {target_type}")
-                report_lines.append(f"\n⚠ Matrix not found: {matrix_name}\n")
-                continue
-            
-            matrix = self._read_csv(str(csv_path))
-            
-            # Calculate metrics
-            total_sources = len(set(link.source_id for link in matrix.links))
-            traced_sources = len(set(link.source_id for link in matrix.links if link.target_id))
-            coverage = traced_sources / total_sources if total_sources > 0 else 0.0
-            
-            report_lines.append(f"\n## {source_type} → {target_type}")
-            report_lines.append(f"\n**Coverage**: {coverage*100:.1f}% ({traced_sources}/{total_sources})")
-            report_lines.append(f"**Total Links**: {len(matrix.links)}\n")
-            
-            # Traceability table
-            report_lines.append(f"\n| Source ID | Target ID | Link Type | Verified |\n")
-            report_lines.append(f"|-----------|-----------|-----------|----------|\n")
-            
-            for link in sorted(matrix.links, key=lambda x: x.source_id):
-                verified_icon = "✓" if link.verified else "✗"
-                report_lines.append(f"| {link.source_id} | {link.target_id} | {link.link_type} | {verified_icon} |\n")
-            
-            report_lines.append("\n")
-        
-        report_content = "".join(report_lines)
-        
+            entry = {"matrix": matrix_name, "source_type": source_type, "target_type": target_type}
+            if csv_path.exists():
+                matrix = self._read_csv(str(csv_path))
+                total_sources = len(set(lnk.source_id for lnk in matrix.links))
+                traced_sources = len(set(lnk.source_id for lnk in matrix.links if lnk.target_id))
+                entry["coverage"] = traced_sources / total_sources if total_sources > 0 else 0.0
+                entry["total_links"] = len(matrix.links)
+                entry["links"] = [
+                    {
+                        "source_id": lnk.source_id,
+                        "target_id": lnk.target_id,
+                        "link_type": lnk.link_type,
+                        "verified": lnk.verified,
+                        "confidence": lnk.confidence,
+                    }
+                    for lnk in sorted(matrix.links, key=lambda x: x.source_id)
+                ]
+                entry["found"] = True
+            else:
+                entry["found"] = False
+                entry["coverage"] = 0.0
+                entry["total_links"] = 0
+                entry["links"] = []
+            matrix_data.append(entry)
+
+        if format == "json":
+            report_content = json.dumps(
+                {
+                    "project": self.project,
+                    "generated": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "source_type": source_type,
+                    "matrices": matrix_data,
+                },
+                indent=2,
+            )
+
+        elif format == "csv":
+            buf = io.StringIO()
+            writer = csv.writer(buf)
+            writer.writerow(["matrix", "source_id", "target_id", "link_type", "verified", "confidence"])
+            for entry in matrix_data:
+                if not entry["found"]:
+                    writer.writerow([entry["matrix"], "", "", "", "", ""])
+                    continue
+                for lnk in entry["links"]:
+                    writer.writerow([
+                        entry["matrix"],
+                        lnk["source_id"],
+                        lnk["target_id"],
+                        lnk["link_type"],
+                        "yes" if lnk["verified"] else "no",
+                        lnk["confidence"],
+                    ])
+            report_content = buf.getvalue()
+
+        else:  # markdown (default)
+            report_lines = []
+            report_lines.append(f"# Traceability Report: {source_type}")
+            report_lines.append(f"\n**Project**: {self.project}")
+            report_lines.append(f"**Date**: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+            report_lines.append(f"\n---\n")
+            for entry in matrix_data:
+                report_lines.append(f"\n## {entry['source_type']} → {entry['target_type']}")
+                if not entry["found"]:
+                    report_lines.append(f"\n⚠ Matrix not found: {entry['matrix']}\n")
+                    continue
+                report_lines.append(
+                    f"\n**Coverage**: {entry['coverage']*100:.1f}%"
+                    f" ({entry['total_links']} links)"
+                )
+                report_lines.append(f"\n| Source ID | Target ID | Link Type | Verified |\n")
+                report_lines.append(f"|-----------|-----------|-----------|----------|\n")
+                for lnk in entry["links"]:
+                    verified_icon = "✓" if lnk["verified"] else "✗"
+                    report_lines.append(
+                        f"| {lnk['source_id']} | {lnk['target_id']}"
+                        f" | {lnk['link_type']} | {verified_icon} |\n"
+                    )
+                report_lines.append("\n")
+            report_content = "".join(report_lines)
+
         # Write to file if output specified
         if output:
-            with open(output, "w") as f:
-                f.write(report_content)
+            tmp = Path(str(output) + ".tmp")
+            tmp.write_text(report_content)
+            os.replace(tmp, output)
             print(f"✓ Report written to: {output}")
         else:
             print(report_content)
@@ -820,7 +1267,15 @@ class TraceabilityManager:
             Output file path
         """
         if matrix_name == "all":
-            # Export all matrices
+            # Export all matrices — only JSON is supported for bulk export
+            if format != "json":
+                print(
+                    f"Error: --matrix all only supports --format json "
+                    f"(got '{format}'). To export a single matrix in another "
+                    f"format, specify a matrix name instead of 'all'.",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
             matrices = [p.stem for p in self.evidence_dir.glob("*.csv")]
             
             if format == "json":
@@ -840,9 +1295,7 @@ class TraceabilityManager:
                     json.dump({'project': self.project, 'matrices': all_data}, f, indent=2)
                 
                 print(f"✓ Exported {len(matrices)} matrices to {output_path}")
-                
-            else:
-                raise ValueError("Export all matrices only supported for JSON format")
+            # (non-JSON for "all" is blocked above)
         
         else:
             # Export single matrix
@@ -870,7 +1323,10 @@ class TraceabilityManager:
                     json.dump(data, f, indent=2)
             
             elif format == "markdown":
-                # Copy Markdown
+                # Regenerate markdown from the in-memory matrix rather than
+                # copying matrix.markdown_path — the .md sidecar may not exist
+                # if the matrix was created or modified without a prior sync.
+                self._write_markdown(matrix)
                 import shutil
                 shutil.copy(matrix.markdown_path, output_path)
             
@@ -1094,7 +1550,7 @@ class TraceabilityManager:
         Args:
             source_type: Source artifact type or specific artifact ID
             target_type: Target artifact type
-            format: Visualization format (mermaid, dot, svg, png)
+            format: Visualization format (mermaid, dot)
             output: Output file path
         
         Returns:
@@ -1310,34 +1766,38 @@ class TraceabilityManager:
         return matrix
     
     def _write_csv(self, matrix: TraceabilityMatrix):
-        """Write traceability matrix to CSV file."""
+        """Write traceability matrix to CSV file (atomic write)."""
         fieldnames = [
             'source_id', 'source_type', 'target_id', 'target_type',
             'link_type', 'rationale', 'verified', 'verified_by', 'verified_date',
             'confidence', 'source_document',
         ]
-        
-        with open(matrix.csv_path, 'w', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            
-            for link in matrix.links:
-                writer.writerow({
-                    'source_id': link.source_id,
-                    'source_type': link.source_type,
-                    'target_id': link.target_id,
-                    'target_type': link.target_type,
-                    'link_type': link.link_type,
-                    'rationale': link.rationale,
-                    'verified': str(link.verified).lower(),
-                    'verified_by': link.verified_by,
-                    'verified_date': link.verified_date,
-                    'confidence': link.confidence,
-                    'source_document': link.source_document,
-                })
-    
+
+        import io as _io
+        buf = _io.StringIO()
+        writer = csv.DictWriter(buf, fieldnames=fieldnames)
+        writer.writeheader()
+        for link in matrix.links:
+            writer.writerow({
+                'source_id': link.source_id,
+                'source_type': link.source_type,
+                'target_id': link.target_id,
+                'target_type': link.target_type,
+                'link_type': link.link_type,
+                'rationale': link.rationale,
+                'verified': str(link.verified).lower(),
+                'verified_by': link.verified_by,
+                'verified_date': link.verified_date,
+                'confidence': link.confidence,
+                'source_document': link.source_document,
+            })
+
+        tmp = Path(str(matrix.csv_path) + ".tmp")
+        tmp.write_text(buf.getvalue(), newline='')
+        os.replace(tmp, matrix.csv_path)
+
     def _write_json(self, matrix: TraceabilityMatrix):
-        """Write traceability matrix to JSON file (for queries)."""
+        """Write traceability matrix to JSON file (atomic write)."""
         data = {
             'name': matrix.name,
             'source_type': matrix.source_type,
@@ -1349,14 +1809,15 @@ class TraceabilityManager:
             'created_date': matrix.created_date,
             'modified_date': matrix.modified_date,
         }
-        
-        with open(matrix.json_path, 'w') as f:
-            json.dump(data, f, indent=2)
-    
+
+        tmp = Path(str(matrix.json_path) + ".tmp")
+        tmp.write_text(json.dumps(data, indent=2))
+        os.replace(tmp, matrix.json_path)
+
     def _write_markdown(self, matrix: TraceabilityMatrix):
-        """Write traceability matrix to Markdown file (for embedding in documents)."""
+        """Write traceability matrix to Markdown file (atomic write)."""
         lines = []
-        
+
         lines.append(f"# Traceability Matrix: {matrix.name}\n\n")
         lines.append(f"**Project**: {matrix.project}  \n")
         lines.append(f"**Source Type**: {matrix.source_type}  \n")
@@ -1364,22 +1825,26 @@ class TraceabilityManager:
         lines.append(f"**Version**: {matrix.version}  \n")
         lines.append(f"**Status**: {matrix.status}  \n")
         lines.append(f"\n---\n\n")
-        
+
         if matrix.links:
             lines.append("| Source ID | Target ID | Link Type | Verified | Rationale |\n")
             lines.append("|-----------|-----------|-----------|----------|------------|\n")
-            
+
             for link in matrix.links:
                 verified_icon = "✓" if link.verified else "✗"
-                lines.append(f"| {link.source_id} | {link.target_id} | {link.link_type} | {verified_icon} | {link.rationale} |\n")
+                lines.append(
+                    f"| {link.source_id} | {link.target_id} | {link.link_type}"
+                    f" | {verified_icon} | {link.rationale} |\n"
+                )
         else:
             lines.append("*No traceability links defined yet.*\n")
-        
+
         lines.append(f"\n---\n\n")
         lines.append(f"*Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*\n")
-        
-        with open(matrix.markdown_path, 'w') as f:
-            f.writelines(lines)
+
+        tmp = Path(str(matrix.markdown_path) + ".tmp")
+        tmp.write_text("".join(lines))
+        os.replace(tmp, matrix.markdown_path)
 
 # ============================================================================
 # CLI Interface
@@ -1456,7 +1921,7 @@ Examples:
     report_parser = subparsers.add_parser('report', help='Generate traceability report')
     report_parser.add_argument('--from', dest='source', required=True, help='Source artifact type')
     report_parser.add_argument('--to', dest='targets', required=True, help='Comma-separated target types')
-    report_parser.add_argument('--format', choices=['markdown', 'csv', 'json', 'html'], default='markdown', help='Output format')
+    report_parser.add_argument('--format', choices=['markdown', 'csv', 'json'], default='markdown', help='Output format')
     report_parser.add_argument('--output', help='Output file path')
     
     # import command
@@ -1467,8 +1932,11 @@ Examples:
     
     # export command
     export_parser = subparsers.add_parser('export', help='Export traceability data')
-    export_parser.add_argument('--matrix', required=True, help='Matrix name (or "all" for all matrices)')
-    export_parser.add_argument('--format', choices=['csv', 'json', 'excel', 'markdown'], required=True, help='Output format')
+    export_parser.add_argument(
+        '--matrix', required=True,
+        help='Matrix name, or "all" to export every matrix (JSON format only when using "all")',
+    )
+    export_parser.add_argument('--format', choices=['csv', 'json', 'excel', 'markdown'], required=True, help='Output format (use "json" when --matrix all)')
     export_parser.add_argument('--output', required=True, help='Output file path')
     
     # extract command
@@ -1481,12 +1949,56 @@ Examples:
     visualize_parser = subparsers.add_parser('visualize', help='Generate traceability visualization')
     visualize_parser.add_argument('--from', dest='source', required=True, help='Source artifact type')
     visualize_parser.add_argument('--to', dest='target', required=True, help='Target artifact type')
-    visualize_parser.add_argument('--format', choices=['mermaid', 'dot', 'svg', 'png'], default='mermaid', help='Visualization format')
+    visualize_parser.add_argument('--format', choices=['mermaid', 'dot'], default='mermaid', help='Visualization format')
     visualize_parser.add_argument('--output', help='Output file path')
     
     # sync command
     sync_parser = subparsers.add_parser('sync', help='Synchronize CSV/JSON/Markdown formats')
     sync_parser.add_argument('--matrix', required=True, help='Matrix name (or "all" for all matrices)')
+
+    # gate-check command
+    gate_check_parser = subparsers.add_parser(
+        'gate-check',
+        help='Check T1-T15 normative traceability rules for a lifecycle phase gate',
+    )
+    gate_check_parser.add_argument(
+        '--phase',
+        required=True,
+        choices=[
+            'planning', 'requirements', 'design', 'component-design',
+            'implementation-testing', 'integration', 'validation',
+        ],
+        help='Lifecycle phase to check (cumulative — all rules valid up to this phase)',
+    )
+    gate_check_parser.add_argument(
+        '--sil', type=int, required=True, help='SIL level (0-4)',
+    )
+
+    # verify-link command
+    verify_link_parser = subparsers.add_parser(
+        'verify-link',
+        help='Mark a traceability link as VER-verified in a matrix CSV',
+    )
+    verify_link_parser.add_argument(
+        '--matrix', required=True,
+        help='Matrix file stem (e.g., doc6_to_doc9)',
+    )
+    verify_link_parser.add_argument(
+        '--source', required=True,
+        help='Source artifact ID (e.g., SRS-REQ-001)',
+    )
+    verify_link_parser.add_argument(
+        '--target', required=True,
+        help='Target artifact ID (e.g., ARCH-001)',
+    )
+    verify_link_parser.add_argument(
+        '--name', dest='verified_by', required=True,
+        help='VER reviewer name or role (e.g., VER or "J.Smith")',
+    )
+    verify_link_parser.add_argument(
+        '--date',
+        help='Verification date in ISO format YYYY-MM-DD (defaults to today)',
+    )
     
     args = parser.parse_args()
     
@@ -1507,6 +2019,9 @@ Examples:
             return 0 if result['overall_pass'] else 1
         
         elif args.command == 'query':
+            if not args.source and not args.target:
+                print("Error: query requires at least one of --source or --target.", file=sys.stderr)
+                return 1
             mgr.query(args.source, args.target, args.direction)
         
         elif args.command == 'check-gaps':
@@ -1530,6 +2045,20 @@ Examples:
         
         elif args.command == 'sync':
             mgr.sync(args.matrix)
+        
+        elif args.command == 'gate-check':
+            result = mgr.gate_check(args.phase, args.sil)
+            return 0 if result.get('overall_pass') else 1
+
+        elif args.command == 'verify-link':
+            ok = mgr.verify_link(
+                args.matrix,
+                args.source,
+                args.target,
+                args.verified_by,
+                args.date,
+            )
+            return 0 if ok else 1
         
         return 0
     

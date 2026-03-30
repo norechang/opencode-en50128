@@ -10,15 +10,12 @@ Usage:
 
 Commands:
     submit           Submit document for review
-    review           Review and approve/reject document
-    approve          Mark document as approved
-    reject           Reject document and return to author
+    review           Review and approve/reject document (use --approve or --reject)
+    approve          Finalize document as approved (after all review approvals obtained)
     baseline         Create configuration baseline
     gate-check       Validate phase gate prerequisites
-    change-request   Create/manage change requests
     status           Generate workflow status report
     history          Show document workflow history
-    notify           Send workflow notifications
 
 EN 50128 Compliance:
     - Independent verification and validation (SIL 3-4)
@@ -38,7 +35,14 @@ import os
 import re
 import subprocess
 import sys
-import yaml
+try:
+    import yaml
+except ImportError:
+    print(
+        "Error: pyyaml is required. Install it with: pip install pyyaml",
+        file=sys.stderr,
+    )
+    sys.exit(1)
 from dataclasses import dataclass, asdict, field
 from datetime import datetime
 from enum import Enum
@@ -397,8 +401,7 @@ class GateResult:
 
     def to_json(self) -> str:
         """Render as JSON."""
-        from dataclasses import asdict as _asdict
-        return json.dumps(_asdict(self), indent=2)
+        return json.dumps(asdict(self), indent=2)
 
 
 class GateChecker:
@@ -868,7 +871,7 @@ class WorkflowManager:
         try:
             with open("LIFECYCLE_STATE.md", "r") as f:
                 content = f.read()
-                match = re.search(r'\*\*Project\*\*:\s*(.+)', content)
+                match = re.search(r'\|\s*\*\*Project Name\*\*\s*\|\s*(.+?)\s*\|', content)
                 if match:
                     return match.group(1).strip()
         except FileNotFoundError:
@@ -880,7 +883,7 @@ class WorkflowManager:
         try:
             with open("LIFECYCLE_STATE.md", "r") as f:
                 content = f.read()
-                match = re.search(r'\*\*SIL\*\*:\s*(\d)', content)
+                match = re.search(r'\|\s*\*\*SIL Level\*\*\s*\|\s*(\d)', content)
                 if match:
                     return int(match.group(1))
         except FileNotFoundError:
@@ -920,7 +923,7 @@ class WorkflowManager:
     # ========================================================================
     
     def submit(self, document_id: str, document_path: str, author_role: str, 
-               author_name: str, sil: int = None) -> DocumentWorkflow:
+               author_name: str, sil: int = None, phase: int = None) -> DocumentWorkflow:
         """
         Submit document for review.
         
@@ -930,14 +933,21 @@ class WorkflowManager:
             author_role: Author's role (REQ, DES, IMP, etc.)
             author_name: Author's name
             sil: SIL level (uses project SIL if not specified)
+            phase: Phase number this document belongs to (1-8); stored on the
+                   workflow record so gate-check can find it.
         
         Returns:
             DocumentWorkflow object
         """
         sil = sil if sil is not None else self.sil_level
         
-        # Determine required approval workflow based on SIL
-        required_roles = self.config["approval_workflows"][f"sil_{sil}"]
+        # Determine required approval workflow from PHASE_APPROVAL_CHAINS when
+        # phase is known; fall back to generic config chain when phase is None.
+        if phase is not None and phase in PHASE_APPROVAL_CHAINS:
+            sil_group = "sil_high" if sil >= 3 else "sil_low"
+            required_roles = PHASE_APPROVAL_CHAINS[phase][sil_group]["chain"]
+        else:
+            required_roles = self.config["approval_workflows"][f"sil_{min(sil, 4)}"]
         
         # Create workflow state
         workflow = DocumentWorkflow(
@@ -949,6 +959,7 @@ class WorkflowManager:
             author_name=author_name,
             required_roles=required_roles,
             sil_level=sil,
+            phase=str(phase) if phase is not None else "",
         )
         
         # Save workflow state
@@ -960,7 +971,8 @@ class WorkflowManager:
         print(f"✓ Document submitted for review: {document_id}")
         print(f"  State: Draft → Review")
         print(f"  SIL {sil} workflow: {len(required_roles)} approvals required")
-        print(f"  Next reviewer: {required_roles[1].upper()}")  # Skip author (index 0)
+        next_rev = required_roles[1].upper() if len(required_roles) > 1 else "N/A"
+        print(f"  Next reviewer: {next_rev}")
         
         return workflow
     
@@ -1124,6 +1136,14 @@ class WorkflowManager:
         if not workflow:
             raise ValueError(f"Document not found: {document_id}")
         
+        # Document must be in REVIEW state before it can be approved
+        if workflow.state != WorkflowState.REVIEW.value:
+            raise ValueError(
+                f"Cannot approve document '{document_id}': current state is "
+                f"'{workflow.state}', expected '{WorkflowState.REVIEW.value}'. "
+                f"Submit the document for review first."
+            )
+        
         # Check if all approvals obtained
         approved_roles = set(a.reviewer_role for a in workflow.approvals)
         pending_roles = [r for r in workflow.required_roles if r not in approved_roles]
@@ -1185,9 +1205,18 @@ class WorkflowManager:
             documents_to_baseline.append(workflow)
         
         elif phase:
-            # Baseline all documents for phase
+            # Baseline all documents for phase.
+            # submit() stores phase as a string (str(int) e.g. "2" or the raw
+            # string the caller passed).  Normalise both sides to lower-case
+            # stripped strings so "--phase requirements" and "--phase 2" both
+            # work regardless of how the value was recorded.
+            phase_norm = str(phase).strip().lower()
             all_workflows = self._list_workflows()
-            phase_docs = [w for w in all_workflows if w.phase == phase and w.state == WorkflowState.APPROVED.value]
+            phase_docs = [
+                w for w in all_workflows
+                if str(w.phase).strip().lower() == phase_norm
+                and w.state == WorkflowState.APPROVED.value
+            ]
             
             if not phase_docs:
                 raise ValueError(f"No approved documents found for phase: {phase}")
@@ -1347,7 +1376,7 @@ class WorkflowManager:
         
         Args:
             document_id: Document identifier
-            format: Output format (text, json, timeline)
+            format: Output format (text, json)
         
         Returns:
             History as string
@@ -1363,7 +1392,7 @@ class WorkflowManager:
         if format == "json":
             events = []
             for line in history_lines:
-                parts = line.strip().split(" | ")
+                parts = line.strip().split("\t")
                 if len(parts) >= 4:
                     events.append({
                         "timestamp": parts[0],
@@ -1384,11 +1413,16 @@ class WorkflowManager:
     # ========================================================================
     
     def _save_workflow(self, workflow: DocumentWorkflow):
-        """Save workflow state to YAML file."""
+        """Save workflow state to YAML file (atomic write)."""
         workflow_path = self.workflow_dir / "documents" / f"{workflow.document_id}.yaml"
-        
-        with open(workflow_path, "w") as f:
-            yaml.dump(asdict(workflow), f, default_flow_style=False)
+
+        import io as _io
+        buf = _io.StringIO()
+        yaml.dump(asdict(workflow), buf, default_flow_style=False)
+
+        tmp_path = Path(str(workflow_path) + ".tmp")
+        tmp_path.write_text(buf.getvalue())
+        os.replace(tmp_path, workflow_path)
     
     def _load_workflow(self, document_id: str) -> Optional[DocumentWorkflow]:
         """Load workflow state from YAML file."""
@@ -1420,11 +1454,19 @@ class WorkflowManager:
         return workflows
     
     def _log_history(self, document_id: str, old_state: str, new_state: str, description: str):
-        """Log state transition to history."""
+        """Log state transition to history.
+
+        Format: tab-separated fields so that pipe characters in ``description``
+        (e.g. approval counts such as "2/3") cannot corrupt the record.
+        Field order: timestamp<TAB>old_state<TAB>new_state<TAB>description
+        """
         history_path = self.workflow_dir / "history" / f"{document_id}.log"
         
         timestamp = datetime.now().isoformat()
-        log_entry = f"{timestamp} | {old_state} | {new_state} | {description}\n"
+        # Sanitize each field so they contain no tabs (replace with space)
+        def _s(v: str) -> str:
+            return str(v).replace("\t", " ")
+        log_entry = f"{_s(timestamp)}\t{_s(old_state)}\t{_s(new_state)}\t{_s(description)}\n"
         
         with open(history_path, "a") as f:
             f.write(log_entry)
@@ -1478,6 +1520,7 @@ Examples:
     submit_parser.add_argument('--path', required=True, help='Document file path')
     submit_parser.add_argument('--author-role', required=True, help='Author role (REQ, DES, IMP, etc.)')
     submit_parser.add_argument('--author-name', required=True, help='Author name')
+    submit_parser.add_argument('--phase', type=int, help='Phase number the document belongs to (1-8)')
     submit_parser.add_argument('--sil', type=int, help='SIL level (default: from LIFECYCLE_STATE.md)')
     
     # review command
@@ -1485,8 +1528,9 @@ Examples:
     review_parser.add_argument('document_id', help='Document identifier')
     review_parser.add_argument('--role', required=True, help='Reviewer role (PEER, QUA, VER, VAL, etc.)')
     review_parser.add_argument('--name', required=True, help='Reviewer name')
-    review_parser.add_argument('--approve', action='store_true', help='Approve document')
-    review_parser.add_argument('--reject', action='store_true', help='Reject document')
+    _review_action = review_parser.add_mutually_exclusive_group(required=True)
+    _review_action.add_argument('--approve', action='store_true', help='Approve document')
+    _review_action.add_argument('--reject', action='store_true', help='Reject document')
     review_parser.add_argument('--comment', default='', help='Review comments')
     
     # approve command
@@ -1512,7 +1556,7 @@ Examples:
     # history command
     history_parser = subparsers.add_parser('history', help='Show document workflow history')
     history_parser.add_argument('document_id', help='Document identifier')
-    history_parser.add_argument('--format', choices=['text', 'json', 'timeline'], default='text', help='Output format')
+    history_parser.add_argument('--format', choices=['text', 'json'], default='text', help='Output format')
 
     # gate-check command
     gate_parser = subparsers.add_parser(
@@ -1547,7 +1591,7 @@ Examples:
     # Execute command
     try:
         if args.command == 'submit':
-            mgr.submit(args.document_id, args.path, args.author_role, args.author_name, args.sil)
+            mgr.submit(args.document_id, args.path, args.author_role, args.author_name, args.sil, args.phase)
         
         elif args.command == 'review':
             mgr.review(args.document_id, args.role, args.name, args.approve, args.reject, args.comment)
@@ -1556,10 +1600,10 @@ Examples:
             mgr.approve(args.document_id, args.force)
         
         elif args.command == 'baseline':
-            mgr.baseline(args.document, args.phase, args.tag, args.message)
+            mgr.baseline(document_id=args.document, phase=args.phase, tag=args.tag, message=args.message)
         
         elif args.command == 'status':
-            result = mgr.status(args.document, args.phase, args.all, args.format, args.approvals)
+            result = mgr.status(document_id=args.document, phase=args.phase, all=args.all, format=args.format, show_approvals=args.approvals)
             print(result)
         
         elif args.command == 'history':

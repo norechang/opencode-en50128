@@ -204,17 +204,17 @@ Per EN 50128 §5.1.2.8, VAL gives agreement/disagreement for software release.
 
 ## 9. Report Templates Directory
 
-Use the Markdown templates in `deliverables/` when authoring VAL deliverables.
-The `deliverables/` YAML files are machine-readable requirement specs (SIL criteria,
+Use the Markdown templates in `[PROJECT_ROOT] deliverables/` when authoring VAL deliverables.
+The `[PROJECT_ROOT] deliverables/` YAML files are machine-readable requirement specs (SIL criteria,
 evidence requirements, verification criteria) — they complement but do not replace
 the Markdown templates.
 
 | Annex C Item | Markdown Template | Requirements Spec (YAML) |
 |-------------|-------------------|--------------------------|
-| 5 — Software Validation Plan | `deliverables/planning/Software-Validation-Plan-template.md` | `deliverables/planning/Software-Validation-Plan.yaml` |
-| 25 — Software Validation Report | `deliverables/validation/Software-Validation-Report-template.md` | `deliverables/validation/Software-Validation-Report.yaml` |
-| 26 — Tools Validation Report | `deliverables/validation/Tools-Validation-Report-template.md` | `deliverables/validation/Tools-Validation-Report.yaml` |
-| 27 — Release Note | *(assign in SQAP; no platform template — §7.7.4.12)* | `deliverables/deployment/Release-Notes.yaml` |
+| 5 — Software Validation Plan | `[PROJECT_ROOT] deliverables/planning/Software-Validation-Plan-template.md` | `[PROJECT_ROOT] deliverables/planning/Software-Validation-Plan.yaml` |
+| 25 — Software Validation Report | `[PROJECT_ROOT] deliverables/validation/Software-Validation-Report-template.md` | `[PROJECT_ROOT] deliverables/validation/Software-Validation-Report.yaml` |
+| 26 — Tools Validation Report | `[PROJECT_ROOT] deliverables/validation/Tools-Validation-Report-template.md` | `[PROJECT_ROOT] deliverables/validation/Tools-Validation-Report.yaml` |
+| 27 — Release Note | *(assign in SQAP; no platform template — §7.7.4.12)* | `[PROJECT_ROOT] deliverables/deployment/Release-Notes.yaml` |
 
 ---
 
@@ -224,23 +224,64 @@ the Markdown templates.
 
 ```bash
 # Submit SVaP to workflow after authoring
-python3 tools/workflow_manager.py submit <DOC-SVaP-ID> --phase 1 --role VAL
+python3 tools/workspace.py wf submit <DOC-SVaP-ID> \
+  --path <path-to-svap> \
+  --author-role VAL \
+  --author-name '<VAL Name>' \
+  --sil <level>
 
 # Submit Validation Report to QUA
-python3 tools/workflow_manager.py submit <DOC-VALRPT-ID> --phase 7 --role VAL
+python3 tools/workspace.py wf submit <DOC-VALRPT-ID> \
+  --path <path-to-validation-report> \
+  --author-role VAL \
+  --author-name '<VAL Name>' \
+  --sil <level>
 
 # Record VAL approval/disagreement
-python3 tools/workflow_manager.py review <DOC-VALRPT-ID> --role VAL \
-    --name "<VAL name>" --approve --comment "Validation complete. AGREE for release."
+python3 tools/workspace.py wf review <DOC-VALRPT-ID> \
+  --role VAL \
+  --name '<VAL Name>' \
+  --approve \
+  --comment "Validation complete. AGREE for release."
 
-# Check traceability completeness before release
-python3 tools/workspace.py trace validate --phase validation --sil <level>
+# Check traceability completeness before release — normative T-rule gate check
+# Checks all T-rules applicable up to and including the validation phase,
+# reports per-rule PASS/FAIL with normative clause citations, exits 0/1.
+python3 tools/workspace.py trace gate-check \
+    --phase validation \
+    --sil <level>
 
-# Generate requirements coverage report
+# Mark a traceability link as VAL-verified in the named matrix CSV
+python3 tools/workspace.py trace verify-link \
+    --matrix doc25_to_doc6 \
+    --source <SOURCE_ID> \
+    --target <TARGET_ID> \
+    --role VAL \
+    --name '<VAL Name>'
+
+# Generate requirements coverage report (SRS → validation tests)
 python3 tools/workspace.py trace report \
     --from requirements --to tests --format markdown \
     --output evidence/validation/requirements_coverage.md
 ```
+
+**Matrix naming convention** (established by `traceability_manager.py`):
+
+```
+evidence/traceability/doc<from>_to_doc<to>.csv
+```
+
+Key validation-phase matrices:
+
+| Rule | Matrix | Description |
+|------|--------|-------------|
+| T13 | `doc25_to_doc6.csv` | Validation Report → SRS requirements |
+| T3  | `doc6_to_doc9.csv`  | SRS → Architecture (cumulative) |
+| T5a | `doc10_to_doc9.csv` | Design Spec → Architecture (cumulative) |
+
+**Note**: `trace validate --sil <level>` performs per-item gap detection within a
+single matrix and does NOT check T1–T15 normative rules.  Use `trace gate-check`
+for phase gate compliance checks.
 
 ---
 

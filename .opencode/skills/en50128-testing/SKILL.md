@@ -34,10 +34,10 @@ logic for software testing per EN 50128 §5.3.4, §7.4–7.7.
 | Authority structure, two-track loop, CCB re-entry | `WORKFLOW.md` |
 | Independence matrix (TST = HR at SIL 3–4) | `ORGANIZATION.md` |
 | §5.3.4, §7.4–7.7, Table A.5, A.13, A.21 | `std/EN50128-2011.md` |
-| Component Test Specification template | `deliverables/component-design/Component-Test-Specification-template.md` |
-| Component Test Report template | `deliverables/implementation/Component-Test-Report-template.md` |
-| Overall Software Test Specification template | `deliverables/requirements/Overall-Software-Test-Specification-template.md` |
-| Overall Software Test Report template | `deliverables/validation/Overall-Software-Test-Report-template.md` |
+| Component Test Specification template | `[PROJECT_ROOT] deliverables/component-design/Component-Test-Specification-template.md` |
+| Component Test Report template | `[PROJECT_ROOT] deliverables/implementation/Component-Test-Report-template.md` |
+| Overall Software Test Specification template | `[PROJECT_ROOT] deliverables/requirements/Overall-Software-Test-Specification-template.md` |
+| Overall Software Test Report template | `[PROJECT_ROOT] deliverables/validation/Overall-Software-Test-Report-template.md` |
 | Source code (TST input, item 18) | CM `query-location --doc source-code` |
 | Component Design Spec (item 15) | CM `query-location --doc component-design-spec` |
 
@@ -74,8 +74,8 @@ Follow these steps in order. Do not skip steps.
    - Item 16 (Phase 4): locate Software Component Design Specification (item 15).
    - Item 7 (Phase 2): locate SRS (item 6). If either prerequisite is missing, halt and report to PM.
 
-4. **Load the appropriate template** (`Component-Test-Specification-template.md` or
-   `Overall-Software-Test-Specification-template.md`). Instantiate it for the project.
+ 4. **Load the appropriate template** (`[PROJECT_ROOT] deliverables/component-design/Component-Test-Specification-template.md` or
+    `[PROJECT_ROOT] deliverables/requirements/Overall-Software-Test-Specification-template.md`). Instantiate it for the project.
 
 5. **Derive test cases** — for each requirement in scope:
    - Normal-operation test case (happy path, verifiable output).
@@ -128,7 +128,7 @@ Follow these steps in order. Do not skip steps.
 6. **Verify coverage meets the project-defined target** from the SVP/SQAP.
    Document any gaps with justification (required SIL 2+).
 
-7. **Load template** `Component-Test-Report-template.md`. Fill:
+ 7. **Load template** `[PROJECT_ROOT] deliverables/implementation/Component-Test-Report-template.md`. Fill:
    - Test execution summary (pass/fail counts, execution date, tester identity).
    - Coverage metrics table (coverage type, target, actual, status).
    - Defect list (reference to defect IDs in the project defect tracker).

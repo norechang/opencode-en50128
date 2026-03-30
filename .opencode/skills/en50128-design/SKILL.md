@@ -33,10 +33,10 @@ and design per EN 50128 §7.3 and §7.4.
 | Independence matrix (DES = No at all SIL levels) | `ORGANIZATION.md` |
 | §7.3 SAS requirements, Table A.3 techniques | `std/EN50128-2011.md` |
 | §7.4 design and implementation techniques, Table A.4 | `std/EN50128-2011.md` |
-| SAS template (item 9) | `deliverables/architecture/Software-Architecture-Specification-template.md` |
-| SDS template (item 10) | `deliverables/component-design/Software-Design-Specification-template.md` |
-| SIS template (item 11) | `deliverables/architecture/Software-Interface-Specifications-template.md` |
-| Component Design Spec template (item 15) | `deliverables/component-design/Software-Component-Design-Specification-template.md` |
+| SAS template (item 9) | `[PROJECT_ROOT] deliverables/architecture/Software-Architecture-Specification-template.md` |
+| SDS template (item 10) | `[PROJECT_ROOT] deliverables/component-design/Software-Design-Specification-template.md` |
+| SIS template (item 11) | `[PROJECT_ROOT] deliverables/architecture/Software-Interface-Specifications-template.md` |
+| Component Design Spec template (item 15) | `[PROJECT_ROOT] deliverables/component-design/Software-Component-Design-Specification-template.md` |
 | Defensive programming patterns, complexity guidelines, MISRA C design | `resources/` |
 | SAF phase footprint, Hazard Log ownership | `tasks/SAFETY_ENGINEERING.md` |
 | Canonical document paths at runtime | CM `query-location` |
@@ -76,7 +76,7 @@ Follow these steps in order. Do not skip steps.
 3. **Verify Phase 3 prerequisites** (§7.3.2): locate the SRS (item 6), Hazard Log (SAF),
    SQAP (item 2), and SCMP (item 3). If any are missing, halt and report to PM.
 
-4. **Load the SAS template** from `deliverables/architecture/Software-Architecture-Specification-template.md`.
+ 4. **Load the SAS template** from `[PROJECT_ROOT] deliverables/architecture/Software-Architecture-Specification-template.md`.
    Fill the Document Control block (doc ID = `DOC-SAS-YYYY-001`, version = `0.1 DRAFT`).
 
 5. **Fill the Approvals table** using project SIL level:
@@ -110,8 +110,8 @@ Follow these steps in order. Prerequisite: SAS (item 9) must be baselined.
 
 1. **Invoke CM `query-location`** for `--doc sds` and `--doc sis`. Record both paths.
 
-2. **Load the SDS template** from `deliverables/component-design/Software-Design-Specification-template.md`
-   and the SIS template from `deliverables/architecture/Software-Interface-Specifications-template.md`.
+ 2. **Load the SDS template** from `[PROJECT_ROOT] deliverables/component-design/Software-Design-Specification-template.md`
+    and the SIS template from `[PROJECT_ROOT] deliverables/architecture/Software-Interface-Specifications-template.md`.
    Fill Document Control blocks and Approvals tables per the same SIL rules as Step 5 above.
 
 3. **Decompose each SAS component** into modules. For each module specify:
@@ -137,8 +137,8 @@ Prerequisite: SDS (item 10) must be baselined.
 
 1. **Invoke CM `query-location`** for `--doc component-design-spec`. Record the path.
 
-2. **Load the Component Design Spec template** from
-   `deliverables/component-design/Software-Component-Design-Specification-template.md`.
+ 2. **Load the Component Design Spec template** from
+    `[PROJECT_ROOT] deliverables/component-design/Software-Component-Design-Specification-template.md`.
    Fill Document Control block and Approvals table per SIL rules.
 
 3. **For each component** identified in the SDS, produce a component-level specification:
