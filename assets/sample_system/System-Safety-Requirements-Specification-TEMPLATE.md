@@ -53,7 +53,7 @@ Key sections to customize:
 | **Document ID** | DOC-SYS-SAFE-YYYY-NNN |
 | **Version** | 1.0 |
 | **Date** | YYYY-MM-DD |
-| **Project** | Train Door Control System (train_door_control2) |
+| **Project** | Train Door Control System ([ProjectName]) |
 | **System SIL Level** | SIL 3 |
 | **Author** | System Safety Team |
 | **Status** | Approved - Baseline for Software Safety Requirements |

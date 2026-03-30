@@ -250,7 +250,7 @@ cpptestcov report lcov  cov-data          # lcov format (for parse_coverage_repo
 
 ### 5.3 Makefile Integration Pattern
 
-The existing `examples/train_door_control2/Makefile` uses a `CC ?= gcc` pattern. The simplest integration is a parallel `coverage-mcdc` target:
+The `examples/TDC/` project (active reference) will use a `CC ?= gcc` pattern in its Makefile when implementation begins at Phase 5. The simplest integration is a parallel `coverage-mcdc` target:
 
 ```makefile
 CPPTESTCC ?= /home/norechang/bin/cpptest-ct/bin/cpptestcc
@@ -432,7 +432,7 @@ Before formal adoption on a SIL 3–4 project:
 - [ ] Create Tool Validation Report for `cpptestcov` (T2)
 - [ ] Define build configuration separation (instrumented vs. production) in SQAP and Makefile documentation
 - [ ] Define Coverage Suppression Register artifact and add to VER phase checklist
-- [ ] Pilot integration on the `examples/train_door_control2` example project to validate the four-step workflow
+- [ ] Pilot integration on the `examples/TDC` project at Phase 5 (Implementation) to validate the four-step workflow
 
 ### 11.4 Limitations and Constraints
 
@@ -479,7 +479,7 @@ Before formal adoption on a SIL 3–4 project:
   tools/mcdc/coverage_tracker.py
   tools/mcdc/report_gen.py
   deliverables/tools/Tool-Validation-Report-template.md   TVR template
-  examples/train_door_control2/Makefile  Reference build system (Unity + gcov)
+  examples/TDC/                          Active reference project (Makefile added at Phase 5)
 ```
 
 ---

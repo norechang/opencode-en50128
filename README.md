@@ -392,11 +392,9 @@ EN50128/
 │   └── scripts/                      # Validation scripts
 │
 └── examples/                          # YOUR PROJECTS GO HERE
-    └── train_door_control2/           # Reference SIL 3 project
+    └── TDC/                           # Active SIL 3 Train Door Control project
         ├── LIFECYCLE_STATE.md
-        ├── src/                       # C source (MISRA C)
-        ├── tests/                     # Unity unit tests
-        └── docs/                      # EN 50128 deliverables
+        └── docs/                      # EN 50128 deliverables (Phases 0–2 complete)
 ```
 
 ---

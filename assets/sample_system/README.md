@@ -300,18 +300,17 @@ These documents are structured to comply with:
 - `std/EN50126-2-2017.md` - RAMS Part 2 (safety)
 
 ### Example Project
-- `examples/train_door_control2/` - Complete project at Phase 5 (Integration)
-  - `docs/system/` - Original source documents (non-templated)
-  - `docs/` - Software documents (EN 50128 lifecycle)
-  - `src/` - C source code (MISRA C compliant, SIL 3)
-  - `tests/` - Unity test framework
+- `examples/TDC/` - Active reference project (SIL 3, Phase 2 complete)
+  - `docs/system/` - System-level documents (EN 50126/50129)
+  - `docs/phase-1-planning/` - Planning documents
+  - `docs/phase-2-requirements/` - Requirements documents + V&V reports
 
 ## Questions?
 
 If you're unsure how to use these templates, consider:
 
 1. **Use `@cod generate-system`** to automatically generate all 4 documents for your project from the `TYPICAL-SYSTEMS.md` catalogue (fastest path)
-2. **Read the example project** first: `examples/train_door_control2/`
+2. **Read the example project** first: `examples/TDC/`
 3. **Use platform agents** to help:
    - `/req` can help extract requirements
    - `/des` can help design architecture

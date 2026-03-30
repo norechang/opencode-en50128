@@ -181,7 +181,7 @@ opencode-en50128/
 │   ├── enhelp.py             # Command help system
 │   └── workspace.py          # Workspace manager
 ├── examples/                  # Your railway software projects go here
-│   └── train_door_control2/  # Reference implementation
+│   └── TDC/                  # Active reference project (SIL 3, Phase 2 complete)
 ├── .opencode/                 # OpenCode agent definitions
 │   ├── commands/             # Agent command files
 │   └── skills/               # Domain-specific skills
@@ -223,11 +223,8 @@ opencode
 ### 3. Explore Reference Implementation
 
 ```bash
-# Switch to reference project
-/workspace switch train_door_control2
-
-# Check project status
-/cod status
+# Check active example project status
+@cod status
 ```
 
 ### 4. Create Your Own Project
