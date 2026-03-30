@@ -21,8 +21,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
 
-# Platform root directory
-PLATFORM_ROOT = Path("/home/norechang/work/EN50128")
+# Platform root directory (detected relative to this script)
+# Use the repository root (one level above the tools/ directory) so the
+# tool works regardless of the developer's home path. Previously this used
+# a hard-coded path which caused workspace discovery to fail when running
+# inside the test environment.
+PLATFORM_ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES_DIR = PLATFORM_ROOT / "examples"
 WORKSPACE_FILE = PLATFORM_ROOT / ".workspace"
 ARCHIVED_DIR = EXAMPLES_DIR / "archived"

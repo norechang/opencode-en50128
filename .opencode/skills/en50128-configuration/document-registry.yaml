@@ -20,7 +20,7 @@ documents:
     annex_c_item: 1
     document_name: "Software Quality Assurance Plan"
     phase: 1
-    phase_dir: phase-1-planning
+    phase_dir: docs/phase-1-planning
     filename: Software-Quality-Assurance-Plan.md
     written_by: qua
 
@@ -28,7 +28,7 @@ documents:
     annex_c_item: 2
     document_name: "Software Quality Assurance Verification Report"
     phase: 1
-    phase_dir: phase-1-planning
+    phase_dir: docs/phase-1-planning
     filename: reports/Software-Quality-Assurance-Verification-Report.md
     written_by: ver
 
@@ -36,7 +36,7 @@ documents:
     annex_c_item: 3
     document_name: "Software Configuration Management Plan"
     phase: 1
-    phase_dir: phase-1-planning
+    phase_dir: docs/phase-1-planning
     filename: Software-Configuration-Management-Plan.md
     written_by: cm
 
@@ -44,7 +44,7 @@ documents:
     annex_c_item: 4
     document_name: "Software Verification Plan"
     phase: 1
-    phase_dir: phase-1-planning
+    phase_dir: docs/phase-1-planning
     filename: Software-Verification-Plan.md
     written_by: ver
 
@@ -52,7 +52,7 @@ documents:
     annex_c_item: 5
     document_name: "Software Validation Plan"
     phase: 1
-    phase_dir: phase-1-planning
+    phase_dir: docs/phase-1-planning
     filename: Software-Validation-Plan.md
     written_by: val
 
@@ -61,7 +61,7 @@ documents:
     annex_c_item: 6
     document_name: "Software Requirements Specification"
     phase: 2
-    phase_dir: phase-2-requirements
+    phase_dir: docs/phase-2-requirements
     filename: Software-Requirements-Specification.md
     written_by: req
     user_approval_required: true
@@ -70,7 +70,7 @@ documents:
     annex_c_item: 7
     document_name: "Overall Software Test Specification"
     phase: 2
-    phase_dir: phase-2-requirements
+    phase_dir: docs/phase-2-requirements
     filename: Overall-Software-Test-Specification.md
     written_by: tst
 
@@ -78,7 +78,7 @@ documents:
     annex_c_item: 8
     document_name: "Software Requirements Verification Report"
     phase: 2
-    phase_dir: phase-2-requirements
+    phase_dir: docs/phase-2-requirements
     filename: reports/Software-Requirements-Verification-Report.md
     written_by: ver
 
@@ -87,7 +87,7 @@ documents:
     annex_c_item: 9
     document_name: "Software Architecture Specification"
     phase: 3
-    phase_dir: phase-3-architecture-design
+    phase_dir: docs/phase-3-architecture-design
     filename: Software-Architecture-Specification.md
     written_by: des
 
@@ -95,7 +95,7 @@ documents:
     annex_c_item: 10
     document_name: "Software Design Specification"
     phase: 3
-    phase_dir: phase-3-architecture-design
+    phase_dir: docs/phase-3-architecture-design
     filename: Software-Design-Specification.md
     written_by: des
 
@@ -103,7 +103,7 @@ documents:
     annex_c_item: 11
     document_name: "Software Interface Specifications"
     phase: 3
-    phase_dir: phase-3-architecture-design
+    phase_dir: docs/phase-3-architecture-design
     filename: Software-Interface-Specifications.md
     written_by: des
     notes: "PLURAL form per §7.3.3 item 3"
@@ -112,7 +112,7 @@ documents:
     annex_c_item: 12
     document_name: "Software Integration Test Specification"
     phase: 3
-    phase_dir: phase-3-architecture-design
+    phase_dir: docs/phase-3-architecture-design
     filename: Software-Integration-Test-Specification.md
     written_by: int
 
@@ -120,7 +120,7 @@ documents:
     annex_c_item: 13
     document_name: "Software/Hardware Integration Test Specification"
     phase: 3
-    phase_dir: phase-3-architecture-design
+    phase_dir: docs/phase-3-architecture-design
     filename: Software-Hardware-Integration-Test-Specification.md
     written_by: int
 
@@ -128,7 +128,7 @@ documents:
     annex_c_item: 14
     document_name: "Software Architecture and Design Verification Report"
     phase: 3
-    phase_dir: phase-3-architecture-design
+    phase_dir: docs/phase-3-architecture-design
     filename: reports/Software-Architecture-and-Design-Verification-Report.md
     written_by: ver
 
@@ -137,7 +137,7 @@ documents:
     annex_c_item: 15
     document_name: "Software Component Design Specification"
     phase: 4
-    phase_dir: phase-4-component-design
+    phase_dir: docs/phase-4-component-design
     filename: Software-Component-Design-Specification.md
     written_by: des
 
@@ -145,7 +145,7 @@ documents:
     annex_c_item: 16
     document_name: "Software Component Test Specification"
     phase: 4
-    phase_dir: phase-4-component-design
+    phase_dir: docs/phase-4-component-design
     filename: Software-Component-Test-Specification.md
     written_by: tst
 
@@ -153,7 +153,7 @@ documents:
     annex_c_item: 17
     document_name: "Software Component Design Verification Report"
     phase: 4
-    phase_dir: phase-4-component-design
+    phase_dir: docs/phase-4-component-design
     filename: reports/Software-Component-Design-Verification-Report.md
     written_by: ver
 
@@ -162,7 +162,7 @@ documents:
     annex_c_item: 18
     document_name: "Software Source Code and supporting documentation"
     phase: 5
-    phase_dir: phase-5-implementation-testing
+    phase_dir: docs/phase-5-implementation-testing
     filename: src/
     written_by: imp
     notes: "Directory reference — individual source files live under src/"
@@ -171,7 +171,7 @@ documents:
     annex_c_item: 19
     document_name: "Software Source Code Verification Report"
     phase: 5
-    phase_dir: phase-5-implementation-testing
+    phase_dir: docs/phase-5-implementation-testing
     filename: Software-Source-Code-Verification-Report.md
     written_by: ver
 
@@ -179,7 +179,7 @@ documents:
     annex_c_item: 20
     document_name: "Software Component Test Report"
     phase: 5
-    phase_dir: phase-5-implementation-testing
+    phase_dir: docs/phase-5-implementation-testing
     filename: Software-Component-Test-Report.md
     written_by: tst
     platform_deviation: "Phase 5 per §7.5.4.5; Annex C places in Integration phase. Document in SQAP."
@@ -189,7 +189,7 @@ documents:
     annex_c_item: 21
     document_name: "Software Integration Test Report"
     phase: 6
-    phase_dir: phase-6-integration
+    phase_dir: docs/phase-6-integration
     filename: Software-Integration-Test-Report.md
     written_by: int
 
@@ -197,7 +197,7 @@ documents:
     annex_c_item: 22
     document_name: "Software/Hardware Integration Test Report"
     phase: 6
-    phase_dir: phase-6-integration
+    phase_dir: docs/phase-6-integration
     filename: Software-Hardware-Integration-Test-Report.md
     written_by: int
 
@@ -206,7 +206,7 @@ documents:
     annex_c_item: 23
     document_name: "Software Integration Verification Report"
     phase: 7
-    phase_dir: phase-7-validation
+    phase_dir: docs/phase-7-validation
     filename: Software-Integration-Verification-Report.md
     written_by: ver
 
@@ -214,7 +214,7 @@ documents:
     annex_c_item: 24
     document_name: "Overall Software Test Report"
     phase: 7
-    phase_dir: phase-7-validation
+    phase_dir: docs/phase-7-validation
     filename: Overall-Software-Test-Report.md
     written_by: tst
 
@@ -222,7 +222,7 @@ documents:
     annex_c_item: 25
     document_name: "Software Validation Report"
     phase: 7
-    phase_dir: phase-7-validation
+    phase_dir: docs/phase-7-validation
     filename: Software-Validation-Report.md
     written_by: val
 
@@ -230,7 +230,7 @@ documents:
     annex_c_item: 26
     document_name: "Tools Validation Report"
     phase: 7
-    phase_dir: phase-7-validation
+    phase_dir: docs/phase-7-validation
     filename: Tools-Validation-Report.md
     written_by: val
     conditional: "applicable only if tool qualification evidence required"
@@ -239,7 +239,7 @@ documents:
     annex_c_item: 27
     document_name: "Release Note"
     phase: 7
-    phase_dir: phase-7-validation
+    phase_dir: docs/phase-7-validation
     filename: Release-Note.md
     written_by: null
     notes: "SINGULAR — distinct from 'Release Notes' (plural, item 38, Phase 9). Required by §7.7.4.12."
@@ -249,7 +249,7 @@ documents:
     annex_c_item: 45
     document_name: "Software Assessment Plan"
     phase: 8
-    phase_dir: phase-8-assessment
+    phase_dir: docs/phase-8-assessment
     filename: Software-Assessment-Plan.md
     written_by: asr
 
@@ -257,7 +257,7 @@ documents:
     annex_c_item: 46
     document_name: "Software Assessment Report"
     phase: 8
-    phase_dir: phase-8-assessment
+    phase_dir: docs/phase-8-assessment
     filename: Software-Assessment-Report.md
     written_by: asr
 
@@ -266,7 +266,7 @@ documents:
     annex_c_item: 36
     document_name: "Software Release and Deployment Plan"
     phase: 9
-    phase_dir: phase-9-deployment
+    phase_dir: docs/phase-9-deployment
     filename: Software-Release-and-Deployment-Plan.md
     written_by: pm
 
@@ -274,7 +274,7 @@ documents:
     annex_c_item: 37
     document_name: "Software Deployment Manual"
     phase: 9
-    phase_dir: phase-9-deployment
+    phase_dir: docs/phase-9-deployment
     filename: Software-Deployment-Manual.md
     written_by: pm
 
@@ -282,7 +282,7 @@ documents:
     annex_c_item: 38
     document_name: "Release Notes"
     phase: 9
-    phase_dir: phase-9-deployment
+    phase_dir: docs/phase-9-deployment
     filename: Release-Notes.md
     written_by: pm
     notes: "PLURAL — distinct from 'Release Note' (singular, item 27, Phase 7)"
@@ -291,7 +291,7 @@ documents:
     annex_c_item: 39
     document_name: "Deployment Records"
     phase: 9
-    phase_dir: phase-9-deployment
+    phase_dir: docs/phase-9-deployment
     filename: Deployment-Records.md
     written_by: pm
 
@@ -299,7 +299,7 @@ documents:
     annex_c_item: 40
     document_name: "Deployment Verification Report"
     phase: 9
-    phase_dir: phase-9-deployment
+    phase_dir: docs/phase-9-deployment
     filename: Deployment-Verification-Report.md
     written_by: ver
     platform_deviation: "Phase 9 per §9.1; Annex C places under maintenance. Document in SQAP."
@@ -309,7 +309,7 @@ documents:
     annex_c_item: 41
     document_name: "Software Maintenance Plan"
     phase: 10
-    phase_dir: phase-10-maintenance
+    phase_dir: docs/phase-10-maintenance
     filename: Software-Maintenance-Plan.md
     written_by: pm
 
@@ -317,7 +317,7 @@ documents:
     annex_c_item: 42
     document_name: "Software Change Records"
     phase: 10
-    phase_dir: phase-10-maintenance
+    phase_dir: docs/phase-10-maintenance
     filename: Software-Change-Records.md
     written_by: pm
     notes: "Standard has typo 'Software Chang Records' (§9.2.4) — correct name used here"
@@ -326,7 +326,7 @@ documents:
     annex_c_item: 43
     document_name: "Software Maintenance Records"
     phase: 10
-    phase_dir: phase-10-maintenance
+    phase_dir: docs/phase-10-maintenance
     filename: Software-Maintenance-Records.md
     written_by: pm
 
@@ -334,7 +334,7 @@ documents:
     annex_c_item: 44
     document_name: "Software Maintenance Verification Report"
     phase: 10
-    phase_dir: phase-10-maintenance
+    phase_dir: docs/phase-10-maintenance
     filename: Software-Maintenance-Verification-Report.md
     written_by: ver
     platform_deviation: "Phase 10 per §9.2; Annex C places under assessment. Document in SQAP."

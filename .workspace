@@ -1,10 +1,11 @@
 {
-  "active_workspace": "myprj",
+  "active_workspace": "TDC",
   "workspaces": {
     "train_door_control2": {
       "path": "examples/train_door_control2",
       "created": "2026-02-22T00:00:00.000000",
-      "last_accessed": "2026-02-24T14:45:00.000000"
+      "last_accessed": "2026-02-24T14:45:00.000000",
+      "status": "inactive"
     },
     "test_eval_project": {
       "path": "examples/test_eval_project",
@@ -22,9 +23,21 @@
       "completion": 0,
       "created": "2026-03-17T10:00:00.000000",
       "last_accessed": "2026-03-17T10:00:00.000000",
-      "status": "active",
+      "status": "inactive",
       "cod_mode": "Strict Gatekeeper",
       "lifecycle_model": "V-Model"
+    },
+    "TDC": {
+      "path": "examples/TDC",
+      "sil": 3,
+      "current_phase": "Phase 1 — Planning ✅ COMPLETE (Gate PASSED)",
+      "completion": 22,
+      "created": "2026-03-27T10:50:00.000000",
+      "last_accessed": "2026-03-30T12:00:00.000000",
+      "status": "active",
+      "cod_mode": "Strict Gatekeeper",
+      "lifecycle_model": "V-Model",
+      "description": "Train Door Control System"
     }
   }
 }
