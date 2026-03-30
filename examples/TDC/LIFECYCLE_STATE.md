@@ -19,10 +19,10 @@
 
 | Property | Value |
 |----------|-------|
-| **Current Phase** | Phase 0 — Initialization |
-| **Completion** | 0% |
+| **Current Phase** | Phase 0 — Initialization (Complete) |
+| **Completion** | 5% |
 | **Gate Mode** | Strict Gatekeeper (SIL 3 — no override permitted) |
-| **Next Action** | Run `@cod generate-system` to generate system-level input documents |
+| **Next Action** | Run `@pm execute-phase 1` to begin Planning phase |
 
 ---
 
@@ -50,13 +50,16 @@
 | Deliverable | Status | Path |
 |-------------|--------|------|
 | LIFECYCLE_STATE.md | ✅ Created | `examples/TDC/LIFECYCLE_STATE.md` |
-| System-level documents | ⏳ Pending | Run `@cod generate-system` |
+| System Requirements Specification | ✅ Generated | `examples/TDC/docs/system/System-Requirements-Specification.md` |
+| System Architecture Description | ✅ Generated | `examples/TDC/docs/system/System-Architecture-Description.md` |
+| System Safety Plan | ✅ Generated | `examples/TDC/docs/system/System-Safety-Plan.md` |
+| System Safety Requirements Specification | ✅ Generated | `examples/TDC/docs/system/System-Safety-Requirements-Specification.md` |
 
 ### Phase 1 — Planning
 | Deliverable | Status | Path |
 |-------------|--------|------|
-| Software Quality Assurance Plan (SQAP) | ⏳ Pending | `examples/TDC/docs/Software-Quality-Assurance-Plan.md` |
-| Software Configuration Management Plan (SCMP) | ⏳ Pending | `examples/TDC/docs/Software-Configuration-Management-Plan.md` |
+| Software Quality Assurance Plan (SQAP) | ✅ Generated | `examples/TDC/docs/phase-1-planning/Software-Quality-Assurance-Plan.md` |
+| Software Configuration Management Plan (SCMP) | ✅ Generated | `examples/TDC/docs/phase-1-planning/Software-Configuration-Management-Plan.md` |
 | Software Verification Plan (SVP) | ⏳ Pending | `examples/TDC/docs/Software-Verification-Plan.md` |
 | Software Validation Plan (SVaP) | ⏳ Pending | `examples/TDC/docs/Software-Validation-Plan.md` |
 
