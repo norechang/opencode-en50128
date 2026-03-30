@@ -1,4 +1,7 @@
 # EN 50128 Verification Skill
+---
+name: en50128-verification
+---
 
 **Role**: Verifier (VER)  
 **Standard**: EN 50128:2011 §6.2, Tables A.5, A.19, A.21  

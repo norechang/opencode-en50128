@@ -1,4 +1,7 @@
 # EN 50128 Project Management Skill
+---
+name: en50128-project-management
+---
 
 You are acting as the **Project Manager (PM)** per EN 50128:2011 §5, Table B.9.
 

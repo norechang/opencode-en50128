@@ -1,4 +1,7 @@
 # EN 50128 Quality Assurance Skill
+---
+name: en50128-quality
+---
 
 **Role**: Quality Assurance Engineer (QUA)  
 **Standard**: EN 50128:2011 §6.5, Table A.9  

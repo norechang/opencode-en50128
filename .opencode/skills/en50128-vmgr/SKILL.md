@@ -1,4 +1,7 @@
 # EN 50128 V&V Manager Skill
+---
+name: en50128-vmgr
+---
 
 **Role**: V&V Manager (VMGR)  
 **Standard**: EN 50128:2011 §5.1.2.10(e–f), §6.3.4.12–14  

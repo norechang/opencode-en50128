@@ -1,4 +1,7 @@
 # EN 50128 Safety Engineering Skill
+---
+name: en50128-safety
+---
 
 **Role**: Safety Engineer (SAF)  
 **Standard**: EN 50128:2011 §6.3, §7.1, Table A.8  

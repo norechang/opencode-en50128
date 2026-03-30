@@ -1,4 +1,7 @@
 # EN 50128 Tools Skill
+---
+name: en50128-tools
+---
 
 **EN 50128 Reference**: Section 6.7 — Software Tools and Their Validation
 **Target Roles**: All agents (REQ, DES, IMP, TST, VER, INT, VAL, SAF, QUA, CM, PM, COD)
