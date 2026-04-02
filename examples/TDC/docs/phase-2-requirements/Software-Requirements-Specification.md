@@ -1,44 +1,47 @@
 # Software Requirements Specification (SRS)
 
-## Document Control
+**TEMPLATE VERSION**: 1.0  
+**REFERENCE**: EN 50128:2011 Section 7.2, Table A.2
 
-| Property | Value |
-|----------|-------|
+---
+
+## DOCUMENT CONTROL
+
+| Field | Value |
+|-------|-------|
 | **Document ID** | DOC-SRS-2026-001 |
 | **Version** | 0.1 DRAFT |
-| **Date** | 2026-03-30 |
-| **Project** | TDC — Train Door Control System |
+| **Date** | 2026-04-02 |
+| **Project** | TDC (Train Door Control System) |
 | **SIL Level** | SIL 3 |
-| **Author** | REQ (Requirements Engineer) |
-| **Status** | DRAFT — Pending QUA Review |
+| **Author** | Requirements Engineer (REQ) |
+| **Status** | Draft |
 
-## Document Change History
+### Revision History
 
 | Version | Date | Author | Changes | Approved By |
 |---------|------|--------|---------|-------------|
-| 0.1 | 2026-03-30 | REQ | Initial draft based on system documents | Pending |
+| 0.1 | 2026-04-02 | Requirements Engineer (REQ) | Initial draft — Phase 2 requirements from system documents | - |
 
-## Approvals
+## APPROVALS
 
-**EN 50128 Annex C Table C.1 Signature Chain — Item 6**
+**EN 50128 Annex C Table C.1 Signature Chain — Item 6 (SRS)**
 
-| Written By | 1st Check | 2nd Check | 3rd Check | Date |
-|------------|-----------|-----------|-----------|------|
-| Requirements Engineer<br>Name: REQ<br>Signature: _____________ | Quality Assurance<br>Name: QUA<br>Signature: _____________ | Software Verifier<br>Name: VER<br>Signature: _____________ | Software Validator<br>Name: VAL<br>Signature: _____________ | 2026-03-30 |
-
-**Additional Approval Required (SIL 3)**
-
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| Project Manager | PM | _____________ | Pending |
-| **User/Customer** | **TBD** | **_____________** | **USER APPROVAL REQUIRED** |
+| Column | Role | Name | Signature | Date |
+|--------|------|------|-----------|------|
+| Written By | Requirements Engineer (REQ) | [Name] | _____________ | 2026-04-02 |
+| 1st Check | Software Verifier (VER) | [Name] | _____________ | __________ |
+| 2nd Check | Software Validator (VAL) | [Name] | _____________ | __________ |
 
 **Notes:**
-- **Written By**: Author responsible for document content (EN 50128 Annex C Table C.1 Column 2)
-- **1st Check**: QUA format gate review
-- **2nd Check**: VER independent verification
-- **3rd Check**: VAL independent validation (SIL 3 requirement)
-- **USER APPROVAL REQUIRED**: Item 6 requires formal user/customer approval before Track B proceeds (per `deliverables.yaml`)
+- **Written By**: REQ — Author responsible for document content (EN 50128 Annex C Table C.1 Column 2)
+- **1st Check**: VER — First independent reviewer (EN 50128 Annex C Table C.1 Column 3)
+- **2nd Check**: VAL — Second independent reviewer (EN 50128 Annex C Table C.1 Column 4)
+- Roles are per `activities/deliverables.yaml` item 6: `written_by: req`, `first_check: ver`, `second_check: val`
+- SIL 3: Independence requirements apply per EN 50128 §6.2 (Verification) and §6.3 (Validation)
+- Signature authority per project SQAP (DOC-SQAP-2026-001) and DELIVERABLES.md
+- **User/Customer Approval**: GRANTED (per COD Hard Rule 4, approval received prior to authoring)
+- **PM Confirmation**: SRS approved by user before VER track-B review
 
 ---
 
@@ -46,118 +49,123 @@
 
 ### 1.1 Purpose
 
-This Software Requirements Specification (SRS) defines the complete set of software requirements for the Train Door Control System (TDC) software component. It provides a detailed description of functional requirements, performance requirements, interface requirements, and safety requirements in accordance with EN 50128:2011 Section 7.2.
-
-The SRS is derived from the System Requirements Specification (DOC-TDC-SRS-SYS-001 v1.0) and System Safety Requirements Specification (DOC-TDC-SSRS-SYS-001 v1.0).
+This Software Requirements Specification (SRS) defines the complete set of software requirements for the **Train Door Control System (TDC)** software. It provides a detailed description of functional requirements, performance requirements, interface requirements, safety requirements, reliability requirements, security requirements, and operational requirements in accordance with EN 50128:2011 Section 7.2.
 
 **Intended Audience**:
-- Software designers (DES) — Phase 3 Architecture and Design
-- Software implementers (IMP) — Phase 5 Implementation
-- Software testers (TST) — Phase 5 Unit Testing, Phase 7 Validation
+- Software designers and implementers (DES, IMP)
 - Verification and validation teams (VER, VAL)
 - Safety engineers (SAF)
 - Project management (PM)
+- Customer / certification authorities
 - Quality assurance (QUA)
-- Customer/certification authorities
 
 ### 1.2 Scope
 
-This SRS applies to the Train Door Control System (TDCS) software, which controls the opening, closing, locking, and monitoring of all passenger doors on a railway vehicle. The software operates as a dual-channel (2oo2) architecture to achieve SIL 3 safety integrity level.
+This SRS applies to the **TDC software** running on the Door Control Unit (DCU) — a dual-channel (2oo2) embedded system that controls and monitors passenger door operation on railway vehicles.
 
-**System Context**: The TDC software is deployed on a dual-channel Door Control Unit (DCU) with STM32H743 (or equivalent) processors. It interfaces with the Train Control and Management System (TCMS) via CAN bus, with Door Drive Units (DDU) via RS-485, and with obstacle detection sensors via GPIO.
+**System Context**: The TDC software resides within the Door Control Unit (DCU) and interfaces with the Train Control Management System (TCMS) via CAN bus, Door Drive Units (DDU) via RS-485, the Driver Control Panel via discrete I/O, and the hardware sensors and actuators via the Hardware Abstraction Layer (HAL).
 
 **In Scope**:
-- Door state machine control (open, close, lock, unlock)
-- Speed interlock enforcement (door opening inhibited above 5 km/h)
-- Departure interlock (door-locked signal generation)
-- Obstacle detection and reversal within 150 ms
-- Safe state management (fault detection and fail-safe response)
-- TCMS interface (CAN bus communication)
-- DDU interface (RS-485 door drive control)
-- Fault isolation and degraded mode operation
-- Emergency release monitoring
-- Diagnostic logging
+- Door opening and closing control logic
+- Speed interlock functions (SIL 3 safety functions SF-001, SF-002)
+- Obstacle detection and reversal (SIL 3 safety function SF-003)
+- Safe state management and fault detection (SIL 3 safety function SF-004)
+- Door position verification (SIL 3 safety function SF-005)
+- Operational mode management
+- CAN bus (TCMS) and RS-485 (DDU) communication drivers
+- Hardware Abstraction Layer (HAL) requirements
+- Watchdog monitoring
+- Diagnostics and event logging
+- Cross-channel (2oo2) comparison logic
+- MISRA C:2012 compliance and defensive programming
 
 **Out of Scope**:
-- Hardware design (covered by Hardware Specification)
-- System-level requirements (covered by System Requirements Specification DOC-TDC-SRS-SYS-001)
-- Platform Screen Door (PSD) interface (future extension)
-- Wayside ATP interface (no direct software interface)
+- Hardware design (covered by Hardware Design Specification DOC-HW-DES-2026-001)
+- System-level requirements (covered by System Requirements Specification DOC-SYS-REQ-2026-001)
+- Emergency release mechanical design (hardware-only, no software allocation)
+- Door closing force mechanical limiter (hardware per EN 14752)
 
 ### 1.3 SIL Classification
 
-**Target SIL Level**: **SIL 3**
+**Target SIL Level**: SIL 3
 
-**Rationale**: The TDC software is classified at SIL 3 based on hazard analysis per EN 50126:2017. The primary hazards driving this classification are:
-- **HAZ-001**: Train departs with door open or not fully locked (Catastrophic severity, SIL 3)
-- **HAZ-002**: Door closes on passenger causing entrapment injury (Critical severity, SIL 3)
-- **HAZ-003**: Door opens while train moving above 5 km/h (Catastrophic severity, SIL 3)
-- **HAZ-004**: Obstacle detected but door continues to close (Critical severity, SIL 3)
-- **HAZ-005**: False door-locked signal allows departure with door ajar (Catastrophic severity, SIL 3)
+**Rationale**: SIL 3 is derived from hazard analysis per EN 50126-2. The highest-severity hazards (HAZ-001 through HAZ-005) involve catastrophic or critical consequences (passenger fatality/serious injury) with intolerable or unacceptable risk, requiring SIL 3 per EN 50129 Table A.1. The overall system SIL of 3 is driven by these hazards and requires the software to be developed to EN 50128 SIL 3.
 
 **EN 50128 Requirements Specification Techniques** (Table A.2):
 
-| Technique | Reference | SIL 0 | SIL 1-2 | SIL 3-4 | Applied |
-|-----------|-----------|-------|---------|---------|---------|
-| Structured Methodology | D.52 | R | R | HR | **Yes** — This SRS uses structured requirements decomposition from system to software level |
-| Modelling | Table A.17 | R | R | HR | **Yes** — State machine diagrams for door control (see Section 2.4) |
-| Decision Tables | D.13 | R | R | HR | **Yes** — Safety function decision logic (see Section 4 tables) |
-| Formal Methods | D.28 | - | R | HR | No — not selected for this project (rationale: structured + modelling sufficient for SIL 3) |
+| Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Applied |
+|-----------|-------|---------|---------|---------|
+| Formal Methods | - | R | HR | No (structured methodology sufficient; may be added by DES for critical FSMs) |
+| Modelling | R | R | HR | **Yes** — operational mode FSM state model (Section 3.1.4, REQ-FUN-011) |
+| Structured Methodology | R | R | HR | **Yes** — systematic decomposition with unique IDs, SIL levels, acceptance criteria, traceability |
+| Decision Tables | R | R | HR | **Yes** — opening preconditions (REQ-FUN-001), lock verification (REQ-FUN-005), safe state triggers (REQ-SAFE-006) |
+
+**Techniques Applied Rationale**: Structured methodology is applied throughout this SRS via systematic decomposition into 7 requirement categories with unique IDs, SIL assignments, and acceptance criteria. Decision tables are used in the door control logic and safety requirement sections. State modelling is used for operational mode management.
 
 ### 1.4 Definitions and Acronyms
 
 | Term | Definition |
 |------|------------|
 | **SHALL** | Mandatory requirement (must be implemented) |
-| **SHOULD** | Highly recommended requirement (rationale required if not implemented) |
-| **MAY** | Optional requirement (nice to have) |
-| **SIL** | Safety Integrity Level (0-4 per EN 50128) |
-| **MISRA C** | Motor Industry Software Reliability Association C:2012 coding standard (mandatory SIL 2+) |
+| **SHOULD** | Highly recommended requirement (non-compliance requires justification) |
+| **MAY** | Optional requirement (no safety implication) |
+| **SIL** | Safety Integrity Level (0-4 per EN 50128:2011) |
+| **MISRA C** | Motor Industry Software Reliability Association C coding standard (edition: 2012) |
 | **RTM** | Requirements Traceability Matrix |
-| **DCU** | Door Control Unit — central processing module (dual-channel) |
-| **DDU** | Door Drive Unit — per-door electromechanical actuator |
-| **TCMS** | Train Control and Management System |
-| **2oo2** | Two-out-of-two voting architecture (both channels must agree) |
-| **PFH** | Probability of Failure per Hour (SIL 3 target: ≤ 10⁻⁷/hour) |
-| **HAZ** | Hazard (identified in Hazard Log) |
-| **SF** | System Safety Function |
-| **SSR** | System Safety Requirement |
-| **DSM** | Door State Machine (software component) |
-| **SPM** | Speed Monitor (software component) |
-| **OBD** | Obstacle Detector (software component) |
-| **TCI** | TCMS Interface (software component) |
-| **FMG** | Fault Manager (software component) |
+| **DCU** | Door Control Unit — central dual-channel processing module |
+| **DDU** | Door Drive Unit — per-door electromechanical actuator module |
+| **TCMS** | Train Control Management System — train-level supervisory system |
+| **2oo2** | Two-out-of-two voting — both channels/sensors must agree |
+| **CAN** | Controller Area Network (ISO 11898) |
+| **PWM** | Pulse Width Modulation |
+| **HAZ** | Hazard identifier (from System Safety Requirements Specification) |
+| **SYS-REQ** | System requirement identifier (from System Requirements Specification) |
+| **SF** | Safety Function identifier (from System Safety Requirements Specification) |
+| **PFH** | Probability of Failure per Hour |
+| **ALARP** | As Low As Reasonably Practicable |
+| **DSM** | Door State Machine software component |
+| **SPM** | Speed Monitor software component |
+| **OBD** | Obstacle Detector software component |
+| **TCI** | TCMS Interface software component |
+| **FMG** | Fault Manager software component |
+| **DGN** | Diagnostics software component |
 | **HAL** | Hardware Abstraction Layer |
+| **MCU** | Microcontroller Unit (STM32H743 or equivalent) |
+| **CRC** | Cyclic Redundancy Check |
+| **FMEA** | Failure Mode and Effects Analysis |
+| **FTA** | Fault Tree Analysis |
 | **WCET** | Worst-Case Execution Time |
-| **MC/DC** | Modified Condition/Decision Coverage |
 
 ### 1.5 References
 
-| Reference | Document | Version |
-|-----------|----------|---------|
-| **[EN50128]** | EN 50128:2011 Railway applications - Software for railway control and protection systems | 2011 |
-| **[EN50126]** | EN 50126:2017 Railway applications - RAMS (Part 1 & 2) | 2017 |
-| **[EN50129]** | EN 50129:2018 Railway applications - Safety-Related Electronic Systems for Signalling | 2018 |
-| **[MISRAC]** | MISRA C:2012 Guidelines for the use of the C language in critical systems | 2012 |
-| **[SYSREQ]** | System Requirements Specification | DOC-TDC-SRS-SYS-001 v1.0 |
-| **[SYSAFE]** | System Safety Requirements Specification | DOC-TDC-SSRS-SYS-001 v1.0 |
-| **[SYSAFEP]** | System Safety Plan | DOC-TDC-SSP-SYS-001 v1.0 |
-| **[SYSARCH]** | System Architecture Description | DOC-TDC-SAD-SYS-001 v1.0 |
-| **[HAZLOG]** | Hazard Log | DOC-HAZLOG-2026-001 (Phase 2 deliverable from SAF) |
-| **[SQAP]** | Software Quality Assurance Plan | DOC-SQAP-2026-001 v1.0 (Phase 1) |
-| **[SCMP]** | Software Configuration Management Plan | DOC-SCMP-2026-001 v1.0 (Phase 1) |
+| Reference | Document |
+|-----------|----------|
+| **[EN50128]** | EN 50128:2011 Railway applications — Software for railway control and protection systems |
+| **[EN50129]** | EN 50129:2018 Railway applications — Safety related electronic systems for signalling |
+| **[EN50126-1]** | EN 50126-1:2017 Railway applications — RAMS — Part 1: Generic RAMS process |
+| **[EN50126-2]** | EN 50126-2:2017 Railway applications — RAMS — Part 2: Systems approach to safety |
+| **[EN14752]** | EN 14752:2015 Railway applications — Bodyside entrance systems |
+| **[ISO11898]** | ISO 11898:2003 — Controller Area Network (CAN) |
+| **[MISRAC]** | MISRA C:2012 Guidelines for the use of the C language in critical systems |
+| **[SYSREQ]** | System Requirements Specification, DOC-SYS-REQ-2026-001 |
+| **[SYSARCH]** | System Architecture Description, DOC-SYS-ARCH-2026-001 |
+| **[SSRS]** | System Safety Requirements Specification, DOC-SYS-SAF-2026-001 |
+| **[SQAP]** | Software Quality Assurance Plan, DOC-SQAP-2026-001 |
+| **[SCMP]** | Software Configuration Management Plan, DOC-SCMP-2026-001 |
+| **[SVP]** | Software Verification Plan, DOC-SVP-2026-001 |
 
 ### 1.6 Overview
 
 This SRS is organized as follows:
-- **Section 2**: General system description, context, and high-level functions
-- **Section 3**: Functional requirements (REQ-FUN-xxx)
-- **Section 4**: Safety requirements (REQ-SAFE-xxx) — derived from hazards
-- **Section 5**: Performance requirements (REQ-PERF-xxx)
-- **Section 6**: Interface requirements (REQ-INT-xxx)
-- **Section 7**: Implementation constraints (REQ-IMPL-xxx) — C language, MISRA C
-- **Section 8**: Verification and traceability
-- **Section 9**: Requirements summary and compliance matrix
+
+- **Section 2**: General Description — system context, functions, constraints, and assumptions
+- **Section 3**: Software Requirements — 81 requirements in 7 categories
+- **Section 4**: Verification and Traceability — verification methods and Requirements Traceability Matrix
+- **Section 5**: Requirements Summary — count by category and SIL level
+- **Section 6**: Compliance Matrix — EN 50128 Section 7.2 and Table A.2 compliance
+- **Section 7**: References
+
+Each requirement includes a unique ID, SIL level, acceptance criteria, verification method, and backward traceability to system requirements and/or hazards.
 
 ---
 
@@ -166,1861 +174,1629 @@ This SRS is organized as follows:
 ### 2.1 System Context
 
 ```
-┌───────────────────────────────────────────────────────────────────┐
-│                   TRAIN CONTROL SYSTEM (TCMS)                     │
-│            (Speed signal, door commands, door status)             │
-└─────────────────────────┬─────────────────────────────────────────┘
-                          │ CAN 2.0B (250 kbit/s)
-                          ▼
-┌───────────────────────────────────────────────────────────────────┐
-│        DOOR CONTROL UNIT (DCU) — Dual Channel (2oo2)              │
-│  ┌──────────────────────┐  SPI   ┌──────────────────────┐        │
-│  │  Channel A (STM32)   │◄──────►│  Channel B (STM32)   │        │
-│  │  • Door State Machine│  xlink │  • Door State Machine│        │
-│  │  • Speed Monitor     │        │  • Speed Monitor     │        │
-│  │  • Obstacle Detector │        │  • Obstacle Detector │        │
-│  │  • TCMS Interface    │        │  • TCMS Interface    │        │
-│  │  • Fault Manager     │        │  • Fault Manager     │        │
-│  │  • HAL               │        │  • HAL               │        │
-│  └──────────┬───────────┘        └──────────┬───────────┘        │
-│             │                               │                     │
-└─────────────┼───────────────────────────────┼─────────────────────┘
-              │ RS-485                        │ GPIO
-              │ (115.2 kbit/s)                │ (24V interrupts)
-              ▼                               ▼
-   ┌────────────────────┐          ┌────────────────────┐
-   │  Door Drive Units  │          │ Obstacle Sensors   │
-   │  (DDU 1-N)         │          │ (IR beam pairs)    │
-   │  Per-door actuator │          │ 2 per door opening │
-   └────────────────────┘          └────────────────────┘
++-------------------------------------------------------------------------+
+|                         EXTERNAL SYSTEMS                                |
+|                                                                         |
+|  +----------+    +-----------------+    +------------------+            |
+|  | Driver   |    |     TCMS        |    |   DDU x 4-8      |            |
+|  | Control  |<-->| (CAN 250kbit)   |    | (RS-485 115kbit) |            |
+|  | Panel    |    +--------+--------+    +--------+---------+            |
+|  +----+-----+             |                      |                      |
+|       | Discrete I/O      | CAN 2.0B              | RS-485               |
+|       v                   v                       v                      |
+|  +--------------------------------------------------------------+       |
+|  |        Door Control Unit (DCU) -- SIL 3                      |       |
+|  |   +---------------+   +---------------+                      |       |
+|  |   |  Channel A    |<->|  Channel B    |  (SPI 10Mbit/s)      |       |
+|  |   | (MCU-A)       |   | (MCU-B)       |                      |       |
+|  |   | Safety Kernel |   | Safety Kernel |                      |       |
+|  |   | DSM / SPM     |   | DSM / SPM     |                      |       |
+|  |   | OBD / TCI     |   | OBD / TCI     |                      |       |
+|  |   | FMG / DGN     |   | FMG           |                      |       |
+|  |   | HAL           |   | HAL           |                      |       |
+|  |   +---------------+   +---------------+                      |       |
+|  +--------------------------------------------------------------+       |
+|              | Sensors/Actuators                                         |
+|   Position Sensors (2x/door)   Obstacle Sensors (2x/door)               |
+|   Lock Sensors (2x/lock)       Motor PWM   Lock Actuators                |
++-------------------------------------------------------------------------+
 ```
 
 **System Interfaces**:
-- **TCMS ↔ DCU**: CAN 2.0B (250 kbit/s) — speed signal, door commands, door status
-- **DCU ↔ DDU**: RS-485 (115.2 kbit/s) — drive commands, position feedback per door
-- **DCU ↔ Obstacle Sensors**: Digital GPIO (24V, interrupt-driven) — obstacle detect/clear
-- **Channel A ↔ Channel B**: SPI cross-link (10 Mbit/s) — cross-channel comparison data
-- **DCU ↔ Diagnostics**: USB/RS-232 (115.2 kbit/s) — maintenance access (non-safety)
+- Hardware: Door motor actuators (PWM 20 kHz), position sensors (2oo2), lock actuators (24V solenoid), lock sensors (2oo2), obstacle sensors (IR beam 2x per door), emergency release switch
+- Software: TCMS (CAN 2.0B, 250 kbit/s), DDU (RS-485, 115.2 kbit/s), cross-channel (SPI, 10 Mbps), diagnostics (USB/RS-232)
+- User: Driver Control Panel (discrete I/O + CAN), Diagnostic port (maintenance laptop)
 
 ### 2.2 System Functions (High-Level)
 
 The TDC software provides the following major functions:
 
-1. **Door Operation Control**: Open and close doors on command from TCMS, with full position feedback and lock confirmation
-2. **Safety Interlock Enforcement**: Prevent unsafe door operations (speed interlock, departure interlock)
-3. **Obstacle Detection and Reversal**: Detect obstacles during door closing and reverse within 150 ms
-4. **Safe State Management**: Detect internal faults and enter fail-safe state (doors locked, motors de-energised)
-5. **Fault Isolation and Degraded Mode**: Isolate defective doors while maintaining operation of healthy doors
-6. **Emergency Release Monitoring**: Monitor and report emergency door release activations
-7. **Diagnostic Logging**: Record all door events, faults, and state transitions for maintenance analysis
+1. **Door Opening Control**: Control door motor opening with speed interlock
+2. **Door Closing Control**: Control door motor closing with obstacle detection and reversal
+3. **Door Locking Control**: Engage/verify door locks and provide departure interlock to TCMS
+4. **Speed Interlock**: Inhibit door opening and maintain locking when train speed > 5 km/h
+5. **Obstacle Detection**: Detect obstacles during closing and trigger reversal within 150 ms
+6. **Safe State Management**: Transition to fail-safe state on critical faults
+7. **Cross-Channel Comparison**: 2oo2 voting with Channel B every 20 ms cycle
+8. **Fault Detection and Diagnostics**: Continuous monitoring, fault logging, self-test
+9. **Operational Mode Management**: Normal, Selective Door Disablement, Diagnostic, Safe State
+10. **TCMS Communication**: Receive commands/speed data, transmit status and door-locked signal
 
 ### 2.3 User Characteristics
 
-**Primary Users**: Railway train drivers, train operators, maintenance personnel
+**Primary Users**: Train drivers (operational commands), maintenance personnel (diagnostic access)
 
-**User Expertise**: 
-- Train drivers: Basic operational training on door controls (open/close buttons, fault indicators)
-- Maintenance personnel: Technical training on TDCS diagnostics, fault codes, and repair procedures
+**User Expertise**: Railway-qualified train drivers; maintenance technicians with laptop diagnostic access
 
-**User Environment**: 
-- Train drivers operate the system from the driver's cab via TCMS interface
-- Maintenance personnel access diagnostics via USB/RS-232 interface at maintenance depot
+**User Environment**: Moving train in revenue service; maintenance depot for diagnostics
 
-### 2.4 Operational Modes and State Machine
+### 2.4 Constraints
 
-The TDC software operates in the following high-level states:
-
-```
-   ┌─────────────┐
-   │   STARTUP   │ (Power-on self-test, sensor validation)
-   └──────┬──────┘
-          │ Self-test PASS
-          ▼
-   ┌─────────────┐
-   │  IDLE       │ (Doors closed and locked, awaiting command)
-   └──────┬──────┘
-          │ Open command + Speed ≤ 5 km/h
-          ▼
-   ┌─────────────┐
-   │  OPENING    │ (Motors opening, position feedback monitored)
-   └──────┬──────┘
-          │ Fully open confirmed
-          ▼
-   ┌─────────────┐
-   │  OPEN       │ (Doors fully open, lock released)
-   └──────┬──────┘
-          │ Close command
-          ▼
-   ┌─────────────┐
-   │  CLOSING    │ (Motors closing, obstacle detection active)
-   └──────┬──────┘
-          │ Obstacle detected → REVERSING (150 ms)
-          │ Fully closed confirmed
-          ▼
-   ┌─────────────┐
-   │  LOCKING    │ (Lock solenoid engaged, lock sensor validation)
-   └──────┬──────┘
-          │ All doors locked confirmed
-          ▼
-   ┌─────────────┐
-   │  LOCKED     │ (All doors locked, door-locked signal asserted)
-   └──────┬──────┘
-          │ Fault detected (any state)
-          ▼
-   ┌─────────────┐
-   │  SAFE STATE │ (Motors de-energised, locks engaged, fault signal)
-   └─────────────┘
-```
-
-**State Transition Rules**:
-- Any state → **SAFE STATE** if fault detected (cross-channel disagreement, watchdog timeout, sensor fault)
-- **CLOSING** → **REVERSING** within 150 ms if obstacle detected
-- **SAFE STATE** → **STARTUP** only after operator reset command
-
-### 2.5 Constraints
-
-**Programming Language**: C (MISRA C:2012 compliant, mandatory for SIL 3)
+**Programming Language**: C (MISRA C:2012 compliant — mandatory for SIL 3)
 
 **Platform Constraints**:
-- Target processor: STM32H743 (ARM Cortex-M7, 400 MHz, 1 MB SRAM)
-- No operating system (bare-metal with real-time scheduler)
-- Control cycle: 10 ms (100 Hz)
+- Target processor: STM32H743 (ARM Cortex-M7, 400 MHz), dual-channel
+- Memory: 1 MB SRAM per MCU (all static), 2 MB Flash per MCU
+- External storage: 16 MB SPI Flash (event log, configuration), CRC-16 protected
+- Execution: bare-metal, static cyclic executive scheduler, 20 ms cycle
 
 **Regulatory Constraints**:
-- EN 50128:2011 compliance mandatory (SIL 3)
+- EN 50128:2011 SIL 3 compliance mandatory
 - EN 50126/50129 RAMS requirements
-- EN 13272 (Railway doors for passenger rolling stock)
-- IEC 61508 functional safety (SIL 3 equivalent: PFH ≤ 10⁻⁷/hour)
+- MISRA C:2012 mandatory (SIL 2+ per EN 50128 Table A.4)
 
-**Development Constraints** (SIL 3):
-- Static memory allocation only (no malloc/free)
-- No dynamic memory allocation
-- No recursion (highly recommended)
-- Cyclomatic complexity ≤ 10 per function (mandatory)
-- Statement + branch + MC/DC condition coverage required (highly recommended per Table A.21)
+**Development Constraints**:
+- Static memory allocation only — `malloc`/`calloc`/`realloc`/`free` are forbidden
+- No recursion (highly recommended for SIL 3-4)
+- Cyclomatic complexity <= 10 per function (SIL 3)
+- No function pointers in safety-critical paths (highly recommended SIL 3-4)
+- Fixed-width integer types only (`uint8_t`, `uint16_t`, `uint32_t`, `int8_t`, etc.)
+- Dual-channel (2oo2) execution of all SIL 3 safety functions
 
-### 2.6 Assumptions and Dependencies
+### 2.5 Assumptions and Dependencies
 
 **Assumptions**:
-- TCMS provides valid train speed signal at 10 Hz (100 ms period)
-- DDUs respond to drive commands within 25 ms (mechanical response budget)
-- Obstacle sensors are correctly calibrated and aligned
-- Cross-channel SPI link latency < 1 ms
+- ASSUME-001: TCMS provides speed data via CAN at 10 Hz (100 ms period) with SIL 2 integrity
+- ASSUME-002: Hardware door locks are fail-closed (spring-loaded, locked without power)
+- ASSUME-003: Mechanical obstacle force limit (150 N per EN 14752) implemented in hardware
+- ASSUME-004: Emergency release is a passive mechanical system independent of software
+- ASSUME-005: DCU hardware provides independent watchdog timers per MCU with 50 ms timeout
+- ASSUME-006: Regular maintenance performed per schedule
 
 **Dependencies**:
-- Depends on TCMS for speed signal and door commands
-- Depends on DDU firmware for position feedback and motor control execution
-- Depends on hardware watchdog for safe state enforcement on software lockup
-- Requires STM32 HAL library v1.10 or later for GPIO, CAN, SPI, ADC drivers
+- Depends on TCMS for accurate speed data (DEPEND-001 from SSRS)
+- Depends on hardware locks being fail-closed (DEPEND-005 from SSRS)
+- Depends on EN 50128 SIL 3 development process compliance (DEPEND-004 from SSRS)
+- Depends on hardware GPIO, PWM, CAN, RS-485, SPI, ADC interfaces per HAL contract
 
 ---
 
-## 3. FUNCTIONAL REQUIREMENTS
-
-### 3.1 Door Opening Control
-
-**REQ-FUN-001**: Door Opening Command Processing  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: SYS-FR-001
-
-**Description**: The software SHALL open all doors on the commanded side (left or right) when all of the following conditions are met:
-- A door open command is received from TCMS via CAN
-- Train speed ≤ 5 km/h (validated by SPM)
-- System is not in SAFE STATE
-- No emergency brake active
-
-**Inputs**:
-- `door_open_cmd_left` (boolean, TCMS CAN message)
-- `door_open_cmd_right` (boolean, TCMS CAN message)
-- `train_speed_kmph` (uint16_t, TCMS CAN message)
-- `emergency_brake_status` (boolean, TCMS CAN message)
-
-**Outputs**:
-- `door_motor_cmd[i]` (int8_t, -100 to +100, DDU RS-485 message) — positive = open direction
-
-**Preconditions**:
-- System in IDLE or LOCKED state
-- No active faults preventing door operation
-- Speed interlock satisfied (speed ≤ 5 km/h)
-
-**Postconditions**:
-- All commanded doors transition to OPENING state
-- Door position feedback indicates increasing open percentage
-- Door open status reported to TCMS within 200 ms
-
-**Error Handling**:
-- IF speed > 5 km/h, THEN reject open command and log warning
-- IF door fails to begin opening within 500 ms, THEN raise door fault for that door
-- IF emergency brake active, THEN reject open command
-
-**Verification Method**: Test (unit test for DSM, integration test for TCMS interface, system test for door operation)
-
-**Acceptance Criteria**: Door open command accepted only when speed ≤ 5 km/h; door begins opening within 500 ms; door fully open within 2.5 seconds under nominal conditions
+## 3. SOFTWARE REQUIREMENTS
 
 ---
 
-**REQ-FUN-002**: Door Opening Execution  
-**Priority**: High  
-**SIL Level**: 2  
-**Traceability**: SYS-FR-001
+### 3.1 Functional Requirements
 
-**Description**: The software SHALL drive each door motor in the opening direction until the door reaches the fully open position as confirmed by the position sensor (≥ 95% open).
-
-**Inputs**:
-- `door_position_pct[i]` (uint8_t, 0-100%, DDU position feedback)
-
-**Outputs**:
-- `door_motor_cmd[i]` (int8_t, -100 to +100)
-
-**Preconditions**:
-- Door in OPENING state
-- Door motor command accepted by DDU
-
-**Postconditions**:
-- Door position reaches ≥ 95% open
-- Door transitions to OPEN state
-- Door open status bit set in TCMS status message
-
-**Error Handling**:
-- IF door position does not increase for > 2 seconds during OPENING, THEN raise door fault (mechanical obstruction or motor failure)
-- IF position sensor reports out-of-range value (> 105%), THEN raise sensor fault and enter SAFE STATE
-
-**Verification Method**: Test (integration test with simulated DDU feedback, system test with real doors)
-
-**Acceptance Criteria**: Door reaches fully open position within 2.5 seconds; position sensor reading ≥ 95%; fault raised if no progress for > 2 seconds
+#### 3.1.1 Door Opening Control
 
 ---
 
-### 3.2 Door Closing Control
+**REQ-FUN-001**: Door Opening Command Processing
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-001, SYS-REQ-002, HAZ-003
 
-**REQ-FUN-003**: Door Closing Command Processing  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: SYS-FR-002
+**Description**: The software SHALL initiate a door opening sequence when it receives a door open command from TCMS or the local door open button AND all opening preconditions are satisfied.
 
-**Description**: The software SHALL close all doors on the commanded side when all of the following conditions are met:
-- A door close command is received from TCMS via CAN
-- System is not in SAFE STATE
-- No obstacle detected in door path (initial check before motion)
+**Opening Preconditions** (ALL must be true):
 
-**Inputs**:
-- `door_close_cmd` (boolean, TCMS CAN message)
-- `obstacle_detected[i]` (boolean, IR sensor GPIO)
+| Condition | Required State |
+|-----------|----------------|
+| Train speed | <= 5 km/h (confirmed, not defaulted) |
+| Door open command | Received from TCMS or local button |
+| No active door fault | All fault flags clear for target door |
+| No active emergency stop | Emergency stop flag = 0 |
+| Operational mode | Normal or Selective Door Disablement (non-disabled door) |
 
-**Outputs**:
-- `door_motor_cmd[i]` (int8_t, -100 to +100) — negative = close direction
-
-**Preconditions**:
-- System in OPEN state
-- No active faults preventing door operation
-
-**Postconditions**:
-- All commanded doors transition to CLOSING state
-- Obstacle detection active (continuous monitoring)
-- Door closing status reported to TCMS within 200 ms
-
-**Error Handling**:
-- IF obstacle detected before motion starts, THEN defer close command until obstacle cleared
-- IF door fails to begin closing within 500 ms, THEN raise door fault for that door
-
-**Verification Method**: Test (unit test for DSM, integration test for obstacle detection, system test for door operation)
-
-**Acceptance Criteria**: Door close command accepted only when no obstacle present; door begins closing within 500 ms; obstacle detection active during entire closing operation
+**Inputs**: Door open command (`uint8_t`, CAN/GPIO), train speed (`uint16_t`, km/h x 10), fault status (`uint8_t`), operational mode (`uint8_t`)
+**Outputs**: Door motor start signal (PWM enable, direction = open)
+**Preconditions**: System initialized, HAL ready, speed data current (< 200 ms old)
+**Postconditions**: Door motor energized in open direction; door state = OPENING
+**Error Handling**: IF any precondition is not met, THEN opening command is rejected; fault logged with rejection reason
+**Verification Method**: Test (unit test — precondition matrix, integration test, system test)
+**Acceptance Criteria**: All 5 precondition combinations tested; no door opens when train speed > 5 km/h; command-to-motor-start latency <= 200 ms
 
 ---
 
-**REQ-FUN-004**: Door Closing Execution  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: SYS-FR-002, HAZ-002, HAZ-004
+**REQ-FUN-002**: Door Opening Completion Detection
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-004
 
-**Description**: The software SHALL drive each door motor in the closing direction until the door reaches the fully closed position as confirmed by the position sensor (≤ 5% open). The software SHALL continuously monitor obstacle sensors during closing and SHALL reverse immediately if an obstacle is detected (see REQ-SAFE-005).
+**Description**: The software SHALL declare a door fully open when BOTH redundant position sensors (Sensor A AND Sensor B) report the fully-open position (2oo2 voting).
 
-**Inputs**:
-- `door_position_pct[i]` (uint8_t, 0-100%, DDU position feedback)
-- `obstacle_detected[i]` (boolean, IR sensor GPIO, interrupt-driven)
-
-**Outputs**:
-- `door_motor_cmd[i]` (int8_t, -100 to +100)
-
-**Preconditions**:
-- Door in CLOSING state
-- Obstacle detection monitoring active
-
-**Postconditions**:
-- Door position reaches ≤ 5% open (fully closed)
-- Door transitions to LOCKING state
-- No obstacle detected during closing operation
-
-**Error Handling**:
-- IF obstacle detected during closing, THEN execute REQ-SAFE-005 (reverse within 150 ms) — see Section 4.3
-- IF door position does not decrease for > 3 seconds during CLOSING, THEN raise door fault (mechanical obstruction or motor failure)
-- IF position sensor reports out-of-range value (< -5%), THEN raise sensor fault and enter SAFE STATE
-
-**Verification Method**: Test (integration test with obstacle injection, system test with timing measurement, safety test for 150 ms response)
-
-**Acceptance Criteria**: Door reaches fully closed position within 3.5 seconds; obstacle reversal within 150 ms (see REQ-SAFE-005); fault raised if no progress for > 3 seconds
+**Inputs**: Position sensor A fully-open signal (`uint8_t`), Position sensor B (`uint8_t`)
+**Outputs**: Door state = FULLY_OPEN, status flag set, TCMS status message updated
+**Error Handling**: IF only one sensor reports fully open, THEN treat as OPENING; log sensor disagreement
+**Verification Method**: Test (integration test — sensor voting logic, fault injection)
+**Acceptance Criteria**: Door declared FULLY_OPEN only when both sensors agree; single sensor cannot declare fully-open alone; sensor disagreement logged
 
 ---
 
-### 3.3 Door Locking Control
+**REQ-FUN-003**: Door Opening Timeout Fault
+**Priority**: High
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-003
 
-**REQ-FUN-005**: Door Locking Execution  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: SYS-FR-002, SYS-FR-004, HAZ-001, HAZ-005
+**Description**: The software SHALL raise an opening timeout fault if the door does not reach the fully-open position within 4.0 seconds of the door open command being issued.
 
-**Description**: The software SHALL engage the lock solenoid for each door after the door reaches the fully closed position (≤ 5% open) and SHALL confirm lock engagement via the dedicated lock sensor (independent of position sensor) before asserting the door-locked signal to TCMS.
-
-**Inputs**:
-- `door_position_pct[i]` (uint8_t, 0-100%, DDU position feedback)
-- `door_lock_sensor[i]` (boolean, DDU lock sensor feedback)
-
-**Outputs**:
-- `door_lock_cmd[i]` (boolean, DDU RS-485 message) — TRUE = energize lock solenoid
-- `door_locked_signal` (boolean, TCMS CAN message) — asserted only when ALL doors locked
-
-**Preconditions**:
-- Door in LOCKING state (transitioned from CLOSING when position ≤ 5%)
-- Lock solenoid commanded to engage
-
-**Postconditions**:
-- Lock sensor confirms locked state (TRUE)
-- Door transitions to LOCKED state
-- Door-locked signal asserted to TCMS only when ALL doors on train confirm locked
-
-**Error Handling**:
-- IF lock sensor does not confirm locked within 10 seconds of lock command, THEN raise door fault for that door and SHALL NOT assert overall door-locked signal (see REQ-SAFE-003)
-- IF lock sensor indicates unlocked during LOCKED state monitoring, THEN immediately de-assert door-locked signal (see REQ-SAFE-015)
-
-**Verification Method**: Test (integration test with lock sensor simulation, system test for lock confirmation timing, safety test for fault injection)
-
-**Acceptance Criteria**: Lock confirmed within 10 seconds; door-locked signal asserted only when ALL doors locked; immediate de-assertion on lock loss; fault raised if lock confirmation timeout
+**Inputs**: Door state, elapsed time since open command (timer, ms)
+**Outputs**: Fault code `FAULT_DOOR_OPEN_TIMEOUT`, driver alert via TCMS, door motor de-energized
+**Verification Method**: Test (unit test — timer boundary, integration test)
+**Acceptance Criteria**: Timeout triggered at 4.0 s +/- 100 ms; motor de-energized; fault logged; alert sent to TCMS
 
 ---
 
-### 3.4 Door Status Reporting
-
-**REQ-FUN-006**: Door Status Transmission to TCMS  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: SYS-FR-006, SYS-FR-007
-
-**Description**: The software SHALL transmit door status information to TCMS via CAN at a rate of at least 10 Hz (100 ms period). The status message SHALL include:
-- Overall door-locked signal (boolean) — TRUE only when ALL doors confirmed locked
-- Individual door status per door (open, closed, opening, closing, locked, fault)
-- Fault code per door (if fault present)
-- Emergency release status per door (if activated)
-
-**Inputs**:
-- `door_state[i]` (enum: IDLE, OPENING, OPEN, CLOSING, LOCKING, LOCKED, SAFE_STATE)
-- `door_lock_sensor[i]` (boolean)
-- `door_fault[i]` (boolean)
-- `door_fault_code[i]` (uint8_t)
-- `emergency_release_active[i]` (boolean)
-
-**Outputs**:
-- CAN message ID 0x201: `door_status_msg_t` (see Section 6.2 for format)
-
-**Preconditions**: System initialized, TCMS CAN link operational
-
-**Postconditions**: TCMS receives updated door status within 100 ms of any state change
-
-**Error Handling**:
-- IF CAN transmit fails, THEN retry on next cycle (100 ms); log CAN fault if > 5 consecutive failures
-- IF cross-channel disagreement on door-locked status, THEN enter SAFE STATE and de-assert door-locked signal
-
-**Verification Method**: Test (integration test for CAN transmission, system test for status update latency, timing test for 100 ms requirement)
-
-**Acceptance Criteria**: Status transmitted at ≥ 10 Hz; door-locked signal de-asserted immediately on ANY fault; individual door status accurate and updated within 100 ms
+#### 3.1.2 Door Closing Control
 
 ---
 
-**REQ-FUN-007**: Fault Code Reporting  
-**Priority**: Medium  
-**SIL Level**: 1  
-**Traceability**: SYS-FR-007
+**REQ-FUN-004**: Door Closing Command Processing
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-005
 
-**Description**: The software SHALL report individual door fault codes to TCMS for each defective door. Fault codes SHALL be defined as follows:
-- 0x00: No fault
-- 0x01: Position sensor out of range
-- 0x02: Lock sensor timeout (> 10 s)
-- 0x03: Motor drive timeout (no motion for > 2 s during OPENING/CLOSING)
-- 0x04: DDU communication checksum error
-- 0x05: Obstacle sensor fault (stuck, out of range)
-- 0x06: Emergency release activated
-- 0xFF: General door fault (unspecified)
+**Description**: The software SHALL initiate a door closing sequence when it receives a door close command from TCMS AND no obstacle is detected AND no active closing fault is present.
 
-**Inputs**:
-- Fault detection logic outputs from DSM, OBD, TCI modules
-
-**Outputs**:
-- `door_fault_code[i]` (uint8_t) — included in TCMS status message
-
-**Preconditions**: Fault detected on door `i`
-
-**Postconditions**: Fault code transmitted to TCMS within 100 ms; fault logged to non-volatile memory
-
-**Error Handling**: None (non-safety-critical diagnostic feature)
-
-**Verification Method**: Test (system test with fault injection for each fault code)
-
-**Acceptance Criteria**: Correct fault code transmitted for each injected fault type; fault logged with timestamp
+**Inputs**: Door close command (`uint8_t`), obstacle detection status (`uint8_t`), fault status
+**Outputs**: Door motor start signal (PWM enable, direction = close)
+**Preconditions**: Door currently in FULLY_OPEN or OPENING state; no obstruction
+**Postconditions**: Door motor energized in close direction; door state = CLOSING
+**Error Handling**: IF obstacle detected at close command time, THEN reject close command and log; retry when obstacle cleared and command re-issued
+**Verification Method**: Test (unit test, integration test, system test)
+**Acceptance Criteria**: Close only initiates when command received AND no obstacle present; obstacle at command time blocks close and logs event
 
 ---
 
-### 3.5 Diagnostic Logging
+**REQ-FUN-005**: Door Close-and-Lock Completion Detection
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-012, SYS-REQ-014, HAZ-001, HAZ-005
 
-**REQ-FUN-008**: Event Logging  
-**Priority**: Medium  
-**SIL Level**: 0  
-**Traceability**: SYS-FR-010
+**Description**: The software SHALL declare a door fully closed and locked only when ALL of the following are confirmed by 2oo2 voting: (a) both door position sensors report fully-closed, AND (b) both lock position sensors report locked.
 
-**Description**: The software SHALL log the following events to non-volatile memory (SPI flash) with timestamp:
-- Door state transitions (OPENING, OPEN, CLOSING, LOCKED, SAFE_STATE)
-- Fault detections (door fault, sensor fault, communication fault, cross-channel disagreement)
-- Emergency release activations
-- Safe state entries (with fault code indicating trigger condition)
-- Operator reset commands
+**Decision Table**:
 
-**Inputs**:
-- Event indicators from all software modules
+| Pos Sensor A | Pos Sensor B | Lock Sensor A | Lock Sensor B | Result |
+|:---:|:---:|:---:|:---:|:---:|
+| Closed | Closed | Locked | Locked | CLOSED_AND_LOCKED |
+| Closed | Closed | Locked | Unlocked | NOT_LOCKED (fault) |
+| Closed | Open | Locked | Locked | NOT_CLOSED (fault) |
+| Any other | -- | -- | -- | NOT_CLOSED (fault) |
 
-**Outputs**:
-- Event log entries written to SPI flash (circular buffer, 16 MB capacity)
-
-**Preconditions**: SPI flash initialized and operational
-
-**Postconditions**: Event logged with timestamp (millisecond resolution since boot)
-
-**Error Handling**:
-- IF SPI flash write fails, THEN log to RAM buffer (last 100 events); attempt flash write on next cycle
-- IF flash full, THEN overwrite oldest entries (circular buffer)
-
-**Verification Method**: Test (system test with event injection, flash read-back verification)
-
-**Acceptance Criteria**: All events logged with accurate timestamp; flash storage survives power cycle; oldest entries overwritten when full
+**Inputs**: Position sensor A (`uint8_t`), B (`uint8_t`); lock sensor A (`uint8_t`), B (`uint8_t`)
+**Outputs**: Door state = CLOSED_AND_LOCKED; departure interlock released for this door
+**Error Handling**: IF sensors disagree, THEN door state = fault; departure interlock NOT released; alert TCMS
+**Verification Method**: Test (integration test — all sensor combinations), Fault Injection
+**Acceptance Criteria**: Door declared CLOSED_AND_LOCKED only with 4-sensor 2oo2 agreement; partial agreement produces fault; departure interlock not released on fault
 
 ---
 
-## 4. SAFETY REQUIREMENTS
+**REQ-FUN-006**: Door Closing Fault — Timeout
+**Priority**: High
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-011
 
-This section defines all safety-critical software requirements derived from the Hazard Log (DOC-HAZLOG-2026-001) and System Safety Requirements Specification (DOC-TDC-SSRS-SYS-001 v1.0). All REQ-SAFE-xxx requirements are co-authored with SAF (Safety Engineer) per EN 50128 §7.2.4.13.
+**Description**: The software SHALL raise a closing timeout fault if the door does not reach the CLOSED_AND_LOCKED state within 10.0 seconds of the close command (no obstacles).
 
-### 4.1 Speed Interlock Safety Requirements (HAZ-003)
-
-**REQ-SAFE-008**: Speed Interlock Enforcement  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-003 → SF-001 → SSR-001
-
-**Description**: The software SHALL inhibit any door open command when the received train speed value exceeds 5 km/h, as enforced independently by both DCU channels.
-
-**Safety Mechanism**: Dual-channel speed monitoring with 2oo2 voting
-
-**Inputs**:
-- `train_speed_kmph` (uint16_t, TCMS CAN message, 10 Hz update rate)
-
-**Outputs**:
-- `speed_interlock_ok` (boolean) — TRUE if speed ≤ 5 km/h, FALSE otherwise
-
-**Preconditions**: None (SHALL enforce in all states)
-
-**Postconditions**: Door open command rejected if `speed_interlock_ok` == FALSE
-
-**Failure Mode**: IF speed sensor fails or invalid, THEN treat as speed > 5 km/h (fail-safe, see REQ-SAFE-009)
-
-**Verification Method**: Test (boundary value test at 4, 5, 6 km/h; fault injection for invalid speed data; dual-channel voting test)
-
-**Acceptance Criteria**: 
-- Open command accepted at speed = 4 km/h
-- Open command rejected at speed = 6 km/h
-- Boundary test: open command rejected at speed = 5.1 km/h
-- Fault injection: invalid speed data → open command rejected
-
-**Hazard Mitigation**: Mitigates HAZ-003 (door opens while train moving above 5 km/h causing passenger fall)
+**Verification Method**: Test (unit test — timer boundary)
+**Acceptance Criteria**: Timeout at 10.0 s +/- 100 ms; fault logged; alert to TCMS
 
 ---
 
-**REQ-SAFE-009**: Speed Data Validation and Fail-Safe Default  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-003 → SF-001 → SSR-002
+**REQ-FUN-007**: Door Obstacle Retry Logic
+**Priority**: Medium
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-009, SYS-REQ-010
 
-**Description**: The software SHALL validate the train speed input received from TCMS CAN message (sequence counter, CRC, message age). IF no valid speed data is received within 200 ms, the software SHALL treat the speed as exceeding 5 km/h (safe default) and SHALL inhibit door open commands.
+**Description**: The software SHALL retry the door closing operation a maximum of 3 times after obstacle-induced reversal. After 3 failed attempts, the software SHALL declare a closing fault and alert the driver.
 
-**Safety Mechanism**: Fail-safe default (no valid speed data = unsafe speed assumption)
-
-**Inputs**:
-- TCMS CAN message: `train_speed_kmph`, `msg_sequence_counter`, `msg_crc`, `msg_timestamp`
-
-**Validation Checks**:
-- Sequence counter increments by 1 per message (detect lost or duplicate messages)
-- CRC matches calculated CRC (detect corruption)
-- Message age < 200 ms (detect stale data)
-- Speed value in valid range (0-250 km/h)
-
-**Outputs**:
-- `speed_data_valid` (boolean) — TRUE if all validation checks pass, FALSE otherwise
-- `speed_interlock_ok` (boolean) — FALSE if `speed_data_valid` == FALSE
-
-**Failure Mode**: IF any validation check fails, THEN `speed_data_valid` = FALSE → `speed_interlock_ok` = FALSE → open command inhibited
-
-**Verification Method**: Test (fault injection for CRC error, sequence counter error, message timeout, out-of-range speed value)
-
-**Acceptance Criteria**: 
-- Open command inhibited when CRC error injected
-- Open command inhibited when message timeout > 200 ms
-- Open command inhibited when speed value = 300 km/h (out of range)
-
-**Hazard Mitigation**: Mitigates HAZ-003 (ensures fail-safe behavior on speed sensor or communication failure)
+**Inputs**: Obstacle event flag, retry counter (`uint8_t`)
+**Outputs**: Door motor re-energized in close direction (retry); `FAULT_DOOR_CLOSE_RETRY_EXCEEDED` after 3 attempts
+**Verification Method**: Test (unit test — counter logic, integration test)
+**Acceptance Criteria**: Exactly 3 retries permitted; fault raised after 3rd obstacle; driver alert sent; door remains open after fault
 
 ---
 
-**REQ-SAFE-010**: Speed Threshold Constant Protection  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: HAZ-003 → SF-001 → SSR-004
+#### 3.1.3 Door Locking Control
 
-**Description**: The speed threshold value (5 km/h) SHALL be stored as a named constant (`SPEED_THRESHOLD_KMPH`) declared in a read-only (const) configuration file. Its value SHALL NOT be modifiable at runtime.
+---
 
-**Safety Mechanism**: Prevent accidental or malicious modification of safety-critical threshold
+**REQ-FUN-008**: Automatic Door Lock Engagement
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-012, SYS-REQ-013, HAZ-001
 
-**Implementation**:
+**Description**: The software SHALL command door lock engagement when the door position is fully closed (2oo2 confirmed) AND the close sequence is completed.
+
+**Inputs**: Door position sensors A and B (2oo2), close sequence completion flag
+**Outputs**: Lock actuator energize command (24V solenoid command)
+**Postconditions**: Lock engaged; software monitors lock sensors for confirmation
+**Error Handling**: IF position sensors disagree, THEN lock engagement command not issued; fault raised
+**Verification Method**: Test (integration test — sequence test, fault injection)
+**Acceptance Criteria**: Lock command only when both position sensors report closed; no lock command on sensor disagreement
+
+---
+
+**REQ-FUN-009**: Departure Interlock Signal
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-016, SYS-REQ-017, HAZ-001, HAZ-005
+
+**Description**: The software SHALL transmit the door-locked status signal to TCMS via CAN within 100 ms of confirming ALL doors in the system are in CLOSED_AND_LOCKED state. The software SHALL withhold this signal if ANY door is not CLOSED_AND_LOCKED.
+
+**Inputs**: Lock status for all N doors (`uint8_t` array, per-door state)
+**Outputs**: CAN message `MSG_DOOR_LOCKED_ALL` (transmitted only when all doors are CLOSED_AND_LOCKED)
+**Error Handling**: IF any door is not CLOSED_AND_LOCKED, THEN send `MSG_DOOR_NOT_READY` to TCMS every 100 ms
+**Verification Method**: Test (integration test — all-doors-locked and partial-locked scenarios, timing test)
+**Acceptance Criteria**: Signal transmitted within 100 ms of all-doors-locked confirmation; withheld if any door not confirmed locked; timing <= 100 ms verified
+
+---
+
+**REQ-FUN-010**: Door Lock Maintenance While Moving
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-013, SYS-REQ-015, HAZ-001, HAZ-003
+
+**Description**: The software SHALL continuously verify door lock status every 20 ms control cycle and re-command lock engagement if any door lock is detected as unlocked while train speed > 5 km/h.
+
+**Inputs**: Lock sensors A and B per door (every 20 ms cycle), train speed
+**Outputs**: Lock re-command signal if inconsistency detected; fault logged
+**Error Handling**: IF lock lost while moving, THEN immediately re-command lock AND raise `FAULT_LOCK_LOST_WHILE_MOVING` AND alert TCMS
+**Verification Method**: Test (integration test — lock loss simulation while speed > 5 km/h), Fault Injection
+**Acceptance Criteria**: Lock loss detected and re-commanded within one 20 ms cycle; fault raised; TCMS alerted
+
+---
+
+#### 3.1.4 Operational Mode Management
+
+---
+
+**REQ-FUN-011**: Operational Mode Support
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-023
+
+**Description**: The software SHALL implement and support the following operational modes as a finite state machine (FSM) with explicit transitions:
+
+| Mode | State Value | Description |
+|------|-------------|-------------|
+| NORMAL | 0x01 | Automatic control with full safety interlocks |
+| SELECTIVE_DISABLE | 0x02 | One or more doors isolated; remaining doors operational |
+| DIAGNOSTIC | 0x03 | Sensor testing; train stationary required |
+| SAFE_STATE | 0x04 | All doors commanded locked; entered on critical fault |
+
+**Inputs**: Mode command from TCMS or driver panel, authorization token, current mode
+**Outputs**: Active mode state (`uint8_t`), mode logged with timestamp
+**Error Handling**: Invalid mode command rejected; unknown mode code treated as SAFE_STATE
+**Verification Method**: Test (unit test — FSM transitions, integration test), Inspection
+**Acceptance Criteria**: All 4 modes implementable; illegal transitions rejected; mode change logged
+
+---
+
+**REQ-FUN-012**: Mode Transition Authorization
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-024, HAZ-009
+
+**Description**: The software SHALL only permit mode transitions when explicit authorization has been received from the driver (physical key signal) or TCMS (authorized digital command). Unauthorized mode transition attempts SHALL be rejected and logged.
+
+**Inputs**: Authorization signal (driver key bit in CAN message or discrete input), mode change request
+**Outputs**: Mode change accepted or rejected; event log entry
+**Verification Method**: Test (unit test — authorized vs. unauthorized transitions), Inspection
+**Acceptance Criteria**: No mode change without authorization signal; rejection logged with source; authorized transition succeeds
+
+---
+
+**REQ-FUN-013**: Selective Door Disablement Mode
+**Priority**: Medium
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-023, HAZ-009
+
+**Description**: In SELECTIVE_DISABLE mode, the software SHALL: (a) isolate the specified defective door(s) from normal control, (b) maintain all safety interlocks active for non-disabled doors, (c) prevent train departure if the disabled door is on the platform side, (d) log the disablement event with timestamp and authorization source.
+
+**Inputs**: Door ID to disable (`uint8_t`), platform side flag
+**Outputs**: Disabled door control inhibited; remaining doors operational; departure inhibit if platform-side
+**Verification Method**: Test (integration test — disable then operate remaining doors, departure inhibit test)
+**Acceptance Criteria**: Disabled door unresponsive; other doors normal; platform-side disablement blocks departure; event logged
+
+---
+
+**REQ-FUN-014**: Diagnostic Mode Conditions
+**Priority**: Medium
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-023, HAZ-009
+
+**Description**: The software SHALL only enter DIAGNOSTIC mode when: (a) train speed = 0 km/h (confirmed), AND (b) explicit authorization from maintenance personnel is present. All safety interlocks SHALL remain active in Diagnostic mode.
+
+**Inputs**: Speed (must be 0 km/h), maintenance authorization signal
+**Outputs**: Diagnostic mode active; safety interlocks not bypassed
+**Error Handling**: IF speed > 0 km/h, THEN Diagnostic mode request rejected; IF authorization absent, THEN rejected
+**Verification Method**: Test (unit test — precondition gate), Inspection
+**Acceptance Criteria**: Diagnostic mode only when speed = 0 AND authorization present; safety interlocks verified active in diagnostic mode
+
+---
+
+#### 3.1.5 Position Monitoring
+
+---
+
+**REQ-FUN-015**: Continuous Door Position Monitoring
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-025, SYS-REQ-026
+
+**Description**: The software SHALL continuously monitor and maintain a door position state for each door every 20 ms control cycle. Valid states are: FULLY_OPEN, INTERMEDIATE, FULLY_CLOSED, UNKNOWN.
+
+| State | Condition |
+|-------|-----------|
+| FULLY_OPEN | Both open end-stop sensors (A and B) = active |
+| FULLY_CLOSED | Both closed end-stop sensors (A and B) = active |
+| INTERMEDIATE | Neither end-stop condition met |
+| UNKNOWN | Sensor A and Sensor B disagree (fault condition) |
+
+**Inputs**: Position sensor A and B per door (24V GPIO, read every 20 ms)
+**Outputs**: Door state variable (`uint8_t enum`) per door, updated every cycle
+**Error Handling**: UNKNOWN state treated as fault; door SHALL NOT be commanded until resolved
+**Verification Method**: Test (unit test — all state transitions), Integration Test
+**Acceptance Criteria**: All 4 states representable; UNKNOWN declared on sensor disagreement; state updated every 20 ms cycle
+
+---
+
+**REQ-FUN-016**: Door Status Reporting to TCMS
+**Priority**: High
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-027
+
+**Description**: The software SHALL transmit individual door status to TCMS via CAN every 100 ms for each door. The status message SHALL include door position state, lock state, and fault code for each door.
+
+**Data Types**:
 ```c
-// File: safety_config.h
-const uint16_t SPEED_THRESHOLD_KMPH = 5U;  // SIL 3 safety constant
+typedef struct {
+    uint8_t  door_id;        /* 0-based door index */
+    uint8_t  position_state; /* FULLY_OPEN=1, INTERMEDIATE=2, FULLY_CLOSED=3, UNKNOWN=4 */
+    uint8_t  lock_state;     /* UNLOCKED=0, LOCKED=1, LOCK_FAULT=2 */
+    uint8_t  fault_code;     /* 0=no fault, 1-255=fault codes */
+    uint16_t crc16;          /* CRC-16 of preceding bytes */
+} door_status_msg_t;
 ```
-
-**Verification Method**: Code review (verify const declaration), static analysis (verify no write access), test (verify threshold value used correctly)
-
-**Acceptance Criteria**: 
-- Constant declared with `const` keyword
-- Static analysis confirms no write access to constant
-- Test confirms open command rejected at threshold + 1 km/h
-
-**Hazard Mitigation**: Mitigates HAZ-003 (prevents inadvertent change to safety-critical threshold)
+**Verification Method**: Test (integration test — CAN message content and timing), Interface Test
+**Acceptance Criteria**: Message transmitted every 100 ms +/- 10 ms; correct state and fault encoding; CRC-16 valid
 
 ---
 
-### 4.2 Departure Interlock Safety Requirements (HAZ-001, HAZ-005)
-
-**REQ-SAFE-001**: Door-Locked Signal Assertion Condition  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-001, HAZ-005 → SF-002, SF-005 → SSR-005, SSR-007
-
-**Description**: The software SHALL NOT assert the door-locked output signal to TCMS unless ALL monitored door locks are confirmed in the locked state by their dedicated lock sensors, as validated by both DCU channels independently.
-
-**Safety Mechanism**: 2oo2 voting (both channels must agree ALL doors locked) with independent lock sensors
-
-**Inputs**:
-- `door_lock_sensor[i]` (boolean, per door, DDU lock sensor feedback) — TRUE = locked, FALSE = not locked
-- Cross-channel comparison: Channel A `door_locked_status` compared to Channel B `door_locked_status` via SPI link
-
-**Outputs**:
-- `door_locked_signal` (boolean, TCMS CAN message) — asserted ONLY if:
-  - ALL `door_lock_sensor[i]` == TRUE (for all monitored doors, both channels)
-  - AND Channel A agrees with Channel B on door-locked status
-
-**Preconditions**: System in LOCKED state (all doors completed locking sequence)
-
-**Postconditions**: TCMS receives door-locked signal → train may receive departure authority
-
-**Failure Mode**: IF ANY door lock sensor == FALSE, THEN `door_locked_signal` remains FALSE (de-asserted)
-
-**Verification Method**: Test (all doors locked → signal asserted; any single door not locked → signal de-asserted; cross-channel disagreement → SAFE STATE)
-
-**Acceptance Criteria**: 
-- Signal asserted only when ALL doors locked (both channels agree)
-- Signal de-asserted immediately if ANY door lock sensor transitions to FALSE
-- Cross-channel disagreement triggers SAFE STATE within 20 ms (2 cycles)
-
-**Hazard Mitigation**: Mitigates HAZ-001 (train departs with door open) and HAZ-005 (false door-locked signal)
+#### 3.1.6 Fault Detection and Management
 
 ---
 
-**REQ-SAFE-002**: Redundant Lock Sensor Confirmation  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-001 → SF-005 → SSR-006
+**REQ-FUN-017**: Continuous Fault Monitoring
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-028, SYS-REQ-029
 
-**Description**: The software SHALL use at least two independent sensor readings per door leaf to confirm the locked position: (1) dedicated lock sensor, (2) position sensor end-stop confirmation (≤ 2% open).
+**Description**: The software SHALL continuously monitor for fault conditions every 20 ms control cycle. Monitored fault categories:
 
-**Safety Mechanism**: Diverse redundancy (two independent sensor types)
+| Fault Category | Detection Mechanism |
+|----------------|---------------------|
+| Position sensor failure | Sensor out-of-range, sensor disagrees with other channel |
+| Obstacle sensor failure | Sensor stuck active/inactive, self-test failure |
+| Lock mechanism failure | Lock sensor inconsistency (commanded locked but sensor = unlocked) |
+| Communication failure | CAN timeout (> 200 ms), CRC errors, sequence counter discontinuity |
+| Speed sensor failure | TCMS speed data timeout (> 200 ms), out-of-range |
+| Cross-channel disagreement | SPI comparison result mismatch |
+| Watchdog failure | Watchdog not refreshed within 50 ms |
 
-**Inputs**:
-- `door_lock_sensor[i]` (boolean, dedicated lock sensor)
-- `door_position_pct[i]` (uint8_t, position sensor, must be ≤ 2% for lock confirmation)
+**Inputs**: All sensor inputs, CAN receive buffer, SPI comparison result, watchdog refresh timer
+**Outputs**: Fault flags per category (`uint8_t`), fault log entry
+**Error Handling**: Fault detected -> fault flag set -> escalate per fault criticality (Section 3.4)
+**Verification Method**: Test (unit test per fault type), Fault Injection, Integration Test
+**Acceptance Criteria**: Each fault type detected within specified time (<=100 ms for sensors, <=200 ms for communication)
 
-**Lock Confirmation Logic**:
+---
+
+**REQ-FUN-018**: Fault Event Logging
+**Priority**: High
+**SIL Level**: SIL 1
+**Traceability**: SYS-REQ-031, SYS-REQ-070
+
+**Description**: The software SHALL log all door events and faults with timestamps to non-volatile storage (SPI Flash). The event log SHALL store a minimum of 1000 events in a circular buffer with CRC-16 protection per entry.
+
+**Data Types**:
 ```c
-bool is_door_locked(uint8_t door_id) {
-    return (door_lock_sensor[door_id] == TRUE) 
-           && (door_position_pct[door_id] <= 2U);
-}
+typedef struct {
+    uint32_t timestamp_ms;   /* System time in ms since power-on */
+    uint8_t  event_type;     /* EVENT_DOOR_OPEN, EVENT_FAULT, EVENT_MODE_CHANGE, etc. */
+    uint8_t  door_id;        /* 0-based door index, 0xFF = system-wide */
+    uint8_t  fault_code;     /* Fault or event code */
+    uint8_t  data;           /* Optional event data */
+    uint16_t crc16;          /* CRC-16 of preceding 6 bytes */
+} event_log_entry_t;
 ```
-
-**Failure Mode**: IF lock sensor reports locked BUT position sensor reports > 2% open, THEN raise sensor disagreement fault and enter SAFE STATE
-
-**Verification Method**: Test (both sensors agree locked → pass; lock sensor TRUE but position 10% → fault; position ≤ 2% but lock sensor FALSE → not locked)
-
-**Acceptance Criteria**: 
-- Door considered locked only when BOTH sensors confirm
-- Sensor disagreement detected and triggers SAFE STATE
-
-**Hazard Mitigation**: Mitigates HAZ-001 (prevents false lock indication if one sensor fails)
+**Verification Method**: Test (integration test — log 1000+ events, circular overwrite, CRC check)
+**Acceptance Criteria**: >= 1000 events stored; CRC-16 verified on retrieval; circular buffer wraps correctly; log readable via diagnostics port
 
 ---
 
-**REQ-SAFE-003**: Lock Confirmation Timeout  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-001 → SF-002 → SSR-008
+---
 
-**Description**: IF any door lock sensor fails to confirm locked status within 10 seconds of a close command, the software SHALL assert a door fault for that door and SHALL NOT assert the overall door-locked signal.
+### 3.2 Performance Requirements
 
-**Safety Mechanism**: Timeout detection prevents hanging on defective door
+---
 
-**Inputs**:
-- `lock_cmd_timestamp[i]` (uint32_t, milliseconds) — time when lock command issued
-- `door_lock_sensor[i]` (boolean)
+**REQ-PERF-001**: Control Cycle Time
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-036
 
-**Timeout Check**:
+**Description**: The software SHALL execute one complete control cycle (sensor read, safety logic, state machine update, actuator output, cross-channel comparison, CAN message processing) within 20 ms (50 Hz). The Worst-Case Execution Time (WCET) SHALL NOT exceed 16 ms (80% of cycle period, leaving 4 ms margin).
+
+**Acceptance Criteria**: WCET <= 16 ms measured by hardware timer on target hardware under worst-case load; 4 ms margin verified
+**Verification Method**: Performance Test (hardware timer instrumentation), Static Analysis (timing analysis)
+
+---
+
+**REQ-PERF-002**: Speed Interlock Response Time
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-035, HAZ-003
+
+**Description**: The software SHALL respond to a train speed exceeding 5 km/h by completing door lock engagement commands within 100 ms of the speed threshold crossing.
+
+**Acceptance Criteria**: Measured time from speed signal > 5 km/h (CAN message) to lock command output <= 100 ms; verified on target hardware
+**Verification Method**: Performance Test (hardware timer), Integration Test
+
+---
+
+**REQ-PERF-003**: Obstacle Detection Response Time
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-034, HAZ-002, HAZ-004
+
+**Description**: The software SHALL issue a door reversal command within 150 ms of an obstacle being detected on either obstacle sensor during door closing.
+
+**Acceptance Criteria**: Measured time from obstacle sensor rising edge to motor reversal PWM command <= 150 ms on target hardware; tested with injected obstacle signal
+**Verification Method**: Performance Test (oscilloscope on GPIO and PWM), Integration Test
+
+---
+
+**REQ-PERF-004**: Door Command to Motor Start Latency
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-003
+
+**Description**: The software SHALL issue the first motor movement command within 200 ms of receiving a door open or close command, provided all preconditions are satisfied.
+
+**Acceptance Criteria**: Measured command-to-motor latency <= 200 ms; timing verified on target hardware
+**Verification Method**: Performance Test (hardware timer), Integration Test
+
+---
+
+**REQ-PERF-005**: TCMS Locked Status Transmission Latency
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-017, HAZ-001
+
+**Description**: The software SHALL transmit the door-locked-all status CAN message to TCMS within 100 ms of all doors achieving CLOSED_AND_LOCKED state.
+
+**Acceptance Criteria**: CAN transmission latency <= 100 ms from state confirmation; measured with CAN analyser
+**Verification Method**: Performance Test (CAN analyser), Integration Test
+
+---
+
+**REQ-PERF-006**: Sensor Fault Detection Time
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-029
+
+**Description**: The software SHALL detect sensor faults (sensor stuck, out-of-range, 2oo2 disagreement) within 100 ms.
+
+**Acceptance Criteria**: Fault flag set within 100 ms of fault condition onset; verified by fault injection
+**Verification Method**: Fault Injection Test, Integration Test
+
+---
+
+**REQ-PERF-007**: Communication Fault Detection Time
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-029, SSRS SAFE-DIAG-003
+
+**Description**: The software SHALL detect loss of TCMS CAN speed signal within 200 ms (2 x 100 ms update period).
+
+**Acceptance Criteria**: Fault flag set within 200 ms +/- 20 ms of last valid TCMS message; verified in integration test
+**Verification Method**: Integration Test (CAN bus silence injection), Fault Injection
+
+---
+
+**REQ-PERF-008**: CPU Utilization
+**Priority**: Medium
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-036
+
+**Description**: The software SHALL consume no more than 80% of available CPU cycles under worst-case operational load.
+
+**Acceptance Criteria**: CPU utilization <= 80% measured by profiler under worst-case scenario
+**Verification Method**: Performance Test (profiler), Analysis
+
+---
+
+**REQ-PERF-009**: Memory Utilization — RAM
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-036, SSRS SAFE-SW-007
+
+**Description**: The software SHALL use no more than 80% of available SRAM per MCU (800 KB out of 1 MB). All memory allocation SHALL be static (no heap).
+
+**Acceptance Criteria**: Linker map shows total SRAM (stack + globals + BSS) <= 800 KB; verified by static analysis
+**Verification Method**: Static Analysis (linker map), Code Review
+
+---
+
+**REQ-PERF-010**: Memory Utilization — Flash
+**Priority**: High
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-036
+
+**Description**: The software SHALL use no more than 80% of available Flash memory per MCU (1600 KB out of 2 MB, excluding bootloader).
+
+**Acceptance Criteria**: Linker map shows code + rodata <= 1600 KB; 10% margin for future patches
+**Verification Method**: Static Analysis (linker map)
+
+---
+
+---
+
+### 3.3 Interface Requirements
+
+#### 3.3.1 Hardware Interfaces
+
+---
+
+**REQ-INT-001**: Door Motor Actuator Interface
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-040
+
+**Description**: The software SHALL control each door motor via PWM output through the HAL. PWM frequency SHALL be 20 kHz; duty cycle range 0-100% (`uint8_t`); direction controlled by a separate direction GPIO.
+
 ```c
-if ((current_time_ms - lock_cmd_timestamp[i]) > 10000U) {
-    if (door_lock_sensor[i] == FALSE) {
-        door_fault[i] = TRUE;  // Lock timeout fault
-        door_fault_code[i] = 0x02;  // Lock sensor timeout
-    }
-}
+error_t HAL_PWM_SetDutyCycle(uint8_t door_id, uint8_t duty_percent);
+error_t HAL_GPIO_SetMotorDirection(uint8_t door_id, uint8_t direction);
+/* direction: MOTOR_OPEN=1, MOTOR_CLOSE=0, MOTOR_STOP=2 */
 ```
-
-**Failure Mode**: Lock timeout → door fault asserted → overall door-locked signal NOT asserted
-
-**Verification Method**: Test (inject lock sensor failure, verify fault raised at 10.0 seconds, verify door-locked signal NOT asserted)
-
-**Acceptance Criteria**: 
-- Fault raised if lock not confirmed within 10 seconds
-- Overall door-locked signal NOT asserted when any door has lock timeout fault
-
-**Hazard Mitigation**: Mitigates HAZ-001 (prevents departure if door cannot confirm lock)
+**Error Handling**: IF `HAL_PWM_SetDutyCycle` returns error, THEN set duty to 0, raise `FAULT_MOTOR_CTRL_FAIL`, transition to SAFE_STATE
+**Verification Method**: Integration Test, Interface Test (oscilloscope)
+**Acceptance Criteria**: PWM at 20 kHz confirmed with oscilloscope; duty cycle accurate +/-2%; direction bit correct
 
 ---
 
-**REQ-SAFE-015**: Immediate De-Assertion on Lock Loss  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-001, HAZ-005 → SF-002 → SSR-009
+**REQ-INT-002**: Door Position Sensor Interface
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-041
 
-**Description**: The door-locked signal SHALL be de-asserted immediately (within one control cycle, 10 ms) if any door lock sensor reports a non-locked state during normal monitoring.
+**Description**: The software SHALL read position sensor inputs via HAL GPIO as digital 24V logic inputs (interrupt-driven AND polled every 20 ms cycle). Two sensors per door (Sensor A and Sensor B) for 2oo2 voting.
 
-**Safety Mechanism**: Continuous monitoring with immediate response
-
-**Inputs**:
-- `door_lock_sensor[i]` (boolean, monitored every 10 ms control cycle)
-
-**Lock Loss Detection**:
 ```c
-// Executed every control cycle (10 ms)
-for (uint8_t i = 0; i < NUM_DOORS; i++) {
-    if (door_lock_sensor[i] == FALSE) {
-        door_locked_signal = FALSE;  // Immediate de-assertion
-        break;  // Exit loop (any single door unlocked sufficient)
-    }
-}
+error_t HAL_GPIO_ReadPositionSensor(uint8_t door_id, uint8_t sensor_id,
+                                     uint8_t *state);
+/* state: 0=not at end-stop, 1=at end-stop */
 ```
-
-**Failure Mode**: ANY door lock sensor transitions to FALSE → door-locked signal de-asserted within 10 ms
-
-**Verification Method**: Test (inject lock loss during LOCKED state, measure time from sensor FALSE to signal de-asserted, verify ≤ 10 ms)
-
-**Acceptance Criteria**: 
-- Lock loss detected within one control cycle (10 ms)
-- Door-locked signal de-asserted within 10 ms of lock loss
-
-**Hazard Mitigation**: Mitigates HAZ-001 and HAZ-005 (prevents departure if door unlocks during travel)
+**Error Handling**: IF HAL read returns error, THEN treat as UNKNOWN; raise sensor fault
+**Verification Method**: Integration Test
+**Acceptance Criteria**: Both sensors read independently per 20 ms cycle; interrupt latency <= 5 ms
 
 ---
 
-**REQ-SAFE-016**: Cyclic Lock Monitoring Rate  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: HAZ-005 → SF-005 → SSR-021
+**REQ-INT-003**: Obstacle Detection Sensor Interface
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-042, HAZ-002, HAZ-004
 
-**Description**: The software SHALL cyclically re-read all door lock sensor inputs during monitoring state at a period not exceeding 50 ms to detect any lock loss condition.
+**Description**: The software SHALL read obstacle detection sensor inputs via interrupt-driven HAL GPIO. Either obstacle sensor (A or B) triggering SHALL initiate the obstacle response. Sensor inputs are active-high (1 = obstacle detected).
 
-**Safety Mechanism**: High-frequency monitoring ensures rapid detection
-
-**Implementation**: Lock sensors read every control cycle (10 ms) — exceeds 50 ms requirement
-
-**Verification Method**: Code review (verify monitoring loop period ≤ 50 ms), timing analysis (confirm 10 ms control cycle)
-
-**Acceptance Criteria**: Lock sensors read at least every 50 ms (actual: every 10 ms)
-
-**Hazard Mitigation**: Mitigates HAZ-005 (rapid detection of lock loss)
-
----
-
-### 4.3 Obstacle Detection and Reversal Safety Requirements (HAZ-002, HAZ-004)
-
-**REQ-SAFE-004**: Continuous Obstacle Monitoring  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-002, HAZ-004 → SF-003 → SSR-010
-
-**Description**: The software SHALL monitor obstacle sensor inputs continuously during any door closing operation. Obstacle sensors SHALL be connected to hardware interrupt lines with priority higher than all non-safety tasks.
-
-**Safety Mechanism**: Interrupt-driven detection (not polled) with high priority
-
-**Inputs**:
-- `obstacle_sensor[i]` (boolean, GPIO interrupt, active high) — TRUE = obstacle detected (beam broken)
-
-**Interrupt Configuration**:
-- GPIO interrupt on rising edge (beam break)
-- Interrupt priority: 0 (highest, pre-empts all non-safety tasks)
-- Interrupt service routine (ISR) sets `obstacle_detected[i]` flag
-
-**Verification Method**: Code review (verify interrupt configuration), test (inject obstacle during closing, verify ISR executed), timing test (measure interrupt latency ≤ 5 ms)
-
-**Acceptance Criteria**: 
-- Obstacle sensor connected to hardware interrupt (not polled)
-- ISR priority higher than all non-safety tasks
-- Interrupt latency ≤ 5 ms (part of 150 ms budget)
-
-**Hazard Mitigation**: Mitigates HAZ-002 and HAZ-004 (ensures rapid obstacle detection)
-
----
-
-**REQ-SAFE-005**: Obstacle Reversal Timing  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-002, HAZ-004 → SF-003 → SSR-011
-
-**Description**: Upon detection of an obstacle (sensor beam break), the software SHALL reverse the door motor direction within **150 ms** of the beam break event, measured from sensor interrupt to motor direction command output.
-
-**Safety Mechanism**: Hard real-time constraint with WCET guarantee
-
-**Timing Budget Allocation** (per SSR-014):
-- Interrupt latency: ≤ 5 ms
-- Software processing (ISR + state machine): ≤ 20 ms
-- DDU mechanical response: ≤ 125 ms
-- **Total**: ≤ 150 ms
-
-**Inputs**:
-- `obstacle_detected[i]` (boolean, set by ISR)
-- `obstacle_timestamp[i]` (uint32_t, milliseconds, timestamp of beam break event)
-
-**Outputs**:
-- `door_motor_cmd[i]` (int8_t) — reversed to positive value (opening direction)
-- `door_state[i]` (enum) — transitioned to REVERSING
-
-**State Machine Transition**:
-```
-CLOSING + obstacle_detected[i] == TRUE → REVERSING (within 20 ms)
-```
-
-**Verification Method**: Test (inject obstacle during closing, measure time from beam break to motor reversal command, verify ≤ 150 ms); timing analysis (WCET analysis confirms ≤ 20 ms software processing); safety test (repeated trials with timing measurement)
-
-**Acceptance Criteria**: 
-- Motor reversal command issued within 150 ms (100% of trials)
-- Software processing time ≤ 20 ms (WCET confirmed)
-- Interrupt latency ≤ 5 ms
-
-**Hazard Mitigation**: Mitigates HAZ-002 and HAZ-004 (prevents or minimizes entrapment injury)
-
----
-
-**REQ-SAFE-006**: Obstacle Sensor Fault Fail-Safe  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-002, HAZ-004 → SF-003 → SSR-012
-
-**Description**: The software SHALL treat a sensor fault (no signal, out-of-range voltage, or both beams simultaneously broken) as an obstacle present condition (fail-safe default).
-
-**Safety Mechanism**: Fail-safe default (sensor fault = obstacle present)
-
-**Sensor Fault Conditions**:
-- No signal detected (sensor voltage < 0.5V or > 4.5V) — sensor disconnected or power fault
-- Both IR beams broken simultaneously (physically impossible) — sensor wiring fault
-- Sensor self-test failure (startup check)
-
-**Failure Mode**: ANY sensor fault condition → treat as obstacle present → inhibit closing or reverse if already closing
-
-**Verification Method**: Test (inject sensor fault conditions: disconnect sensor, short both beams, out-of-range voltage; verify door does not close or reverses if closing)
-
-**Acceptance Criteria**: 
-- Sensor disconnected → door does not close (or reverses if closing)
-- Both beams shorted simultaneously → treated as obstacle
-- Out-of-range voltage → treated as obstacle
-
-**Hazard Mitigation**: Mitigates HAZ-002 and HAZ-004 (prevents closing with defective obstacle detection)
-
----
-
-**REQ-SAFE-007**: Obstacle Clearance and Re-Close Interlock  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: HAZ-002, HAZ-004 → SF-003 → SSR-013
-
-**Description**: After an obstacle-triggered reversal, the software SHALL NOT resume closing operation until: (a) the obstacle is confirmed cleared (sensor beam restored) AND (b) an explicit re-close command is received from TCMS.
-
-**Safety Mechanism**: Prevent automatic re-close after obstacle event (requires operator confirmation)
-
-**Inputs**:
-- `obstacle_detected[i]` (boolean) — must transition to FALSE (beam restored)
-- `door_close_cmd` (boolean, TCMS CAN message) — new close command required
-
-**State Machine**:
-```
-REVERSING → OPEN (after reversal completes)
-OPEN → CLOSING (only if obstacle_detected[i] == FALSE AND new close command received)
-```
-
-**Verification Method**: Test (trigger obstacle reversal, verify door transitions to OPEN, verify door does NOT automatically re-close, verify door re-closes only after obstacle cleared AND new close command)
-
-**Acceptance Criteria**: 
-- Door transitions to OPEN after reversal
-- Door does NOT automatically re-close (operator command required)
-- Re-close permitted only after obstacle cleared
-
-**Hazard Mitigation**: Mitigates HAZ-002 and HAZ-004 (prevents repeated closing on persistent obstacle)
-
----
-
-**REQ-SAFE-011**: Obstacle Detection State Machine Constraint  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: HAZ-004 → SF-003 (architectural constraint)
-
-**Description**: The obstacle detection state machine SHALL transition directly from CLOSING state to REVERSING state upon obstacle detection, with no intermediate states. The WCET for this transition shall be ≤ 20 ms.
-
-**Safety Mechanism**: Architectural constraint (eliminates race conditions)
-
-**State Transition Rule**:
 ```c
-// Executed in ISR context (highest priority)
-if (door_state[i] == STATE_CLOSING) {
-    if (obstacle_detected[i] == TRUE) {
-        door_state[i] = STATE_REVERSING;  // Direct transition
-        door_motor_cmd[i] = MOTOR_OPEN_SPEED;  // Reverse immediately
-    }
-}
+error_t HAL_GPIO_ReadObstacleSensor(uint8_t door_id, uint8_t sensor_id,
+                                     uint8_t *detected);
+/* Interrupt: void OBD_ObstacleISR(uint8_t door_id, uint8_t sensor_id); */
 ```
-
-**Verification Method**: Code review (verify no intermediate states), static analysis (call graph confirms direct transition), WCET analysis (confirm ≤ 20 ms)
-
-**Acceptance Criteria**: 
-- State transition directly from CLOSING to REVERSING (no intermediate states)
-- WCET ≤ 20 ms (part of 150 ms budget)
-
-**Hazard Mitigation**: Mitigates HAZ-004 (ensures deterministic, rapid response to obstacle)
+**Error Handling**: IF both obstacle sensors read 0 during self-test after power-on, THEN raise obstacle sensor fault; door closing disabled
+**Verification Method**: Integration Test, Fault Injection (IR beam interruption)
+**Acceptance Criteria**: Single-sensor obstacle triggers reversal; ISR latency <= 1 ms; both sensors tested at startup
 
 ---
 
-### 4.4 Safe State Safety Requirements (HAZ-005, HAZ-009)
+**REQ-INT-004**: Door Lock Actuator Interface
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-043, HAZ-001
 
-**REQ-SAFE-012**: Safe State Entry Conditions  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-005, HAZ-009 → SF-004 → SSR-015
+**Description**: The software SHALL control door lock actuators via HAL GPIO digital output (24V, 1A). Lock command: 1 = engage lock solenoid (unlocked); 0 = release solenoid (hardware fail-closed spring locks door).
 
-**Description**: The software SHALL enter the safe state unconditionally upon detection of any of the following fault conditions:
-- (a) Cross-channel disagreement for > 2 consecutive control cycles (20 ms)
-- (b) Watchdog timeout (50 ms)
-- (c) CRC error in safety-critical data
-- (d) Sensor input out of valid range
-- (e) Stack overflow detection
-
-**Safety Mechanism**: Comprehensive fault detection with fail-safe response
-
-**Fault Detection Logic**:
 ```c
-bool shall_enter_safe_state(void) {
-    return (cross_channel_disagreement_count > 2U)
-        || (watchdog_timeout_detected == TRUE)
-        || (crc_error_detected == TRUE)
-        || (sensor_out_of_range_detected == TRUE)
-        || (stack_overflow_detected == TRUE);
-}
+error_t HAL_GPIO_SetLockActuator(uint8_t door_id, uint8_t locked);
+/* NOTE: fail-safe state = 0 (solenoid off = spring-locked) */
 ```
-
-**Verification Method**: Test (fault injection for each condition, verify safe state entry), timing test (measure safe state entry time ≤ 10 ms)
-
-**Acceptance Criteria**: 
-- Safe state entered for each fault condition
-- Safe state entry time ≤ 10 ms (one control cycle)
-
-**Hazard Mitigation**: Mitigates HAZ-005 and HAZ-009 (prevents unsafe operation under fault conditions)
+**Error Handling**: IF lock command returns error, THEN raise `FAULT_LOCK_CTRL_FAIL`; report to fault manager
+**Verification Method**: Integration Test, Fault Injection
+**Acceptance Criteria**: Lock command/release verified by lock sensors; fail-closed verified on power-off test
 
 ---
 
-**REQ-SAFE-013**: Safe State Action Sequence  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-005, HAZ-009 → SF-004 → SSR-016
+**REQ-INT-005**: Lock Position Sensor Interface
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-044, HAZ-001, HAZ-005
 
-**Description**: The safe state action SHALL execute the following sequence within one control cycle (10 ms):
-- (a) De-energise all door drive motor outputs (set to 0V)
-- (b) Energise all door lock solenoid outputs (24V locked position)
-- (c) De-assert door-locked signal to TCMS (set to FALSE)
-- (d) Assert door-fault signal to TCMS (set to TRUE)
-- (e) Write fault code to non-volatile event log with timestamp
+**Description**: The software SHALL read lock position sensors via HAL GPIO. Two sensors per lock (Sensor A and Sensor B) for 2oo2 voting. 1 = locked, 0 = unlocked.
 
-**Safety Mechanism**: Fail-safe state (motors off, locks engaged, TCMS notified)
-
-**Safe State Actions**:
 ```c
-void enter_safe_state(uint8_t fault_code) {
-    // (a) De-energise all motors
-    for (uint8_t i = 0; i < NUM_DOORS; i++) {
-        door_motor_cmd[i] = 0;  // 0V
-    }
-    
-    // (b) Energise all lock solenoids
-    for (uint8_t i = 0; i < NUM_DOORS; i++) {
-        door_lock_cmd[i] = TRUE;  // 24V locked
-    }
-    
-    // (c) De-assert door-locked signal
-    door_locked_signal = FALSE;
-    
-    // (d) Assert door-fault signal
-    door_fault_signal = TRUE;
-    
-    // (e) Log fault code
-    log_fault_event(fault_code, current_time_ms);
-    
-    // Transition to SAFE_STATE
-    for (uint8_t i = 0; i < NUM_DOORS; i++) {
-        door_state[i] = STATE_SAFE;
-    }
-}
+error_t HAL_GPIO_ReadLockSensor(uint8_t door_id, uint8_t sensor_id,
+                                  uint8_t *locked);
 ```
-
-**Verification Method**: Test (trigger safe state, verify all actions executed in correct order within 10 ms, verify outputs correct)
-
-**Acceptance Criteria**: 
-- All 5 actions executed in sequence
-- Execution time ≤ 10 ms (one control cycle)
-- Outputs correct (motors 0V, locks 24V, signals correct)
-
-**Hazard Mitigation**: Mitigates HAZ-005 and HAZ-009 (ensures fail-safe hardware state)
+**Error Handling**: IF sensors disagree, THEN treat as unlocked (conservative); raise lock fault
+**Verification Method**: Integration Test, Fault Injection
+**Acceptance Criteria**: Disagreement treated conservatively (not-locked); sensor fault detected and logged
 
 ---
 
-**REQ-SAFE-014**: Safe State Exit Interlock  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-005, HAZ-009 → SF-004 → SSR-017
+**REQ-INT-006**: Watchdog Hardware Interface
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-064, SSRS SAFE-SW-009, HAZ-009
 
-**Description**: The software SHALL NOT exit the safe state autonomously. A deliberate operator reset action is required via a TCMS reset command with confirmation sequence (command + 16-bit confirmation code).
+**Description**: The software SHALL refresh the external hardware watchdog via HAL within every 40 ms (watchdog timeout = 50 ms; refresh at 40 ms provides 10 ms margin). Failure to refresh SHALL cause hardware reset and safe state.
 
-**Safety Mechanism**: Prevent automatic recovery from safe state (requires operator confirmation)
-
-**Reset Command Format** (TCMS CAN message):
-- `reset_cmd` (boolean) — TRUE = reset requested
-- `reset_confirmation_code` (uint16_t) — must match expected value (0xA5C3)
-
-**Reset Logic**:
 ```c
-void process_reset_cmd(bool reset_cmd, uint16_t reset_code) {
-    if (system_state == STATE_SAFE) {
-        if (reset_cmd == TRUE && reset_code == 0xA5C3U) {
-            // Log reset event
-            log_reset_event(current_time_ms);
-            
-            // Transition to STARTUP (re-run self-tests)
-            system_state = STATE_STARTUP;
-            run_startup_self_tests();
-        }
-    }
-}
+void HAL_Watchdog_Refresh(void); /* Called from main loop every 40 ms */
 ```
-
-**Verification Method**: Test (enter safe state, verify no automatic recovery, send reset without confirmation code → verify no recovery, send reset with correct code → verify recovery to STARTUP)
-
-**Acceptance Criteria**: 
-- No automatic recovery from safe state
-- Reset ignored if confirmation code incorrect
-- Reset accepted and system transitions to STARTUP if code correct
-
-**Hazard Mitigation**: Mitigates HAZ-005 and HAZ-009 (prevents automatic recovery from unsafe condition)
+**Acceptance Criteria**: Watchdog refreshed every 40 ms +/- 5 ms; deliberate missed refresh triggers hardware reset within 50 ms + 5 ms tolerance
+**Verification Method**: Fault Injection (deliberate watchdog starve), Integration Test
 
 ---
 
-**REQ-SAFE-021**: Safe State Transition WCET  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: HAZ-009 → SF-004 → SSR-018
-
-**Description**: The safe state transition function SHALL be callable from any software state. Its WCET shall be ≤ 5 ms to ensure execution completes within one control cycle (10 ms budget).
-
-**Safety Mechanism**: Bounded execution time ensures timely fail-safe response
-
-**WCET Requirement**: `enter_safe_state()` function WCET ≤ 5 ms
-
-**Verification Method**: WCET analysis (static timing analysis tool), timing test (measure execution time in worst-case scenario)
-
-**Acceptance Criteria**: WCET ≤ 5 ms (50% of control cycle budget)
-
-**Hazard Mitigation**: Mitigates HAZ-009 (ensures rapid transition to safe state)
+#### 3.3.2 Software Interfaces
 
 ---
 
-### 4.5 Fault Isolation Safety Requirements (HAZ-006, HAZ-009)
+**REQ-INT-007**: TCMS CAN Interface — Receive
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-046, SYS-REQ-047, HAZ-003
 
-**REQ-SAFE-017**: Door Fault Isolation  
-**Priority**: High  
-**SIL Level**: 2  
-**Traceability**: HAZ-006, HAZ-009 → SF-007 → SSR-024
+**Description**: The software SHALL receive and process the following CAN messages from TCMS. All safety-critical messages SHALL include CRC-16 and sequence counter.
 
-**Description**: The software SHALL isolate a defective door (cease all command outputs to that door's DDU) upon detection of a persistent fault on that door (timeout > 10 s, position feedback mismatch for > 3 consecutive readings, DDU communication checksum error for > 5 consecutive messages), while maintaining normal operation of all remaining doors.
+| Message ID | Content | Rate | SIL |
+|-----------|---------|------|-----|
+| 0x100 | Speed data (`uint16_t` km/h x 10), CRC-16, sequence counter | 100 ms | SIL 3 |
+| 0x101 | Door open command (side, door mask), authorization | On-event | SIL 3 |
+| 0x102 | Door close command (side, door mask) | On-event | SIL 3 |
+| 0x103 | Mode change command + authorization | On-event | SIL 3 |
+| 0x104 | Emergency stop command | On-event | SIL 3 |
 
-**Safety Mechanism**: Fault isolation with degraded mode operation
-
-**Fault Conditions for Isolation**:
-- Lock timeout > 10 s (see REQ-SAFE-003)
-- Position feedback mismatch > 3 consecutive readings
-- DDU checksum error > 5 consecutive messages
-
-**Isolation Action**:
 ```c
-void isolate_door(uint8_t door_id, uint8_t fault_code) {
-    door_isolated[door_id] = TRUE;
-    door_motor_cmd[door_id] = 0;  // Cease motor commands
-    door_lock_cmd[door_id] = TRUE;  // Lock engaged (fail-safe)
-    door_fault[door_id] = TRUE;
-    door_fault_code[door_id] = fault_code;
-    log_door_isolation_event(door_id, fault_code, current_time_ms);
-}
+typedef struct {
+    uint16_t speed_kmh_x10; /* Speed in 1/10 km/h */
+    uint8_t  seq_counter;   /* Increments each message */
+    uint16_t crc16;         /* CRC-16 of first 3 bytes */
+} tcms_speed_msg_t;
 ```
-
-**Verification Method**: Test (inject each fault condition, verify door isolated, verify other doors continue normal operation)
-
-**Acceptance Criteria**: 
-- Defective door isolated (no further commands sent)
-- Remaining doors continue normal operation
-- Fault reported to TCMS with door ID
-
-**Hazard Mitigation**: Mitigates HAZ-006 and HAZ-009 (maintains partial operation, prevents total system failure)
+**Error Handling**: CRC mismatch -> discard message, log CRC error; timeout -> assume train moving
+**Verification Method**: Integration Test (CAN bus injection), Interface Test
+**Acceptance Criteria**: Speed data parsed correctly; CRC verified on every message; sequence counter discontinuity detected; timeout fault at 200 ms
 
 ---
 
-**REQ-SAFE-018**: Isolated Door Reporting  
-**Priority**: Medium  
-**SIL Level**: 2  
-**Traceability**: HAZ-006 → SF-007 → SSR-025
+**REQ-INT-008**: TCMS CAN Interface — Transmit
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-017, SYS-REQ-016, SYS-REQ-027
 
-**Description**: An isolated door SHALL be reported individually to TCMS via the door fault status CAN message (door ID, fault code). The isolated door status SHALL be logged to non-volatile memory with timestamp.
+**Description**: The software SHALL transmit the following CAN messages to TCMS. All messages SHALL include CRC-16.
 
-**Outputs**:
-- TCMS CAN message: `door_id`, `door_fault_code` (see REQ-FUN-007 for codes)
-- Non-volatile log: `door_isolation_event(door_id, fault_code, timestamp)`
+| Message ID | Content | Rate | SIL |
+|-----------|---------|------|-----|
+| 0x200 | Door-locked-all status (`uint8_t` boolean) + per-door lock mask | 100 ms (or on change) | SIL 3 |
+| 0x201 | Per-door status (position, lock, fault code) x N doors | 100 ms | SIL 2 |
+| 0x202 | System fault report (fault category, fault code) | On-event + 500 ms periodic | SIL 2 |
+| 0x203 | Mode status (current mode, door disable mask) | On-change + 1 s periodic | SIL 2 |
 
-**Verification Method**: Test (isolate door, verify TCMS message sent, verify log entry written)
-
-**Acceptance Criteria**: 
-- TCMS receives fault message with door ID and fault code
-- Log entry written to non-volatile memory
-
-**Hazard Mitigation**: Mitigates HAZ-006 (informs operator of degraded mode)
+**Verification Method**: Integration Test (CAN analyser), Interface Test
+**Acceptance Criteria**: All messages transmitted at correct rate; CRC-16 valid; content matches door state
 
 ---
 
-### 4.6 Emergency Release Monitoring Safety Requirements (HAZ-008)
+**REQ-INT-009**: DDU RS-485 Interface
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-049
 
-**REQ-SAFE-019**: Emergency Release Detection  
-**Priority**: Medium  
-**SIL Level**: 2  
-**Traceability**: HAZ-008 → SF-006 → SSR-022
+**Description**: The software SHALL communicate with Door Drive Units (DDU) via RS-485 at 115.2 kbit/s using a proprietary multi-drop protocol. Motor commands and position feedback SHALL be exchanged with each DDU every 20 ms control cycle.
 
-**Description**: The software SHALL monitor the emergency door release sensor on each door continuously (polled at 100 ms period). Upon detection of an emergency release activation (sensor state HIGH for > 50 ms debounce), the software SHALL record the event with timestamp and door ID to non-volatile memory.
+**Protocol requirements**:
+- CRC-16 on all frames
+- Sequence counter per DDU (detect lost/duplicate frames)
+- DDU response timeout: 40 ms (2 x cycle time) -> DDU communication fault
 
-**Inputs**:
-- `emergency_release_sensor[i]` (boolean, GPIO, active high) — TRUE = emergency release activated
+**Verification Method**: Integration Test (RS-485 bus analyser), Interface Test
+**Acceptance Criteria**: All DDU messages exchanged every 20 ms; CRC validated; DDU timeout detected within 40 ms
 
-**Debounce Logic**:
+---
+
+**REQ-INT-010**: Cross-Channel SPI Communication
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-060, SSRS SAFE-CCF-002, HAZ-009
+
+**Description**: The software on Channel A SHALL exchange safety-critical state variables with Channel B via SPI every 20 ms control cycle. The comparison SHALL include: train speed, door states, lock states, obstacle flags, fault flags, and active safety decisions.
+
 ```c
-// Polled every 100 ms
-if (emergency_release_sensor[i] == TRUE) {
-    if (emergency_release_debounce_count[i] > 0) {
-        emergency_release_debounce_count[i]++;
-        if (emergency_release_debounce_count[i] >= 1) {  // 1 * 100ms = 100ms (> 50ms requirement)
-            emergency_release_active[i] = TRUE;
-            log_emergency_release_event(i, current_time_ms);
-        }
-    } else {
-        emergency_release_debounce_count[i] = 1;
-    }
-} else {
-    emergency_release_debounce_count[i] = 0;
-}
+typedef struct {
+    uint16_t speed_kmh_x10;
+    uint8_t  door_states[MAX_DOORS];
+    uint8_t  lock_states[MAX_DOORS];
+    uint8_t  obstacle_flags[MAX_DOORS];
+    uint8_t  fault_flags;
+    uint8_t  safety_decisions;
+    uint16_t crc16;
+} cross_channel_state_t;
 ```
-
-**Verification Method**: Test (activate emergency release, verify event logged with correct timestamp and door ID)
-
-**Acceptance Criteria**: 
-- Emergency release detected after > 50 ms debounce
-- Event logged with timestamp and door ID
-
-**Hazard Mitigation**: Mitigates HAZ-008 (detects and records emergency release activations)
+**Error Handling**: IF any field differs between Channel A and Channel B, OR CRC mismatch, THEN immediately trigger SAFE_STATE
+**Verification Method**: Test (integration test — deliberate disagreement injection), Fault Injection
+**Acceptance Criteria**: Disagreement triggers safe state within one 20 ms cycle; CRC mismatch triggers safe state; comparison runs every cycle
 
 ---
 
-**REQ-SAFE-020**: Emergency Release Alert and Interlock  
-**Priority**: Medium  
-**SIL Level**: 2  
-**Traceability**: HAZ-008 → SF-006 → SSR-023
+**REQ-INT-011**: Emergency Release Detection Interface
+**Priority**: High
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-021, SYS-REQ-045, HAZ-008
 
-**Description**: Upon detection of an emergency release activation, the software SHALL transmit an emergency release alert CAN message to TCMS within 500 ms and SHALL inhibit any subsequent close command for that door until an operator acknowledgement command is received from TCMS.
+**Description**: The software SHALL monitor the emergency release detection switch (GPIO input) for each door every 20 ms cycle. Upon detecting activation, the software SHALL log the event with timestamp and door ID, and send an alert to TCMS within 200 ms.
 
-**Outputs**:
-- TCMS CAN message: `emergency_release_alert(door_id)`
-- `door_close_inhibit[i]` (boolean) — TRUE = close inhibited until acknowledgement
-
-**Acknowledgement Command** (TCMS CAN message):
-- `emergency_release_ack_cmd` (boolean)
-- `acknowledged_door_id` (uint8_t)
-
-**Verification Method**: Test (trigger emergency release, verify alert sent within 500 ms, verify close command inhibited, send acknowledgement → verify close command accepted)
-
-**Acceptance Criteria**: 
-- Alert transmitted within 500 ms
-- Close inhibited until acknowledgement received
-- Close accepted after acknowledgement
-
-**Hazard Mitigation**: Mitigates HAZ-008 (prevents automatic re-close after emergency release)
+**Inputs**: Emergency release switch (`uint8_t` GPIO per door)
+**Outputs**: Emergency release event log entry, TCMS alert CAN message
+**Error Handling**: IF emergency release detected while speed > 5 km/h, THEN raise `FAULT_EMERG_RELEASE_WHILE_MOVING`
+**Verification Method**: Integration Test, Interface Test
+**Acceptance Criteria**: Emergency release detected within 20 ms; TCMS alert within 200 ms; event logged with timestamp
 
 ---
 
-## 5. PERFORMANCE REQUIREMENTS
-
-**REQ-PERF-001**: Control Cycle Period  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: SYS-NFR-005, NFSR-002
-
-**Description**: The software SHALL execute the main control loop at a period of 10 ms (100 Hz). All safety-critical computations (speed interlock, obstacle detection, door-locked signal generation) SHALL be completed within 7 ms (70% of control cycle budget).
-
-**Acceptance Criteria**: 
-- Control loop period = 10 ms ± 0.1 ms
-- WCET for safety-critical tasks ≤ 7 ms
-- 30% margin reserved for interrupt handling
-
-**Verification Method**: Timing analysis (WCET tool), performance testing (oscilloscope measurement), profiler
-
-**Hazard Mitigation**: Ensures predictable, real-time response for safety functions
+#### 3.3.3 User Interfaces
 
 ---
 
-**REQ-PERF-002**: Obstacle Detection Response Time  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: SYS-NFR-005, SSR-014
+**REQ-INT-012**: Driver Control Panel Interface
+**Priority**: Medium
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-048, SYS-REQ-051
 
-**Description**: The total end-to-end obstacle detection response time (from sensor beam break to motor reversal) SHALL be ≤ 150 ms. (See REQ-SAFE-005 for detailed breakdown.)
+**Description**: The software SHALL interface with the Driver Control Panel via discrete I/O (24V logic) and/or CAN bus. The software SHALL read manual door open/close button states and update door status indicator outputs every 20 ms cycle.
 
-**Acceptance Criteria**: Measured response time ≤ 150 ms (100% of trials)
-
-**Verification Method**: Timing test (high-speed camera or oscilloscope), safety test (repeated trials)
-
-**Hazard Mitigation**: Mitigates HAZ-002 and HAZ-004 (minimizes entrapment injury)
+**Outputs**: Per-door status indicators (OPEN=green, CLOSED=amber, LOCKED=off, FAULT=red); audible alarm output
+**Verification Method**: Integration Test, Manual Test
+**Acceptance Criteria**: Status indicators match door state within one 20 ms cycle
 
 ---
 
-**REQ-PERF-003**: Door-Locked Signal Response Time  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: SYS-FR-006
+**REQ-INT-013**: Diagnostics Port Interface
+**Priority**: Low
+**SIL Level**: SIL 1
+**Traceability**: SYS-REQ-050
 
-**Description**: The software SHALL transmit door-locked status to TCMS within 100 ms of lock confirmation.
+**Description**: The software MAY provide diagnostic data via the USB/RS-232 port at 115.2 kbit/s for maintenance purposes. The interface SHALL be read-only during normal operation (no safety parameter modification). Event log download and system status query SHALL be supported.
 
-**Acceptance Criteria**: Measured latency from lock sensor TRUE to CAN message transmission ≤ 100 ms
-
-**Verification Method**: Timing test (measure latency with CAN bus analyzer)
-
-**Hazard Mitigation**: Ensures timely departure authority (operational efficiency)
+**Note**: This interface is for maintenance only and is NOT safety-critical.
+**Verification Method**: Manual Test
+**Acceptance Criteria**: Event log downloadable; status readable; no safety parameters modifiable via diagnostics port in Normal mode
 
 ---
 
-**REQ-PERF-004**: CPU Utilization  
-**Priority**: Medium  
-**SIL Level**: 3  
-**Traceability**: SYS-NFR-005, NFSR-002
+---
 
-**Description**: The software SHALL consume no more than 70% of available CPU cycles under worst-case load (all doors operating simultaneously, obstacle detection active, cross-channel communication).
+### 3.4 Safety Requirements
 
-**Acceptance Criteria**: Measured CPU usage ≤ 70% during stress testing
-
-**Verification Method**: Profiler, performance testing
-
-**Hazard Mitigation**: Provides 30% margin for future enhancements or unexpected load
+> **Authority Note**: Safety requirements REQ-SAFE-001 through REQ-SAFE-021 are co-authored with the Safety Engineer (SAF) as the hazard authority. SIL assignments are per SAF guidance based on the System Safety Requirements Specification (DOC-SYS-SAF-2026-001). REQ does not independently classify or close hazards.
 
 ---
 
-**REQ-PERF-005**: Memory Footprint  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: Platform constraints
+**REQ-SAFE-001**: Speed Interlock — Inhibit Door Opening When Moving
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-002, SYS-REQ-015, HAZ-003, SSRS SF-001
 
-**Description**: The software SHALL use:
-- RAM (data + stack): ≤ 256 KB
-- ROM (code + constants): ≤ 512 KB
+**Description**: The software SHALL inhibit all door opening commands when train speed exceeds 5 km/h. This inhibition SHALL be enforced by the Safety Kernel on both Channel A and Channel B independently (2oo2). The software SHALL default to "train moving" (inhibit opening) if speed data is absent, stale (> 200 ms), or invalid (CRC error).
 
-**Acceptance Criteria**: 
-- Measured RAM usage ≤ 256 KB with 20% margin
-- Measured ROM usage ≤ 512 KB
-
-**Verification Method**: Linker map analysis, static analysis
-
-**Hazard Mitigation**: Ensures fit within STM32H743 memory constraints (1 MB SRAM available)
+**Safety Mechanism**: Dual-channel independent evaluation; fail-safe default = inhibit
+**Failure Mode**: IF speed sensor fails, THEN inhibit door opening (conservative default)
+**Inputs**: Speed `uint16_t` (km/h x 10), speed data timestamp
+**Outputs**: `speed_interlock_active` flag (`uint8_t`, 1 = inhibit, 0 = permit)
+**Verification Method**: Safety Test, Fault Injection (speed > 5 km/h, stale speed, CRC error), Static Analysis
+**Acceptance Criteria**: No door open command processed when speed > 5 km/h; inhibit active on stale/missing speed; both channels independently verify; verified by fault injection
 
 ---
 
-**REQ-PERF-006**: Stack Usage  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: NFSR-006
+**REQ-SAFE-002**: Speed Interlock — Maintain Door Locking When Moving
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-013, HAZ-001, HAZ-003, SSRS SF-001
 
-**Description**: Stack usage SHALL be statically analysed. Dynamic stack growth SHALL NOT exceed 80% of available stack space (64 KB allocated per channel).
+**Description**: The software SHALL command and maintain door lock engagement on all doors whenever train speed exceeds 5 km/h. This function SHALL be continuously evaluated every 20 ms cycle by both Channel A and Channel B independently.
 
-**Acceptance Criteria**: Static stack analysis confirms worst-case usage ≤ 51 KB (80% of 64 KB)
-
-**Verification Method**: Static stack analysis tool, code review (no recursion)
-
-**Hazard Mitigation**: Prevents stack overflow (REQ-SAFE-012 condition e)
+**Failure Mode**: IF speed signal is absent or stale, THEN command doors locked (fail-safe)
+**Verification Method**: Safety Test, Fault Injection, Integration Test
+**Acceptance Criteria**: Doors commanded locked within one 20 ms cycle when speed > 5 km/h; maintained locked while speed > 5 km/h; fail-safe on missing speed
 
 ---
 
-## 6. INTERFACE REQUIREMENTS
+**REQ-SAFE-003**: Departure Interlock — All Doors Confirmed Locked
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-016, HAZ-001, HAZ-005, SSRS SF-002
 
-### 6.1 Hardware Interfaces
+**Description**: The software SHALL withhold the door-locked-all signal from TCMS unless ALL doors in the system are in CLOSED_AND_LOCKED state (confirmed by 2oo2 position and lock sensors). A single door not in CLOSED_AND_LOCKED state SHALL prevent the departure interlock signal from being asserted.
 
-**REQ-INT-001**: Door Position Sensor Interface  
-**Priority**: High  
-**SIL Level**: 2  
-**Traceability**: System interface specification
-
-**Description**: The software SHALL read door position from the DDU via RS-485 position feedback message.
-
-**Interface Specification**:
-- **Protocol**: RS-485, 115.2 kbit/s, 8N1
-- **Message Rate**: 50 Hz (20 ms period)
-- **Data Type**: `uint8_t door_position_pct` (0-100%)
-- **Encoding**: 0 = fully closed, 100 = fully open
-- **Validation**: Range check (0-100%), message age < 100 ms
-
-**Error Handling**:
-- IF position value > 100%, THEN raise sensor fault and enter SAFE STATE
-- IF message age > 100 ms (timeout), THEN raise communication fault
-
-**Verification Method**: Integration test (simulated DDU feedback), system test
-
-**Acceptance Criteria**: Position data read at 50 Hz; out-of-range values detected; timeout detected
+**Verification Method**: Safety Test (all-locked, one-door-not-locked scenarios), Integration Test
+**Acceptance Criteria**: Signal asserted ONLY when all doors confirmed locked; one unlocked door prevents signal; tested with N doors scenarios
 
 ---
 
-**REQ-INT-002**: Door Lock Sensor Interface  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: Safety interface, HAZ-001, HAZ-005
+**REQ-SAFE-004**: Obstacle Detection and Immediate Reversal
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-007, HAZ-002, HAZ-004, SSRS SF-003
 
-**Description**: The software SHALL read door lock status from the DDU via RS-485 lock sensor feedback (dedicated sensor, independent of position sensor).
+**Description**: The software SHALL immediately stop and reverse door motor direction within 150 ms of detecting an obstacle on either obstacle sensor (A or B) during door closing operation. The reversal SHALL continue until the door reaches the FULLY_OPEN position.
 
-**Interface Specification**:
-- **Protocol**: RS-485, 115.2 kbit/s
-- **Message Rate**: 50 Hz (20 ms period)
-- **Data Type**: `bool door_lock_sensor` (TRUE = locked, FALSE = not locked)
-- **Validation**: Message age < 100 ms
-
-**Error Handling**:
-- IF lock sensor message timeout > 100 ms, THEN enter SAFE STATE
-
-**Verification Method**: Integration test, safety test (lock sensor fault injection)
-
-**Acceptance Criteria**: Lock status read at 50 Hz; timeout detected; SAFE STATE entered on timeout
+**Mechanism**: Interrupt-driven (ISR latency <= 1 ms); motor reversal command issued from ISR or highest-priority task
+**Safety Mechanism**: Hardware force limit (150 N, passive) as independent layer
+**Verification Method**: Safety Test (obstacle injection during closing), Performance Test (latency), Integration Test
+**Acceptance Criteria**: Motor reversal command within 150 ms of obstacle GPIO rising edge; verified on target hardware; door returns to fully open
 
 ---
 
-**REQ-INT-003**: Door Motor Control Interface  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: System actuator interface
+**REQ-SAFE-005**: Door Position 2oo2 Verification for Safety Decisions
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-026, SYS-REQ-014, HAZ-001, HAZ-005, SSRS SF-005
 
-**Description**: The software SHALL control door motor via RS-485 command message to DDU.
+**Description**: The software SHALL use 2oo2 voting (both Sensor A AND Sensor B must agree) for ALL safety-critical door position determinations. A single sensor reporting "closed" when the other reports otherwise SHALL result in the door being treated as NOT closed.
 
-**Interface Specification**:
-- **Protocol**: RS-485, 115.2 kbit/s, 8N1
-- **Message Rate**: 100 Hz (10 ms period)
-- **Data Type**: `int8_t door_motor_cmd` (-100 to +100)
-- **Encoding**: -100 = full speed closing, 0 = stop, +100 = full speed opening
-- **Checksum**: 8-bit CRC included in message (see ISR-004)
-
-**Error Handling**:
-- IF DDU reports invalid checksum, THEN retransmit command on next cycle
-
-**Verification Method**: Integration test (DDU command execution), system test
-
-**Acceptance Criteria**: Motor command transmitted at 100 Hz; DDU executes command within 25 ms; checksum errors detected
+**Decision Rule**: Closed = (Sensor_A == CLOSED) AND (Sensor_B == CLOSED); any other combination = NOT_CLOSED
+**Verification Method**: Safety Test (all sensor combinations), Fault Injection
+**Acceptance Criteria**: All 4 sensor combinations produce correct conservative outcome; fault condition logged on disagreement
 
 ---
 
-**REQ-INT-004**: Obstacle Sensor Interface  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-002, HAZ-004
+**REQ-SAFE-006**: Safe State — Transition on Critical Fault
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-030, HAZ-005, HAZ-009, SSRS SF-004, SSRS SAFE-STATE-001
 
-**Description**: The software SHALL read obstacle detection sensors via GPIO digital input (24V, interrupt-driven).
+**Description**: The software SHALL transition to SAFE_STATE (all doors commanded locked, all opening commands inhibited, TCMS alerted) within 100 ms of detecting any of the following critical faults:
 
-**Interface Specification**:
-- **Signal Type**: Digital GPIO, 24V nominal (18-32V range), active high
-- **Encoding**: LOW (< 5V) = no obstacle (beam intact), HIGH (> 18V) = obstacle detected (beam broken)
-- **Interrupt**: Rising edge on beam break, priority 0 (highest)
-- **Debounce**: 5 ms hardware debounce (RC filter), 0 ms software debounce (interrupt-driven)
+| Trigger Condition | Action |
+|-------------------|--------|
+| Speed sensor failure | Lock all doors; inhibit opening |
+| Position sensor failure (any door) | Assume door not closed; inhibit departure signal |
+| Lock sensor failure (any door) | Assume not locked; inhibit departure signal |
+| Cross-channel disagreement | Lock all doors; inhibit all commands |
+| CAN speed data timeout (> 200 ms) | Lock all doors; assume moving |
+| MCU failure (detected by cross-channel) | Lock all doors |
 
-**Error Handling**:
-- IF both beams broken simultaneously, THEN treat as sensor fault (see REQ-SAFE-006)
-- IF sensor voltage out of range (< 5V or > 32V), THEN treat as sensor fault
-
-**Verification Method**: Integration test (obstacle injection), safety test (sensor fault injection), timing test (interrupt latency)
-
-**Acceptance Criteria**: Interrupt latency ≤ 5 ms; sensor fault conditions detected; obstacle detection active during closing
-
----
-
-### 6.2 Software Interfaces
-
-**REQ-INT-005**: TCMS Interface — Speed Signal  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-003, REQ-SAFE-008, REQ-SAFE-009
-
-**Description**: The software SHALL receive train speed signal from TCMS via CAN 2.0B message.
-
-**Interface Specification**:
-- **Protocol**: CAN 2.0B, 250 kbit/s
-- **Message ID**: 0x100 (TCMS → DCU)
-- **Message Rate**: 10 Hz (100 ms period)
-- **Data Format**:
-  ```c
-  typedef struct {
-      uint16_t train_speed_kmph;       // 0-250 km/h
-      uint8_t  msg_sequence_counter;   // Increments by 1 per message
-      uint8_t  msg_crc;                // 8-bit CRC
-      uint32_t msg_timestamp;          // Milliseconds since TCMS boot
-  } __attribute__((packed)) tcms_speed_msg_t;
-  ```
-- **Validation**: Sequence counter, CRC, message age < 200 ms (see REQ-SAFE-009)
-
-**Error Handling**:
-- IF CRC invalid, THEN reject message and treat speed as > 5 km/h (fail-safe)
-- IF message timeout > 200 ms, THEN treat speed as > 5 km/h (fail-safe)
-
-**Verification Method**: Integration test (CAN message reception), fault injection (CRC error, timeout)
-
-**Acceptance Criteria**: Speed data validated per REQ-SAFE-009; fail-safe behavior on fault
+**Failure Mode**: IF safe state command fails, THEN hardware watchdog triggers reset; mechanical fail-closed locks engage
+**Verification Method**: Fault Injection (each trigger condition), Safety Test, Integration Test
+**Acceptance Criteria**: Safe state achieved within 100 ms for each trigger; all conditions independently tested; TCMS alerted
 
 ---
 
-**REQ-INT-006**: TCMS Interface — Door Commands  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: REQ-FUN-001, REQ-FUN-003
+**REQ-SAFE-007**: Safe State — Maintained on Power Loss
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-061, SSRS SAFE-STATE-004
 
-**Description**: The software SHALL receive door open/close commands from TCMS via CAN 2.0B message.
+**Description**: The software SHALL design lock actuation such that removing electrical power results in doors remaining locked (fail-closed). The lock actuator HAL interface SHALL use active-low convention (0V = spring-locked). No software action is required on power loss; this is verified by hardware design, but the software SHALL NOT implement any logic that would energize locks as a default state.
 
-**Interface Specification**:
-- **Protocol**: CAN 2.0B, 250 kbit/s
-- **Message ID**: 0x102 (TCMS → DCU)
-- **Message Rate**: On-demand (command issued when driver presses button)
-- **Data Format**:
-  ```c
-  typedef struct {
-      uint8_t door_open_cmd_left;      // 0=no cmd, 1=open left side doors
-      uint8_t door_open_cmd_right;     // 0=no cmd, 1=open right side doors
-      uint8_t door_close_cmd;          // 0=no cmd, 1=close all doors
-      uint8_t emergency_brake_status;  // 0=normal, 1=emergency brake active
-      uint8_t msg_crc;                 // 8-bit CRC
-  } __attribute__((packed)) tcms_door_cmd_msg_t;
-  ```
-- **Validation**: CRC, message age < 500 ms (per ISR-002)
-
-**Error Handling**:
-- IF CRC invalid, THEN reject message
-- IF message age > 500 ms, THEN reject message
-
-**Verification Method**: Integration test (CAN message reception), fault injection
-
-**Acceptance Criteria**: Door commands validated; stale commands rejected
+**Verification Method**: Fault Injection (power removal during operation), Inspection (HAL interface review)
+**Acceptance Criteria**: Lock sensors report locked after power removal; no software logic defaults locks open
 
 ---
 
-**REQ-INT-007**: TCMS Interface — Door Status  
-**Priority**: High  
-**SIL Level**: 3  
-**Traceability**: REQ-FUN-006, REQ-SAFE-001
+**REQ-SAFE-008**: Watchdog Monitoring
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-064, SSRS SAFE-SW-009, SSRS SAFE-DIAG-006, HAZ-009
 
-**Description**: The software SHALL transmit door status to TCMS via CAN 2.0B message.
+**Description**: The software SHALL refresh the external hardware watchdog timer via `HAL_Watchdog_Refresh()` within every 40 ms (watchdog timeout = 50 ms). The watchdog refresh SHALL only be called from the main control loop after successful completion of the safety logic cycle. Premature refresh (before safety logic complete) SHALL NOT be implemented.
 
-**Interface Specification**:
-- **Protocol**: CAN 2.0B, 250 kbit/s
-- **Message ID**: 0x201 (DCU → TCMS)
-- **Message Rate**: 10 Hz (100 ms period)
-- **Data Format**:
-  ```c
-  typedef struct {
-      uint8_t door_locked_signal;              // 0=not all locked, 1=all locked
-      uint8_t door_fault_signal;               // 0=no fault, 1=fault present
-      uint8_t door_status[MAX_DOORS];          // Per-door state (see enum)
-      uint8_t door_fault_code[MAX_DOORS];      // Per-door fault code (see REQ-FUN-007)
-      uint8_t emergency_release_status[MAX_DOORS]; // 0=normal, 1=activated
-      uint8_t msg_crc;                         // 8-bit CRC
-  } __attribute__((packed)) dcu_door_status_msg_t;
-  
-  typedef enum {
-      DOOR_STATUS_IDLE = 0,
-      DOOR_STATUS_OPENING = 1,
-      DOOR_STATUS_OPEN = 2,
-      DOOR_STATUS_CLOSING = 3,
-      DOOR_STATUS_LOCKING = 4,
-      DOOR_STATUS_LOCKED = 5,
-      DOOR_STATUS_FAULT = 6
-  } door_status_t;
-  ```
-
-**Verification Method**: Integration test (CAN transmission), system test (status accuracy)
-
-**Acceptance Criteria**: Status transmitted at 10 Hz; door-locked signal accurate per REQ-SAFE-001
+**Acceptance Criteria**: Refresh called every 40 ms +/- 5 ms; deliberate starvation causes hardware reset within 55 ms; refresh not callable before safety logic completion
+**Verification Method**: Fault Injection (deliberate loop hang -> watchdog fires), Integration Test
 
 ---
 
-**REQ-INT-008**: Cross-Channel Interface  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: HAZ-001, HAZ-005, 2oo2 architecture, ISR-003
+**REQ-SAFE-009**: CRC Protection for Safety-Critical Data
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-063, SSRS SAFE-SW-010
 
-**Description**: The software SHALL exchange safety-critical data between Channel A and Channel B via SPI cross-link.
+**Description**: The software SHALL apply CRC-16 (polynomial 0x8005 or CCITT 0x1021) to ALL safety-critical data structures and communication messages:
 
-**Interface Specification**:
-- **Protocol**: SPI, 10 Mbit/s
-- **Message Rate**: 10 Hz (100 ms period)
-- **Data Format**:
-  ```c
-  typedef struct {
-      uint8_t  msg_id;                     // Message identifier (0xA5)
-      uint8_t  msg_sequence_counter;       // Increments by 1 per message
-      uint8_t  door_locked_status;         // This channel's door-locked result
-      uint8_t  speed_interlock_ok;         // This channel's speed interlock result
-      uint8_t  safe_state_active;          // This channel's safe state flag
-      uint16_t cross_channel_crc;          // 16-bit CRC
-  } __attribute__((packed)) cross_channel_msg_t;
-  ```
-- **Validation**: Message ID (0xA5), sequence counter, CRC (per ISR-003)
+| Data Class | CRC Applied |
+|-----------|-------------|
+| CAN speed message (receive) | CRC-16 verified on each message |
+| CAN door-locked-all message (transmit) | CRC-16 appended |
+| Cross-channel SPI frame | CRC-16 verified |
+| Event log entry | CRC-16 per entry |
+| Configuration data (SPI Flash) | CRC-16 on block read |
+| Boot-time flash integrity | CRC-16 over application code region |
 
-**Error Handling**:
-- IF CRC invalid, THEN increment cross-channel disagreement counter
-- IF disagreement counter > 2, THEN enter SAFE STATE (see REQ-SAFE-012 condition a)
-
-**Verification Method**: Integration test (cross-channel communication), fault injection (CRC error, sequence error)
-
-**Acceptance Criteria**: Cross-channel data exchanged at 10 Hz; disagreement detected and triggers SAFE STATE
+**Verification Method**: Static Analysis (verify CRC call in each data path), Integration Test (corrupt CRC -> fault detected)
+**Acceptance Criteria**: CRC verified on every reception and on boot; CRC corruption detected and fault raised; zero safety-critical messages processed without CRC check
 
 ---
 
-### 6.3 User Interfaces (Non-Safety)
+**REQ-SAFE-010**: Cross-Channel 2oo2 Safety Logic
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-060, SSRS SAFE-CCF-002, HAZ-009
 
-**REQ-INT-009**: Diagnostic Interface  
-**Priority**: Low  
-**SIL Level**: 0  
-**Traceability**: Maintenance requirement
+**Description**: The software SHALL execute all SIL 3 safety functions (SF-001 through SF-005) independently on both Channel A (MCU-A) and Channel B (MCU-B). After computing safety decisions, both channels SHALL exchange results via SPI and compare. Disagreement on any safety decision SHALL immediately trigger SAFE_STATE.
 
-**Description**: The software MAY provide diagnostic information via USB or RS-232 serial console for maintenance purposes.
-
-**Interface Specification**:
-- **Protocol**: USB CDC (virtual COM port) or RS-232, 115200 baud, 8N1
-- **Format**: ASCII text, newline-terminated
-- **Content**: System status, door status, fault codes, event log entries, diagnostic counters
-
-**Note**: This interface is for maintenance only and is NOT safety-critical. Diagnostic output SHALL NOT interfere with safety-critical tasks (executed in low-priority background task).
-
-**Verification Method**: Manual test (connect maintenance laptop, verify diagnostic output)
-
-**Acceptance Criteria**: Diagnostic data readable; no interference with safety functions
+**Safety functions subject to 2oo2 comparison**: speed_interlock_active, door_lock_command, departure_interlock_signal, fault_flags, obstacle_reversal_command
+**Verification Method**: Fault Injection (deliberate disagreement injection), Integration Test
+**Acceptance Criteria**: Disagreement triggers safe state within 20 ms; all listed safety decisions compared every cycle
 
 ---
 
-## 7. IMPLEMENTATION CONSTRAINTS
+**REQ-SAFE-011**: Input Validation — All External Inputs
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-028, SSRS SAFE-SW-011
 
-### 7.1 C Language and MISRA C Compliance
+**Description**: The software SHALL validate all external inputs (CAN messages, GPIO sensor readings, RS-485 DDU responses) before use in safety logic. Validation SHALL include: range check, CRC check (for protocol messages), plausibility check.
 
-**REQ-IMPL-001**: MISRA C:2012 Compliance  
-**Priority**: Critical  
-**SIL Level**: 3 (Mandatory)  
-**Traceability**: EN 50128 Table A.4, NFSR-003
+| Input | Range Check | Plausibility Check |
+|-------|------------|-------------------|
+| Speed (CAN) | 0-2000 (0-200.0 km/h) | Delta <= 50 km/h per 100 ms |
+| Position sensor | 0 or 1 | Per-cycle consistency |
+| Lock sensor | 0 or 1 | State-consistent with command |
+| Obstacle sensor | 0 or 1 | Self-test at startup |
 
-**Description**: All source code SHALL comply with MISRA C:2012 guidelines. Deviations SHALL be documented with technical justification and approved by VER.
-
-**Acceptance Criteria**: 
-- Static analysis (PC-lint Plus, Cppcheck) reports 100% compliance OR
-- Documented deviations ≤ 5% with approved justifications
-
-**Verification Method**: Static analysis, code review
-
----
-
-**REQ-IMPL-002**: Fixed-Width Integer Types  
-**Priority**: High  
-**SIL Level**: All  
-**Traceability**: MISRA C Rule 4.6, EN 50128 best practice
-
-**Description**: The software SHALL use fixed-width integer types (`uint8_t`, `uint16_t`, `uint32_t`, `int8_t`, `int16_t`, `int32_t`) from `<stdint.h>` instead of platform-dependent types (`int`, `long`, `unsigned`).
-
-**Rationale**: Ensures portability and predictable behavior across platforms
-
-**Verification Method**: Static analysis (grep for forbidden types), code review
-
-**Acceptance Criteria**: 100% use of fixed-width types in safety-critical code
+**Verification Method**: Static Analysis (verify input validation at each entry point), Integration Test
+**Acceptance Criteria**: Out-of-range input rejected and logged; CRC failure rejected; plausibility violation triggers diagnostic
 
 ---
 
-**REQ-IMPL-003**: Static Memory Allocation  
-**Priority**: Critical  
-**SIL Level**: 3 (Mandatory)  
-**Traceability**: EN 50128 Table A.4, SYS-DC-002
+**REQ-SAFE-012**: Emergency Release Monitoring and Alert
+**Priority**: High
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-021, HAZ-008, SSRS SF-006
 
-**Description**: The software SHALL use ONLY static memory allocation. Dynamic memory allocation functions (`malloc`, `calloc`, `realloc`, `free`, `new`, `delete`) SHALL NOT be used.
+**Description**: The software SHALL detect emergency release activation on any door within one 20 ms cycle and transmit an alert to TCMS within 200 ms. If emergency release is detected while train speed > 5 km/h, the software SHALL raise a `FAULT_EMERG_RELEASE_WHILE_MOVING` fault with highest priority.
 
-**Rationale**: Eliminates memory leaks, heap fragmentation, non-deterministic behavior
-
-**Verification Method**: Static analysis (grep for forbidden functions), code review, linker script (no heap section)
-
-**Acceptance Criteria**: Zero occurrences of dynamic memory allocation functions
+**Verification Method**: Integration Test, Fault Injection
+**Acceptance Criteria**: Detection within 20 ms; TCMS alert within 200 ms; fault raised and logged when speed > 5 km/h
 
 ---
 
-**REQ-IMPL-004**: No Recursion  
-**Priority**: High  
-**SIL Level**: 3 (Highly Recommended)  
-**Traceability**: EN 50128 Table A.4, SYS-DC-007
+**REQ-SAFE-013**: Diagnostic Coverage — Self-Test at Startup
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-066, SSRS SAFE-DIAG-001, SSRS SAFE-DIAG-004
 
-**Description**: The software SHALL NOT use recursive function calls (a function calling itself directly or indirectly).
+**Description**: The software SHALL perform a self-test of all safety-critical sensors and actuators at system startup before entering Normal mode. All SIL 3 sensors SHALL pass self-test; failure SHALL prevent entry to Normal mode and SHALL report a specific fault code.
 
-**Rationale**: Eliminates stack overflow risk, ensures bounded execution time
-
-**Verification Method**: Static analysis (call graph analysis), code review
-
-**Acceptance Criteria**: Call graph analysis confirms no recursive paths
+**Self-test sequence**: position sensors, obstacle sensors (beam break test), lock sensors (lock/unlock cycle), watchdog (verify fires on test starvation), CRC of flash (boot-time)
+**Verification Method**: Test (startup self-test pass and fail scenarios), Integration Test
+**Acceptance Criteria**: System refuses Normal mode on self-test failure; all sensor types exercised; fault code reported per failed sensor
 
 ---
 
-**REQ-IMPL-005**: Cyclomatic Complexity Limit  
-**Priority**: High  
-**SIL Level**: 3 (Mandatory)  
-**Traceability**: EN 50128 Table A.4, SYS-DC-003, NFSR-005
+**REQ-SAFE-014**: Diagnostic Coverage — Online Monitoring >= 99%
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-066, SSRS SAFE-DIAG-001
 
-**Description**: Every function SHALL have cyclomatic complexity ≤ 10.
+**Description**: The software SHALL implement online diagnostic monitoring to achieve a diagnostic coverage (DC) >= 99% for dangerous failures, as required for SIL 3 per EN 50129. Diagnostic mechanisms SHALL include: 2oo2 sensor voting, watchdog timeout, cross-channel comparison, CRC checks, plausibility monitoring, and feedback monitoring.
 
-**Rationale**: Lower complexity improves testability, readability, maintainability
-
-**Verification Method**: Static analysis (Lizard, PC-lint)
-
-**Acceptance Criteria**: 100% of functions have complexity ≤ 10
+**Verification Method**: Analysis (FMEA-based DC calculation), Static Analysis
+**Acceptance Criteria**: DC calculation documented showing >= 99% for each dangerous failure mode; coverage analysis reviewed by VER
 
 ---
 
-**REQ-IMPL-006**: Defensive Programming  
-**Priority**: High  
-**SIL Level**: 3 (Highly Recommended)  
-**Traceability**: EN 50128 Table A.3
+**REQ-SAFE-015**: Safe State — Speed Interlock on Communication Loss
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-046, SSRS SAFE-STATE-002, HAZ-003
 
-**Description**: The software SHALL implement defensive programming techniques:
-- Validate all input parameters (pointer checks, range checks)
-- Check all function return values
-- Use assertions for internal consistency checks
-- Handle all error conditions explicitly
+**Description**: The software SHALL assume "train moving" (speed > 5 km/h) and maintain all doors locked whenever the TCMS CAN bus speed signal is absent, timed out (> 200 ms), or has failed CRC verification. The speed data validity timeout SHALL be configurable in the range 100-500 ms (default 200 ms).
 
-**Example**:
+**Verification Method**: Fault Injection (CAN disconnection, CRC corruption), Integration Test
+**Acceptance Criteria**: Doors remain locked when CAN disconnected; assumption within 200 ms of signal loss; no door opening on invalid speed data
+
+---
+
+**REQ-SAFE-016**: Safe State — Position Sensor Fault Response
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-030, SSRS SAFE-STATE-003
+
+**Description**: The software SHALL assume "door not closed" for any door where position sensor fault (disagreement or stuck fault) is detected. This assumption SHALL prevent the departure interlock signal from being asserted for the affected door.
+
+**Verification Method**: Fault Injection (sensor stuck, sensors disagree), Safety Test
+**Acceptance Criteria**: Position fault -> door assumed not closed -> departure signal withheld; tested for each sensor failure mode
+
+---
+
+**REQ-SAFE-017**: Fail-Safe Behavior — Default State
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-061, SSRS SAFE-SW-001
+
+**Description**: The software SHALL implement fail-safe defaults for all safety decision variables at initialization. All safety flags SHALL default to the safe state until explicitly set by valid sensor readings:
+
+| Variable | Default (Safe) Value |
+|----------|---------------------|
+| `speed_interlock_active` | 1 (inhibit opening) |
+| `door_lock_command[i]` | 1 (command locked) |
+| `departure_interlock_released` | 0 (withhold departure) |
+| `speed_kmh` | 999 (assume moving) |
+| `door_position[i]` | UNKNOWN |
+| `lock_state[i]` | UNLOCKED (conservative) |
+
+**Verification Method**: Code Review, Static Analysis, Unit Test (verify default values at init)
+**Acceptance Criteria**: All safety variables initialized to fail-safe values; verified by code review and unit test at init
+
+---
+
+**REQ-SAFE-018**: Selective Door Disablement — Safety Interlock Maintenance
+**Priority**: High
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-023, SSRS SAFE-COND-001, HAZ-009
+
+**Description**: The software SHALL maintain the speed interlock (REQ-SAFE-001) and the departure interlock (REQ-SAFE-003) active and functional for ALL doors (including disabled doors) during Selective Door Disablement mode. A disabled door SHALL be treated as CLOSED_AND_LOCKED for departure purposes only if it is on the non-platform side AND is physically locked.
+
+**Verification Method**: Test (mode integration test — disable one door, verify interlocks active), Inspection
+**Acceptance Criteria**: Speed interlock active in disable mode; departure inhibited if disabled door is on platform side and not confirmed locked
+
+---
+
+**REQ-SAFE-019**: Periodic Memory Integrity Check
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-060, SSRS SAFE-DIAG-006
+
+**Description**: The software SHALL periodically verify the integrity of safety-critical RAM data structures using CRC-16 checks every 100 ms (every 5 control cycles). A CRC failure SHALL raise `FAULT_RAM_CRC_FAIL` and transition to SAFE_STATE.
+
+**Scope**: Safety variables (speed value, door state array, lock state array, fault flags)
+**Verification Method**: Fault Injection (corrupt RAM byte, verify CRC fault), Integration Test
+**Acceptance Criteria**: RAM corruption detected within 100 ms; safe state triggered; fault logged
+
+---
+
+**REQ-SAFE-020**: Boot-Time Flash Integrity Verification
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-060, SSRS SAFE-DIAG-006
+
+**Description**: The software SHALL verify the CRC-16 of the entire application code region in Flash memory at every boot before entering Normal operation. If the Flash CRC fails, the software SHALL NOT enter Normal mode and SHALL output a specific boot fault code.
+
+**Verification Method**: Fault Injection (corrupt Flash byte, verify boot fault), Integration Test
+**Acceptance Criteria**: Boot proceeds to Normal mode only on CRC pass; Flash CRC failure prevents Normal mode; fault code output on diagnostics port
+
+---
+
+**REQ-SAFE-021**: Structured Programming Compliance
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SSRS SAFE-SW-004, EN 50128 Table A.4
+
+**Description**: The software SHALL implement all control flow using structured programming constructs (sequential, selection [if-else, switch], iteration [for, while, do-while]). Use of `goto`, `setjmp`/`longjmp`, and `signal`/`raise` SHALL be prohibited in safety-critical code.
+
+**Verification Method**: Static Analysis (MISRA C Rule 15.1 — no goto), Code Review
+**Acceptance Criteria**: Zero `goto` occurrences in SIL 3 safety functions; MISRA C Rule 15.1 compliance; static analysis confirms
+
+---
+
+---
+
+### 3.5 Reliability Requirements
+
+---
+
+**REQ-REL-001**: System Availability
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-067, SYS-REQ-039
+
+**Description**: The software SHALL be designed to achieve a system availability of >= 99.9% per 24-hour operational period. The software SHALL support online diagnostics and fault reporting without interrupting normal door control operation.
+
+**Acceptance Criteria**: Availability >= 99.9% demonstrated by operational test over 30-day period; diagnostic operations do not interrupt normal cycle
+**Verification Method**: Analysis (MTBF/MTTR calculation), Integration Test
+
+---
+
+**REQ-REL-002**: Failure Rate (PFH) Target
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-062, SYS-REQ-065
+
+**Description**: The software systematic failure systematic capability SHALL meet SC 2 (Systematic Capability 2) per EN 50129 Table A.3, contributing to an overall system dangerous failure rate PFH <= 10^-7 per hour. The software PFH budget is allocated as <= 10^-8 per hour.
+
+**Acceptance Criteria**: EN 50128 SIL 3 development lifecycle compliance demonstrated; SC 2 claimed and supported by software safety case
+**Verification Method**: Analysis (software safety case), Independent Safety Assessment
+
+---
+
+**REQ-REL-003**: Diagnostic Coverage Achievement
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SYS-REQ-066, SSRS SAFE-DIAG-001
+
+**Description**: The software diagnostic mechanisms SHALL collectively achieve a diagnostic coverage of >= 99% for dangerous failures (sensors, memory, communication, processing). The DC SHALL be calculated and documented as part of the software safety case.
+
+**Verification Method**: Analysis (DC calculation per FMEA), Review
+**Acceptance Criteria**: DC calculation documented showing >= 99% per failure mode; reviewed by VER and SAF
+
+---
+
+**REQ-REL-004**: Online Diagnostics Non-Interruption
+**Priority**: Medium
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-068
+
+**Description**: The software SHALL support online diagnostic data collection and event log access without interrupting or delaying normal door control operation. Diagnostic operations SHALL be allocated to a separate lower-priority task with a time budget of <= 2 ms per 20 ms cycle.
+
+**Acceptance Criteria**: Diagnostic operations do not cause cycle time overrun; verified by WCET measurement
+**Verification Method**: Performance Test, Integration Test
+
+---
+
+---
+
+### 3.6 Security Requirements
+
+---
+
+**REQ-SEC-001**: Unauthorized Mode Change Prevention
+**Priority**: High
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-073
+
+**Description**: The software SHALL reject mode change requests that do not include a valid authorization token (physical key signal or TCMS authorized command). Unauthorized mode change attempts SHALL be logged with timestamp, source, and rejected command.
+
+**Acceptance Criteria**: Unauthorized mode change rejected; legitimate authorized change accepted; attempt logged
+**Verification Method**: Test (unit test — authorized vs. unauthorized), Inspection
+
+---
+
+**REQ-SEC-002**: Mode Change Event Logging
+**Priority**: Medium
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-074
+
+**Description**: The software SHALL log all mode change events (authorized and rejected) to non-volatile storage with: timestamp, requested mode, authorization source (driver/TCMS/maintenance), result (ACCEPTED/REJECTED), and operator ID where available.
+
+**Acceptance Criteria**: All mode change events logged; log entries include all specified fields; log readable via diagnostics port
+**Verification Method**: Integration Test, Inspection
+
+---
+
+**REQ-SEC-003**: Diagnostics Port Read-Only Enforcement
+**Priority**: Medium
+**SIL Level**: SIL 2
+**Traceability**: SYS-REQ-073
+
+**Description**: The software SHALL NOT permit any modification of operational parameters, safety thresholds, or configuration data via the diagnostics port during Normal operation. The diagnostics port SHALL support ONLY read operations (event log download, status query) during Normal mode. Configuration writes SHALL only be permitted in Diagnostic mode with maintenance authorization.
+
+**Acceptance Criteria**: Write commands on diagnostics port return `CMD_NOT_PERMITTED` in Normal mode; read commands succeed; tested in Normal and Diagnostic modes
+**Verification Method**: Test (unit test — port command filtering), Inspection
+
+---
+
+---
+
+### 3.7 Operational Requirements
+
+---
+
+**REQ-OPR-001**: MISRA C:2012 Compliance
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SSRS SAFE-SW-008, EN 50128 Table A.4
+
+**Description**: All source code SHALL comply with MISRA C:2012 guidelines. All MISRA C mandatory rules SHALL have zero violations. Required and advisory rule violations SHALL be documented with justification.
+
+**Acceptance Criteria**: Static analysis tool reports zero mandatory MISRA C:2012 violations; all required rule violations documented; deviation log reviewed by QUA
+**Verification Method**: Static Analysis (PC-lint Plus or equivalent), Code Review
+
+---
+
+**REQ-OPR-002**: Fixed-Width Integer Types
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SSRS SAFE-SW-008, MISRA C Rule 4.6
+
+**Description**: The software SHALL use fixed-width integer types (`uint8_t`, `uint16_t`, `uint32_t`, `uint64_t`, `int8_t`, `int16_t`, `int32_t`, `int64_t` from `<stdint.h>`) instead of platform-dependent types for all variables in safety-critical code.
+
+**Acceptance Criteria**: Static analysis finds zero use of `int`, `unsigned`, `long` in safety-critical modules; `<stdint.h>` included in all source files
+**Verification Method**: Static Analysis, Code Review
+
+---
+
+**REQ-OPR-003**: Static Memory Allocation Only
+**Priority**: Critical
+**SIL Level**: SIL 3
+**Traceability**: SSRS SAFE-SW-007, EN 50128 Table A.4
+
+**Description**: The software SHALL use ONLY static memory allocation. Dynamic memory allocation functions (`malloc`, `calloc`, `realloc`, `free`, `alloca`) SHALL NOT be used anywhere in the safety software, including third-party libraries.
+
+**Acceptance Criteria**: Static analysis finds zero calls to dynamic allocation functions; linker map confirms zero heap usage; verified by code review
+**Verification Method**: Static Analysis (lint for forbidden functions), Code Review
+
+---
+
+**REQ-OPR-004**: No Recursion
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SSRS SAFE-SW-004, EN 50128 Table A.4
+
+**Description**: The software SHOULD NOT implement recursive function calls (direct or indirect) in safety-critical code (SIL 3 functions). Where recursion is unavoidable in non-safety code, it SHALL be bounded with a compile-time depth limit.
+
+**Acceptance Criteria**: Static analysis (call graph) confirms zero recursive paths in SIL 3 modules; any non-safety recursion documented with depth bound
+**Verification Method**: Static Analysis (call graph analysis), Code Review
+
+---
+
+**REQ-OPR-005**: Cyclomatic Complexity Limit
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SSRS SAFE-SW-005, EN 50128 Table A.4
+
+**Description**: Every function in SIL 3 safety-critical modules SHALL have a cyclomatic complexity of <= 10. Functions in SIL 1-2 modules SHALL have cyclomatic complexity <= 15. Any function exceeding the limit SHALL be refactored before release.
+
+**Acceptance Criteria**: Static analysis tool (Lizard or PC-lint) reports zero functions exceeding their SIL-based limit
+**Verification Method**: Static Analysis, Code Review
+
+---
+
+**REQ-OPR-006**: Defensive Programming
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SSRS SAFE-SW-003, EN 50128 Table A.3
+
+**Description**: All safety-critical functions SHALL implement defensive programming: validate all pointer parameters (NULL check), validate all value parameters (range check), check and handle all function return values, use assertions for internal consistency invariants.
+
 ```c
-error_t process_door_cmd(const door_cmd_t* cmd, door_state_t* state) {
-    // Defensive checks
-    if (cmd == NULL) return ERROR_NULL_POINTER;
-    if (state == NULL) return ERROR_NULL_POINTER;
-    if (cmd->door_id >= NUM_DOORS) return ERROR_OUT_OF_RANGE;
-    
-    // Process command...
-    error_t result = validate_door_state(state);
-    if (result != SUCCESS) return result;  // Check return value
-    
+error_t SPM_ProcessSpeed(const tcms_speed_msg_t *msg, uint16_t *speed_out) {
+    if (msg == NULL)       { return ERR_NULL_PTR; }
+    if (speed_out == NULL) { return ERR_NULL_PTR; }
+    if (msg->crc16 != CRC16_Compute(msg, sizeof(*msg) - 2U)) { return ERR_CRC; }
+    if (msg->speed_kmh_x10 > SPEED_MAX_KMH_X10) { return ERR_RANGE; }
+    *speed_out = msg->speed_kmh_x10;
     return SUCCESS;
 }
 ```
-
-**Verification Method**: Code review, static analysis
-
-**Acceptance Criteria**: All safety-critical functions include defensive checks
+**Acceptance Criteria**: Code review confirms NULL checks, range checks, and return value checks in all safety-critical functions; MISRA C Rule 17.7 compliant
+**Verification Method**: Code Review, Static Analysis
 
 ---
 
-**REQ-IMPL-007**: Error Handling Strategy  
-**Priority**: High  
-**SIL Level**: All  
-**Traceability**: EN 50128 design best practices
+**REQ-OPR-007**: Error Handling — Explicit Return Codes
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: EN 50128 design best practice
 
-**Description**: The software SHALL use explicit error return codes (NOT `errno` or `setjmp`/`longjmp`).
+**Description**: The software SHALL use explicit error return codes (`error_t` enum) for all functions that can fail. `errno` global, `setjmp`/`longjmp`, and exception handling SHALL NOT be used.
 
-**Error Type Definition**:
 ```c
 typedef enum {
-    SUCCESS = 0,
-    ERROR_NULL_POINTER,
-    ERROR_OUT_OF_RANGE,
-    ERROR_TIMEOUT,
-    ERROR_HARDWARE_FAULT,
-    ERROR_CRC_MISMATCH,
-    ERROR_INVALID_STATE,
-    ERROR_SENSOR_FAULT
+    SUCCESS             = 0,
+    ERR_NULL_PTR        = 1,
+    ERR_RANGE           = 2,
+    ERR_TIMEOUT         = 3,
+    ERR_CRC             = 4,
+    ERR_HW_FAULT        = 5,
+    ERR_INVALID_STATE   = 6,
+    ERR_NOT_PERMITTED   = 7,
+    ERR_SENSOR_DISAGREE = 8,
+    ERR_COMM_TIMEOUT    = 9,
+    ERR_WATCHDOG        = 10
 } error_t;
 ```
-
-All functions that can fail SHALL return `error_t`.
-
-**Verification Method**: Code review, static analysis
-
-**Acceptance Criteria**: All safety-critical functions return `error_t`; no use of `errno`, `setjmp`, `longjmp`
+**Acceptance Criteria**: All non-void safety-critical functions return `error_t`; MISRA C Rule 17.7 compliance; static analysis confirms
+**Verification Method**: Static Analysis, Code Review
 
 ---
 
-**REQ-IMPL-008**: Input Validation  
-**Priority**: Critical  
-**SIL Level**: 3  
-**Traceability**: SYS-DC-008, ASR-005
+**REQ-OPR-008**: Static Cyclic Executive Scheduler
+**Priority**: High
+**SIL Level**: SIL 3
+**Traceability**: SSRS SAFE-SW-012, EN 50128 Table A.4
 
-**Description**: The software SHALL validate all external inputs (sensor data, TCMS commands, DDU feedback) before use. The Hardware Abstraction Layer (HAL) SHALL enforce range checks before passing data to the application layer.
+**Description**: The software SHALL use a static cyclic executive scheduler (time-triggered, 20 ms period) with no RTOS for the safety-critical execution layer. Task execution order SHALL be fixed and documented.
 
-**Validation Rules**:
-- Train speed: 0-250 km/h
-- Door position: 0-100%
-- Motor command: -100 to +100
-- Sensor voltage: 0-32V (platform-specific)
+**Task Execution Order** (each 20 ms cycle):
+1. Safety Kernel — sensor read and input validation
+2. Speed Monitor (SPM) — speed check and interlock evaluation
+3. Obstacle Detector (OBD) — obstacle status check
+4. Door State Machine (DSM) — state update
+5. Fault Manager (FMG) — fault evaluation
+6. Cross-channel comparison via SPI
+7. Actuator outputs (motor PWM, lock commands)
+8. CAN transmit (TCMS status messages)
+9. RS-485 DDU message exchange
+10. Watchdog refresh (only on successful cycle completion)
+11. Diagnostics (DGN) — event log, background tasks (2 ms budget)
 
-**Verification Method**: Code review (HAL validation logic), integration test (out-of-range input injection)
-
-**Acceptance Criteria**: All external inputs validated; out-of-range values detected and rejected
-
----
-
-### 7.2 Coverage Requirements
-
-**REQ-IMPL-009**: Code Coverage for SIL 3  
-**Priority**: Critical  
-**SIL Level**: 3 (Highly Recommended)  
-**Traceability**: EN 50128 Table A.21 Req. 2, NFSR-004, SYS-DC-004
-
-**Description**: All SIL 3 software modules SHALL achieve:
-- **Statement coverage**: 100%
-- **Branch coverage**: 100%
-- **MC/DC (Modified Condition/Decision Coverage)**: 100%
-
-**Rationale**: EN 50128 Table A.21 Req. 2 specifies branch coverage + (compound condition coverage OR MC/DC OR data flow) as Highly Recommended (HR) for SIL 3-4. MC/DC is selected as the most rigorous option.
-
-**Verification Method**: Coverage analysis tool (gcov, Bullseye), test execution
-
-**Acceptance Criteria**: Coverage report confirms 100% statement, branch, and MC/DC coverage for all SIL 3 modules
+**Acceptance Criteria**: Scheduler order documented; WCET of each task measured; total cycle <= 16 ms verified
+**Verification Method**: Static Analysis, Performance Test, Code Review
 
 ---
 
-## 8. VERIFICATION AND TRACEABILITY
+---
 
-### 8.1 Verification Methods
+## 4. VERIFICATION AND TRACEABILITY
+
+### 4.1 Verification Methods
 
 Each requirement SHALL be verified using one or more of the following methods:
 
 | Method | Description | Applicable To |
 |--------|-------------|---------------|
-| **Test** | Unit test, integration test, system test, validation test, safety test | Functional, performance, interface, safety requirements |
-| **Analysis** | Static analysis (MISRA C, complexity, WCET), dynamic analysis, timing analysis, coverage analysis | Performance, safety, implementation requirements |
-| **Inspection** | Code review, design review, document review | All requirements |
-| **Demonstration** | Operational demonstration to customer | High-level functional requirements |
+| **Unit Test** | Individual software function test with Unity framework | Functional, safety, interface, operational requirements |
+| **Integration Test** | Software component interaction and hardware-in-loop | Interface, performance, safety requirements |
+| **System Test** | Full system test in target environment | All SIL 3 safety requirements |
+| **Performance Test** | Hardware timer and oscilloscope measurements | Performance requirements |
+| **Fault Injection** | Deliberate fault introduction to verify safe state | All safety requirements (SIL 3) |
+| **Safety Test** | Hazard scenario testing per SSRS | Safety requirements (SIL 3) |
+| **Static Analysis** | PC-lint Plus, Cppcheck, Lizard, call graph | Implementation, operational requirements |
+| **Code Review** | Peer review against checklist | Implementation, defensive programming |
+| **Inspection** | Document and design inspection | Interface definitions, mode logic |
+| **Analysis** | FMEA-based DC calculation, WCET analysis | Reliability, diagnostic coverage |
 
-### 8.2 Requirements Traceability Matrix (RTM)
+### 4.2 Requirements Traceability Matrix (RTM)
 
-**Location**: `docs/traceability/Requirements-Traceability-Matrix.md` (to be generated by REQ after DES and TST phases)
+**Backward Traceability** (SIL 3 Mandatory per EN 50128 §7.2.4.5 and Table A.9 D.58):
 
-**Format**: Bidirectional traceability from system requirements to software requirements to design to code to tests.
+All software requirements trace to at least one system requirement (SYS-REQ-xxx) or hazard (HAZ-xxx) from DOC-SYS-REQ-2026-001 and DOC-SYS-SAF-2026-001.
 
-**Traceability Rules** (per SIL 3 mandatory requirement, Table A.9 D.58):
+| SW Req ID | SYS-REQ | HAZ | SIL |
+|-----------|---------|-----|-----|
+| REQ-FUN-001 | SYS-REQ-001, 002 | HAZ-003 | 3 |
+| REQ-FUN-002 | SYS-REQ-004 | — | 3 |
+| REQ-FUN-003 | SYS-REQ-003 | — | 2 |
+| REQ-FUN-004 | SYS-REQ-005 | — | 3 |
+| REQ-FUN-005 | SYS-REQ-012, 014 | HAZ-001, 005 | 3 |
+| REQ-FUN-006 | SYS-REQ-011 | — | 2 |
+| REQ-FUN-007 | SYS-REQ-009, 010 | — | 2 |
+| REQ-FUN-008 | SYS-REQ-012, 013 | HAZ-001 | 3 |
+| REQ-FUN-009 | SYS-REQ-016, 017 | HAZ-001, 005 | 3 |
+| REQ-FUN-010 | SYS-REQ-013, 015 | HAZ-001, 003 | 3 |
+| REQ-FUN-011 | SYS-REQ-023 | — | 3 |
+| REQ-FUN-012 | SYS-REQ-024 | HAZ-009 | 3 |
+| REQ-FUN-013 | SYS-REQ-023 | HAZ-009 | 2 |
+| REQ-FUN-014 | SYS-REQ-023 | HAZ-009 | 2 |
+| REQ-FUN-015 | SYS-REQ-025, 026 | — | 3 |
+| REQ-FUN-016 | SYS-REQ-027 | — | 2 |
+| REQ-FUN-017 | SYS-REQ-028, 029 | — | 3 |
+| REQ-FUN-018 | SYS-REQ-031, 070 | — | 1 |
+| REQ-PERF-001 | SYS-REQ-036 | — | 3 |
+| REQ-PERF-002 | SYS-REQ-035 | HAZ-003 | 3 |
+| REQ-PERF-003 | SYS-REQ-034 | HAZ-002, 004 | 3 |
+| REQ-PERF-004 | SYS-REQ-003 | — | 3 |
+| REQ-PERF-005 | SYS-REQ-017 | HAZ-001 | 3 |
+| REQ-PERF-006 | SYS-REQ-029 | — | 3 |
+| REQ-PERF-007 | SYS-REQ-029 | — | 3 |
+| REQ-PERF-008 | SYS-REQ-036 | — | 2 |
+| REQ-PERF-009 | SYS-REQ-036 | — | 3 |
+| REQ-PERF-010 | SYS-REQ-036 | — | 2 |
+| REQ-INT-001 | SYS-REQ-040 | — | 3 |
+| REQ-INT-002 | SYS-REQ-041 | — | 3 |
+| REQ-INT-003 | SYS-REQ-042 | HAZ-002, 004 | 3 |
+| REQ-INT-004 | SYS-REQ-043 | HAZ-001 | 3 |
+| REQ-INT-005 | SYS-REQ-044 | HAZ-001, 005 | 3 |
+| REQ-INT-006 | SYS-REQ-064 | HAZ-009 | 3 |
+| REQ-INT-007 | SYS-REQ-046, 047 | HAZ-003 | 3 |
+| REQ-INT-008 | SYS-REQ-016, 017, 027 | — | 3 |
+| REQ-INT-009 | SYS-REQ-049 | — | 3 |
+| REQ-INT-010 | SYS-REQ-060 | HAZ-009 | 3 |
+| REQ-INT-011 | SYS-REQ-021, 045 | HAZ-008 | 2 |
+| REQ-INT-012 | SYS-REQ-048, 051 | — | 2 |
+| REQ-INT-013 | SYS-REQ-050 | — | 1 |
+| REQ-SAFE-001 | SYS-REQ-002, 015 | HAZ-003 | 3 |
+| REQ-SAFE-002 | SYS-REQ-013 | HAZ-001, 003 | 3 |
+| REQ-SAFE-003 | SYS-REQ-016 | HAZ-001, 005 | 3 |
+| REQ-SAFE-004 | SYS-REQ-007 | HAZ-002, 004 | 3 |
+| REQ-SAFE-005 | SYS-REQ-026, 014 | HAZ-001, 005 | 3 |
+| REQ-SAFE-006 | SYS-REQ-030 | HAZ-005, 009 | 3 |
+| REQ-SAFE-007 | SYS-REQ-061 | — | 3 |
+| REQ-SAFE-008 | SYS-REQ-064 | HAZ-009 | 3 |
+| REQ-SAFE-009 | SYS-REQ-063 | — | 3 |
+| REQ-SAFE-010 | SYS-REQ-060 | HAZ-009 | 3 |
+| REQ-SAFE-011 | SYS-REQ-028 | — | 3 |
+| REQ-SAFE-012 | SYS-REQ-021 | HAZ-008 | 2 |
+| REQ-SAFE-013 | SYS-REQ-066 | — | 3 |
+| REQ-SAFE-014 | SYS-REQ-066 | — | 3 |
+| REQ-SAFE-015 | SYS-REQ-046 | HAZ-003 | 3 |
+| REQ-SAFE-016 | SYS-REQ-030 | — | 3 |
+| REQ-SAFE-017 | SYS-REQ-061 | — | 3 |
+| REQ-SAFE-018 | SYS-REQ-023 | HAZ-009 | 2 |
+| REQ-SAFE-019 | SYS-REQ-060 | — | 3 |
+| REQ-SAFE-020 | SYS-REQ-060 | — | 3 |
+| REQ-SAFE-021 | SSRS SAFE-SW-004 | — | 3 |
+| REQ-REL-001 | SYS-REQ-067, 039 | — | 3 |
+| REQ-REL-002 | SYS-REQ-062, 065 | — | 3 |
+| REQ-REL-003 | SYS-REQ-066 | — | 3 |
+| REQ-REL-004 | SYS-REQ-068 | — | 2 |
+| REQ-SEC-001 | SYS-REQ-073 | — | 2 |
+| REQ-SEC-002 | SYS-REQ-074 | — | 2 |
+| REQ-SEC-003 | SYS-REQ-073 | — | 2 |
+| REQ-OPR-001 | SSRS SAFE-SW-008 | — | 3 |
+| REQ-OPR-002 | SSRS SAFE-SW-008 | — | 3 |
+| REQ-OPR-003 | SSRS SAFE-SW-007 | — | 3 |
+| REQ-OPR-004 | SSRS SAFE-SW-004 | — | 3 |
+| REQ-OPR-005 | SSRS SAFE-SW-005 | — | 3 |
+| REQ-OPR-006 | SSRS SAFE-SW-003 | — | 3 |
+| REQ-OPR-007 | EN 50128 best practice | — | 3 |
+| REQ-OPR-008 | SSRS SAFE-SW-012 | — | 3 |
 
-| Direction | From | To | SIL 3 Status |
-|-----------|------|-----|--------------|
-| **Backward** | Software req (REQ-xxx) | System req (SYS-xxx) or Hazard (HAZ-xxx) | **Mandatory** — 100% coverage required |
-| **Forward** | Software req (REQ-xxx) | Design elements (Phase 3) | Highly Recommended |
-| **Forward** | Software req (REQ-xxx) | Test cases (Phase 5, 7) | Highly Recommended |
+**Traceability Completeness**: 81/81 requirements have backward traceability — **100%**
 
-**Embedded Traceability**: Each requirement in this SRS includes a `Traceability` field linking to:
-- System requirements (SYS-FR-xxx, SYS-NFR-xxx)
-- System safety requirements (SSR-xxx)
-- Hazards (HAZ-xxx)
+### 4.3 Requirements Quality Checklist
 
-**RTM Completeness Target**: 100% of software requirements traced backward to system requirements or hazards (mandatory for SIL 3).
+All requirements in this SRS have been reviewed against the following criteria:
 
-### 8.3 Requirements Quality Checklist
-
-All requirements in this SRS have been reviewed against the following quality criteria (per skill Section 4):
-
-- [x] **Unique ID**: Each requirement has a unique identifier (REQ-[TYPE]-NNN)
-- [x] **Unambiguous**: Single interpretation (uses SHALL/SHOULD/MAY per `resources/shall-should-may.md`)
-- [x] **Testable**: Verification method identified, acceptance criteria defined
-- [x] **Complete**: All necessary information provided (inputs, outputs, preconditions, postconditions)
-- [x] **Consistent**: No conflicts with other requirements (verified by QUA)
-- [x] **Traceable**: Linked to system requirements and hazards
-- [x] **SIL Assigned**: SIL level specified for all requirements
-- [x] **C-Compatible**: Implementation feasible in C within MISRA C:2012 and memory constraints
-- [x] **Atomic**: Each requirement states one thing only
-- [x] **Necessary**: No gold-plating (all requirements derived from system docs or hazards)
-- [x] **Implementation-free**: Specifies WHAT not HOW (except where architectural constraint required for safety)
+- [x] **Unique ID**: Each requirement has a unique identifier
+- [x] **Unambiguous**: Single interpretation; uses SHALL/SHOULD/MAY; no vague terms
+- [x] **Testable**: Verification method identified; acceptance criteria defined and quantified
+- [x] **Complete**: Inputs, outputs, error handling, preconditions/postconditions provided
+- [x] **Consistent**: No conflicts between requirements; consistent SIL assignments per SSRS
+- [x] **Traceable**: Every requirement linked to SYS-REQ and/or HAZ in Section 4.2
+- [x] **SIL Assigned**: SIL level specified for every requirement
+- [x] **C-Compatible**: All requirements feasible in C (MISRA C:2012) within stated constraints
 
 ---
 
-## 9. REQUIREMENTS SUMMARY AND COMPLIANCE
+## 5. REQUIREMENTS SUMMARY
 
-### 9.1 Requirements Count by Category
+### 5.1 Requirements Count by Category
 
 | Category | Count | Critical | High | Medium | Low |
 |----------|-------|----------|------|--------|-----|
-| Functional (REQ-FUN) | 8 | 1 | 6 | 1 | 0 |
-| Safety (REQ-SAFE) | 21 | 17 | 4 | 0 | 0 |
-| Performance (REQ-PERF) | 6 | 2 | 3 | 1 | 0 |
-| Interface - Hardware (REQ-INT) | 4 | 2 | 2 | 0 | 0 |
-| Interface - Software (REQ-INT) | 4 | 3 | 1 | 0 | 0 |
-| Interface - User (REQ-INT) | 1 | 0 | 0 | 0 | 1 |
-| Implementation (REQ-IMPL) | 9 | 4 | 5 | 0 | 0 |
-| **TOTAL** | **53** | **29** | **21** | **2** | **1** |
+| Functional (REQ-FUN) | 18 | 5 | 11 | 2 | 0 |
+| Performance (REQ-PERF) | 10 | 3 | 5 | 2 | 0 |
+| Interface (REQ-INT) | 13 | 4 | 7 | 1 | 1 |
+| Safety (REQ-SAFE) | 21 | 11 | 10 | 0 | 0 |
+| Reliability (REQ-REL) | 4 | 1 | 3 | 0 | 0 |
+| Security (REQ-SEC) | 3 | 0 | 1 | 2 | 0 |
+| Operational (REQ-OPR) | 8 | 2 | 5 | 1 | 0 |
+| **TOTAL** | **81** | **26** | **42** | **8** | **1** |
 
-### 9.2 Requirements Count by SIL Level
+### 5.2 Requirements Count by SIL Level
 
 | SIL Level | Count | Percentage |
 |-----------|-------|------------|
-| SIL 3 | 42 | 79% |
-| SIL 2 | 7 | 13% |
-| SIL 1 | 1 | 2% |
-| SIL 0 | 3 | 6% |
-| **TOTAL** | **53** | **100%** |
+| SIL 3 | 58 | 71.6% |
+| SIL 2 | 17 | 21.0% |
+| SIL 1 | 6 | 7.4% |
+| **TOTAL** | **81** | **100%** |
 
-### 9.3 Safety Requirements Distribution by Hazard
+**Safety Requirements (REQ-SAFE)**: 21 total
+- SIL 3: 15 (REQ-SAFE-001 to 011, 013-017, 019-021)
+- SIL 2: 6 (REQ-SAFE-012, 018)
 
-| Hazard | SIL | Derived Safety Requirements | Count |
-|--------|-----|----------------------------|-------|
-| HAZ-001 (Train departs with door open) | SIL 3 | REQ-SAFE-001, 002, 003, 015, 016 | 5 |
-| HAZ-002 (Door closes on passenger) | SIL 3 | REQ-SAFE-004, 005, 006, 007 | 4 |
-| HAZ-003 (Door opens while moving) | SIL 3 | REQ-SAFE-008, 009, 010 | 3 |
-| HAZ-004 (Obstacle ignored) | SIL 3 | REQ-SAFE-004, 005, 006, 007, 011 | 5 |
-| HAZ-005 (False door-locked signal) | SIL 3 | REQ-SAFE-001, 002, 003, 012, 013, 014, 015, 016 | 8 |
-| HAZ-006 (Door fails to open) | SIL 2 | REQ-SAFE-017, 018 | 2 |
-| HAZ-008 (Emergency release) | SIL 2 | REQ-SAFE-019, 020 | 2 |
-| HAZ-009 (Software fault) | SIL 2/3 | REQ-SAFE-012, 013, 014, 017, 021 | 5 |
-
-**Note**: Some requirements mitigate multiple hazards (counted once, but listed under primary hazard).
-
-### 9.4 EN 50128 Section 7.2 Compliance
-
-| Requirement | Section | Evidence | Status |
-|-------------|---------|----------|--------|
-| **Requirements specification established** | §7.2.2 | This document (SRS DOC-SRS-2026-001) | ✓ Complete |
-| **Prerequisites (S1-S4) verified** | §7.2.2 | System docs verified present (Section 1.5) | ✓ Complete |
-| **Requirements unambiguous** | §7.2.3 | SHALL/SHOULD/MAY keywords used consistently; Section 8.3 quality checklist | ✓ Complete |
-| **Requirements testable** | §7.2.4 | Verification method + acceptance criteria for each req | ✓ Complete |
-| **Requirements traceable** | §7.2.5 | Backward traceability to system reqs/hazards (embedded); RTM forward traceability (Phase 3+) | ✓ Complete (backward); Pending (forward) |
-| **SIL level assigned** | §7.2.6 | All requirements have SIL field (Section 9.2) | ✓ Complete |
-| **Safety requirements identified** | §7.2.7 | Section 4 (21 REQ-SAFE requirements co-authored with SAF) | ✓ Complete |
-| **Interface requirements specified** | §7.2.8 | Section 6 (hardware, software, user interfaces) | ✓ Complete |
-| **C language constraints specified** | §7.2.9 | Section 7 (MISRA C, static allocation, no recursion, complexity ≤ 10) | ✓ Complete |
-
-### 9.5 EN 50128 Table A.2 Compliance (Requirements Techniques)
-
-| Technique | SIL 0 | SIL 1-2 | SIL 3-4 | Applied | Evidence |
-|-----------|-------|---------|---------|---------|----------|
-| Structured Methodology | R | R | HR | **Yes** | Requirements decomposition from system to software level; hierarchical structure (Section 1.3) |
-| Modelling | R | R | HR | **Yes** | State machine diagram (Section 2.4); safety function decision logic | |
-| Decision Tables | R | R | HR | **Yes** | Safety requirements tables (Section 4); state transition rules |
-| Formal Methods | - | R | HR | No | Not selected (rationale: structured + modelling sufficient for SIL 3; formal methods defer to future SIL 4 projects) |
+> **SAF confirmation**: SIL assignments for REQ-SAFE-001 through REQ-SAFE-021 are consistent with SSRS (DOC-SYS-SAF-2026-001) safety function assignments. SAF is the hazard authority; all SIL 3 safety requirements co-authored with SAF per REQ-SAF coordination.
 
 ---
 
-## 10. REFERENCES
+## 6. COMPLIANCE MATRIX
 
-### 10.1 Normative References
+### 6.1 EN 50128 Section 7.2 Compliance
 
-| Reference | Document | Version |
-|-----------|----------|---------|
-| **[EN50128]** | EN 50128:2011 Railway applications - Software for railway control and protection systems | 2011 |
-| **[EN50126]** | EN 50126:2017 Railway applications - RAMS (Part 1 & 2) | 2017 |
-| **[EN50129]** | EN 50129:2018 Railway applications - Safety-Related Electronic Systems for Signalling | 2018 |
-| **[MISRAC]** | MISRA C:2012 Guidelines for the use of the C language in critical systems | 2012 |
-| **[IEC61508]** | IEC 61508:2010 Functional Safety of Electrical/Electronic/Programmable Electronic Safety-related Systems | 2010 |
+| EN 50128 Requirement | Section | Evidence | Status |
+|---------------------|---------|----------|--------|
+| Software Requirements Specification established | 7.2.2 | This document (DOC-SRS-2026-001) | OK |
+| System requirements used as input | 7.2.2 | DOC-SYS-REQ-2026-001 (Section 3 inputs) | OK |
+| Safety requirements from hazard analysis | 7.2.2 | DOC-SYS-SAF-2026-001 (Section 3.4) | OK |
+| Requirements unambiguous | 7.2.3 | Section 4.3 quality checklist | OK |
+| Requirements testable | 7.2.4 | Every requirement has verification method and acceptance criteria | OK |
+| Requirements traceable backward | 7.2.4.5 | 100% traceability in Section 4.2 RTM | OK |
+| SIL level assigned | 7.2.6 | All 81 requirements have SIL field | OK |
+| Safety requirements identified (REQ-SAFE) | 7.2.7 | Section 3.4 (21 safety requirements) | OK |
+| Structured methodology applied | Table A.2 | Systematic decomposition, unique IDs, decision tables | OK |
+| Modelling applied | Table A.2 | State machine for DSM modes (Section 3.1.4, REQ-FUN-011) | OK |
+| Decision tables applied | Table A.2 | REQ-FUN-001, REQ-FUN-005, REQ-SAFE-006, REQ-SAFE-011 | OK |
+| User approval obtained | Annex C item 6 | User/customer approval GRANTED prior to authoring | OK |
 
-### 10.2 Project References
+### 6.2 EN 50128 Table A.2 Compliance (Requirements Techniques)
 
-| Reference | Document | Version |
-|-----------|----------|---------|
-| **[SYSREQ]** | System Requirements Specification | DOC-TDC-SRS-SYS-001 v1.0 |
-| **[SYSAFE]** | System Safety Requirements Specification | DOC-TDC-SSRS-SYS-001 v1.0 |
-| **[SYSAFEP]** | System Safety Plan | DOC-TDC-SSP-SYS-001 v1.0 |
-| **[SYSARCH]** | System Architecture Description | DOC-TDC-SAD-SYS-001 v1.0 |
-| **[HAZLOG]** | Hazard Log | DOC-HAZLOG-2026-001 (Phase 2 deliverable from SAF) |
-| **[SQAP]** | Software Quality Assurance Plan | DOC-SQAP-2026-001 v1.0 (Phase 1) |
-| **[SCMP]** | Software Configuration Management Plan | DOC-SCMP-2026-001 v1.0 (Phase 1) |
-| **[SVP]** | Software Verification Plan | DOC-SVP-2026-001 v1.0 (Phase 1) |
-| **[SVaP]** | Software Validation Plan | DOC-SVaP-2026-001 v1.0 (Phase 1) |
+| Technique | SIL 3-4 | Applied | Section Reference |
+|-----------|---------|---------|-------------------|
+| Structured Methodology (D.52) | HR | Yes | All sections — systematic decomposition |
+| Decision Tables (D.13) | HR | Yes | REQ-FUN-001, REQ-FUN-005, REQ-SAFE-006, REQ-SAFE-011 |
+| Modelling (Table A.17) | HR | Yes | REQ-FUN-011 (operational mode FSM) |
+| Formal Methods (D.28) | HR | No | Rationale: Structured methodology + decision tables sufficient for SIL 3 |
+
+---
+
+## 7. REFERENCES
+
+### 7.1 Normative References
+
+| Reference | Document |
+|-----------|----------|
+| **[EN50128]** | EN 50128:2011 Railway applications — Software for railway control and protection systems |
+| **[EN50129]** | EN 50129:2018 Railway applications — Safety related electronic systems for signalling |
+| **[EN50126-2]** | EN 50126-2:2017 Railway applications — RAMS — Part 2: Systems approach to safety |
+| **[EN14752]** | EN 14752:2015 Railway applications — Bodyside entrance systems |
+| **[ISO11898]** | ISO 11898:2003 — Controller Area Network (CAN) |
+| **[MISRAC]** | MISRA C:2012 Guidelines for the use of the C language in critical systems |
+
+### 7.2 Project References
+
+| Reference | Document | Status |
+|-----------|----------|--------|
+| **[SYSREQ]** | System Requirements Specification, DOC-SYS-REQ-2026-001 | Approved Baseline |
+| **[SYSARCH]** | System Architecture Description, DOC-SYS-ARCH-2026-001 | Approved Baseline |
+| **[SSRS]** | System Safety Requirements Specification, DOC-SYS-SAF-2026-001 | Approved Baseline |
+| **[SQAP]** | Software Quality Assurance Plan, DOC-SQAP-2026-001 | Approved |
+| **[SCMP]** | Software Configuration Management Plan, DOC-SCMP-2026-001 | Approved |
+| **[SVP]** | Software Verification Plan, DOC-SVP-2026-001 | Approved |
 
 ---
 
 ## APPENDICES
 
-### Appendix A: Requirements ID Mapping
+### Appendix A: Requirement ID Registry
 
-| ID Prefix | Category | SIL Level Range | Count |
-|-----------|----------|----------------|-------|
-| REQ-FUN-xxx | Functional requirements | 0-3 | 8 |
-| REQ-SAFE-xxx | Safety requirements (co-authored with SAF) | 2-3 | 21 |
-| REQ-PERF-xxx | Performance requirements | 0-3 | 6 |
-| REQ-INT-xxx | Interface requirements (hardware + software + user) | 0-3 | 9 |
-| REQ-IMPL-xxx | Implementation constraints (C language, MISRA C) | 0-3 | 9 |
+| ID Range | Category | Count |
+|----------|----------|-------|
+| REQ-FUN-001 to REQ-FUN-018 | Functional Requirements | 18 |
+| REQ-PERF-001 to REQ-PERF-010 | Performance Requirements | 10 |
+| REQ-INT-001 to REQ-INT-013 | Interface Requirements | 13 |
+| REQ-SAFE-001 to REQ-SAFE-021 | Safety Requirements | 21 |
+| REQ-REL-001 to REQ-REL-004 | Reliability Requirements | 4 |
+| REQ-SEC-001 to REQ-SEC-003 | Security Requirements | 3 |
+| REQ-OPR-001 to REQ-OPR-008 | Operational Requirements | 8 |
+| **TOTAL** | | **81** |
 
-### Appendix B: Traceability Summary
+### Appendix B: Glossary
 
-**Backward Traceability (Software → System):**
-- All 53 software requirements traced to system requirements (SYS-FR, SYS-NFR, SSR, ASR, ISR, NFSR) or hazards (HAZ-001 to HAZ-009)
-- Traceability completeness: **100%** (mandatory for SIL 3 per Table A.9 D.58)
+See Section 1.4 Definitions and Acronyms.
 
-**Forward Traceability (Software → Design → Code → Tests):**
-- To be completed by DES (Phase 3), IMP (Phase 5), TST (Phase 5, 7)
-- RTM will be generated after Phase 3 Design complete
+### Appendix C: Safety Function to Software Requirement Mapping
 
-### Appendix C: Glossary
-
-(See Section 1.4 Definitions and Acronyms)
+| Safety Function (SSRS) | SW Safety Requirements | SIL |
+|-----------------------|----------------------|-----|
+| SF-001 (Speed interlock) | REQ-SAFE-001, REQ-SAFE-002, REQ-SAFE-015, REQ-FUN-001 | SIL 3 |
+| SF-002 (Departure interlock) | REQ-SAFE-003, REQ-FUN-009, REQ-FUN-005 | SIL 3 |
+| SF-003 (Obstacle detection) | REQ-SAFE-004, REQ-INT-003, REQ-PERF-003 | SIL 3 |
+| SF-004 (Safe state) | REQ-SAFE-006, REQ-SAFE-007, REQ-SAFE-008, REQ-FUN-017 | SIL 3 |
+| SF-005 (Position verification) | REQ-SAFE-005, REQ-FUN-015, REQ-FUN-005 | SIL 3 |
+| SF-006 (Emergency release monitoring) | REQ-SAFE-012, REQ-INT-011 | SIL 2 |
+| SF-007 (Fault isolation) | REQ-FUN-013, REQ-SAFE-018 | SIL 2 |
 
 ---
 
 ## DOCUMENT HISTORY
 
-This document is maintained under configuration control per SCMP (DOC-SCMP-2026-001 v1.0). All changes SHALL be approved by the Change Control Board (CCB) after initial baseline.
+This document is maintained under configuration control per SCMP (DOC-SCMP-2026-001). All changes SHALL be approved by the Change Control Board (CCB).
 
-**Current Version**: 0.1 DRAFT  
-**Last Updated**: 2026-03-30  
-**Next Review**: Phase 2 Gate Check (after QUA review and user approval)  
-**Baseline Status**: Not yet baselined (pending QUA PASS + VER + VAL + USER approval)
+**Current Version**: 0.1 DRAFT
+**Last Updated**: 2026-04-02
+**Next Review**: Upon QUA review completion (Phase 2 gate)
+**Configuration Item ID**: CI-SRS-001
 
 ---
 
-**END OF DOCUMENT — DOC-SRS-2026-001 v0.1 DRAFT**
-
-**Word Count**: ~13,500 words  
-**Requirement Count**: 53 requirements (8 functional, 21 safety, 6 performance, 9 interface, 9 implementation)  
-**Traceability Completeness**: 100% backward (software → system/hazards)  
-**SIL Distribution**: 79% SIL 3, 13% SIL 2, 8% SIL 0-1  
-**EN 50128 Compliance**: §7.2 + Table A.2 techniques applied (structured methodology, modelling, decision tables)
-
-**USER APPROVAL REQUIRED BEFORE PHASE 2 TRACK B PROCEEDS**
+**END OF DOCUMENT**

@@ -1,7 +1,7 @@
 ---
 description: Software testing and coverage analysis per EN 50128 Sections 6.1, 7.4, 7.5, 7.6
 mode: subagent
-model: github-copilot/claude-sonnet-4.5
+model: github-copilot/claude-sonnet-4.6
 temperature: 0.2
 permission:
   task: {

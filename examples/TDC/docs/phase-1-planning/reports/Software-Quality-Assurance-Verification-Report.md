@@ -1,920 +1,532 @@
-# Software Quality Assurance Verification Report (SQAVR)
+# Software Quality Assurance Verification Report
+
+**Document ID:** DOC-SQAVR-2026-001  
+**Document Type:** Software-Quality-Assurance-Verification-Report  
+**Phase:** Phase 1 - Planning  
+**EN 50128 Reference:** Annex C #2, Section 6.2.4.10-11, 6.5.4.7-8
+
+---
 
 ## Document Control
 
-| Field | Value |
-|-------|-------|
-| **Document ID** | DOC-TDC-SQAVR-002 |
-| **Version** | 1.0 |
-| **Date** | 2026-03-30 |
-| **Status** | DRAFT |
-| **Author** | Software Verifier (VER) Team |
-| **Project** | TDC (Train Door Control) |
-| **SIL Level** | SIL 3 |
-| **Standard** | EN 50128:2011 Section 6.2 — Software Verification |
-| **Annex C Item** | 2 |
+**Document ID:** DOC-SQAVR-2026-001  
+**Version:** 1.0  
+**Date:** 2026-04-02  
+**Author:** VER  
+**Status:** Baseline
+
+**Configuration Item:** DOC-SQAVR-2026-001  
+**Baseline:** planning-baseline (Gate 1)
+
+### Version History
+
+| Version | Date | Author | Reviewer | Approver | Changes |
+|---------|------|--------|----------|----------|---------|
+| 0.1 | 2026-04-02 | VER | QUA | VMGR | Initial draft |
+| 1.0 | 2026-04-02 | VER | QUA | VMGR | Baseline version for Phase 1 gate |
 
 ---
 
 ## Approvals
 
-**EN 50128 Annex C Table C.1 Review Chain (Item 2)**
+**EN 50128 Annex C Table C.1 Signature Chain**
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| **Software Verifier (Author)** | TBD — assigned at project kick-off | _____________ | 2026-03-30 |
-| **V&V Manager (VMGR)** | TBD — assigned at project kick-off | _____________ | — |
+| Written By: Software Verifier | [VER Name] | _____________ | 2026-04-02 |
+| 1st Check: Software Verifier | [VER Name] | _____________ | 2026-04-02 |
+| 2nd Check: Software Validator | [VAL Name] | _____________ | [PENDING] |
 
 **Notes:**
-- **Author**: VER produces this verification report covering Phase 1 planning deliverables
-- **1st Check**: QUA performs format-gate check per SQAP 1-Pass Rule
-- **VMGR Approval**: Required for SIL 3 — VMGR issues final V&V decision before COD gate check
-- **Independence**: VER reports to VMGR (not PM) per EN 50128 §5.1.2.10e (SIL 3 mandatory)
-
----
-
-## Revision History
-
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2026-03-30 | VER Team | Initial SQAVR for TDC Phase 1 Planning (SIL 3) |
-
----
-
-## Table of Contents
-
-1. [Executive Summary](#1-executive-summary)
-2. [Verification Scope](#2-verification-scope)
-3. [Verification Methodology](#3-verification-methodology)
-4. [Document Review Results](#4-document-review-results)
-5. [SIL 3 Compliance Assessment](#5-sil-3-compliance-assessment)
-6. [Traceability Verification](#6-traceability-verification)
-7. [Cross-Plan Consistency Analysis](#7-cross-plan-consistency-analysis)
-8. [Independence Assessment](#8-independence-assessment)
-9. [Findings Summary](#9-findings-summary)
-10. [EN 50128 Compliance Matrix](#10-en-50128-compliance-matrix)
-11. [Verification Conclusion](#11-verification-conclusion)
-12. [References](#12-references)
+- Signature authority per EN 50128 Annex C Table C.1 and project SQAP
+- For SIL 3: Independence requirements apply per EN 50128 §6.2 (Verification) and §6.3 (Validation)
+- VER authors and performs 1st Check; VAL performs 2nd Check; VMGR approves
 
 ---
 
 ## 1. Executive Summary
 
-### 1.1 Verification Overview
+**Project:** TDC (Train Door Control System)  
+**SIL Level:** 3  
+**Verification Date:** 2026-04-02  
+**Verifier:** [VER Name]  
+**Verification Scope:** 
+- Item 1: Software Quality Assurance Plan (DOC-SQAP-2026-001)
+- Item 3: Software Configuration Management Plan (DOC-SCMP-2026-001)
+- Item 5: Software Validation Plan (DOC-SVaP-2026-001)
 
-This Software Quality Assurance Verification Report documents the independent technical verification of Phase 1 Planning deliverables for the **TDC (Train Door Control)** project, a **SIL 3** railway safety software system developed in accordance with **EN 50128:2011**.
+**EXCLUDED FROM SCOPE (Independence Constraint):**
+- Item 4: Software Verification Plan (DOC-SVP-2026-001) — **VER authored this document per §6.2.4.2; VER cannot self-check own plan** (deviation D8)
 
-**Verification Authority**: This report is authored by the independent Verifier (VER) per §6.2.4.13 and reports to the V&V Manager (VMGR) per §5.1.2.10e. VER is organizationally independent from the development team (PM, QUA, CM) and reports exclusively to VMGR for SIL 3 projects.
+**Overall Verification Result:** **APPROVE**
 
-### 1.2 Verification Result Summary
+**Summary:**  
+The Verifier has reviewed three of the four QUA-accepted planning documents (items 1, 3, 5) for Phase 1 of the TDC project (SIL 3). All three documents fully comply with EN 50128:2011 requirements and demonstrate comprehensive, internally consistent planning for quality assurance, configuration management, and validation. No critical or major non-conformities were found. Minor observations have been documented for future improvement but do not impact approval.
 
-**Phase**: Phase 1 — Planning  
-**Review Type**: Track B — Independent V&V Content Review  
-**Documents Reviewed**: 4  
-**Verification Date**: 2026-03-30  
-**VER Review Type**: 1st-check (SQAP, SCMP, SVaP) + 2nd-check (SVP)
-
-| # | Document | Annex C Item | VER Review Type | Result |
-|---|----------|--------------|-----------------|--------|
-| 1 | Software Quality Assurance Plan (SQAP) | 1 | **1st-check** | ✅ **APPROVE** |
-| 2 | Software Configuration Management Plan (SCMP) | 3 | **1st-check** | ✅ **APPROVE** |
-| 3 | Software Verification Plan (SVP) | 4 | **2nd-check** | ✅ **APPROVE** |
-| 4 | Software Validation Plan (SVaP) | 5 | **1st-check** | ✅ **APPROVE** |
-
-### 1.3 Overall Assessment
-
-**✅ VER RECOMMENDATION: APPROVE ALL FOUR PHASE 1 PLANNING DOCUMENTS**
-
-- **Total Documents Reviewed**: 4
-- **VER Result**: 4 APPROVED (100%)
-- **Findings**: 0 Critical, 0 Major, 4 Minor (observations only)
-- **SIL 3 Compliance**: ✅ All mandatory requirements satisfied
-- **Traceability**: ✅ System documents → Planning documents verified
-- **Independence**: ✅ VER/VAL/VMGR independence requirements correctly specified
-- **Acceptance Criteria Met**: ✅ VER 1-Pass Rule satisfied (no Major/Critical findings)
-
-**Recommendation to VMGR**: All Phase 1 planning documents are technically correct, complete, and compliant with EN 50128:2011 requirements for SIL 3. VER recommends **APPROVAL** for COD Phase 1 gate check progression.
+**Key Findings:**
+- **SQAP (item 1):** PASS — Comprehensive coverage of EN 50128 §6.5 requirements; SIL 3 obligations clearly documented; independence structure compliant.
+- **SCMP (item 3):** PASS — Complete CM processes per §6.6; traceability management (T1–T15) fully defined; baseline management robust.
+- **SVaP (item 5):** PASS — Validation strategy comprehensive per §6.3.4; acceptance criteria clear; independence requirements documented.
+- **SVP (item 4):** NOT VERIFIED — VER authored item 4 and cannot perform self-check (independence constraint per §5.1.2.10). Item 4 is excluded from SQAVR scope per deviation D8.
 
 ---
 
-## 2. Verification Scope
+## 2. Introduction
 
-### 2.1 Phase 1 Planning Deliverables
+### 2.1 Purpose
 
-Per EN 50128:2011 Annex C Table C.1, Phase 1 Planning includes the following deliverables:
+This document reports the independent verification of the Phase 1 Planning documents for the TDC (Train Door Control System) project, in compliance with EN 50128:2011 Sections 6.2.4.10-11 and 6.5.4.7-8.
 
-| Annex C Item | Document | Author | VER Review Type | Verification Scope |
-|--------------|----------|--------|-----------------|-------------------|
-| **1** | Software Quality Assurance Plan (SQAP) | QUA | 1st-check | Technical content correctness, SIL 3 provisions, mandatory techniques (Table A.9) |
-| **2** | Software Quality Assurance Verification Report (SQAVR) | VER | *Self-authored* | N/A — VER cannot self-check item 2 |
-| **3** | Software Configuration Management Plan (SCMP) | CM | 1st-check | CM processes, baseline procedures, change control (9 aspects §6.6.4.1) |
-| **4** | Software Verification Plan (SVP) | VER | 2nd-check | Fitness-for-use, cross-plan consistency, independence maintained |
-| **5** | Software Validation Plan (SVaP) | VAL | 1st-check | Technical content correctness, SIL 3 validation techniques (Table A.7) |
+The SQAP Verification Report (SQAVR) verifies that the planning documents are:
+- **Complete:** all EN 50128 Section 6.5.4.4-6, §6.6.4.1, and §6.3.4.2 requirements addressed
+- **Internally consistent:** no contradictions between sections
+- **Readable and traceable:** meet document quality requirements per §5.3.2.7-10
+- **Covering all lifecycle phases:** QA, CM, validation activities defined for each phase
 
-**Note on Item 4 (SVP)**: VER authors the SVP but performs **2nd-check** (not 1st-check) on it to maintain independence. The 2nd-check confirms the SVP is fit-for-use and consistent with other planning documents, but VER cannot independently validate its own verification approach. This is documented as a platform deviation and will be addressed in the Software Assessment Report (Phase 8).
+### 2.2 Scope
 
-### 2.2 System-Level Documents (Phase 0 — Pre-Verification)
+This verification covers:
+- **Item 1:** Software Quality Assurance Plan (SQAP) — DOC-SQAP-2026-001
+- **Item 3:** Software Configuration Management Plan (SCMP) — DOC-SCMP-2026-001
+- **Item 5:** Software Validation Plan (SVaP) — DOC-SVaP-2026-001
 
-The following system-level documents were generated in Phase 0 and serve as input references for Phase 1 planning:
+**EXCLUDED:**
+- **Item 4:** Software Verification Plan (SVP) — DOC-SVP-2026-001  
+  **Rationale:** VER authored the SVP per §6.2.4.2. VER cannot self-check its own SVP (independence constraint per §5.1.2.10). This exclusion is documented per deviation D8 (DELIVERABLES.md). Item 4 will undergo independent 2nd Check by VAL per `activities/phase-1-planning.yaml` line 43.
 
-| Document | Document ID | Version | Status | VER Check |
-|----------|-------------|---------|--------|-----------|
-| System Requirements Specification | DOC-TDC-SRS-SYS-001 | 1.0 | APPROVED | ✅ Referenced correctly |
-| System Architecture Description | DOC-TDC-SAD-SYS-001 | 1.0 | APPROVED | ✅ Referenced correctly |
-| System Safety Plan | DOC-TDC-SSP-SYS-001 | 1.0 | APPROVED | ✅ Referenced correctly |
-| System Safety Requirements Specification | DOC-TDC-SSRS-SYS-001 | 1.0 | APPROVED | ✅ Referenced correctly |
+This report verifies the **planning documents as plan documents** — not the execution of QA/CM/validation activities. Activity execution is verified at each phase gate.
 
-**Traceability Check**: All Phase 1 planning documents correctly reference the four system-level documents by Document ID and establish the foundation for Phase 2 software requirements traceability.
+### 2.3 Reference Documents
 
-### 2.3 Out of Scope
+| Document ID | Title | Version |
+|-------------|-------|---------|
+| DOC-SQAP-2026-001 | Software Quality Assurance Plan | 1.0 |
+| DOC-SCMP-2026-001 | Software Configuration Management Plan | 1.0 |
+| DOC-SVaP-2026-001 | Software Validation Plan | 1.0 |
+| DOC-SVP-2026-001 | Software Verification Plan | 1.0 (not verified here) |
+| STD-EN50128 | EN 50128:2011 Railway Applications | - |
+| SQAP | Software Quality Assurance Plan (reference context) | 1.0 |
+| WORKFLOW.md | Authority structure, two-track loop | - |
+| DELIVERABLES.md | Annex C Table C.1, deviations D1–D8 | - |
 
-The following items are **not** covered by this verification report:
+### 2.4 Verification Team
 
-- **QUA format-gate review** — QUA completed Track A review separately (QUA-REVIEW-TDC-PHASE1-001)
-- **VAL 2nd-check** — VAL performs 2nd-check on items 1, 3, 4 independently
-- **Phase 0 system documents** — Already approved; not subject to VER Phase 1 review
-- **Phase 2+ deliverables** — Future phases subject to separate VER reports
+| Role | Name | Organization | Independence |
+|------|------|--------------|--------------|
+| Lead Verifier | [VER Name] | [VER Organization] | Yes — independent from QUA, CM, VAL per §5.1.2.10e (SIL 3 MANDATORY) |
 
 ---
 
 ## 3. Verification Methodology
 
-### 3.1 EN 50128 Verification Requirements
+### 3.1 Verification Techniques Applied
 
-This verification follows **EN 50128:2011 Section 6.2** requirements:
+Per EN 50128 Table A.5, the following verification techniques were applied:
 
-| Clause | Requirement | Implementation |
-|--------|-------------|----------------|
-| §6.2.4.2 | SVP written by VER | ✅ Verified: SVP DOC-TDC-SVP-001 authored by VER |
-| §6.2.4.10 | Verify quality plan provisions | ✅ Verified: SQAP SIL 3 provisions per Table A.9 |
-| §6.2.4.11 | Confirm quality records approach | ✅ Verified: SQAP Section 15 (metrics, NCRs, audits) |
-| §6.2.4.13 | VER report per phase | ✅ This report (item 2) |
-| Table A.5 T1 | Static Analysis | Applied: Document content analysis per SQAP checklists |
-| Table A.5 D.58 | Traceability | ✅ Verified: System docs → Planning docs references |
+| Technique | SIL 3 Requirement | Applied | Rationale |
+|-----------|-----------------|---------|-----------|
+| Plan-Based Verification (D.1) | **M** (MANDATORY) | **Yes** | Verified planning documents against EN 50128 normative requirements per §6.2.4.10-11 |
+| Traceability (D.58) | **M** (MANDATORY) | **Yes** | Verified traceability of planning documents to EN 50128 §6.5, §6.6, §6.3.4 requirements |
 
-### 3.2 SIL 3 Verification Techniques Applied
+### 3.2 Verification Activities
 
-Per EN 50128 Table A.5 and SVP Section 6, the following mandatory (M) and highly recommended (HR) techniques were applied:
+The following verification activities were performed for each document:
 
-| # | Technique | SIL 3 | Applied | Evidence |
-|---|-----------|-------|---------|----------|
-| D.24 | Static Analysis | **M** | ✅ | Document content analysis per deliverable YAML criteria |
-| D.58 | Traceability | **M** | ✅ | System docs → Planning docs cross-reference verification |
-| D.32 | Inspection | **M** | ✅ | Line-by-line review of all four planning documents |
-| D.37 | Metrics | HR | ✅ | Verified SQAP Section 15 defines SIL 3 mandatory metrics |
-
-### 3.3 Verification Acceptance Criteria (SVP Section 16.2.1)
-
-**VER 1-Pass Rule**: A deliverable is **APPROVED** if it contains:
-- **0 Critical findings** (gate blockers — safety violation, normative non-compliance)
-- **0 Major findings** (significant technical errors requiring author rework)
-- **Any number of Minor findings** (observations, editorial improvements, clarifications)
-
-**Severity Definitions** (SQAP Section 14.1):
-
-| Severity | Definition | Impact |
-|----------|------------|--------|
-| **CRITICAL** | Safety violation, normative non-compliance, missing mandatory section | Gate blocker — REJECT |
-| **MAJOR** | Significant technical error, incorrect SIL provision, missing required technique | Rework required — CONDITIONAL APPROVE or REJECT |
-| **MINOR** | Editorial improvement, clarification, advisory recommendation | No rework — APPROVE |
-
-### 3.4 Verification Process Flow
-
-The VER review followed this process per SVP Section 11.1:
-
-```
-1. Track A Completion Verification
-   └─► Confirm QUA review complete: QUA-REVIEW-TDC-PHASE1-001 (✅ 4/4 documents PASS)
-
-2. Document Content Review (Per Document)
-   ├─► Read deliverable YAML criteria: deliverables/planning/<DeliverableName>.yaml
-   ├─► Read document in full (all sections)
-   ├─► Apply SIL 3 additional requirements
-   ├─► Check EN 50128 normative compliance
-   ├─► Verify cross-references to system documents
-   └─► Record findings (CRITICAL / MAJOR / MINOR)
-
-3. Cross-Plan Consistency Check
-   └─► Verify SQAP ↔ SCMP ↔ SVP ↔ SVaP alignment
-
-4. Independence Assessment (SIL 3 Mandatory)
-   └─► Verify VER/VAL/VMGR independence provisions
-
-5. Traceability Verification
-   └─► Verify System Requirements → Planning Document references
-
-6. Author Verification Report
-   └─► Document findings, compliance assessment, VER recommendation
-```
+1. **Completeness Verification** — Verified document addresses all EN 50128 normative requirements for its type
+2. **Internal Consistency Verification** — Verified no contradictions between document sections
+3. **Readability and Traceability Verification** — Verified per §5.3.2.7-10
+4. **Specific Requirements Verification** — Verified clause-by-clause compliance (§6.5.4 for SQAP, §6.6.4 for SCMP, §6.3.4 for SVaP)
+5. **Coverage Verification** — Verified activities defined for all lifecycle phases
+6. **Independence Verification** — Confirmed independence structure compliant with §5.1.2.10 (SIL 3)
 
 ---
 
-## 4. Document Review Results
+## 4. Verification Criteria
 
-### 4.1 Document 1: Software Quality Assurance Plan (SQAP)
+### 4.1 SQAP Completeness Criteria (Item 1)
 
-**Document ID**: DOC-TDC-SQAP-001  
-**Version**: 1.0 DRAFT  
-**Annex C Item**: 1  
-**Author**: QUA Team  
-**VER Review Type**: **1st-check**  
-**Review Date**: 2026-03-30
+Per EN 50128 §6.5.4.4-6:
 
-#### 4.1.1 Verification Criteria Applied
+- [x] §6.5.4.4 — Quality System described
+- [x] §6.5.4.5 — QA activities per lifecycle phase specified
+- [x] §6.5.4.6 — QA tailored to this specific project (SIL 3, TDC railway door control system)
+- [x] All normative sub-clauses of EN 50128 referenced
+- [x] QA tools and techniques specified per Table A.9 (SIL 3)
 
-Per `deliverables/planning/Software-Quality-Assurance-Plan.yaml`:
+### 4.2 SCMP Completeness Criteria (Item 3)
 
-| Criterion | Requirement | Result | Evidence |
-|-----------|-------------|--------|----------|
-| **SEC-001** | All 21 mandatory sections present | ✅ PASS | TOC verified — 21 sections present |
-| **SIL3-001** | Independence requirements documented | ✅ PASS | Section 4.1 — VER/VAL/VMGR mandatory independent |
-| **SIL3-002** | Mandatory techniques (Table A.9) mapped | ✅ PASS | Section 16 — complete SIL 3 technique matrix |
-| **SIL3-003** | MISRA C:2012 compliance approach | ✅ PASS | Section 7.2 — zero mandatory violations required |
-| **SIL3-004** | Coverage requirements (100%) | ✅ PASS | Section 9.1 — 100% statement/branch/condition |
-| **SIL3-005** | Cyclomatic complexity ≤ 10 | ✅ PASS | Section 7.3 — hard gate block at CCN > 10 |
-| **SIL3-006** | Traceability (100% bidirectional) | ✅ PASS | Section 17 — RTM 100% coverage required |
-| **SIL3-007** | 1-Pass Rule defined | ✅ PASS | Section 8.2.2 — clearly documented |
-| **SIL3-008** | Process audits (monthly SIL 3) | ✅ PASS | Section 13.1 — monthly mandatory |
-| **SIL3-009** | Quality metrics (per phase SIL 3) | ✅ PASS | Section 15.1 — Table A.9 T8 mandatory |
-| **REF-001** | System documents referenced by ID | ✅ PASS | Section 2.2 — all four system docs referenced |
-| **TECH-001** | QUA role boundaries clear | ✅ PASS | Section 3.2 — format-gate vs. technical review distinction |
-| **TECH-002** | Two-track review workflow documented | ✅ PASS | Section 8.1 — Track A (QUA) vs. Track B (VER/VAL) |
+Per EN 50128 §6.6.4.1-2:
 
-#### 4.1.2 Technical Content Assessment
+- [x] §6.6.4.1 — Change control process defined (nine aspects a–i)
+- [x] §6.6.4.2 — Re-entry to lifecycle phase procedure defined
+- [x] Configuration identification defined (CIs, baselines, version numbering)
+- [x] Configuration control defined (CCB, change request lifecycle)
+- [x] Configuration status accounting defined
+- [x] Configuration audits defined (CM presence checks, VER functional completeness)
+- [x] Traceability management defined (T1–T15 per TRACEABILITY.md)
 
-**Correctness**: ✅ **EXCELLENT**
-- Quality organization structure correctly implements EN 50128 §5.1.2.10 SIL 3 independence requirements
-- QUA role boundaries clearly defined (format-gate only, no technical review)
-- Two-track review workflow (Track A: QUA, Track B: VER/VAL) correctly documented
-- All Table A.9 mandatory techniques (T1–T9) mapped to project activities
+### 4.3 SVaP Completeness Criteria (Item 5)
 
-**Completeness**: ✅ **EXCELLENT**
-- All 21 mandatory sections present and substantive
-- Document review checklists (Section 11) comprehensive
-- Code review checklists (Section 12) cover MISRA C, defensive programming, complexity
-- Audit schedule (Section 13) specifies monthly process audits (SIL 3 mandatory)
-- Metrics collection (Section 15) defines per-phase quality metrics (SIL 3 mandatory)
+Per EN 50128 §6.3.4.2-3:
 
-**Consistency**: ✅ **EXCELLENT**
-- Cross-references to SCMP, SVP, SVaP are correct and bidirectional
-- SIL 3 provisions consistent across all sections
-- 1-Pass Rule consistently applied to all VER/VAL reports
+- [x] §6.3.4.2 — Validation approach defined on basis of input documents
+- [x] §6.3.4.3 — Validation plan includes purpose, scope, organization, validation test specifications, acceptance criteria
+- [x] Independence requirements defined per §5.1.2.10f (SIL 3 MANDATORY)
+- [x] Validation techniques per Table A.7 (SIL 3)
+- [x] Performance testing defined per Table A.18 (MANDATORY SIL 3)
+- [x] Pre-existing software handling per §6.3.4.5 (N/A for TDC)
+- [x] Release decision authority documented per §5.1.2.8
 
-**SIL 3 Compliance**: ✅ **EXCELLENT**
-- All EN 50128 Table A.9 mandatory techniques (SIL 3) correctly identified
-- Independence requirements (VER/VAL/VMGR) correctly specified
-- MISRA C:2012 zero mandatory violations policy appropriate for SIL 3
-- 100% coverage requirements exceed normative minimum (HR) — project policy justified
+### 4.4 Internal Consistency Criteria (All Documents)
 
-**Feasibility**: ✅ **EXCELLENT**
-- Proposed QUA activities are feasible for SIL 3 project
-- Monthly process audits are appropriately scoped
-- 1-Pass Rule balances quality and efficiency
-- Tool qualification approach (T1/T2/T3) is practical
+- [x] No contradictions between document sections
+- [x] All cross-references within documents valid
+- [x] Terminology used consistently throughout
+- [x] Metrics and thresholds defined consistently
 
-#### 4.1.3 Findings
+### 4.5 Readability and Traceability Criteria (All Documents)
 
-**MINOR-SQAVR-SQAP-001**: Section 20 (Platform Deviations) lists eight deviations (D1–D8) but provides only brief descriptions. **Recommendation**: Add detailed rationale for each deviation per EN 50128 §4.8. Specifically:
-- **D8 (QUA authors SQAP)**: VER direction provides oversight per §6.5.4.3; deviation is normatively permitted but should explicitly reference §6.5.4.3 in the deviation table.
+Per §5.3.2.7-10:
 
-**Impact**: MINOR — Deviation is normatively compliant; enhanced documentation improves auditability.
-
-**Disposition**: ✅ **APPROVE** — SQAP is technically correct, complete, and feasible for SIL 3. Minor finding does not require rework.
+- [x] Document structure clear and logical (§5.3.2.7)
+- [x] Terminology defined and used consistently (§5.3.2.8)
+- [x] Traceability to EN 50128 requirements established (§5.3.2.9)
+- [x] Document management information present (§5.3.2.10)
 
 ---
 
-### 4.2 Document 2: Software Configuration Management Plan (SCMP)
+## 5. Verification Results
 
-**Document ID**: DOC-TDC-SCMP-001  
-**Version**: 1.0 DRAFT  
-**Annex C Item**: 3  
-**Author**: Configuration Manager (CM)  
-**VER Review Type**: **1st-check**  
-**Review Date**: 2026-03-30
+### 5.1 SQAP Completeness Verification (Item 1)
 
-#### 4.2.1 Verification Criteria Applied
+**Completeness Result:** **PASS**
 
-Per `deliverables/planning/Software-Configuration-Management-Plan.yaml`:
+| EN 50128 Requirement | SQAP Section | Status | Notes |
+|----------------------|--------------|--------|-------|
+| §6.5.4.3 — SQAP written under VER responsibility | Introduction, Deviation D8 | **PASS** | QUA authors under VER direction; VER 1st-checks; VAL 2nd-checks |
+| §6.5.4.4 — Quality System | Section 1 | **PASS** | ISO 9001:2015 compliance documented; QA role, authority, independence defined |
+| §6.5.4.5 — QA activities per phase | Section 5 | **PASS** | All 10 phases covered; Phase 8 zero activity documented |
+| §6.5.4.6 — QA tailoring to project | Sections 1.3, 7.1 | **PASS** | SIL 3 obligations mapped per Table A.9; TDC-specific context |
+| QA tools and techniques | Section 7 | **PASS** | All Table A.9 techniques adopted (T1–T8); tool qualification status documented |
+| QA touchpoints (37 of 46 items) | Section 1.6 | **PASS** | Format-gate position defined; 1-Pass Rule documented |
+| Traceability management | Section 8 | **PASS** | T1–T15 traceability rules; QUA audits VER traceability checks |
+| Non-conformance management | Section 9 | **PASS** | NCR severity definitions; escalation rules; gate impact documented |
+| Quality metrics | Section 10 | **PASS** | 12 metrics defined (M1–M12); thresholds, reporting frequency specified |
+| Training requirements | Section 11 | **PASS** | Training topics, frequency, evidence defined for all roles |
 
-| Criterion | Requirement | Result | Evidence |
-|-----------|-------------|--------|----------|
-| **SEC-001** | All 18 mandatory sections present | ✅ PASS | TOC verified — 18 sections including appendices |
-| **SIL3-001** | Version control system defined | ✅ PASS | Section 6 — Git with branching strategy |
-| **SIL3-002** | Baseline management per §9.1.4.2 | ✅ PASS | Section 7 — 7-step baseline procedure |
-| **SIL3-003** | Change control (9 aspects §6.6.4.1) | ✅ PASS | Section 8.2 — all nine aspects mapped to CR template |
-| **SIL3-004** | Phase re-entry (§6.6.4.2) | ✅ PASS | Section 8.3 — COD authority on re-entry phase |
-| **SIL3-005** | CCB operation | ✅ PASS | Section 8.4 — PM chairs, COD has veto |
-| **SIL3-006** | Configuration audits | ✅ PASS | Section 13 — baseline presence check, functional completeness |
-| **SIL3-007** | Traceability management | ✅ PASS | Section 10.4 — RTM maintenance |
-| **SIL3-008** | Backup and recovery | ✅ PASS | Section 12 — daily/weekly backup schedule |
-| **REF-001** | System documents referenced | ✅ PASS | Section 2.2 — all four system docs referenced |
-| **TECH-001** | Nine required aspects documented | ✅ PASS | Section 8.2 — explicit mapping of §6.6.4.1(a–i) |
-| **TECH-002** | Baseline reproducibility | ✅ PASS | Section 7.3 — Git tags + archived manifests |
+**Overall SQAP Completeness:** All EN 50128 §6.5.4 requirements fully addressed. No gaps identified.
 
-#### 4.2.2 Technical Content Assessment
+### 5.2 SCMP Completeness Verification (Item 3)
 
-**Correctness**: ✅ **EXCELLENT**
-- Configuration Item identification scheme is comprehensive and unambiguous
-- Version control system (Git) is appropriate and classified as T1 tool (no qualification required)
-- Baseline management procedure correctly implements EN 50128 §9.1.4.2 requirements
-- Change control procedure correctly addresses all nine required aspects (§6.6.4.1(a–i))
-- CCB operation correctly assigns PM as chair and COD as lifecycle authority (no override)
+**Completeness Result:** **PASS**
 
-**Completeness**: ✅ **EXCELLENT**
-- All 18 mandatory sections present and substantive
-- Document CI naming convention (Section 5.2) clear and consistent
-- Source code CI naming convention (Section 5.3) appropriate
-- Baseline tag naming convention (Section 5.5) unambiguous
-- Change Request template (Appendix B) addresses all nine required aspects
-- Baseline manifest template (Appendix C) includes all required fields
+| EN 50128 Requirement | SCMP Section | Status | Notes |
+|----------------------|--------------|--------|-------|
+| §6.6.4.1 — Change control (9 aspects) | Section 4.1 | **PASS** | All nine aspects (a–i) explicitly mapped to CM process steps |
+| §6.6.4.1(a) — Unique identification | Section 4.1.1 | **PASS** | CR ID format: `CR-<YYYYMMDD>-<NNN>` |
+| §6.6.4.1(b) — Recording of reasons | Section 4.1.1 | **PASS** | Required in CR submission template |
+| §6.6.4.1(c) — Analysis of consequences | Section 4.1.2 | **PASS** | CM impact analysis procedure defined |
+| §6.6.4.1(d) — Approval by authorized personnel | Section 4.1.3 | **PASS** | CCB composition, quorum, decision authority defined |
+| §6.6.4.1(e) — Updating all affected documents | Section 4.1.4 | **PASS** | Implementation procedure includes affected CI updates |
+| §6.6.4.1(f) — Recording affected software items | Section 4.1.2 | **PASS** | CM impact analysis identifies all affected CIs |
+| §6.6.4.1(g) — Implementation, verification, test | Sections 4.1.4-5 | **PASS** | VER review of changes mandatory before merge |
+| §6.6.4.1(h) — Reporting to relevant parties | Sections 4.1.7, 5.1 | **PASS** | Configuration status accounting defined |
+| §6.6.4.1(i) — Maintaining traceability | Section 4.1.6, 5.2 | **PASS** | T1–T15 traceability updates per CR; workspace.py trace command |
+| §6.6.4.2 — Re-entry to lifecycle phase | Section 4.1.8 | **PASS** | CM identifies re-entry phase; COD authorizes; procedure documented |
+| Configuration identification | Section 3 | **PASS** | Document registry, evidence paths, version numbering, Git branch strategy |
+| Baseline management | Section 7 | **PASS** | 8 baselines (Gates 1–9); manifest format; creation procedure |
+| Traceability management | Section 5.2 | **PASS** | T1–T15 rules; workspace.py trace tool; matrix naming convention |
+| CM role boundary | Section 2.3 | **PASS** | CM presence checks vs. VER functional completeness clearly distinguished |
 
-**Consistency**: ✅ **EXCELLENT**
-- Cross-references to SQAP, SVP, SVaP are correct
-- CI naming conventions are consistent with SQAP Document Control requirements
-- Baseline procedures align with SVP traceability requirements
-- Change control procedures align with SQAP NCR management
+**Overall SCMP Completeness:** All EN 50128 §6.6.4 requirements fully addressed. CM canonical path authority documented.
 
-**SIL 3 Compliance**: ✅ **EXCELLENT**
-- All EN 50128 §6.6 requirements correctly implemented
-- Configuration management is **mandatory** at SIL 3 (Table A.9 T5) — correctly identified
-- Baseline management preserves reproducibility per §9.1.4.3
-- Change control supports phase re-entry per §6.6.4.2
+### 5.3 SVaP Completeness Verification (Item 5)
 
-**Feasibility**: ✅ **EXCELLENT**
-- Git version control is practical and widely supported
-- Baseline tagging procedure is straightforward
-- CCB operation is clearly defined with appropriate authority structure
-- Backup schedule (daily incremental, weekly full) is feasible and appropriate for SIL 3
+**Completeness Result:** **PASS**
 
-#### 4.2.3 Findings
+| EN 50128 Requirement | SVaP Section | Status | Notes |
+|----------------------|--------------|--------|-------|
+| §6.3.4.2 — SVaP written on basis of input documents | Section 1.2 | **PASS** | Input documents: SQAP, SCMP, SVP, System Req, System Safety Req |
+| §6.3.4.3 — SVaP content requirements | Sections 2–11 | **PASS** | Purpose, scope, organization, test specifications, acceptance criteria all present |
+| §6.3.4.4 — Validation criteria defined | Section 7 | **PASS** | Acceptance criteria per SIL 3 defined; 10 criteria with evidence requirements |
+| §6.3.4.5 — Pre-existing software | Section 3.4 | **PASS** | N/A for TDC (no pre-existing software); documented per §6.3.4.5 requirement |
+| §6.3.4.6 — Validation techniques per Table A.7 | Section 3.2 | **PASS** | All MANDATORY techniques for SIL 3 adopted (functional/black-box testing, performance testing, boundary value analysis, regression testing) |
+| Independence requirements (§5.1.2.10f) | Sections 1.3, 2.3 | **PASS** | VAL independence from DES/IMP/TST/VER/INT documented; VAL reports to VMGR |
+| Release decision authority (§5.1.2.8) | Sections 1.3, 7.3 | **PASS** | VAL final AGREE/DISAGREE authority documented; cannot be overridden |
+| Operational scenarios | Section 4.2.1 | **PASS** | 15 scenarios defined (normal, degraded, emergency, recovery, environmental) |
+| Performance testing (MANDATORY SIL 3) | Section 4.4 | **PASS** | Timing analysis, load testing, resource usage, reliability testing per Table A.18 |
+| Traceability to requirements | Section 5 | **PASS** | T13 (SW Req → Validation Report); 100% coverage requirement documented |
+| Validation evidence management | Section 6 | **PASS** | Evidence types, storage, review, archival procedures defined |
 
-**MINOR-SQAVR-SCMP-001**: Section 4.1 states CM responsibility for "Validating that document and evidence paths conform to the canonical registry" but does not specify the registry location or format. **Recommendation**: Add explicit reference to `document-registry.yaml` location and CM query-location procedure.
+**Overall SVaP Completeness:** All EN 50128 §6.3.4 requirements fully addressed. Platform deviation D1 (SVaP in Phase 1) justified per §5.3.2.4.
 
-**Impact**: MINOR — CM role is clearly defined; explicit registry reference improves operational clarity.
+### 5.4 Internal Consistency Verification
 
-**Disposition**: ✅ **APPROVE** — SCMP is technically correct, complete, and feasible for SIL 3. Minor finding does not require rework.
+**Consistency Result:** **PASS**
 
----
+| Document | Check | Status | Findings |
+|----------|-------|--------|----------|
+| **SQAP** | No contradictions found | **PASS** | All sections consistent; no conflicts in QA procedures |
+| SQAP | All cross-references valid | **PASS** | All references to SCMP, SVP, SVaP, DELIVERABLES.md, WORKFLOW.md validated |
+| SQAP | Consistent terminology | **PASS** | "QUA", "VER", "VAL", "VMGR", "NCR", "1-Pass Rule" used consistently |
+| SQAP | Consistent quality metrics | **PASS** | M1–M12 metrics thresholds consistent across Sections 10 and 5 |
+| **SCMP** | No contradictions found | **PASS** | All sections consistent; CM role vs. VER role clearly distinguished |
+| SCMP | All cross-references valid | **PASS** | All references to SQAP, SVP, TRACEABILITY.md, BASELINE_MANAGEMENT.md validated |
+| SCMP | Consistent terminology | **PASS** | "CM", "CCB", "CI", "baseline", "manifest", "T1–T15" used consistently |
+| SCMP | Consistent version numbering | **PASS** | MAJOR.MINOR.PATCH scheme used consistently in Sections 3.4 and 7 |
+| **SVaP** | No contradictions found | **PASS** | All sections consistent; validation vs. verification distinction clear |
+| SVaP | All cross-references valid | **PASS** | All references to SQAP, SCMP, SVP, SRS, Hazard Log validated |
+| SVaP | Consistent terminology | **PASS** | "VAL", "VMGR", "validation", "acceptance", "AGREE/DISAGREE" used consistently |
+| SVaP | Consistent test scenarios | **PASS** | 15 scenarios (SCEN-VAL-001 to -015) cross-referenced correctly |
 
-### 4.3 Document 3: Software Verification Plan (SVP)
+### 5.5 Readability and Traceability Verification
 
-**Document ID**: DOC-TDC-SVP-001  
-**Version**: 1.0 DRAFT  
-**Annex C Item**: 4  
-**Author**: Software Verifier (VER)  
-**VER Review Type**: **2nd-check**  
-**Review Date**: 2026-03-30
+**Readability/Traceability Result:** **PASS**
 
-#### 4.3.1 Verification Criteria Applied
+| Document | Criterion | Status | Evidence |
+|----------|-----------|--------|----------|
+| **SQAP** | Document structure clear (§5.3.2.7) | **PASS** | 12 sections with logical progression; TOC in Section 1.6 |
+| SQAP | Terminology defined (§5.3.2.8) | **PASS** | Section 1.4 defines QUA, VER, VAL, NCR, 1-Pass Rule, Track A/B |
+| SQAP | Traceability to EN 50128 (§5.3.2.9) | **PASS** | Table A.9 techniques T1–T8 mapped to TDC implementation in Section 7.1 |
+| SQAP | Document management present (§5.3.2.10) | **PASS** | Document Control, Version History, Approvals tables present |
+| **SCMP** | Document structure clear (§5.3.2.7) | **PASS** | 12 sections with logical progression; TOC in Section 1.6 |
+| SCMP | Terminology defined (§5.3.2.8) | **PASS** | Section 1.4 defines CI, baseline, CCB, CR, canonical path, T1–T15 |
+| SCMP | Traceability to EN 50128 (§5.3.2.9) | **PASS** | §6.6.4.1 nine aspects (a–i) explicitly mapped to CM process in Section 4.1 |
+| SCMP | Document management present (§5.3.2.10) | **PASS** | Document Control, Version History, Approvals tables present |
+| **SVaP** | Document structure clear (§5.3.2.7) | **PASS** | 12 sections with logical progression; TOC in Section 1.6 |
+| SVaP | Terminology defined (§5.3.2.8) | **PASS** | Section 1.4 defines validation, acceptance testing, operational scenario, black-box testing, release decision |
+| SVaP | Traceability to EN 50128 (§5.3.2.9) | **PASS** | Table A.7 techniques mapped to TDC implementation in Section 3.2 |
+| SVaP | Document management present (§5.3.2.10) | **PASS** | Document Control, Version History, Approvals tables present |
 
-**Note on 2nd-Check**: VER authored the SVP and performs **2nd-check** (not 1st-check) to maintain independence. The 2nd-check confirms fitness-for-use and cross-plan consistency but does not constitute full independent validation of VER's own verification approach.
+### 5.6 Coverage Verification
 
-Per `deliverables/planning/Software-Verification-Plan.yaml`:
+**Coverage Result:** **PASS**
 
-| Criterion | Requirement | Result | Evidence |
-|-----------|-------------|--------|----------|
-| **FIT-001** | SVP approach appropriate for SIL 3 | ✅ PASS | All mandatory techniques (Table A.5) correctly identified |
-| **FIT-002** | Verification techniques achievable | ✅ PASS | Tool selection (Cppcheck, Clang, Lizard, gcov) appropriate |
-| **FIT-003** | Acceptance criteria clear | ✅ PASS | Section 16.2.1 — VER 1-Pass Rule clearly defined |
-| **CONS-001** | SVP aligns with SQAP | ✅ PASS | Cross-references correct; SIL 3 provisions consistent |
-| **CONS-002** | SVP aligns with SCMP | ✅ PASS | Traceability requirements consistent with RTM maintenance |
-| **CONS-003** | SVP aligns with SVaP | ✅ PASS | Verification vs. validation boundary clearly defined |
-| **IND-001** | VER independence maintained | ✅ PASS | Section 4.1.1 — VER reports to VMGR, not PM |
-| **IND-002** | No self-check conflict | ✅ PASS | SVP explicitly states VER cannot self-check item 4 |
+| Lifecycle Phase | SQAP QA Activities (Section 5) | SCMP CM Activities (Sections 3-8) | SVaP VAL Activities (Section 4) | Status |
+|----------------|--------------------------------|-----------------------------------|--------------------------------|--------|
+| **Phase 0** | NONE (COD generates; QUA not instantiated) | NONE (pre-project) | N/A | **N/A** |
+| **Phase 1** | SQAP authorship; template compliance (5 items) | Document registry, baseline at Gate 1 | SVaP authorship | **PASS** |
+| **Phase 2** | Template compliance; traceability audit (T1–T2) | Traceability matrix (T1–T2), baseline at Gate 2 | Requirements validation (customer review) | **PASS** |
+| **Phase 3** | Template compliance; traceability audit (T3–T5c) | Traceability matrix (T3–T5c), baseline at Gate 3 | N/A (validation in Phase 7) | **PASS** |
+| **Phase 4** | Template compliance; traceability audit (T6, T11) | Traceability matrix (T6, T8, T11), baseline at Gate 4 | N/A (validation in Phase 7) | **PASS** |
+| **Phase 5** | Template compliance; evidence audit (MISRA, coverage); QA process data (T8) | Evidence storage initialization; traceability (T7, T12); baseline at Gate 5 | N/A (validation in Phase 7) | **PASS** |
+| **Phase 6** | Template compliance; traceability audit (T10a, T10b, T12) | Traceability matrix (T10a, T10b); baseline at Gate 6 | N/A (validation in Phase 7) | **PASS** |
+| **Phase 7** | Template compliance (Track A item 24); 1-Pass Rule (Track B items 23, 25–27) | Baseline at Gate 7 (release-baseline); traceability (T13–T15) | Test planning, test execution, performance validation, acceptance testing (Phase 7 activities) | **PASS** |
+| **Phase 8** | **ZERO ACTIVITY** (ASR fully independent) | Read-only access to release-baseline | 2nd check on SVP (item 4) only; no VAL report | **PASS** |
+| **Phase 9** | Template compliance (items 36–40) | Deployment records; baseline at Gate 9 | 2nd check on deployment items | **PASS** |
+| **Phase 10** | Template compliance (items 41–44); CCB audit; traceability impact audit | Per-CR baseline; change records; traceability updates per CR | N/A (VAL not in maintenance loop) | **PASS** |
 
-#### 4.3.2 Technical Content Assessment
-
-**Fitness-for-Use**: ✅ **EXCELLENT**
-- Verification approach is appropriate for TDC SIL 3 project
-- All EN 50128 Table A.5 mandatory techniques (SIL 3) correctly identified
-- Static analysis tools (Cppcheck, Clang Static Analyzer) are appropriate for C code
-- Test coverage tools (gcov/lcov) are industry-standard and suitable for SIL 3
-- Complexity measurement (Lizard for cyclomatic complexity) is appropriate
-- MISRA C:2012 verification approach (zero mandatory violations) is correct for SIL 3
-
-**Cross-Plan Consistency**: ✅ **EXCELLENT**
-- SVP Section 9.1 references SQAP Section 7.2 (MISRA C requirements) — consistent
-- SVP Section 10.4 references SCMP RTM maintenance — consistent
-- SVP Section 11.7 references VAL Phase 7 activities — consistent
-- SVP Section 8.1 coverage requirements (100%) match SQAP Section 9.1 — consistent
-
-**Independence**: ✅ **MAINTAINED**
-- SVP Section 4.1.1 correctly states VER reports to VMGR (not PM) for SIL 3
-- SVP explicitly acknowledges VER cannot self-check item 4 — deviation documented
-- Prohibited role combinations (VER + DES/IMP/REQ/TST/INT) correctly identified
-
-#### 4.3.3 Findings
-
-**MINOR-SQAVR-SVP-001**: SVP Section 11.6 (Phase 6 Integration Verification) states "Phase 6 has NO VER report per standard phase mapping" but then describes that item 23 (SW Integration Verification Report) is produced in Phase 7. **Recommendation**: Clarify upfront: "VER reviews integration evidence in Phase 6 but produces formal report (item 23) in Phase 7 Step B1 per §6.3.4.12."
-
-**Impact**: MINOR — Content is correct; restructuring improves clarity for readers unfamiliar with Phase 7 special flow.
-
-**Disposition**: ✅ **APPROVE** — SVP is fit-for-use, consistent with other plans, and maintains VER independence. Minor finding does not require rework.
+**Overall Coverage:** All lifecycle phases have appropriate QA, CM, and validation activities defined. Phase 8 zero QA activity is correctly documented per ASR independence requirement.
 
 ---
 
-### 4.4 Document 4: Software Validation Plan (SVaP)
+## 6. Non-Conformities and Issues
 
-**Document ID**: DOC-TDC-SVaP-001  
-**Version**: 1.0 DRAFT  
-**Annex C Item**: 5  
-**Author**: Software Validator (VAL)  
-**VER Review Type**: **1st-check**  
-**Review Date**: 2026-03-30
+### 6.1 Critical Non-Conformities
 
-#### 4.4.1 Verification Criteria Applied
+*Critical: MUST be resolved before SQAP approval*
 
-Per `deliverables/planning/Software-Validation-Plan.yaml`:
+**None Found.**
 
-| Criterion | Requirement | Result | Evidence |
-|-----------|-------------|--------|----------|
-| **SEC-001** | All 20 mandatory sections present | ✅ PASS | TOC verified — 20 sections present |
-| **SIL3-001** | VAL independence mandatory | ✅ PASS | Section 4.1.1 — reports to Safety Authority/VMGR, not PM |
-| **SIL3-002** | Validation techniques (Table A.7) | ✅ PASS | Section 6 — all SIL 3 mandatory techniques |
-| **SIL3-003** | Functional/black-box testing | ✅ PASS | Section 6.4.1 — operational scenarios |
-| **SIL3-004** | Performance testing (mandatory SIL 3) | ✅ PASS | Section 10 — timing, WCET, load, resource usage |
-| **SIL3-005** | Target environment testing | ✅ PASS | Section 7 — DCU hardware mandatory |
-| **SIL3-006** | Safety requirements validation | ✅ PASS | Section 11 — 100% SSRS coverage |
-| **SIL3-007** | Acceptance testing | ✅ PASS | Section 9 — customer involvement |
-| **SIL3-008** | Release decision authority | ✅ PASS | Section 8.7 — VAL AGREE/DISAGREE per §5.1.2.8 |
-| **REF-001** | System documents referenced | ✅ PASS | Section 1.5.2 — all four system docs referenced |
-| **TECH-001** | Verification vs. validation boundary | ✅ PASS | Section 1.4 — clear distinction table |
-| **TECH-002** | Validation environment specified | ✅ PASS | Section 7 — DCU hardware, -25°C to +55°C |
+### 6.2 Major Non-Conformities
 
-#### 4.4.2 Technical Content Assessment
+*Major: SHOULD be resolved*
 
-**Correctness**: ✅ **EXCELLENT**
-- Validation organization correctly implements EN 50128 §5.1.2.10f SIL 3 independence
-- All EN 50128 Table A.7 mandatory techniques (SIL 3) correctly identified
-- Validation vs. verification boundary clearly defined (Section 1.4 table)
-- Target environment testing requirement correctly specified (DCU hardware)
-- Performance testing requirements (timing, WCET, load) appropriate for SIL 3
-- Release decision authority (VAL AGREE/DISAGREE) correctly assigned per §5.1.2.8
+**None Found.**
 
-**Completeness**: ✅ **EXCELLENT**
-- All 20 mandatory sections present and substantive
-- Operational scenarios (normal, degraded, emergency, recovery) comprehensively defined
-- Acceptance testing criteria include customer involvement
-- Safety requirements validation includes 100% SSRS traceability
-- Validation tools and test automation approach clearly defined
+### 6.3 Minor Non-Conformities
 
-**Consistency**: ✅ **EXCELLENT**
-- Cross-references to SQAP, SVP, SCMP are correct
-- SIL 3 provisions consistent with SQAP and SVP
-- Independence requirements align with SVP VER independence provisions
-- Traceability requirements (SSRS → validation tests) align with SCMP RTM maintenance
+| ID | Severity | Description | Document | Section | Recommendation |
+|----|----------|-------------|----------|---------|----------------|
+| NC-001 | Minor | SQAP references "docs/organization/org-chart.pdf" but file does not yet exist | SQAP | Section 1.5 | Create org chart before Gate 1; non-blocking for SQAP approval |
+| NC-002 | Minor | SCMP manifest example shows placeholder `<hash>` but does not specify hash algorithm | SCMP | Section 7.3 | Document states SHA-256 in Section 7.3; manifest example should show "sha256" explicitly |
+| NC-003 | Minor | SVaP Table 10.1 references "RTOS profiler" but does not specify which RTOS will be used | SVaP | Section 10.1 | Specify RTOS in Phase 3 (Architecture); non-blocking for SVaP approval |
 
-**SIL 3 Compliance**: ✅ **EXCELLENT**
-- All EN 50128 Table A.7 mandatory techniques correctly applied
-- Performance testing (**M** at SIL 3) comprehensively addressed (Section 10)
-- Functional and black-box testing (**M** at SIL 3) clearly defined
-- Regression testing (**M** at SIL 3) planned with automated suite
-- Boundary value analysis (**M** at SIL 3) applied to speed interlock, door timing
+### 6.4 Observations
 
-**Feasibility**: ✅ **EXCELLENT**
-- Validation activities are feasible for Phase 7 execution
-- Target environment (DCU hardware) availability assumed — reasonable for SIL 3
-- Customer involvement in acceptance testing is standard practice
-- Validation schedule (Section 18) aligns with Phase 7 duration
-
-#### 4.4.3 Findings
-
-**MINOR-SQAVR-SVaP-001**: SVaP Section 10.3 (WCET Analysis) states "Method: Measure worst-case execution time for safety-critical functions" but does not specify tool support. **Recommendation**: Clarify whether manual timing analysis (hardware timers, RTOS tick counters) or dedicated WCET tool (e.g., AbsInt aiT) will be used. For SIL 3, manual WCET analysis with measurement-based evidence is acceptable if properly documented.
-
-**Impact**: MINOR — WCET analysis requirement is correctly stated; tool clarification improves execution planning.
-
-**Disposition**: ✅ **APPROVE** — SVaP is technically correct, complete, and feasible for SIL 3. Minor finding does not require rework.
+| ID | Description | Recommendation |
+|----|-------------|----------------|
+| OBS-001 | SQAP Section 7.1 Table A.9 technique justifications are comprehensive and well-documented | No action required; best practice |
+| OBS-002 | SCMP Section 2.3 explicitly distinguishes CM presence checks from VER functional completeness (good clarity) | No action required; best practice |
+| OBS-003 | SVaP Section 4.2.1 defines 15 operational scenarios (exceeds minimum 10 for SIL 3) | No action required; exceeds requirement |
+| OBS-004 | All three documents reference platform deviations D1–D8 consistently | No action required; traceability excellent |
 
 ---
 
-## 5. SIL 3 Compliance Assessment
+## 7. EN 50128 Compliance
 
-### 5.1 EN 50128 Normative Requirements Verification
+### 7.1 Section 6.5.4 Compliance (SQAP)
 
-| Clause | Requirement | Status | Evidence |
-|--------|-------------|--------|----------|
-| **§6.5.4.3** | SQAP SHALL be written | ✅ PASS | DOC-TDC-SQAP-001 v1.0 DRAFT |
-| **§6.6.4.1** | SCMP SHALL define CM | ✅ PASS | DOC-TDC-SCMP-001 v1.0 DRAFT |
-| **§6.2.4.2** | SVP SHALL be written by VER | ✅ PASS | DOC-TDC-SVP-001 v1.0 DRAFT (VER-authored) |
-| **§6.3.4.2** | SVaP SHALL be written by VAL | ✅ PASS | DOC-TDC-SVaP-001 v1.0 DRAFT (VAL-authored) |
-| **§5.1.2.10e** | VER independent (SIL 3) | ✅ PASS | SVP Section 4.1.1 — reports to VMGR |
-| **§5.1.2.10f** | VAL independent (SIL 3) | ✅ PASS | SVaP Section 4.1.1 — reports to VMGR |
-| **§5.3.2.4** | SVaP at baseline before Phase 7 | ✅ PASS | SVaP Section 1.2 — Phase 1 delivery |
-| **§6.6.4.1** | Nine required aspects of change control | ✅ PASS | SCMP Section 8.2 — all nine aspects (a–i) mapped |
-| **§9.1.4.2** | Baseline recording and maintenance | ✅ PASS | SCMP Section 7 — 7-step baseline procedure |
+| Clause | Requirement | SQAP Response | Compliance |
+|--------|-------------|---------------|------------|
+| §6.5.4.3 | SQAP written under VER responsibility | Introduction, Deviation D8 | **PASS** |
+| §6.5.4.4 | Quality System described | Section 1 | **PASS** |
+| §6.5.4.5 | QA activities per phase | Section 5 | **PASS** |
+| §6.5.4.6 | QA tailored to project | Sections 1.3, 7.1 | **PASS** |
+| §6.5.4.14-17 | Readability requirements | All sections | **PASS** |
 
-### 5.2 Mandatory Techniques Verification (Table A.9 — SIL 3)
+### 7.2 Section 6.6.4 Compliance (SCMP)
 
-| # | Technique | Requirement | Status | Evidence |
-|---|-----------|-------------|--------|----------|
-| **T1** | Quality Management System | **M** | ✅ PASS | SQAP entire document |
-| **T2** | Process Audits | **M** | ✅ PASS | SQAP Section 13.1 — monthly audits |
-| **T3** | Risk-based Quality Plan | HR | ✅ PASS | SQAP Section 1.1 — SIL-tailored |
-| **T4** | Document and Data Control | **M** | ✅ PASS | SCMP Section 5 — CI identification |
-| **T5** | Software Configuration Management | **M** | ✅ PASS | SCMP entire document |
-| **T6** | Software Traceability | **M** | ✅ PASS | SCMP Section 10.4 — RTM maintenance |
-| **T7** | Defect Management | **M** | ✅ PASS | SQAP Section 14 — NCR management |
-| **T8** | Quality Records and Metrics | **M** | ✅ PASS | SQAP Section 15 — per-phase metrics |
-| **T9** | Review and Approval Process | **M** | ✅ PASS | SQAP Section 8 — two-track review |
+| Clause | Requirement | SCMP Response | Compliance |
+|--------|-------------|---------------|------------|
+| §6.6.4.1 | Change control (nine aspects a–i) | Section 4.1 | **PASS** |
+| §6.6.4.2 | Re-entry to lifecycle phase | Section 4.1.8 | **PASS** |
+| §6.6.3 | Configuration status reports | Section 5.1 | **PASS** |
+| §9.1.4.2 | Baseline recorded under CM control | Section 7 | **PASS** |
+| §9.1.4.3 | Reproducibility throughout operational lifetime | Section 7.3 (manifest) | **PASS** |
 
-**Assessment**: ✅ All nine EN 50128 Table A.9 mandatory techniques for SIL 3 are correctly identified and implemented in the Phase 1 planning documents.
+### 7.3 Section 6.3.4 Compliance (SVaP)
 
-### 5.3 Verification Techniques (Table A.5 — SIL 3)
+| Clause | Requirement | SVaP Response | Compliance |
+|--------|-------------|---------------|------------|
+| §6.3.4.2 | SVaP written on basis of input documents | Section 1.2 | **PASS** |
+| §6.3.4.3 | SVaP content requirements | Sections 2–11 | **PASS** |
+| §6.3.4.4 | Validation criteria defined | Section 7 | **PASS** |
+| §6.3.4.5 | Pre-existing software handling | Section 3.4 (N/A) | **PASS** |
+| §6.3.4.6 | Validation techniques (Table A.7) | Section 3.2 | **PASS** |
 
-Per SVP Section 6, the following mandatory and highly recommended verification techniques are correctly specified:
+### 7.4 Independence Requirements (SIL 3)
 
-| # | Technique | SIL 3 | Status | Evidence |
-|---|-----------|-------|--------|----------|
-| **D.24** | Static Analysis | **M** | ✅ PASS | SVP Section 7 — Cppcheck, Clang |
-| **D.58** | Traceability | **M** | ✅ PASS | SVP Section 10 — RTM 100% |
-| **D.32** | Inspection | **M** | ✅ PASS | SVP Section 11 — per-phase reviews |
-| **D.37** | Metrics | HR | ✅ PASS | SVP Section 6.4 — complexity, coverage |
+**Verification Independence:** **COMPLIANT**
 
-### 5.4 Validation Techniques (Table A.7 — SIL 3)
+Evidence:
+- VER [VER Name] is independent from SQAP author (QUA), SCMP author (CM), and SVaP author (VAL) per §5.1.2.10e
+- VER reports to VMGR (SIL 3 requirement), not to PM
+- No conflicts of interest identified
+- VER did NOT verify item 4 (SVP) — self-check exclusion per deviation D8
 
-Per SVaP Section 6, the following mandatory techniques are correctly specified:
+**Validation Independence:** **COMPLIANT**
 
-| # | Technique | SIL 3 | Status | Evidence |
-|---|-----------|-------|--------|----------|
-| **Functional/Black-Box Testing** | **M** | ✅ PASS | SVaP Section 6.4.1 — operational scenarios |
-| **Performance Testing** | **M** | ✅ PASS | SVaP Section 10 — timing, WCET, load |
-| **Regression Testing** | **M** | ✅ PASS | SVaP Section 6.4.3 — automated suite |
-| **Boundary Value Analysis** | **M** | ✅ PASS | SVaP Section 6.4.5 — speed, timing boundaries |
-
-**Assessment**: ✅ All EN 50128 Table A.7 mandatory validation techniques for SIL 3 are correctly identified and planned.
+Evidence:
+- VAL [VAL Name] is independent from DES, IMP, TST, VER, INT per §5.1.2.10f
+- VAL reports to VMGR (SIL 3 requirement), not to PM
+- VAL has final release decision authority (AGREE/DISAGREE) per §5.1.2.8
 
 ---
 
-## 6. Traceability Verification
+## 8. Verification Summary
 
-### 6.1 System Documents to Planning Documents
+**SQAP completeness verification result:** **PASS**  
+**SCMP completeness verification result:** **PASS**  
+**SVaP completeness verification result:** **PASS**  
+**Internal consistency result (all documents):** **PASS**  
+**Readability/traceability result (all documents):** **PASS**  
+**Coverage result (all documents):** **PASS**
 
-**Traceability Requirement**: All Phase 1 planning documents SHALL reference the four system-level documents (Phase 0) by Document ID to establish the foundation for Phase 2 software requirements traceability.
+**Overall Verification Decision:** **APPROVE**
 
-| System Document | Document ID | SQAP | SCMP | SVP | SVaP |
-|-----------------|-------------|------|------|-----|------|
-| System Requirements Specification | DOC-TDC-SRS-SYS-001 | ✅ Sec 2.2 | ✅ Sec 2.2 | ✅ Sec 2.2 | ✅ Sec 1.5.2 |
-| System Architecture Description | DOC-TDC-SAD-SYS-001 | ✅ Sec 2.2 | ✅ Sec 2.2 | ✅ Sec 2.2 | ✅ Sec 1.5.2 |
-| System Safety Plan | DOC-TDC-SSP-SYS-001 | ✅ Sec 2.2 | ✅ Sec 2.2 | ✅ Sec 2.2 | ✅ Sec 1.5.2 |
-| System Safety Requirements Specification | DOC-TDC-SSRS-SYS-001 | ✅ Sec 2.2 | ✅ Sec 2.2 | ✅ Sec 2.2 | ✅ Sec 1.5.2 |
+**Rationale:**  
+All three planning documents (SQAP, SCMP, SVaP) fully comply with EN 50128:2011 requirements for SIL 3. Completeness verification confirms all normative clauses are addressed. Internal consistency verification found zero contradictions. Readability and traceability verification confirms all §5.3.2 requirements met. Coverage verification confirms QA, CM, and validation activities defined for all lifecycle phases.
 
-**Traceability Assessment**: ✅ **PASS** — All four system-level documents are correctly referenced by Document ID in all four Phase 1 planning documents.
+**Minor Non-Conformities (NC-001, NC-002, NC-003):** Three minor documentation issues identified (missing org chart file, hash algorithm example clarity, RTOS tool specification). These are non-blocking for SQAP approval and can be resolved during Phase 2 or Phase 3 activities.
 
-### 6.2 Cross-Plan Traceability
+**Independence Constraint (Item 4):** VER authored the SVP (item 4) per §6.2.4.2 and cannot perform self-check. Item 4 is excluded from this SQAVR scope per deviation D8. VAL will perform 2nd Check on item 4 per `activities/phase-1-planning.yaml`.
 
-**Traceability Requirement**: Phase 1 planning documents SHALL cross-reference each other to establish consistency and avoid conflicts.
-
-| Reference | From | To | Result | Evidence |
-|-----------|------|-----|--------|----------|
-| SQAP → SCMP | SQAP Sec 1.3 | SCMP | ✅ PASS | DOC-TDC-SCMP-001 referenced |
-| SQAP → SVP | SQAP Sec 1.3 | SVP | ✅ PASS | DOC-TDC-SVP-001 referenced |
-| SQAP → SVaP | SQAP Sec 1.3 | SVaP | ✅ PASS | DOC-TDC-SVaP-001 referenced |
-| SCMP → SQAP | SCMP Sec 1.3 | SQAP | ✅ PASS | DOC-TDC-SQAP-001 referenced |
-| SCMP → SVP | SCMP Sec 1.3 | SVP | ✅ PASS | DOC-TDC-SVP-001 referenced |
-| SCMP → SVaP | SCMP Sec 1.3 | SVaP | ✅ PASS | DOC-TDC-SVaP-001 referenced |
-| SVP → SQAP | SVP Sec 1.4 | SQAP | ✅ PASS | DOC-TDC-SQAP-001 referenced |
-| SVP → SCMP | SVP Sec 1.4 | SCMP | ✅ PASS | DOC-TDC-SCMP-001 referenced |
-| SVP → SVaP | SVP Sec 1.4 | SVaP | ✅ PASS | DOC-TDC-SVaP-001 referenced |
-| SVaP → SQAP | SVaP Sec 1.5.2 | SQAP | ✅ PASS | DOC-TDC-SQAP-001 referenced |
-| SVaP → SVP | SVaP Sec 1.4 | SVP | ✅ PASS | DOC-TDC-SVP-001 referenced |
-| SVaP → SCMP | SVaP Sec 13.1 | SCMP | ✅ PASS | DOC-TDC-SCMP-001 referenced |
-
-**Traceability Assessment**: ✅ **PASS** — All cross-plan references are correct and bidirectional. No orphaned references detected.
+**Conditions for Approval:** None. All critical and major non-conformities: **ZERO**.
 
 ---
 
-## 7. Cross-Plan Consistency Analysis
+## 9. Conclusion
 
-### 7.1 SIL 3 Provisions Consistency
+### 9.1 Conditions for Approval
 
-| Provision | SQAP | SCMP | SVP | SVaP | Consistent? |
-|-----------|------|------|-----|------|-------------|
-| **Independence (VER/VAL/VMGR)** | Sec 4.1 | Sec 4.2 | Sec 4.1 | Sec 4.1 | ✅ YES |
-| **MISRA C:2012 (zero violations)** | Sec 7.2 | N/A | Sec 9 | N/A | ✅ YES |
-| **Coverage (100% S/B/C)** | Sec 9.1 | N/A | Sec 8 | N/A | ✅ YES |
-| **Cyclomatic Complexity (CCN ≤ 10)** | Sec 7.3 | N/A | Sec 7.4 | N/A | ✅ YES |
-| **Traceability (100% bidirectional)** | Sec 17 | Sec 10.4 | Sec 10 | Sec 13 | ✅ YES |
-| **Baseline Management** | Ref SCMP | Sec 7 | Ref SCMP | Ref SCMP | ✅ YES |
-| **Gate Authority (COD Strict)** | Sec 5.1 | Sec 4.3 | N/A | N/A | ✅ YES |
-| **1-Pass Rule (VER/VAL reports)** | Sec 8.2.2 | N/A | Sec 16.2.1 | N/A | ✅ YES |
+- [x] All critical non-conformities resolved (zero found)
+- [x] All major non-conformities resolved or justified (zero found)
+- [x] All verification criteria met
+- [x] Independent verification complete (SIL 3 requirement met)
 
-**Consistency Assessment**: ✅ **EXCELLENT** — All SIL 3 provisions are consistent across the four planning documents. No conflicts detected.
+### 9.2 Verifier Statement
 
-### 7.2 Mandatory Techniques Consistency
+I, [Verifier Name], hereby certify that:
+1. I have independently verified the Software Quality Assurance Plan (item 1), Software Configuration Management Plan (item 3), and Software Validation Plan (item 5)
+2. The verification activities were performed in accordance with the Software Verification Plan (DOC-SVP-2026-001)
+3. The verification results documented in this report are accurate and complete
+4. **[SIL 3]** I am independent from the SQAP author (QUA), SCMP author (CM), and SVaP author (VAL) per §5.1.2.10e
+5. **[SIL 3 Independence Constraint]** I authored the SVP (item 4) per §6.2.4.2 and have excluded it from my verification scope to maintain independence integrity per §5.1.2.10
 
-| Technique | SQAP | SVP | SVaP | Consistent? |
-|-----------|------|-----|------|-------------|
-| **Static Analysis (Table A.5 D.24)** | M | M (Sec 7) | N/A | ✅ YES |
-| **Traceability (Table A.5 D.58)** | M | M (Sec 10) | M (Sec 13) | ✅ YES |
-| **Functional Testing (Table A.7)** | N/A | N/A | M (Sec 6.4.1) | ✅ YES |
-| **Performance Testing (Table A.7)** | N/A | N/A | M (Sec 10) | ✅ YES |
-
-**Consistency Assessment**: ✅ **EXCELLENT** — All mandatory techniques are consistently identified across planning documents.
+**Verifier:** [VER Name]  
+**Signature:** [Signature]  
+**Date:** 2026-04-02
 
 ---
 
-## 8. Independence Assessment
-
-### 8.1 EN 50128 Independence Requirements (SIL 3)
-
-| Role | Independence Requirement | Status | Evidence |
-|------|-------------------------|--------|----------|
-| **VER** | **MANDATORY** (§5.1.2.10e) | ✅ PASS | SVP Sec 4.1.1 — reports to VMGR, not PM |
-| **VAL** | **MANDATORY** (§5.1.2.10f) | ✅ PASS | SVaP Sec 4.1.1 — reports to VMGR, not PM |
-| **VMGR** | **MANDATORY** (platform extension) | ✅ PASS | SQAP Sec 4.2.4 — independent from PM/COD |
-| **QUA** | Not required | ✅ PASS | SQAP Sec 4.2.1 — reports to COD/PM (not development) |
-| **CM** | Not required | ✅ PASS | SCMP Sec 4.2 — not required, but separated from IMP |
-
-### 8.2 Prohibited Role Combinations (SIL 3)
-
-| Prohibited Combination | Status | Evidence |
-|------------------------|--------|----------|
-| VER + DES | ✅ Prohibited | SVP Sec 4.2 |
-| VER + IMP | ✅ Prohibited | SVP Sec 4.2 |
-| VER + REQ | ✅ Prohibited | SVP Sec 4.2 |
-| VER + TST | ✅ Prohibited | SVP Sec 4.2 |
-| VER + INT | ✅ Prohibited | SVP Sec 4.2 |
-| VAL + any development role | ✅ Prohibited | SVaP Sec 4.2 |
-
-### 8.3 Organizational Independence Verification
-
-**VER Reporting Line** (SVP Section 4.1.1):
-```
-VER → VMGR → Safety Authority
-     (NOT PM)
-```
-✅ **PASS** — VER reports to VMGR, not PM. Organizationally independent.
-
-**VAL Reporting Line** (SVaP Section 4.1.1):
-```
-VAL → VMGR → Safety Authority
-     (NOT PM)
-```
-✅ **PASS** — VAL reports to VMGR, not PM. Organizationally independent.
-
-**VMGR Reporting Line** (SQAP Section 4.2.4):
-```
-VMGR → Safety Authority
-       (NOT COD or PM)
-```
-✅ **PASS** — VMGR is independent from COD and PM.
-
-**Independence Assessment**: ✅ **EXCELLENT** — All SIL 3 mandatory independence requirements are correctly specified in the planning documents.
-
----
-
-## 9. Findings Summary
-
-### 9.1 Findings by Severity
-
-| Severity | Count | Impact |
-|----------|-------|--------|
-| **CRITICAL** | 0 | No gate blockers |
-| **MAJOR** | 0 | No rework required |
-| **MINOR** | 4 | Observations only — no rework required |
-
-### 9.2 Detailed Findings List
-
-| Finding ID | Document | Section | Severity | Description | Recommendation |
-|------------|----------|---------|----------|-------------|----------------|
-| **MINOR-SQAVR-SQAP-001** | SQAP | 20 | MINOR | Deviation rationale not detailed | Add explicit §6.5.4.3 reference for D8 |
-| **MINOR-SQAVR-SCMP-001** | SCMP | 4.1 | MINOR | Document registry location not specified | Add reference to `document-registry.yaml` |
-| **MINOR-SQAVR-SVP-001** | SVP | 11.6 | MINOR | Phase 6 VER report placement could be clearer | Clarify item 23 produced in Phase 7 upfront |
-| **MINOR-SQAVR-SVaP-001** | SVaP | 10.3 | MINOR | WCET tool not specified | Clarify manual vs. dedicated WCET tool |
-
-### 9.3 QUA Minor Findings Disposition
-
-QUA identified 12 MINOR findings in Track A review (QUA-REVIEW-TDC-PHASE1-001). VER reviewed all 12 findings and concurs:
-
-- **MINOR-SQAP-001 to MINOR-SQAP-003**: ✅ Concur — Editorial improvements
-- **MINOR-SCMP-001 to MINOR-SCMP-003**: ✅ Concur — Editorial improvements
-- **MINOR-SVP-001 to MINOR-SVP-003**: ✅ Concur — Editorial improvements
-- **MINOR-SVaP-001 to MINOR-SVaP-003**: ✅ Concur — Editorial improvements
-
-**VER Assessment**: All 12 QUA MINOR findings are advisory only and do not require rework. VER findings (4 MINOR) are additional observations.
-
-**Total Findings**: 4 VER MINOR + 12 QUA MINOR = **16 MINOR** (all advisory)
-
-### 9.4 Findings Impact on Gate Progression
-
-**VER 1-Pass Rule Assessment** (SVP Section 16.2.1):
-- **0 Critical findings** ✅
-- **0 Major findings** ✅
-- **4 Minor findings** ✅ (observations only, no rework)
-
-**Gate Readiness**: ✅ **READY FOR COD PHASE 1 GATE CHECK**
-
----
-
-## 10. EN 50128 Compliance Matrix
-
-### 10.1 Normative Compliance
-
-| Clause | Requirement | Compliance | Evidence |
-|--------|-------------|------------|----------|
-| §5.1.2.10e | VER independence (SIL 3) | ✅ COMPLIANT | SVP Section 4.1.1 |
-| §5.1.2.10f | VAL independence (SIL 3) | ✅ COMPLIANT | SVaP Section 4.1.1 |
-| §6.2.4.2 | SVP written by VER | ✅ COMPLIANT | SVP Document Control |
-| §6.2.4.10 | Verify quality plan provisions | ✅ COMPLIANT | This report Section 4.1 |
-| §6.2.4.11 | Confirm quality records approach | ✅ COMPLIANT | SQAP Section 15 verified |
-| §6.2.4.13 | VER report per phase | ✅ COMPLIANT | This report (item 2) |
-| §6.3.4.2 | SVaP written by VAL | ✅ COMPLIANT | SVaP Document Control |
-| §6.5.4.3 | SQAP written | ✅ COMPLIANT | SQAP authored by QUA under VER direction |
-| §6.6.4.1 | Nine required aspects | ✅ COMPLIANT | SCMP Section 8.2 |
-| §9.1.4.2 | Baseline recording | ✅ COMPLIANT | SCMP Section 7 |
-
-### 10.2 Table A.5 Verification Techniques (SIL 3)
-
-| # | Technique | SIL 3 | Compliance | Evidence |
-|---|-----------|-------|------------|----------|
-| D.24 | Static Analysis | **M** | ✅ COMPLIANT | SVP Section 7 |
-| D.58 | Traceability | **M** | ✅ COMPLIANT | SVP Section 10 |
-| D.32 | Inspection | **M** | ✅ COMPLIANT | SVP Section 11 |
-| D.37 | Metrics | HR | ✅ COMPLIANT | SVP Section 6.4 |
-
-### 10.3 Table A.7 Validation Techniques (SIL 3)
-
-| Technique | SIL 3 | Compliance | Evidence |
-|-----------|-------|------------|----------|
-| Functional/Black-Box Testing | **M** | ✅ COMPLIANT | SVaP Section 6.4.1 |
-| Performance Testing | **M** | ✅ COMPLIANT | SVaP Section 10 |
-| Regression Testing | **M** | ✅ COMPLIANT | SVaP Section 6.4.3 |
-| Boundary Value Analysis | **M** | ✅ COMPLIANT | SVaP Section 6.4.5 |
-
-### 10.4 Table A.9 Quality Assurance Techniques (SIL 3)
-
-| # | Technique | SIL 3 | Compliance | Evidence |
-|---|-----------|-------|------------|----------|
-| T1 | Quality Management System | **M** | ✅ COMPLIANT | SQAP entire document |
-| T2 | Process Audits | **M** | ✅ COMPLIANT | SQAP Section 13.1 |
-| T4 | Document and Data Control | **M** | ✅ COMPLIANT | SCMP Section 5 |
-| T5 | Software Configuration Management | **M** | ✅ COMPLIANT | SCMP entire document |
-| T6 | Software Traceability | **M** | ✅ COMPLIANT | SCMP Section 10.4 |
-| T7 | Defect Management | **M** | ✅ COMPLIANT | SQAP Section 14 |
-| T8 | Quality Records and Metrics | **M** | ✅ COMPLIANT | SQAP Section 15 |
-| T9 | Review and Approval Process | **M** | ✅ COMPLIANT | SQAP Section 8 |
-
-**Compliance Assessment**: ✅ **FULLY COMPLIANT** — All EN 50128:2011 normative requirements for SIL 3 are satisfied.
-
----
-
-## 11. Verification Conclusion
-
-### 11.1 Overall Verification Result
-
-**✅ VER APPROVES ALL FOUR PHASE 1 PLANNING DOCUMENTS**
-
-| Document | Annex C Item | VER Result | Rationale |
-|----------|--------------|------------|-----------|
-| SQAP | 1 | ✅ **APPROVE** | Technically correct, complete, SIL 3 compliant, feasible |
-| SCMP | 3 | ✅ **APPROVE** | Technically correct, complete, SIL 3 compliant, feasible |
-| SVP | 4 | ✅ **APPROVE** | Fit-for-use, consistent, independence maintained |
-| SVaP | 5 | ✅ **APPROVE** | Technically correct, complete, SIL 3 compliant, feasible |
-
-### 11.2 VER Acceptance Criteria Met
-
-Per SVP Section 16.2.1 (VER 1-Pass Rule):
-
-| Criterion | Target | Actual | Met? |
-|-----------|--------|--------|------|
-| **Critical findings** | 0 | 0 | ✅ YES |
-| **Major findings** | 0 | 0 | ✅ YES |
-| **Minor findings** | Any | 4 | ✅ YES (observations only) |
-
-**Assessment**: ✅ All acceptance criteria satisfied. No rework required.
-
-### 11.3 Gate Readiness Assessment
-
-**Phase 1 Gate Criteria** (per `activities/phase-1-planning.yaml`):
-
-| Criterion | Status | Evidence |
-|-----------|--------|----------|
-| SQAP (item 1) QUA-passed and approved | ✅ PASS | QUA-REVIEW-TDC-PHASE1-001 |
-| SQAVR (item 2) QUA-passed and VER-issued | ✅ PASS | This report (DOC-TDC-SQAVR-002) |
-| SCMP (item 3) QUA-passed and approved | ✅ PASS | QUA-REVIEW-TDC-PHASE1-001 |
-| SVP (item 4) QUA-passed and approved | ✅ PASS | QUA-REVIEW-TDC-PHASE1-001 |
-| SVaP (item 5) QUA-passed and at baseline | ✅ PASS | QUA-REVIEW-TDC-PHASE1-001 |
-| VMGR approved VER report (SIL 3) | ⏳ PENDING | Awaiting VMGR review of this report |
-| SIL level documented | ✅ PASS | All documents state SIL 3 |
-| Zero critical open defects | ✅ PASS | 0 CRITICAL findings |
-
-**Gate Readiness**: ✅ **READY FOR VMGR REVIEW** → After VMGR approval → **READY FOR COD GATE CHECK**
-
-### 11.4 Recommendation to VMGR
-
-**VER recommends VMGR approval of Phase 1 Planning deliverables for the following reasons:**
-
-1. **Technical Correctness**: All four planning documents are technically correct and free of errors
-2. **Completeness**: All mandatory sections are present and substantive
-3. **SIL 3 Compliance**: All EN 50128 normative requirements for SIL 3 are satisfied
-4. **Consistency**: All documents are internally consistent and mutually aligned
-5. **Traceability**: System documents → Planning documents references are correct
-6. **Independence**: VER/VAL/VMGR independence requirements correctly specified
-7. **Feasibility**: Proposed approaches are practical and achievable for SIL 3 project
-8. **Findings**: 0 Critical, 0 Major, 4 Minor (observations only — no rework required)
-
-**VER Decision**: ✅ **APPROVE — READY FOR PHASE 1 GATE CHECK**
-
----
-
-## 12. References
-
-### 12.1 Normative References
-
-| Reference | Title | Version |
-|-----------|-------|---------|
-| EN 50128:2011 | Railway applications — Software for railway control and protection systems | 2011 |
-| EN 50126-1:2017 | Railway applications — RAMS — Part 1: Generic RAMS process | 2017 |
-| EN 50126-2:2017 | Railway applications — RAMS — Part 2: Systems approach to safety | 2017 |
-
-### 12.2 Project Documents Reviewed
-
-| Document ID | Title | Version | Review Date |
-|-------------|-------|---------|-------------|
-| DOC-TDC-SQAP-001 | Software Quality Assurance Plan | 1.0 DRAFT | 2026-03-30 |
-| DOC-TDC-SCMP-001 | Software Configuration Management Plan | 1.0 DRAFT | 2026-03-30 |
-| DOC-TDC-SVP-001 | Software Verification Plan | 1.0 DRAFT | 2026-03-30 |
-| DOC-TDC-SVaP-001 | Software Validation Plan | 1.0 DRAFT | 2026-03-30 |
-
-### 12.3 System Documents Referenced
-
-| Document ID | Title | Version |
-|-------------|-------|---------|
-| DOC-TDC-SRS-SYS-001 | System Requirements Specification | 1.0 APPROVED |
-| DOC-TDC-SAD-SYS-001 | System Architecture Description | 1.0 APPROVED |
-| DOC-TDC-SSP-SYS-001 | System Safety Plan | 1.0 APPROVED |
-| DOC-TDC-SSRS-SYS-001 | System Safety Requirements Specification | 1.0 APPROVED |
-
-### 12.4 Process Documents Referenced
-
-| Document ID | Title | Location |
-|-------------|-------|----------|
-| QUA-REVIEW-TDC-PHASE1-001 | QUA Review Summary — Phase 1 Planning | `docs/phase-1-planning/QUA-Review-Reports-Phase1-Summary.md` |
-| — | Verification Skill | `.opencode/skills/en50128-verification/SKILL.md` |
-| — | VnV Process Reference | `tasks/VnV-PROCESS.md` |
-| — | Phase 1 Planning Activity | `activities/phase-1-planning.yaml` |
-
----
-
-## Appendix A: Verification Evidence
-
-### A.1 Documents Read
-
-- ✅ DOC-TDC-SQAP-001 v1.0 DRAFT (67,849 bytes, 1,646 lines) — Read in full
-- ✅ DOC-TDC-SCMP-001 v1.0 DRAFT (71,843 bytes, 1,776 lines) — Read in full
-- ✅ DOC-TDC-SVP-001 v1.0 DRAFT (67,717 bytes, 1,285 lines) — Read in full
-- ✅ DOC-TDC-SVaP-001 v1.0 DRAFT (71,782 bytes, 1,593 lines) — Read in full
-- ✅ QUA-REVIEW-TDC-PHASE1-001 (29,784 bytes, 527 lines) — Read in full
-
-### A.2 Verification Checklists Applied
-
-- ✅ `deliverables/planning/Software-Quality-Assurance-Plan.yaml` — All criteria verified
-- ✅ `deliverables/planning/Software-Configuration-Management-Plan.yaml` — All criteria verified
-- ✅ `deliverables/planning/Software-Verification-Plan.yaml` — All criteria verified
-- ✅ `deliverables/planning/Software-Validation-Plan.yaml` — All criteria verified
-
-### A.3 Verification Tools Used
-
-| Tool | Version | Purpose | Classification |
-|------|---------|---------|----------------|
-| Document Content Analysis | Manual | Line-by-line review per EN 50128 Table A.5 D.32 | N/A |
-| Traceability Checker | Manual | Cross-reference verification per Table A.5 D.58 | N/A |
-
----
-
-## Appendix B: VER Independence Statement
-
-**Independence Declaration** (EN 50128 §5.1.2.10e):
-
-I, the undersigned Software Verifier (VER), declare that:
-
-1. **Organizational Independence**: I am organizationally independent from the TDC project development team (PM, QUA, CM, and all future REQ/DES/IMP/TST/INT roles).
-
-2. **Reporting Line**: I report exclusively to the V&V Manager (VMGR), who is independent from the Project Manager (PM) and the Lifecycle Coordinator (COD).
-
-3. **Role Separation**: I have NOT performed and SHALL NOT perform any of the following roles for the TDC project:
-   - Requirements Engineer (REQ)
-   - Designer (DES)
-   - Implementer (IMP)
-   - Tester (TST) — for the same code being verified
-   - Integrator (INT)
-
-4. **Authority**: I have the authority to reject phase completion if verification criteria are not met. My findings SHALL NOT be overruled by PM or COD without VMGR approval.
-
-5. **SVP Self-Check Limitation**: I authored the Software Verification Plan (item 4) and performed 2nd-check (not 1st-check) on it to maintain independence. This limitation is documented as a platform deviation and will be addressed in the Phase 8 Software Assessment Report.
-
-**VER Signature**: _____________  
-**Date**: 2026-03-30
+## 10. Appendices
+
+### Appendix A: Completeness Checklist
+
+**EN 50128 §6.5.4 (SQAP) Requirements Checklist**
+
+| Requirement | SQAP Section | Status | Evidence |
+|-------------|--------------|--------|----------|
+| §6.5.4.3 — SQAP written under VER responsibility | Introduction, Deviation D8 | ✓ | QUA authors under VER direction |
+| §6.5.4.4 — Quality System described | Section 1 | ✓ | ISO 9001:2015 compliance |
+| §6.5.4.5 — QA activities per phase | Section 5 | ✓ | All 10 phases covered |
+| §6.5.4.6 — QA tailored to project | Sections 1.3, 7.1 | ✓ | SIL 3, TDC-specific |
+| Table A.9 Technique T1 (ISO 9001 accreditation) | Section 7.1, row T1 | ✓ | HR adopted |
+| Table A.9 Technique T2 (ISO 9001 compliance) | Section 7.1, row T2 | ✓ | **M** adopted |
+| Table A.9 Technique T3 (ISO/IEC 90003) | Section 7.1, row T3 | ✓ | R adopted |
+| Table A.9 Technique T4 (Company Quality System) | Section 7.1, row T4 | ✓ | **M** adopted |
+| Table A.9 Technique T5 (SCM) | Section 7.1, row T5 | ✓ | **M** adopted (SCMP reference) |
+| Table A.9 Technique T6 (Traceability) | Section 7.1, row T6 | ✓ | **M** adopted (T1–T15) |
+| Table A.9 Technique T7 (Metrics) | Section 7.1, row T7 | ✓ | R adopted (M1–M12) |
+| Table A.9 Technique T8 (Data Recording/Analysis) | Section 7.1, row T8 | ✓ | **M** adopted |
+
+**EN 50128 §6.6.4 (SCMP) Requirements Checklist**
+
+| Requirement | SCMP Section | Status | Evidence |
+|-------------|--------------|--------|----------|
+| §6.6.4.1(a) — Unique identification | Section 4.1.1 | ✓ | CR ID: `CR-<YYYYMMDD>-<NNN>` |
+| §6.6.4.1(b) — Recording of reasons | Section 4.1.1 | ✓ | Required in CR template |
+| §6.6.4.1(c) — Analysis of consequences | Section 4.1.2 | ✓ | CM impact analysis procedure |
+| §6.6.4.1(d) — Approval by authorized personnel | Section 4.1.3 | ✓ | CCB composition, PM chair |
+| §6.6.4.1(e) — Updating all affected documents | Section 4.1.4 | ✓ | Implementation procedure |
+| §6.6.4.1(f) — Recording affected software items | Section 4.1.2 | ✓ | CM identifies all affected CIs |
+| §6.6.4.1(g) — Implementation, verification, test | Sections 4.1.4-5 | ✓ | VER review mandatory |
+| §6.6.4.1(h) — Reporting to relevant parties | Sections 4.1.7, 5.1 | ✓ | Configuration status accounting |
+| §6.6.4.1(i) — Maintaining traceability | Sections 4.1.6, 5.2 | ✓ | T1–T15 updates per CR |
+| §6.6.4.2 — Re-entry to lifecycle phase | Section 4.1.8 | ✓ | CM identifies; COD authorizes |
+
+**EN 50128 §6.3.4 (SVaP) Requirements Checklist**
+
+| Requirement | SVaP Section | Status | Evidence |
+|-------------|--------------|--------|----------|
+| §6.3.4.2 — SVaP written on basis of input documents | Section 1.2 | ✓ | SQAP, SCMP, SVP, System Req |
+| §6.3.4.3 — SVaP content (purpose, scope, org, tests, acceptance) | Sections 2–11 | ✓ | All sections present |
+| §6.3.4.4 — Validation criteria defined | Section 7 | ✓ | 10 acceptance criteria |
+| §6.3.4.5 — Pre-existing software | Section 3.4 | ✓ | N/A for TDC |
+| §6.3.4.6 — Validation techniques (Table A.7) | Section 3.2 | ✓ | All **M** techniques adopted |
+| §5.1.2.10f — Independence (SIL 3 MANDATORY) | Sections 1.3, 2.3 | ✓ | VAL reports to VMGR |
+| §5.1.2.8 — Release decision authority | Sections 1.3, 7.3 | ✓ | VAL AGREE/DISAGREE final |
+
+### Appendix B: Defect Details
+
+**NC-001: SQAP references missing org chart file**
+
+- **Severity:** Minor
+- **SQAP Section:** 1.5 (Role Assignments)
+- **Description:** SQAP states "Organization chart demonstrating independence of VER, VAL, VMGR, and QUA from development team shall be maintained in `docs/organization/org-chart.pdf` and reviewed quarterly." File does not yet exist.
+- **Impact:** Low — org chart can be created before Gate 1; SQAP approval not blocked
+- **Recommendation:** Create `docs/organization/org-chart.pdf` before Gate 1 with roles: VMGR → VER / VAL; PM → DES/IMP/TST/INT/REQ; PM → QUA; PM → CM
+- **Status:** OPEN (non-blocking)
+
+**NC-002: SCMP manifest example hash placeholder**
+
+- **Severity:** Minor
+- **SCMP Section:** 7.3 (Baseline Manifest Format)
+- **Description:** Manifest example YAML shows `sha256: <hash>` but uses placeholder instead of explicit algorithm name
+- **Impact:** Low — Section 7.3 text states "SHA-256 hash" clearly; manifest example should match
+- **Recommendation:** Update manifest example to show `sha256: "abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"` (example hash)
+- **Status:** OPEN (non-blocking)
+
+**NC-003: SVaP RTOS profiler not specified**
+
+- **Severity:** Minor
+- **SVaP Section:** 10.1 (Test Tools)
+- **Description:** Table 10.1 lists "RTOS Profiler (IAR Embedded Workbench)" but TDC RTOS not yet selected
+- **Impact:** Low — RTOS selection occurs in Phase 3 (Architecture); SVaP tool list can be updated via SCMP change control
+- **Recommendation:** Document RTOS selection in Phase 3; update SVaP via CCB-approved CR if RTOS changes
+- **Status:** OPEN (non-blocking)
 
 ---
 
 **End of Software Quality Assurance Verification Report**
-
-**Distribution**:
-- VMGR (V&V Manager) — for final V&V approval
-- QUA (Quality Assurance) — for format-gate check per 1-Pass Rule
-- COD (Lifecycle Coordinator) — for Phase 1 gate check preparation
-- PM (Project Manager) — for information (reports to COD, not VER)
-- CM (Configuration Manager) — for baseline preparation
-
-**Retention**: This report SHALL be archived under CM control per SCMP Section 14 and retained for project lifetime + 10 years per EN 50128 §9.3.

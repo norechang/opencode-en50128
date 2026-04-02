@@ -1,0 +1,45 @@
+{
+  "rtm_path": "examples/TDC/docs/traceability/Requirements-Traceability-Matrix.md",
+  "system_to_software_coverage": "89.6%",
+  "software_to_test_coverage": "87.0%",
+  "safety_to_hazard_coverage": "37.7%",
+  "total_requirements": 77,
+  "total_test_cases": 181,
+  "total_trace_links": 268,
+  "t1_links": 87,
+  "t2_links": 181,
+  "safety_links": 40,
+  "gaps_found": 18,
+  "t1_gaps": 8,
+  "t2_gaps": 10,
+  "validation_status": "PASS_WITH_GAPS",
+  "gate_check_status": "PASS",
+  "deliverables_created": [
+    "Requirements-Traceability-Matrix.md (17KB)",
+    "T1-SysRS-to-SRS.csv (87 links)",
+    "T2-SRS-to-OSTS.csv (181 links)",
+    "Traceability-Gaps.csv (18 gaps)",
+    "docS1_to_doc6.csv (T1 evidence)",
+    "doc6_to_doc7.csv (T2 evidence)",
+    "doc7_to_doc6.csv (T8 evidence)",
+    "docS4_to_doc6.csv (Safety evidence)"
+  ],
+  "locations": {
+    "rtm_document": "examples/TDC/docs/traceability/",
+    "evidence_matrices": "examples/TDC/evidence/traceability/"
+  },
+  "next_actions": [
+    "REQ: Close 8 T1 gaps (add SysRS traces for REQ-SAFE-021, REQ-OPR-001-006, 008)",
+    "TST: Close 10 T2 gaps (add test cases for REQ-PERF-001 through REQ-PERF-010)",
+    "VER: Technical review of all traceability links",
+    "VER: Update Software Requirements Verification Report with RTM findings",
+    "PM: Approve RTM before Phase 2 gate-check"
+  ],
+  "en50128_compliance": {
+    "table_a9_technique_6": "MANDATORY SIL 3 \u2014 IMPLEMENTED",
+    "section_6_6_4_1_i": "Traceability maintained per \u00a76.6.4.1(i)",
+    "section_7_2_4_18": "Requirements traceable to system requirements",
+    "section_7_7_4_7": "Test specs traceable to requirements",
+    "gate_check_tool": "workspace.py trace gate-check --phase requirements --sil 3 PASSED"
+  }
+}

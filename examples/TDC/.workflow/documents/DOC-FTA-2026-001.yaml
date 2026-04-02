@@ -1,0 +1,26 @@
+approvals: []
+approved_date: ''
+author_name: Safety Engineer
+author_role: saf
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-02T21:10:39.834806'
+document_id: DOC-FTA-2026-001
+document_path: examples/TDC/docs/safety/FTA-Report.md
+document_type: Unknown Document Type
+modified_date: '2026-04-02T21:10:39.834806'
+phase: ''
+rejections: []
+required_roles:
+- author
+- peer
+- qua
+- safety_mgr
+- ver
+- val
+- assessor
+- pm
+sil_level: 3
+state: review
+version: '1.0'

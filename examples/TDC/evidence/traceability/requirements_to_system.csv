@@ -1,0 +1,16 @@
+source_id,source_type,target_id,target_type,link_type,rationale,verified,verified_by,verified_date,confidence,source_document
+DOC-SRS-2026-001,requirements,DOC-SRS-2026-001,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,high,Software-Requirements-Specification.md
+DOC-SQAP-2026-001,requirements,DOC-SQAP-2026-001,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,high,Software-Requirements-Specification.md
+DOC-HW-DES-2026,requirements,DOC-HW-DES-2026,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,high,Software-Requirements-Specification.md
+DOC-HW-DES-2026,requirements,DOC-SYS-REQ-2026,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,high,Software-Requirements-Specification.md
+DOC-SYS-REQ-2026,requirements,DOC-SYS-REQ-2026,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,high,Software-Requirements-Specification.md
+DOC-SYS-REQ-2026,requirements,DOC-SYS-ARCH-2026,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,high,Software-Requirements-Specification.md
+DOC-SYS-REQ-2026,requirements,DOC-SYS-SAF-2026,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,high,Software-Requirements-Specification.md
+DOC-SYS-REQ-2026,requirements,DOC-SQAP-2026-001,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,medium,Software-Requirements-Specification.md
+DOC-SYS-REQ-2026,requirements,DOC-SCMP-2026-001,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,low,Software-Requirements-Specification.md
+DOC-SYS-REQ-2026,requirements,DOC-SVP-2026-001,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,low,Software-Requirements-Specification.md
+DOC-SYS-SAF-2026,requirements,DOC-SYS-SAF-2026,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,high,Software-Requirements-Specification.md
+DOC-SYS-SAF-2026,requirements,DOC-SRS-2026-001,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,low,Software-Requirements-Specification.md
+DOC-SYS-SAF-2026,requirements,DOC-SYS-REQ-2026,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,low,Software-Requirements-Specification.md
+DOC-SRS-2026-001,requirements,DOC-SYS-SAF-2026,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,medium,Software-Requirements-Specification.md
+DOC-SCMP-2026-001,requirements,DOC-SCMP-2026-001,system,allocated_to,Auto-extracted from Software-Requirements-Specification.md,false,,,high,Software-Requirements-Specification.md

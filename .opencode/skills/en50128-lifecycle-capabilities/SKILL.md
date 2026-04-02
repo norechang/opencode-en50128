@@ -331,6 +331,7 @@ Action Required: <what user must do>
 3. Phase 0 status = "complete" in LIFECYCLE_STATE.md
 4. assets/sample_system/TYPICAL-SYSTEMS.md is readable
 5. docs/system/ does NOT already contain generated docs (warn; require --overwrite to proceed)
+6. EN 50126 standards available: std/EN 50126-1-2017.md and std/EN 50126-2-2017.md
 ```
 
 **Algorithm**:
@@ -338,17 +339,25 @@ Action Required: <what user must do>
 1. Read .workspace → active_workspace path
 2. Read LIFECYCLE_STATE.md → project_name, sil_level, today's date
 3. Check preconditions (error messages defined above)
-4. Read assets/sample_system/TYPICAL-SYSTEMS.md → system list
-5. If --system not provided: present numbered menu (name, SIL, domain, "Recommended For");
+4. Read EN 50126 standards for reference:
+   - std/EN 50126-1-2017.md (RAMS Part 1: Generic RAMS Process)
+   - std/EN 50126-2-2017.md (RAMS Part 2: Systems approach to safety)
+5. Read assets/sample_system/TYPICAL-SYSTEMS.md → system list
+6. If --system not provided: present numbered menu (name, SIL, domain, "Recommended For");
    ask user to select
-6. Read selected system's catalogue entry:
+7. Read selected system's catalogue entry:
    Overview, Hazard List (HAZ-xxx), Functional Requirements (SYS-FR-xxx),
    Safety Functions (SF-xxx), System Architecture, Communication Interfaces,
    Non-Functional Requirements, Design Constraints, Glossary
-7. Create <workspace>/docs/system/
-8. Generate four documents (rules below) — content MUST be substantive, NOT generic placeholders
-9. Register all four files in LIFECYCLE_STATE.md §System Documents
-10. Display confirmation summary with file paths and content counts
+8. Read document templates from assets/sample_system/:
+   - System-Requirements-Specification-TEMPLATE.md
+   - System-Architecture-Description-TEMPLATE.md
+   - System-Safety-Requirements-Specification-TEMPLATE.md
+   - System-Safety-Plan-TEMPLATE.md
+9. Create <workspace>/docs/system/
+10. Generate four documents using templates (rules below) — content MUST be substantive, NOT generic placeholders
+11. Register all four files in LIFECYCLE_STATE.md §System Documents
+12. Display confirmation summary with file paths and content counts
 ```
 
 **Document metadata substitution** (all four documents):
@@ -360,10 +369,17 @@ Action Required: <what user must do>
 - Version → 1.0
 - Approval fields → `[PENDING]`
 
+**Standard References** (include in all documents where applicable):
+- EN 50126-1:2017 - RAMS Part 1: Generic RAMS Process
+- EN 50126-2:2017 - RAMS Part 2: Systems approach to safety
+- EN 50128:2011 - Software for railway control and protection systems
+- EN 50129:2018 - Safety related electronic systems for signalling
+
 **Document 1 — System Requirements Specification**
 - File: `docs/system/System-Requirements-Specification.md`
-- Template: `assets/sample_system/System-Requirements-Specification-TEMPLATE.md`
-- Populate: §1 intro (name, SIL, standards); §1.4 hazard summary (HAZ table);
+- Template: `assets/sample_system/System-Requirements-Specification-TEMPLATE.md` (MANDATORY USE)
+- EN 50126 Reference: Part 1 Section 5 (System Definition and Application Conditions), Part 2 Section 5 (Hazard identification and risk analysis)
+- Populate: §1 intro (name, SIL, standards including EN 50126-1 and EN 50126-2); §1.4 hazard summary (HAZ table);
   §2 functional requirements (SYS-FR-xxx — each with ID, description, rationale, SIL, verification method);
   §2 non-functional requirements; §3 requirements allocation to HW/SW/operational;
   §4 architecture overview; §5 V&V reference to SVP/SVaP;
@@ -372,44 +388,47 @@ Action Required: <what user must do>
 
 **Document 2 — System Architecture Description**
 - File: `docs/system/System-Architecture-Description.md`
-- Template: `assets/sample_system/System-Architecture-Description-TEMPLATE.md`
+- Template: `assets/sample_system/System-Architecture-Description-TEMPLATE.md` (MANDATORY USE)
+- EN 50126 Reference: Part 1 Section 6 (System Design and Implementation), Part 2 Section 6.4 (Architecture for safety)
 - Populate: §2 architecture overview (system boundary, decomposition table);
   §3 hardware architecture (all HW components; ASCII block diagram);
   §4 software architecture (all SW components with purpose);
-  §5 safety architecture (SF-xxx → component mapping, redundancy scheme);
+  §5 safety architecture (SF-xxx → component mapping, redundancy scheme per EN 50126-2);
   §6 communication architecture (full catalogue interface table);
   §8 HW/SW interface (signals, HAL structure);
   §10 ICDs (stub per external interface);
   §12 traceability (SYS-FR-xxx → architecture component);
-  §13 references (applicable standards from catalogue)
+  §13 references (applicable standards from catalogue including EN 50126-1, EN 50126-2)
 
 **Document 3 — System Safety Requirements Specification**
 - File: `docs/system/System-Safety-Requirements-Specification.md`
-- Template: `assets/sample_system/System-Safety-Requirements-Specification-TEMPLATE.md`
-- Populate: §2.1 hazard identification (full HAZ table with severity/frequency/SIL);
-  §2.2 SIL determination rationale;
+- Template: `assets/sample_system/System-Safety-Requirements-Specification-TEMPLATE.md` (MANDATORY USE)
+- EN 50126 Reference: Part 2 Section 5 (Hazard identification, risk assessment, SIL allocation), Section 6 (Safety requirements), Section 7 (FMEA/FTA analysis)
+- Populate: §2.1 hazard identification (full HAZ table with severity/frequency/SIL per EN 50126-2 risk matrix);
+  §2.2 SIL determination rationale (per EN 50126-2 Table 3);
   §2.3 FMEA (one row per HW component — failure mode/effect derived from hazards; mitigation = SF reference);
   §2.4 FTA stub (top event = most catastrophic hazard; gates from contributing hazards);
   §3 safety functions (full SF table — ID, description, SIL, derived from HAZ references);
   §3.3 CCF analysis (common cause failure notes from redundancy architecture);
-  §4 safety function allocation (SF-xxx → HW/SW/combined);
-  §5.2 SW integrity requirements (SIL-specific, referencing EN 50128);
+  §4 safety function allocation (SF-xxx → HW/SW/combined per EN 50126-2);
+  §5.2 SW integrity requirements (SIL-specific, referencing EN 50128 and EN 50126-2 Section 6.5);
   §7 hazard log (all HAZ entries, status = OPEN);
   §8 traceability (HAZ → SF → SYS-FR cross-reference matrix)
 
 **Document 4 — System Safety Plan**
 - File: `docs/system/System-Safety-Plan.md`
-- Template: `assets/sample_system/System-Safety-Plan-TEMPLATE.md`
-- Populate: §1 intro (name, SIL, scope);
-  §2 safety management organization (Safety Manager, ISA, PM with [NAME TBD]);
-  §3 safety lifecycle (phases → EN 50126 V-Model; reference LIFECYCLE_STATE.md);
-  §4 hazard management (process referencing SSRS Hazard Log; FMEA/FTA schedule);
-  §5 safety requirements management (traceability chain: hazards → SF → SW req);
-  §6 safety V&V (activities table per lifecycle phase; reference SVP/SVaP);
-  §7 ISA plan (scope = SIL level and all SF-xxx; independence requirements);
+- Template: `assets/sample_system/System-Safety-Plan-TEMPLATE.md` (MANDATORY USE)
+- EN 50126 Reference: Part 1 Section 4 (RAMS lifecycle and management), Part 2 Section 4 (Safety management), Section 8 (Safety management plan requirements)
+- Populate: §1 intro (name, SIL, scope referencing EN 50126-1 lifecycle);
+  §2 safety management organization (Safety Manager, ISA, PM with [NAME TBD] per EN 50126-2 Section 4.2);
+  §3 safety lifecycle (phases → EN 50126-1 V-Model; reference LIFECYCLE_STATE.md);
+  §4 hazard management (process referencing SSRS Hazard Log; FMEA/FTA schedule per EN 50126-2);
+  §5 safety requirements management (traceability chain: hazards → SF → SW req per EN 50126-2 Section 6);
+  §6 safety V&V (activities table per lifecycle phase; reference SVP/SVaP and EN 50126-1 Section 7);
+  §7 ISA plan (scope = SIL level and all SF-xxx; independence requirements per EN 50126-2 Section 4.4);
   §8 safety case (outline per EN 50129 Annex B);
-  §12 change management (safety-relevant change control; reference @cm and CCB process);
-  §13 safety metrics (PFH target, coverage target, defect density target based on SIL)
+  §12 change management (safety-relevant change control; reference @cm and CCB process per EN 50126-1 Section 9);
+  §13 safety metrics (PFH target, coverage target, defect density target based on SIL per EN 50126-2 Annex B)
 
 **LIFECYCLE_STATE.md update** — add after generation:
 ```markdown
@@ -430,6 +449,7 @@ Note: Review and approve with system engineering team before Phase 2.
 ```
 
 **EN 50128 references**: §7.2.2, §7.2.2(a), §7.2.2(b), §7.2.2(c)
+**EN 50126 references**: Part 1 Sections 4–7; Part 2 Sections 4–8 (RAMS lifecycle, safety management, hazard analysis, safety requirements)
 
 ---
 
