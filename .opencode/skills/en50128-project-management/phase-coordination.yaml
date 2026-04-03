@@ -82,8 +82,27 @@ phase_2:
       depends_on: [1]
       note: "SAF updates Hazard Log: assign SIL levels, link hazards to SRS requirements."
     - step: 3
+      agent: "tst"
+      deliverable: "Overall-Software-Test-Specification"
+      depends_on: [1]
+      note: "TST creates Overall SW Test Spec tracing all SRS requirements."
+    - step: 4
+      agent: "cm"
+      action: "traceability-evidence-creation"
+      depends_on: [1, 2, 3]
+      note: "CM extracts traceability from Phase 2 documents and creates CSV evidence
+             files. MANDATORY before user approval per §6.5.4.15."
+      validation_required:
+        - command: "python3 tools/workspace.py trace validate --sil {sil_level}"
+          must_pass: true
+        - command: "python3 tools/workspace.py trace gate-check --phase requirements --sil {sil_level}"
+          must_pass: true
+      deliverables:
+        - "4 CSV files: docS1_to_doc6.csv, docS4_to_doc6.csv, doc6_to_doc7.csv, doc7_to_doc6.csv"
+    - step: 5
       user_approval: true
-      note: "PM presents SRS to user for approval before reporting Track A complete to COD."
+      depends_on: [4]
+      note: "PM presents SRS to user for approval AFTER traceability validation complete."
 
   escalation_triggers:
     - condition: "SAF identifies requirements with contradictory SIL assignments"
@@ -136,6 +155,23 @@ phase_3:
       deliverable: "Software-Hardware-Integration-Test-Specification"
       depends_on: [3, 4]
       parallel_with: [5]
+    - step: 7
+      agent: "cm"
+      action: "traceability-evidence-creation"
+      depends_on: [1, 2, 3, 4, 5, 6]
+      note: "CM extracts traceability from all Phase 3 documents and creates CSV evidence
+             files. MANDATORY before Track A completion per §6.5.4.15 (traceability shall
+             be subject of configuration management). CM must run validation commands:
+             `trace validate --sil {sil}` and `trace gate-check --phase design --sil {sil}`.
+             Both MUST return ALL CHECKS PASSED before PM can report Track A complete."
+      validation_required:
+        - command: "python3 tools/workspace.py trace validate --sil {sil_level}"
+          must_pass: true
+        - command: "python3 tools/workspace.py trace gate-check --phase design --sil {sil_level}"
+          must_pass: true
+      deliverables:
+        - "14 CSV files in evidence/traceability/ (see CM skill § Traceability Evidence Management)"
+        - "Optional: Requirements-Traceability-Matrix.md (Markdown summary for readability)"
 
   escalation_triggers:
     - condition: "DES identifies architectural constraint that makes a safety requirement unachievable"

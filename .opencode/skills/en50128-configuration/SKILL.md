@@ -270,3 +270,110 @@ included in the baseline manifest at each gate. **CM stores; VER produces.**
 | MAJOR | Evidence artifact not stored in canonical path | Log; report at next status accounting |
 | MAJOR | CR missing one of the nine §6.6.4.1(a–i) aspects | Log; return CR to originator |
 | MINOR | Version tag missing or inconsistent | Log; correct at next baseline cycle |
+
+---
+
+## Traceability Evidence Management (§6.5.4.15, Table A.9)
+
+**Normative Basis**:
+- §5.3.2.7: "For each document, traceability shall be provided in terms of a unique reference number and a defined and documented relationship with other documents."
+- §6.5.4.15: "Traceability shall be the subject of configuration management."
+- Table A.9 Row 7: Traceability is **MANDATORY** at SIL 3–4
+
+**Role Responsibilities**:
+
+| Activity | Role | Reference |
+|----------|------|-----------|
+| Create trace links when authoring documents | REQ, DES, IMP, TST, INT | §5.3.2.7 |
+| **Manage traceability artifacts under version control** | **CM** | **§6.5.4.15** |
+| Verify traceability completeness and correctness | VER | §6.5.4.14–6.5.4.17 |
+| Validate traceability (2nd check) | VAL | §6.3, Annex C |
+| Enforce traceability at phase gates | COD | §5.3 |
+
+### CM Traceability Workflow (Per Phase)
+
+**Phase 2 (Requirements):**
+1. After REQ produces SRS and TST produces Overall SW Test Spec:
+2. CM extracts traceability using `workspace.py trace extract` or `trace sync`
+3. CM creates CSV evidence files in `evidence/traceability/`:
+   - `docS1_to_doc6.csv` (System Requirements → SRS)
+   - `docS4_to_doc6.csv` (System Safety Requirements → SRS)
+   - `doc6_to_doc7.csv` (SRS → Overall SW Test Spec)
+   - `doc7_to_doc6.csv` (Overall SW Test Spec → SRS backward)
+4. CM may create Markdown RTM for human readability (optional summary artifact)
+5. CM validates before Track A completion:
+   ```bash
+   cd {workspace_root}
+   python3 tools/workspace.py trace validate --sil {sil_level}
+   python3 tools/workspace.py trace gate-check --phase requirements --sil {sil_level}
+   ```
+6. Both commands MUST return ✅ ALL CHECKS PASSED before CM signals Track A complete
+
+**Phase 3 (Architecture & Design):**
+1. After DES produces SAS, SDS, SIS and INT produces Integration Test Specs:
+2. CM extracts traceability and creates CSV evidence files (14 files total):
+   - T3: `doc6_to_doc9.csv` (SRS → SAS)
+   - T4: `doc9_to_doc6.csv` (SAS → SRS backward)
+   - T5a: `doc10_to_doc9.csv` (SDS → SAS)
+   - T5b: `doc10_to_doc6.csv` (SDS → SRS)
+   - T5c: `doc10_to_doc11.csv` (SDS → Interface Specs)
+   - T10a: Integration Test Spec → Requirements/Architecture/Design/Interfaces (4 files):
+     * `doc12_to_doc6.csv`, `doc12_to_doc9.csv`, `doc12_to_doc10.csv`, `doc12_to_doc11.csv`
+   - T10b: HW/SW Integration Test Spec → all upstream documents (5 files):
+     * `doc13_to_doc6.csv`, `doc13_to_doc9.csv`, `doc13_to_doc10.csv`, `doc13_to_docS1.csv`, `doc13_to_docS2.csv`
+3. CM validates:
+   ```bash
+   python3 tools/workspace.py trace validate --sil {sil_level}
+   python3 tools/workspace.py trace gate-check --phase design --sil {sil_level}
+   ```
+
+**Phase 4–6**: Similar pattern — CM extracts after document authors complete, validates before Track A complete.
+
+### Traceability Tool Commands (workspace.py)
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `trace extract` | Extract trace links from documents to CSV | `trace extract --from docs/phase-2-requirements/SRS.md --to docs/phase-3-architecture-design/SAS.md --output evidence/traceability/doc6_to_doc9.csv` |
+| `trace sync` | Synchronize Markdown RTM ↔ CSV files | `trace sync --project {project_name}` |
+| `trace create` | Manually create trace link CSV file | `trace create --from doc6 --to doc9 --output evidence/traceability/doc6_to_doc9.csv` |
+| `trace validate` | Validate all traceability for SIL level | `trace validate --sil 3` |
+| `trace gate-check` | Check phase gate readiness | `trace gate-check --phase design --sil 3` |
+| `trace query` | Query specific trace relationships | `trace query --from doc6 --to doc9` |
+| `trace report` | Generate traceability report | `trace report --from doc6 --to doc9` |
+
+**CSV File Format** (required for automated validation):
+```csv
+source_id,target_id,rationale,verification_method,status
+SRS-REQ-001,SAS-COMP-DCS,DCS component implements door control requirements,Design review + test,verified
+```
+
+**Storage Location**:
+- CSV files (normative evidence): `{workspace_root}/evidence/traceability/*.csv`
+- Markdown RTM (optional summary): `{workspace_root}/docs/traceability/Requirements-Traceability-Matrix.md`
+
+**Baseline Integration**:
+- CM includes all CSV files in `evidence/traceability/` in baseline manifest
+- VER verification reports reference traceability validation results
+- COD gate-check requires `trace validate` and `trace gate-check` to pass
+
+**Critical Rule**: CM MUST NOT signal Track A complete until both validation commands return ✅ ALL CHECKS PASSED. Missing or incomplete traceability evidence will BLOCK the phase gate.
+
+### Document ID Mapping Reference
+
+See `TRACEABILITY.md` Section 6 for complete mapping. Quick reference:
+
+| Document | Doc ID | Phase |
+|----------|--------|-------|
+| System Requirements Specification | S1 (docS1) | 0 |
+| System Architecture Description | S2 (docS2) | 0 |
+| System Safety Plan | S3 (docS3) | 0 |
+| System Safety Requirements | S4 (docS4) | 0 |
+| Software Requirements Specification | 6 (doc6) | 2 |
+| Overall Software Test Specification | 7 (doc7) | 2 |
+| Software Architecture Specification | 9 (doc9) | 3 |
+| Software Design Specification | 10 (doc10) | 3 |
+| Software Interface Specifications | 11 (doc11) | 3 |
+| SW Integration Test Specification | 12 (doc12) | 3 |
+| SW/HW Integration Test Specification | 13 (doc13) | 3 |
+
+Full mapping: `DELIVERABLES.md` Annex C Table C.1.
