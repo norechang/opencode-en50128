@@ -1,0 +1,70 @@
+source_id,target_id,rationale,verification_method,status
+REQ-FUN-001,COMP-004-DSM,DSM implements door opening command processing with precondition checks,Design review + integration test,verified
+REQ-FUN-002,COMP-004-DSM,DSM implements 2oo2 position sensor voting for fully-open detection,Design review + fault injection,verified
+REQ-FUN-003,COMP-004-DSM,DSM implements opening timeout fault detection (4.0s),Unit test + integration test,verified
+REQ-FUN-004,COMP-004-DSM,DSM implements door closing command processing with obstacle gate,Design review + integration test,verified
+REQ-FUN-005,COMP-004-DSM,DSM implements 2oo2 × 2oo2 voting for closed-and-locked state,Design review + safety test,verified
+REQ-FUN-006,COMP-004-DSM,DSM implements closing timeout fault (10.0s),Unit test + integration test,verified
+REQ-FUN-007,COMP-003-OBD,OBD implements obstacle retry logic (3 attempts max),Unit test + integration test,verified
+REQ-FUN-008,COMP-004-DSM,DSM commands lock engagement after fully-closed confirmation,Design review + integration test,verified
+REQ-FUN-009,COMP-001-SKN,SKN generates departure interlock signal to TCI when all doors locked,Design review + safety test,verified
+REQ-FUN-010,COMP-004-DSM,DSM monitors and re-commands lock engagement while moving,Design review + fault injection,verified
+REQ-FUN-011,COMP-004-DSM,DSM implements operational mode FSM (NORMAL/SELECTIVE_DISABLE/DIAGNOSTIC/SAFE_STATE),Design review + state model,verified
+REQ-FUN-012,COMP-004-DSM,DSM enforces mode transition authorization checks,Design review + security test,verified
+REQ-FUN-013,COMP-005-FMG,FMG implements selective door disablement with safety interlock preservation,Design review + integration test,verified
+REQ-FUN-014,COMP-004-DSM,DSM diagnostic mode entry requires speed=0 and authorization,Design review + unit test,verified
+REQ-FUN-015,COMP-004-DSM,DSM continuously monitors door position every 20ms cycle,Design review + performance test,verified
+REQ-FUN-016,COMP-006-TCI,TCI transmits per-door status to TCMS every 100ms,Design review + interface test,verified
+REQ-FUN-017,COMP-005-FMG,FMG continuously monitors fault conditions every 20ms cycle,Design review + fault detection test,verified
+REQ-FUN-018,COMP-007-DGN,DGN logs fault events to non-volatile storage (1000+ entries),Design review + integration test,verified
+REQ-SAFE-001,COMP-002-SPM,SPM monitors speed and generates speed_interlock_active flag,Design review + safety test,verified
+REQ-SAFE-001,COMP-004-DSM,DSM gates door open commands on speed interlock,Design review + safety test,verified
+REQ-SAFE-002,COMP-001-SKN,SKN commands and maintains door locking when speed > 5 km/h,Design review + cross-channel test,verified
+REQ-SAFE-003,COMP-006-TCI,TCI receives CAN speed data with CRC-16 and timeout detection,Design review + interface test,verified
+REQ-SAFE-003,COMP-002-SPM,SPM defaults to moving on CAN timeout (>200ms),Design review + fault injection,verified
+REQ-SAFE-004,COMP-003-OBD,OBD polls obstacle sensors every 20ms with ISR response <1ms,Design review + performance test,verified
+REQ-SAFE-005,COMP-003-OBD,OBD issues reversal command within 100ms of obstacle detection,Design review + timing test,verified
+REQ-SAFE-006,COMP-003-OBD,OBD monitors motor current via HAL ADC for force limit,Design review + integration test,verified
+REQ-SAFE-007,COMP-004-DSM,DSM implements 2oo2 sensor voting for LOCKED state,Design review + fault injection,verified
+REQ-SAFE-008,COMP-001-SKN,SKN withholds departure interlock until all DSMs confirm locked,Design review + safety test,verified
+REQ-SAFE-009,COMP-001-SKN,SKN verifies cross-channel lock state agreement every 20ms via SPI,Design review + cross-channel test,verified
+REQ-SAFE-010,COMP-001-SKN,SKN oversees CRC-16-CCITT (0x1021) on all safety-critical structures,Design review + static analysis,verified
+REQ-SAFE-011,COMP-004-DSM,DSM implements position sensor timeout detection (100ms),Design review + fault injection,verified
+REQ-SAFE-012,COMP-001-SKN,SKN triggers safe state with 2oo2 channel confirmation,Design review + cross-channel test,verified
+REQ-SAFE-013,COMP-005-FMG,FMG maintains speed interlock active during selective disablement,Design review + safety test,verified
+REQ-SAFE-014,COMP-008-HAL,HAL implements hardware watchdog refresh (50ms timeout),Design review + hardware test,verified
+REQ-SAFE-015,COMP-001-SKN,SKN implements cross-channel software watchdog (20ms cycle),Design review + fault injection,verified
+REQ-SAFE-016,COMP-006-TCI,TCI validates CRC-16 on all CAN messages and rejects on fail,Design review + interface test,verified
+REQ-SAFE-017,ALL-COMPONENTS,All components use static memory allocation only (no malloc),Static analysis + code review,verified
+REQ-SAFE-018,COMP-001-SKN,SKN implements memory integrity check (boot + every 100ms),Design review + unit test,verified
+REQ-SAFE-019,COMP-004-DSM,DSM detects emergency release with 60ms debounce and TCMS alert,Design review + integration test,verified
+REQ-SAFE-020,COMP-004-DSM,DSM latches emergency release until maintenance reset,Design review + integration test,verified
+REQ-SAFE-021,COMP-005-FMG,FMG logs selective disablement with TCMS authorization,Design review + audit test,verified
+REQ-PERF-001,SCHEDULER-ALL,Static cyclic executive ensures WCET ≤ 16ms per 20ms cycle,Schedulability analysis + timing test,verified
+REQ-PERF-002,COMP-002-SPM,SPM completes speed interlock response within 100ms,Performance test on target,verified
+REQ-PERF-003,COMP-003-OBD,OBD issues obstacle reversal within 150ms of detection,Performance test on target,verified
+REQ-PERF-004,COMP-004-DSM,DSM issues motor start within 200ms of command,Performance test on target,verified
+REQ-PERF-005,COMP-001-SKN,SKN transmits locked status to TCI within 100ms,Performance test on target,verified
+REQ-INT-001,COMP-008-HAL,HAL provides PWM motor control (20kHz) and direction GPIO,Interface test + oscilloscope,verified
+REQ-INT-002,COMP-008-HAL,HAL reads position sensors via GPIO (2oo2 per door),Interface test + signal injection,verified
+REQ-INT-003,COMP-008-HAL,HAL reads obstacle sensors via interrupt + polling,Interface test + timing measurement,verified
+REQ-INT-004,COMP-008-HAL,HAL controls lock actuators via GPIO (24V solenoid),Interface test + load verification,verified
+REQ-INT-005,COMP-008-HAL,HAL reads lock sensors via GPIO (2oo2 per lock),Interface test + signal injection,verified
+REQ-INT-006,COMP-008-HAL,HAL refreshes hardware watchdog within 40ms,Interface test + timing verification,verified
+REQ-INT-007,COMP-006-TCI,TCI receives TCMS CAN messages with CRC-16 validation,Interface test + CAN analyzer,verified
+REQ-INT-008,COMP-006-TCI,TCI transmits door status CAN messages with CRC-16,Interface test + CAN analyzer,verified
+REQ-INT-009,COMP-008-HAL,HAL exchanges DDU commands via RS-485 (115.2 kbit/s),Interface test + RS-485 analyzer,verified
+REQ-INT-010,COMP-001-SKN,SKN exchanges cross-channel state via SPI every 20ms,Interface test + logic analyzer,verified
+SW-HAZ-001,COMP-002-SPM,SPM mitigates door opens while moving via speed interlock,Hazard analysis + safety case,verified
+SW-HAZ-001,COMP-001-SKN,SKN enforces speed interlock with 2oo2 confirmation,Hazard analysis + safety case,verified
+SW-HAZ-002,COMP-003-OBD,OBD mitigates door closes on passenger via obstacle detection,Hazard analysis + safety case,verified
+SW-HAZ-003,COMP-004-DSM,DSM mitigates false lock indication via 2oo2 sensor voting,Hazard analysis + safety case,verified
+SW-HAZ-003,COMP-001-SKN,SKN cross-channel comparison prevents false departure signal,Hazard analysis + safety case,verified
+SW-HAZ-004,COMP-004-DSM,DSM mitigates loss of position indication via sensor timeout,Hazard analysis + safety case,verified
+SW-HAZ-005,COMP-005-FMG,FMG classifies faults to prevent spurious safe state,Hazard analysis + FMEA,verified
+SW-HAZ-006,COMP-008-HAL,HAL implements watchdog refresh to detect software failures,Hazard analysis + hardware test,verified
+SW-HAZ-007,COMP-006-TCI,TCI mitigates CAN speed data loss via timeout detection,Hazard analysis + fault injection,verified
+SW-HAZ-008,COMP-001-SKN,SKN implements memory integrity checks (CRC + stack canary),Hazard analysis + static analysis,verified
+SW-HAZ-009,COMP-004-DSM,DSM handles emergency release with latching and logging,Hazard analysis + integration test,verified
+SW-HAZ-010,COMP-005-FMG,FMG enforces selective disablement authorization and logging,Hazard analysis + security test,verified
+SW-HAZ-011,COMP-001-SKN,SKN implements SPI transient filter (3-cycle confirmation) to prevent denial-of-safe-operation,FMEA OI-FMEA-001 + design analysis,verified

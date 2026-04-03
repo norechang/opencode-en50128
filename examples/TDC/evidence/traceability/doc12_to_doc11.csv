@@ -1,0 +1,68 @@
+source_id,target_id,rationale,verification_method,status
+TC-INT-001,IF-020,Tests DGN to SPI Flash event log buffer interface,Integration test with Flash read-back verification,verified
+TC-INT-002,IF-020,Tests DGN event logging non-interference with safety path,Integration test monitoring safe state during log operations,verified
+TC-INT-002,IF-015,Verifies SKN safe state broadcast is not affected by DGN operations,Integration test,verified
+TC-INT-003,IF-001,Tests TCI to SPM TCMS speed message delivery interface,Integration test with CAN stub injecting valid frames,verified
+TC-INT-004,IF-001,Tests TCI CRC-16 validation on speed message interface,Integration test with corrupted frame injection,verified
+TC-INT-005,IF-001,Tests TCI CAN timeout detection on speed interface,Integration test with frame withheld,verified
+TC-INT-005,IF-002,Tests SPM to SKN speed interlock gate propagation,Integration test verifying interlock flag,verified
+TC-INT-006,IF-002,Tests SPM to SKN speed interlock gate interface,Integration test with SKN stub monitoring,verified
+TC-INT-007,IF-003,Tests SPM to DSM speed gate interface,Integration test with DSM stub monitoring,verified
+TC-INT-008,IF-001,Tests TCI sequence counter validation on speed interface,Integration test with out-of-sequence frame,verified
+TC-INT-009,IF-004,Tests HAL GPIO to DSM position/lock sensor interface,Integration test with sensor signal injection,verified
+TC-INT-010,IF-005,Tests HAL GPIO to OBD obstacle sensor interface,Integration test with obstacle pulse,verified
+TC-INT-010,IF-006,Tests OBD to DSM obstacle flags interface,Integration test verifying reversal flag,verified
+TC-INT-011,IF-007,Tests OBD to SKN obstacle for safety arbitration interface,Integration test with SKN stub,verified
+TC-INT-012,IF-010,Tests DSM to HAL lock actuator interface,Integration test with GPIO output measurement,verified
+TC-INT-013,IF-011,Tests DSM to HAL motor PWM interface,Integration test with oscilloscope verification,verified
+TC-INT-014,IF-009,Tests DSM to TCI per-door status reporting interface,Integration test with CAN analyser,verified
+TC-INT-015,IF-012,Tests FMG to SKN fault state bitmask interface,Integration test with fault injection,verified
+TC-INT-015,IF-015,Verifies SKN safe state broadcast on FMG fault escalation,Integration test,verified
+TC-INT-016,IF-015,Tests SKN safe state broadcast to all components interface,Integration test with component stubs,verified
+TC-INT-017,IF-008,Tests DSM to SKN door/lock states interface for departure interlock,Integration test with 2oo2 sensor voting,verified
+TC-INT-017,IF-016,Tests SKN to TCI departure interlock interface,Integration test verifying departure_ready flag,verified
+TC-INT-018,IF-013,Tests FMG to TCI fault report interface,Integration test with CAN analyser capture,verified
+TC-INT-019,IF-014,Tests FMG to DGN event log entry interface,Integration test with Flash read-back,verified
+TC-INT-020,IF-003,Tests speed gate from SPM to DSM during command execution,Integration test verifying gate blocking,verified
+TC-INT-020,IF-018,Tests TCI to DSM door commands interface,Integration test with CAN command injection,verified
+TC-INT-021,IF-017,Tests SKN Channel A to B cross-channel SPI normal exchange,Integration test with dual DCU boards and SPI analyser,verified
+TC-INT-022,IF-017,Tests cross-channel safety-data disagreement detection on SPI interface,Integration test with injected mismatch,verified
+TC-INT-023,IF-017,Tests SPI infrastructure fault with 3-cycle transient filter,Integration test with SPI CRC error,verified
+TC-INT-024,IF-017,Tests SPI timeout detection and 3-cycle filter on cross-channel interface,Integration test with SPI disconnection,verified
+TC-INT-025,IF-019,Tests HAL to SKN watchdog status interface,Integration test with watchdog refresh withheld,verified
+TC-INT-PERF-001,IF-001,Verifies speed message interface latency contribution to WCET,Performance test with DWT timestamps,verified
+TC-INT-PERF-001,IF-002,Verifies speed interlock gate interface latency,Performance test,verified
+TC-INT-PERF-001,IF-003,Verifies speed gate interface latency,Performance test,verified
+TC-INT-PERF-001,IF-004,Verifies sensor interface latency,Performance test,verified
+TC-INT-PERF-001,IF-005,Verifies obstacle sensor interface latency,Performance test,verified
+TC-INT-PERF-001,IF-006,Verifies obstacle flags interface latency,Performance test,verified
+TC-INT-PERF-001,IF-007,Verifies obstacle to SKN interface latency,Performance test,verified
+TC-INT-PERF-001,IF-008,Verifies door/lock states interface latency,Performance test,verified
+TC-INT-PERF-001,IF-009,Verifies status reporting interface latency,Performance test,verified
+TC-INT-PERF-001,IF-010,Verifies lock actuator interface latency,Performance test,verified
+TC-INT-PERF-001,IF-011,Verifies motor PWM interface latency,Performance test,verified
+TC-INT-PERF-001,IF-012,Verifies fault state bitmask interface latency,Performance test,verified
+TC-INT-PERF-001,IF-013,Verifies fault report interface latency,Performance test,verified
+TC-INT-PERF-001,IF-014,Verifies event log interface latency,Performance test,verified
+TC-INT-PERF-001,IF-015,Verifies safe state broadcast interface latency,Performance test,verified
+TC-INT-PERF-001,IF-016,Verifies departure interlock interface latency,Performance test,verified
+TC-INT-PERF-001,IF-017,Verifies cross-channel SPI interface latency,Performance test,verified
+TC-INT-PERF-001,IF-018,Verifies door commands interface latency,Performance test,verified
+TC-INT-PERF-001,IF-019,Verifies watchdog status interface latency,Performance test,verified
+TC-INT-PERF-001,IF-020,Verifies event log buffer interface latency,Performance test,verified
+TC-INT-PERF-002,IF-001,Tests speed message interface latency for interlock response,Performance test with timestamped injection,verified
+TC-INT-PERF-002,IF-002,Tests speed interlock gate interface latency,Performance test,verified
+TC-INT-PERF-002,IF-003,Tests speed gate to DSM interface latency,Performance test,verified
+TC-INT-PERF-003,IF-005,Tests obstacle sensor interface latency for reversal,Performance test with obstacle pulse,verified
+TC-INT-PERF-003,IF-006,Tests obstacle flags interface latency,Performance test,verified
+TC-INT-PERF-003,IF-011,Tests motor PWM interface latency for reversal command,Performance test,verified
+TC-INT-PERF-004,IF-008,Tests door/lock states interface latency for departure interlock,Performance test,verified
+TC-INT-PERF-004,IF-016,Tests departure interlock interface latency to TCMS,Performance test,verified
+TC-INT-ERR-001,IF-004,Tests HAL sensor interface NULL pointer error handling,Error guessing test with NULL injection,verified
+TC-INT-ERR-002,IF-001,Verifies CRC-16 consistency on speed interface,Error guessing test,verified
+TC-INT-ERR-002,IF-017,Verifies CRC-16 consistency on cross-channel SPI interface,Error guessing test,verified
+TC-INT-ERR-003,IF-004,Tests door index bounds check on sensor interface,Error guessing test,verified
+TC-INT-ERR-003,IF-005,Tests door index bounds check on obstacle interface,Error guessing test,verified
+TC-INT-ERR-003,IF-010,Tests door index bounds check on lock actuator interface,Error guessing test,verified
+TC-INT-ERR-003,IF-011,Tests door index bounds check on motor PWM interface,Error guessing test,verified
+TC-INT-ERR-004,IF-012,Tests FMG initialization fault state on fault bitmask interface,Error guessing test,verified

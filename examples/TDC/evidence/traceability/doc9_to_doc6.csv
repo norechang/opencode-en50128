@@ -1,0 +1,81 @@
+source_id,target_id,rationale,verification_method,status
+COMP-001-SKN,REQ-SAFE-002,SKN implements speed-based locking enforcement,Design review + cross-channel test,verified
+COMP-001-SKN,REQ-SAFE-008,SKN implements all-doors-locked departure interlock,Design review + safety test,verified
+COMP-001-SKN,REQ-SAFE-009,SKN implements cross-channel lock verification every 20ms,Design review + SPI test,verified
+COMP-001-SKN,REQ-SAFE-010,SKN oversees CRC-16-CCITT on all safety structures,Design review + static analysis,verified
+COMP-001-SKN,REQ-SAFE-012,SKN implements 2oo2 safe state trigger,Design review + cross-channel test,verified
+COMP-001-SKN,REQ-SAFE-015,SKN implements cross-channel software watchdog,Design review + fault injection,verified
+COMP-001-SKN,REQ-SAFE-018,SKN implements memory integrity checks,Design review + unit test,verified
+COMP-001-SKN,REQ-FUN-009,SKN generates departure interlock signal when all doors locked,Design review + integration test,verified
+COMP-001-SKN,REQ-PERF-005,SKN transmits locked status within 100ms,Performance test,verified
+COMP-001-SKN,REQ-INT-010,SKN exchanges cross-channel state via SPI,Interface test,verified
+COMP-001-SKN,SW-HAZ-001,SKN mitigates door opens while moving,Safety case,verified
+COMP-001-SKN,SW-HAZ-003,SKN prevents false departure signal via cross-channel comparison,Safety case,verified
+COMP-001-SKN,SW-HAZ-006,SKN coordinates with HAL watchdog for failure detection,Safety case,verified
+COMP-001-SKN,SW-HAZ-008,SKN detects memory corruption,Safety case,verified
+COMP-001-SKN,SW-HAZ-011,SKN filters SPI transients (3-cycle) to prevent passenger trapping,FMEA mitigation,verified
+COMP-002-SPM,REQ-SAFE-001,SPM generates speed interlock flag based on TCMS speed,Design review + safety test,verified
+COMP-002-SPM,REQ-SAFE-003,SPM defaults to moving on CAN timeout,Design review + fault injection,verified
+COMP-002-SPM,REQ-PERF-002,SPM completes interlock response within 100ms,Performance test,verified
+COMP-002-SPM,SW-HAZ-001,SPM implements speed interlock to prevent opening while moving,Safety case,verified
+COMP-002-SPM,SW-HAZ-007,SPM mitigates CAN speed data loss,Safety case,verified
+COMP-003-OBD,REQ-FUN-007,OBD implements obstacle retry logic (3 attempts),Design review + unit test,verified
+COMP-003-OBD,REQ-SAFE-004,OBD polls obstacles every 20ms with ISR <1ms,Design review + timing test,verified
+COMP-003-OBD,REQ-SAFE-005,OBD issues reversal within 100ms of detection,Design review + performance test,verified
+COMP-003-OBD,REQ-SAFE-006,OBD monitors motor current for force limit,Design review + integration test,verified
+COMP-003-OBD,REQ-PERF-003,OBD reverses within 150ms of obstacle,Performance test,verified
+COMP-003-OBD,SW-HAZ-002,OBD prevents door closing on passenger,Safety case,verified
+COMP-004-DSM,REQ-FUN-001,DSM processes door opening commands with preconditions,Design review + integration test,verified
+COMP-004-DSM,REQ-FUN-002,DSM detects fully-open with 2oo2 position voting,Design review + fault injection,verified
+COMP-004-DSM,REQ-FUN-003,DSM detects opening timeout (4.0s),Unit test,verified
+COMP-004-DSM,REQ-FUN-004,DSM processes closing commands with obstacle gate,Design review + integration test,verified
+COMP-004-DSM,REQ-FUN-005,DSM confirms closed-and-locked with 2oo2 × 2oo2 voting,Design review + safety test,verified
+COMP-004-DSM,REQ-FUN-006,DSM detects closing timeout (10.0s),Unit test,verified
+COMP-004-DSM,REQ-FUN-008,DSM commands lock engagement after fully-closed,Design review + integration test,verified
+COMP-004-DSM,REQ-FUN-010,DSM re-commands lock engagement while moving,Design review + fault injection,verified
+COMP-004-DSM,REQ-FUN-011,DSM implements operational mode FSM,Design review + state model,verified
+COMP-004-DSM,REQ-FUN-012,DSM enforces mode transition authorization,Design review + security test,verified
+COMP-004-DSM,REQ-FUN-014,DSM requires speed=0 and authorization for diagnostic mode,Design review + unit test,verified
+COMP-004-DSM,REQ-FUN-015,DSM monitors door position every 20ms,Design review + performance test,verified
+COMP-004-DSM,REQ-SAFE-001,DSM gates opening on speed interlock,Design review + safety test,verified
+COMP-004-DSM,REQ-SAFE-007,DSM implements 2oo2 voting for locked state,Design review + fault injection,verified
+COMP-004-DSM,REQ-SAFE-011,DSM detects position sensor timeout (100ms),Design review + fault injection,verified
+COMP-004-DSM,REQ-SAFE-019,DSM detects emergency release with 60ms debounce,Design review + integration test,verified
+COMP-004-DSM,REQ-SAFE-020,DSM latches emergency release until reset,Design review + integration test,verified
+COMP-004-DSM,REQ-PERF-004,DSM issues motor start within 200ms,Performance test,verified
+COMP-004-DSM,SW-HAZ-003,DSM prevents false lock indication via 2oo2 voting,Safety case,verified
+COMP-004-DSM,SW-HAZ-004,DSM mitigates loss of position indication,Safety case,verified
+COMP-004-DSM,SW-HAZ-009,DSM handles emergency release correctly,Safety case,verified
+COMP-005-FMG,REQ-FUN-013,FMG implements selective door disablement,Design review + integration test,verified
+COMP-005-FMG,REQ-FUN-017,FMG monitors faults every 20ms,Design review + fault detection test,verified
+COMP-005-FMG,REQ-SAFE-012,FMG coordinates with SKN for safe state triggers,Design review + integration test,verified
+COMP-005-FMG,REQ-SAFE-013,FMG maintains speed interlock during selective disablement,Design review + safety test,verified
+COMP-005-FMG,REQ-SAFE-021,FMG logs selective disablement with authorization,Design review + audit test,verified
+COMP-005-FMG,SW-HAZ-005,FMG prevents spurious safe state,Safety case,verified
+COMP-005-FMG,SW-HAZ-010,FMG enforces selective disablement authorization,Safety case,verified
+COMP-006-TCI,REQ-FUN-016,TCI transmits door status every 100ms,Design review + interface test,verified
+COMP-006-TCI,REQ-SAFE-003,TCI receives CAN speed with CRC-16 and timeout,Design review + interface test,verified
+COMP-006-TCI,REQ-SAFE-016,TCI validates CRC-16 on CAN messages,Design review + interface test,verified
+COMP-006-TCI,REQ-INT-007,TCI receives TCMS CAN messages,Interface test + CAN analyzer,verified
+COMP-006-TCI,REQ-INT-008,TCI transmits CAN messages with CRC-16,Interface test + CAN analyzer,verified
+COMP-006-TCI,SW-HAZ-007,TCI mitigates CAN speed data loss,Safety case,verified
+COMP-007-DGN,REQ-FUN-018,DGN logs fault events to non-volatile storage,Design review + integration test,verified
+COMP-007-DGN,REQ-SAFE-021,DGN supports selective disablement logging,Design review + audit test,verified
+COMP-008-HAL,REQ-SAFE-014,HAL implements hardware watchdog refresh,Design review + hardware test,verified
+COMP-008-HAL,REQ-SAFE-017,HAL uses static memory allocation only,Static analysis + code review,verified
+COMP-008-HAL,REQ-INT-001,HAL provides PWM motor control,Interface test + oscilloscope,verified
+COMP-008-HAL,REQ-INT-002,HAL reads position sensors,Interface test + signal injection,verified
+COMP-008-HAL,REQ-INT-003,HAL reads obstacle sensors via interrupt,Interface test + timing,verified
+COMP-008-HAL,REQ-INT-004,HAL controls lock actuators,Interface test + load verification,verified
+COMP-008-HAL,REQ-INT-005,HAL reads lock sensors,Interface test + signal injection,verified
+COMP-008-HAL,REQ-INT-006,HAL refreshes watchdog within 40ms,Interface test + timing,verified
+COMP-008-HAL,REQ-INT-009,HAL exchanges DDU commands via RS-485,Interface test + RS-485 analyzer,verified
+COMP-008-HAL,SW-HAZ-006,HAL watchdog detects software failures,Safety case,verified
+SF-001-SPEED-INTERLOCK,REQ-SAFE-001,Speed interlock safety function maps to SPM component,Safety architecture allocation,verified
+SF-001-SPEED-INTERLOCK,REQ-SAFE-002,Speed interlock safety function maps to SKN coordination,Safety architecture allocation,verified
+SF-002-DEPARTURE-INTERLOCK,REQ-SAFE-008,Departure interlock safety function maps to SKN,Safety architecture allocation,verified
+SF-002-DEPARTURE-INTERLOCK,REQ-FUN-009,Departure interlock safety function maps to SKN→TCI,Safety architecture allocation,verified
+SF-003-OBSTACLE-DETECTION,REQ-SAFE-004,Obstacle detection safety function maps to OBD,Safety architecture allocation,verified
+SF-003-OBSTACLE-DETECTION,REQ-SAFE-005,Obstacle reversal safety function maps to OBD,Safety architecture allocation,verified
+SF-004-SAFE-STATE,REQ-SAFE-012,Safe state safety function maps to SKN + FMG,Safety architecture allocation,verified
+SF-005-DOOR-POSITION-VERIFICATION,REQ-SAFE-007,Door position verification maps to DSM 2oo2 voting,Safety architecture allocation,verified

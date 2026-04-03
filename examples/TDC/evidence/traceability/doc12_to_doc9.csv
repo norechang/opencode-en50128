@@ -1,0 +1,72 @@
+source_id,target_id,rationale,verification_method,status
+TC-INT-001,COMP-007,Tests DGN event log write/read via IF-020 SPI Flash interface,Integration test execution with SPI Flash hardware,verified
+TC-INT-002,COMP-007,Tests DGN non-interference with safety state during event logging,Integration test with SKN stub monitoring safe_state_active,verified
+TC-INT-003,COMP-006,Tests normal TCMS speed message delivery through TCI component,Integration test with CAN stub injecting valid frames,verified
+TC-INT-003,COMP-002,Tests SPM reception of speed data from TCI via IF-001,Integration test verifying speed_valid flag propagation,verified
+TC-INT-004,COMP-006,Tests TCI CRC-16 validation and fail-safe behavior on CRC error,Integration test with corrupted CAN frame injection,verified
+TC-INT-004,COMP-002,Tests SPM retaining last valid speed on CRC error,Integration test verifying speed_valid=false retention,verified
+TC-INT-005,COMP-006,Tests TCI CAN timeout detection (200 ms),Integration test with CAN frame withheld,verified
+TC-INT-005,COMP-002,Tests SPM speed interlock activation on timeout,Integration test verifying interlock flag transition,verified
+TC-INT-006,COMP-002,Tests SPM to SKN speed interlock gate propagation via IF-002,Integration test with SKN stub monitoring interlock flag,verified
+TC-INT-006,COMP-001,Tests SKN reception of speed interlock gate from SPM,Integration test verifying safe state logic integration,verified
+TC-INT-007,COMP-002,Tests SPM to DSM speed gate propagation via IF-003,Integration test with DSM stub monitoring speed gate,verified
+TC-INT-007,COMP-004,Tests DSM rejection of OPENING command when speed interlock active,Integration test verifying FSM transition blocking,verified
+TC-INT-008,COMP-006,Tests TCI CAN sequence counter validation,Integration test with out-of-sequence frame injection,verified
+TC-INT-009,COMP-008,Tests HAL GPIO position/lock sensor read from hardware,Integration test with sensor signal injection,verified
+TC-INT-009,COMP-004,Tests DSM state transition based on HAL sensor data via IF-004,Integration test verifying FSM state CLOSED_AND_LOCKED,verified
+TC-INT-010,COMP-008,Tests HAL GPIO obstacle sensor ISR triggering,Integration test with obstacle pulse injection,verified
+TC-INT-010,COMP-003,Tests OBD obstacle detection and DSM reversal command via IF-006,Integration test verifying reversal flag propagation,verified
+TC-INT-010,COMP-004,Tests DSM state transition to REVERSING on obstacle,Integration test verifying FSM reversal logic,verified
+TC-INT-011,COMP-003,Tests OBD to SKN obstacle propagation for safety arbitration via IF-007,Integration test with SKN stub monitoring obstacle flag,verified
+TC-INT-011,COMP-001,Tests SKN safe state evaluation with obstacle input,Integration test verifying safe state arbitration logic,verified
+TC-INT-012,COMP-004,Tests DSM to HAL lock actuator command via IF-010,Integration test verifying GPIO actuator output,verified
+TC-INT-012,COMP-008,Tests HAL lock actuator GPIO output on target hardware,Integration test with oscilloscope monitoring GPIO,verified
+TC-INT-013,COMP-004,Tests DSM to HAL motor PWM command via IF-011,Integration test verifying PWM duty cycle,verified
+TC-INT-013,COMP-008,Tests HAL motor PWM output generation,Integration test with oscilloscope measuring 20 kHz PWM,verified
+TC-INT-014,COMP-004,Tests DSM to TCI per-door status reporting via IF-009,Integration test verifying CAN TX frame content,verified
+TC-INT-014,COMP-006,Tests TCI transmission of door status to TCMS,Integration test with CAN analyser capture,verified
+TC-INT-015,COMP-005,Tests FMG fault aggregation and safe state escalation via IF-012,Integration test with multiple fault injection,verified
+TC-INT-015,COMP-001,Tests SKN safe state activation from FMG fault state bitmask,Integration test verifying safe_state_active=1,verified
+TC-INT-016,COMP-001,Tests SKN safe state broadcast to all components via IF-015,Integration test with all component stubs monitoring broadcast,verified
+TC-INT-017,COMP-004,Tests all-doors CLOSED_AND_LOCKED departure interlock logic via IF-008,Integration test with 2oo2 sensor voting,verified
+TC-INT-017,COMP-001,Tests SKN departure interlock evaluation and TCI reporting via IF-016,Integration test verifying departure_ready flag,verified
+TC-INT-017,COMP-006,Tests TCI CAN TX departure interlock frame to TCMS,Integration test with CAN analyser verification,verified
+TC-INT-018,COMP-005,Tests FMG to TCI fault report via IF-013,Integration test with fault injection and CAN capture,verified
+TC-INT-018,COMP-006,Tests TCI CAN TX fault report frame to TCMS,Integration test with CAN analyser verification,verified
+TC-INT-019,COMP-005,Tests FMG to DGN fault log entry via IF-014,Integration test verifying event log write,verified
+TC-INT-019,COMP-007,Tests DGN event log write on fault report,Integration test with SPI Flash read-back,verified
+TC-INT-020,COMP-006,Tests TCI to DSM door command delivery via IF-018,Integration test with CAN command injection,verified
+TC-INT-020,COMP-004,Tests DSM processing of TCMS door command,Integration test verifying FSM command acceptance,verified
+TC-INT-021,COMP-001,Tests cross-channel SPI normal exchange via IF-017 (Channel A ↔ B),Integration test with dual DCU boards and SPI analyser,verified
+TC-INT-022,COMP-001,Tests cross-channel safety-data disagreement detection and immediate safe state,Integration test with injected data mismatch,verified
+TC-INT-023,COMP-001,Tests SPI infrastructure fault with 3-cycle transient filter,Integration test with SPI CRC error injection,verified
+TC-INT-024,COMP-001,Tests SPI timeout detection and 3-cycle filter triggering safe state,Integration test with SPI link disconnection,verified
+TC-INT-025,COMP-008,Tests HAL watchdog status monitoring and reporting via IF-019,Integration test with watchdog refresh withheld,verified
+TC-INT-025,COMP-001,Tests SKN reception of watchdog warning from HAL,Integration test verifying safe state escalation path,verified
+TC-INT-PERF-001,COMP-001,Tests full scheduler cycle WCET ≤ 16 ms (20 ms budget with margin),Performance test on target hardware with DWT cycle counter,verified
+TC-INT-PERF-001,COMP-002,Verifies SPM execution within cycle budget,Performance test on target hardware,verified
+TC-INT-PERF-001,COMP-003,Verifies OBD execution within cycle budget,Performance test on target hardware,verified
+TC-INT-PERF-001,COMP-004,Verifies DSM execution within cycle budget,Performance test on target hardware,verified
+TC-INT-PERF-001,COMP-005,Verifies FMG execution within cycle budget,Performance test on target hardware,verified
+TC-INT-PERF-001,COMP-006,Verifies TCI execution within cycle budget,Performance test on target hardware,verified
+TC-INT-PERF-001,COMP-007,Verifies DGN execution within cycle budget,Performance test on target hardware,verified
+TC-INT-PERF-001,COMP-008,Verifies HAL execution within cycle budget,Performance test on target hardware,verified
+TC-INT-PERF-002,COMP-006,Tests speed interlock response latency CAN RX to DSM gate ≤ 100 ms,Performance test with timestamped CAN injection,verified
+TC-INT-PERF-002,COMP-002,Verifies SPM processing latency contribution,Performance test with DWT timestamps,verified
+TC-INT-PERF-002,COMP-004,Verifies DSM gate reception latency,Performance test with DWT timestamps,verified
+TC-INT-PERF-003,COMP-003,Tests obstacle reversal latency sensor to motor reversal ≤ 150 ms,Performance test with obstacle pulse and PWM capture,verified
+TC-INT-PERF-003,COMP-004,Verifies DSM reversal command latency,Performance test with DWT timestamps,verified
+TC-INT-PERF-003,COMP-008,Verifies HAL motor PWM output latency,Performance test with oscilloscope measurement,verified
+TC-INT-PERF-004,COMP-004,Tests TCMS departure interlock reporting latency ≤ 100 ms,Performance test with sensor change to CAN TX timestamp,verified
+TC-INT-PERF-004,COMP-001,Verifies SKN departure interlock evaluation latency,Performance test with DWT timestamps,verified
+TC-INT-PERF-004,COMP-006,Verifies TCI CAN TX latency,Performance test with CAN analyser timestamps,verified
+TC-INT-ERR-001,COMP-008,Tests HAL NULL pointer handling for sensor API,Error guessing test with NULL pointer injection,verified
+TC-INT-ERR-001,COMP-004,Tests DSM resilience to HAL sensor API NULL return,Error guessing test verifying safe state escalation,verified
+TC-INT-ERR-002,COMP-001,Tests CRC-16 computation consistency across all safety structures,Error guessing test with cross-component CRC validation,verified
+TC-INT-ERR-002,COMP-002,Verifies SPM CRC-16 consistency,Error guessing test,verified
+TC-INT-ERR-002,COMP-004,Verifies DSM CRC-16 consistency,Error guessing test,verified
+TC-INT-ERR-002,COMP-006,Verifies TCI CRC-16 consistency,Error guessing test,verified
+TC-INT-ERR-003,COMP-004,Tests door index bounds check (0 ≤ door_idx < 8) across all components,Error guessing test with out-of-bounds index injection,verified
+TC-INT-ERR-003,COMP-003,Verifies OBD bounds checking,Error guessing test,verified
+TC-INT-ERR-003,COMP-008,Verifies HAL bounds checking,Error guessing test,verified
+TC-INT-ERR-004,COMP-005,Tests FMG initialization fault counter state at startup,Error guessing test verifying zero-initialized fault state,verified

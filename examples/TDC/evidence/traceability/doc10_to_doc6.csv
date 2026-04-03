@@ -1,0 +1,59 @@
+source_id,target_id,rationale,verification_method,status
+MOD-SKN-001,REQ-SAFE-009,Cross-channel comparator verifies lock state agreement every 20ms,Module design + SPI test,verified
+MOD-SKN-001,REQ-SAFE-012,Cross-channel comparator triggers safe state on mismatch,Module design + fault injection,verified
+MOD-SKN-001,REQ-INT-010,Cross-channel comparator exchanges state via SPI,Module design + interface test,verified
+MOD-SKN-001,SW-HAZ-011,Cross-channel comparator implements 3-cycle SPI transient filter,FMEA mitigation + design analysis,verified
+MOD-SKN-002,REQ-SAFE-012,Safe state manager is sole authority for safe_state_active flag,Module design + integration test,verified
+MOD-SKN-003,REQ-FUN-009,Departure interlock module generates all-doors-locked signal,Module design + safety test,verified
+MOD-SKN-003,REQ-SAFE-008,Departure interlock module withholds signal until all doors locked,Module design + safety test,verified
+MOD-SKN-003,REQ-PERF-005,Departure interlock transmission latency ≤ 100ms,Module design + performance test,verified
+MOD-SKN-004,REQ-SAFE-010,Memory integrity module computes CRC-16 on safety globals,Module design + unit test,verified
+MOD-SKN-004,REQ-SAFE-018,Memory integrity module checks ROM and RAM (boot + 100ms),Module design + unit test,verified
+MOD-SKN-004,SW-HAZ-008,Memory integrity module detects memory corruption,Module design + fault injection,verified
+MOD-SPM-001,REQ-INT-007,CAN speed receiver processes TCMS speed messages,Module design + CAN test,verified
+MOD-SPM-002,REQ-SAFE-003,Speed validator defaults to moving on CAN timeout (>200ms),Module design + fault injection,verified
+MOD-SPM-002,REQ-SAFE-016,Speed validator checks CRC-16 on speed messages,Module design + CAN test,verified
+MOD-SPM-003,REQ-SAFE-001,Interlock generator sets speed_interlock_active when speed > 5 km/h,Module design + safety test,verified
+MOD-SPM-003,REQ-PERF-002,Interlock generator responds within 100ms,Module design + performance test,verified
+MOD-OBD-001,REQ-INT-003,Obstacle sensor reader polls sensors and handles ISR,Module design + timing test,verified
+MOD-OBD-002,REQ-SAFE-004,Obstacle detector polls every 20ms with ISR response <1ms,Module design + timing test,verified
+MOD-OBD-003,REQ-SAFE-005,Reversal command generator issues reversal within 100ms,Module design + performance test,verified
+MOD-OBD-003,REQ-PERF-003,Reversal latency ≤ 150ms from obstacle detection,Module design + performance test,verified
+MOD-DSM-001,REQ-FUN-001,Door FSM engine processes opening commands with preconditions,Module design + unit test,verified
+MOD-DSM-001,REQ-FUN-004,Door FSM engine processes closing commands with gates,Module design + unit test,verified
+MOD-DSM-001,REQ-FUN-011,Door FSM engine implements operational mode FSM,Module design + state model,verified
+MOD-DSM-001,REQ-FUN-015,Door FSM engine monitors position every 20ms,Module design + performance test,verified
+MOD-DSM-002,REQ-FUN-002,Sensor voter implements 2oo2 fully-open detection,Module design + fault injection,verified
+MOD-DSM-002,REQ-FUN-005,Sensor voter implements 2oo2 × 2oo2 closed-and-locked detection,Module design + safety test,verified
+MOD-DSM-002,REQ-SAFE-007,Sensor voter implements 2oo2 locked state confirmation,Module design + fault injection,verified
+MOD-DSM-003,REQ-FUN-008,Lock controller commands lock engagement after fully-closed,Module design + integration test,verified
+MOD-DSM-003,REQ-FUN-010,Lock controller re-commands lock while moving,Module design + fault injection,verified
+MOD-DSM-003,REQ-INT-004,Lock controller interfaces with HAL lock actuators,Module design + interface test,verified
+MOD-DSM-004,REQ-INT-001,Motor controller generates PWM and direction commands,Module design + oscilloscope test,verified
+MOD-DSM-004,REQ-PERF-004,Motor controller issues start command within 200ms,Module design + performance test,verified
+MOD-DSM-005,REQ-FUN-012,Mode manager enforces mode transition authorization,Module design + security test,verified
+MOD-DSM-005,REQ-FUN-013,Mode manager implements selective door disablement,Module design + integration test,verified
+MOD-DSM-005,REQ-FUN-014,Mode manager requires speed=0 for diagnostic mode,Module design + unit test,verified
+MOD-FMG-001,REQ-FUN-017,Fault aggregator monitors faults every 20ms,Module design + fault detection test,verified
+MOD-FMG-002,REQ-SAFE-012,Fault classifier escalates critical faults to safe state,Module design + FMEA analysis,verified
+MOD-FMG-003,REQ-SAFE-013,Safe state escalator maintains speed interlock during selective disablement,Module design + safety test,verified
+MOD-TCI-001,REQ-SAFE-016,CAN receiver validates CRC-16 on all RX messages,Module design + CAN test,verified
+MOD-TCI-002,REQ-INT-008,CAN transmitter generates CRC-16 on all TX messages,Module design + CAN test,verified
+MOD-TCI-003,REQ-FUN-001,Command parser decodes door open/close commands,Module design + unit test,verified
+MOD-TCI-004,REQ-FUN-016,Status formatter transmits per-door status every 100ms,Module design + interface test,verified
+MOD-DGN-001,REQ-FUN-018,Event log writer stores 1000+ events in circular buffer,Module design + integration test,verified
+MOD-DGN-003,REQ-SAFE-010,Log CRC generator computes per-entry CRC-16,Module design + unit test,verified
+MOD-HAL-001,REQ-INT-002,GPIO driver reads position sensors,Module design + hardware test,verified
+MOD-HAL-001,REQ-INT-005,GPIO driver reads lock sensors,Module design + hardware test,verified
+MOD-HAL-002,REQ-INT-001,PWM driver generates 20kHz motor control signal,Module design + oscilloscope test,verified
+MOD-HAL-003,REQ-INT-007,CAN driver receives TCMS messages,Module design + CAN analyzer test,verified
+MOD-HAL-003,REQ-INT-008,CAN driver transmits door status messages,Module design + CAN analyzer test,verified
+MOD-HAL-004,REQ-INT-010,SPI driver exchanges cross-channel state,Module design + logic analyzer test,verified
+MOD-HAL-005,REQ-SAFE-010,CRC-16-CCITT utility provides polynomial 0x1021,Module design + test vectors,verified
+WCET-ANALYSIS,REQ-PERF-001,Schedulability analysis proves WCET ≤ 16ms per 20ms cycle,SDS §11 + timing measurement,verified
+MEMORY-ALLOCATION,REQ-SAFE-017,Static-only allocation strategy eliminates heap usage,SDS §10 + linker map analysis,verified
+CYCLOMATIC-COMPLEXITY,REQ-SAFE-017,All functions limited to complexity ≤ 10,SDS §1.4 constraint + static analysis,verified
+NO-RECURSION,REQ-SAFE-017,No recursive functions in design,SDS §1.4 constraint + code review,verified
+NO-DYNAMIC-MEMORY,REQ-SAFE-017,No malloc/calloc/realloc/free in any module,SDS §1.4 constraint + MISRA 21.3 check,verified
+FIXED-WIDTH-TYPES,REQ-SAFE-017,All modules use uint8_t/uint16_t/uint32_t types,SDS §2.2 + code review,verified
+ERROR-RETURN-CODES,REQ-SAFE-014,All HAL functions return error_t and callers check,SDS §2.2 + code review,verified

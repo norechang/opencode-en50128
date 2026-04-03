@@ -1,0 +1,56 @@
+source_id,target_id,rationale,verification_method,status
+MOD-SKN-001,COMP-001-SKN,Cross-channel comparator module implements SKN comparison logic,Design review + module test,verified
+MOD-SKN-002,COMP-001-SKN,Safe state manager module implements SKN safe state authority,Design review + module test,verified
+MOD-SKN-003,COMP-001-SKN,Departure interlock module implements SKN interlock logic,Design review + module test,verified
+MOD-SKN-004,COMP-001-SKN,Memory integrity module implements SKN CRC and stack canary checks,Design review + static analysis,verified
+MOD-SPM-001,COMP-002-SPM,CAN speed receiver module implements SPM TCMS interface,Design review + module test,verified
+MOD-SPM-002,COMP-002-SPM,Speed validator module implements SPM CRC and timeout logic,Design review + fault injection,verified
+MOD-SPM-003,COMP-002-SPM,Interlock generator module implements SPM interlock flag management,Design review + unit test,verified
+MOD-OBD-001,COMP-003-OBD,Obstacle sensor reader implements OBD GPIO and ISR interface,Design review + timing test,verified
+MOD-OBD-002,COMP-003-OBD,Obstacle detector implements OBD 1oo2 detection logic,Design review + fault injection,verified
+MOD-OBD-003,COMP-003-OBD,Reversal command generator implements OBD motor reversal authority,Design review + performance test,verified
+MOD-DSM-001,COMP-004-DSM,Door FSM engine implements per-door state machine,Design review + state model verification,verified
+MOD-DSM-002,COMP-004-DSM,Sensor voter implements DSM 2oo2 position and lock voting,Design review + fault injection,verified
+MOD-DSM-003,COMP-004-DSM,Lock controller implements DSM lock actuator commands,Design review + integration test,verified
+MOD-DSM-004,COMP-004-DSM,Motor controller implements DSM PWM and direction commands,Design review + integration test,verified
+MOD-DSM-005,COMP-004-DSM,Mode manager implements DSM operational mode FSM,Design review + unit test,verified
+MOD-FMG-001,COMP-005-FMG,Fault aggregator implements FMG fault flag collection,Design review + fault detection test,verified
+MOD-FMG-002,COMP-005-FMG,Fault classifier implements FMG severity classification,Design review + FMEA analysis,verified
+MOD-FMG-003,COMP-005-FMG,Safe state escalator implements FMG safe state trigger,Design review + integration test,verified
+MOD-TCI-001,COMP-006-TCI,CAN receiver implements TCI CAN RX with CRC validation,Design review + interface test,verified
+MOD-TCI-002,COMP-006-TCI,CAN transmitter implements TCI CAN TX with CRC generation,Design review + interface test,verified
+MOD-TCI-003,COMP-006-TCI,Command parser implements TCI door command decoding,Design review + unit test,verified
+MOD-TCI-004,COMP-006-TCI,Status formatter implements TCI door status encoding,Design review + integration test,verified
+MOD-DGN-001,COMP-007-DGN,Event log writer implements DGN circular buffer management,Design review + integration test,verified
+MOD-DGN-002,COMP-007-DGN,Event log reader implements DGN diagnostic port interface,Design review + manual test,verified
+MOD-DGN-003,COMP-007-DGN,Log CRC generator implements DGN per-entry CRC-16,Design review + unit test,verified
+MOD-HAL-001,COMP-008-HAL,GPIO driver implements HAL sensor and actuator interface,Design review + hardware test,verified
+MOD-HAL-002,COMP-008-HAL,PWM driver implements HAL motor control (20kHz),Design review + oscilloscope test,verified
+MOD-HAL-003,COMP-008-HAL,CAN driver implements HAL bxCAN interface,Design review + CAN analyzer test,verified
+MOD-HAL-004,COMP-008-HAL,SPI driver implements HAL cross-channel and Flash SPI,Design review + logic analyzer test,verified
+MOD-HAL-005,COMP-008-HAL,CRC-16-CCITT utility provides polynomial 0x1021 computation,Design review + test vectors,verified
+IF-001,MOD-TCI-001,TCI→SPM speed message interface uses CAN receiver output,Interface specification + test,verified
+IF-002,MOD-SPM-003,SPM→SKN speed interlock interface uses interlock generator output,Interface specification + test,verified
+IF-003,MOD-SPM-003,SPM→DSM speed gate interface shares interlock flag with IF-002,Interface specification + test,verified
+IF-004,MOD-HAL-001,HAL→DSM sensor inputs use GPIO driver output arrays,Interface specification + test,verified
+IF-005,MOD-HAL-001,HAL→OBD obstacle sensors use GPIO driver ISR and polling,Interface specification + timing test,verified
+IF-006,MOD-OBD-002,OBD→DSM obstacle flags use obstacle detector output,Interface specification + test,verified
+IF-007,MOD-OBD-002,OBD→SKN obstacle state for cross-channel comparison,Interface specification + test,verified
+IF-008,MOD-DSM-001,DSM→SKN door and lock states from FSM engine,Interface specification + test,verified
+IF-009,MOD-TCI-004,DSM→TCI per-door status via status formatter,Interface specification + test,verified
+IF-010,MOD-DSM-003,DSM→HAL lock actuator commands via lock controller,Interface specification + test,verified
+IF-011,MOD-DSM-004,DSM→HAL motor PWM commands via motor controller,Interface specification + test,verified
+IF-012,MOD-FMG-001,FMG→SKN fault flags from fault aggregator,Interface specification + test,verified
+IF-013,MOD-TCI-002,FMG→TCI fault report via CAN transmitter,Interface specification + test,verified
+IF-014,MOD-DGN-001,FMG→DGN fault log entries to event writer,Interface specification + test,verified
+IF-015,MOD-SKN-002,SKN→ALL safe state broadcast from safe state manager,Interface specification + test,verified
+IF-016,MOD-SKN-003,SKN→TCI departure interlock from interlock module,Interface specification + test,verified
+IF-017,MOD-SKN-001,SKN(ChA)↔SKN(ChB) cross-channel SPI via comparator,Interface specification + cross-channel test,verified
+IF-018,MOD-TCI-003,TCI→DSM door commands from command parser,Interface specification + test,verified
+IF-019,MOD-HAL-001,HAL→SKN watchdog status (implicit in GPIO driver),Interface specification + timing test,verified
+IF-020,MOD-DGN-001,DGN→SPI Flash event log via HAL SPI driver,Interface specification + integration test,verified
+CRC-16-CCITT-0x1021,MOD-HAL-005,Unified CRC polynomial implemented in HAL CRC utility,OI-FTA-003 resolution + test vectors,verified
+SPI-TRANSIENT-FILTER,MOD-SKN-001,3-cycle SPI infrastructure fault filter in comparator,OI-FMEA-001 resolution + fault injection,verified
+CROSS-CHANNEL-STATE,MOD-SKN-001,cross_channel_state_t structure defined in tdc_types.h,Design specification + interface test,verified
+DOOR-FSM-STATES,MOD-DSM-001,door_fsm_state_t enumeration with 9 states,Design specification + state model,verified
+ERROR-TYPE-ENUM,MOD-HAL-005,error_t return codes for all safety functions,Design specification + code review,verified

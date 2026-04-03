@@ -1,0 +1,51 @@
+source_id,target_id,rationale,verification_method,status
+TC-INT-001,IF-020,DGN event log write and read tests IF-020 (DGN→SPI Flash),Integration test spec + test execution,specified
+TC-INT-002,IF-001,TCI→SPM CAN speed message delivery tests IF-001,Integration test spec + test execution,specified
+TC-INT-003,IF-001,CAN speed CRC-16 validation tests IF-001 error handling,Integration test spec + fault injection,specified
+TC-INT-004,IF-001,CAN speed timeout detection tests IF-001 200ms threshold,Integration test spec + timing test,specified
+TC-INT-005,IF-002,SPM→SKN speed interlock flag propagation tests IF-002,Integration test spec + test execution,specified
+TC-INT-006,IF-002,Speed interlock fail-safe default tests IF-002 at startup,Integration test spec + power-on test,specified
+TC-INT-007,IF-003,SPM→DSM speed gate blocking tests IF-003 door inhibit,Integration test spec + safety test,specified
+TC-INT-008,IF-004,HAL→DSM position sensor 2oo2 voting tests IF-004,Integration test spec + fault injection,specified
+TC-INT-009,IF-004,HAL→DSM lock sensor 2oo2 voting tests IF-004,Integration test spec + fault injection,specified
+TC-INT-010,IF-005,HAL→OBD obstacle sensor ISR latency tests IF-005 <1ms,Integration test spec + timing measurement,specified
+TC-INT-011,IF-005,HAL→OBD obstacle sensor 1oo2 detection tests IF-005,Integration test spec + fault injection,specified
+TC-INT-012,IF-006,OBD→DSM obstacle flag propagation tests IF-006,Integration test spec + test execution,specified
+TC-INT-013,IF-006,OBD→DSM reversal command response tests IF-006 timing,Integration test spec + performance test,specified
+TC-INT-014,IF-007,OBD→SKN obstacle state cross-channel comparison tests IF-007,Integration test spec + cross-channel test,specified
+TC-INT-015,IF-008,DSM→SKN door and lock states delivery tests IF-008,Integration test spec + test execution,specified
+TC-INT-016,IF-008,DSM→SKN door state FSM all-states coverage tests IF-008,Integration test spec + state model verification,specified
+TC-INT-017,IF-009,DSM→TCI per-door status CAN message tests IF-009,Integration test spec + CAN analyzer,specified
+TC-INT-018,IF-009,DSM→TCI status transmission timing (100ms) tests IF-009,Integration test spec + timing test,specified
+TC-INT-019,IF-010,DSM→HAL lock actuator command tests IF-010,Integration test spec + hardware test,specified
+TC-INT-020,IF-010,DSM→HAL lock actuator fail-safe tests IF-010 power-off,Integration test spec + power cycle test,specified
+TC-INT-021,IF-011,DSM→HAL motor PWM duty cycle tests IF-011 (0-100%),Integration test spec + oscilloscope,specified
+TC-INT-022,IF-011,DSM→HAL motor direction control tests IF-011,Integration test spec + oscilloscope,specified
+TC-INT-023,IF-012,FMG→SKN fault flags propagation tests IF-012,Integration test spec + test execution,specified
+TC-INT-024,IF-012,FMG→SKN fault severity classification tests IF-012,Integration test spec + FMEA analysis,specified
+TC-INT-025,IF-013,FMG→TCI fault report CAN message tests IF-013,Integration test spec + CAN analyzer,specified
+TC-INT-026,IF-014,FMG→DGN fault log entry recording tests IF-014,Integration test spec + log verification,specified
+TC-INT-027,IF-015,SKN→ALL safe state broadcast tests IF-015 all components,Integration test spec + system-wide test,specified
+TC-INT-028,IF-015,SKN safe state irreversibility tests IF-015 latch behavior,Integration test spec + safety test,specified
+TC-INT-029,IF-016,SKN→TCI departure interlock signal tests IF-016,Integration test spec + safety test,specified
+TC-INT-030,IF-016,SKN departure interlock all-doors-locked condition tests IF-016,Integration test spec + safety test,specified
+TC-INT-031,IF-017,SKN(ChA)↔SKN(ChB) cross-channel SPI exchange tests IF-017,Integration test spec + dual-board test,specified
+TC-INT-032,IF-017,Cross-channel CRC-16 mismatch safe state tests IF-017,Integration test spec + fault injection,specified
+TC-INT-033,IF-017,Cross-channel SPI transient filter (3-cycle) tests IF-017 OI-FMEA-001,Integration test spec + SPI fault injection,specified
+TC-INT-034,IF-018,TCI→DSM door open command tests IF-018,Integration test spec + test execution,specified
+TC-INT-035,IF-018,TCI→DSM door close command tests IF-018,Integration test spec + test execution,specified
+TC-INT-036,IF-018,TCI→DSM mode change command tests IF-018,Integration test spec + test execution,specified
+TC-INT-037,IF-019,HAL→SKN watchdog refresh timing tests IF-019 40ms cycle,Integration test spec + timing measurement,specified
+TC-INT-038,IF-020,DGN circular buffer wrap-around tests IF-020 1000+ entries,Integration test spec + stress test,specified
+TC-INT-039,IF-020,DGN event log CRC-16 integrity tests IF-020,Integration test spec + corruption detection,specified
+TC-INT-040,IF-ALL,Full system integration regression (IF-001 to IF-020),Integration test spec + complete system test,specified
+PHASE-1-HAL-DGN,IF-020,Phase 1 integration validates HAL + DGN (IF-020),Integration strategy + phase execution,specified
+PHASE-2-TCI-SPM,IF-001,Phase 2 integration validates TCI + SPM (IF-001/IF-002),Integration strategy + phase execution,specified
+PHASE-2-TCI-SPM,IF-002,Phase 2 integration validates SPM→SKN interface,Integration strategy + phase execution,specified
+PHASE-3-OBD-DSM,IF-004,Phase 3 integration validates HAL→DSM sensors (IF-004),Integration strategy + phase execution,specified
+PHASE-3-OBD-DSM,IF-005,Phase 3 integration validates HAL→OBD obstacles (IF-005),Integration strategy + phase execution,specified
+PHASE-3-OBD-DSM,IF-006,Phase 3 integration validates OBD→DSM reversal (IF-006),Integration strategy + phase execution,specified
+PHASE-4-FMG-SKN,IF-012,Phase 4 integration validates FMG→SKN faults (IF-012),Integration strategy + phase execution,specified
+PHASE-4-FMG-SKN,IF-015,Phase 4 integration validates SKN→ALL safe state (IF-015),Integration strategy + phase execution,specified
+PHASE-5-CROSS-CHANNEL,IF-017,Phase 5 integration validates cross-channel SPI (IF-017),Integration strategy + dual-board test,specified
+PHASE-5-FULL-SYSTEM,IF-ALL,Phase 5 integration validates all 20 interfaces regression,Integration strategy + complete test,specified

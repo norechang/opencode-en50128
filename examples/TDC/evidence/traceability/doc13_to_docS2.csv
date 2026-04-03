@@ -1,0 +1,36 @@
+source_id,target_id,rationale,verification_method,status
+TC-HWSW-001,DCU-GPIO,Tests DCU GPIO digital inputs for door position sensors on STM32H743 hardware,HW/SW integration test with 24V logic sensor signals,verified
+TC-HWSW-002,DCU-GPIO,Tests DCU GPIO digital inputs for lock position sensors 2oo2 on hardware,HW/SW integration test with dual magnetic reed switches,verified
+TC-HWSW-003,DCU-GPIO,Tests DCU GPIO interrupt-driven inputs for obstacle sensors on STM32H743,HW/SW integration test with IR sensor pulse injection,verified
+TC-HWSW-004,DCU-WATCHDOG,Tests DCU independent hardware watchdog (IWDG) 50 ms timeout on STM32H743,HW/SW integration test with watchdog refresh timing,verified
+TC-HWSW-005,DCU-WATCHDOG,Tests DCU watchdog timeout and reset behavior on hardware,HW/SW integration test with refresh withheld,verified
+TC-HWSW-006,DCU-GPIO,Tests DCU GPIO digital outputs for lock actuators 24V on hardware,HW/SW integration test with actuator load measurement,verified
+TC-HWSW-007,DCU-PWM,Tests DCU PWM outputs for motor control at 20 kHz on STM32H743 TIM1,HW/SW integration test with oscilloscope verification,verified
+TC-HWSW-008,DCU-GPIO,Tests DCU GPIO outputs for motor direction control on hardware,HW/SW integration test with logic analyser measurement,verified
+TC-HWSW-009,DCU-PWM,Tests DCU PWM fail-safe (duty=0) on safe state on hardware,HW/SW integration test with oscilloscope,verified
+TC-HWSW-010,DCU-CAN,Tests DCU CAN controller RX on STM32H743 bxCAN 250 kbit/s on hardware,HW/SW integration test with CAN analyser injection,verified
+TC-HWSW-011,DCU-CAN,Tests DCU CAN controller TX on STM32H743 bxCAN on hardware,HW/SW integration test with CAN analyser capture,verified
+TC-HWSW-012,DCU-CAN,Tests DCU CAN TX fault reporting on hardware,HW/SW integration test with CAN analyser,verified
+TC-HWSW-013,DCU-SPI-CROSS-CHANNEL,Tests DCU cross-channel SPI 10 Mbps on STM32H743 SPI4 dual-MCU hardware,HW/SW integration test with dual DCU boards and SPI analyser,verified
+TC-HWSW-014,DCU-SPI-CROSS-CHANNEL,Tests DCU SPI cross-channel timeout detection on hardware,HW/SW integration test with SPI link disconnection,verified
+TC-HWSW-015,DCU-ADC,Tests DCU ADC analog inputs for motor current monitoring 0-10V on STM32H743,HW/SW integration test with current ramp injection,verified
+TC-HWSW-016,DCU-RS485,Tests DCU RS-485 transceiver 115.2 kbit/s to DDU on USART1 hardware,HW/SW integration test with RS-485 analyser,verified
+TC-HWSW-017,DCU-GPIO,Tests DCU GPIO emergency release detection input on hardware,HW/SW integration test with manual switch activation,verified
+TC-HWSW-018,DCU-GPIO,Tests DCU discrete I/O for driver control panel on hardware,HW/SW integration test with DCP simulator,verified
+TC-HWSW-019,DCU-USB-RS232,Tests DCU USB/RS-232 diagnostics port 115.2 kbit/s on USART3 hardware,HW/SW integration test with USB-UART adapter,verified
+TC-HWSW-PERF-001,DCU-MCU,Tests DCU dual STM32H743 microcontroller 400 MHz WCET performance,Performance test with DWT cycle counter on target hardware,verified
+TC-HWSW-PERF-001,DCU-PROCESSING,Validates DCU dual-channel processing cycle time ≤ 20 ms on hardware,Performance test on STM32H743 ARM Cortex-M7,verified
+TC-HWSW-PERF-002,DCU-FLASH,Tests DCU Flash code size utilization ≤ 1600 KB (2 MB total) on hardware,Performance test with linker map analysis,verified
+TC-HWSW-PERF-003,DCU-SRAM,Tests DCU SRAM static allocation ≤ 800 KB (1 MB total) on hardware,Performance test with linker map analysis,verified
+TC-HWSW-PERF-004,DCU-GPIO,Tests DCU GPIO interrupt latency for obstacle ISR on STM32H743 hardware,Performance test with oscilloscope measurement,verified
+TC-HWSW-FAULT-001,DCU-CAN,Tests DCU CAN controller fault detection and safe state on hardware,Fault injection test with bxCAN peripheral disabled,verified
+TC-HWSW-FAULT-002,DCU-SRAM,Tests DCU SRAM memory integrity check with CRC protection on hardware,Fault injection test with corrupted safety globals,verified
+TC-HWSW-FAULT-003,DCU-SRAM,Tests DCU stack canary corruption detection on hardware,Fault injection test with stack overflow injection,verified
+TC-HWSW-001,DCU-DUAL-CHANNEL,Verifies DCU dual-channel 2oo2 sensor voting architecture on hardware,HW/SW integration test,verified
+TC-HWSW-002,DCU-DUAL-CHANNEL,Verifies DCU dual-channel lock sensor 2oo2 architecture on hardware,HW/SW integration test,verified
+TC-HWSW-013,DCU-DUAL-CHANNEL,Tests DCU dual-channel 2oo2 processing with SPI cross-check on hardware,HW/SW integration test with dual boards,verified
+TC-HWSW-001,DCU-POWER,Verifies DCU 24V DC input power (18-32V range) operation for sensors,HW/SW integration test with power supply,verified
+TC-HWSW-007,DCU-POWER,Verifies DCU isolated 5V/3.3V internal supplies for MCUs and PWM,HW/SW integration test,verified
+TC-HWSW-PERF-001,DCU-TEMP,Validates DCU operation at -25°C to +55°C temperature range,Performance test on target hardware,verified
+TC-HWSW-013,DCU-SPI-FLASH,Tests DCU external SPI Flash 16 MB for event log storage,HW/SW integration test with Flash read-back,verified
+TC-HWSW-019,DCU-SPI-FLASH,Verifies DCU SPI Flash event logging via diagnostics port,HW/SW integration test,verified

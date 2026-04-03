@@ -1,0 +1,51 @@
+source_id,target_id,rationale,verification_method,status
+MOD-SKN-001,IF-017,Cross-channel comparator exchanges cross_channel_state_t via SPI,Module design + interface spec,verified
+MOD-SKN-002,IF-015,Safe state manager broadcasts safe_state_active to all components,Module design + interface spec,verified
+MOD-SKN-003,IF-016,Departure interlock module sends departure_interlock_ok to TCI,Module design + interface spec,verified
+MOD-SPM-001,IF-001,CAN speed receiver reads tcms_speed_msg_t from TCI,Module design + interface spec,verified
+MOD-SPM-003,IF-002,Interlock generator writes speed_interlock_active for SKN,Module design + interface spec,verified
+MOD-SPM-003,IF-003,Interlock generator writes speed_interlock_active for DSM,Module design + interface spec,verified
+MOD-OBD-001,IF-005,Obstacle sensor reader reads hal_obs_sensor_a/b arrays,Module design + interface spec,verified
+MOD-OBD-002,IF-006,Obstacle detector writes obstacle_flags array for DSM,Module design + interface spec,verified
+MOD-OBD-002,IF-007,Obstacle detector writes obstacle_flags array for SKN cross-channel,Module design + interface spec,verified
+MOD-DSM-001,IF-008,Door FSM engine writes door_states and lock_states arrays for SKN,Module design + interface spec,verified
+MOD-DSM-002,IF-004,Sensor voter reads hal_pos_sensor and hal_lock_sensor arrays,Module design + interface spec,verified
+MOD-DSM-003,IF-010,Lock controller writes lock actuator commands via HAL API,Module design + interface spec,verified
+MOD-DSM-004,IF-011,Motor controller writes PWM duty and direction via HAL API,Module design + interface spec,verified
+MOD-DSM-001,IF-009,Door FSM engine provides per-door status to TCI status formatter,Module design + interface spec,verified
+MOD-DSM-005,IF-018,Mode manager receives door commands from TCI command parser,Module design + interface spec,verified
+MOD-FMG-001,IF-012,Fault aggregator writes fault_flags bitmask for SKN,Module design + interface spec,verified
+MOD-FMG-002,IF-013,Fault classifier sends fault report to TCI for CAN transmission,Module design + interface spec,verified
+MOD-FMG-003,IF-014,Safe state escalator sends fault log entries to DGN,Module design + interface spec,verified
+MOD-TCI-001,IF-001,CAN receiver writes tcms_speed_msg_t for SPM consumption,Module design + interface spec,verified
+MOD-TCI-002,IF-016,CAN transmitter receives departure interlock from SKN for TX,Module design + interface spec,verified
+MOD-TCI-002,IF-013,CAN transmitter receives fault report from FMG for TX,Module design + interface spec,verified
+MOD-TCI-003,IF-018,Command parser sends door open/close commands to DSM,Module design + interface spec,verified
+MOD-TCI-004,IF-009,Status formatter receives per-door status from DSM for CAN TX,Module design + interface spec,verified
+MOD-DGN-001,IF-014,Event log writer receives fault log entries from FMG,Module design + interface spec,verified
+MOD-DGN-001,IF-020,Event log writer accesses SPI Flash via HAL SPI driver,Module design + interface spec,verified
+MOD-HAL-001,IF-004,GPIO driver writes hal_pos_sensor and hal_lock_sensor arrays,Module design + interface spec,verified
+MOD-HAL-001,IF-005,GPIO driver writes hal_obs_sensor arrays and ISR flags,Module design + interface spec,verified
+MOD-HAL-001,IF-019,GPIO driver provides implicit watchdog status to SKN,Module design + interface spec,verified
+MOD-HAL-002,IF-011,PWM driver receives motor PWM commands from DSM motor controller,Module design + interface spec,verified
+MOD-HAL-003,IF-001,CAN driver provides RX buffer for TCI CAN receiver,Module design + interface spec,verified
+MOD-HAL-003,IF-009,CAN driver transmits status messages formatted by TCI,Module design + interface spec,verified
+MOD-HAL-004,IF-017,SPI driver exchanges cross_channel_state_t between channels,Module design + interface spec,verified
+MOD-HAL-004,IF-020,SPI driver provides Flash access for DGN event log,Module design + interface spec,verified
+IF-001-SPEED-MSG,EXT-007,TCI CAN receiver gets TCMS speed from external CAN bus,Interface spec + external interface,verified
+IF-009-STATUS-MSG,EXT-008,TCI CAN transmitter sends door status to external TCMS,Interface spec + external interface,verified
+IF-017-CROSS-CHANNEL,EXT-010,SKN comparator uses external SPI hardware for channel link,Interface spec + external interface,verified
+IF-004-SENSORS,EXT-002,HAL GPIO driver reads external position sensors,Interface spec + external interface,verified
+IF-004-SENSORS,EXT-005,HAL GPIO driver reads external lock sensors,Interface spec + external interface,verified
+IF-005-OBSTACLES,EXT-003,HAL GPIO driver reads external obstacle sensors,Interface spec + external interface,verified
+IF-010-LOCK-ACTUATOR,EXT-004,DSM lock controller commands external lock actuators via HAL,Interface spec + external interface,verified
+IF-011-MOTOR-PWM,EXT-001,DSM motor controller commands external motor PWM via HAL,Interface spec + external interface,verified
+IF-019-WATCHDOG,EXT-006,HAL provides watchdog refresh to external IWDG hardware,Interface spec + external interface,verified
+IF-020-SPI-FLASH,EXT-013,DGN event log uses SPI Flash for diagnostics port access,Interface spec + external interface,verified
+CROSS-CHANNEL-STATE-STRUCT,EXT-010,cross_channel_state_t structure transmitted over SPI hardware,Data structure + interface spec,verified
+TCMS-SPEED-MSG-STRUCT,EXT-007,tcms_speed_msg_t structure received from CAN hardware,Data structure + interface spec,verified
+DOOR-STATUS-MSG-STRUCT,EXT-008,door_status_msg_t structure transmitted to CAN hardware,Data structure + interface spec,verified
+EVENT-LOG-ENTRY-STRUCT,EXT-013,event_log_entry_t structure stored in SPI Flash,Data structure + interface spec,verified
+CRC-16-CCITT-ALGORITHM,EXT-010,CRC-16-CCITT (0x1021) applied to SPI cross-channel frames,Algorithm + interface spec,verified
+CRC-16-CCITT-ALGORITHM,EXT-007,CRC-16-CCITT (0x1021) applied to CAN RX speed messages,Algorithm + interface spec,verified
+CRC-16-CCITT-ALGORITHM,EXT-008,CRC-16-CCITT (0x1021) applied to CAN TX status messages,Algorithm + interface spec,verified

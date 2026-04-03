@@ -1,0 +1,41 @@
+source_id,target_id,rationale,verification_method,status
+TC-HWSW-001,SYS-REQ-004,Tests redundant 2oo2 position sensor interface on hardware for door fully open detection,HW/SW integration test with dual sensor inputs,verified
+TC-HWSW-001,SYS-REQ-025,Verifies continuous door position state monitoring on hardware,HW/SW integration test,verified
+TC-HWSW-001,SYS-REQ-026,Validates 2oo2 position sensors for fully closed determination on hardware,HW/SW integration test,verified
+TC-HWSW-002,SYS-REQ-014,Tests 2oo2 door lock status confirmation on hardware,HW/SW integration test with dual lock sensors,verified
+TC-HWSW-002,SYS-REQ-016,Verifies withholding of door-locked signal until all doors confirmed locked,HW/SW integration test,verified
+TC-HWSW-003,SYS-REQ-006,Tests obstacle detection sensor interface on hardware (2 per door opening),HW/SW integration test with IR sensor simulation,verified
+TC-HWSW-003,SYS-REQ-007,Verifies obstacle detected to motor reversal timing ≤ 150 ms on hardware,HW/SW integration test with latency measurement,verified
+TC-HWSW-003,SYS-REQ-034,Validates obstacle detection response time ≤ 150 ms on target hardware,HW/SW integration test,verified
+TC-HWSW-004,SYS-REQ-028,Tests hardware watchdog monitoring for fault detection on hardware,HW/SW integration test with IWDG on STM32H743,verified
+TC-HWSW-004,SYS-REQ-029,Verifies sensor fault detection within 100 ms on hardware,HW/SW integration test,verified
+TC-HWSW-005,SYS-REQ-030,Tests transition to safe state on watchdog timeout fault,HW/SW integration test with watchdog reset,verified
+TC-HWSW-006,SYS-REQ-012,Tests door lock engagement actuator on hardware,HW/SW integration test with lock actuator output,verified
+TC-HWSW-007,SYS-REQ-001,Tests door motor PWM control for door opening on hardware,HW/SW integration test with 20 kHz PWM measurement,verified
+TC-HWSW-007,SYS-REQ-003,Verifies door opening timing ≤ 3.0 seconds (PWM output verification),HW/SW integration test,verified
+TC-HWSW-007,SYS-REQ-032,Validates door opening time performance on target hardware,HW/SW integration test,verified
+TC-HWSW-008,SYS-REQ-001,Tests motor direction control for door movement on hardware,HW/SW integration test with direction GPIO,verified
+TC-HWSW-009,SYS-REQ-030,Tests safe state motor shut-off on hardware,HW/SW integration test verifying duty=0 on safe state,verified
+TC-HWSW-010,SYS-REQ-002,Tests speed interlock condition monitoring via CAN RX on hardware,HW/SW integration test with TCMS CAN frames,verified
+TC-HWSW-010,SYS-REQ-013,Verifies train speed > 5 km/h detection via CAN on hardware,HW/SW integration test,verified
+TC-HWSW-010,SYS-REQ-035,Validates speed interlock response time ≤ 100 ms on hardware,HW/SW integration test,verified
+TC-HWSW-011,SYS-REQ-016,Tests door-locked signal transmission to TCMS via CAN TX on hardware,HW/SW integration test with CAN analyser,verified
+TC-HWSW-011,SYS-REQ-017,Verifies door-locked status transmission within 100 ms via CAN on hardware,HW/SW integration test with timestamp measurement,verified
+TC-HWSW-012,SYS-REQ-027,Tests individual door fault status transmission to TCMS via CAN on hardware,HW/SW integration test with CAN analyser,verified
+TC-HWSW-013,SYS-REQ-004,Tests cross-channel redundancy for position determination on SPI hardware,HW/SW integration test with dual DCU boards,verified
+TC-HWSW-013,SYS-REQ-014,Validates cross-channel lock confirmation on SPI hardware,HW/SW integration test,verified
+TC-HWSW-014,SYS-REQ-030,Tests safe state transition on cross-channel timeout fault,HW/SW integration test with SPI disconnection,verified
+TC-HWSW-015,SYS-REQ-006,Tests obstacle detection via motor current sensing ADC on hardware,HW/SW integration test with current injection,verified
+TC-HWSW-015,SYS-REQ-008,Validates door closing force limit (current-based) on hardware,HW/SW integration test,verified
+TC-HWSW-016,SYS-REQ-005,Tests door close and lock command via RS-485 DDU interface on hardware,HW/SW integration test with RS-485 analyser,verified
+TC-HWSW-017,SYS-REQ-018,Tests manual emergency door release detection on hardware,HW/SW integration test with release switch activation,verified
+TC-HWSW-017,SYS-REQ-021,Verifies emergency door release activation detection and driver alert,HW/SW integration test,verified
+TC-HWSW-018,SYS-REQ-023,Tests operational mode control via Driver Control Panel GPIO on hardware,HW/SW integration test with DCP simulator,verified
+TC-HWSW-019,SYS-REQ-031,Tests event logging to non-volatile storage via diagnostics port on hardware,HW/SW integration test with USB-UART connection,verified
+TC-HWSW-PERF-001,SYS-REQ-036,Tests control cycle time ≤ 20 ms on target STM32H743 hardware,Performance test with DWT cycle counter,verified
+TC-HWSW-PERF-002,SYS-REQ-037,Verifies Flash code size supports MTBF ≥ 200000 hours requirement (code quality),Performance test with linker map,verified
+TC-HWSW-PERF-003,SYS-REQ-037,Verifies RAM allocation supports MTBF requirement (resource usage),Performance test with linker map,verified
+TC-HWSW-PERF-004,SYS-REQ-034,Tests obstacle detection response time ≤ 150 ms on target hardware,Performance test with oscilloscope measurement,verified
+TC-HWSW-FAULT-001,SYS-REQ-030,Tests safe state transition on CAN controller peripheral fault,Fault injection test with CAN disabled,verified
+TC-HWSW-FAULT-002,SYS-REQ-028,Tests memory integrity check for fault detection on hardware,Fault injection test with memory corruption,verified
+TC-HWSW-FAULT-003,SYS-REQ-028,Tests stack canary fault detection on hardware,Fault injection test with stack overflow,verified

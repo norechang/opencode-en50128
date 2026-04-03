@@ -1,0 +1,81 @@
+source_id,target_id,rationale,verification_method,status
+TC-INT-001,MOD-DGN-001,Tests DGN event log write function,Integration test with log buffer inspection,verified
+TC-INT-001,MOD-DGN-002,Tests DGN SPI Flash buffer flush,Integration test with Flash read-back verification,verified
+TC-INT-002,MOD-DGN-001,Tests DGN non-interference with safety modules during event logging,Integration test monitoring safe state,verified
+TC-INT-002,MOD-SKN-002,Verifies SKN safe state evaluation is not affected by DGN operations,Integration test,verified
+TC-INT-003,MOD-TCI-001,Tests TCI CAN RX processing for normal speed frame,Integration test with CAN stub,verified
+TC-INT-003,MOD-SPM-001,Tests SPM processing of speed data from TCI,Integration test verifying speed_valid flag,verified
+TC-INT-004,MOD-TCI-001,Tests TCI CRC-16 validation on CAN RX frame,Integration test with corrupted frame,verified
+TC-INT-004,MOD-SPM-001,Tests SPM fail-safe retention on CRC error,Integration test verifying last valid speed,verified
+TC-INT-005,MOD-TCI-001,Tests TCI CAN timeout detection (200 ms),Integration test with frame withheld,verified
+TC-INT-005,MOD-SPM-002,Tests SPM speed interlock activation on timeout,Integration test verifying interlock flag,verified
+TC-INT-006,MOD-SPM-002,Tests SPM to SKN speed interlock gate propagation,Integration test with SKN stub,verified
+TC-INT-006,MOD-SKN-002,Tests SKN reception and evaluation of speed interlock gate,Integration test,verified
+TC-INT-007,MOD-SPM-002,Tests SPM to DSM speed gate propagation,Integration test with DSM stub,verified
+TC-INT-007,MOD-DSM-001,Tests DSM FSM rejection of OPENING command when speed gate active,Integration test,verified
+TC-INT-008,MOD-TCI-003,Tests TCI CAN sequence counter validation,Integration test with out-of-sequence frame,verified
+TC-INT-009,MOD-HAL-001,Tests HAL GPIO position/lock sensor read,Integration test with sensor signal injection,verified
+TC-INT-009,MOD-DSM-002,Tests DSM 2oo2 sensor voting for position and lock state,Integration test,verified
+TC-INT-009,MOD-DSM-001,Tests DSM FSM transition to CLOSED_AND_LOCKED based on sensor data,Integration test,verified
+TC-INT-010,MOD-HAL-001,Tests HAL GPIO obstacle sensor ISR triggering,Integration test with obstacle pulse,verified
+TC-INT-010,MOD-OBD-001,Tests OBD obstacle ISR handler,Integration test verifying flag set,verified
+TC-INT-010,MOD-OBD-002,Tests OBD obstacle detection and reversal flag propagation to DSM,Integration test,verified
+TC-INT-010,MOD-DSM-001,Tests DSM FSM transition to REVERSING on obstacle,Integration test,verified
+TC-INT-011,MOD-OBD-002,Tests OBD obstacle propagation to SKN for safety arbitration,Integration test,verified
+TC-INT-011,MOD-SKN-002,Tests SKN safe state evaluation with obstacle input,Integration test,verified
+TC-INT-012,MOD-DSM-001,Tests DSM lock actuator command generation,Integration test,verified
+TC-INT-012,MOD-HAL-001,Tests HAL GPIO lock actuator output,Integration test with GPIO measurement,verified
+TC-INT-013,MOD-DSM-001,Tests DSM motor PWM command generation,Integration test,verified
+TC-INT-013,MOD-HAL-002,Tests HAL PWM duty cycle output,Integration test with oscilloscope,verified
+TC-INT-014,MOD-DSM-001,Tests DSM per-door status reporting to TCI,Integration test,verified
+TC-INT-014,MOD-TCI-002,Tests TCI CAN TX transmission of door status,Integration test with CAN analyser,verified
+TC-INT-015,MOD-FMG-001,Tests FMG fault aggregation and classification,Integration test with fault injection,verified
+TC-INT-015,MOD-FMG-002,Tests FMG safe state escalation logic,Integration test,verified
+TC-INT-015,MOD-SKN-002,Tests SKN safe state activation from FMG fault bitmask,Integration test,verified
+TC-INT-016,MOD-SKN-002,Tests SKN safe state broadcast to all components,Integration test with component stubs,verified
+TC-INT-017,MOD-DSM-002,Tests DSM 2oo2 voting for departure interlock,Integration test with all-doors locked,verified
+TC-INT-017,MOD-SKN-002,Tests SKN departure interlock evaluation,Integration test,verified
+TC-INT-017,MOD-TCI-002,Tests TCI CAN TX departure interlock frame,Integration test with CAN analyser,verified
+TC-INT-018,MOD-FMG-001,Tests FMG fault report generation to TCI,Integration test,verified
+TC-INT-018,MOD-TCI-002,Tests TCI CAN TX fault report frame,Integration test with CAN analyser,verified
+TC-INT-019,MOD-FMG-001,Tests FMG fault log entry to DGN,Integration test,verified
+TC-INT-019,MOD-DGN-001,Tests DGN event log write on fault report,Integration test with Flash read-back,verified
+TC-INT-020,MOD-TCI-001,Tests TCI door command reception from TCMS,Integration test with CAN command injection,verified
+TC-INT-020,MOD-DSM-001,Tests DSM FSM processing of TCMS door command,Integration test,verified
+TC-INT-021,MOD-SKN-001,Tests cross-channel SPI normal exchange and data comparison,Integration test with dual DCU boards,verified
+TC-INT-021,MOD-HAL-004,Tests HAL SPI cross-channel hardware exchange,Integration test with SPI analyser,verified
+TC-INT-022,MOD-SKN-001,Tests cross-channel safety-data disagreement detection,Integration test with injected mismatch,verified
+TC-INT-022,MOD-SKN-002,Tests immediate safe state on cross-channel disagreement,Integration test,verified
+TC-INT-023,MOD-SKN-001,Tests SPI infrastructure fault with 3-cycle transient filter,Integration test with SPI CRC error,verified
+TC-INT-023,MOD-HAL-004,Tests HAL SPI error detection,Integration test,verified
+TC-INT-024,MOD-SKN-001,Tests SPI timeout detection and 3-cycle filter,Integration test with SPI disconnection,verified
+TC-INT-024,MOD-SKN-002,Tests safe state escalation on SPI timeout,Integration test,verified
+TC-INT-025,MOD-HAL-005,Tests HAL watchdog status monitoring and reporting,Integration test with watchdog refresh withheld,verified
+TC-INT-025,MOD-SKN-002,Tests SKN reception of watchdog warning,Integration test,verified
+TC-INT-PERF-001,MOD-SKN-003,Tests SKN scheduler cycle WCET contribution,Performance test with DWT cycle counter,verified
+TC-INT-PERF-001,MOD-SPM-003,Tests SPM cycle execution time,Performance test,verified
+TC-INT-PERF-001,MOD-OBD-003,Tests OBD cycle execution time,Performance test,verified
+TC-INT-PERF-001,MOD-DSM-005,Tests DSM cycle execution time,Performance test,verified
+TC-INT-PERF-001,MOD-FMG-003,Tests FMG cycle execution time,Performance test,verified
+TC-INT-PERF-001,MOD-TCI-004,Tests TCI cycle execution time,Performance test,verified
+TC-INT-PERF-001,MOD-DGN-001,Tests DGN cycle execution time,Performance test,verified
+TC-INT-PERF-001,MOD-HAL-005,Tests HAL system services execution time,Performance test,verified
+TC-INT-PERF-002,MOD-TCI-001,Tests TCI CAN RX latency contribution,Performance test with timestamps,verified
+TC-INT-PERF-002,MOD-SPM-002,Tests SPM interlock evaluation latency,Performance test,verified
+TC-INT-PERF-002,MOD-DSM-001,Tests DSM speed gate reception latency,Performance test,verified
+TC-INT-PERF-003,MOD-OBD-002,Tests OBD obstacle detection latency,Performance test,verified
+TC-INT-PERF-003,MOD-DSM-001,Tests DSM reversal command latency,Performance test,verified
+TC-INT-PERF-003,MOD-HAL-002,Tests HAL motor PWM output latency,Performance test with oscilloscope,verified
+TC-INT-PERF-004,MOD-DSM-002,Tests DSM departure interlock voting latency,Performance test,verified
+TC-INT-PERF-004,MOD-SKN-002,Tests SKN departure interlock evaluation latency,Performance test,verified
+TC-INT-PERF-004,MOD-TCI-002,Tests TCI CAN TX departure interlock latency,Performance test,verified
+TC-INT-ERR-001,MOD-HAL-001,Tests HAL NULL pointer handling in sensor API,Error guessing test,verified
+TC-INT-ERR-001,MOD-DSM-002,Tests DSM resilience to HAL NULL return,Error guessing test,verified
+TC-INT-ERR-002,MOD-HAL-005,Tests CRC-16 computation consistency (HAL_CRC16_CCITT_Compute),Error guessing test,verified
+TC-INT-ERR-002,MOD-SKN-001,Verifies SKN CRC-16 consistency for cross-channel data,Error guessing test,verified
+TC-INT-ERR-002,MOD-SPM-001,Verifies SPM CRC-16 consistency for speed data,Error guessing test,verified
+TC-INT-ERR-002,MOD-TCI-001,Verifies TCI CRC-16 consistency for CAN frames,Error guessing test,verified
+TC-INT-ERR-003,MOD-DSM-001,Tests DSM door index bounds check (0 ≤ idx < 8),Error guessing test,verified
+TC-INT-ERR-003,MOD-OBD-002,Tests OBD door index bounds check,Error guessing test,verified
+TC-INT-ERR-003,MOD-HAL-001,Tests HAL door index bounds check in GPIO APIs,Error guessing test,verified
+TC-INT-ERR-004,MOD-FMG-003,Tests FMG initialization fault counter zero state,Error guessing test,verified
