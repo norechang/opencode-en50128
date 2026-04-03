@@ -266,7 +266,8 @@ The Safety Kernel is the central authority for:
 ### 3.1 MOD-SKN-001 — Cross-Channel Comparator
 
 **File**: `skn_comparator.c` / `skn_comparator.h`  
-**Responsibility**: Compare local safety state with received cross-channel state.
+**Responsibility**: Compare local safety state with received cross-channel state.  
+**Traceability**: [Trace: COMP-001, REQ-SAFE-009, REQ-SAFE-012, REQ-INT-010, SW-HAZ-011]
 
 #### Data Structures (static)
 
@@ -388,7 +389,8 @@ Cyclomatic complexity: 8 (MAX_DOORS=4; 4 loop iterations × 2 branches + entry/e
 ### 3.2 MOD-SKN-002 — Safe State Manager
 
 **File**: `skn_safe_state.c` / `skn_safe_state.h`  
-**Responsibility**: Assert/clear `safe_state_active`; manage departure interlock.
+**Responsibility**: Assert/clear `safe_state_active`; manage departure interlock.  
+**Traceability**: [Trace: COMP-001, REQ-SAFE-012]
 
 #### Data Structures (static)
 
@@ -496,8 +498,11 @@ Cyclomatic complexity: 3
 
 ### 3.3 MOD-SKN-003 — Scheduler Entry Point
 
+**Traceability**: [Trace: COMP-001, REQ-FUN-009, REQ-PERF-005, REQ-SAFE-008]
+
 **File**: `skn_scheduler.c` / `skn_scheduler.h`  
-**Responsibility**: Orchestrate the 20 ms cyclic executive. Called by the timer ISR flag.
+**Responsibility**: Orchestrate the 20 ms cyclic executive. Called by the timer ISR flag.  
+**Traceability**: [Trace: COMP-001, REQ-FUN-009, REQ-PERF-005, REQ-SAFE-008]
 
 #### Functions
 
@@ -534,6 +539,8 @@ Cyclomatic complexity: 3
 
 ### 3.4 MOD-SKN-004 — Initialization
 
+**Traceability**: [Trace: COMP-001, REQ-SAFE-010, REQ-SAFE-018, SW-HAZ-008]
+
 **File**: `skn_init.c` / `skn_init.h`
 
 **`SKN_Init`**
@@ -559,6 +566,8 @@ Cyclomatic complexity: 2
 **SIL**: 3 | **Complexity limit**: ≤ 10 | **Phase**: Cycle step 2
 
 ### 4.1 MOD-SPM-001 — CAN Speed Reception and Validation
+
+**Traceability**: [Trace: COMP-002, REQ-INT-007]
 
 **File**: `spm_can.c` / `spm_can.h`
 
@@ -613,6 +622,8 @@ Cyclomatic complexity: 6
 
 ### 4.2 MOD-SPM-002 — Interlock Evaluation
 
+**Traceability**: [Trace: COMP-002, REQ-SAFE-003, REQ-SAFE-016]
+
 **File**: `spm_interlock.c` / `spm_interlock.h`
 
 **`SPM_EvaluateInterlock`**
@@ -652,6 +663,8 @@ Cyclomatic complexity: 5
 
 ### 4.3 MOD-SPM-003 — Initialization and Cycle Entry
 
+**Traceability**: [Trace: COMP-002, REQ-PERF-002, REQ-SAFE-001]
+
 **File**: `spm_init.c` / `spm_init.h`
 
 **`SPM_Init`**: Sets all static state to fail-safe (interlock = 1, speed = UNKNOWN).  
@@ -667,8 +680,11 @@ Cyclomatic complexity: ≤ 3 per function.
 
 ### 5.1 MOD-OBD-001 — Obstacle Sensor ISR Handler
 
+**Traceability**: [Trace: COMP-003, REQ-INT-003]
+
 **File**: `obd_isr.c` / `obd_isr.h`  
-**Responsibility**: Interrupt service routine — write to static mailbox only (no logic).
+**Responsibility**: Interrupt service routine — write to static mailbox only (no logic).  
+**Traceability**: [Trace: COMP-001, REQ-FUN-009, REQ-PERF-005, REQ-SAFE-008]
 
 #### Data Structures (static)
 
@@ -694,6 +710,8 @@ Cyclomatic complexity: 2
 ---
 
 ### 5.2 MOD-OBD-002 — Obstacle Detection and Reversal
+
+**Traceability**: [Trace: COMP-003, REQ-SAFE-004]
 
 **File**: `obd_detect.c` / `obd_detect.h`
 
@@ -746,6 +764,8 @@ Cyclomatic complexity: 10 (within limit)
 
 ### 5.3 MOD-OBD-003 — Initialization and Cycle Entry
 
+**Traceability**: [Trace: COMP-003, REQ-PERF-003, REQ-SAFE-005]
+
 **`OBD_Init`**: Zeros all static arrays, ISR flags, ADC readings.  
 **`OBD_RunCycle`**: Calls `OBD_PollSensorsAndEvaluate`; writes result to `g_obstacle_flags`.  
 Cyclomatic complexity: ≤ 3 each.
@@ -757,6 +777,8 @@ Cyclomatic complexity: ≤ 3 each.
 **SIL**: 3 | **Complexity limit**: ≤ 10 | **Phase**: Cycle step 4
 
 ### 6.1 MOD-DSM-001 — Per-Door FSM Engine
+
+**Traceability**: [Trace: COMP-004, REQ-FUN-001, REQ-FUN-004, REQ-FUN-011, REQ-FUN-015]
 
 **File**: `dsm_fsm.c` / `dsm_fsm.h`
 
@@ -850,6 +872,8 @@ Individual transition helpers (each ≤ 5 cyclomatic complexity):
 
 ### 6.2 MOD-DSM-002 — Sensor Voter (2oo2)
 
+**Traceability**: [Trace: COMP-004, REQ-FUN-002, REQ-FUN-005, REQ-SAFE-007]
+
 **File**: `dsm_voter.c` / `dsm_voter.h`
 
 **`DSM_VotePosition`**
@@ -879,8 +903,11 @@ Cyclomatic complexity: 3
 
 ### 6.3 MOD-DSM-003 — Operational Mode Manager
 
+**Traceability**: [Trace: COMP-004, REQ-FUN-008, REQ-FUN-010, REQ-INT-004]
+
 **File**: `dsm_mode.c` / `dsm_mode.h`  
-**Responsibility**: Manage operational mode FSM (OI-SAS-003 resolution).
+**Responsibility**: Manage operational mode FSM (OI-SAS-003 resolution).  
+**Traceability**: [Trace: COMP-001, REQ-FUN-009, REQ-PERF-005, REQ-SAFE-008]
 
 #### Data Structures (static)
 
@@ -920,6 +947,8 @@ Cyclomatic complexity: 8
 
 ### 6.4 MOD-DSM-004 — Emergency Release Handler
 
+**Traceability**: [Trace: COMP-004, REQ-INT-001, REQ-PERF-004]
+
 **File**: `dsm_emergency.c` / `dsm_emergency.h`
 
 **`DSM_HandleEmergencyRelease`**
@@ -943,6 +972,8 @@ Cyclomatic complexity: 4
 
 ### 6.5 MOD-DSM-005 — Initialization and Cycle Entry
 
+**Traceability**: [Trace: COMP-004, REQ-FUN-012, REQ-FUN-013, REQ-FUN-014]
+
 **`DSM_Init`**: All FSM states → FSM_IDLE; door_states → DOOR_STATE_UNKNOWN; lock_states → 0 (LOCKED_UNKNOWN).  
 **`DSM_RunCycle`**: For each door, reads sensors via HAL, calls `DSM_VotePosition`, calls `DSM_UpdateFSM`.  
 Cyclomatic complexity: ≤ 4 each.
@@ -954,6 +985,8 @@ Cyclomatic complexity: ≤ 4 each.
 **SIL**: 3 | **Complexity limit**: ≤ 10 | **Phase**: Cycle step 5
 
 ### 7.1 MOD-FMG-001 — Fault Aggregator
+
+**Traceability**: [Trace: COMP-005, REQ-FUN-017]
 
 **File**: `fmg_aggregator.c` / `fmg_aggregator.h`
 
@@ -1031,6 +1064,8 @@ Cyclomatic complexity: 4
 
 ### 7.2 MOD-FMG-002 — Safe State Coordinator
 
+**Traceability**: [Trace: COMP-005, REQ-SAFE-012]
+
 **File**: `fmg_safe_state.c` / `fmg_safe_state.h`
 
 **`FMG_HandleSelectiveDisablement`**: Implements REQ-FUN-013 / REQ-SAFE-013 —
@@ -1040,6 +1075,8 @@ authorization (REQ-SAFE-021). Logs to DGN. Cyclomatic complexity: ≤ 6.
 ---
 
 ### 7.3 MOD-FMG-003 — Initialization and Cycle Entry
+
+**Traceability**: [Trace: COMP-005, REQ-SAFE-013]
 
 **`FMG_Init`**: s_fault_state = 0U.  
 **`FMG_RunCycle`**: Calls `FMG_AggregateFaults` then `FMG_ClassifyAndEscalate`.  
@@ -1053,6 +1090,8 @@ Cyclomatic complexity: ≤ 3 each.
 **SIL**: 3 | **Complexity limit**: ≤ 10 | **Phase**: Cycle step 8 (TX) + ISR (RX)
 
 ### 8.1 MOD-TCI-001 — CAN Receive Handler
+
+**Traceability**: [Trace: COMP-006, REQ-SAFE-016]
 
 **File**: `tci_rx.c` / `tci_rx.h`
 
@@ -1099,6 +1138,8 @@ Cyclomatic complexity: 8
 
 ### 8.2 MOD-TCI-002 — CAN Transmit
 
+**Traceability**: [Trace: COMP-006, REQ-INT-008]
+
 **File**: `tci_tx.c` / `tci_tx.h`
 
 **`TCI_TransmitDepartureInterlock`** (CAN 0x200, 100 ms):
@@ -1124,6 +1165,8 @@ Cyclomatic complexity: 3
 
 ### 8.3 MOD-TCI-003 — Sequence Counter
 
+**Traceability**: [Trace: COMP-006, REQ-FUN-001]
+
 **File**: `tci_seq.c` / `tci_seq.h`
 
 **`TCI_IncrementTxSeqCounter`**: Modulo-256 increment of TX sequence counter.  
@@ -1133,6 +1176,8 @@ Cyclomatic complexity: ≤ 3 each.
 ---
 
 ### 8.4 MOD-TCI-004 — Initialization and Cycle Entry
+
+**Traceability**: [Trace: COMP-006, REQ-FUN-016]
 
 **`TCI_Init`**: Zeros all mailboxes, seq counters.  
 **`TCI_TransmitCycle`**: Called at step 8; calls all three TX functions.  
@@ -1145,6 +1190,8 @@ Cyclomatic complexity: ≤ 3 each.
 **SIL**: 1 (non-safety) | **Complexity limit**: ≤ 10 | **Phase**: Cycle step 11
 
 ### 9.1 MOD-DGN-001 — Event Log (Circular Buffer)
+
+**Traceability**: [Trace: COMP-007, REQ-FUN-018]
 
 **File**: `dgn_log.c` / `dgn_log.h`
 
@@ -1182,6 +1229,8 @@ Cyclomatic complexity: 2
 
 ### 9.2 MOD-DGN-002 — SPI Flash Writer
 
+**Traceability**: [Trace: COMP-007-DGN]
+
 **File**: `dgn_flash.c` / `dgn_flash.h`  
 **Responsibility**: Non-blocking, deferred write of log buffer to SPI Flash.  
 DGN MUST NOT block if SPI Flash is busy — defers to next cycle.  
@@ -1190,6 +1239,8 @@ Cyclomatic complexity: ≤ 8.
 ---
 
 ### 9.3 MOD-DGN-003 — Diagnostic Port Handler
+
+**Traceability**: [Trace: COMP-007, REQ-SAFE-010]
 
 **File**: `dgn_port.c` / `dgn_port.h`  
 **Responsibility**: Serve log data on USB/RS-232 port.  
@@ -1203,6 +1254,8 @@ Cyclomatic complexity: ≤ 8.
 **SIL**: 3 | **Complexity limit**: ≤ 10 | **Phase**: Called by all components
 
 ### 10.1 MOD-HAL-001 — GPIO and Sensor Drivers
+
+**Traceability**: [Trace: COMP-008, REQ-INT-002, REQ-INT-005]
 
 **File**: `hal_gpio.c` / `hal_gpio.h`
 
@@ -1224,6 +1277,8 @@ Each function: cyclomatic complexity ≤ 4.
 
 ### 10.2 MOD-HAL-002 — PWM Motor Driver
 
+**Traceability**: [Trace: COMP-008, REQ-INT-001]
+
 **File**: `hal_pwm.c` / `hal_pwm.h`
 
 ```c
@@ -1238,6 +1293,8 @@ Cyclomatic complexity: ≤ 4 each.
 
 ### 10.3 MOD-HAL-003 — CAN Controller Driver
 
+**Traceability**: [Trace: COMP-008, REQ-INT-007, REQ-INT-008]
+
 **File**: `hal_can.c` / `hal_can.h`
 
 ```c
@@ -1251,6 +1308,8 @@ Cyclomatic complexity: ≤ 6 each.
 ---
 
 ### 10.4 MOD-HAL-004 — SPI Cross-Channel and RS-485 DDU Drivers
+
+**Traceability**: [Trace: COMP-008, REQ-INT-010]
 
 **File**: `hal_spi.c` / `hal_spi.h`, `hal_rs485.c` / `hal_rs485.h`
 
@@ -1269,6 +1328,8 @@ Cyclomatic complexity: ≤ 8 each.
 ---
 
 ### 10.5 MOD-HAL-005 — CRC-16, Watchdog, and System Services
+
+**Traceability**: [Trace: COMP-008, REQ-SAFE-010]
 
 **File**: `hal_services.c` / `hal_services.h`
 

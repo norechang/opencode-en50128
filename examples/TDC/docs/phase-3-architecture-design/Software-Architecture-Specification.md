@@ -276,6 +276,8 @@ influence safety decisions. It executes last in each cycle (lowest priority).
 | OUT | Departure interlock signal | `uint8_t` | SKN → TCI (CAN 0x200) |
 | OUT | Safe state command | void | SKN → FMG |
 
+**Traceability**: [Trace: REQ-SAFE-002, REQ-SAFE-007, REQ-SAFE-008, REQ-SAFE-009, REQ-SAFE-010, REQ-SAFE-012, REQ-SAFE-014, REQ-SAFE-015, REQ-SAFE-018, REQ-FUN-009, REQ-PERF-005, REQ-INT-010, SW-HAZ-001, SW-HAZ-003, SW-HAZ-006, SW-HAZ-008, SW-HAZ-011]
+
 **Hazard allocation**: SW-HAZ-001 (speed interlock), SW-HAZ-003 (false lock indication),
 SW-HAZ-006 (watchdog failure). Safety requirements: REQ-SAFE-007, REQ-SAFE-008,
 REQ-SAFE-009, REQ-SAFE-014, REQ-SAFE-015.
@@ -305,6 +307,8 @@ REQ-SAFE-009, REQ-SAFE-014, REQ-SAFE-015.
 | OUT | Current speed value | `uint16_t` (km/h × 10) | SPM → SKN, cross-channel |
 | OUT | Speed data timestamp | `uint32_t` | SPM → SKN |
 
+**Traceability**: [Trace: REQ-SAFE-001, REQ-SAFE-002, REQ-SAFE-003, REQ-SAFE-016, REQ-PERF-002, SW-HAZ-001, SW-HAZ-007]
+
 **Hazard allocation**: SW-HAZ-001, SW-HAZ-007. Safety requirements: REQ-SAFE-001,
 REQ-SAFE-002, REQ-SAFE-003, REQ-SAFE-016.
 
@@ -331,6 +335,8 @@ REQ-SAFE-002, REQ-SAFE-003, REQ-SAFE-016.
 | IN | Door closing flag | `uint8_t` per door | DSM → OBD |
 | OUT | Obstacle detected flag | `uint8_t[MAX_DOORS]` | OBD → DSM, SKN, cross-channel |
 | OUT | Reversal command | `uint8_t` per door | OBD → HAL PWM direction |
+
+**Traceability**: [Trace: REQ-SAFE-004, REQ-SAFE-005, REQ-SAFE-006, REQ-PERF-003, REQ-INT-003, SW-HAZ-002]
 
 **Hazard allocation**: SW-HAZ-002. Safety requirements: REQ-SAFE-004, REQ-SAFE-005,
 REQ-SAFE-006.
@@ -368,6 +374,8 @@ REQ-SAFE-006.
 
 **Interfaces**: (defined in SIS, DOC-SIS-2026-001)
 
+**Traceability**: [Trace: REQ-SAFE-007, REQ-SAFE-008, REQ-SAFE-009, REQ-SAFE-010, REQ-SAFE-011, REQ-SAFE-019, REQ-SAFE-020, REQ-FUN-001, REQ-FUN-002, REQ-FUN-003, REQ-FUN-004, REQ-FUN-005, REQ-FUN-006, REQ-FUN-007, REQ-FUN-008, REQ-FUN-010, REQ-FUN-011, REQ-FUN-012, REQ-FUN-014, REQ-FUN-015, REQ-PERF-004, REQ-INT-001, REQ-INT-002, REQ-INT-004, SW-HAZ-003, SW-HAZ-004, SW-HAZ-009]
+
 **Hazard allocation**: SW-HAZ-003, SW-HAZ-004. Safety requirements: REQ-SAFE-007,
 REQ-SAFE-008, REQ-SAFE-009, REQ-SAFE-010, REQ-SAFE-011.
 
@@ -403,6 +411,8 @@ REQ-SAFE-008, REQ-SAFE-009, REQ-SAFE-010, REQ-SAFE-011.
 
 **Interfaces**: (defined in SIS, DOC-SIS-2026-001)
 
+**Traceability**: [Trace: REQ-SAFE-012, REQ-SAFE-013, REQ-SAFE-021, REQ-FUN-013, REQ-FUN-017, REQ-FUN-018, REQ-PERF-006, SW-HAZ-005, SW-HAZ-010]
+
 **Hazard allocation**: SW-HAZ-005, SW-HAZ-006. Safety requirements: REQ-SAFE-012,
 REQ-SAFE-013, REQ-SAFE-014, REQ-SAFE-015.
 
@@ -435,6 +445,8 @@ REQ-SAFE-013, REQ-SAFE-014, REQ-SAFE-015.
 | 0x202 | TX | System fault report | On-event + 500 ms | SIL 2 |
 | 0x203 | TX | Mode status + door disable mask | On-change + 1 s | SIL 2 |
 
+**Traceability**: [Trace: REQ-SAFE-003, REQ-SAFE-016, REQ-FUN-016, REQ-PERF-005, REQ-PERF-007, REQ-INT-007, REQ-INT-008, REQ-INT-009, SW-HAZ-007]
+
 **Hazard allocation**: SW-HAZ-007. Safety requirements: REQ-SAFE-003, REQ-SAFE-016.
 
 ---
@@ -450,6 +462,8 @@ REQ-SAFE-013, REQ-SAFE-014, REQ-SAFE-015.
 | **Inputs** | Event log entries from FMG, DSM, SKN; diagnostic port (USB/RS-232 RX) |
 | **Outputs** | SPI Flash event log writes; diagnostic port (USB/RS-232 TX) |
 | **Key constraints** | (1) Circular buffer: ≥ 1000 entries; CRC-16 per entry. (2) DGN MUST NOT hold or delay any safety-critical component. (3) If DGN overruns its cycle budget, it defers to next cycle — safety components are never blocked. (4) Diagnostic port: read-only during Normal mode. |
+
+**Traceability**: [Trace: REQ-FUN-018]
 
 **Hazard allocation**: None (SIL 1 — no direct safety function). Supports fault
 observability for SW-HAZ-001 through SW-HAZ-010 via event log.
@@ -509,6 +523,8 @@ error_t HAL_RS485_DDU_Exchange(uint8_t ddu_id, const uint8_t *cmd,
 /* Watchdog */
 void HAL_Watchdog_Refresh(void);  /* Must be called ≤ 40 ms; HW timeout = 50 ms */
 ```
+
+**Traceability**: [Trace: REQ-SAFE-014, REQ-SAFE-017, REQ-SAFE-018, REQ-INT-001, REQ-INT-002, REQ-INT-003, REQ-INT-004, REQ-INT-005, REQ-INT-006, REQ-INT-010, REQ-INT-011, SW-HAZ-006, SW-HAZ-008]
 
 **Hazard allocation**: SW-HAZ-006 (watchdog), SW-HAZ-008 (memory integrity via stack
 canary). Safety requirements: REQ-SAFE-014, REQ-SAFE-017, REQ-SAFE-018.
