@@ -1,6 +1,0 @@
-artifact_patterns:
-  requirement: "REQ-[A-Z]+-[0-9]+"
-  component: "COMP-[0-9]{3}"
-  module: "MOD-[A-Z]+-[0-9]{3}"
-  interface: "IF-[0-9]{3}"
-  test_case: "TC-[A-Z]+-[0-9]+"
