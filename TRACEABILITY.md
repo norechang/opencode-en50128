@@ -544,63 +544,280 @@ The following are documented platform deviations from the informative Annex C Ta
 
 Per EN 50128:2011 §5.3.2.7 and §6.5.4.14-17, traceability evidence MUST be created at each phase and verified by VER before COD gate check. This platform uses **manual CSV creation** as the official workflow.
 
-**Roles**:
-- **Document Authors** (REQ, DES, INT, TST, IMP): Embed traceability IDs in deliverables using consistent conventions
-- **CM**: Manually create CSV files by reading documents and extracting trace relationships
-- **VER**: Validate CSV completeness using `trace validate` and `trace gate-check`
-- **COD**: Enforce gate based on VER's Verification Report
+#### 13.1.1 Roles and Responsibilities
 
-**CSV File Naming Convention**:
-```
-doc{source}_to_doc{target}.csv
-```
+| Role | Responsibility | EN 50128 Reference |
+|------|---------------|-------------------|
+| **Document Authors** (REQ, DES, INT, TST, IMP) | Embed traceability IDs in deliverables using consistent conventions (e.g., `[Trace: REQ-XXX]` tags in document sections) | §5.3.2.7 |
+| **CM (Configuration Manager)** | Manually create CSV files by reading completed documents and extracting trace relationships; maintain CSV files in baseline | §6.6, §5.3.2.7 |
+| **VER (Verifier)** | Validate CSV completeness and accuracy using mandatory validation tools; document findings in Verification Report | §6.2 |
+| **COD (Lifecycle Coordinator)** | Enforce phase gate based on VER's Verification Report; block gate if traceability gaps exist | §5.3 |
+
+#### 13.1.2 CSV File Naming Convention
+
+**Format**: `doc{source_id}_to_doc{target_id}.csv`
 
 **Examples**:
 - `doc6_to_docS1.csv` — SRS [6] → System Requirements Specification [S1]
 - `doc9_to_doc6.csv` — SAS [9] → SRS [6]
 - `doc10_to_doc9.csv` — SDS [10] → SAS [9]
 
-**CSV File Format**:
+**Document ID Mapping** (from Section 11):
+
+| Doc ID | Document Name | Phase |
+|--------|--------------|-------|
+| docS1 | System Requirements Specification | 0 (System) |
+| docS2 | System Architecture Description | 0 (System) |
+| docS4 | System Safety Requirements Specification | 0 (System) |
+| doc6 | Software Requirements Specification | 2 |
+| doc7 | Overall Software Test Specification | 2 |
+| doc9 | Software Architecture Specification | 3 |
+| doc10 | Software Design Specification | 3 |
+| doc11 | Software Interface Specifications | 3 |
+| doc12 | Software Integration Test Specification | 3 |
+| doc13 | Software/Hardware Integration Test Specification | 3 |
+| doc15 | Software Component Design Specification | 4 |
+| doc16 | Software Component Test Specification | 4 |
+| doc18 | Software Source Code and Supporting Documentation | 5 |
+| doc20 | Software Component Test Report | 5 |
+| doc21 | Software Integration Test Report | 6 |
+| doc22 | Software/Hardware Integration Test Report | 6 |
+| doc24 | Overall Software Test Report | 7 |
+| doc25 | Software Validation Report | 7 |
+
+#### 13.1.3 CSV File Format Specification
+
+**Mandatory Columns**:
 ```csv
 source_id,source_type,target_id,target_type,link_type,rationale,verified,verified_by,verified_date,source_document,target_document
-COMP-001-SKN,component,REQ-SAFE-007,requirement,implements,SKN implements safety interlock,true,VER,2026-03-28,doc9,doc6
 ```
 
-**Storage Location**: `evidence/traceability/`
+**Example Row**:
+```csv
+COMP-001-SKN,component,REQ-SAFE-007,requirement,implements,SKN implements safety interlock requirement,true,VER,2026-03-28,doc9,doc6
+```
 
-**Validation Commands**:
+**Column Definitions**:
+
+| Column | Type | Description | Example Values |
+|--------|------|-------------|----------------|
+| `source_id` | string | Source artifact unique identifier | `COMP-001-SKN`, `MOD-002-EMG` |
+| `source_type` | string | Source artifact type | `requirement`, `component`, `module`, `function`, `test_case`, `interface`, `hazard` |
+| `target_id` | string | Target artifact unique identifier | `REQ-SAFE-007`, `SYS-ARCH-001` |
+| `target_type` | string | Target artifact type | Same as `source_type` |
+| `link_type` | string | Relationship type | `implements`, `traces_to`, `allocated_to`, `tests`, `verifies`, `refines`, `derives_from` |
+| `rationale` | string | Human-readable explanation of the relationship | "SKN component implements emergency brake safety interlock requirement" |
+| `verified` | boolean | Has VER verified this link? | `true`, `false` |
+| `verified_by` | string | Role who verified (typically VER) | `VER` |
+| `verified_date` | string | Verification date (ISO 8601 format) | `2026-03-28` |
+| `source_document` | string | Source document ID | `doc9`, `doc10`, `doc18` |
+| `target_document` | string | Target document ID | `doc6`, `doc9`, `docS1` |
+
+**Storage Location**: `evidence/traceability/` (in project baseline)
+
+#### 13.1.4 Validation Commands
+
+**Validate CSV completeness** (checks coverage thresholds per SIL):
 ```bash
-# Validate all CSV files for current phase
-python3 tools/workspace.py trace validate --phase design --sil 3
+python3 tools/workspace.py trace validate --sil 3
+```
 
-# Gate check before COD gate
+**Gate check** (validates all T-rules applicable to current phase):
+```bash
 python3 tools/workspace.py trace gate-check --phase design --sil 3
 ```
 
+See `tools/README_TRACEABILITY.md` for complete tool usage documentation.
+
 ### 13.2 Per-Phase Workflow
 
-| Phase | Document Authors | Traceability Created | CM Action | VER Validation |
-|-------|------------------|---------------------|-----------|----------------|
-| 2: Requirements | REQ + SAF | SRS requirements embedded | Create `doc6_to_docS1.csv`, `doc6_to_docS2.csv` | Verify T1, T2 completeness |
-| 3: Architecture & Design | DES + SAF | Components/modules with trace sections | Create `doc9_to_doc6.csv`, `doc10_to_doc9.csv`, `doc10_to_doc6.csv`, `doc10_to_doc11.csv` + test specs (9 more files) | Verify T3, T4, T5a-c, T8, T9, T10a-b |
-| 4: Component Design | DES | Component designs with trace to SDS | Create `doc15_to_doc10.csv`, `doc16_to_doc15.csv` | Verify T6, T11 |
-| 5: Implementation & Testing | IMP + TST | Source code headers with trace comments | Create `doc18_to_doc15.csv`, `doc20_to_doc16.csv`, `doc20_to_doc18.csv` | Verify T7, T12 |
-| 6: Integration | INT + TST | Integration test results | Create `doc21_to_doc12.csv`, `doc21_to_doc18.csv`, `doc22_to_doc13.csv`, `doc22_to_doc18.csv` | Verify T10a, T10b, T12 |
-| 7: Validation | VAL + TST | Overall test report | Create `doc24_to_doc7.csv`, `doc25_to_doc24.csv`, `doc25_to_doc6.csv` | Verify T12, T13 |
+This section defines CM responsibilities for creating traceability CSV files at each phase. Document authors (REQ, DES, IMP, TST, INT, VAL) MUST embed traceability identifiers in deliverables before CM creates CSV files.
+
+#### Phase 2: Requirements
+
+**Document Authors**: REQ + SAF create SRS [6] and Overall SW Test Spec [7] with embedded trace IDs linking to system-level documents.
+
+**CM Actions**:
+1. Read SRS sections and identify all system requirement references
+2. Create CSV files:
+   - `doc6_to_docS1.csv` — SRS requirements → System Requirements (T1)
+   - `doc6_to_docS2.csv` — SRS requirements → System Architecture (if applicable)
+   - `doc6_to_docS4.csv` — SRS safety requirements → System Safety Requirements (T2)
+   - `doc7_to_doc6.csv` — Overall test cases → SRS requirements (T9)
+3. Validate: `python3 tools/workspace.py trace validate --sil {project_sil}`
+4. Gate check: `python3 tools/workspace.py trace gate-check --phase requirements --sil {project_sil}`
+
+**Expected files**: 3-4 CSV files (T1, T2, T9)
+
+---
+
+#### Phase 3: Architecture & Design
+
+**Document Authors**: DES + SAF create SAS [9], SDS [10], SIS [11], Integration Test Specs [12, 13] with embedded trace IDs.
+
+**CM Actions**:
+1. Read architecture and design documents
+2. Create CSV files:
+   - `doc9_to_doc6.csv` — SAS components → SRS requirements (T3, T4)
+   - `doc10_to_doc9.csv` — SDS modules → SAS components (T5a)
+   - `doc10_to_doc6.csv` — SDS modules → SRS requirements (T5b)
+   - `doc10_to_doc11.csv` — SDS modules → Interface specifications (T5c)
+   - `doc12_to_doc6.csv` — SW Integration Test Spec → SRS (T10a)
+   - `doc12_to_doc9.csv` — SW Integration Test Spec → SAS (T10a)
+   - `doc12_to_doc10.csv` — SW Integration Test Spec → SDS (T10a)
+   - `doc12_to_doc11.csv` — SW Integration Test Spec → SIS (T10a)
+   - `doc13_to_doc6.csv` — SW/HW Integration Test Spec → SRS (T10b)
+   - `doc13_to_doc9.csv` — SW/HW Integration Test Spec → SAS (T10b)
+   - `doc13_to_doc10.csv` — SW/HW Integration Test Spec → SDS (T10b)
+   - `doc13_to_docS1.csv` — SW/HW Integration Test Spec → System Requirements (T10b)
+   - `doc13_to_docS2.csv` — SW/HW Integration Test Spec → System Architecture (T10b)
+   - `doc6_to_doc7.csv` — SRS requirements → Overall Test Spec (bi-directional trace, T8)
+   - `doc7_to_doc6.csv` — Overall Test Spec → SRS requirements (T8)
+3. Validate: `python3 tools/workspace.py trace validate --sil {project_sil}`
+4. Gate check: `python3 tools/workspace.py trace gate-check --phase design --sil {project_sil}`
+
+**Expected files**: 13-15 CSV files (T3, T4, T5a-c, T8, T9, T10a-b)
+
+---
+
+#### Phase 4: Component Design
+
+**Document Authors**: DES creates Component Design Spec [15] and Component Test Spec [16] with embedded trace IDs.
+
+**CM Actions**:
+1. Read component design and test specifications
+2. Create CSV files:
+   - `doc15_to_doc10.csv` — Component designs → SDS modules (T6)
+   - `doc16_to_doc15.csv` — Component test specs → Component designs (T11)
+3. Validate: `python3 tools/workspace.py trace validate --sil {project_sil}`
+4. Gate check: `python3 tools/workspace.py trace gate-check --phase component-design --sil {project_sil}`
+
+**Expected files**: 2 CSV files (T6, T11)
+
+---
+
+#### Phase 5: Implementation & Testing
+
+**Document Authors**: IMP + TST create source code [18] with header trace comments and component test results [20].
+
+**CM Actions**:
+1. Read source code file headers and test reports
+2. Create CSV files:
+   - `doc18_to_doc15.csv` — Source code files → Component designs (T7)
+   - `doc20_to_doc16.csv` — Component test results → Component test specs (T12)
+   - `doc20_to_doc18.csv` — Component test results → Source code (executed against)
+3. Validate: `python3 tools/workspace.py trace validate --sil {project_sil}`
+4. Gate check: `python3 tools/workspace.py trace gate-check --phase implementation-testing --sil {project_sil}`
+
+**Expected files**: 3 CSV files (T7, T12)
+
+---
+
+#### Phase 6: Integration
+
+**Document Authors**: INT + TST create integration test reports [21, 22] with references to source code and test specs.
+
+**CM Actions**:
+1. Read integration test reports
+2. Create CSV files:
+   - `doc21_to_doc12.csv` — SW Integration Test Report → SW Integration Test Spec (T12)
+   - `doc21_to_doc18.csv` — SW Integration Test Report → Source code (executed against)
+   - `doc22_to_doc13.csv` — SW/HW Integration Test Report → SW/HW Integration Test Spec (T12)
+   - `doc22_to_doc18.csv` — SW/HW Integration Test Report → Source code (executed against)
+3. Validate: `python3 tools/workspace.py trace validate --sil {project_sil}`
+4. Gate check: `python3 tools/workspace.py trace gate-check --phase integration --sil {project_sil}`
+
+**Expected files**: 4 CSV files (T12)
+
+---
+
+#### Phase 7: Validation
+
+**Document Authors**: TST completes Overall Software Test Report [24] and VAL completes Validation Report [25].
+
+**CM Actions**:
+1. Read validation reports
+2. Create CSV files:
+   - `doc24_to_doc7.csv` — Overall SW Test Report → Overall SW Test Spec (T12)
+   - `doc25_to_doc24.csv` — Validation Report → Overall SW Test Report
+   - `doc25_to_doc6.csv` — Validation Report → SRS (confirms all requirements validated, T13)
+3. Validate: `python3 tools/workspace.py trace validate --sil {project_sil}`
+4. Gate check: `python3 tools/workspace.py trace gate-check --phase validation --sil {project_sil}`
+
+**Expected files**: 3 CSV files (T12, T13)
 
 ### 13.3 Tool Support
 
 **Mandatory Tools** (required for EN 50128 compliance):
-- `trace validate` — Validates CSV completeness and SIL thresholds
-- `trace gate-check` — Per-phase gate validation with rule checking (T1-T15)
+- `trace validate` — Validates CSV file syntax, completeness, and coverage thresholds per SIL
+- `trace gate-check` — Per-phase gate validation with T-rule checking (T1-T15); reads `activities/traceability.yaml`
 
 **Optional/Experimental Tools** (not required for compliance):
-- `trace extract` — Auto-extraction using proximity heuristics (⚠ may produce incorrect semantic mappings)
+- `trace extract` — Auto-extraction from documents using proximity heuristics (⚠ may produce incorrect semantic mappings)
 - `trace sync` — Synchronize CSV ↔ JSON ↔ Markdown formats
+- `trace query` — Query traceability links using filters
+- `trace visualize` — Generate Mermaid/DOT diagrams
 
-**Recommendation**: Use mandatory tools only; manual CSV creation ensures semantic accuracy.
+**Recommendation**: Use manual CSV creation for authoring traceability evidence; use mandatory validation tools for verification.
 
-**See**: `.opencode/skills/en50128-configuration/SKILL.md` Section 3.4 "Traceability Evidence Management" for detailed CM workflow instructions.
+See `tools/README_TRACEABILITY.md` for complete tool command reference and `TOOLS.md` for tool qualification per EN 50128 §6.7.
+
+### 13.4 CCB Change Request Impact
+
+When a Change Request (CR) is approved by the CCB, CM MUST assess traceability impact:
+
+1. **Identify affected phases** (per Section 10: Change Impact on Traceability)
+2. **Update all affected CSV files** with new/modified/deleted trace relationships
+3. **Re-validate**: `python3 tools/workspace.py trace validate --sil {project_sil}`
+4. **Submit to VER** for re-verification
+5. **COD re-runs gate check** after VER approval (may require phase re-entry)
+
+**Example**: CR modifies SRS requirement REQ-SAFE-007
+- **Affected phases**: 2-7 (all downstream phases that trace to REQ-SAFE-007)
+- **Affected CSV files**: `doc9_to_doc6.csv`, `doc10_to_doc6.csv`, `doc18_to_doc15.csv` (via propagation), all test trace files referencing REQ-SAFE-007
+- **CM must**: Update all affected CSVs, re-validate, and document changes in SCMR (Software Configuration Management Report)
+
+See `WORKFLOW.md` Section 3 for complete CCB change request procedures.
+
+### 13.5 Example: TDC Phase 3 Traceability
+
+**TDC Project** (SIL 3) created 19 CSV files for Phase 3 (Architecture & Design):
+
+| File | Relationships | T-Rule(s) | Status |
+|------|--------------|-----------|--------|
+| `doc6_to_docS1.csv` | 54 | T1 | ✅ 100% |
+| `doc6_to_doc7.csv` | 67 | T9 | ✅ 100% |
+| `doc7_to_doc6.csv` | 181 | T8 | ✅ 100% |
+| `doc9_to_doc6.csv` | 13 | T3, T4 | ✅ 100% |
+| `doc10_to_doc9.csv` | 55 | T5a | ✅ 100% |
+| `doc10_to_doc6.csv` | 36 | T5b | ✅ 100% |
+| `doc10_to_doc11.csv` | 38 | T5c | ✅ 100% |
+| `doc12_to_doc6.csv` | 46 | T10a | ✅ 100% |
+| `doc12_to_doc9.csv` | 33 | T10a | ✅ 100% |
+| `doc12_to_doc10.csv` | 33 | T10a | ✅ 100% |
+| `doc12_to_doc11.csv` | 33 | T10a | ✅ 100% |
+| `doc13_to_doc6.csv` | 26 | T10b | ✅ 100% |
+| `doc13_to_doc9.csv` | 26 | T10b | ✅ 100% |
+| `doc13_to_doc10.csv` | 26 | T10b | ✅ 100% |
+| `doc13_to_docS1.csv` | 26 | T10b | ✅ 100% |
+| `doc13_to_docS2.csv` | 26 | T10b | ✅ 100% |
+| `docS1_to_doc6.csv` | 54 | T1 | ✅ 100% |
+| `docS4_to_doc6.csv` | 7 | T2 | ✅ 100% |
+| `requirements_to_system.csv` | 6 | - | ✅ 100% |
+
+**Total**: 19 CSV files, 593 traceability relationships, 100% coverage (SIL 3 compliant)
+
+**Validation**:
+```bash
+cd examples/TDC
+python3 ../../tools/workspace.py trace validate --sil 3
+# ✓ PASS (all 19 matrices)
+
+python3 ../../tools/workspace.py trace gate-check --phase design --sil 3
+# ✓ PASS (11 T-rules satisfied)
+```
+
+**Reference**: See `examples/TDC/evidence/traceability/` for complete CSV file set.
 
 ---
 
