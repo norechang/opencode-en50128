@@ -294,8 +294,8 @@ included in the baseline manifest at each gate. **CM stores; VER produces.**
 
 **Phase 2 (Requirements):**
 1. After REQ produces SRS and TST produces Overall SW Test Spec:
-2. CM extracts traceability using `workspace.py trace extract` or `trace sync`
-3. CM creates CSV evidence files in `evidence/traceability/`:
+2. CM reads the documents and extracts trace relationships (manual review of document content)
+3. CM creates CSV evidence files in `evidence/traceability/` using the Write tool:
    - `docS1_to_doc6.csv` (System Requirements → SRS)
    - `docS4_to_doc6.csv` (System Safety Requirements → SRS)
    - `doc6_to_doc7.csv` (SRS → Overall SW Test Spec)
@@ -311,7 +311,8 @@ included in the baseline manifest at each gate. **CM stores; VER produces.**
 
 **Phase 3 (Architecture & Design):**
 1. After DES produces SAS, SDS, SIS and INT produces Integration Test Specs:
-2. CM extracts traceability and creates CSV evidence files (14 files total):
+2. CM reads the documents and extracts trace relationships (manual review)
+3. CM creates CSV evidence files using the Write tool (14 files total):
    - T3: `doc6_to_doc9.csv` (SRS → SAS)
    - T4: `doc9_to_doc6.csv` (SAS → SRS backward)
    - T5a: `doc10_to_doc9.csv` (SDS → SAS)
@@ -331,21 +332,40 @@ included in the baseline manifest at each gate. **CM stores; VER produces.**
 
 ### Traceability Tool Commands (workspace.py)
 
+**Creation Commands** (CM creates CSV files manually using Write tool - automated extraction not currently available):
+
+| Command | Purpose | When CM Uses It |
+|---------|---------|-----------------|
+| **Manual CSV creation** | CM reads documents and creates CSV files with Write tool | **Primary workflow** — After each phase's documents are complete |
+| `trace validate --sil {N}` | Validate all traceability matrices for SIL level | **MANDATORY** — Before reporting Track A complete |
+| `trace gate-check --phase {P} --sil {N}` | Check T-rule compliance for phase gate | **MANDATORY** — Before reporting Track A complete |
+
+**Query/Report Commands** (used after CSV files exist):
+
 | Command | Purpose | Example |
 |---------|---------|---------|
-| `trace extract` | Extract trace links from documents to CSV | `trace extract --from docs/phase-2-requirements/SRS.md --to docs/phase-3-architecture-design/SAS.md --output evidence/traceability/doc6_to_doc9.csv` |
-| `trace sync` | Synchronize Markdown RTM ↔ CSV files | `trace sync --project {project_name}` |
-| `trace create` | Manually create trace link CSV file | `trace create --from doc6 --to doc9 --output evidence/traceability/doc6_to_doc9.csv` |
-| `trace validate` | Validate all traceability for SIL level | `trace validate --sil 3` |
-| `trace gate-check` | Check phase gate readiness | `trace gate-check --phase design --sil 3` |
-| `trace query` | Query specific trace relationships | `trace query --from doc6 --to doc9` |
-| `trace report` | Generate traceability report | `trace report --from doc6 --to doc9` |
+| `trace query` | Query specific trace relationships | `trace query --source REQ-FUN-001 --direction forward` |
+| `trace report` | Generate traceability report | `trace report --from requirements --to architecture` |
+| `trace check-gaps` | Detect traceability gaps | `trace check-gaps --phase design --sil 3` |
+
+**Note on `trace extract`**: The tool provides a `trace extract --document <file> --type <link_type>` command, but it uses abstract link types (`design_to_requirements`) that don't map cleanly to the doc6/doc9 document ID scheme. CM should create CSV files directly using the Write tool with the canonical filename format (`doc{N}_to_doc{M}.csv`).
 
 **CSV File Format** (required for automated validation):
 ```csv
 source_id,target_id,rationale,verification_method,status
 SRS-REQ-001,SAS-COMP-DCS,DCS component implements door control requirements,Design review + test,verified
 ```
+
+**CM Workflow Example (Phase 3)**:
+1. CM reads `Software-Requirements-Specification.md` and identifies requirement IDs (REQ-FUN-001, REQ-SAFE-001, etc.)
+2. CM reads `Software-Architecture-Specification.md` and identifies component IDs (COMP-001-SKN, COMP-004-DSM, etc.)
+3. CM identifies which components implement which requirements (by reading SAS component descriptions)
+4. CM creates `evidence/traceability/doc6_to_doc9.csv` using Write tool with extracted relationships
+5. CM repeats for all 14 required trace relationships
+6. CM runs validation: `trace validate --sil 3` and `trace gate-check --phase design --sil 3`
+7. If validation passes, CM signals Track A complete to PM
+
+**Standards Basis**: EN 50128 does NOT mandate automated extraction. §5.3.2.7 requires only that traceability be "provided" with "unique reference numbers" and "documented relationships". Manual extraction by reading documents is compliant.
 
 **Storage Location**:
 - CSV files (normative evidence): `{workspace_root}/evidence/traceability/*.csv`
