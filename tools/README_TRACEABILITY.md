@@ -8,6 +8,8 @@
 
 ## Overview
 
+> ⚠ **IMPORTANT — Official Workflow**: The official EN 50128 traceability workflow for this platform uses **manual CSV creation** by the Configuration Manager (CM). The `trace extract` command is **OPTIONAL/EXPERIMENTAL** and may produce incorrect semantic mappings due to proximity-based heuristics. For compliance, use manual CSV creation as documented in `TRACEABILITY.md` Section 13 and `.opencode/skills/en50128-configuration/SKILL.md`.
+
 The **Traceability Manager** is a Python-based CLI tool for creating, maintaining, and validating traceability matrices across the EN 50128 software development lifecycle. It ensures bidirectional traceability from system requirements through software requirements, architecture, design, implementation, testing, and verification.
 
 **Key Features**:
@@ -17,7 +19,7 @@ The **Traceability Manager** is a Python-based CLI tool for creating, maintainin
 - ✅ Bidirectional queries (forward: REQ→Design→Code→Test, backward: Test→Code→Design→REQ)
 - ✅ Generate traceability reports for EN 50128 deliverables
 - ✅ Import/export traceability data in multiple formats
-- ✅ Auto-extract traceability from documents
+- ⚠ Auto-extract traceability from documents (OPTIONAL/EXPERIMENTAL)
 - ✅ Generate visualizations (Mermaid, GraphViz DOT)
 - ✅ Synchronize CSV/JSON/Markdown formats
 
@@ -61,7 +63,7 @@ The Traceability Manager provides 10 commands:
 | `report` | Generate traceability report | ✅ Complete |
 | `import` | Import traceability data | ✅ Complete |
 | `export` | Export traceability data | ✅ Complete |
-| `extract` | Auto-extract traceability from documents | ✅ Complete |
+| `extract` | Auto-extract traceability from documents | ⚠ OPTIONAL/EXPERIMENTAL |
 | `visualize` | Generate traceability visualizations | ✅ Complete |
 | `sync` | Synchronize CSV/JSON/Markdown formats | ✅ Complete |
 
@@ -69,7 +71,28 @@ The Traceability Manager provides 10 commands:
 
 ## Quick Start
 
-### 1. Create Traceability Matrix
+### 1. Manual CSV Creation (Official Workflow — RECOMMENDED)
+
+**For EN 50128 compliance, use manual CSV creation**:
+
+1. Read deliverables produced by document authors
+2. Extract trace relationships (e.g., COMP-001 → REQ-SAFE-007)
+3. Create CSV file with canonical naming: `doc{source}_to_doc{target}.csv`
+4. Use standard CSV format (see Section 4 "Data Models")
+5. Validate: `python3 tools/workspace.py trace validate --phase design --sil 3`
+
+**Example** (Phase 3 — Architecture to Requirements):
+```csv
+source_id,source_type,target_id,target_type,link_type,rationale,verified,verified_by,verified_date,source_document,target_document
+COMP-001-SKN,component,REQ-SAFE-007,requirement,implements,SKN implements safety interlock,true,VER,2026-03-28,doc9,doc6
+COMP-001-SKN,component,REQ-SAFE-002,requirement,implements,SKN monitors door sensor,true,VER,2026-03-28,doc9,doc6
+```
+
+**See**: `TRACEABILITY.md` Section 13 and `.opencode/skills/en50128-configuration/SKILL.md` for detailed per-phase workflows.
+
+---
+
+### 2. Create Traceability Matrix (Alternative — Template Creation)
 
 Create a new traceability matrix between requirements and architecture:
 
@@ -84,7 +107,7 @@ python3 tools/traceability_manager.py create \
 - `evidence/traceability/requirements_to_architecture.json` (query index)
 - `evidence/traceability/requirements_to_architecture.md` (report)
 
-### 2. Populate Matrix
+### 3. Populate Matrix
 
 Edit the CSV file to add traceability links:
 
@@ -94,7 +117,7 @@ SW-REQ-001,software_requirement,ARCH-COMP-001,architecture_component,allocated_t
 SW-REQ-002,software_requirement,ARCH-COMP-001,architecture_component,allocated_to,Another allocation,false,,,high,Software Requirements Specification
 ```
 
-### 3. Validate Traceability
+### 4. Validate Traceability
 
 Validate traceability completeness for SIL 3:
 
@@ -125,7 +148,7 @@ Overall Status: ✓ PASS
 ======================================================================
 ```
 
-### 4. Query Traceability
+### 5. Query Traceability
 
 Find all architecture components that implement a requirement (forward traceability):
 
@@ -143,7 +166,7 @@ python3 tools/traceability_manager.py query \
   --direction backward
 ```
 
-### 5. Check for Gaps
+### 6. Check for Gaps
 
 Detect traceability gaps before phase gate:
 
@@ -174,7 +197,7 @@ Low Confidence Links: 3
 ======================================================================
 ```
 
-### 6. Generate Report
+### 7. Generate Report
 
 Generate traceability report for inclusion in EN 50128 documents:
 
@@ -186,7 +209,7 @@ python3 tools/traceability_manager.py report \
   --output docs/traceability_report.md
 ```
 
-### 7. Import Traceability Data
+### 8. Import Traceability Data
 
 Import existing traceability data from CSV/JSON/Excel:
 
@@ -197,7 +220,7 @@ python3 tools/traceability_manager.py import \
   --format csv
 ```
 
-### 8. Export Traceability Data
+### 9. Export Traceability Data
 
 Export all traceability matrices to JSON:
 
@@ -208,7 +231,9 @@ python3 tools/traceability_manager.py export \
   --output traceability_export.json
 ```
 
-### 9. Auto-Extract Traceability
+### 10. Auto-Extract Traceability (OPTIONAL/EXPERIMENTAL)
+
+> ⚠ **Note**: This command is OPTIONAL/EXPERIMENTAL. It uses proximity-based heuristics to extract traceability links from documents. For EN 50128 compliance, use manual CSV creation as documented in `TRACEABILITY.md` Section 13.
 
 Automatically extract traceability links from design documents:
 
@@ -219,7 +244,7 @@ python3 tools/traceability_manager.py extract \
   --merge
 ```
 
-### 10. Generate Visualization
+### 11. Generate Visualization
 
 Generate Mermaid diagram for traceability:
 
@@ -231,7 +256,7 @@ python3 tools/traceability_manager.py visualize \
   --output docs/traceability_diagram.md
 ```
 
-### 11. Synchronize Formats
+### 12. Synchronize Formats
 
 Synchronize CSV, JSON, and Markdown formats:
 

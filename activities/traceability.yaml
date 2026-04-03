@@ -974,7 +974,119 @@ traceability:
         This platform has no standalone "System Design Description" document.
         The term is mapped to S1 (System Requirements Specification) + S2
         (System Architecture Description) as joint inputs.
-      normative_justification: >
-        See Section 11 doc 13 and Phase 0 note in TRACEABILITY.md Diagram 2.
-        The SQAP must document this mapping and the Safety Authority must confirm
-        it is adequate for the project context.
+        normative_justification: >
+          See Section 11 doc 13 and Phase 0 note in TRACEABILITY.md Diagram 2.
+          The SQAP must document this mapping and the Safety Authority must confirm
+          it is adequate for the project context.
+
+  # ── Section 14: Traceability Evidence Workflow Guidance ─────────────────────
+  # Official workflow per Option B decision (2026-04-03): manual CSV creation
+  # by Configuration Manager. This section provides machine-consumable guidance
+  # for agents (CM, PM, VER) on the per-phase workflow.
+  workflow_guidance:
+    official_method: "manual_csv_creation"
+    experimental_methods: ["trace_extract"]
+    description: >
+      The official EN 50128 traceability workflow for this platform uses manual
+      CSV creation by the Configuration Manager (CM). CM reads deliverables
+      produced by document authors and extracts trace relationships into CSV
+      files using the canonical naming convention doc{source}_to_doc{target}.csv.
+      The `trace extract` tool is marked as OPTIONAL/EXPERIMENTAL and is not
+      required for compliance.
+    
+    cm_responsibilities:
+      - responsibility: "Create traceability CSV files"
+        when: "After document authors complete deliverables"
+        how: "Read documents; extract trace relationships; write CSV files using Write tool"
+      - responsibility: "Validate CSV completeness"
+        when: "Before submitting to VER"
+        command: "trace validate --phase {phase} --sil {sil}"
+      - responsibility: "Pre-gate check"
+        when: "Before COD gate"
+        command: "trace gate-check --phase {phase} --sil {sil}"
+      - responsibility: "Update baselines"
+        when: "After COD gate PASS"
+        how: "Tag CSV files in git with phase baseline"
+      - responsibility: "Re-trace after CCB changes"
+        when: "After approved Change Request"
+        how: "Update affected CSV files; re-validate"
+    
+    per_phase_csv_files:
+      phase_2_requirements:
+        expected_files: 2
+        files:
+          - "doc6_to_docS1.csv"
+          - "doc6_to_docS2.csv"
+        traceability_rules: ["T1", "T2"]
+      
+      phase_3_architecture_design:
+        expected_files: 13-14
+        files:
+          - "doc9_to_doc6.csv"
+          - "doc10_to_doc9.csv"
+          - "doc10_to_doc6.csv"
+          - "doc10_to_doc11.csv"
+          - "doc12_to_doc6.csv"
+          - "doc12_to_doc9.csv"
+          - "doc12_to_doc10.csv"
+          - "doc12_to_doc11.csv"
+          - "doc13_to_docS1.csv"
+          - "doc13_to_docS2.csv"
+          - "doc13_to_doc6.csv"
+          - "doc13_to_doc9.csv"
+          - "doc13_to_doc10.csv"
+        traceability_rules: ["T3", "T4", "T5a", "T5b", "T5c", "T10a", "T10b"]
+      
+      phase_4_component_design:
+        expected_files: 2
+        files:
+          - "doc15_to_doc10.csv"
+          - "doc16_to_doc15.csv"
+        traceability_rules: ["T6", "T11"]
+      
+      phase_5_implementation_testing:
+        expected_files: 3
+        files:
+          - "doc18_to_doc15.csv"
+          - "doc20_to_doc16.csv"
+          - "doc20_to_doc18.csv"
+        traceability_rules: ["T7", "T12"]
+      
+      phase_6_integration:
+        expected_files: 4
+        files:
+          - "doc21_to_doc12.csv"
+          - "doc21_to_doc18.csv"
+          - "doc22_to_doc13.csv"
+          - "doc22_to_doc18.csv"
+        traceability_rules: ["T12"]
+      
+      phase_7_validation:
+        expected_files: 3
+        files:
+          - "doc24_to_doc7.csv"
+          - "doc25_to_doc24.csv"
+          - "doc25_to_doc6.csv"
+        traceability_rules: ["T12", "T13"]
+    
+    mandatory_tools:
+      - tool: "trace validate"
+        purpose: "Validate CSV completeness and SIL thresholds"
+        required_for: "SIL 3-4 compliance"
+      - tool: "trace gate-check"
+        purpose: "Per-phase gate validation with rule checking (T1-T15)"
+        required_for: "All phases"
+    
+    optional_tools:
+      - tool: "trace extract"
+        purpose: "Auto-extraction using proximity heuristics"
+        status: "OPTIONAL/EXPERIMENTAL"
+        warning: "May produce incorrect semantic mappings"
+      - tool: "trace sync"
+        purpose: "Synchronize CSV ↔ JSON ↔ Markdown formats"
+        status: "OPTIONAL"
+    
+    references:
+      - "TRACEABILITY.md Section 13"
+      - ".opencode/skills/en50128-configuration/SKILL.md Section 3.4"
+      - "tools/README_TRACEABILITY.md"

@@ -484,3 +484,31 @@ Both commands must return ✅ ALL CHECKS PASSED.
 - `examples/TDC/TRACEABILITY_ROLE_RESPONSIBILITIES.md` — Full EN 50128:2011 role analysis  
 - `TRACEABILITY.md` — T1-T15 rules and V-Model diagrams  
 - `WORKFLOW.md` — Two-track execution model
+
+---
+
+## 11. Resolution: Option B Adopted (2026-04-03)
+
+**Decision**: Manual CSV creation is the official traceability workflow. The `trace extract` tool is marked as OPTIONAL/EXPERIMENTAL.
+
+**Rationale**:
+- TDC Phase 3 successfully completed with manual CSV creation (19 files, all validated)
+- `trace extract` tool uses proximity heuristics that produce incorrect semantic mappings
+- Manual workflow ensures CM has full control over trace accuracy
+- No tool development/maintenance burden
+
+**Actions Taken**:
+1. ✅ Updated `TRACEABILITY.md` Section 13 with official manual workflow
+2. ✅ Updated `.opencode/skills/en50128-configuration/SKILL.md` with detailed CM instructions
+3. ✅ Updated `TOOLS.md` to mark `trace extract` as optional/experimental
+4. ✅ Updated `tools/README_TRACEABILITY.md` with workflow guidance
+5. ✅ Updated `activities/traceability.yaml` with workflow guidance section
+
+**Historical Context**: Sections 1-10 of this document represent the gap analysis conducted between 2026-03-28 and 2026-04-03. The analysis identified a workflow integration gap (CM agent didn't use `trace extract`) and led to testing of tool-based extraction in TDC Phase 3. The test revealed that proximity-based extraction is unsuitable for EN 50128 semantic traceability. Option B (manual workflow) was selected as the most reliable approach.
+
+**Related Documents**:
+- `examples/TDC/TRACEABILITY_TOOL_EXTRACTION_STATUS.md` — Detailed test results
+- `examples/TDC/OPTION_B_SCOPE_ANALYSIS_REPORT.md` — Platform-wide scope analysis
+- `examples/TDC/OPTION_B_IMPLEMENTATION_PLAN.md` — Step-by-step implementation plan
+
+**EN 50128 Compliance**: This decision is fully compliant with EN 50128:2011. §5.3.2.7 and §6.5.4.14-17 require traceability evidence but do not mandate a specific tool. Manual CSV creation satisfies all normative traceability requirements (T1-T15).

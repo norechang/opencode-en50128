@@ -538,5 +538,71 @@ The following are documented platform deviations from the informative Annex C Ta
 
 ---
 
+## 13. Traceability Evidence Management Workflow
+
+### 13.1 Official Workflow: Manual CSV Creation
+
+Per EN 50128:2011 §5.3.2.7 and §6.5.4.14-17, traceability evidence MUST be created at each phase and verified by VER before COD gate check. This platform uses **manual CSV creation** as the official workflow.
+
+**Roles**:
+- **Document Authors** (REQ, DES, INT, TST, IMP): Embed traceability IDs in deliverables using consistent conventions
+- **CM**: Manually create CSV files by reading documents and extracting trace relationships
+- **VER**: Validate CSV completeness using `trace validate` and `trace gate-check`
+- **COD**: Enforce gate based on VER's Verification Report
+
+**CSV File Naming Convention**:
+```
+doc{source}_to_doc{target}.csv
+```
+
+**Examples**:
+- `doc6_to_docS1.csv` — SRS [6] → System Requirements Specification [S1]
+- `doc9_to_doc6.csv` — SAS [9] → SRS [6]
+- `doc10_to_doc9.csv` — SDS [10] → SAS [9]
+
+**CSV File Format**:
+```csv
+source_id,source_type,target_id,target_type,link_type,rationale,verified,verified_by,verified_date,source_document,target_document
+COMP-001-SKN,component,REQ-SAFE-007,requirement,implements,SKN implements safety interlock,true,VER,2026-03-28,doc9,doc6
+```
+
+**Storage Location**: `evidence/traceability/`
+
+**Validation Commands**:
+```bash
+# Validate all CSV files for current phase
+python3 tools/workspace.py trace validate --phase design --sil 3
+
+# Gate check before COD gate
+python3 tools/workspace.py trace gate-check --phase design --sil 3
+```
+
+### 13.2 Per-Phase Workflow
+
+| Phase | Document Authors | Traceability Created | CM Action | VER Validation |
+|-------|------------------|---------------------|-----------|----------------|
+| 2: Requirements | REQ + SAF | SRS requirements embedded | Create `doc6_to_docS1.csv`, `doc6_to_docS2.csv` | Verify T1, T2 completeness |
+| 3: Architecture & Design | DES + SAF | Components/modules with trace sections | Create `doc9_to_doc6.csv`, `doc10_to_doc9.csv`, `doc10_to_doc6.csv`, `doc10_to_doc11.csv` + test specs (9 more files) | Verify T3, T4, T5a-c, T8, T9, T10a-b |
+| 4: Component Design | DES | Component designs with trace to SDS | Create `doc15_to_doc10.csv`, `doc16_to_doc15.csv` | Verify T6, T11 |
+| 5: Implementation & Testing | IMP + TST | Source code headers with trace comments | Create `doc18_to_doc15.csv`, `doc20_to_doc16.csv`, `doc20_to_doc18.csv` | Verify T7, T12 |
+| 6: Integration | INT + TST | Integration test results | Create `doc21_to_doc12.csv`, `doc21_to_doc18.csv`, `doc22_to_doc13.csv`, `doc22_to_doc18.csv` | Verify T10a, T10b, T12 |
+| 7: Validation | VAL + TST | Overall test report | Create `doc24_to_doc7.csv`, `doc25_to_doc24.csv`, `doc25_to_doc6.csv` | Verify T12, T13 |
+
+### 13.3 Tool Support
+
+**Mandatory Tools** (required for EN 50128 compliance):
+- `trace validate` — Validates CSV completeness and SIL thresholds
+- `trace gate-check` — Per-phase gate validation with rule checking (T1-T15)
+
+**Optional/Experimental Tools** (not required for compliance):
+- `trace extract` — Auto-extraction using proximity heuristics (⚠ may produce incorrect semantic mappings)
+- `trace sync` — Synchronize CSV ↔ JSON ↔ Markdown formats
+
+**Recommendation**: Use mandatory tools only; manual CSV creation ensures semantic accuracy.
+
+**See**: `.opencode/skills/en50128-configuration/SKILL.md` Section 3.4 "Traceability Evidence Management" for detailed CM workflow instructions.
+
+---
+
 *Document generated from: `LIFECYCLE.md` v1.9, `DELIVERABLES.md`, `WORKFLOW.md`, `AGENTS.md`*  
 *EN 50128:2011 — Railway Applications — Communication, Signalling and Processing Systems — Software for Railway Control and Protection Systems*

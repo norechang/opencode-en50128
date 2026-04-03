@@ -102,11 +102,27 @@ python3 tools/workspace.py trace export \
   --output <PATH>
 ```
 
-**Extract traceability items from a document**:
+**Create traceability CSV files manually (OFFICIAL WORKFLOW — RECOMMENDED)**:
 ```bash
-python3 tools/workspace.py trace extract \
-  --document <PATH> \
-  --type <TYPE>
+# 1. Create CSV file in evidence/traceability/ with format:
+#    source_id,target_id,rationale,verification_method
+#    Example: doc2_to_doc3.csv for SRS → SAS traceability
+#
+# 2. Validate CSV syntax and completeness:
+python3 tools/workspace.py trace validate --sil <0-4>
+#
+# 3. Run gate check for current phase:
+python3 tools/workspace.py trace gate-check --phase <PHASE> --sil <0-4>
+```
+
+**Extract traceability items from a document (⚠ OPTIONAL/EXPERIMENTAL)**:
+```bash
+# ⚠ Note: Uses proximity-based heuristics that may produce incorrect semantic mappings.
+#    Manual CSV creation is the official workflow (see above).
+#
+# python3 tools/workspace.py trace extract \
+#   --document <PATH> \
+#   --type <TYPE>
 ```
 
 **Visualize traceability**:
