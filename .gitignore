@@ -246,6 +246,11 @@ std/*.pdf
 # Uncomment the line below if you want to include standards in private repo:
 # !std/*.pdf
 
+# Keep these EN standard markdown copies local only (do not push)
+std/EN50128-2011.md
+std/EN 50126-1-2017.md
+std/EN 50126-2-2017.md
+
 # ============================================================================
 # Credentials and Secrets
 # ============================================================================
