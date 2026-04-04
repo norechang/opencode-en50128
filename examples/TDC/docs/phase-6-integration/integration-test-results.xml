@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN 50128:2011 §7.6.4.5b — Machine-readable integration test results -->
+<!-- Document ID: DOC-INTTESTRPT-2026-001 Attachment A -->
+<!-- Project: TDC (Train Door Control System) | SIL 3 | Phase 6 Integration -->
+<!-- Execution Date: 2026-04-04 | Git SHA: 10c702d -->
+<testsuites
+    name="TDC Software Integration Tests"
+    tests="28"
+    failures="0"
+    errors="0"
+    ignored="0"
+    time="0"
+    timestamp="2026-04-04">
+
+  <testsuite
+      name="test_integration"
+      tests="28"
+      failures="0"
+      errors="0"
+      ignored="0"
+      hostname="host"
+      timestamp="2026-04-04">
+
+    <!-- Phase 1-2: DGN / SPM / TCI / SKN cross-module data flows -->
+    <testcase classname="test_integration" name="test_TC_INT_001_DGN_log_write_read"
+              test_id="TC-INT-001" interface="IF-DGN-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_003_TCI_to_SPM_normal_speed"
+              test_id="TC-INT-003" interface="IF-TCI-SPM-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_004_CAN_CRC_error_fault_path"
+              test_id="TC-INT-004" interface="IF-TCI-CAN-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_005_CAN_timeout_interlock"
+              test_id="TC-INT-005" interface="IF-SPM-SKN-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_006_speed_gate_to_skn"
+              test_id="TC-INT-006" interface="IF-SPM-SKN-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_007_speed_gate_boundary_at_threshold"
+              test_id="TC-INT-007" interface="IF-SPM-SKN-001" sil="3" result="PASS"/>
+
+    <!-- Phase 3: DSM / HAL position and obstacle integration -->
+    <testcase classname="test_integration" name="test_TC_INT_009_HAL_position_to_DSM_transition"
+              test_id="TC-INT-009" interface="IF-HAL-DSM-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_010_obstacle_ISR_to_DSM_reversal"
+              test_id="TC-INT-010" interface="IF-OBD-DSM-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_012_DSM_to_HAL_lock_actuator"
+              test_id="TC-INT-012" interface="IF-DSM-HAL-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_013_DSM_to_HAL_motor_PWM"
+              test_id="TC-INT-013" interface="IF-DSM-HAL-002" sil="3" result="PASS"/>
+
+    <!-- Phase 4: FMG / SKN fault management and departure interlock -->
+    <testcase classname="test_integration" name="test_TC_INT_015_FMG_fault_to_SKN_safe_state"
+              test_id="TC-INT-015" interface="IF-FMG-SKN-001" sil="3" result="PASS">
+      <properties>
+        <property name="defect_noted" value="DEFECT-SKN-001"/>
+        <property name="note" value="Uses SPM fault bit (0x01) — DSM fault bit (0x04) incompatible with if(1U==trigger) at skn_safe_state.c:117"/>
+      </properties>
+    </testcase>
+    <testcase classname="test_integration" name="test_TC_INT_016_SKN_safe_state_broadcast_sticky"
+              test_id="TC-INT-016" interface="IF-SKN-GLOBAL-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_017_departure_interlock_all_closed_and_locked"
+              test_id="TC-INT-017" interface="IF-DSM-DEPART-001" sil="3" result="PASS"/>
+
+    <!-- Error path tests -->
+    <testcase classname="test_integration" name="test_TC_INT_ERR_002_CRC16_consistency_DGN_entry"
+              test_id="TC-INT-ERR-002" interface="IF-DGN-CRC-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_ERR_003_door_index_bounds"
+              test_id="TC-INT-ERR-003" interface="IF-DSM-BOUNDS-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_ERR_004_FMG_init_fault_counter_cleared"
+              test_id="TC-INT-ERR-004" interface="IF-FMG-INIT-001" sil="3" result="PASS"/>
+
+    <!-- Phase 5: SPI cross-channel 2oo2 comparison -->
+    <testcase classname="test_integration" name="test_TC_INT_021_normal_SPI_exchange"
+              test_id="TC-INT-021" interface="IF-SKN-SPI-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_022_SPI_safety_data_disagreement"
+              test_id="TC-INT-022" interface="IF-SKN-SPI-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_023_SPI_transient_3cycle_filter"
+              test_id="TC-INT-023" interface="IF-SKN-SPI-001" sil="3" result="PASS"/>
+
+    <!-- Additional coverage tests -->
+    <testcase classname="test_integration" name="test_TC_INT_024_TCI_open_command_to_DSM"
+              test_id="TC-INT-024" interface="IF-TCI-DSM-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_025_TCI_close_command_to_DSM"
+              test_id="TC-INT-025" interface="IF-TCI-DSM-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_026_TCI_emergency_stop_to_FMG"
+              test_id="TC-INT-026" interface="IF-TCI-FMG-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_027_FMG_RunCycle_all_clear"
+              test_id="TC-INT-027" interface="IF-FMG-CYCLE-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_028_departure_interlock_one_door_not_locked"
+              test_id="TC-INT-028" interface="IF-DSM-DEPART-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_029_SPI_CRC_failure_immediate_safe_state"
+              test_id="TC-INT-029" interface="IF-SKN-SPI-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_030_DGN_read_out_of_range"
+              test_id="TC-INT-030" interface="IF-DGN-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_031_DGN_read_null_pointer"
+              test_id="TC-INT-031" interface="IF-DGN-001" sil="3" result="PASS"/>
+    <testcase classname="test_integration" name="test_TC_INT_032_OBD_ISR_out_of_range_door_id"
+              test_id="TC-INT-032" interface="IF-OBD-DSM-001" sil="3" result="PASS"/>
+
+  </testsuite>
+</testsuites>

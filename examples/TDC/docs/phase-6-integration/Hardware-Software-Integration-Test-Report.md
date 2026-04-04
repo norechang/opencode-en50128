@@ -1097,6 +1097,131 @@ All EN 50128 §7.6 integration obligations have been met:
 
 ---
 
+## 12. QEMU EMULATION RESULTS (SUPPLEMENTARY EVIDENCE)
+
+### 12.1 Purpose of QEMU Integration
+
+**Date**: 2026-04-04  
+**Documents**: DOC-QEMUINTPLAN-2026-001, DOC-TVR-QEMU-2026-001  
+**Tool**: QEMU ARM System Emulator v8.2.2  
+**Status**: Integration plan and tool validation report created; test execution PENDING
+
+Per PM coordination (2026-04-04), QEMU ARM emulator has been integrated to provide
+**supplementary functional evidence** for the 4 HIL-pending test cases and establish a
+pre-validation environment for Phase 7.
+
+> **CRITICAL LIMITATION DISCLOSURE** (EN 50128 §7.6.4.9): QEMU emulation results are NOT
+> equivalent to physical hardware validation. All 4 HIL-pending items remain REQUIRED for
+> SIL 3 compliance before Phase 7 final sign-off. QEMU provides:
+> - Functional behaviour verification (T1 evidence)
+> - Indicative timing estimates only (T2 evidence with ±30% error bounds)
+> - Pre-validation environment for functional scenario testing
+
+### 12.2 QEMU Feasibility Assessment — HIL-Pending Test Cases
+
+**Source**: DOC-QEMUINTPLAN-2026-001 Section 4
+
+| TC ID | HIL-PENDING | Primary Objective | QEMU Feasibility | QEMU Value |
+|-------|------------|-------------------|-----------------|-----------|
+| TC-HWSW-005 | HIL-PENDING-001 | IWDG hardware timeout 50 ms ± 5 ms (oscilloscope) | **Physical hardware required** | Minimal — HAL_Watchdog_Refresh API coverage only |
+| TC-HWSW-PERF-001 | HIL-PENDING-002 | WCET ≤ 16 ms via DWT cycle counter at 400 MHz | **QEMU-feasible with limitations** | Moderate — worst-case path coverage + gross timing bound (T2 estimate ±30%) |
+| TC-HWSW-PERF-004 | HIL-PENDING-003 | ISR latency ≤ 1 ms (oscilloscope on GPIO interrupt) | **Physical hardware required** | Minimal — ISR functional invocation verification (T1) only |
+| TC-HWSW-FAULT-002 | HIL-PENDING-004 | Memory CRC corruption via JTAG debugger | **QEMU-feasible with limitations** | High — GDB memory injection (functional equivalent to JTAG) verifies CRC detection chain (T1) |
+
+**Assessment Summary**:
+- **TC-HWSW-FAULT-002** has highest QEMU value — GDB remote stub provides functional
+  equivalent to JTAG memory injection for software CRC detection verification.
+- **TC-HWSW-PERF-001** can benefit from QEMU execution — worst-case path coverage and
+  indicative timing bounds (must apply ±30% error factor per Tool Validation Report).
+- **TC-HWSW-005 and TC-HWSW-PERF-004** have minimal QEMU value — silicon-specific timing
+  and peripheral behaviour cannot be meaningfully emulated.
+
+### 12.3 QEMU Supplementary Test Cases Defined
+
+**Source**: DOC-QEMUINTPLAN-2026-001 Section 6
+
+Four new supplementary test cases have been defined for QEMU execution:
+
+| QEMU TC ID | Maps to HIL-Pending | Objective | Evidence Type | Status |
+|-----------|-------------------|----------|--------------|--------|
+| TC-QEMU-MEMCRC-001 | TC-HWSW-FAULT-002 | GDB memory injection → CRC mismatch → safe state | T1 functional | PENDING execution |
+| TC-QEMU-WCET-001 | TC-HWSW-PERF-001 | Worst-case scenario execution (4 doors, obstacles, CAN+SPI) | T2 timing (±30%) | PENDING execution |
+| TC-QEMU-API-WDG | TC-HWSW-005 | HAL_Watchdog_Refresh API coverage (supplementary) | T1 functional | PENDING execution |
+| TC-QEMU-API-ISR | TC-HWSW-PERF-004 | ISR functional invocation (supplementary) | T1 functional | PENDING execution |
+
+**Execution Status**: All 4 QEMU test cases are PENDING execution. PM has assigned TST to
+execute and report results. When available, results will be added to this section.
+
+### 12.4 QEMU Tool Qualification Status
+
+**Tool Validation Report**: DOC-TVR-QEMU-2026-001 v1.0  
+**Path**: `examples/TDC/docs/phase-6-integration/QEMU-Tool-Validation-Report.md`  
+**TCL**: T1 (functional testing) / T2 (timing estimation)  
+**Qualification Method**: §6.7.4.4.3 — Increased confidence from use (open-source, GPL v2+)
+
+**Key Limitations** (per Tool Validation Report):
+- **L-001**: Timing accuracy — WCET values are ESTIMATES, not measurements
+- **L-002**: Peripheral emulation approximated (GPIO, ADC, PWM, CAN)
+- **L-003**: Interrupt timing may differ from real hardware
+- **L-004**: Cannot emulate hardware faults (IWDG silicon timeout, physical JTAG)
+- **L-005**: Platform mismatch — Cortex-M4 emulation vs. STM32H743 Cortex-M7 target (±30% error)
+- **L-006**: Physical hardware validation MANDATORY for operational deployment (SIL 3)
+
+**T2 Usage Constraints**:
+- All QEMU timing results labeled: `≈ X ms (QEMU estimate ± 30%; T2 tool)`
+- Mandatory cross-check against static WCET analysis (lizard complexity from Phase 5)
+- Simulation error bound: **±30%** applied to all timing estimates
+- Physical STM32H743 HIL validation remains the acceptance gate
+
+### 12.5 HIL-Pending Item Status — UNCHANGED
+
+**CRITICAL**: QEMU integration does NOT reduce the HIL-pending count from 4 to 0. All 4
+HIL-pending items remain REQUIRED for EN 50128 SIL 3 compliance:
+
+| HIL-Pending | Status | Rationale |
+|------------|--------|-----------|
+| HIL-PENDING-001 (TC-HWSW-005) | **HIL REQUIRED** | Silicon watchdog timeout measurement — QEMU cannot emulate |
+| HIL-PENDING-002 (TC-HWSW-PERF-001) | **HIL REQUIRED** | DWT cycle counter WCET on Cortex-M7 at 400 MHz — QEMU provides T2 estimate only |
+| HIL-PENDING-003 (TC-HWSW-PERF-004) | **HIL REQUIRED** | Oscilloscope ISR latency on physical GPIO — QEMU provides T1 functional verification only |
+| HIL-PENDING-004 (TC-HWSW-FAULT-002) | **HIL REQUIRED** | Physical JTAG memory write on real silicon — QEMU GDB provides T1 functional equivalent only |
+
+**Phase 7 Precondition**: All 4 HIL-pending items SHALL be executed on physical STM32H743
+hardware before Phase 7 final sign-off (Overall Software Validation gate).
+
+### 12.6 QEMU Test Execution Results
+
+**Status**: PENDING  
+**Assigned To**: TST  
+**Expected Completion**: TBD (awaiting ARM cross-compilation toolchain setup)
+
+When QEMU test cases are executed, results will be reported in the following format:
+
+```
+TC-QEMU-MEMCRC-001: [PASS/FAIL] — GDB memory injection → CRC mismatch detected → safe state asserted
+TC-QEMU-WCET-001: [PASS/FAIL] — Worst-case execution time ≈ X ms (QEMU estimate ± 30%; T2 tool)
+TC-QEMU-API-WDG: [PASS/FAIL] — HAL_Watchdog_Refresh API functional coverage
+TC-QEMU-API-ISR: [PASS/FAIL] — ISR functional invocation verified
+```
+
+### 12.7 Phase 7 Pre-Validation Support
+
+**Status**: QEMU environment READY (Integration Plan and Tool Validation Report approved)  
+**Use Case**: VAL can use QEMU for early validation test development before STM32H743 hardware availability
+
+**Phase 7 Pre-Validation Protocol** (DOC-QEMUINTPLAN-2026-001 Section 9):
+- Functional scenario testing (door open/close/obstacle/emergency chains)
+- Regression testing after code changes
+- Validation test case development and debugging
+- **All QEMU validation results SHALL be labeled**: `(QEMU pre-validation — physical hardware validation required)`
+
+**Next Steps**:
+1. TST to execute TC-QEMU-MEMCRC-001, TC-QEMU-WCET-001, TC-QEMU-API-WDG, TC-QEMU-API-ISR
+2. INT to update this section with QEMU test results
+3. VAL to reference QEMU environment for Phase 7 pre-validation test development
+4. All 4 HIL-pending items to be executed on physical STM32H743 before Phase 7 gate
+
+---
+
 **END OF DOCUMENT**
 
 *Submitted to PM for routing to QUA and VER per EN 50128 §5.3.6 and WORKFLOW.md.*
