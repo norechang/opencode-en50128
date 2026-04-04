@@ -2,8 +2,29 @@
 
 **AI-powered development platform for EN 50128:2011 compliant railway software**
 
-**Status**: Active Development
+**Status**: Demonstration Complete — Development Frozen
 **Version**: 3.2.0
+
+---
+
+## Project Status Notice
+
+> **This platform has achieved its demonstration goal and is no longer under active development.**
+>
+> The primary objective of this platform was to demonstrate the **possibility and flexibility of
+> adopting agentic AI systems in safety-critical engineering infrastructure** — specifically,
+> whether a multi-agent AI system could credibly execute the full EN 50128:2011 V-Model software
+> development lifecycle for a SIL 3 railway application.
+>
+> Through the **TDC (Train Door Control System)** example project, this goal has been achieved.
+> The TDC project progressed through all six active development phases (Planning through
+> Integration), produced the full set of EN 50128 Annex C deliverables, enforced SIL 3 gate
+> criteria, exercised the two-track V&V model with independent VMGR authority, raised and closed
+> formal NCRs and change requests, and reached Phase 7 (Validation) authorization — all driven
+> by AI agents operating within the EN 50128 role and independence constraints.
+>
+> **This demonstration platform is now frozen.** The repository is preserved as a reference.
+> No further development is planned.
 
 ---
 
