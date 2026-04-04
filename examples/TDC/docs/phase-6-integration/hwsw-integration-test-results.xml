@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN 50128:2011 §7.6.4.5b — Machine-readable HW/SW integration test results -->
+<!-- Document ID: DOC-HWINTTESTRPT-2026-001 Attachment A -->
+<!-- Project: TDC (Train Door Control System) | SIL 3 | Phase 6 Integration -->
+<!-- Specification: DOC-HWINTTESTSPEC-2026-001 v0.1 (Annex C Item 13) -->
+<!-- Execution Date: 2026-04-04 | Git SHA: 10c702d -->
+<!-- Execution Mode: HAL stub simulation on host (software simulation) -->
+<testsuites
+    name="TDC HW/SW Integration Tests"
+    tests="26"
+    failures="0"
+    errors="0"
+    hil_pending="4"
+    ignored="0"
+    time="0"
+    timestamp="2026-04-04">
+
+  <testsuite
+      name="hwsw_integration"
+      tests="26"
+      failures="0"
+      errors="0"
+      hil_pending="4"
+      hostname="host"
+      timestamp="2026-04-04">
+
+    <!-- ================================================================ -->
+    <!-- HW Phase 1: GPIO Sensors and IWDG (TC-HWSW-001 through TC-HWSW-006) -->
+    <!-- ================================================================ -->
+    <testcase classname="hwsw_integration" name="TC-HWSW-001_HAL_GPIO_position_sensor_EXT002"
+              test_id="TC-HWSW-001" hw_phase="1" interface="EXT-002" sil="3"
+              type="Interface,Functional" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-HAL-001,TC-HAL-002,TC-HAL-003,TC-HAL-004,TC-HAL-005,TC-HAL-055,TC-INT-009"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-002_HAL_GPIO_lock_sensor_2oo2_EXT005"
+              test_id="TC-HWSW-002" hw_phase="1" interface="EXT-005" sil="3"
+              type="Interface,Functional" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-HAL-012,TC-HAL-013,TC-HAL-014,TC-HAL-015,TC-INT-017,TC-INT-028"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-003_HAL_GPIO_obstacle_ISR_EXT003"
+              test_id="TC-HWSW-003" hw_phase="1" interface="EXT-003" sil="3"
+              type="Interface,Functional" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-HAL-016,TC-HAL-017,TC-HAL-018,TC-HAL-019,TC-INT-010,TC-INT-032"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-004_IWDG_normal_operation_EXT006"
+              test_id="TC-HWSW-004" hw_phase="1" interface="EXT-006" sil="3"
+              type="Interface,Functional" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-HAL-011,TC-HAL-042"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-005_IWDG_hardware_timeout_EXT006"
+              test_id="TC-HWSW-005" hw_phase="1" interface="EXT-006" sil="3"
+              type="Interface,Functional" priority="Critical"
+              execution_mode="hil_pending" result="HIL-PENDING"
+              hil_id="HIL-PENDING-001"
+              hil_rationale="IWDG 50ms timeout requires oscilloscope on physical STM32H743 NRST pin; LSI ±10% tolerance requires silicon measurement; HAL stub cannot simulate hardware reset event"
+              hil_acceptance="Reset within 50ms±5ms; RCC_RSR IWDG flag set; cold-start safe_state_active=1"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-006_HAL_GPIO_lock_actuator_EXT004"
+              test_id="TC-HWSW-006" hw_phase="1" interface="EXT-004" sil="3"
+              type="Interface,Functional" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-HAL-024,TC-HAL-025,TC-INT-012"/>
+
+    <!-- ================================================================ -->
+    <!-- HW Phase 2: Motor PWM and Direction (TC-HWSW-007 through TC-HWSW-009) -->
+    <!-- ================================================================ -->
+    <testcase classname="hwsw_integration" name="TC-HWSW-007_HAL_PWM_duty_cycle_EXT001"
+              test_id="TC-HWSW-007" hw_phase="2" interface="EXT-001" sil="3"
+              type="Interface,Functional" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-HAL-026,TC-HAL-027,TC-HAL-028,TC-HAL-029,TC-HAL-057,TC-INT-013"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-008_HAL_motor_direction_GPIO_EXT001"
+              test_id="TC-HWSW-008" hw_phase="2" interface="EXT-001" sil="3"
+              type="Interface,Functional" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-HAL-022,TC-HAL-023,TC-HAL-046"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-009_motor_failsafe_safe_state_EXT001"
+              test_id="TC-HWSW-009" hw_phase="2" interface="EXT-001" sil="3"
+              type="Interface,Functional" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-INT-015,TC-INT-016"/>
+
+    <!-- ================================================================ -->
+    <!-- HW Phase 3: CAN Bus Interface (TC-HWSW-010 through TC-HWSW-012) -->
+    <!-- ================================================================ -->
+    <testcase classname="hwsw_integration" name="TC-HWSW-010_CAN_RX_TCMS_speed_frame_EXT007"
+              test_id="TC-HWSW-010" hw_phase="3" interface="EXT-007" sil="3"
+              type="Interface,Functional" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-HAL-030,TC-HAL-031,TC-HAL-032,TC-HAL-033,TC-INT-003,TC-INT-004,TC-INT-005"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-011_CAN_TX_departure_interlock_EXT008"
+              test_id="TC-HWSW-011" hw_phase="3" interface="EXT-008" sil="3"
+              type="Interface,Functional" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-HAL-034,TC-HAL-035,TC-HAL-009,TC-INT-017,TC-INT-028"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-012_CAN_TX_fault_report_EXT008"
+              test_id="TC-HWSW-012" hw_phase="3" interface="EXT-008" sil="3"
+              type="Interface,Functional" priority="High"
+              execution_mode="stub" result="PASS"
+              evidence="TC-INT-026,TC-INT-027"/>
+
+    <!-- ================================================================ -->
+    <!-- HW Phase 4: SPI Cross-Channel and ADC (TC-HWSW-013 through TC-HWSW-015) -->
+    <!-- ================================================================ -->
+    <testcase classname="hwsw_integration" name="TC-HWSW-013_SPI_cross_channel_normal_EXT010"
+              test_id="TC-HWSW-013" hw_phase="4" interface="EXT-010" sil="3"
+              type="Interface,Functional" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-HAL-010,TC-HAL-037,TC-HAL-038,TC-INT-021"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-014_SPI_cross_channel_timeout_EXT010"
+              test_id="TC-HWSW-014" hw_phase="4" interface="EXT-010" sil="3"
+              type="Interface,Error" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-INT-023,TC-INT-029"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-015_ADC_motor_current_overcurrent_EXTADC"
+              test_id="TC-HWSW-015" hw_phase="4" interface="EXT-ADC" sil="3"
+              type="Interface,Functional" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-HAL-039,TC-HAL-040,TC-HAL-041,TC-INT-010"/>
+
+    <!-- ================================================================ -->
+    <!-- HW Phase 5: Remaining Interfaces (TC-HWSW-016 through TC-HWSW-019) -->
+    <!-- ================================================================ -->
+    <testcase classname="hwsw_integration" name="TC-HWSW-016_RS485_DDU_interface_EXT009"
+              test_id="TC-HWSW-016" hw_phase="5" interface="EXT-009" sil="2"
+              type="Interface,Functional" priority="High"
+              execution_mode="stub" result="PASS"
+              evidence="TC-INT-001,TC-INT-027"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-017_emergency_release_GPIO_EXT011"
+              test_id="TC-HWSW-017" hw_phase="5" interface="EXT-011" sil="2"
+              type="Interface,Functional" priority="High"
+              execution_mode="stub" result="PASS"
+              evidence="TC-HAL-020,TC-HAL-021,TC-INT-006"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-018_DCP_GPIO_EXT012"
+              test_id="TC-HWSW-018" hw_phase="5" interface="EXT-012" sil="2"
+              type="Interface,Functional" priority="High"
+              execution_mode="stub" result="PASS"
+              evidence="TC-HAL-025,TC-INT-024,TC-INT-025"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-019_diagnostics_port_EXT013"
+              test_id="TC-HWSW-019" hw_phase="5" interface="EXT-013" sil="1"
+              type="Interface,Functional" priority="Medium"
+              execution_mode="stub" result="PASS"
+              evidence="TC-INT-001,TC-INT-030,TC-INT-031"/>
+
+    <!-- ================================================================ -->
+    <!-- Performance Tests (TC-HWSW-PERF-001 through TC-HWSW-PERF-004) -->
+    <!-- ================================================================ -->
+    <testcase classname="hwsw_integration" name="TC-HWSW-PERF-001_WCET_target_hardware"
+              test_id="TC-HWSW-PERF-001" hw_phase="5" interface="ALL" sil="3"
+              type="Performance" priority="Critical"
+              execution_mode="hil_pending" result="HIL-PENDING"
+              hil_id="HIL-PENDING-002"
+              hil_rationale="WCET requires DWT cycle counter on STM32H743 at 400MHz with real peripheral I/O; x86 host timing not representative"
+              hil_acceptance="Max cycle time ≤ 16ms; CPU utilisation ≤ 80%"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-PERF-002_flash_code_size"
+              test_id="TC-HWSW-PERF-002" hw_phase="5" interface="N/A" sil="3"
+              type="Resource" priority="High"
+              execution_mode="toolchain" result="PASS"
+              note="Flash ≤ 1600KB: SDS allocation analysis + linker heap=0 confirmed; heap=0 verified via linker_symbols_stub"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-PERF-003_RAM_static_allocation"
+              test_id="TC-HWSW-PERF-003" hw_phase="5" interface="N/A" sil="3"
+              type="Resource" priority="High"
+              execution_mode="toolchain" result="PASS"
+              note="RAM ≤ 800KB: SDS component allocation ~98KB total; heap=0; no malloc/calloc/realloc/free in sources"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-PERF-004_obstacle_ISR_latency"
+              test_id="TC-HWSW-PERF-004" hw_phase="5" interface="EXT-003" sil="3"
+              type="Performance" priority="Critical"
+              execution_mode="hil_pending" result="HIL-PENDING"
+              hil_id="HIL-PENDING-003"
+              hil_rationale="ISR latency requires oscilloscope on real STM32H743; NVIC interrupt latency hardware-dependent"
+              hil_acceptance="Max ISR latency ≤ 1ms (REQ-INT-003)"/>
+
+    <!-- ================================================================ -->
+    <!-- Fault Injection Tests (TC-HWSW-FAULT-001 through TC-HWSW-FAULT-003) -->
+    <!-- ================================================================ -->
+    <testcase classname="hwsw_integration" name="TC-HWSW-FAULT-001_CAN_busoff_fault_EXT007"
+              test_id="TC-HWSW-FAULT-001" hw_phase="5" interface="EXT-007" sil="3"
+              type="FaultInjection" priority="High"
+              execution_mode="stub" result="PASS"
+              evidence="TC-INT-004,TC-INT-015"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-FAULT-002_memory_CRC_JTAG"
+              test_id="TC-HWSW-FAULT-002" hw_phase="5" interface="N/A" sil="3"
+              type="FaultInjection" priority="Critical"
+              execution_mode="hil_pending" result="HIL-PENDING"
+              hil_id="HIL-PENDING-004"
+              hil_rationale="JTAG memory write during execution requires physical silicon; host execution has no equivalent in-flight SRAM corruption capability"
+              hil_acceptance="CRC mismatch detected ≤ 120ms; safe_state_active=1; FAULT_CRC_ERROR logged"
+              partial_stub_evidence="TC-INT-022 (CRC mismatch→safe state PASS)"/>
+
+    <testcase classname="hwsw_integration" name="TC-HWSW-FAULT-003_stack_canary_corruption"
+              test_id="TC-HWSW-FAULT-003" hw_phase="5" interface="N/A" sil="3"
+              type="FaultInjection" priority="Critical"
+              execution_mode="stub" result="PASS"
+              evidence="TC-INT-022,TC-INT-015,TC-INT-016"/>
+
+  </testsuite>
+
+  <!-- ================================================================== -->
+  <!-- Coverage Summary -->
+  <!-- ================================================================== -->
+  <coverage
+      timestamp="2026-04-04"
+      git_sha="10c702d"
+      tool="gcovr + gcov (GCC host build)"
+      build_flags="-fprofile-arcs -ftest-coverage -g -O0 -std=c99">
+
+    <module name="hal_services.c" lines="147" lines_covered="136"
+            line_percent="92" branches="74" branches_covered="67" branch_percent="90"
+            notes="Uncovered: hardware-register-state-dependent paths (lines 422,430,459,499,563,670) — HIL-only"/>
+
+    <module name="Combined_all_modules" lines="965" lines_covered="888"
+            line_percent="92" branches="428" branches_covered="372" branch_percent="86"/>
+
+    <target name="SVP_line_coverage_target" value="90" achieved="92" met="true"/>
+    <target name="SVP_branch_coverage_target" value="85" achieved="86" met="true"/>
+    <target name="interface_coverage_target" value="100" achieved="100" met="true" note="14/14 EXT-NNN interfaces"/>
+  </coverage>
+
+  <!-- ================================================================== -->
+  <!-- HIL Pending Summary -->
+  <!-- ================================================================== -->
+  <hil_pending_summary count="4">
+    <item id="HIL-PENDING-001" test_id="TC-HWSW-005" priority="Critical" estimated_days="1"
+          requirement="REQ-INT-006" safety_function="SF-004"/>
+    <item id="HIL-PENDING-002" test_id="TC-HWSW-PERF-001" priority="Critical" estimated_days="2"
+          requirement="REQ-PERF-001,REQ-PERF-008" safety_function="ALL"/>
+    <item id="HIL-PENDING-003" test_id="TC-HWSW-PERF-004" priority="Critical" estimated_days="1"
+          requirement="REQ-PERF-003,REQ-INT-003" safety_function="SF-003"/>
+    <item id="HIL-PENDING-004" test_id="TC-HWSW-FAULT-002" priority="Critical" estimated_days="1"
+          requirement="REQ-SAFE-018" safety_function="SF-004"/>
+    <total_estimated_days value="5"/>
+  </hil_pending_summary>
+
+</testsuites>
