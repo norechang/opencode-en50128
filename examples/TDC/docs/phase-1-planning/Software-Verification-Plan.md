@@ -13,8 +13,8 @@
 | Field | Value |
 |-------|-------|
 | **Document ID** | DOC-SVP-2026-001 |
-| **Version** | 1.0 |
-| **Date** | 2026-04-02 |
+| **Version** | 1.1 |
+| **Date** | 2026-04-04 |
 | **Project** | TDC (Train Door Control System) |
 | **SIL Level** | SIL 3 |
 | **Author** | Verifier (VER) |
@@ -27,7 +27,8 @@
 | Version | Date | Author | Changes | Approved By |
 |---------|------|--------|---------|-------------|
 | 0.1 | 2026-04-02 | VER | Initial SVP draft for SIL 3 TDC project | - |
-| 1.0 | 2026-04-02 | VER | Baseline version for Phase 1 gate | [Pending VAL] |
+| 1.0 | 2026-04-02 | VER | Baseline version for Phase 1 gate | VMGR |
+| 1.1 | 2026-04-04 | VER/CM | CCR-SVP-001 — Corrected Table A.21 SIL 3 recommendation levels (Statement=M, Branch=M); removed fabricated MC/DC row (not in EN 50128:2011) | CCB (PM) |
 
 ---
 
@@ -356,10 +357,9 @@ The following verification techniques are applied per EN 50128:2011 Table A.5 fo
 
 | # | Coverage Type | Table Ref | SIL 3 | TDC Target | Tool | Measured In Phase |
 |---|--------------|-----------|-------|-----------|------|------------------|
-| **1** | Statement Coverage | A.21 | HR | **100%** | gcov/lcov | 5 (unit tests) |
-| **2** | Branch Coverage | A.21 | HR | **100%** | gcov/lcov | 5 (unit tests) |
+| **1** | Statement Coverage | A.21 | M | **100%** | gcov/lcov | 5 (unit tests) |
+| **2** | Branch Coverage | A.21 | M | **100%** | gcov/lcov | 5 (unit tests) |
 | **3** | Compound Condition Coverage | A.21 | HR | **100%** | gcov/lcov (manual verification) | 5 (safety-critical modules) |
-| **4** | MC/DC Coverage | A.21 | R | **N/A** | — | Not adopted for SIL 3 (HR threshold met by compound condition) |
 
 **EN 50128 Note**: EN 50128 does not specify a mandatory percentage threshold for coverage; the requirement is to apply the technique at the stated level. **Full coverage (100%)** is a TDC project-defined acceptance criterion documented in this SVP.
 
