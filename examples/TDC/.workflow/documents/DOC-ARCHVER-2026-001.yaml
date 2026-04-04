@@ -1,0 +1,44 @@
+approvals:
+- approved: true
+  comment: VER report format-gate PASS. First-submission PASS. Accepted.
+  document_id: DOC-ARCHVER-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: dd43fad7212f9af6
+  timestamp: '2026-04-04T09:00:00.000000'
+- approved: true
+  comment: ARCHVER APPROVED WITH COMMENTS. Track B Phase 3 complete. Phase 3->4 authorized.
+  document_id: DOC-ARCHVER-2026-001
+  reviewer_name: Independent V&V Manager
+  reviewer_role: vmgr
+  signature: 291afb53fb395d72
+  timestamp: '2026-04-04T14:50:00.000000'
+- approved: true
+  comment: 'Phase 3 gate: ARCHVER VMGR-approved. COD gate stamp. Phase 4 authorized.'
+  document_id: DOC-ARCHVER-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: ea7ef684ebbd1eb6
+  timestamp: '2026-04-04T15:50:00.000000'
+approved_date: '2026-04-04T15:50:00.000000'
+author_name: Verifier
+author_role: ver
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-04T08:00:00.000000'
+document_id: DOC-ARCHVER-2026-001
+document_path: examples/TDC/docs/phase-3-architecture-design/reports/Software-Architecture-Design-Verification-Report.md
+document_type: Software Architecture & Design Verification Report
+modified_date: '2026-04-04T08:00:00.000000'
+phase: '3'
+rejections: []
+required_roles:
+- author
+- qua
+- ver
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

@@ -1,0 +1,52 @@
+approvals:
+- approved: true
+  comment: Format-gate PASS. First-submission PASS. Accepted.
+  document_id: DOC-SDS-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: ecb94dc607454ac6
+  timestamp: '2026-04-04T08:10:00.000000'
+- approved: true
+  comment: SDS verified. 30 modules, MISRA C:2012 compliance confirmed. OBS-002 advisory
+    only.
+  document_id: DOC-SDS-2026-001
+  reviewer_name: Verifier
+  reviewer_role: ver
+  signature: c2ce2083c0dca96e
+  timestamp: '2026-04-04T10:10:00.000000'
+- approved: true
+  comment: SDS APPROVED WITH COMMENTS. OBS-002 non-blocking.
+  document_id: DOC-SDS-2026-001
+  reviewer_name: Independent V&V Manager
+  reviewer_role: vmgr
+  signature: 61bea4e26aeca3ad
+  timestamp: '2026-04-04T14:10:00.000000'
+- approved: true
+  comment: 'Phase 3 gate: SDS VMGR-approved. COD gate stamp.'
+  document_id: DOC-SDS-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: 12b5051395c0917f
+  timestamp: '2026-04-04T15:10:00.000000'
+approved_date: '2026-04-04T15:10:00.000000'
+author_name: Designer
+author_role: des
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-04T07:05:00.000000'
+document_id: DOC-SDS-2026-001
+document_path: examples/TDC/docs/phase-3-architecture-design/Software-Design-Specification.md
+document_type: Software Design Specification
+modified_date: '2026-04-04T07:05:00.000000'
+phase: '3'
+rejections: []
+required_roles:
+- author
+- qua
+- ver
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

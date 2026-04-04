@@ -1,0 +1,52 @@
+approvals:
+- approved: true
+  comment: Format-gate PASS. First-submission PASS. Accepted.
+  document_id: DOC-HWSWINTTEST-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: 064f4048cecd6f8a
+  timestamp: '2026-04-04T08:40:00.000000'
+- approved: true
+  comment: HW/SW Integration Test Spec verified. 26 test cases covering SPI, HAL interfaces.
+  document_id: DOC-HWSWINTTEST-2026-001
+  reviewer_name: Verifier
+  reviewer_role: ver
+  signature: 555138d17ffc31bd
+  timestamp: '2026-04-04T10:40:00.000000'
+- approved: true
+  comment: HWSWINTTEST APPROVED. HW/SW integration test coverage adequate for SIL
+    3.
+  document_id: DOC-HWSWINTTEST-2026-001
+  reviewer_name: Independent V&V Manager
+  reviewer_role: vmgr
+  signature: f2b9086a33999c0b
+  timestamp: '2026-04-04T14:40:00.000000'
+- approved: true
+  comment: 'Phase 3 gate: HWSWINTTEST VMGR-approved. COD gate stamp.'
+  document_id: DOC-HWSWINTTEST-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: bdbb8ba278293a4a
+  timestamp: '2026-04-04T15:40:00.000000'
+approved_date: '2026-04-04T15:40:00.000000'
+author_name: Integrator
+author_role: int
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-04T07:20:00.000000'
+document_id: DOC-HWSWINTTEST-2026-001
+document_path: examples/TDC/docs/phase-3-architecture-design/Software-Hardware-Integration-Test-Specification.md
+document_type: Software/Hardware Integration Test Specification
+modified_date: '2026-04-04T07:20:00.000000'
+phase: '3'
+rejections: []
+required_roles:
+- author
+- qua
+- ver
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

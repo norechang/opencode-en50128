@@ -1,0 +1,43 @@
+approvals:
+- approved: true
+  comment: 'Format-gate PASS: SCMP template checks passed (iteration 2). Accepted.'
+  document_id: DOC-SCMP-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: 49e03d2f00db87a0
+  timestamp: '2026-04-02T10:10:00.000000'
+- approved: true
+  comment: SCMP reviewed and approved. CM procedures consistent with SVP/SVaP.
+  document_id: DOC-SCMP-2026-001
+  reviewer_name: Independent V&V Manager
+  reviewer_role: vmgr
+  signature: 62e2c34749caac89
+  timestamp: '2026-04-02T11:10:00.000000'
+- approved: true
+  comment: 'Phase 1 gate: SCMP approved by VMGR. COD gate stamp recorded.'
+  document_id: DOC-SCMP-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: b42e649f3eb78083
+  timestamp: '2026-04-02T12:10:00.000000'
+approved_date: '2026-04-02T12:10:00.000000'
+author_name: Configuration Manager
+author_role: cm
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-02T09:05:00.000000'
+document_id: DOC-SCMP-2026-001
+document_path: examples/TDC/docs/phase-1-planning/Software-Configuration-Management-Plan.md
+document_type: Software Configuration Management Plan
+modified_date: '2026-04-02T09:05:00.000000'
+phase: '1'
+rejections: []
+required_roles:
+- author
+- qua
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

@@ -1,0 +1,41 @@
+approvals:
+- approved: true
+  comment: "Format-gate PASS (iteration 1): All GF-001/GF-002/GF-003/GF-004 checks\
+    \ passed. Document structure excellent; all EN 50128 \xA77.5.4.10(a-e) verification\
+    \ activities documented; all required sections present per sourcecodever-sections.yaml.\
+    \ Zero format defects found. VER report ready for VAL 2nd check and VMGR technical\
+    \ review."
+  document_id: DOC-SOURCECODEVER-2026-001
+  reviewer_name: QUA Agent
+  reviewer_role: qua
+  signature: e8111d12968fd554
+  timestamp: '2026-04-04T16:50:14.931407'
+approved_date: '2026-04-04T17:06:49.586121'
+author_name: VER Agent
+author_role: ver
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-04T16:47:50.168300'
+document_id: DOC-SOURCECODEVER-2026-001
+document_path: examples/TDC/docs/phase-5-implementation-testing/reports/Software-Source-Code-Verification-Report.md
+document_type: Unknown Document Type
+modified_date: '2026-04-04T16:47:50.168300'
+phase: ''
+rejections: []
+required_roles:
+- author
+- peer
+- qua
+- safety_mgr
+- ver
+- val
+- assessor
+- pm
+sil_level: 3
+state: rework_required
+version: '1.0'
+notes: 'INVALIDATED by NCR-P5-002 (VER failed independent verification of coverage
+  waiver — did not check stub inventory; accepted unverified TST assertion). Rework
+  required: VER to re-perform source code verification per EN 50128 §7.5.4.10(c) after
+  TST submits corrected Item 20.'

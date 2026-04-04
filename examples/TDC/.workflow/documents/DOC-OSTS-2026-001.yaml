@@ -1,0 +1,51 @@
+approvals:
+- approved: true
+  comment: Format-gate PASS. First-submission PASS. Accepted.
+  document_id: DOC-OSTS-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: d2fdf41415bd0b52
+  timestamp: '2026-04-02T16:10:00.000000'
+- approved: true
+  comment: OSTS verified. 267 test cases cover 100% of SRS requirements.
+  document_id: DOC-OSTS-2026-001
+  reviewer_name: Verifier
+  reviewer_role: ver
+  signature: 4ef3dac8f560599c
+  timestamp: '2026-04-02T18:10:00.000000'
+- approved: true
+  comment: OSTS approved. Test coverage adequate for SIL 3.
+  document_id: DOC-OSTS-2026-001
+  reviewer_name: Independent V&V Manager
+  reviewer_role: vmgr
+  signature: 3d2e9077ddf23a21
+  timestamp: '2026-04-02T20:10:00.000000'
+- approved: true
+  comment: 'Phase 2 gate: OSTS VMGR-approved. COD gate stamp.'
+  document_id: DOC-OSTS-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: e48eb5b570b947f5
+  timestamp: '2026-04-02T21:10:00.000000'
+approved_date: '2026-04-02T21:10:00.000000'
+author_name: Tester
+author_role: tst
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-02T15:40:00.000000'
+document_id: DOC-OSTS-2026-001
+document_path: examples/TDC/docs/phase-2-requirements/Overall-Software-Test-Specification.md
+document_type: Software Test Specification
+modified_date: '2026-04-02T15:40:00.000000'
+phase: '2'
+rejections: []
+required_roles:
+- author
+- qua
+- ver
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

@@ -1,0 +1,51 @@
+approvals:
+- approved: true
+  comment: Format-gate PASS. First-submission PASS. Accepted.
+  document_id: DOC-SWINTTEST-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: 99752787067ec101
+  timestamp: '2026-04-04T08:30:00.000000'
+- approved: true
+  comment: SW Integration Test Spec verified. 33 test cases, 100% interface coverage.
+  document_id: DOC-SWINTTEST-2026-001
+  reviewer_name: Verifier
+  reviewer_role: ver
+  signature: d376ae54d254ec45
+  timestamp: '2026-04-04T10:30:00.000000'
+- approved: true
+  comment: SWINTTEST APPROVED. Integration test coverage adequate.
+  document_id: DOC-SWINTTEST-2026-001
+  reviewer_name: Independent V&V Manager
+  reviewer_role: vmgr
+  signature: c19042db22c623bb
+  timestamp: '2026-04-04T14:30:00.000000'
+- approved: true
+  comment: 'Phase 3 gate: SWINTTEST VMGR-approved. COD gate stamp.'
+  document_id: DOC-SWINTTEST-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: def3f2c906b8dbf5
+  timestamp: '2026-04-04T15:30:00.000000'
+approved_date: '2026-04-04T15:30:00.000000'
+author_name: Integrator
+author_role: int
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-04T07:15:00.000000'
+document_id: DOC-SWINTTEST-2026-001
+document_path: examples/TDC/docs/phase-3-architecture-design/Software-Integration-Test-Specification.md
+document_type: Software Integration Test Specification
+modified_date: '2026-04-04T07:15:00.000000'
+phase: '3'
+rejections: []
+required_roles:
+- author
+- qua
+- ver
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

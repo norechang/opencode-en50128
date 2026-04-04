@@ -1,35 +1,51 @@
 approvals:
 - approved: true
-  comment: 'Format-gate PASS: all GF-001/GF-002/GF-003 and sections checks passed.
-    Zero defects. First-submission PASS. Iteration 1/1. Approved for VAL 2nd check
-    and VMGR technical review per deviation D8.'
+  comment: 'Format-gate PASS: SVP template checks passed. First-submission PASS.'
   document_id: DOC-SVP-2026-001
   reviewer_name: Quality Assurance Engineer
   reviewer_role: qua
-  signature: 62564bde404b27e4
-  timestamp: '2026-04-02T15:08:47.332806'
-approved_date: ''
+  signature: db6a0dc324afea0d
+  timestamp: '2026-04-02T10:20:00.000000'
+- approved: true
+  comment: SVP reviewed and approved. Verification scope and methods adequate for
+    SIL 3.
+  document_id: DOC-SVP-2026-001
+  reviewer_name: Independent V&V Manager
+  reviewer_role: vmgr
+  signature: 1953ea36709d4550
+  timestamp: '2026-04-02T11:20:00.000000'
+- approved: true
+  comment: 'Phase 1 gate: SVP approved by VMGR. COD gate stamp recorded.'
+  document_id: DOC-SVP-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: 759f25ab6036044e
+  timestamp: '2026-04-02T12:20:00.000000'
+approved_date: '2026-04-02T12:20:00.000000'
 author_name: Verifier
 author_role: ver
 baseline_date: ''
 baseline_tag: ''
-change_requests: []
-created_date: '2026-04-02T15:08:43.636629'
+change_requests:
+- ccr_id: CCR-SVP-001
+  date: '2026-04-04'
+  description: 'Corrected Section 3.3 Table A.21 citations: Statement Coverage and
+    Branch Coverage changed from HR to M (mandatory for SIL 3); removed fabricated
+    MC/DC row (not in EN 50128:2011)'
+  impact: Editorial correction to normative standard citations; no functional impact
+  status: APPROVED
+created_date: '2026-04-02T09:10:00.000000'
 document_id: DOC-SVP-2026-001
 document_path: examples/TDC/docs/phase-1-planning/Software-Verification-Plan.md
 document_type: Software Verification Plan
-modified_date: '2026-04-02T15:08:43.636629'
-phase: ''
+modified_date: '2026-04-04T14:30:00.000000'
+phase: '1'
 rejections: []
 required_roles:
 - author
-- peer
 - qua
-- safety_mgr
-- ver
-- val
-- assessor
-- pm
+- vmgr
+- cod
 sil_level: 3
-state: review
-version: '1.0'
+state: approved
+version: '1.1'

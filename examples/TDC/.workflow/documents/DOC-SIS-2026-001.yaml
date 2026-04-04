@@ -1,0 +1,51 @@
+approvals:
+- approved: true
+  comment: Format-gate PASS. First-submission PASS. Accepted.
+  document_id: DOC-SIS-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: d60a0eb2927a466a
+  timestamp: '2026-04-04T08:20:00.000000'
+- approved: true
+  comment: SIS verified. 33 interfaces (20 internal, 13 external) fully specified.
+  document_id: DOC-SIS-2026-001
+  reviewer_name: Verifier
+  reviewer_role: ver
+  signature: fac9a0b00898df79
+  timestamp: '2026-04-04T10:20:00.000000'
+- approved: true
+  comment: SIS APPROVED. Interface specifications adequate for integration testing.
+  document_id: DOC-SIS-2026-001
+  reviewer_name: Independent V&V Manager
+  reviewer_role: vmgr
+  signature: da256b442cf2b525
+  timestamp: '2026-04-04T14:20:00.000000'
+- approved: true
+  comment: 'Phase 3 gate: SIS VMGR-approved. COD gate stamp.'
+  document_id: DOC-SIS-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: 19356a9a85da143a
+  timestamp: '2026-04-04T15:20:00.000000'
+approved_date: '2026-04-04T15:20:00.000000'
+author_name: Designer
+author_role: des
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-04T07:10:00.000000'
+document_id: DOC-SIS-2026-001
+document_path: examples/TDC/docs/phase-3-architecture-design/Software-Interface-Specifications.md
+document_type: Software Interface Specifications
+modified_date: '2026-04-04T07:10:00.000000'
+phase: '3'
+rejections: []
+required_roles:
+- author
+- qua
+- ver
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

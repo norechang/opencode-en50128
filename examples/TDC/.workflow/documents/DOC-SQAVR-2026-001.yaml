@@ -1,0 +1,44 @@
+approvals:
+- approved: true
+  comment: VER report format-gate PASS (iteration 2). Accepted.
+  document_id: DOC-SQAVR-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: 3e76732649c58fcb
+  timestamp: '2026-04-02T13:00:00.000000'
+- approved: true
+  comment: SQAVR reviewed and approved. 3 minor defects non-blocking. Track B Phase
+    1 complete.
+  document_id: DOC-SQAVR-2026-001
+  reviewer_name: Independent V&V Manager
+  reviewer_role: vmgr
+  signature: 779b6b0387fa4c5e
+  timestamp: '2026-04-02T14:00:00.000000'
+- approved: true
+  comment: 'Phase 1 gate: Track B (SQAVR) approved by VMGR. Gate PASSED. Phase 2 authorized.'
+  document_id: DOC-SQAVR-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: 3cf9a1882f12bcaf
+  timestamp: '2026-04-02T15:00:00.000000'
+approved_date: '2026-04-02T15:00:00.000000'
+author_name: Verifier
+author_role: ver
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-02T12:40:00.000000'
+document_id: DOC-SQAVR-2026-001
+document_path: examples/TDC/docs/phase-1-planning/reports/Software-Quality-Assurance-Verification-Report.md
+document_type: Software Quality Assurance Verification Report
+modified_date: '2026-04-02T12:40:00.000000'
+phase: '1'
+rejections: []
+required_roles:
+- author
+- qua
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

@@ -1,0 +1,31 @@
+approvals:
+- approved: true
+  comment: QUA format-gate review PASS (iteration 2). Document ID corrected from SITREP
+    to INTTESTRPT. All EN 50128 formatting requirements met. Ready for VER technical
+    review.
+  document_id: DOC-INTTESTRPT-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: 7453f12f674276df
+  timestamp: '2026-04-04T21:12:45.438338'
+approved_date: ''
+author_name: Software Integrator
+author_role: int
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-04T21:12:40.987234'
+document_id: DOC-INTTESTRPT-2026-001
+document_path: examples/TDC/docs/phase-6-integration/Software-Integration-Test-Report.md
+document_type: Unknown Document Type
+modified_date: '2026-04-04T21:12:40.987234'
+phase: '6'
+rejections: []
+required_roles:
+- val
+- qua
+- vmgr
+- cod
+sil_level: 3
+state: review
+version: '1.0'

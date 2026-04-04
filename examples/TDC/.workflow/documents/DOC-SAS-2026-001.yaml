@@ -1,0 +1,52 @@
+approvals:
+- approved: true
+  comment: Format-gate PASS (iteration 2). Accepted.
+  document_id: DOC-SAS-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: 00c7a0dc87896bc5
+  timestamp: '2026-04-04T08:00:00.000000'
+- approved: true
+  comment: SAS verified. 2oo2 dual-channel architecture consistent with SIL 3 safety
+    requirements.
+  document_id: DOC-SAS-2026-001
+  reviewer_name: Verifier
+  reviewer_role: ver
+  signature: 9f6127d716cd8f40
+  timestamp: '2026-04-04T10:00:00.000000'
+- approved: true
+  comment: SAS APPROVED WITH COMMENTS. OBS-001 non-blocking (Phase 4 pre-work).
+  document_id: DOC-SAS-2026-001
+  reviewer_name: Independent V&V Manager
+  reviewer_role: vmgr
+  signature: da2ecabb67f15b4f
+  timestamp: '2026-04-04T14:00:00.000000'
+- approved: true
+  comment: 'Phase 3 gate: SAS VMGR-approved. COD gate stamp.'
+  document_id: DOC-SAS-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: c1e47a5d536f8572
+  timestamp: '2026-04-04T15:00:00.000000'
+approved_date: '2026-04-04T15:00:00.000000'
+author_name: Designer
+author_role: des
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-04T07:00:00.000000'
+document_id: DOC-SAS-2026-001
+document_path: examples/TDC/docs/phase-3-architecture-design/Software-Architecture-Specification.md
+document_type: Software Architecture Specification
+modified_date: '2026-04-04T07:00:00.000000'
+phase: '3'
+rejections: []
+required_roles:
+- author
+- qua
+- ver
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

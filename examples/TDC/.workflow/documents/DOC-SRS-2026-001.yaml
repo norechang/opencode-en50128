@@ -1,0 +1,51 @@
+approvals:
+- approved: true
+  comment: Format-gate PASS (iteration 2). User approval obtained. Accepted.
+  document_id: DOC-SRS-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: 9bdbc740f04a451c
+  timestamp: '2026-04-02T16:00:00.000000'
+- approved: true
+  comment: SRS verification complete. 81 requirements verified. Traceability 100%.
+  document_id: DOC-SRS-2026-001
+  reviewer_name: Verifier
+  reviewer_role: ver
+  signature: 702b64f8016baa6f
+  timestamp: '2026-04-02T18:00:00.000000'
+- approved: true
+  comment: SRS approved with comments. 18 RTM gaps verified NON-BLOCKING by VER.
+  document_id: DOC-SRS-2026-001
+  reviewer_name: Independent V&V Manager
+  reviewer_role: vmgr
+  signature: c3053c0b81e024f4
+  timestamp: '2026-04-02T20:00:00.000000'
+- approved: true
+  comment: 'Phase 2 gate (2nd attempt): SRS VMGR-approved. COD gate stamp.'
+  document_id: DOC-SRS-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: 787c3e8afa37963f
+  timestamp: '2026-04-02T21:00:00.000000'
+approved_date: '2026-04-02T21:00:00.000000'
+author_name: Requirements Engineer
+author_role: req
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-02T15:30:00.000000'
+document_id: DOC-SRS-2026-001
+document_path: examples/TDC/docs/phase-2-requirements/Software-Requirements-Specification.md
+document_type: Software Requirements Specification
+modified_date: '2026-04-02T15:30:00.000000'
+phase: '2'
+rejections: []
+required_roles:
+- author
+- qua
+- ver
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

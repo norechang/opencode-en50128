@@ -1,0 +1,44 @@
+approvals:
+- approved: true
+  comment: 'Format-gate PASS: SVaP template checks passed (iteration 2). Accepted.'
+  document_id: DOC-SVAP-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: b0946259e205b6d7
+  timestamp: '2026-04-02T10:30:00.000000'
+- approved: true
+  comment: SVaP reviewed and approved. Validation scope covers all 5 SIL 3 safety
+    functions.
+  document_id: DOC-SVAP-2026-001
+  reviewer_name: Independent V&V Manager
+  reviewer_role: vmgr
+  signature: a74635ce19bde3de
+  timestamp: '2026-04-02T11:30:00.000000'
+- approved: true
+  comment: 'Phase 1 gate: SVaP approved by VMGR. COD gate stamp recorded.'
+  document_id: DOC-SVAP-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: 3d294e43f9892e11
+  timestamp: '2026-04-02T12:30:00.000000'
+approved_date: '2026-04-02T12:30:00.000000'
+author_name: Validator
+author_role: val
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-02T09:15:00.000000'
+document_id: DOC-SVAP-2026-001
+document_path: examples/TDC/docs/phase-1-planning/Software-Validation-Plan.md
+document_type: Software Validation Plan
+modified_date: '2026-04-02T09:15:00.000000'
+phase: '1'
+rejections: []
+required_roles:
+- author
+- qua
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

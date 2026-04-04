@@ -1,0 +1,23 @@
+approvals: []
+approved_date: ''
+author_name: Software Tester
+author_role: tst
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-04T19:52:45.297928'
+document_id: DOC-COMPTESTRPT-2026-001
+document_path: examples/TDC/docs/phase-5-implementation-testing/Software-Component-Test-Report.md
+document_type: Unknown Document Type
+modified_date: '2026-04-04T19:52:45.297928'
+phase: '5'
+rejections: []
+required_roles:
+- author
+- qua
+- ver
+- vmgr
+- cod
+sil_level: 3
+state: review
+version: '1.0'

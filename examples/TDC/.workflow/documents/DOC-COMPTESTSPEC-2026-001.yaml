@@ -1,0 +1,53 @@
+approvals:
+- approved: true
+  comment: Format review APPROVED - first iteration, zero defects
+  document_id: DOC-COMPTESTSPEC-2026-001
+  reviewer_name: QUA Agent
+  reviewer_role: qua
+  signature: 1ed2c18b238e139a
+  timestamp: '2026-04-04T13:54:22.413857'
+- approved: true
+  comment: 'Item 16 verified as part of Track B: 106 test cases adequate, traceable,
+    complete. APPROVE.'
+  document_id: DOC-COMPTESTSPEC-2026-001
+  reviewer_name: Verifier
+  reviewer_role: ver
+  signature: 95a2391b337a0c68
+  timestamp: '2026-04-04T14:25:54.558107'
+- approved: true
+  comment: 'VMGR technical review complete: Item 16 approved for Phase 4 gate exit.'
+  document_id: DOC-COMPTESTSPEC-2026-001
+  reviewer_name: V&V Manager
+  reviewer_role: vmgr
+  signature: 3c0172f73fb7c0e6
+  timestamp: '2026-04-04T14:25:55.447304'
+- approved: true
+  comment: 'Phase 4 Track B complete: Item 16 verified by VER, VMGR APPROVED. COD
+    gate stamp.'
+  document_id: DOC-COMPTESTSPEC-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: a865befe157e4c25
+  timestamp: '2026-04-04T14:26:21.118300'
+approved_date: '2026-04-04T14:26:36.900377'
+author_name: TST Agent
+author_role: tst
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-04T13:54:21.548954'
+document_id: DOC-COMPTESTSPEC-2026-001
+document_path: examples/TDC/docs/phase-4-component-design/Software-Component-Test-Specification.md
+document_type: Software Test Specification
+modified_date: '2026-04-04T13:54:21.548954'
+phase: '4'
+rejections: []
+required_roles:
+- author
+- qua
+- ver
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

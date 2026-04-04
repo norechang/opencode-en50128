@@ -1,0 +1,53 @@
+approvals:
+- approved: true
+  comment: Format review PASSED - first iteration, zero defects
+  document_id: DOC-COMPDES-2026-001
+  reviewer_name: QUA Agent
+  reviewer_role: qua
+  signature: ceff699a21c02928
+  timestamp: '2026-04-04T13:44:01.547447'
+- approved: true
+  comment: 'Item 15 verified as part of Track B: component design complete, traceable,
+    SIL 3-compliant. APPROVE.'
+  document_id: DOC-COMPDES-2026-001
+  reviewer_name: Verifier
+  reviewer_role: ver
+  signature: 04839f1a75cd6563
+  timestamp: '2026-04-04T14:25:52.487270'
+- approved: true
+  comment: 'VMGR technical review complete: Item 15 approved for Phase 4 gate exit.'
+  document_id: DOC-COMPDES-2026-001
+  reviewer_name: V&V Manager
+  reviewer_role: vmgr
+  signature: 25c12f03c7dc44ac
+  timestamp: '2026-04-04T14:25:53.733550'
+- approved: true
+  comment: 'Phase 4 Track B complete: Item 15 verified by VER, VMGR APPROVED. COD
+    gate stamp.'
+  document_id: DOC-COMPDES-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: f5d31aa717008f94
+  timestamp: '2026-04-04T14:26:19.762951'
+approved_date: '2026-04-04T14:26:36.259419'
+author_name: DES Agent
+author_role: des
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-04T13:43:52.749682'
+document_id: DOC-COMPDES-2026-001
+document_path: examples/TDC/docs/phase-4-component-design/Software-Component-Design-Specification.md
+document_type: Unknown Document Type
+modified_date: '2026-04-04T13:43:52.749682'
+phase: '4'
+rejections: []
+required_roles:
+- author
+- qua
+- ver
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

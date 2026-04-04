@@ -1,0 +1,45 @@
+approvals:
+- approved: true
+  comment: VER report format-gate PASS (iteration 2). Accepted.
+  document_id: DOC-REQVER-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: 43a4e389bf0d1ad2
+  timestamp: '2026-04-02T19:00:00.000000'
+- approved: true
+  comment: REQVER approved with comments. Track B Phase 2 complete. Phase 3 authorized.
+  document_id: DOC-REQVER-2026-001
+  reviewer_name: Independent V&V Manager
+  reviewer_role: vmgr
+  signature: 5723fc9cad95679e
+  timestamp: '2026-04-02T20:30:00.000000'
+- approved: true
+  comment: 'Phase 2 gate (2nd attempt): Track B VMGR-approved. Gate PASSED. Phase
+    3 authorized.'
+  document_id: DOC-REQVER-2026-001
+  reviewer_name: Lifecycle Coordinator
+  reviewer_role: cod
+  signature: 7e30b4f81151ca8c
+  timestamp: '2026-04-02T21:30:00.000000'
+approved_date: '2026-04-02T21:30:00.000000'
+author_name: Verifier
+author_role: ver
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-02T17:00:00.000000'
+document_id: DOC-REQVER-2026-001
+document_path: examples/TDC/docs/phase-2-requirements/reports/Software-Requirements-Verification-Report.md
+document_type: Software Requirements Verification Report
+modified_date: '2026-04-02T17:00:00.000000'
+phase: '2'
+rejections: []
+required_roles:
+- author
+- qua
+- ver
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'

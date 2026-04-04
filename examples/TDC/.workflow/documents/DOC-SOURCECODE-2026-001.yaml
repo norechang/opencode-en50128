@@ -1,0 +1,31 @@
+approvals:
+- approved: true
+  comment: "Format compliance verified \u2014 2 iterations (4 defects resolved); all\
+    \ GF rules satisfied; package manifest complete"
+  document_id: DOC-SOURCECODE-2026-001
+  reviewer_name: Quality Assurance Engineer
+  reviewer_role: qua
+  signature: bb977ec6cd32eb27
+  timestamp: '2026-04-04T15:33:51.724703'
+approved_date: '2026-04-04T17:06:49.669685'
+author_name: Software Implementer
+author_role: imp
+baseline_date: ''
+baseline_tag: ''
+change_requests: []
+created_date: '2026-04-04T15:33:51.632926'
+document_id: DOC-SOURCECODE-2026-001
+document_path: examples/TDC/src/SOFTWARE-SOURCE-CODE-PACKAGE.md
+document_type: Unknown Document Type
+modified_date: '2026-04-04T15:33:51.632926'
+phase: '5'
+rejections: []
+required_roles:
+- author
+- qua
+- ver
+- vmgr
+- cod
+sil_level: 3
+state: approved
+version: '1.0'
