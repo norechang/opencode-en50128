@@ -33,7 +33,10 @@ known_limitations:
   - "Fault behaviour: cannot emulate hardware faults (stuck pins, ADC failures, EMI)"
   - "Physical hardware validation required before operational deployment (SIL 3-4 mandatory)"
 qualification_status:
-  status: to_be_provided
+  status: conditionally_qualified
+  doc_id: "DOC-TVR-QEMU-2026-001"
+  doc_version: "1.0"
+  doc_date: "2026-04-04"
   notes: >
     TCL varies by usage: T1 for functional/logic testing (output verified by test
     assertions); T2 for performance/timing estimates (no independent verification of
@@ -42,9 +45,17 @@ qualification_status:
     Simulation limitations MUST be documented in all test/integration reports.
     EN 50128 Section 7.6.4.9: report must disclose simulation environment and
     acknowledge limitations. Required before ISA evaluation (T2 usage only).
-  evidence_path: "deliverables/tools/QEMU-Tool-Validation-Report.md"
+    TVR produced 2026-04-04 by TST (DOC-TVR-QEMU-2026-001 v1.0). Validation test
+    suite (QVT-002..007) pending ARM cross-compilation infrastructure setup.
+    Physical hardware validation mandatory before operational deployment (SIL 3).
+  evidence_path: "examples/TDC/docs/phase-6-integration/QEMU-Tool-Validation-Report.md"
   template_path: "deliverables/tools/Tool-Validation-Report-template.md"
   supplier_evidence: >
     QEMU is an open-source, widely-used system emulator. Version 8.2.2.
     GPL v2+ licensed. Extensive industry use in embedded software development.
   validation_suite_path: "tools/tool-validation/qemu/"
+  pending_actions:
+    - "QVT-002..007 validation test execution (requires ARM cross-compilation toolchain)"
+    - "QUA review and approval"
+    - "VER review (Track B)"
+    - "CM baseline: record qemu-system-arm SHA-256 before HIL test execution"

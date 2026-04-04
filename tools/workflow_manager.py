@@ -113,9 +113,12 @@ PHASE_APPROVAL_CHAINS: Dict = {
             "chain": ["author", "qua", "vmgr", "cod"],
             "blocked_from_chain": ["pm"],   # PM blocked from SVP/SVaP chain
             "independence_forbidden": [
-                # VER must not be the same person as the document author
-                # for any planning doc they verify (EN 50128 §5.1.2.10i)
-                ("ver", "author"),
+                # NOTE: ("ver", "author") is intentionally ABSENT for Phase 1.
+                # VER is the designated author of the SVP (§5.1.2.10e); checking
+                # VER ≠ author across the phase would falsely flag SVP authorship.
+                # Independence enforcement for VER vs. development roles begins
+                # from Phase 2 onward, where VER verifies *others'* deliverables.
+                #
                 # VAL must not report to PM (EN 50128 §5.1.2.10f)
                 ("val", "pm"),
             ],
@@ -123,7 +126,9 @@ PHASE_APPROVAL_CHAINS: Dict = {
                 "SIL 3-4: COD initiates; VMGR manages VER for SVP authoring; "
                 "PM is BLOCKED from SVP/SVaP chain. "
                 "EN 50128 §5.1.2.10e (VER reports to VMGR), "
-                "§5.1.2.10f (VAL independent of PM)."
+                "§5.1.2.10f (VAL independent of PM). "
+                "VER authoring SVP is by design — no VER/author independence "
+                "constraint applies in Phase 1."
             ),
         },
     },
@@ -566,11 +571,23 @@ class GateChecker:
         required_chain: List[str],
         result: GateResult,
     ) -> None:
-        """Rule 1: all required chain roles must have approved the document."""
+        """Rule 1: all required chain roles must have approved the document.
+
+        Special case: if the document was *authored* by a V&V role (ver/val),
+        that role's chain step is considered implicitly satisfied by authorship —
+        the same person cannot approve their own document via the review mechanism.
+        """
         approved_roles = {a.reviewer_role.lower() for a in doc.approvals}
+        doc_author_role = (doc.author_role or "").lower()
+
         for required_role in required_chain:
-            # "author" is the document author role, not a separate approval step
+            # "author" sentinel is not a reviewable role
             if required_role == "author":
+                continue
+            # V&V author implicit satisfaction: if VER authored this document,
+            # the VER approval step is implicitly satisfied by authorship.
+            # Same rule for VAL-authored documents and the VAL step.
+            if required_role == doc_author_role and doc_author_role in ("ver", "val"):
                 continue
             if required_role not in approved_roles:
                 result.violations.append(GateViolation(
@@ -595,8 +612,11 @@ class GateChecker:
         Rule 2: approvals must occur in the correct order.
 
         Checks that the timestamp of role[i] is strictly before role[i+1]
-        for every consecutive pair in required_chain (excluding "author").
+        for every consecutive pair in required_chain (excluding "author" and
+        any V&V-authored implicit step — see _check_chain_roles).
         """
+        doc_author_role = (doc.author_role or "").lower()
+
         # Build role→earliest timestamp map
         role_ts: Dict[str, str] = {}
         for approval in doc.approvals:
@@ -605,8 +625,15 @@ class GateChecker:
             if role not in role_ts or ts < role_ts[role]:
                 role_ts[role] = ts
 
-        # Walk required chain (skip "author" placeholder)
-        chain_roles = [r for r in required_chain if r != "author"]
+        # Walk required chain, skipping "author" and the implicit VER/VAL step
+        def _skip(role: str) -> bool:
+            if role == "author":
+                return True
+            if role == doc_author_role and doc_author_role in ("ver", "val"):
+                return True
+            return False
+
+        chain_roles = [r for r in required_chain if not _skip(r)]
         for i in range(len(chain_roles) - 1):
             role_a = chain_roles[i]
             role_b = chain_roles[i + 1]
@@ -655,13 +682,26 @@ class GateChecker:
         # The sentinel key "author" always maps to the document author's name
         # so that independence_pairs can use "author" to mean "whoever wrote
         # this document" regardless of their actual role (req/des/imp/…).
+        #
+        # IMPORTANT: VER/VAL deliverables (e.g. Verification Reports, Validation
+        # Reports) are authored by VER/VAL by design.  Including VER-authored
+        # documents in the "author" sentinel would cause a false INDEPENDENCE
+        # violation for the ("ver","author") pair (VER is supposed to author
+        # their own reports).  Therefore the "author" sentinel is populated
+        # only from Track-A (development) documents, i.e. those whose
+        # author_role is NOT "ver" and NOT "val".
+        VNVV_AUTHOR_ROLES = {"ver", "val"}
         role_persons: Dict[str, Set[str]] = {}
 
         for doc in docs:
-            # Include author under their actual role AND under the sentinel "author"
+            # Include author under their actual role.
             if doc.author_role and doc.author_name:
                 role_persons.setdefault(doc.author_role.lower(), set()).add(doc.author_name)
-                role_persons.setdefault("author", set()).add(doc.author_name)
+
+            # Populate the "author" sentinel only for Track-A (non-VER/VAL) docs.
+            if doc.author_role and doc.author_name:
+                if doc.author_role.lower() not in VNVV_AUTHOR_ROLES:
+                    role_persons.setdefault("author", set()).add(doc.author_name)
 
             for approval in doc.approvals:
                 role = approval.reviewer_role.lower()
@@ -978,21 +1018,45 @@ class WorkflowManager:
     
     def _infer_document_type(self, document_id: str) -> str:
         """Infer document type from document ID."""
-        type_patterns = {
-            "SRS": "Software Requirements Specification",
-            "SAS": "Software Architecture Specification",
-            "SDS": "Software Design Specification",
-            "STS": "Software Test Specification",
-            "SVP": "Software Verification Plan",
-            "SVaP": "Software Validation Plan",
-            "SQAP": "Software Quality Assurance Plan",
-            "SCMP": "Software Configuration Management Plan",
-        }
-        
-        for key, value in type_patterns.items():
-            if key in document_id.upper():
+        # Longer/more-specific patterns must come before shorter ones to avoid
+        # false matches (e.g. "SVAP" before "SRS"; "ARCHVER" before "VER").
+        type_patterns = [
+            ("SQAP",            "Software Quality Assurance Plan"),
+            ("SCMP",            "Software Configuration Management Plan"),
+            ("SVAP",            "Software Validation Plan"),
+            ("SVaP",            "Software Validation Plan"),
+            ("SVP",             "Software Verification Plan"),
+            ("ARCHVER",         "Software Architecture & Design Verification Report"),
+            ("SRS",             "Software Requirements Specification"),
+            ("SAS",             "Software Architecture Specification"),
+            ("SDS",             "Software Design Specification"),
+            ("SIS",             "Software Interface Specifications"),
+            ("SWINTTEST",       "Software Integration Test Specification"),
+            ("HWSWINTTEST",     "Software/Hardware Integration Test Specification"),
+            ("STS",             "Software Test Specification"),
+            ("HAZLOG",          "Hazard Log"),
+            ("FMEA",            "FMEA Report"),
+            ("FTA",             "FTA Report"),
+            ("SYSREQ",          "System Requirements Specification"),
+            ("SYSARCH",         "System Architecture Specification"),
+            ("SYSVAL",          "System Validation Report"),
+            ("VALREP",          "Software Validation Report"),
+            ("VERREP",          "Software Verification Report"),
+            ("INTTESTSPEC",     "Integration Test Specification"),
+            ("INTTESTRES",      "Integration Test Results"),
+            ("UNITTESTSPEC",    "Unit Test Specification"),
+            ("UNITTESTRES",     "Unit Test Results"),
+            ("RELEASENOTE",     "Release Note"),
+            ("DEPLOYPLAN",      "Deployment Plan"),
+            ("MAINTREC",        "Maintenance Record"),
+            ("CHANGEREC",       "Change Record"),
+        ]
+
+        doc_upper = document_id.upper()
+        for key, value in type_patterns:
+            if key.upper() in doc_upper:
                 return value
-        
+
         return "Unknown Document Type"
     
     # ========================================================================

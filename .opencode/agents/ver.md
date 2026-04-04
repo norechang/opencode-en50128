@@ -70,6 +70,15 @@ reference, and report templates are in `en50128-verification`. Load it first.
    content of the Software Assessment Report or Assessment Plan.
 7. **Document location rule** — before writing any Verification Report, invoke CM `query-location`
    via the `task` tool to obtain the canonical path. Never hard-code file paths.
+8. **Coverage gap root-cause rule** — when reviewing item 20 (Component Test Report) or item 19
+   (Source Code Verification Report) for a coverage gap, VER MUST NOT accept "hardware dependency"
+   or "not testable on host" as a standalone justification. VER SHALL first check whether the
+   project's stub directory (`tests/stubs/` or equivalent) contains stubs for the uncovered
+   module's dependencies. If stubs exist: the gap is test inadequacy (reject; raise T002 finding).
+   Only document a hardware-dependency justification when no stub or high-fidelity simulation
+   exists AND the uncovered path directly invokes hardware registers or platform calls with no
+   software substitute. Each justified gap must cite the specific lines/branches and the
+   missing stub or simulation capability.
 
 ## Reference Documents
 

@@ -207,7 +207,103 @@ that a package manifest / index section exists. QUA does not inspect code conten
 
 ---
 
-## 6. SQAP Authorship (Capability 2)
+## 6. Coverage Waiver Validation (Component Test Reports — Item 20, SIL 2-4)
+
+When reviewing a Component Test Report (Annex C item 20) that contains a coverage gap or
+waiver, QUA SHALL verify the following criteria beyond standard format checks. This is a
+**mandatory content check** for coverage waivers — not just format verification.
+
+**Trigger**: Any Component Test Report stating coverage < 100% OR containing a "waiver"
+section OR listing "unreachable code" OR mentioning "hardware-dependent paths".
+
+**Check 1 — Stub inventory evidence**
+
+The report MUST identify which stub files were used in the test build (e.g., `tests/stubs/*.c`).
+
+- If the module under test has hardware dependencies, stubs MUST exist and MUST have been
+  included in the build command
+- A bare claim of "hardware-dependent paths" is NOT acceptable if `tests/stubs/` already
+  contains stubs for those dependencies
+- QUA SHALL check for the existence of stub files (listed in the report or visible in the
+  repository) before accepting the waiver
+- **FAIL criterion**: Report claims "hardware-dependent untested code" but stubs exist and
+  were not used in the test build
+
+**Check 2 — Gap classification**
+
+Each uncovered code path MUST be classified as one of:
+
+- **(a) Genuinely unreachable code** — defensive error handlers for architecturally impossible
+  states, linker-generated symbols
+- **(b) Hardware path** — no available stub AND no simulation environment exists (must be
+  documented)
+- **(c) Test inadequacy** — test cases simply not written
+
+Classification (c) is **NEVER** an acceptable waiver justification. QUA SHALL return the
+document if any gap is implicitly or explicitly classified (c).
+
+**FAIL criterion**: Gap is attributed to "not yet implemented tests", "insufficient test cases",
+or similar wording that indicates test inadequacy rather than genuine unreachability or hardware
+limitation.
+
+**Check 3 — Table A.21 Req 4 compensating measure (EN 50128:2011)**
+
+For any gap classified as (a) or (b), the report MUST cite a **Table A.19 static analysis
+technique** (e.g., control flow analysis, data flow analysis) applied as a compensating measure
+demonstrating correctness.
+
+- "Will be verified in Phase 6 HIL testing" does NOT satisfy Table A.21 Req 4 and QUA SHALL
+  NOT accept it as a compensating measure
+- The report must reference an actual static analysis tool run (e.g., `cppcheck`, `Coverity`,
+  `PC-lint`) and the specific finding or report ID confirming the path's properties
+
+**FAIL criterion**: Waiver lacks a Table A.19 technique citation OR defers validation to a
+future phase without current static analysis evidence.
+
+**Check 4 — Compound condition coverage (SIL 3-4)**
+
+For SIL 3-4 projects, the report MUST include compound condition coverage results for
+safety-critical modules.
+
+- A report that omits compound condition coverage entirely (not measured, not claimed) SHALL
+  be returned unless a formal deviation from the SVP coverage targets has been approved
+- If compound condition coverage is waived, the waiver must cite the approved deviation number
+  and the compensating measure applied (typically data flow analysis per Table A.21 option)
+
+**FAIL criterion**: SIL 3-4 report with no compound condition coverage data AND no approved
+deviation cited.
+
+**Check 5 — Minimum coverage combination (Table A.21 Req 2, SIL 3-4)**
+
+At SIL 3-4 component level, the test report must demonstrate coverage using one of:
+
+- **Branch + Compound Condition** (Table A.21 items 2 AND 3)
+- **Branch + Data Flow** (Table A.21 items 2 AND 4)
+- **Path coverage** (Table A.21 item 5)
+
+Statement + Branch alone (items 1+2) does NOT satisfy the SIL 3 minimum combination per
+Table A.21 Req 2. QUA SHALL return the document with a **MAJOR finding** if this is not met.
+
+**FAIL criterion**: SIL 3-4 report presents only statement and branch coverage without compound
+condition, data flow, or path coverage.
+
+---
+
+**Output when coverage waiver validation fails**:
+
+QUA shall write a QUA Review Report with:
+- Overall result: **FAIL**
+- Defect list entry for each failed check (Check 1–5)
+- Severity: **MAJOR** (coverage waiver defects block gate passage)
+- Disposition: returned to TST (test author) with requirement to fix defects and resubmit
+
+**Escalation**: If a Component Test Report fails coverage waiver validation on the second
+submission (1-Pass Rule applies to test reports at SIL 3-4), QUA raises NCR
+severity=MAJOR and escalates to PM → VMGR per iteration limit policy (Section 3).
+
+---
+
+## 7. SQAP Authorship (Capability 2)
 
 Per §6.5.4.3 and deviation D8 (`DELIVERABLES.md`):
 
@@ -243,7 +339,7 @@ M = Mandatory, HR = Highly Recommended, R = Recommended, — = No recommendation
 
 ---
 
-## 7. Process Audit (Capability 3)
+## 8. Process Audit (Capability 3)
 
 QUA audits that evidence **exists** — QUA does not re-execute technical checks.
 
@@ -266,7 +362,7 @@ QUA audits that evidence **exists** — QUA does not re-execute technical checks
 
 ---
 
-## 8. Non-Conformance Management (Capability 4)
+## 9. Non-Conformance Management (Capability 4)
 
 **NCR fields**:
 - NCR ID: `NCR-[YYYY]-[NNN]`
@@ -285,7 +381,7 @@ open CRITICAL NCRs. PM must resolve MAJOR/MINOR before gate; waiver requires COD
 
 ---
 
-## 9. Metrics Report (Capability 5)
+## 10. Metrics Report (Capability 5)
 
 Collected per SQAP. Mandatory at SIL 3–4 (Table A.9 T7/T8).
 
@@ -301,7 +397,7 @@ Produced at each phase gate; archived under CM control.
 
 ---
 
-## 10. QUA Review Report Output
+## 11. QUA Review Report Output
 
 **Document ID**: `QUA-REVIEW-[YYYY]-[NNN]`  
 **Template**: `[PROJECT_ROOT] deliverables/quality/QA-Review-Report-template.md`  
@@ -320,7 +416,7 @@ The review report records:
 
 ---
 
-## 11. Tool Integration
+## 12. Tool Integration
 
 QUA uses `workspace.py wf` commands from `activities/workflow.yaml`:
 
@@ -348,6 +444,6 @@ python3 tools/workspace.py wf review <DOCUMENT_ID> \
 ```
 
 NCRs raised by QUA are written as NCR records in the QUA Review Report and reported to
-PM. NCR format and escalation rules are defined in Section 8 of this skill.
+PM. NCR format and escalation rules are defined in Section 9 of this skill.
 
 Reference: `en50128-lifecycle-tool-integration` skill → workspace.py command reference.

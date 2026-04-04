@@ -110,6 +110,9 @@ phase:
       - "No open defects classified as critical"
       - "Complexity limits verified"
       - "Defensive programming patterns applied correctly"
+      - "Coverage gaps: for each module below target, VER confirmed stub inventory was checked before accepting any hardware-dependency justification (SIL 2+)"
+      - "Coverage gaps: no gap justified as hardware dependency where project stubs already exist for that module (SIL 2+)"
+      - "Coverage gaps: each justification lists specific uncoverable lines/branches and reason no stub or simulation can exercise them (SIL 2+)"
 
   # ── Track B: Validation (2nd Check only — no VAL report in Phase 5) ───────
   validation:
@@ -175,3 +178,5 @@ phase:
       - "Static analysis clean — no unresolved critical findings (SIL 2+)"
       - "Code traceable to component design (bidirectional)"
       - "Zero critical open defects"
+      - "All coverage gaps individually justified with stub-inventory check evidence (SIL 2+)"
+      - "No coverage gap accepted on blanket hardware-dependency claim where project stubs exist for the module (SIL 2+)"

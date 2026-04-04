@@ -212,14 +212,64 @@ For Source Code Verification (item 19):
 
 | # | Coverage | SIL 0 | SIL 1 | SIL 2 | SIL 3 | SIL 4 |
 |---|----------|-------|-------|-------|-------|-------|
-| 1 | Statement coverage | R | HR | HR | HR | HR |
-| 2 | Branch coverage | — | R | HR | HR | HR |
-| 3 | Compound condition coverage | — | — | R | HR | HR |
-| 4 | MC/DC coverage | — | — | — | R | HR |
+| 1 | **Statement coverage** | R | HR | HR | **M** | **M** |
+| 2 | **Branch coverage** | — | R | **M** | **M** | **M** |
+| 3 | **Compound Condition coverage** | — | — | R | HR | HR |
+| 4 | Data Flow coverage | — | — | R | HR | HR |
+| 5 | Path coverage | — | — | — | R | R |
 
-**Note**: EN 50128 does not specify a mandatory percentage threshold for coverage;
-the requirement is to apply the technique at the stated level. Full coverage (100%) is
-a project-defined acceptance criterion documented in the SVP.
+**Key normative facts**:
+- No percentage thresholds exist in EN 50128:2011 — Table A.21 Req.1 requires a
+  quantified measure to be defined per project in the SVP/SQAP. Write the project
+  target in the specification; do not claim a standard-mandated "100%".
+- "Compound Condition" (item 3) is the EN 50128 term. **Never use "MC/DC"** — that
+  term does not appear in EN 50128:2011. MC/DC is an aviation standard (DO-178C) term.
+- Statement coverage is **M** at SIL 3–4; Branch coverage is **M** at SIL 2–4.
+- A coverage gap CANNOT be waived solely on a claim of "hardware dependency". VER
+  MUST first verify whether stubs or a simulation environment exist that would allow
+  the path to be exercised. Only paths that are genuinely unreachable in any test
+  environment (e.g. defensive error handlers for impossible states, linker-generated
+  symbols) are acceptable gap justifications.
+- **Table A.21 Req 2 — Minimum Coverage Combination for SIL 3/4**: For component-level
+  testing at SIL 3/4, coverage shall be achieved using one of three valid combinations:
+  **(items 2 AND 3)** Branch coverage AND Compound Condition coverage, OR **(items 2 AND 4)**
+  Branch coverage AND Data Flow coverage, OR **(item 5)** Path coverage. Branch + Statement
+  (items 1+2) is NOT sufficient at SIL 3. VER MUST verify the test report demonstrates at
+  least one of these three minimum combinations.
+- **Table A.21 Req 4 — Static Analysis for Genuinely Untestable Code**: EN 50128:2011
+  Table A.21 Requirement 4 states: "Any code which it is not practicable to test shall be
+  demonstrated to be correct using a suitable technique, e.g. static analysis from Table A.19."
+  This means: if code cannot be exercised in any test environment (including with stubs),
+  VER MUST verify that a Table A.19 static analysis technique (control flow analysis, data
+  flow analysis, etc.) was applied to that code as a compensating measure. Deferral to
+  Phase 6 HIL integration testing is NOT an acceptable compensating measure under Table A.21
+  Req 4.
+
+#### VER Mandatory Check — Table A.21 Coverage Combination Verification
+
+At SIL 3/4 component-level testing (Phase 5):
+
+1. **Coverage Combination Verification (Table A.21 Req 2)**:
+   - VER SHALL verify the Component Test Report demonstrates one of the three valid minimum
+     combinations:
+     - **(2+3)**: Branch coverage AND Compound Condition coverage
+     - **(2+4)**: Branch coverage AND Data Flow coverage
+     - **(5)**: Path coverage
+   - A report demonstrating only items 1+2 (Statement + Branch) does NOT satisfy Table A.21
+     Req 2 at SIL 3/4.
+   - **Return the document with MAJOR defect** if the minimum combination is not met.
+
+2. **Coverage Gap Compensating Measure (Table A.21 Req 4)**:
+   - At SIL 3/4, for any coverage gap claimed as "not practicable to test", VER SHALL verify
+     that a Table A.19 static analysis technique is documented as a compensating measure.
+   - Acceptable Table A.19 techniques include: Boundary Value Analysis (item 1), Control Flow
+     Analysis (item 2), Data Flow Analysis (item 3), or Equivalence Classes/Input Partition
+     (item 5).
+   - No compensating static analysis documented → **MAJOR defect**.
+   - "Will be covered in Phase 6 HIL integration testing" is NOT an acceptable compensating
+     measure per Table A.21 Req 4.
+   - Deferral to Phase 6 alone does NOT satisfy the normative requirement for static analysis
+     of genuinely untestable code.
 
 ---
 

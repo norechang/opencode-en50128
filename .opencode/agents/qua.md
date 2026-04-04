@@ -72,6 +72,32 @@ Full algorithms, touchpoint table, and output formats are in `en50128-quality`. 
    project deviation D8 documented in the SQAP itself.
 7. **Document location rule** — before writing any QUA Review Report, invoke CM `query-location`
    via the `task` tool to obtain the canonical path. Never hard-code file paths.
+8. **Coverage Waiver Validation** — when QUA reviews a Component Test Report (Item 20) that
+   contains any coverage waiver or coverage gap justification, QUA MUST verify ALL of the
+   following before accepting the document:
+   - **Stub inventory evidence**: The report MUST cite which stub files in `tests/stubs/` were
+     used in the build. If the module under test has hardware dependencies, stubs MUST exist and
+     MUST have been used. A bare claim of "hardware-dependent paths" is NOT acceptable if stubs exist.
+   - **Root-cause classification**: Each coverage gap MUST be classified as one of: (a) genuinely
+     unreachable code (defensive handlers for impossible states, linker symbols), (b) hardware
+     path with NO available stub AND NO simulation environment, or (c) test inadequacy.
+     Classification (c) is NEVER an acceptable waiver reason — TST must write more tests.
+   - **Table A.21 Req 4 compensating measure**: For any gap classified as (a) or (b), the report
+     MUST cite a Table A.19 static analysis technique applied as a compensating measure (e.g.,
+     control flow analysis, data flow analysis). Deferral to Phase 6 HIL testing is NOT a
+     compensating measure per EN 50128:2011 Table A.21 Req 4.
+   - **Compound condition coverage**: For SIL 3 projects, the report MUST include compound
+     condition coverage measurement for safety-critical modules. "Not measured" or "not claimed"
+     is NOT acceptable unless a formal deviation has been approved.
+9. **Table A.21 Minimum Combination** — for SIL 3 projects at component test level, QUA MUST
+   verify that the test report demonstrates coverage at the minimum combination required by
+   EN 50128:2011 Table A.21 Req 2:
+   - **(items 2 AND 3)**: Branch coverage AND Compound Condition coverage, OR
+   - **(items 2 AND 4)**: Branch coverage AND Data Flow coverage, OR
+   - **(item 5)**: Path coverage
+   
+   A report claiming only Statement + Branch coverage (items 1+2) does NOT meet the SIL 3
+   minimum combination. Return the document to TST if this combination is absent.
 
 ## Reference Documents
 

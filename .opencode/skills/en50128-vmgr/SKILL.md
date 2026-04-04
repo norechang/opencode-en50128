@@ -105,8 +105,23 @@ confirm the following:
 - Static analysis results: zero critical/high severity issues (SIL 3-4)
 - MISRA C: zero mandatory violations (SIL 2+); advisory compliance ≥ 95% (SIL 3-4)
 - Cyclomatic complexity: all functions within SIL limit
-- Coverage evidence exists for statement, branch, condition (SIL 3-4)
+- Coverage evidence exists for statement (M SIL 3-4) and branch (M SIL 2-4)
 - Traceability T6 (SDS → source code) is present
+- **Coverage gap verification (SIL 2+)**: For any module where coverage falls below the
+  SVP/SQAP project-defined target, VMGR MUST confirm that VER's report addresses ALL
+  of the following before accepting a gap justification:
+  1. The project's `tests/stubs/` directory (or equivalent) was checked for existing
+     stubs that would allow the uncovered path to be exercised on a host build.
+  2. If stubs exist that cover the module's dependencies, the gap CANNOT be justified
+     as "hardware dependency" — it is a **test inadequacy** and MUST be rejected.
+  3. Only paths that are genuinely unreachable in any test environment (e.g. defensive
+     error handlers for impossible states, linker-provided symbols with no software
+     equivalent) are acceptable gap justifications, and only with explicit rationale.
+  4. "Hardware-dependent paths cannot be tested on host" is NOT acceptable as a
+     standalone justification if stubs for that module's HAL/platform dependencies
+     already exist in the project stub library.
+  If VER's report does not address these points for every gap, REJECT and require VER
+  to re-examine each coverage gap against the stub inventory.
 
 ### Phase 6 — Integration (no separate VER report at phase close; item 23 is in Phase 7)
 - Note: VER produces no Verification Report at the close of Phase 6. Item 23 belongs

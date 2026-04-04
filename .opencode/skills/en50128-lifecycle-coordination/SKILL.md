@@ -43,6 +43,35 @@ Each gate has six criteria types:
 4. **Validation** — VAL report exists, VMGR-approved (SIL 3–4 all phases; SIL 0–2 Phases 5, 7 only)
 5. **Traceability** — RTM completeness for the phase (rules T1–T15 in `TRACEABILITY.md`)
 6. **Independence** — VER/VAL/ASR independence constraints met per `ORGANIZATION.md`
+7. **Workflow tool gate-check** — `python3 tools/workspace.py wf gate-check --phase <N> --sil <SIL>` MUST PASS before COD issues a gate PASS (SIL 2–4 mandatory; SIL 0–1 advisory).
+
+---
+
+## Track B Workflow Registration
+
+When COD coordinates Track B (VER/VMGR/VAL reviews), each role MUST record its approval in
+the workflow tool immediately after completing its review:
+
+```bash
+# VER records verification approval
+python3 tools/workspace.py wf review <DOC-ID> \
+    --role ver --name "Verifier" \
+    --approve --comment "<verification summary>"
+
+# VMGR records V&V Manager approval
+python3 tools/workspace.py wf review <DOC-ID> \
+    --role vmgr --name "Independent V&V Manager" \
+    --approve --comment "<VMGR decision>"
+
+# COD records gate stamp (final step — gates the document)
+python3 tools/workspace.py wf review <DOC-ID> \
+    --role cod --name "Lifecycle Coordinator" \
+    --approve --comment "Phase <N> gate: <summary>. COD gate stamp."
+python3 tools/workspace.py wf approve <DOC-ID>
+```
+
+For VER-authored reports (e.g. Verification Reports), VER's `wf review` step is skipped —
+VER authorship implicitly satisfies the VER chain step. Begin with VMGR review.
 
 ---
 
@@ -151,3 +180,13 @@ are added by COD as the project progresses.
 
 For `workspace.py trace` and `workspace.py wf` command reference, Python automation scripts,
 and EN 50128 coverage statistics, load skill `en50128-lifecycle-tool-integration`.
+
+**Mandatory gate-check command** (run before issuing any gate PASS):
+
+```bash
+python3 tools/workspace.py wf gate-check --phase <N> --sil <SIL>
+```
+
+This command validates that all phase documents are registered, approved in the correct chain
+order, with no blocked roles, and that independence constraints are satisfied. A non-zero exit
+code (FAIL) is a hard block — COD MUST NOT issue a gate PASS if this command fails.

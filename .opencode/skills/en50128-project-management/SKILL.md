@@ -102,8 +102,25 @@ After CCB approval, PM records the decision in `activities/workflow.yaml` CCB re
 3. Read `.opencode/skills/en50128-project-management/phase-coordination.yaml` (`phase_N` key) for PM-specific coordination notes and special cases.
 4. Invoke Track A agents in dependency order via `task` tool.
 5. Run Owner→QUA approval loop for each deliverable.
-6. When all Track A deliverables accepted by QUA: report Track A complete to COD. Wait.
-7. (COD invokes Track B independently. PM does not proceed further until COD reports gate result.)
+6. **Register each QUA-accepted deliverable in the workflow tool** (mandatory — gate-check depends on this):
+   ```bash
+   # Submit the document
+   python3 tools/workspace.py wf submit <DOC-ID> \
+       --path <canonical-path> \
+       --author-role <author-role> \
+       --author-name "<Author Name>" \
+       --phase <N> \
+       --sil <SIL>
+   # Record QUA approval
+   python3 tools/workspace.py wf review <DOC-ID> \
+       --role qua --name "Quality Assurance Engineer" \
+       --approve --comment "<QUA acceptance summary>"
+   ```
+   For SIL 3–4 Track A documents the full chain (VER → VMGR → COD approvals) is recorded
+   by VER/VMGR/COD when they execute their respective reviews and approvals.
+   PM records only the `submit` and `qua` steps.
+7. When all Track A deliverables QUA-accepted and registered: report Track A complete to COD. Wait.
+8. (COD invokes Track B independently. PM does not proceed further until COD reports gate result.)
 
 ### 2. Status Report
 

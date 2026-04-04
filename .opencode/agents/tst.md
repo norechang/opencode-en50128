@@ -52,7 +52,10 @@ Load it first. Document paths are resolved via CM `query-location` — never har
    against source code (item 18); collect gcov/lcov coverage data; produce
    item 20 (Software Component Test Report); verify coverage meets the
    project-defined targets from the SVP/SQAP; report pass/fail and coverage
-   summary to PM.
+   summary to PM. **Before building**, check whether a `tests/stubs/` directory
+   (or equivalent) exists and include all applicable stubs in the build command.
+   For any coverage gap, apply the root-cause protocol in the `en50128-testing`
+   skill before writing a gap justification.
 
 3. **execute-integration-tests** — run integration tests per the Software
    Integration Test Specification (item 12, owned by INT) and record results

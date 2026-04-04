@@ -112,8 +112,14 @@ Follow these steps in order. Do not skip steps.
 
 3. **Build unit tests** with gcov instrumentation:
    ```
-   gcc -fprofile-arcs -ftest-coverage -g -O0 -o <test_binary> <src>.c <test>.c unity.c
+   gcc -fprofile-arcs -ftest-coverage -g -O0 -o <test_binary> \
+       <src>.c <test>.c unity.c \
+       tests/stubs/*.c        # include all project stubs; adjust glob if stubs live elsewhere
    ```
+   Before finalising the build command, check whether `tests/stubs/` (or an equivalent
+   stub directory) exists in the project. If stubs exist for the module under test's
+   dependencies (HAL, platform drivers, RTOS calls), they MUST be included. Omitting
+   available stubs will produce artificially low coverage and invalid gap justifications.
 
 4. **Execute tests**. Capture Unity XML output (machine-readable — required per §7.6.4.5b).
 
@@ -127,6 +133,20 @@ Follow these steps in order. Do not skip steps.
 
 6. **Verify coverage meets the project-defined target** from the SVP/SQAP.
    Document any gaps with justification (required SIL 2+).
+
+   **Coverage gap root-cause protocol (SIL 2+)**: For every module whose coverage falls
+   below target, TST MUST record the following before claiming a gap justification:
+   - Checked `tests/stubs/` (or project stub directory) for stubs covering the module's
+     external dependencies (HAL, driver, RTOS, platform).
+   - If stubs exist: re-run with stubs included. If coverage improves, the gap was
+     **test inadequacy** — add the missing test cases (finding code T002).
+   - If no stubs exist AND the uncovered paths invoke hardware registers or platform
+     calls that have no software substitute: document as hardware-dependency gap with
+     specific line-number evidence and the exact missing stub or simulation capability.
+   - Defensive error handlers (e.g. `assert(0)`, unreachable `default:` cases) may be
+     justified as unreachable but must be listed individually.
+   A blanket "hardware-dependent paths cannot be tested on host" justification covering
+   an entire module or multiple unrelated paths is NOT acceptable.
 
  7. **Load template** `[PROJECT_ROOT] deliverables/implementation/Component-Test-Report-template.md`. Fill:
    - Test execution summary (pass/fail counts, execution date, tester identity).
