@@ -11,13 +11,24 @@ Each subdirectory represents a complete, self-contained railway software project
 ```
 examples/
 ├── README.md                          # This file
-├── TDC/                               # Active SIL 3 Train Door Control project (Phase 2 complete)
+├── TDC/                               # Active SIL 3 Train Door Control project (Phase 6 complete; Phase 7 authorized)
+│   ├── README.md                     # Project overview and status
 │   ├── LIFECYCLE_STATE.md            # Lifecycle tracking
+│   ├── Makefile                      # Build system
+│   ├── src/                          # C source code (21 .c files, 9 .h files, 99 functions)
+│   ├── tests/                        # 203 component tests + 50 integration tests
 │   └── docs/                         # EN 50128 deliverables
 │       ├── system/                   # System-level documents (EN 50126/50129)
 │       ├── phase-1-planning/         # SQAP, SCMP, SVP, SVaP + reports
 │       ├── phase-2-requirements/     # SRS, Overall Software Test Spec + reports
-│       └── safety/                   # Hazard Log
+│       ├── phase-3-architecture-design/ # SAS, SDS, SIS, Integration Test Specs + reports
+│       ├── phase-4-component-design/ # Component Design Spec, Component Test Spec + reports
+│       ├── phase-5-implementation-testing/ # Source code verification + test reports
+│       ├── phase-6-integration/      # SW + HW/SW Integration Test Reports + QEMU plan
+│       ├── safety/                   # Hazard Log, FMEA, FTA
+│       ├── traceability/             # Requirements Traceability Matrix
+│       ├── change-control/           # CCRs (CCR-SVP-001)
+│       └── non-conformance/          # NCRs (NCR-P5-001/002/003 — all closed)
 │
 └── [your-project-name]/               # Your EN 50128 project
     ├── src/                          # Your source code
@@ -132,23 +143,38 @@ the full EN 50128 platform workflow through Phases 0–2 with complete V&V appro
 
 **SIL Level**: 3
 
-**Current Status**: Phase 2 (Requirements) PASSED — Phase 3 (Architecture & Design) authorized
+**Current Status**: Phase 6 (Integration) PASSED — Phase 7 (Validation) authorized
 
 **Lifecycle Progress**:
 - Phase 0 (Initialization): Complete — 4 system-level documents generated
 - Phase 1 (Planning): PASSED — SQAP, SCMP, SVP, SVaP with QUA/VER/VAL/VMGR approval chain
 - Phase 2 (Requirements): PASSED — SRS (53 requirements, 21 safety-critical), Overall SW Test Spec (133 test cases), full QUA→VER→VAL→VMGR→COD gate chain
-- Phase 3+: Pending
+- Phase 3 (Architecture & Design): PASSED — SAS, SDS, SIS; 8 components; FMEA/FTA; 2oo2 dual-channel design; 379 traceability links
+- Phase 4 (Component Design): PASSED — Component Design Spec, Component Test Spec; 30 modules; zero defects
+- Phase 5 (Implementation & Testing): PASSED (2nd attempt) — 21 source files, 99 functions; 203 test cases; 87.9% stmt / 83.9% branch coverage; MISRA C compliant; 3 NCRs raised and closed
+- Phase 6 (Integration): PASSED — 50/50 integration tests PASS (28 SW + 22 HW/SW); 90.3% stmt / 98.3% branch; QEMU ARM emulator pre-validation environment integrated; 4 HIL-pending items tracked (VAL-C-001 MANDATORY for Phase 7 gate)
+- Phase 7 (Validation): AUTHORIZED 2026-04-04 — not yet started
 
 **Key Documents**:
 - `docs/system/` — 4 system-level input documents (EN 50126/50129)
-- `docs/phase-1-planning/` — SQAP, SCMP, SVP, SVaP + phase reports
+- `docs/phase-1-planning/` — SQAP, SCMP, SVP v1.1, SVaP + phase reports
 - `docs/phase-2-requirements/` — SRS, OTSTSPEC + verification/validation reports
-- `docs/safety/Hazard-Log.md` — Safety hazard log
+- `docs/phase-3-architecture-design/` — SAS, SDS, SIS, Integration Test Specs + verification reports
+- `docs/phase-4-component-design/` — Component Design Spec, Component Test Spec + reports
+- `docs/phase-5-implementation-testing/` — Source code, 203 test cases, coverage reports; NCR resolutions
+- `docs/phase-6-integration/` — SW + HW/SW Integration Test Reports; QEMU Integration Plan + Tool Validation Report
+- `docs/safety/` — Hazard-Log.md, FMEA-Report.md, FTA-Report.md
+- `docs/traceability/` — Requirements Traceability Matrix (100% SRS→SAS→SDS→tests)
+- `docs/change-control/` — CCR-SVP-001 (SVP correction, formally approved)
+- `docs/non-conformance/` — NCR-P5-001/002/003 (all closed)
 
 **What TDC demonstrates**:
-- Complete `@cod plan` → `@cod generate-system` → `@pm execute-phase N` → `@cod gate-check phase-N` workflow
+- Complete `@cod plan` → `@cod generate-system` → `@pm execute-phase N` → `@cod gate-check phase-N` workflow through Phase 6
 - Two-track gate model: QUA check → VER approval → VAL concurrence → VMGR final decision → COD gate pass
+- NCR corrective action process (3 NCRs raised, root-caused, and closed with evidence)
+- SVP formal change control (CCR-SVP-001: Table A.21 correction for SIL 3 coverage levels)
+- QEMU ARM emulator integration for HIL pre-validation (T1/T2 tool qualification)
+- Stub-based component testing with coverage gap justification (EN 50128 Table A.21 Req 2+4)
 - Correct document naming convention (`phase-N-<name>/` directories)
 - Full traceability: system requirements → software requirements → test cases (100%)
 - Proper independence: VMGR approval independent from COD/PM
@@ -402,7 +428,7 @@ if (result != SUCCESS) {
 ## Summary
 
 - **`examples/`** = Real EN 50128 project instances
-- **`TDC/`** = Active reference project (SIL 3, Phase 2 complete)
+- **`TDC/`** = Active reference project (SIL 3, Phases 1–6 complete; Phase 7 authorized)
 - **Each project** = Self-contained, fully documented, compliant
 - **Use agents** = `@cod` and `@pm` (entry points); all others orchestrated internally
 - **Follow standards** = MISRA C, EN 50128 technique tables

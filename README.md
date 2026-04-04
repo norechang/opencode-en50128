@@ -394,7 +394,7 @@ EN50128/
 └── examples/                          # YOUR PROJECTS GO HERE
     └── TDC/                           # Active SIL 3 Train Door Control project
         ├── LIFECYCLE_STATE.md
-        └── docs/                      # EN 50128 deliverables (Phases 0–2 complete)
+        └── docs/                      # EN 50128 deliverables (Phases 0–6 complete; Phase 7 authorized)
 ```
 
 ---
